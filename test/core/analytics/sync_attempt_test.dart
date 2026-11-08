@@ -54,6 +54,40 @@ void main() {
     expect(records.last.name.wireName, 'sync_abandoned');
   });
 
+  test('issue787 stage times are sent capped and validated like durations', () {
+    final record = AnalyticsRecord.sync(
+      AnalyticsSyncOperation.backupThenDetectRemoteChanges,
+      trigger: AnalyticsTrigger.resume,
+      outcome: AnalyticsOutcome.succeeded,
+      durationMs: 130000,
+      stageDurationsMs: {
+        AnalyticsSyncStage.backup: 10,
+        AnalyticsSyncStage.changes: 0,
+        AnalyticsSyncStage.download: 125000,
+      },
+    );
+    expect(record.attributes['backupMs'], 10);
+    expect(record.attributes['changesMs'], 0);
+    expect(record.attributes['downloadMs'], AnalyticsRecord.maxDurationMs);
+    expect(record.attributes.containsKey('applyMs'), isFalse);
+    expect(isSafeAnalyticsEvent(_event(record)), isTrue);
+    for (final bad in [-1, 120001, '5', null, 1.5]) {
+      expect(
+        isSafeAnalyticsEvent(_event(record, {'applyMs': bad})),
+        isFalse,
+        reason: '$bad',
+      );
+    }
+    expect(isSafeAnalyticsEvent(_event(record, {'waitMs': 1})), isFalse);
+    final abandoned = AnalyticsRecord.syncAbandoned(
+      AnalyticsSyncOperation.backup,
+      trigger: AnalyticsTrigger.manual,
+      reason: AnalyticsSyncAbandonReason.sessionChanged,
+      durationMs: 1,
+    );
+    expect(isSafeAnalyticsEvent(_event(abandoned, {'backupMs': 1})), isFalse);
+  });
+
   test('invalid attempt numbers and unknown reasons are rejected', () {
     final started = AnalyticsRecord.syncStarted(
       AnalyticsSyncOperation.backup,

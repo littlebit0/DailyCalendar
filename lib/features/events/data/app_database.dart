@@ -53,6 +53,11 @@ class EventRecords extends Table {
   IntColumn get alarmMinutesBefore =>
       integer().withDefault(const Constant(0))();
   DateTimeColumn get alarmCustomAt => dateTime().nullable()();
+  // Schema 13: JSON lists of every alarm trigger (minutes, UTC ISO times).
+  // Null keeps the single legacy trigger above, which always holds the
+  // earliest one for older app versions.
+  TextColumn get alarmMinutesBeforeList => text().nullable()();
+  TextColumn get alarmCustomAtList => text().nullable()();
   BoolColumn get showOvernightOnFollowingDays =>
       boolean().withDefault(const Constant(true))();
 
@@ -62,7 +67,7 @@ class EventRecords extends Table {
 
 @DriftDatabase(tables: [EventRecords])
 class AppDatabase extends _$AppDatabase {
-  static const currentSchemaVersion = 13;
+  static const currentSchemaVersion = 14;
   static const createDeletionTable = '''
     CREATE TABLE IF NOT EXISTS sync_event_deletions (
       id TEXT PRIMARY KEY NOT NULL,
@@ -76,7 +81,7 @@ class AppDatabase extends _$AppDatabase {
   final bool _recordStartupTiming;
 
   /// [legacyShowOvernightOnFollowingDays] is the removed app-wide setting
-  /// (#696). Upgrading from schema 12 or older copies it into every existing
+  /// (#696). Upgrading from schema 13 or older copies it into every existing
   /// event so their display does not change.
   AppDatabase({this.legacyShowOvernightOnFollowingDays = true})
     : _recordStartupTiming = true,
@@ -119,7 +124,7 @@ class AppDatabase extends _$AppDatabase {
         await repairEventSchema(
           migrator,
           rebuild: from < 6,
-          seedOvernightDisplay: from < 13,
+          seedOvernightDisplay: from < 14,
         );
       },
     );
@@ -144,7 +149,7 @@ class AppDatabase extends _$AppDatabase {
         await migrator.addColumn(eventRecords, column);
       }
     }
-    // Schema 13 (#791) moved the app-wide choice onto each event.
+    // Schema 14 (#791) moved the app-wide choice onto each event.
     if (seedOvernightDisplay ||
         !names.contains('show_overnight_on_following_days')) {
       await _seedOvernightDisplay();

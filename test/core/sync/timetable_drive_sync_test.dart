@@ -1296,7 +1296,6 @@ class _Device {
       notificationService: _Notifications(),
       settingsRepository: settings,
       httpClient: client,
-      backupRestoreDelay: Duration.zero,
       changeSyncDelay: automatic ? Duration.zero : const Duration(days: 1),
       automaticRetryDelays: const [],
     );

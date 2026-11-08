@@ -3,19 +3,26 @@
 ## #791 자정 넘김 일정의 다음 날 표시를 일정마다 — 2026-11-08
 
 - Format change (user-approved): `CalendarEvent.showOvernightOnFollowingDays`
-  (default on) in SQLite column `show_overnight_on_following_days` (schema 13),
+  (default on) in SQLite column `show_overnight_on_following_days` (schema 14),
   Drive v2 event key `showOvernightOnFollowingDays` (always written), template
   key of the same name (written only when off). Release with all platforms.
 - Removed the app-wide setting (#696) from Settings and the settings sync doc.
-  Its local pref is read only to seed existing rows on the schema-12 upgrade
+  Its local pref is read only to seed existing rows on the upgrade to schema 14
   (`AppDatabase.repairEventSchema`, both Drift `onUpgrade` and
-  `TodoDatabaseMigrationService`, whose additive gate is now `<= 13`).
+  `TodoDatabaseMigrationService`, whose additive gate is now `<= 14`).
 - Old files without the key read as on; a newer edit from a 4.1.0 writer keeps
   the local value and re-uploads (`_DownloadedEvent.overnightDisplayKnown`).
 - Rule: `calendarEventListedOnDay` (no parameter). Widgets via
   `CalendarWidgetService._eventsByDay`; iOS wallpaper via
   `DailyWallpaperEvent.displayEnd`. Siri answers by real interval (unchanged).
 - Not verified on devices; test apps not updated (main session).
+
+## #787 동기화 고정 대기 제거·문서 부트스트랩 저장·단계별 계측 — 2026-11-08
+
+- 백업 뒤 고정 3초 대기(`backupRestoreDelay`) 삭제. 2.0.1(`be38f04d2`)에 근거 기록 없이 들어왔고, 뒤의 읽기(변경 목록·전체 복원)는 방금 올린 자기 파일이 늦게 보여도 병합·재업로드로 처리됨.
+- 시간표·잊모기·템플릿·학사 설정 부트스트랩: 앱 세션(메모리)마다 → 계정별 기기 저장 1회(`driveDocumentsBootstrapped`). 이후에는 변경 목록에 파일이 있을 때만 받음. 초기화 시 토큰과 함께 지움.
+- `sync_succeeded`/`sync_failed`에 선택 필드 `backupMs`·`changesMs`·`downloadMs`·`applyMs`(0~120000). 앱 검증기와 `tool/analytics_receiver.py` 함께 갱신. 수신기를 먼저 배포해야 새 필드가 거부되지 않음.
+- Dart 공통 코드만 변경, 네이티브 대응 없음. 실제 기기 동기화 시간은 측정하지 않음.
 
 ## #771 시간표 강의 방식 변경을 캘린더에 표시 — 2026-11-07
 

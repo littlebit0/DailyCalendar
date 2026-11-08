@@ -94,20 +94,20 @@ class DailyAndroidParityTest {
         DailyAlarmScheduler.schedule(context, updated)
         val manager = shadowOf(context.getSystemService(AlarmManager::class.java))
         assertEquals(1, manager.scheduledAlarms.size)
-        assertEquals(updated, DailyAlarmScheduler.read(context, "id"))
+        assertEquals(updated, DailyAlarmScheduler.read(context, alarm.id))
         DailyAlarmScheduler.cancel(context, "id")
         assertTrue(manager.scheduledAlarms.isEmpty())
-        assertNull(DailyAlarmScheduler.read(context, "id"))
+        assertNull(DailyAlarmScheduler.read(context, alarm.id))
     }
 
     @Test fun cancelAllKeepsOtherPreferencesUntouched() {
         val alarm = DailyAlarm("one", "Event", "", System.currentTimeMillis() + 60_000, 10)
         DailyAlarmScheduler.schedule(context, alarm)
-        DailyAlarmScheduler.schedule(context, alarm.copy(eventId = "two"))
+        DailyAlarmScheduler.schedule(context, alarm.copy(eventId = "two", id = "two"))
         val prefs = context.getSharedPreferences("FlutterSharedPreferences", Context.MODE_PRIVATE)
         prefs.edit().putString("data", "keep").commit()
         DailyAlarmScheduler.cancelAll(context)
-        assertNull(DailyAlarmScheduler.read(context, "one"))
+        assertNull(DailyAlarmScheduler.read(context, alarm.id))
         assertNull(DailyAlarmScheduler.read(context, "two"))
         assertEquals("keep", prefs.getString("data", null))
     }
@@ -117,14 +117,14 @@ class DailyAndroidParityTest {
         val alarm = DailyAlarm("denied", "Event", "", System.currentTimeMillis() + 60_000, 10)
         assertFalse(DailyAlarmScheduler.authorized(context))
         assertThrows(IllegalStateException::class.java) { DailyAlarmScheduler.schedule(context, alarm) }
-        assertNull(DailyAlarmScheduler.read(context, alarm.eventId))
+        assertNull(DailyAlarmScheduler.read(context, alarm.id))
         assertTrue(shadowOf(context.getSystemService(AlarmManager::class.java)).scheduledAlarms.isEmpty())
     }
 
     @Test fun staleBroadcastCannotStartAReplacedAlarm() {
         val alarm = DailyAlarm("updated", "Event", "", System.currentTimeMillis() + 60_000, 10)
         DailyAlarmScheduler.schedule(context, alarm)
-        DailyAlarmReceiver().onReceive(context, Intent().putExtra(DailyAlarmScheduler.EVENT_ID, alarm.eventId)
+        DailyAlarmReceiver().onReceive(context, Intent().putExtra(DailyAlarmScheduler.EVENT_ID, alarm.id)
             .putExtra(DailyAlarmScheduler.FIRE_AT, alarm.fireAt - 60_000))
         assertNull(shadowOf(RuntimeEnvironment.getApplication()).nextStartedService)
     }
@@ -133,9 +133,9 @@ class DailyAndroidParityTest {
         val alarm = DailyAlarm("future", "Event", "", System.currentTimeMillis() + 60_000, 10)
         DailyAlarmScheduler.schedule(context, alarm)
         context.getSharedPreferences("daily_event_alarms", Context.MODE_PRIVATE).edit()
-            .putString("expired", alarm.copy(eventId = "expired", fireAt = 1L).json()).commit()
+            .putString("expired", alarm.copy(eventId = "expired", fireAt = 1L, id = "expired").json()).commit()
         DailyAlarmScheduler.restore(context)
-        assertEquals(alarm, DailyAlarmScheduler.read(context, "future"))
+        assertEquals(alarm, DailyAlarmScheduler.read(context, alarm.id))
         assertNull(DailyAlarmScheduler.read(context, "expired"))
         assertEquals(1, shadowOf(context.getSystemService(AlarmManager::class.java)).scheduledAlarms.size)
     }

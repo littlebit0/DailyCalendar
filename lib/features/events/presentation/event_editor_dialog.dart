@@ -10,6 +10,7 @@ import '../../../core/calendar/calendar_event_span.dart';
 import '../../../core/localization/app_localizations.dart';
 import '../../../core/localization/twelve_hour_material_localizations.dart';
 import '../../../core/theme/daily_ui.dart';
+import '../domain/alarm_triggers.dart';
 import '../domain/calendar_event.dart';
 import '../domain/event_category.dart';
 import '../domain/event_draft.dart';
@@ -109,8 +110,11 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
   late bool _showOvernightOnFollowingDays;
   late bool _alarmEnabled;
   late TimeOfDay _allDayAlarmTime;
-  late int _alarmMinutesBefore;
-  DateTime? _alarmCustomAt;
+  late List<int> _alarmMinutes;
+  late List<DateTime> _alarmCustomTimes;
+
+  /// The source's legacy minutes, kept while a custom time is the earliest.
+  late int _legacyAlarmMinutes;
   AlarmAuthorizationState _alarmState = AlarmAuthorizationState.unsupported;
   var _alarmStateLoading = true;
   String? _validationMessage;
@@ -189,8 +193,9 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
       hour: allDayAlarmMinutes ~/ 60,
       minute: allDayAlarmMinutes % 60,
     );
-    _alarmMinutesBefore = event?.alarmMinutesBefore ?? 0;
-    _alarmCustomAt = event?.alarmCustomAt;
+    _alarmMinutes = event?.alarmMinutesBeforeList ?? const [0];
+    _alarmCustomTimes = event?.alarmCustomAtList ?? const [];
+    _legacyAlarmMinutes = event?.alarmMinutesBefore ?? 0;
     unawaited(_loadAlarmState());
   }
 
@@ -1131,8 +1136,9 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
       showOvernightOnFollowingDays: _showOvernightOnFollowingDays,
       alarmEnabled: _frequency == RecurrenceFrequency.none && _alarmEnabled,
       allDayAlarmMinutes: _allDayAlarmTime.hour * 60 + _allDayAlarmTime.minute,
-      alarmMinutesBefore: _alarmMinutesBefore,
-      alarmCustomAt: _alarmCustomAt,
+      alarmMinutesBefore: _legacyAlarmMinutes,
+      alarmMinutesBeforeList: _alarmMinutes,
+      alarmCustomAtList: _alarmCustomTimes,
     );
     return draft;
   }
@@ -1199,10 +1205,10 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
             : context.tr('켜면 시스템 알람 권한을 요청하고 정시 알림을 알람으로 대체합니다.'),
       AlarmAuthorizationState.authorized =>
         isMacOS
-            ? (_allDay || _alarmCustomAt != null || _alarmMinutesBefore != 0
+            ? (_allDay || _alarmCustomTimes.isNotEmpty || !_onlyBaseAlarm
                   ? context.tr('선택한 시각에 소리와 다시 알림이 있는 macOS 시스템 알림을 전달합니다.')
                   : context.tr('시작 시각에 소리와 다시 알림이 있는 macOS 시스템 알림을 전달합니다.'))
-            : (_allDay || _alarmCustomAt != null || _alarmMinutesBefore != 0
+            : (_allDay || _alarmCustomTimes.isNotEmpty || !_onlyBaseAlarm
                   ? context.tr('선택한 시각에 시스템 알람이 울립니다.')
                   : context.tr('시작 시각의 정시 알림을 시스템 알람으로 대체합니다.')),
     };
@@ -1250,20 +1256,57 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
           _startTime.minute,
         );
 
-  DateTime get _alarmFireAt =>
-      _alarmCustomAt ??
-      _alarmBaseTime.subtract(Duration(minutes: _alarmMinutesBefore));
+  bool get _onlyBaseAlarm => _alarmMinutes.length == 1 && _alarmMinutes.first == 0;
+
+  /// Every selected fire time, earliest first.
+  List<DateTime> get _alarmFireTimes => alarmFireTimesOf(
+    resolveAlarmTriggers(
+      base: _alarmBaseTime,
+      minutesBefore: _legacyAlarmMinutes,
+      customAt: null,
+      minutesList: _alarmMinutes,
+      customList: _alarmCustomTimes,
+    ),
+    _alarmBaseTime,
+  );
+
+  int get _alarmTriggerCount => _alarmMinutes.length + _alarmCustomTimes.length;
+
+  /// Toggles one "N minutes before" trigger like the reminder chips. The last
+  /// remaining trigger stays: turn the alarm switch off to remove all.
+  void _toggleAlarmMinutes(int minutes, bool selected) {
+    if (!selected && _alarmTriggerCount <= 1) return;
+    setState(() {
+      _alarmMinutes = normalizeReminderMinutes(
+        selected
+            ? [..._alarmMinutes, minutes]
+            : _alarmMinutes.where((value) => value != minutes),
+      );
+    });
+  }
+
+  void _removeAlarmCustomAt(DateTime value) {
+    if (_alarmTriggerCount <= 1) return;
+    setState(() {
+      _alarmCustomTimes = _alarmCustomTimes
+          .where((time) => !time.isAtSameMomentAs(value))
+          .toList(growable: false);
+    });
+  }
 
   Widget _buildAlarmTimeSelector(BuildContext context) {
-    final custom = _alarmCustomAt;
     final options = normalizeReminderMinutes([
       0,
       10,
       30,
       60,
       1440,
-      if (custom == null) _alarmMinutesBefore,
+      ..._alarmMinutes,
     ]);
+    final fireTimes = _alarmFireTimes;
+    final now = DateTime.now();
+    final passed = fireTimes.where((time) => !time.isAfter(now)).length;
+    final canRemove = _alarmTriggerCount > 1;
     return InputDecorator(
       decoration: InputDecoration(
         labelText: context.tr('알람 시각'),
@@ -1278,39 +1321,49 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
             crossAxisAlignment: WrapCrossAlignment.center,
             children: [
               for (final minutes in options)
-                ChoiceChip(
+                FilterChip(
                   label: Text(_label(minutes)),
-                  selected: custom == null && _alarmMinutesBefore == minutes,
-                  onSelected: (_) => setState(() {
-                    _alarmMinutesBefore = minutes;
-                    _alarmCustomAt = null;
-                  }),
+                  selected: _alarmMinutes.contains(minutes),
+                  onSelected: (selected) =>
+                      _toggleAlarmMinutes(minutes, selected),
                 ),
               IconButton.outlined(
                 tooltip: context.tr('알람 직접 입력'),
                 onPressed: _pickAlarmMinutesBefore,
                 icon: const Icon(Icons.edit_outlined),
               ),
-              ChoiceChip(
+              for (final custom in _alarmCustomTimes)
+                InputChip(
+                  label: Text(_formatAlarmDateTime(custom)),
+                  selected: true,
+                  showCheckmark: false,
+                  onDeleted: canRemove
+                      ? () => _removeAlarmCustomAt(custom)
+                      : null,
+                ),
+              ActionChip(
+                avatar: const Icon(Icons.add),
                 label: Text(context.tr('날짜·시각 지정')),
-                selected: custom != null,
-                onSelected: (_) => _pickAlarmCustomAt(),
+                onPressed: _pickAlarmCustomAt,
               ),
             ],
           ),
           const SizedBox(height: 8),
-          Text(
-            _formatAlarmDateTime(_alarmFireAt),
-            style: Theme.of(context).textTheme.bodyMedium,
-          ),
-          if (custom != null)
+          for (final time in fireTimes)
+            Text(
+              _formatAlarmDateTime(time),
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+          if (_alarmCustomTimes.isNotEmpty)
             Text(
               context.tr('일정 시각을 바꿔도 지정한 알람 시각은 유지됩니다.'),
               style: Theme.of(context).textTheme.labelSmall,
             ),
-          if (!_alarmFireAt.isAfter(DateTime.now()))
+          if (passed > 0)
             Text(
-              context.tr('지난 시각이라 알람이 울리지 않습니다.'),
+              passed == fireTimes.length
+                  ? context.tr('지난 시각이라 알람이 울리지 않습니다.')
+                  : context.tr('지난 시각의 알람은 울리지 않습니다.'),
               style: Theme.of(context).textTheme.labelSmall?.copyWith(
                 color: Theme.of(context).colorScheme.error,
               ),
@@ -1333,20 +1386,19 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
       context: context,
       title: context.tr('알람 직접 입력'),
       label: context.tr('몇 분 전에 울릴까요?'),
-      initialValue: _alarmMinutesBefore,
+      initialValue: _alarmMinutes.isEmpty ? 0 : _alarmMinutes.last,
       minValue: 0,
     );
     if (picked != null && mounted) {
       setState(() {
-        _alarmMinutesBefore = picked;
-        _alarmCustomAt = null;
+        _alarmMinutes = normalizeReminderMinutes([..._alarmMinutes, picked]);
       });
     }
   }
 
   Future<void> _pickAlarmCustomAt() async {
     _dismissInput();
-    final initial = _alarmFireAt;
+    final initial = _alarmFireTimes.first;
     final date = await showDatePicker(
       context: context,
       firstDate: DateTime(2000),
@@ -1357,13 +1409,10 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
     final time = await _showTimePicker(TimeOfDay.fromDateTime(initial));
     if (time == null || !mounted) return;
     setState(
-      () => _alarmCustomAt = DateTime(
-        date.year,
-        date.month,
-        date.day,
-        time.hour,
-        time.minute,
-      ),
+      () => _alarmCustomTimes = normalizeAlarmCustomTimes([
+        ..._alarmCustomTimes,
+        DateTime(date.year, date.month, date.day, time.hour, time.minute),
+      ]),
     );
   }
 

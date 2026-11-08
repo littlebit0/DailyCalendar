@@ -5,6 +5,7 @@ import 'package:drift/drift.dart';
 import 'app_database.dart';
 import 'event_mapper.dart';
 import 'recurrence_expander.dart';
+import '../domain/alarm_triggers.dart';
 import '../domain/calendar_event.dart';
 import '../domain/event_category.dart';
 import '../domain/event_repository.dart';
@@ -538,6 +539,16 @@ class DriftEventRepository implements EventRepository, EventSyncMaintenance {
       allDayAlarmMinutes: Value(event.allDayAlarmMinutes),
       alarmMinutesBefore: Value(event.alarmMinutesBefore),
       alarmCustomAt: Value(event.alarmCustomAt),
+      alarmMinutesBeforeList: Value(
+        event.hasMultipleAlarmTimes
+            ? jsonEncode(event.alarmMinutesBeforeList)
+            : null,
+      ),
+      alarmCustomAtList: Value(
+        event.hasMultipleAlarmTimes
+            ? jsonEncode(encodeAlarmCustomList(event.alarmCustomAtList))
+            : null,
+      ),
       showOvernightOnFollowingDays: Value(event.showOvernightOnFollowingDays),
     );
   }

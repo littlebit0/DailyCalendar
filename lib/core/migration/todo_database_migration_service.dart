@@ -9,6 +9,7 @@ import 'package:sqlite3/sqlite3.dart';
 
 import '../../features/events/data/app_database.dart';
 import '../../features/events/data/event_mapper.dart';
+import '../../features/events/domain/alarm_triggers.dart';
 import '../../features/events/domain/calendar_event.dart';
 import '../../features/events/domain/event_deletion.dart';
 import '../../features/events/domain/recurrence_rule.dart';
@@ -146,12 +147,13 @@ class TodoDatabaseMigrationService {
       }
 
       // Schema 8 already has Todo completion, exact sync timestamps and compact
-      // deletions. Schemas 9-13 only add nullable or defaulted columns (LMS
+      // deletions. Schemas 9-14 only add nullable or defaulted columns (LMS
       // metadata, the recurrence anchor day, recurrence details, alarm timing,
-      // the per-event following-day display): they must not repeat the old
-      // cloud migration or turn every unchanged event into an upload.
+      // alarm time lists, the per-event following-day display): they must not
+      // repeat the old cloud migration or turn every unchanged event into an
+      // upload.
       final isAdditiveLmsMigration =
-          originalVersion >= 8 && AppDatabase.currentSchemaVersion <= 13;
+          originalVersion >= 8 && AppDatabase.currentSchemaVersion <= 14;
       final requiresLegacyCloudMigration = !isAdditiveLmsMigration;
       List<CalendarEvent>? remoteEvents = const <CalendarEvent>[];
       if (requiresLegacyCloudMigration) {
@@ -453,7 +455,9 @@ class TodoDatabaseMigrationService {
     allDayAlarmMinutes: row['all_day_alarm_minutes'] as int? ?? 540,
     alarmMinutesBefore: row['alarm_minutes_before'] as int? ?? 0,
     alarmCustomAt: _dateFromSql(row['alarm_custom_at']),
-    // Absent before schema 13; seeded by the schema repair.
+    alarmMinutesBeforeList: row['alarm_minutes_before_list'] as String?,
+    alarmCustomAtList: row['alarm_custom_at_list'] as String?,
+    // Absent before schema 14; seeded by the schema repair.
     showOvernightOnFollowingDays: row['show_overnight_on_following_days'] != 0,
   ).toDomain();
 
@@ -502,9 +506,10 @@ class TodoDatabaseMigrationService {
         recurrence_excluded_dates, created_at, updated_at, deleted_at,
         device_id, sync_status, show_dday, completed, alarm_enabled,
         all_day_alarm_minutes, alarm_minutes_before, alarm_custom_at,
-        lms_metadata, show_overnight_on_following_days
+        alarm_minutes_before_list, alarm_custom_at_list, lms_metadata,
+        show_overnight_on_following_days
       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       ON CONFLICT(id) DO UPDATE SET
         title = excluded.title,
         memo = excluded.memo,
@@ -536,6 +541,8 @@ class TodoDatabaseMigrationService {
         all_day_alarm_minutes = excluded.all_day_alarm_minutes,
         alarm_minutes_before = excluded.alarm_minutes_before,
         alarm_custom_at = excluded.alarm_custom_at,
+        alarm_minutes_before_list = excluded.alarm_minutes_before_list,
+        alarm_custom_at_list = excluded.alarm_custom_at_list,
         lms_metadata = excluded.lms_metadata,
         show_overnight_on_following_days =
           excluded.show_overnight_on_following_days
@@ -576,6 +583,12 @@ class TodoDatabaseMigrationService {
         normalized.alarmCustomAt == null
             ? null
             : _dateToSql(normalized.alarmCustomAt!),
+        normalized.hasMultipleAlarmTimes
+            ? jsonEncode(normalized.alarmMinutesBeforeList)
+            : null,
+        normalized.hasMultipleAlarmTimes
+            ? jsonEncode(encodeAlarmCustomList(normalized.alarmCustomAtList))
+            : null,
         normalized.lms == null ? null : jsonEncode(normalized.lms!.toJson()),
         normalized.showOvernightOnFollowingDays ? 1 : 0,
       ],

@@ -423,6 +423,7 @@ class SettingsRepository {
   static const _settingsSyncDocumentKey = 'settingsSyncDocument.v1';
   static const _driveChangeTokenKey = 'driveChangePageToken';
   static const _driveChangeAccountKey = 'driveChangeAccount';
+  static const _driveDocumentsBootstrappedKey = 'driveDocumentsBootstrapped';
   static const _deviceIdKey = 'deviceId';
   static const _appleUserIdentifierKey = 'appleUserIdentifier';
   static const _appleEmailKey = 'appleEmail';
@@ -1312,9 +1313,27 @@ class SettingsRepository {
     await _preferences.setString(_driveChangeTokenKey, pageToken.trim());
   }
 
+  /// Whether this device already read the timetable, imogi, template and
+  /// settings documents once for [accountEmail] outside the change feed.
+  bool driveDocumentsBootstrapped(String accountEmail) =>
+      (_preferences.getStringList(_driveDocumentsBootstrappedKey) ?? const [])
+          .contains(accountEmail.trim().toLowerCase());
+
+  Future<void> markDriveDocumentsBootstrapped(String accountEmail) async {
+    final email = accountEmail.trim().toLowerCase();
+    final accounts =
+        _preferences.getStringList(_driveDocumentsBootstrappedKey) ?? const [];
+    if (accounts.contains(email)) return;
+    await _preferences.setStringList(_driveDocumentsBootstrappedKey, [
+      ...accounts,
+      email,
+    ]);
+  }
+
   Future<void> clearDriveChangePageToken() async {
     await _preferences.remove(_driveChangeTokenKey);
     await _preferences.remove(_driveChangeAccountKey);
+    await _preferences.remove(_driveDocumentsBootstrappedKey);
   }
 
   List<int> _loadDefaultReminderMinutes() {
@@ -1374,7 +1393,7 @@ class SettingsRepository {
   }
 
   /// The removed app-wide "다음 날에도 표시" value (#696), used once to seed
-  /// each existing event when the event database upgrades past schema 12.
+  /// each existing event when the event database upgrades past schema 13.
   bool legacyShowOvernightOnFollowingDays() =>
       _preferences.getBool(_calendarShowOvernightEventsOnFollowingDaysKey) ??
       true;

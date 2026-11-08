@@ -123,6 +123,7 @@ class EventDetailsPanel extends ConsumerWidget {
         ? [date]
         : const <DateTime>[];
     final dayEvents = liveEventsAsync.maybeWhen(
+      skipLoadingOnReload: true,
       // The live result is unfiltered: apply the calendar's display policy again.
       data: (items) => _eventsForDay(
         withLectureModeChanges(
@@ -1658,22 +1659,23 @@ class _EventDetailSheetState extends ConsumerState<_EventDetailSheet> {
   }
 
   String _formatAlarmLabel(BuildContext context, CalendarEvent event) {
+    final fireTimes = event.alarmFireTimes;
     if (!event.allDay &&
-        event.alarmCustomAt == null &&
-        event.alarmMinutesBefore == 0) {
+        fireTimes.length == 1 &&
+        fireTimes.single == event.startAt) {
       return context.tr('시작 시각 · 중지 또는 10분 후 다시 알림');
     }
-    final fireAt = event.alarmFireAt;
     final locale = context.l10n.locale.toLanguageTag();
-    final time = DateFormat.jm(locale).format(fireAt);
-    final sameDay = DateUtils.isSameDay(fireAt, event.startAt);
+    String label(DateTime fireAt) {
+      final time = DateFormat.jm(locale).format(fireAt);
+      return DateUtils.isSameDay(fireAt, event.startAt)
+          ? time
+          : '${DateFormat.MMMd(locale).format(fireAt)} $time';
+    }
+
     return context.tr(
       '{time} · 중지 또는 10분 후 다시 알림',
-      args: {
-        'time': sameDay
-            ? time
-            : '${DateFormat.MMMd(locale).format(fireAt)} $time',
-      },
+      args: {'time': fireTimes.map(label).join(', ')},
     );
   }
 

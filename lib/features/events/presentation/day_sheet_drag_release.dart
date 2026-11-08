@@ -5,19 +5,30 @@ import 'package:flutter/widgets.dart';
 
 /// Thresholds are fractions of the sheet's parent height (and heights per
 /// second for velocity), so every screen size gets the same physical feel.
-const _belowSmallCloseDistance = 0.12;
-const _belowSmallCloseVelocity = 1.2;
-const _longDragCloseDistance = 0.4;
-const _fastDragCloseDistance = 0.3;
-const _fastDragCloseVelocity = 2.0;
+///
+/// Basis: Flutter's modal `BottomSheet` closes on a downward fling faster than
+/// 700 px/s (about one parent height per second on a phone) or after half its
+/// height, while `DraggableScrollableSheet` snaps to the next stage on any
+/// fling, which is why a large drag used to stop at a stage.
+const _flingCloseVelocity = 1.0;
+const _flingCloseDistance = 0.05;
+const _fastDragCloseVelocity = 0.5;
+const _fastDragCloseDistance = 0.2;
+// One stage gap (0.96 -> 0.68 -> 0.4 is 0.28) plus a margin, so a slow drag
+// closes only once it is clearly past the next lower stage.
+const _longDragCloseDistance = 0.36;
+const _belowSmallCloseDistance = 0.08;
+const _belowSmallCloseVelocity = 0.5;
 const _velocityTolerance = 0.05;
 
 /// Decides where a day sheet should settle when a downward sheet drag ends.
 ///
 /// Returns `0` to close, [smallestStage] to return to the smallest stage, or
-/// `null` to keep the sheet's own stage snapping (short drags and upward
+/// `null` to keep the sheet's own stage snapping (short slow drags and upward
 /// releases). Sizes are sheet fractions; [downwardVelocity] is parent heights
-/// per second, positive when the finger moves down.
+/// per second, positive when the finger moves down. The travel only counts
+/// sheet movement, so a drag that first scrolls the list back to the top
+/// starts counting when the sheet itself starts to move.
 double? daySheetReleaseTarget({
   required double startSize,
   required double endSize,
@@ -28,11 +39,13 @@ double? daySheetReleaseTarget({
   final travel = startSize - endSize;
   final belowSmall = endSize < smallestStage;
   final close =
-      endSize <= smallestStage - _belowSmallCloseDistance ||
-      (belowSmall && downwardVelocity >= _belowSmallCloseVelocity) ||
-      travel >= _longDragCloseDistance ||
+      (travel >= _flingCloseDistance &&
+          downwardVelocity >= _flingCloseVelocity) ||
       (travel >= _fastDragCloseDistance &&
-          downwardVelocity >= _fastDragCloseVelocity);
+          downwardVelocity >= _fastDragCloseVelocity) ||
+      travel >= _longDragCloseDistance ||
+      endSize <= smallestStage - _belowSmallCloseDistance ||
+      (belowSmall && downwardVelocity >= _belowSmallCloseVelocity);
   if (close) return 0;
   return belowSmall ? smallestStage : null;
 }

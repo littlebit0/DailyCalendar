@@ -207,13 +207,25 @@ class LmsSyncService extends ChangeNotifier {
   /// Authentication controls fresh reads, never the lifetime of an owner's cache.
   /// A fresh device can display Drive-restored data before school reauthentication.
   bool isEventVisible(CalendarEvent event) {
+    final scope = visibilityScope();
+    return isCachedEventVisible(
+      event,
+      owner: scope.owner,
+      school: scope.school,
+      principal: scope.principal,
+      hasProfile: scope.hasProfile,
+    );
+  }
+
+  /// The inputs of [isEventVisible]; calendar streams rebuild only when it changes (#790).
+  ({String? owner, String? school, String? principal, bool hasProfile})
+  visibilityScope() {
     final profile = _settings.load().academicProfile;
     final session = _readSession();
     final validSession = session != null && _ownerMatches(session)
         ? session
         : null;
-    return isCachedEventVisible(
-      event,
+    return (
       owner: _settings.dailyAccount()?.googleAccount?.email,
       school: profile != null
           ? profile.timetableUniversity

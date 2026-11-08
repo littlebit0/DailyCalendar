@@ -174,6 +174,21 @@ class SyncAttemptTests(unittest.TestCase):
         self.assertFalse(self.valid('sync_abandoned', {**good, 'reason': 'crash'}))
         self.assertFalse(self.valid('sync_abandoned', {**good, 'errorCode': 'unknown'}))
 
+    def test_stage_times_are_optional_bounded_and_only_on_terminal_results(self):
+        ok = {'operation': 'backupThenDetectRemoteChanges', 'trigger': 'resume',
+              'outcome': 'succeeded', 'durationMs': 900}
+        stages = {'backupMs': 100, 'changesMs': 200, 'downloadMs': 0, 'applyMs': 120000}
+        failed = {**ok, 'outcome': 'failed', 'errorCode': 'network'}
+        self.assertTrue(self.valid('sync_succeeded', {**ok, **stages}))
+        self.assertTrue(self.valid('sync_failed', {**failed, 'backupMs': 5}))
+        self.assertTrue(self.valid('sync_succeeded', ok))
+        for bad in (-1, 120001, '5', None, 1.5, True):
+            self.assertFalse(self.valid('sync_succeeded', {**ok, 'backupMs': bad}))
+        self.assertFalse(self.valid('sync_succeeded', {**ok, 'waitMs': 3000}))
+        abandoned = {'operation': 'backup', 'trigger': 'manual', 'reason': 'sessionChanged', 'durationMs': 5}
+        self.assertFalse(self.valid('sync_abandoned', {**abandoned, 'backupMs': 5}))
+        self.assertFalse(self.valid('sync_started', {'operation': 'backup', 'trigger': 'manual', 'backupMs': 5}))
+
 
 class LmsLoginTests(unittest.TestCase):
     BASE = {'eventId': 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa', 'occurredAt': '2026-10-19T00:00:00Z',

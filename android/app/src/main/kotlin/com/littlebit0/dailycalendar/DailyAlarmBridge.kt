@@ -29,18 +29,16 @@ internal class DailyAlarmBridge(private val activity: FragmentActivity) {
                         nextPermission()
                     }
                     "schedule", "reconcile" -> {
-                        val alarm = DailyAlarm(
-                            requireNotNull(call.argument<String>("eventId")),
-                            requireNotNull(call.argument<String>("title")), call.argument<String>("memo").orEmpty(),
-                            requireNotNull(call.argument<Number>("fireAtMilliseconds")).toLong(),
-                            (call.argument<Number>("snoozeMinutes")?.toInt() ?: 10).coerceIn(1, 60),
+                        val eventId = requireNotNull(call.argument<String>("eventId"))
+                        val title = requireNotNull(call.argument<String>("title"))
+                        require(eventId.isNotBlank() && title.isNotBlank())
+                        val memo = call.argument<String>("memo").orEmpty()
+                        val fireTimes = requireNotNull(call.argument<List<Number>>("fireAtMillisecondsList")).map { it.toLong() }
+                        val snooze = (call.argument<Number>("snoozeMinutes")?.toInt() ?: 10).coerceIn(1, 60)
+                        result.success(
+                            if (call.method == "reconcile") DailyAlarmScheduler.reconcile(activity, eventId, title, memo, snooze, fireTimes)
+                            else DailyAlarmScheduler.scheduleAll(activity, eventId, title, memo, snooze, fireTimes),
                         )
-                        if (call.method == "reconcile") {
-                            result.success(DailyAlarmScheduler.reconcile(activity, alarm))
-                        } else {
-                            DailyAlarmScheduler.schedule(activity, alarm)
-                            result.success(true)
-                        }
                     }
                     "cancel" -> {
                         DailyAlarmScheduler.cancel(activity, requireNotNull(call.argument<String>("eventId")))

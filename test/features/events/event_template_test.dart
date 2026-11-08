@@ -496,4 +496,62 @@ void main() {
       },
     );
   });
+
+  group('EventTemplate several alarm times (#784)', () {
+    final source = EventDraft(
+      title: '회의',
+      startAt: DateTime(2026, 3, 7, 19),
+      endAt: DateTime(2026, 3, 7, 20),
+      category: _workout,
+      alarmEnabled: true,
+      alarmMinutesBeforeList: const [0, 30],
+      alarmCustomAtList: [DateTime(2026, 3, 6, 21, 30)],
+    );
+
+    test('stores, applies and round-trips every trigger', () {
+      final template = EventTemplate.fromDraft(source, id: 'm', name: '회의');
+      expect(template.alarmMinutesBeforeList, [0, 30]);
+      expect(template.alarmCustomTimes, [(dayOffset: -1, minutes: 21 * 60 + 30)]);
+      // Legacy keys hold the earliest trigger: the day-before custom time.
+      final json = template.toJson();
+      expect(json['alarmCustomDayOffset'], -1);
+      expect(json['alarmCustomMinutes'], 21 * 60 + 30);
+      expect(json['alarmMinutesBeforeList'], [0, 30]);
+      final restored = EventTemplate.tryFromJson(jsonDecode(jsonEncode(json)))!;
+      expect(restored.toJson(), json);
+
+      final draft = restored.draftOn(DateTime(2026, 11, 2), _workout);
+      expect(
+        draft.toEvent(id: 'e', now: DateTime(2026), deviceId: 'd').alarmFireTimes,
+        [
+          DateTime(2026, 11, 1, 21, 30),
+          DateTime(2026, 11, 2, 18, 30),
+          DateTime(2026, 11, 2, 19),
+        ],
+      );
+      expect(
+        EventTemplate.fromDraft(draft, id: 'm', name: '회의').toJson(),
+        json,
+      );
+    });
+
+    test('older documents and legacy-only edits read as one alarm', () {
+      final json = EventTemplate.fromDraft(source, id: 'm', name: '회의').toJson();
+      final older = Map<String, Object?>.from(json)
+        ..remove('alarmMinutesBeforeList')
+        ..remove('alarmCustomTimes');
+      final olderTemplate = EventTemplate.tryFromJson(older)!;
+      expect(olderTemplate.alarmCustomTimes, hasLength(1));
+      expect(olderTemplate.alarmMinutesBeforeList, isEmpty);
+
+      final edited = Map<String, Object?>.from(json)
+        ..remove('alarmCustomDayOffset')
+        ..remove('alarmCustomMinutes')
+        ..['alarmMinutesBefore'] = 15;
+      final editedTemplate = EventTemplate.tryFromJson(edited)!;
+      expect(editedTemplate.alarmMinutesBeforeList, [15]);
+      expect(editedTemplate.alarmCustomTimes, isEmpty);
+      expect(editedTemplate.toJson(), isNot(contains('alarmMinutesBeforeList')));
+    });
+  });
 }

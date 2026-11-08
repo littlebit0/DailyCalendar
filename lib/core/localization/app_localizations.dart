@@ -823,6 +823,8 @@ const Map<String, Map<String, String>> _translations = {
         'This alarm time stays the same even if the event time changes.',
     '지난 시각이라 알람이 울리지 않습니다.':
         'This time has passed, so the alarm will not ring.',
+    '지난 시각의 알람은 울리지 않습니다.':
+        'Alarms at times that have passed will not ring.',
     'URL / 링크': 'URL / Link',
     '날씨': 'Weather',
     '예: 흐림': 'e.g. Cloudy',
@@ -1891,6 +1893,7 @@ const Map<String, Map<String, String>> _translations = {
     '날짜·시각 지정': '日時を指定',
     '일정 시각을 바꿔도 지정한 알람 시각은 유지됩니다.': '予定の時刻を変更しても、指定したアラーム時刻は維持されます。',
     '지난 시각이라 알람이 울리지 않습니다.': '過ぎた時刻のため、アラームは鳴りません。',
+    '지난 시각의 알람은 울리지 않습니다.': '過ぎた時刻のアラームは鳴りません。',
     'URL / 링크': 'URL / リンク',
     '날씨': '天気',
     '예: 흐림': '例：曇り',
@@ -2907,6 +2910,7 @@ const Map<String, Map<String, String>> _translations = {
     '날짜·시각 지정': '指定日期與時間',
     '일정 시각을 바꿔도 지정한 알람 시각은 유지됩니다.': '即使變更行程時間，指定的鬧鐘時間也會保留。',
     '지난 시각이라 알람이 울리지 않습니다.': '此時間已過，鬧鐘不會響起。',
+    '지난 시각의 알람은 울리지 않습니다.': '已過時間的鬧鐘不會響起。',
     'URL / 링크': 'URL / 連結',
     '날씨': '天氣',
     '예: 흐림': '例如：陰天',

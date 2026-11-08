@@ -607,16 +607,114 @@ void main() {
     await tester.ensureVisible(find.text('일정 알람'));
     await tester.tap(find.text('일정 알람'));
     await tester.pumpAndSettle();
-    final chip = find.widgetWithText(ChoiceChip, '30분 전');
-    await tester.ensureVisible(chip);
-    await tester.tap(chip);
+    // The reminder chips come first; the alarm chips are the last match.
+    Finder alarmChip(String label) =>
+        find.widgetWithText(FilterChip, label).last;
+    await tester.ensureVisible(alarmChip('30분 전'));
+    await tester.tap(alarmChip('30분 전'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('저장'));
     await tester.pumpAndSettle();
 
     expect(savedDraft?.alarmEnabled, isTrue);
+    expect(savedDraft?.alarmMinutesBeforeList, [0, 30]);
+    // The legacy field keeps the earliest trigger for older clients.
     expect(savedDraft?.alarmMinutesBefore, 30);
     expect(savedDraft?.alarmCustomAt, isNull);
+    expect(savedDraft?.reminderMinutesBeforeList, isNot(contains(30)));
+  });
+
+  testWidgets('alarm time chips select and clear several times', (
+    tester,
+  ) async {
+    EventDraft? savedDraft;
+    await tester.pumpWidget(
+      _DialogHost(
+        builder: (context) => EventEditorDialog(
+          initialDate: DateTime.now().add(const Duration(days: 1)),
+          alarmService: const _AuthorizedAlarmService(),
+        ),
+        onSaved: (draft) => savedDraft = draft,
+      ),
+    );
+
+    await tester.tap(find.text('열기'));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField).first, '알람 일정');
+    await tester.ensureVisible(find.text('일정 알람'));
+    await tester.tap(find.text('일정 알람'));
+    await tester.pumpAndSettle();
+    Finder alarmChip(String label) =>
+        find.widgetWithText(FilterChip, label).last;
+    for (final label in ['10분 전', '1시간 전', '정시', '1시간 전']) {
+      await tester.ensureVisible(alarmChip(label));
+      await tester.tap(alarmChip(label));
+      await tester.pumpAndSettle();
+    }
+    // The last remaining trigger cannot be cleared from the chips.
+    await tester.ensureVisible(alarmChip('10분 전'));
+    await tester.tap(alarmChip('10분 전'));
+    await tester.pumpAndSettle();
+    expect(tester.widget<FilterChip>(alarmChip('10분 전')).selected, isTrue);
+    await tester.ensureVisible(alarmChip('30분 전'));
+    await tester.tap(alarmChip('30분 전'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('저장'));
+    await tester.pumpAndSettle();
+
+    expect(savedDraft?.alarmMinutesBeforeList, [10, 30]);
+    expect(savedDraft?.alarmCustomAtList, isEmpty);
+    expect(savedDraft?.alarmMinutesBefore, 30);
+  });
+
+  testWidgets('an extra custom alarm time can be removed', (tester) async {
+    final start = DateTime.now().add(const Duration(days: 5));
+    final first = DateTime(start.year, start.month, start.day - 1, 21);
+    final second = DateTime(start.year, start.month, start.day - 2, 8, 15);
+    EventDraft? savedDraft;
+    await tester.pumpWidget(
+      _DialogHost(
+        builder: (context) => EventEditorDialog(
+          initialDate: start,
+          event: CalendarEvent(
+            id: 'multi-custom',
+            title: '여러 알람',
+            startAt: start,
+            endAt: start.add(const Duration(hours: 1)),
+            allDay: false,
+            category: EventCategory.basic,
+            colorValue: EventCategory.basic.colorValue,
+            createdAt: DateTime(2026, 1, 1),
+            updatedAt: DateTime(2026, 1, 1),
+            alarmEnabled: true,
+            alarmMinutesBeforeList: const [],
+            alarmCustomAtList: [first, second],
+          ),
+          alarmService: const _AuthorizedAlarmService(),
+        ),
+        onSaved: (draft) => savedDraft = draft,
+      ),
+    );
+
+    await tester.tap(find.text('열기'));
+    await tester.pumpAndSettle();
+    final chips = find.byType(InputChip);
+    expect(chips, findsNWidgets(2));
+    // Sorted: the earlier (second) custom time comes first.
+    tester.widget<InputChip>(chips.first).onDeleted!();
+    await tester.pumpAndSettle();
+    expect(find.byType(InputChip), findsOneWidget);
+    // The only remaining trigger has no delete button.
+    expect(
+      tester.widget<InputChip>(find.byType(InputChip)).onDeleted,
+      isNull,
+    );
+    await tester.tap(find.text('저장'));
+    await tester.pumpAndSettle();
+
+    expect(savedDraft?.alarmCustomAtList, [first]);
+    expect(savedDraft?.alarmCustomAt, first);
+    expect(savedDraft?.alarmMinutesBeforeList, isEmpty);
   });
 
   testWidgets('keeps an existing custom alarm time on save', (
