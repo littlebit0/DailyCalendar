@@ -9392,61 +9392,10 @@ void main() {
   testWidgets(
     'day schedule sheet swipes to the previous and next day across a month boundary (#693)',
     (tester) async {
-      SharedPreferences.setMockInitialValues({
-        'onboardingCompleted': true,
-        'defaultCalendarView': 'month',
-      });
-      final preferences = await SharedPreferences.getInstance();
-      final settingsRepository = SettingsRepository(preferences: preferences);
       final now = DateTime.now();
       final lastDay = DateTime(now.year, now.month + 1, 0);
       final nextDay = DateTime(now.year, now.month + 1, 1);
-      CalendarEvent event(String id, String title, DateTime day) =>
-          CalendarEvent(
-            id: id,
-            title: title,
-            startAt: DateTime(day.year, day.month, day.day, 9),
-            endAt: DateTime(day.year, day.month, day.day, 10),
-            allDay: false,
-            category: EventCategory.basic,
-            colorValue: EventCategory.basic.colorValue,
-            createdAt: now,
-            updatedAt: now,
-          );
-
-      await tester.pumpWidget(
-        ProviderScope(
-          overrides: [
-            universityRegionsProvider.overrideWith(
-              (ref) async => UniversityRegions.fromJson(
-                jsonDecode(
-                      File(
-                        'assets/academic/university_regions.json',
-                      ).readAsStringSync(),
-                    )
-                    as Map<String, dynamic>,
-              ),
-            ),
-            settingsRepositoryProvider.overrideWithValue(settingsRepository),
-            notificationServiceProvider.overrideWithValue(_FakeNotification()),
-            syncServiceProvider.overrideWithValue(_FakeSync()),
-            eventRepositoryProvider.overrideWithValue(
-              _StreamingEventRepository([
-                event('month-end', '월말 일정', lastDay),
-                event('month-start', '월초 일정', nextDay),
-              ]),
-            ),
-            googleDriveAuthServiceProvider.overrideWithValue(
-              _FakeGoogleDriveAuthService(),
-            ),
-          ],
-          child: const DailyApp(),
-        ),
-      );
-      await tester.pumpAndSettle();
-      final container = ProviderScope.containerOf(
-        tester.element(find.byType(DailyApp)),
-      );
+      final container = await _pumpDaySheetSwipeApp(tester, lastDay, nextDay);
       final panel = find.byType(EventDetailsPanel);
       Finder inPanel(String text) =>
           find.descendant(of: panel, matching: find.text(text));
@@ -9509,6 +9458,102 @@ void main() {
         tester.widget<EventDetailsPanel>(panel).date,
         DateTime(lastDay.year, lastDay.month, lastDay.day - 1),
       );
+
+      await tester.pumpWidget(const SizedBox.shrink());
+    },
+  );
+
+  testWidgets(
+    'day schedule sheet slides with the finger and in the swipe direction (#788)',
+    (tester) async {
+      final now = DateTime.now();
+      final lastDay = DateTime(now.year, now.month + 1, 0);
+      final nextDay = DateTime(now.year, now.month + 1, 1);
+      await _pumpDaySheetSwipeApp(tester, lastDay, nextDay);
+      final panel = find.byType(EventDetailsPanel);
+      final label = find.byKey(const ValueKey('event-details-date-label'));
+      DateTime shownDate() => tester.widget<EventDetailsPanel>(panel).date;
+      double offset() => tester
+          .widget<Transform>(
+            find.byKey(const ValueKey('day-sheet-swipe-offset')),
+          )
+          .transform
+          .getTranslation()
+          .x;
+
+      await tester.tap(
+        find
+            .byKey(
+              ValueKey(
+                'day-cell-${lastDay.year}-${lastDay.month}-${lastDay.day}',
+              ),
+            )
+            .hitTestable()
+            .first,
+      );
+      await tester.pumpAndSettle();
+      expect(shownDate(), lastDay);
+      expect(offset(), 0);
+
+      // While dragging, the content follows the finger.
+      final gesture = await tester.startGesture(tester.getCenter(label));
+      for (var i = 0; i < 6; i++) {
+        await gesture.moveBy(const Offset(-10, 0));
+        await tester.pump(const Duration(milliseconds: 100));
+      }
+      expect(offset(), lessThan(-20));
+      // Back below the thresholds: released slowly, it returns in place.
+      for (var i = 0; i < 4; i++) {
+        await gesture.moveBy(const Offset(8, 0));
+        await tester.pump(const Duration(milliseconds: 100));
+      }
+      await tester.pump(const Duration(milliseconds: 100));
+      await gesture.up();
+      await tester.pumpAndSettle();
+      expect(shownDate(), lastDay);
+      expect(offset(), 0);
+
+      // Left swipe: the next day enters from the right.
+      await tester.drag(label, const Offset(-200, 0));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 160));
+      await tester.pump(const Duration(milliseconds: 40));
+      expect(shownDate(), nextDay);
+      expect(offset(), greaterThan(0));
+      await tester.pumpAndSettle();
+      expect(offset(), 0);
+
+      // Accessibility "previous day": same direction rules, entering from
+      // the left.
+      final semantics = tester.widget<Semantics>(
+        find
+            .ancestor(
+              of: find.byKey(const ValueKey('day-sheet-swipe-navigator')),
+              matching: find.byType(Semantics),
+            )
+            .first,
+      );
+      final actions = semantics.properties.customSemanticsActions!;
+      actions.entries.firstWhere((e) => e.key.label == '이전 날').value();
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 160));
+      await tester.pump(const Duration(milliseconds: 40));
+      expect(shownDate(), lastDay);
+      expect(offset(), lessThan(0));
+      await tester.pumpAndSettle();
+      expect(offset(), 0);
+
+      // Reduce motion: the date changes at once without sliding.
+      tester.platformDispatcher.accessibilityFeaturesTestValue =
+          const FakeAccessibilityFeatures(disableAnimations: true);
+      addTearDown(
+        tester.platformDispatcher.clearAccessibilityFeaturesTestValue,
+      );
+      await tester.pump();
+      await tester.drag(label, const Offset(-200, 0));
+      await tester.pump();
+      expect(shownDate(), nextDay);
+      expect(offset(), 0);
 
       await tester.pumpWidget(const SizedBox.shrink());
     },
@@ -11358,4 +11403,62 @@ class _ToolbarLms extends LmsController {
     onRefresh(force);
     await refreshWait?.future;
   }
+}
+
+Future<ProviderContainer> _pumpDaySheetSwipeApp(
+  WidgetTester tester,
+  DateTime lastDay,
+  DateTime nextDay,
+) async {
+  SharedPreferences.setMockInitialValues({
+    'onboardingCompleted': true,
+    'defaultCalendarView': 'month',
+  });
+  final preferences = await SharedPreferences.getInstance();
+  final settingsRepository = SettingsRepository(preferences: preferences);
+  final now = DateTime.now();
+  CalendarEvent event(String id, String title, DateTime day) =>
+      CalendarEvent(
+        id: id,
+        title: title,
+        startAt: DateTime(day.year, day.month, day.day, 9),
+        endAt: DateTime(day.year, day.month, day.day, 10),
+        allDay: false,
+        category: EventCategory.basic,
+        colorValue: EventCategory.basic.colorValue,
+        createdAt: now,
+        updatedAt: now,
+      );
+
+  await tester.pumpWidget(
+    ProviderScope(
+      overrides: [
+        universityRegionsProvider.overrideWith(
+          (ref) async => UniversityRegions.fromJson(
+            jsonDecode(
+                  File(
+                    'assets/academic/university_regions.json',
+                  ).readAsStringSync(),
+                )
+                as Map<String, dynamic>,
+          ),
+        ),
+        settingsRepositoryProvider.overrideWithValue(settingsRepository),
+        notificationServiceProvider.overrideWithValue(_FakeNotification()),
+        syncServiceProvider.overrideWithValue(_FakeSync()),
+        eventRepositoryProvider.overrideWithValue(
+          _StreamingEventRepository([
+            event('month-end', '월말 일정', lastDay),
+            event('month-start', '월초 일정', nextDay),
+          ]),
+        ),
+        googleDriveAuthServiceProvider.overrideWithValue(
+          _FakeGoogleDriveAuthService(),
+        ),
+      ],
+      child: const DailyApp(),
+    ),
+  );
+  await tester.pumpAndSettle();
+  return ProviderScope.containerOf(tester.element(find.byType(DailyApp)));
 }
