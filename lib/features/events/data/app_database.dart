@@ -61,13 +61,23 @@ class EventRecords extends Table {
 
 @DriftDatabase(tables: [EventRecords])
 class AppDatabase extends _$AppDatabase {
-  static const currentSchemaVersion = 13;
+  static const currentSchemaVersion = 14;
   static const createDeletionTable = '''
     CREATE TABLE IF NOT EXISTS sync_event_deletions (
       id TEXT PRIMARY KEY NOT NULL,
       deleted_at TEXT NOT NULL,
       pending INTEGER NOT NULL DEFAULT 1,
       lms_owner_id TEXT
+    )
+  ''';
+  // Schema 14: device-local copy of Drive v2 event files, keyed by Drive file
+  // id and the content md5. Never uploaded; a listed md5 that matches lets
+  // sync reuse the body instead of downloading it again.
+  static const createRemoteEventFileTable = '''
+    CREATE TABLE IF NOT EXISTS sync_remote_event_files (
+      file_id TEXT PRIMARY KEY NOT NULL,
+      md5_checksum TEXT NOT NULL,
+      body TEXT NOT NULL
     )
   ''';
 
@@ -98,6 +108,7 @@ class AppDatabase extends _$AppDatabase {
       onCreate: (migrator) async {
         await migrator.createAll();
         await customStatement(createDeletionTable);
+        await customStatement(createRemoteEventFileTable);
       },
       onUpgrade: (migrator, from, to) async {
         await repairEventSchema(migrator, rebuild: from < 6);
@@ -134,6 +145,7 @@ class AppDatabase extends _$AppDatabase {
       await migrator.alterTable(TableMigration(eventRecords));
     }
     await customStatement(createDeletionTable);
+    await customStatement(createRemoteEventFileTable);
     final deletionColumns = await customSelect(
       'PRAGMA table_info(sync_event_deletions)',
     ).get();

@@ -380,6 +380,106 @@ void main() {
   }
 
   test(
+    'schema 13 gains the Drive file cache locally and retries after interruption (#786)',
+    () async {
+      final database = AppDatabase.forTesting(NativeDatabase(databaseFile));
+      await DriftEventRepository(database).save(_event(id: 'synced'));
+      await database.close();
+      final before = sqlite3.open(databaseFile.path);
+      try {
+        before.execute('DROP TABLE sync_remote_event_files');
+        before.execute('PRAGMA user_version = 13');
+      } finally {
+        before.close();
+      }
+      var cloudCalls = 0;
+      TodoDatabaseMigrationService linked({void Function()? beforeCommit}) =>
+          TodoDatabaseMigrationService(
+            databaseFile: () async => databaseFile,
+            hasLinkedGoogleAccount: () => true,
+            loadRemoteEvents: () async {
+              cloudCalls++;
+              return null;
+            },
+            remoteDeletionRecords: () {
+              cloudCalls++;
+              return const [];
+            },
+            backupMigratedEvents: () async => cloudCalls++,
+            beforeCommit: beforeCommit,
+          );
+
+      final interrupted = linked(
+        beforeCommit: () => throw StateError('injected interruption'),
+      );
+      addTearDown(interrupted.dispose);
+      await expectLater(
+        interrupted.migrateIfNeeded(),
+        throwsA(isA<TodoMigrationException>()),
+      );
+      final observer = sqlite3.open(databaseFile.path);
+      try {
+        expect(_userVersion(observer), 13);
+        expect(
+          observer.select(
+            "SELECT 1 FROM sqlite_master WHERE name = 'sync_remote_event_files'",
+          ),
+          isEmpty,
+        );
+      } finally {
+        observer.close();
+      }
+
+      final retry = linked();
+      addTearDown(retry.dispose);
+      expect((await retry.migrateIfNeeded()).migrated, isTrue);
+      expect(cloudCalls, 0);
+      final migrated = sqlite3.open(databaseFile.path);
+      try {
+        expect(_userVersion(migrated), 14);
+        expect(
+          migrated.select(
+            'SELECT sync_status FROM event_records WHERE id = ?',
+            ['synced'],
+          ).single['sync_status'],
+          'synced',
+        );
+      } finally {
+        migrated.close();
+      }
+      expect((await retry.migrateIfNeeded()).migrated, isFalse);
+
+      final reopened = AppDatabase.forTesting(NativeDatabase(databaseFile));
+      addTearDown(reopened.close);
+      final repository = DriftEventRepository(reopened);
+      await repository.cacheRemoteEventFile('file', 'md5-a', '{"a":1}');
+      expect(await repository.cachedRemoteEventFile('file', 'md5-a'), '{"a":1}');
+      expect(await repository.cachedRemoteEventFile('file', 'md5-b'), isNull);
+      await repository.clearAll();
+      expect(await repository.cachedRemoteEventFile('file', 'md5-a'), isNull);
+    },
+  );
+
+  test('Drift upgrade from schema 13 creates the Drive file cache', () async {
+    final database = AppDatabase.forTesting(NativeDatabase(databaseFile));
+    await DriftEventRepository(database).save(_event(id: 'kept'));
+    await database.close();
+    final raw = sqlite3.open(databaseFile.path);
+    try {
+      raw.execute('DROP TABLE sync_remote_event_files');
+      raw.execute('PRAGMA user_version = 13');
+    } finally {
+      raw.close();
+    }
+    final upgraded = AppDatabase.forTesting(NativeDatabase(databaseFile));
+    addTearDown(upgraded.close);
+    final repository = DriftEventRepository(upgraded);
+    expect((await repository.findById('kept'))?.syncStatus, 'synced');
+    await repository.cacheRemoteEventFile('file', 'md5', '{}');
+    expect(await repository.cachedRemoteEventFile('file', 'md5'), '{}');
+  });
+
+  test(
     'migrates existing events to incomplete Todo items with a snapshot',
     () async {
       await _createSchemaSixDatabase(databaseFile, [_event(id: 'local')]);

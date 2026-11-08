@@ -3759,6 +3759,265 @@ void _latestMergeTests() {
       },
     );
 
+    group('Drive file cache (#786)', () {
+      setUp(() => drive.listChecksums = true);
+
+      int mediaDownloads() => drive.requests
+          .where(
+            (r) =>
+                r.method == 'GET' &&
+                r.url.path.startsWith('/drive/v3/files/') &&
+                r.url.queryParameters['alt'] == 'media',
+          )
+          .length;
+      int metadataReads() => drive.requests
+          .where(
+            (r) => r.method == 'GET' && r.url.path.startsWith('/drive/v2/'),
+          )
+          .length;
+      Map<String, Object?> file(String id, String title, String updated) =>
+          _eventFileJson(
+            id: id,
+            title: title,
+            startAt: '2026-09-17',
+            endAt: '2026-09-18',
+            updatedAt: updated,
+          );
+      Future<void> editLocally(String title, DateTime updatedAt) async {
+        final current = (await repository.findById('merge'))!;
+        await repository.save(
+          current.copyWith(
+            title: title,
+            updatedAt: updatedAt,
+            syncStatus: 'pending',
+          ),
+        );
+      }
+
+      test(
+        'full restore downloads only files whose listed md5 is not cached',
+        () async {
+          drive.seed(
+            'file-a',
+            'daily-sync-v2-event-a.json',
+            file('a', 'Drive A', '2026-09-15T00:00:00.000Z'),
+          );
+          drive.seed(
+            'file-b',
+            'daily-sync-v2-event-b.json',
+            file('b', 'Drive B', '2026-09-15T00:00:00.000Z'),
+          );
+          drive.seed('file-d', 'daily-sync-v2-event-d.json', {
+            'schemaVersion': 2,
+            'type': 'event',
+            'compacted': true,
+            'deletion': EventDeletion(
+              id: 'd',
+              deletedAt: DateTime.utc(2026, 9, 15),
+            ).toJson(),
+          });
+          await service.restoreNow();
+          expect(mediaDownloads(), 3);
+
+          // Another device rewrites B; A and the tombstone D are unchanged.
+          drive.seed(
+            'file-b',
+            'daily-sync-v2-event-b.json',
+            file('b', 'Other device B', '2026-09-16T00:00:00.000Z'),
+          );
+          await service.restoreNow();
+
+          expect(mediaDownloads(), 4);
+          expect(
+            drive.requests
+                .where((r) => r.url.queryParameters['alt'] == 'media')
+                .last
+                .url
+                .pathSegments
+                .last,
+            'file-b',
+          );
+          expect((await repository.findById('a'))!.title, 'Drive A');
+          expect((await repository.findById('b'))!.title, 'Other device B');
+          final d = await repository.findById('d');
+          expect(d == null || d.isDeleted, isTrue);
+        },
+      );
+
+      test(
+        'startup migration downloads neither read nor write the cache',
+        () async {
+          drive.seed(
+            'file-a',
+            'daily-sync-v2-event-a.json',
+            file('a', 'Drive A', '2026-09-15T00:00:00.000Z'),
+          );
+          Future<int> cachedRows() async => (await database
+                  .customSelect('SELECT file_id FROM sync_remote_event_files')
+                  .get())
+              .length;
+
+          expect(await service.downloadEventsForMigration(), hasLength(1));
+          expect(mediaDownloads(), 1);
+          expect(await cachedRows(), 0);
+
+          await service.restoreNow();
+          expect(await cachedRows(), 1);
+          expect(await service.downloadEventsForMigration(), hasLength(1));
+          expect(mediaDownloads(), 3);
+        },
+      );
+
+      test('a listing without md5 downloads every file as before', () async {
+        drive.seed(
+          'file-a',
+          'daily-sync-v2-event-a.json',
+          file('a', 'Drive A', '2026-09-15T00:00:00.000Z'),
+        );
+        await service.restoreNow();
+        drive.listChecksums = false;
+        await service.restoreNow();
+        expect(mediaDownloads(), 2);
+        expect((await repository.findById('a'))!.title, 'Drive A');
+      });
+
+      test(
+        'an interrupted restore applies the cached files on retry',
+        () async {
+          drive.seed(
+            'file-a',
+            'daily-sync-v2-event-a.json',
+            file('a', 'Drive A', '2026-09-15T00:00:00.000Z'),
+          );
+          var failures = 1;
+          drive.requestOverride = (request) {
+            final q = request.url.queryParameters['q'] ?? '';
+            if (q.contains('daily-sync-v2-timetable.json') && failures-- > 0) {
+              return http.Response('bad request', 400);
+            }
+            return null;
+          };
+          await service.restoreNow().catchError((Object _) {});
+          expect(mediaDownloads(), 1);
+          expect(await repository.findById('a'), isNull);
+
+          await service.restoreNow();
+          expect(mediaDownloads(), 1);
+          expect((await repository.findById('a'))!.title, 'Drive A');
+        },
+      );
+
+      test(
+        'backup over the cached revision skips the compare download',
+        () async {
+          drive.seed('file-m', 'daily-sync-v2-event-merge.json', remote());
+          await service.restoreNow();
+          final downloads = mediaDownloads();
+
+          await editLocally('Edited', DateTime.utc(2026, 10, 12));
+          await service.backupNow(eventIds: {'merge'}, includeSettings: false);
+          expect(mediaDownloads(), downloads);
+          expect((drive.payload('file-m')['event'] as Map)['title'], 'Edited');
+          expect((await repository.findById('merge'))!.syncStatus, 'synced');
+
+          // The uploaded revision is cached from the upload response.
+          final reads = metadataReads();
+          await editLocally('Edited again', DateTime.utc(2026, 10, 13));
+          await service.backupNow(eventIds: {'merge'}, includeSettings: false);
+          expect(mediaDownloads(), downloads);
+          expect(metadataReads(), reads + 1);
+          expect(
+            (drive.payload('file-m')['event'] as Map)['title'],
+            'Edited again',
+          );
+        },
+      );
+
+      test(
+        'a skewed local clock still loses to the newer cached revision',
+        () async {
+          drive.seed('file-m', 'daily-sync-v2-event-merge.json', remote());
+          await service.restoreNow();
+          final downloads = mediaDownloads();
+          final writes = drive.writes;
+
+          // Local edit stamped before the remote revision it was made on.
+          await editLocally('Behind clock', DateTime.utc(2026, 9, 14));
+          // A newer remote revision holds the upload back as a conflict.
+          await expectLater(
+            service.backupNow(eventIds: {'merge'}, includeSettings: false),
+            throwsA(isA<GoogleDriveSyncException>()),
+          );
+
+          expect(mediaDownloads(), downloads);
+          expect(drive.writes, writes);
+          expect((drive.payload('file-m')['event'] as Map)['title'], 'Remote');
+        },
+      );
+
+      test(
+        'another device rewrite after caching is downloaded and wins if newer',
+        () async {
+          drive.seed('file-m', 'daily-sync-v2-event-merge.json', remote());
+          await service.restoreNow();
+          final downloads = mediaDownloads();
+          final writes = drive.writes;
+          drive.seed(
+            'file-m',
+            'daily-sync-v2-event-merge.json',
+            remote(title: 'Other device', updated: '2026-10-20T00:00:00Z'),
+          );
+
+          await editLocally('Edited', DateTime.utc(2026, 10, 12));
+          // A newer remote revision holds the upload back as a conflict.
+          await expectLater(
+            service.backupNow(eventIds: {'merge'}, includeSettings: false),
+            throwsA(isA<GoogleDriveSyncException>()),
+          );
+
+          expect(mediaDownloads(), downloads + 1);
+          expect(drive.writes, writes);
+          expect(
+            (drive.payload('file-m')['event'] as Map)['title'],
+            'Other device',
+          );
+        },
+      );
+
+      test(
+        'a Drive change between listing and write is re-read, not overwritten',
+        () async {
+          drive.seed('file-m', 'daily-sync-v2-event-merge.json', remote());
+          await service.restoreNow();
+          final downloads = mediaDownloads();
+          await editLocally('Edited', DateTime.utc(2026, 10, 12));
+          var raced = false;
+          drive.requestOverride = (request) {
+            if (!raced && request.url.path.startsWith('/drive/v2/files/')) {
+              raced = true;
+              drive.seed(
+                'file-m',
+                'daily-sync-v2-event-merge.json',
+                remote(title: 'Raced', updated: '2026-10-25T00:00:00Z'),
+              );
+            }
+            return null;
+          };
+
+          // A newer remote revision holds the upload back as a conflict.
+          await expectLater(
+            service.backupNow(eventIds: {'merge'}, includeSettings: false),
+            throwsA(isA<GoogleDriveSyncException>()),
+          );
+
+          expect(raced, isTrue);
+          expect(drive.preconditionFailures, 0);
+          expect(mediaDownloads(), downloads + 1);
+          expect((drive.payload('file-m')['event'] as Map)['title'], 'Raced');
+        },
+      );
+    });
+
     test(
       'issue89 restored renamed category retains stable identity through SQLite edit',
       () async {
@@ -4534,6 +4793,10 @@ class _VersionedDrive {
       <String, ({String name, Map<String, Object?> data, int version})>{};
   bool reverseOrder = false;
   bool invalidChecksum = false;
+  // Real Drive lists md5Checksum; older fixtures here model a listing without.
+  bool listChecksums = false;
+  String checksum(String id) =>
+      md5.convert(utf8.encode(jsonEncode(files[id]!.data))).toString();
   FutureOr<void> Function()? beforeWrite;
   FutureOr<http.Response?> Function(http.Request)? requestOverride;
   int preconditionFailures = 0;
@@ -4583,7 +4846,11 @@ class _VersionedDrive {
       if (reverseOrder) entries = entries.toList().reversed;
       return _driveFiles([
         for (final entry in entries)
-          {'id': entry.key, 'name': entry.value.name},
+          {
+            'id': entry.key,
+            'name': entry.value.name,
+            if (listChecksums) 'md5Checksum': checksum(entry.key),
+          },
       ]);
     }
     if (request.method == 'GET' && path.startsWith('/drive/v3/files/')) {
@@ -4611,7 +4878,10 @@ class _VersionedDrive {
         files[id]!.name,
         jsonDecode(request.body) as Map<String, Object?>,
       );
-      return _jsonResponse({'id': id});
+      return _jsonResponse({
+        'id': id,
+        if (listChecksums) 'md5Checksum': checksum(id),
+      });
     }
     if (request.method == 'POST') {
       final boundary = request.headers['content-type']!.split('boundary=').last;
@@ -4627,7 +4897,10 @@ class _VersionedDrive {
       final key = 'created-${files.length}';
       seed(key, jsonParts.first['name'] as String, jsonParts.last);
       writes++;
-      return _jsonResponse({'id': key});
+      return _jsonResponse({
+        'id': key,
+        if (listChecksums) 'md5Checksum': checksum(key),
+      });
     }
     return http.Response('Unexpected request: $request', 500);
   }
