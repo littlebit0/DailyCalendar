@@ -1,3 +1,4 @@
+import 'alarm_triggers.dart';
 import 'calendar_event.dart';
 import 'event_category.dart';
 import 'event_draft.dart';
@@ -10,8 +11,8 @@ import 'event_draft.dart';
 ///
 /// Copied into a new event: title, memo, location, URL, all-day flag, start
 /// time, end day offset and end time, category, reminders, D-day display,
-/// alarm, all-day alarm time and alarm trigger (N minutes before, or a custom
-/// alarm time kept as the same wall-clock time and day offset from the start
+/// alarm, all-day alarm time and alarm triggers (N minutes before, and custom
+/// alarm times kept as the same wall-clock time and day offset from the start
 /// day, e.g. "the day before at 21:00"). Never copied: event id, account/LMS source,
 /// creation history, completion state, weather (date-specific) and recurrence.
 class EventTemplate {
@@ -32,14 +33,39 @@ class EventTemplate {
     this.alarmEnabled = false,
     int allDayAlarmMinutes = 9 * 60,
     int alarmMinutesBefore = 0,
-    this.alarmCustomDayOffset,
+    int? alarmCustomDayOffset,
     int? alarmCustomMinutes,
+    List<int>? alarmMinutesBeforeList,
+    List<AlarmCustomTime>? alarmCustomTimes,
     this.favorite = false,
   }) : startMinutes = allDay ? 0 : startMinutes.clamp(0, 1439),
        endMinutes = allDay ? 0 : endMinutes.clamp(0, 1439),
        allDayAlarmMinutes = allDayAlarmMinutes.clamp(0, 1439),
-       alarmMinutesBefore = alarmMinutesBefore < 0 ? 0 : alarmMinutesBefore,
-       alarmCustomMinutes = alarmCustomMinutes?.clamp(0, 1439),
+       _alarm = resolveAlarmTriggers(
+         base: _referenceDay.add(
+           Duration(
+             minutes: allDay
+                 ? allDayAlarmMinutes.clamp(0, 1439)
+                 : startMinutes.clamp(0, 1439),
+           ),
+         ),
+         minutesBefore: alarmMinutesBefore,
+         customAt: alarmCustomDayOffset == null || alarmCustomMinutes == null
+             ? null
+             : _referenceAt((
+                 dayOffset: alarmCustomDayOffset,
+                 minutes: alarmCustomMinutes.clamp(0, 1439),
+               )),
+         minutesList: alarmMinutesBeforeList,
+         customList: alarmCustomTimes
+             ?.map(
+               (time) => _referenceAt((
+                 dayOffset: time.dayOffset,
+                 minutes: time.minutes.clamp(0, 1439),
+               )),
+             )
+             .toList(),
+       ),
        reminderMinutesBeforeList = normalizeReminderMinutes(
          reminderMinutesBeforeList,
        );
@@ -71,18 +97,33 @@ class EventTemplate {
   final bool alarmEnabled;
   final int allDayAlarmMinutes;
 
-  /// Same meaning as [CalendarEvent.alarmMinutesBefore]; 0 = 정시.
-  final int alarmMinutesBefore;
+  /// Triggers on a UTC reference day, so their order ignores DST.
+  final AlarmTriggers _alarm;
 
-  /// A custom alarm time as days from the start day (negative = before) and
-  /// minutes after midnight. Both null = no custom time; it overrides
-  /// [alarmMinutesBefore] like [CalendarEvent.alarmCustomAt].
-  final int? alarmCustomDayOffset;
-  final int? alarmCustomMinutes;
+  /// Same meaning as [CalendarEvent.alarmMinutesBefore]; 0 = 정시.
+  int get alarmMinutesBefore => _alarm.minutesBefore;
+
+  /// The earliest custom alarm time as days from the start day (negative =
+  /// before) and minutes after midnight, like [CalendarEvent.alarmCustomAt].
+  /// Both null = the earliest trigger is not a custom time.
+  int? get alarmCustomDayOffset => _customAlarm?.dayOffset;
+  int? get alarmCustomMinutes => _customAlarm?.minutes;
+
+  /// Every "N minutes before" trigger, ascending.
+  List<int> get alarmMinutesBeforeList => _alarm.minutesList;
+
+  /// Every custom alarm time, earliest first.
+  List<AlarmCustomTime> get alarmCustomTimes =>
+      _alarm.customList.map(_fromReference).toList(growable: false);
   final bool favorite;
 
-  bool get _hasCustomAlarm =>
-      alarmCustomDayOffset != null && alarmCustomMinutes != null;
+  AlarmCustomTime? get _customAlarm =>
+      _alarm.customAt == null ? null : _fromReference(_alarm.customAt!);
+
+  bool get _hasCustomAlarm => _alarm.customAt != null;
+
+  bool get _hasMultipleAlarmTimes =>
+      _alarm.minutesList.length + _alarm.customList.length > 1;
 
   bool get isValid =>
       id.isNotEmpty &&
@@ -112,7 +153,6 @@ class EventTemplate {
     final endDay = draft.allDay
         ? DateTime(endAt.year, endAt.month, endAt.day - 1)
         : DateTime(endAt.year, endAt.month, endAt.day);
-    final customAt = draft.alarmCustomAt;
     return EventTemplate(
       id: id,
       name: name.trim(),
@@ -130,12 +170,14 @@ class EventTemplate {
       alarmEnabled: draft.alarmEnabled,
       allDayAlarmMinutes: draft.allDayAlarmMinutes,
       alarmMinutesBefore: draft.alarmMinutesBefore,
-      alarmCustomDayOffset: customAt == null
-          ? null
-          : _calendarDaysBetween(startDay, customAt),
-      alarmCustomMinutes: customAt == null
-          ? null
-          : customAt.hour * 60 + customAt.minute,
+      alarmMinutesBeforeList: draft.alarmMinutesBeforeList,
+      alarmCustomTimes: [
+        for (final customAt in draft.alarmCustomAtList)
+          (
+            dayOffset: _calendarDaysBetween(startDay, customAt),
+            minutes: customAt.hour * 60 + customAt.minute,
+          ),
+      ],
       favorite: favorite,
     );
   }
@@ -179,15 +221,10 @@ class EventTemplate {
       alarmEnabled: alarmEnabled,
       allDayAlarmMinutes: allDayAlarmMinutes,
       alarmMinutesBefore: alarmMinutesBefore,
-      alarmCustomAt: _hasCustomAlarm
-          ? DateTime(
-              date.year,
-              date.month,
-              date.day + alarmCustomDayOffset!,
-              alarmCustomMinutes! ~/ 60,
-              alarmCustomMinutes! % 60,
-            )
-          : null,
+      alarmMinutesBeforeList: alarmMinutesBeforeList,
+      alarmCustomAtList: [
+        for (final time in alarmCustomTimes) _customAlarmOn(date, time),
+      ],
     );
   }
 
@@ -211,11 +248,12 @@ class EventTemplate {
 
   bool _keepsTimesOn(DateTime day) {
     final draft = draftOn(day, EventCategory.basic);
-    final customAt = draft.alarmCustomAt;
-    if (customAt != null &&
-        (customAt.hour * 60 + customAt.minute != alarmCustomMinutes ||
-            _calendarDaysBetween(day, customAt) != alarmCustomDayOffset)) {
-      return false;
+    for (final time in alarmCustomTimes) {
+      final customAt = _customAlarmOn(day, time);
+      if (customAt.hour * 60 + customAt.minute != time.minutes ||
+          _calendarDaysBetween(day, customAt) != time.dayOffset) {
+        return false;
+      }
     }
     if (allDay) return true;
     return draft.startAt.hour * 60 + draft.startAt.minute == startMinutes &&
@@ -239,8 +277,8 @@ class EventTemplate {
     alarmEnabled: alarmEnabled,
     allDayAlarmMinutes: allDayAlarmMinutes,
     alarmMinutesBefore: alarmMinutesBefore,
-    alarmCustomDayOffset: alarmCustomDayOffset,
-    alarmCustomMinutes: alarmCustomMinutes,
+    alarmMinutesBeforeList: alarmMinutesBeforeList,
+    alarmCustomTimes: alarmCustomTimes,
     favorite: favorite ?? this.favorite,
   );
 
@@ -266,6 +304,15 @@ class EventTemplate {
       'alarmCustomDayOffset': alarmCustomDayOffset,
       'alarmCustomMinutes': alarmCustomMinutes,
     },
+    // Lists only for several triggers; the keys above stay the earliest one
+    // so 4.1.0 and older keep a single alarm.
+    if (_hasMultipleAlarmTimes) ...{
+      'alarmMinutesBeforeList': alarmMinutesBeforeList,
+      'alarmCustomTimes': [
+        for (final time in alarmCustomTimes)
+          {'dayOffset': time.dayOffset, 'minutes': time.minutes},
+      ],
+    },
     'favorite': favorite,
   };
 
@@ -274,7 +321,7 @@ class EventTemplate {
     if (raw is! Map) return null;
     try {
       final json = Map<String, Object?>.from(raw);
-      final template = EventTemplate(
+      EventTemplate build({bool withLists = true}) => EventTemplate(
         id: json['id'] as String,
         name: json['name'] as String,
         title: json['title'] as String,
@@ -296,14 +343,61 @@ class EventTemplate {
         alarmMinutesBefore: json['alarmMinutesBefore'] as int? ?? 0,
         alarmCustomDayOffset: json['alarmCustomDayOffset'] as int?,
         alarmCustomMinutes: json['alarmCustomMinutes'] as int?,
+        alarmMinutesBeforeList: withLists
+            ? (json['alarmMinutesBeforeList'] as List?)
+                  ?.whereType<int>()
+                  .toList()
+            : null,
+        alarmCustomTimes: withLists
+            ? (json['alarmCustomTimes'] as List?)
+                  ?.map((raw) => Map<String, Object?>.from(raw as Map))
+                  .map(
+                    (time) => (
+                      dayOffset: time['dayOffset'] as int,
+                      minutes: time['minutes'] as int,
+                    ),
+                  )
+                  .toList()
+            : null,
         favorite: json['favorite'] as bool? ?? false,
       );
+      var template = build();
+      // An older client that rewrote only the legacy keys wins over the lists.
+      if ((!template._hasCustomAlarm &&
+              template.alarmMinutesBefore !=
+                  (json['alarmMinutesBefore'] as int? ?? 0)) ||
+          template.alarmCustomDayOffset != json['alarmCustomDayOffset'] ||
+          template.alarmCustomMinutes != json['alarmCustomMinutes']) {
+        template = build(withLists: false);
+      }
       return template.isValid ? template : null;
     } on Object {
       return null;
     }
   }
 }
+
+/// A template custom alarm time: days from the start day and minutes after
+/// midnight of that day.
+typedef AlarmCustomTime = ({int dayOffset, int minutes});
+
+final _referenceDay = DateTime.utc(2000);
+
+DateTime _referenceAt(AlarmCustomTime time) =>
+    _referenceDay.add(Duration(days: time.dayOffset, minutes: time.minutes));
+
+AlarmCustomTime _fromReference(DateTime value) => (
+  dayOffset: _calendarDaysBetween(_referenceDay, value),
+  minutes: value.hour * 60 + value.minute,
+);
+
+DateTime _customAlarmOn(DateTime date, AlarmCustomTime time) => DateTime(
+  date.year,
+  date.month,
+  date.day + time.dayOffset,
+  time.minutes ~/ 60,
+  time.minutes % 60,
+);
 
 int _calendarDaysBetween(DateTime from, DateTime to) => DateTime.utc(
   to.year,

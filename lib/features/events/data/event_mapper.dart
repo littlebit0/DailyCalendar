@@ -4,6 +4,7 @@ import '../../../core/sync/sync_version.dart';
 import '../../../core/lms/lms_models.dart';
 
 import 'app_database.dart';
+import '../domain/alarm_triggers.dart';
 import '../domain/calendar_event.dart';
 import '../domain/event_category.dart';
 import '../domain/recurrence_rule.dart';
@@ -16,6 +17,11 @@ extension EventRecordMapper on EventRecord {
       category,
       colorValue: colorValue,
     );
+    // Only schema 13+ code writes these columns, so they are trusted as-is.
+    // Native partial updates (Siri moving start_at) leave the legacy alarm
+    // columns stale; the representative is recomputed from the lists.
+    final alarmMinutesList = decodeAlarmMinutesList(alarmMinutesBeforeList);
+    final alarmCustomList = decodeAlarmCustomList(alarmCustomAtList);
     final event = CalendarEvent(
       id: id,
       occurrenceId: occurrenceStart == null
@@ -62,6 +68,8 @@ extension EventRecordMapper on EventRecord {
       allDayAlarmMinutes: allDayAlarmMinutes,
       alarmMinutesBefore: alarmMinutesBefore,
       alarmCustomAt: alarmCustomAt,
+      alarmMinutesBeforeList: alarmMinutesList,
+      alarmCustomAtList: alarmCustomList,
       holiday: mappedCategory.id == EventCategory.holiday.id,
     ).normalizeAllDayBounds();
     return restoreSyncTimestamps(

@@ -359,62 +359,101 @@ private final class DailyMacAlarms {
           let eventId = arguments["eventId"] as? String,
           !eventId.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
           let title = arguments["title"] as? String,
-          let fireAtMilliseconds = int64Value(arguments["fireAtMilliseconds"]) else {
+          let rawFireTimes = arguments["fireAtMillisecondsList"] as? [Any] else {
+      result(FlutterError(code: "bad_arguments", message: "Invalid macOS alarm arguments", details: nil))
+      return
+    }
+    let fireTimes = rawFireTimes.compactMap { int64Value($0) }
+    guard fireTimes.count == rawFireTimes.count else {
       result(FlutterError(code: "bad_arguments", message: "Invalid macOS alarm arguments", details: nil))
       return
     }
 
-    let fireAt = Date(timeIntervalSince1970: TimeInterval(fireAtMilliseconds) / 1000.0)
-
     let snoozeMinutes = max(intValue(arguments["snoozeMinutes"]) ?? 10, 1)
     let memo = (arguments["memo"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines)
-    let content = UNMutableNotificationContent()
-    content.title = title
-    content.body = memo.flatMap { $0.isEmpty ? nil : String($0.prefix(160)) }
-      ?? "일정이 시작되었습니다."
-    content.sound = .default
-    content.categoryIdentifier = categoryIdentifier
-    content.threadIdentifier = "daily-event-alarms"
-    let sourceData = (try? JSONSerialization.data(withJSONObject: [fireAtMilliseconds, title, memo ?? "", snoozeMinutes])) ?? Data()
-    let sourceFingerprint = sourceData.base64EncodedString()
-    content.userInfo = [
-      eventIdKey: eventId,
-      snoozeMinutesKey: snoozeMinutes,
-      "dailyAlarmSource": sourceFingerprint,
-    ]
-    if #available(macOS 12.0, *) {
-      content.interruptionLevel = .timeSensitive
-    }
-
-    let identifier = requestIdentifier(eventId)
-    let request = UNNotificationRequest(
-      identifier: identifier,
-      content: content,
-      trigger: UNTimeIntervalNotificationTrigger(
-        timeInterval: max(fireAt.timeIntervalSinceNow, 1.0),
-        repeats: false
-      )
-    )
+    let reconcile = call.method == "reconcile"
     let center = UNUserNotificationCenter.current()
-    let apply = {
-      center.removePendingNotificationRequests(withIdentifiers: [identifier])
-      center.removeDeliveredNotifications(withIdentifiers: [identifier])
-      guard fireAt > Date() else { finish(result, value: false); return }
-      center.add(request) { error in
-        finish(result, error: error, value: true)
+    eventRequests(eventId) { existing in
+      let now = Date()
+      // One request per fire time (#784). A 4.1.0 request keeps the
+      // event-id identifier and may satisfy one of the times on reconcile.
+      let legacyIdentifier = requestIdentifier(eventId)
+      var keep = Set<String>()
+      var additions: [UNNotificationRequest] = []
+      var seen = Set<Int64>()
+      for fireAtMilliseconds in fireTimes where seen.insert(fireAtMilliseconds).inserted {
+        let fireAt = Date(timeIntervalSince1970: TimeInterval(fireAtMilliseconds) / 1000.0)
+        let sourceData = (try? JSONSerialization.data(withJSONObject: [fireAtMilliseconds, title, memo ?? "", snoozeMinutes])) ?? Data()
+        let sourceFingerprint = sourceData.base64EncodedString()
+        if reconcile, let match = existing.first(where: { request in
+          guard !keep.contains(request.identifier) else { return false }
+          let previous = request.content.userInfo["dailyAlarmSource"] as? String
+          return previous == sourceFingerprint ||
+            (previous == nil && request.identifier == legacyIdentifier && fireAt <= now)
+        }) {
+          keep.insert(match.identifier)
+          continue
+        }
+        guard fireAt > now else { continue }
+        let content = UNMutableNotificationContent()
+        content.title = title
+        content.body = memo.flatMap { $0.isEmpty ? nil : String($0.prefix(160)) }
+          ?? "일정이 시작되었습니다."
+        content.sound = .default
+        content.categoryIdentifier = categoryIdentifier
+        content.threadIdentifier = "daily-event-alarms"
+        content.userInfo = [
+          eventIdKey: eventId,
+          snoozeMinutesKey: snoozeMinutes,
+          "dailyAlarmSource": sourceFingerprint,
+        ]
+        if #available(macOS 12.0, *) {
+          content.interruptionLevel = .timeSensitive
+        }
+        additions.append(UNNotificationRequest(
+          identifier: requestIdentifier(eventId) + "#\(fireAtMilliseconds)",
+          content: content,
+          trigger: UNTimeIntervalNotificationTrigger(
+            timeInterval: max(fireAt.timeIntervalSinceNow, 1.0),
+            repeats: false
+          )
+        ))
+      }
+      let stale = Set(existing.map(\.identifier) + [legacyIdentifier]).subtracting(keep)
+      center.removePendingNotificationRequests(withIdentifiers: Array(stale))
+      center.removeDeliveredNotifications(withIdentifiers: Array(stale))
+      guard !additions.isEmpty else { finish(result, value: !keep.isEmpty); return }
+      let group = DispatchGroup()
+      var failure: Error?
+      for request in additions {
+        group.enter()
+        center.add(request) { error in
+          if let error = error { failure = failure ?? error }
+          group.leave()
+        }
+      }
+      group.notify(queue: .main) {
+        finish(result, error: failure, value: true)
       }
     }
-    guard call.method == "reconcile" else { apply(); return }
-    let matches: (UNNotificationRequest) -> Bool = { existing in
-      guard existing.identifier == identifier else { return false }
-      let previous = existing.content.userInfo["dailyAlarmSource"] as? String
-      return previous == sourceFingerprint || (previous == nil && fireAt <= Date())
+  }
+
+  /// Pending and delivered alarm requests of [eventId], including a 4.1.0
+  /// request that has the event-id identifier.
+  private static func eventRequests(
+    _ eventId: String,
+    _ completion: @escaping ([UNNotificationRequest]) -> Void
+  ) {
+    let legacyIdentifier = requestIdentifier(eventId)
+    let belongs: (UNNotificationRequest) -> Bool = { request in
+      request.identifier == legacyIdentifier ||
+        (request.identifier.hasPrefix(requestIdentifierPrefix) &&
+          request.content.userInfo[eventIdKey] as? String == eventId)
     }
+    let center = UNUserNotificationCenter.current()
     center.getPendingNotificationRequests { pending in
-      if pending.contains(where: matches) { finish(result, value: true); return }
       center.getDeliveredNotifications { delivered in
-        if delivered.contains(where: { matches($0.request) }) { finish(result, value: true); return }
-        apply()
+        completion(pending.filter(belongs) + delivered.map(\.request).filter(belongs))
       }
     }
   }
@@ -426,11 +465,13 @@ private final class DailyMacAlarms {
       result(FlutterError(code: "bad_arguments", message: "Invalid macOS alarm event id", details: nil))
       return
     }
-    let identifiers = [requestIdentifier(eventId)]
-    let center = UNUserNotificationCenter.current()
-    center.removePendingNotificationRequests(withIdentifiers: identifiers)
-    center.removeDeliveredNotifications(withIdentifiers: identifiers)
-    result(nil)
+    eventRequests(eventId) { existing in
+      let identifiers = Array(Set(existing.map(\.identifier) + [requestIdentifier(eventId)]))
+      let center = UNUserNotificationCenter.current()
+      center.removePendingNotificationRequests(withIdentifiers: identifiers)
+      center.removeDeliveredNotifications(withIdentifiers: identifiers)
+      finish(result)
+    }
   }
 
   private static func cancelAll(_ result: @escaping FlutterResult) {

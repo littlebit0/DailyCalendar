@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
 
+import '../../features/events/domain/alarm_triggers.dart';
 import '../../features/events/domain/calendar_event.dart';
 import '../../features/events/domain/event_category.dart';
 
@@ -93,6 +94,10 @@ Map<String, Object?> eventVersionValues(CalendarEvent event) => {
     'alarmMinutesBefore': event.alarmMinutesBefore,
   if (event.alarmCustomAt != null)
     'alarmCustomAt': event.alarmCustomAt!.toUtc().toIso8601String(),
+  if (event.hasMultipleAlarmTimes) ...{
+    'alarmMinutesBeforeList': event.alarmMinutesBeforeList,
+    'alarmCustomAtList': encodeAlarmCustomList(event.alarmCustomAtList),
+  },
 };
 
 String _day(DateTime date) =>
