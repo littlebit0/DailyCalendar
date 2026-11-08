@@ -70,6 +70,7 @@ extension EventRecordMapper on EventRecord {
       alarmCustomAt: alarmCustomAt,
       alarmMinutesBeforeList: alarmMinutesList,
       alarmCustomAtList: alarmCustomList,
+      showOvernightOnFollowingDays: showOvernightOnFollowingDays,
       holiday: mappedCategory.id == EventCategory.holiday.id,
     ).normalizeAllDayBounds();
     return restoreSyncTimestamps(

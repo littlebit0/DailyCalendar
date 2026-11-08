@@ -1,5 +1,22 @@
 # Daily Agent Memory — current handoff
 
+## #791 자정 넘김 일정의 다음 날 표시를 일정마다 — 2026-11-08
+
+- Format change (user-approved): `CalendarEvent.showOvernightOnFollowingDays`
+  (default on) in SQLite column `show_overnight_on_following_days` (schema 14),
+  Drive v2 event key `showOvernightOnFollowingDays` (always written), template
+  key of the same name (written only when off). Release with all platforms.
+- Removed the app-wide setting (#696) from Settings and the settings sync doc.
+  Its local pref is read only to seed existing rows on the upgrade to schema 14
+  (`AppDatabase.repairEventSchema`, both Drift `onUpgrade` and
+  `TodoDatabaseMigrationService`, whose additive gate is now `<= 14`).
+- Old files without the key read as on; a newer edit from a 4.1.0 writer keeps
+  the local value and re-uploads (`_DownloadedEvent.overnightDisplayKnown`).
+- Rule: `calendarEventListedOnDay` (no parameter). Widgets via
+  `CalendarWidgetService._eventsByDay`; iOS wallpaper via
+  `DailyWallpaperEvent.displayEnd`. Siri answers by real interval (unchanged).
+- Not verified on devices; test apps not updated (main session).
+
 ## #787 동기화 고정 대기 제거·문서 부트스트랩 저장·단계별 계측 — 2026-11-08
 
 - 백업 뒤 고정 3초 대기(`backupRestoreDelay`) 삭제. 2.0.1(`be38f04d2`)에 근거 기록 없이 들어왔고, 뒤의 읽기(변경 목록·전체 복원)는 방금 올린 자기 파일이 늦게 보여도 병합·재업로드로 처리됨.

@@ -379,6 +379,56 @@ void main() {
     }
   }
 
+  for (final legacyValue in [false, true]) {
+    test('schema 12 seeds each event with the removed overnight setting '
+        '($legacyValue) without uploads', () async {
+      final database = AppDatabase.forTesting(NativeDatabase(databaseFile));
+      final repository = DriftEventRepository(database);
+      await repository.save(_event(id: 'night'));
+      await repository.save(_event(id: 'pending', syncStatus: 'pending'));
+      await database.close();
+      final before = sqlite3.open(databaseFile.path);
+      try {
+        before.execute(
+          'ALTER TABLE event_records DROP COLUMN show_overnight_on_following_days',
+        );
+        before.execute('PRAGMA user_version = 12');
+      } finally {
+        before.close();
+      }
+
+      final service = TodoDatabaseMigrationService(
+        databaseFile: () async => databaseFile,
+        hasLinkedGoogleAccount: () => true,
+        loadRemoteEvents: () async =>
+            throw StateError('additive migration must not restore'),
+        backupMigratedEvents: () async {},
+        legacyShowOvernightOnFollowingDays: () => legacyValue,
+      );
+      addTearDown(service.dispose);
+      expect((await service.migrateIfNeeded()).migrated, isTrue);
+
+      final migrated = sqlite3.open(databaseFile.path);
+      addTearDown(migrated.close);
+      expect(_userVersion(migrated), AppDatabase.currentSchemaVersion);
+      final rows = migrated.select(
+        'SELECT id, sync_status, show_overnight_on_following_days AS shown '
+        'FROM event_records ORDER BY id',
+      );
+      expect(rows.map((row) => row['shown']), everyElement(legacyValue ? 1 : 0));
+      expect(rows.map((row) => row['sync_status']), ['synced', 'pending']);
+      expect((await service.migrateIfNeeded()).migrated, isFalse);
+
+      final reopened = AppDatabase.forTesting(NativeDatabase(databaseFile));
+      addTearDown(reopened.close);
+      final events = await DriftEventRepository(reopened).allEventsForSync();
+      expect(
+        events.map((event) => event.showOvernightOnFollowingDays),
+        everyElement(legacyValue),
+      );
+    });
+  }
+
   test(
     'schema 13 gains the Drive file cache locally and retries after interruption (#786)',
     () async {
@@ -436,7 +486,7 @@ void main() {
       expect(cloudCalls, 0);
       final migrated = sqlite3.open(databaseFile.path);
       try {
-        expect(_userVersion(migrated), 14);
+        expect(_userVersion(migrated), AppDatabase.currentSchemaVersion);
         expect(
           migrated.select(
             'SELECT sync_status FROM event_records WHERE id = ?',

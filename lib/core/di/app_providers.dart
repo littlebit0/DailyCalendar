@@ -96,7 +96,11 @@ final appSettingsProvider = StateProvider<AppSettings>((ref) {
 });
 
 final databaseProvider = Provider<AppDatabase>((ref) {
-  final database = AppDatabase();
+  final database = AppDatabase(
+    legacyShowOvernightOnFollowingDays: ref
+        .watch(settingsRepositoryProvider)
+        .legacyShowOvernightOnFollowingDays(),
+  );
   ref.onDispose(database.close);
   return database;
 });
@@ -220,6 +224,8 @@ final todoDatabaseMigrationServiceProvider =
         loadRemoteEvents: syncService.downloadEventsForMigration,
         remoteDeletionRecords: () => syncService.migrationDeletions,
         backupMigratedEvents: syncService.syncPendingChangesNow,
+        legacyShowOvernightOnFollowingDays:
+            settingsRepository.legacyShowOvernightOnFollowingDays,
       );
       ref.onDispose(service.dispose);
       return service;

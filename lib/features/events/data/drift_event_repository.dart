@@ -580,6 +580,7 @@ class DriftEventRepository
             ? jsonEncode(encodeAlarmCustomList(event.alarmCustomAtList))
             : null,
       ),
+      showOvernightOnFollowingDays: Value(event.showOvernightOnFollowingDays),
     );
   }
 }

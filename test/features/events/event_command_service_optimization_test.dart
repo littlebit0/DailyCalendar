@@ -793,6 +793,69 @@ void main() {
     );
   }
 
+  for (final scope in RecurringEditScope.values) {
+    test('following-day display is split with $scope edits (#791)', () async {
+      SharedPreferences.setMockInitialValues({});
+      final settings = SettingsRepository(
+        preferences: await SharedPreferences.getInstance(),
+      );
+      final database = AppDatabase.forTesting(NativeDatabase.memory());
+      addTearDown(database.close);
+      final repository = DriftEventRepository(database);
+      final original = _event('night-series', EventCategory.basic).copyWith(
+        startAt: DateTime(2026, 7, 30, 22),
+        endAt: DateTime(2026, 7, 31, 6),
+        recurrence: const RecurrenceRule(
+          frequency: RecurrenceFrequency.daily,
+          count: 10,
+        ),
+        showOvernightOnFollowingDays: false,
+      );
+      await repository.save(original);
+      final occurrence = original.copyWith(
+        startAt: DateTime(2026, 7, 31, 22),
+        endAt: DateTime(2026, 8, 1, 6),
+        occurrenceId: 'night-series@2026-07-31',
+      );
+      final commands = EventCommandService(
+        repository: repository,
+        settingsRepository: settings,
+        notificationService: _CountingNotificationService(),
+        syncService: _CountingSyncService(),
+      );
+      EventDraft draft({required bool shown}) => EventDraft(
+        title: 'night',
+        startAt: occurrence.startAt,
+        endAt: occurrence.endAt,
+        categoryChanged: false,
+        recurrence: occurrence.recurrence,
+        showOvernightOnFollowingDays: shown,
+      );
+      final turnedOn = await commands.editRecurringOccurrence(
+        occurrence: occurrence,
+        draft: draft(shown: true),
+        scope: scope,
+      );
+      expect(turnedOn.event.showOvernightOnFollowingDays, isTrue);
+      expect(
+        (await repository.findById(
+          turnedOn.event.id,
+        ))!.showOvernightOnFollowingDays,
+        isTrue,
+      );
+      if (scope != RecurringEditScope.all) {
+        expect(turnedOn.event.id, isNot(original.id));
+        // The unedited part of the series keeps its own value.
+        expect(
+          (await repository.findById(
+            original.id,
+          ))!.showOvernightOnFollowingDays,
+          isFalse,
+        );
+      }
+    });
+  }
+
   for (final scope in RecurringMoveScope.values) {
     for (final timeShift in [false, true]) {
       test(

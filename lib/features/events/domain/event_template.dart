@@ -13,7 +13,8 @@ import 'event_draft.dart';
 /// time, end day offset and end time, category, reminders, D-day display,
 /// alarm, all-day alarm time and alarm triggers (N minutes before, and custom
 /// alarm times kept as the same wall-clock time and day offset from the start
-/// day, e.g. "the day before at 21:00"). Never copied: event id, account/LMS source,
+/// day, e.g. "the day before at 21:00") and whether an overnight event is
+/// also listed on the following days. Never copied: event id, account/LMS source,
 /// creation history, completion state, weather (date-specific) and recurrence.
 class EventTemplate {
   EventTemplate({
@@ -38,6 +39,7 @@ class EventTemplate {
     List<int>? alarmMinutesBeforeList,
     List<AlarmCustomTime>? alarmCustomTimes,
     this.favorite = false,
+    this.showOvernightOnFollowingDays = true,
   }) : startMinutes = allDay ? 0 : startMinutes.clamp(0, 1439),
        endMinutes = allDay ? 0 : endMinutes.clamp(0, 1439),
        allDayAlarmMinutes = allDayAlarmMinutes.clamp(0, 1439),
@@ -116,6 +118,7 @@ class EventTemplate {
   List<AlarmCustomTime> get alarmCustomTimes =>
       _alarm.customList.map(_fromReference).toList(growable: false);
   final bool favorite;
+  final bool showOvernightOnFollowingDays;
 
   AlarmCustomTime? get _customAlarm =>
       _alarm.customAt == null ? null : _fromReference(_alarm.customAt!);
@@ -179,6 +182,7 @@ class EventTemplate {
           ),
       ],
       favorite: favorite,
+      showOvernightOnFollowingDays: draft.showOvernightOnFollowingDays,
     );
   }
 
@@ -225,6 +229,7 @@ class EventTemplate {
       alarmCustomAtList: [
         for (final time in alarmCustomTimes) _customAlarmOn(date, time),
       ],
+      showOvernightOnFollowingDays: showOvernightOnFollowingDays,
     );
   }
 
@@ -280,6 +285,7 @@ class EventTemplate {
     alarmMinutesBeforeList: alarmMinutesBeforeList,
     alarmCustomTimes: alarmCustomTimes,
     favorite: favorite ?? this.favorite,
+    showOvernightOnFollowingDays: showOvernightOnFollowingDays,
   );
 
   Map<String, Object?> toJson() => {
@@ -314,6 +320,8 @@ class EventTemplate {
       ],
     },
     'favorite': favorite,
+    // Optional key: absent means on, which older documents and apps assume.
+    if (!showOvernightOnFollowingDays) 'showOvernightOnFollowingDays': false,
   };
 
   /// Returns null for unreadable or invalid data instead of guessing values.
@@ -360,6 +368,8 @@ class EventTemplate {
                   .toList()
             : null,
         favorite: json['favorite'] as bool? ?? false,
+        showOvernightOnFollowingDays:
+            json['showOvernightOnFollowingDays'] as bool? ?? true,
       );
       var template = build();
       // An older client that rewrote only the legacy keys wins over the lists.

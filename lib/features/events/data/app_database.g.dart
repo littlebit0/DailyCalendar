@@ -406,6 +406,21 @@ class $EventRecordsTable extends EventRecords
         type: DriftSqlType.string,
         requiredDuringInsert: false,
       );
+  static const VerificationMeta _showOvernightOnFollowingDaysMeta =
+      const VerificationMeta('showOvernightOnFollowingDays');
+  @override
+  late final GeneratedColumn<bool> showOvernightOnFollowingDays =
+      GeneratedColumn<bool>(
+        'show_overnight_on_following_days',
+        aliasedName,
+        false,
+        type: DriftSqlType.bool,
+        requiredDuringInsert: false,
+        defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("show_overnight_on_following_days" IN (0, 1))',
+        ),
+        defaultValue: const Constant(true),
+      );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -443,6 +458,7 @@ class $EventRecordsTable extends EventRecords
     alarmCustomAt,
     alarmMinutesBeforeList,
     alarmCustomAtList,
+    showOvernightOnFollowingDays,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -728,6 +744,15 @@ class $EventRecordsTable extends EventRecords
         ),
       );
     }
+    if (data.containsKey('show_overnight_on_following_days')) {
+      context.handle(
+        _showOvernightOnFollowingDaysMeta,
+        showOvernightOnFollowingDays.isAcceptableOrUnknown(
+          data['show_overnight_on_following_days']!,
+          _showOvernightOnFollowingDaysMeta,
+        ),
+      );
+    }
     return context;
   }
 
@@ -877,6 +902,10 @@ class $EventRecordsTable extends EventRecords
         DriftSqlType.string,
         data['${effectivePrefix}alarm_custom_at_list'],
       ),
+      showOvernightOnFollowingDays: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}show_overnight_on_following_days'],
+      )!,
     );
   }
 
@@ -922,6 +951,7 @@ class EventRecord extends DataClass implements Insertable<EventRecord> {
   final DateTime? alarmCustomAt;
   final String? alarmMinutesBeforeList;
   final String? alarmCustomAtList;
+  final bool showOvernightOnFollowingDays;
   const EventRecord({
     required this.id,
     required this.title,
@@ -958,6 +988,7 @@ class EventRecord extends DataClass implements Insertable<EventRecord> {
     this.alarmCustomAt,
     this.alarmMinutesBeforeList,
     this.alarmCustomAtList,
+    required this.showOvernightOnFollowingDays,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -1033,6 +1064,9 @@ class EventRecord extends DataClass implements Insertable<EventRecord> {
     if (!nullToAbsent || alarmCustomAtList != null) {
       map['alarm_custom_at_list'] = Variable<String>(alarmCustomAtList);
     }
+    map['show_overnight_on_following_days'] = Variable<bool>(
+      showOvernightOnFollowingDays,
+    );
     return map;
   }
 
@@ -1099,6 +1133,7 @@ class EventRecord extends DataClass implements Insertable<EventRecord> {
       alarmCustomAtList: alarmCustomAtList == null && nullToAbsent
           ? const Value.absent()
           : Value(alarmCustomAtList),
+      showOvernightOnFollowingDays: Value(showOvernightOnFollowingDays),
     );
   }
 
@@ -1161,6 +1196,9 @@ class EventRecord extends DataClass implements Insertable<EventRecord> {
       alarmCustomAtList: serializer.fromJson<String?>(
         json['alarmCustomAtList'],
       ),
+      showOvernightOnFollowingDays: serializer.fromJson<bool>(
+        json['showOvernightOnFollowingDays'],
+      ),
     );
   }
   @override
@@ -1208,6 +1246,9 @@ class EventRecord extends DataClass implements Insertable<EventRecord> {
         alarmMinutesBeforeList,
       ),
       'alarmCustomAtList': serializer.toJson<String?>(alarmCustomAtList),
+      'showOvernightOnFollowingDays': serializer.toJson<bool>(
+        showOvernightOnFollowingDays,
+      ),
     };
   }
 
@@ -1247,6 +1288,7 @@ class EventRecord extends DataClass implements Insertable<EventRecord> {
     Value<DateTime?> alarmCustomAt = const Value.absent(),
     Value<String?> alarmMinutesBeforeList = const Value.absent(),
     Value<String?> alarmCustomAtList = const Value.absent(),
+    bool? showOvernightOnFollowingDays,
   }) => EventRecord(
     id: id ?? this.id,
     title: title ?? this.title,
@@ -1303,6 +1345,8 @@ class EventRecord extends DataClass implements Insertable<EventRecord> {
     alarmCustomAtList: alarmCustomAtList.present
         ? alarmCustomAtList.value
         : this.alarmCustomAtList,
+    showOvernightOnFollowingDays:
+        showOvernightOnFollowingDays ?? this.showOvernightOnFollowingDays,
   );
   EventRecord copyWithCompanion(EventRecordsCompanion data) {
     return EventRecord(
@@ -1379,6 +1423,9 @@ class EventRecord extends DataClass implements Insertable<EventRecord> {
       alarmCustomAtList: data.alarmCustomAtList.present
           ? data.alarmCustomAtList.value
           : this.alarmCustomAtList,
+      showOvernightOnFollowingDays: data.showOvernightOnFollowingDays.present
+          ? data.showOvernightOnFollowingDays.value
+          : this.showOvernightOnFollowingDays,
     );
   }
 
@@ -1419,7 +1466,8 @@ class EventRecord extends DataClass implements Insertable<EventRecord> {
           ..write('alarmMinutesBefore: $alarmMinutesBefore, ')
           ..write('alarmCustomAt: $alarmCustomAt, ')
           ..write('alarmMinutesBeforeList: $alarmMinutesBeforeList, ')
-          ..write('alarmCustomAtList: $alarmCustomAtList')
+          ..write('alarmCustomAtList: $alarmCustomAtList, ')
+          ..write('showOvernightOnFollowingDays: $showOvernightOnFollowingDays')
           ..write(')'))
         .toString();
   }
@@ -1461,6 +1509,7 @@ class EventRecord extends DataClass implements Insertable<EventRecord> {
     alarmCustomAt,
     alarmMinutesBeforeList,
     alarmCustomAtList,
+    showOvernightOnFollowingDays,
   ]);
   @override
   bool operator ==(Object other) =>
@@ -1500,7 +1549,9 @@ class EventRecord extends DataClass implements Insertable<EventRecord> {
           other.alarmMinutesBefore == this.alarmMinutesBefore &&
           other.alarmCustomAt == this.alarmCustomAt &&
           other.alarmMinutesBeforeList == this.alarmMinutesBeforeList &&
-          other.alarmCustomAtList == this.alarmCustomAtList);
+          other.alarmCustomAtList == this.alarmCustomAtList &&
+          other.showOvernightOnFollowingDays ==
+              this.showOvernightOnFollowingDays);
 }
 
 class EventRecordsCompanion extends UpdateCompanion<EventRecord> {
@@ -1539,6 +1590,7 @@ class EventRecordsCompanion extends UpdateCompanion<EventRecord> {
   final Value<DateTime?> alarmCustomAt;
   final Value<String?> alarmMinutesBeforeList;
   final Value<String?> alarmCustomAtList;
+  final Value<bool> showOvernightOnFollowingDays;
   final Value<int> rowid;
   const EventRecordsCompanion({
     this.id = const Value.absent(),
@@ -1576,6 +1628,7 @@ class EventRecordsCompanion extends UpdateCompanion<EventRecord> {
     this.alarmCustomAt = const Value.absent(),
     this.alarmMinutesBeforeList = const Value.absent(),
     this.alarmCustomAtList = const Value.absent(),
+    this.showOvernightOnFollowingDays = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   EventRecordsCompanion.insert({
@@ -1614,6 +1667,7 @@ class EventRecordsCompanion extends UpdateCompanion<EventRecord> {
     this.alarmCustomAt = const Value.absent(),
     this.alarmMinutesBeforeList = const Value.absent(),
     this.alarmCustomAtList = const Value.absent(),
+    this.showOvernightOnFollowingDays = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : id = Value(id),
        title = Value(title),
@@ -1658,6 +1712,7 @@ class EventRecordsCompanion extends UpdateCompanion<EventRecord> {
     Expression<DateTime>? alarmCustomAt,
     Expression<String>? alarmMinutesBeforeList,
     Expression<String>? alarmCustomAtList,
+    Expression<bool>? showOvernightOnFollowingDays,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -1705,6 +1760,8 @@ class EventRecordsCompanion extends UpdateCompanion<EventRecord> {
       if (alarmMinutesBeforeList != null)
         'alarm_minutes_before_list': alarmMinutesBeforeList,
       if (alarmCustomAtList != null) 'alarm_custom_at_list': alarmCustomAtList,
+      if (showOvernightOnFollowingDays != null)
+        'show_overnight_on_following_days': showOvernightOnFollowingDays,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -1745,6 +1802,7 @@ class EventRecordsCompanion extends UpdateCompanion<EventRecord> {
     Value<DateTime?>? alarmCustomAt,
     Value<String?>? alarmMinutesBeforeList,
     Value<String?>? alarmCustomAtList,
+    Value<bool>? showOvernightOnFollowingDays,
     Value<int>? rowid,
   }) {
     return EventRecordsCompanion(
@@ -1787,6 +1845,8 @@ class EventRecordsCompanion extends UpdateCompanion<EventRecord> {
       alarmMinutesBeforeList:
           alarmMinutesBeforeList ?? this.alarmMinutesBeforeList,
       alarmCustomAtList: alarmCustomAtList ?? this.alarmCustomAtList,
+      showOvernightOnFollowingDays:
+          showOvernightOnFollowingDays ?? this.showOvernightOnFollowingDays,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -1909,6 +1969,11 @@ class EventRecordsCompanion extends UpdateCompanion<EventRecord> {
     if (alarmCustomAtList.present) {
       map['alarm_custom_at_list'] = Variable<String>(alarmCustomAtList.value);
     }
+    if (showOvernightOnFollowingDays.present) {
+      map['show_overnight_on_following_days'] = Variable<bool>(
+        showOvernightOnFollowingDays.value,
+      );
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -1953,6 +2018,9 @@ class EventRecordsCompanion extends UpdateCompanion<EventRecord> {
           ..write('alarmCustomAt: $alarmCustomAt, ')
           ..write('alarmMinutesBeforeList: $alarmMinutesBeforeList, ')
           ..write('alarmCustomAtList: $alarmCustomAtList, ')
+          ..write(
+            'showOvernightOnFollowingDays: $showOvernightOnFollowingDays, ',
+          )
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -2007,6 +2075,7 @@ typedef $$EventRecordsTableCreateCompanionBuilder =
       Value<DateTime?> alarmCustomAt,
       Value<String?> alarmMinutesBeforeList,
       Value<String?> alarmCustomAtList,
+      Value<bool> showOvernightOnFollowingDays,
       Value<int> rowid,
     });
 typedef $$EventRecordsTableUpdateCompanionBuilder =
@@ -2046,6 +2115,7 @@ typedef $$EventRecordsTableUpdateCompanionBuilder =
       Value<DateTime?> alarmCustomAt,
       Value<String?> alarmMinutesBeforeList,
       Value<String?> alarmCustomAtList,
+      Value<bool> showOvernightOnFollowingDays,
       Value<int> rowid,
     });
 
@@ -2230,6 +2300,11 @@ class $$EventRecordsTableFilterComposer
 
   ColumnFilters<String> get alarmCustomAtList => $composableBuilder(
     column: $table.alarmCustomAtList,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get showOvernightOnFollowingDays => $composableBuilder(
+    column: $table.showOvernightOnFollowingDays,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -2417,6 +2492,11 @@ class $$EventRecordsTableOrderingComposer
     column: $table.alarmCustomAtList,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<bool> get showOvernightOnFollowingDays => $composableBuilder(
+    column: $table.showOvernightOnFollowingDays,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$EventRecordsTableAnnotationComposer
@@ -2570,6 +2650,11 @@ class $$EventRecordsTableAnnotationComposer
     column: $table.alarmCustomAtList,
     builder: (column) => column,
   );
+
+  GeneratedColumn<bool> get showOvernightOnFollowingDays => $composableBuilder(
+    column: $table.showOvernightOnFollowingDays,
+    builder: (column) => column,
+  );
 }
 
 class $$EventRecordsTableTableManager
@@ -2638,6 +2723,7 @@ class $$EventRecordsTableTableManager
                 Value<DateTime?> alarmCustomAt = const Value.absent(),
                 Value<String?> alarmMinutesBeforeList = const Value.absent(),
                 Value<String?> alarmCustomAtList = const Value.absent(),
+                Value<bool> showOvernightOnFollowingDays = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => EventRecordsCompanion(
                 id: id,
@@ -2675,6 +2761,7 @@ class $$EventRecordsTableTableManager
                 alarmCustomAt: alarmCustomAt,
                 alarmMinutesBeforeList: alarmMinutesBeforeList,
                 alarmCustomAtList: alarmCustomAtList,
+                showOvernightOnFollowingDays: showOvernightOnFollowingDays,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -2714,6 +2801,7 @@ class $$EventRecordsTableTableManager
                 Value<DateTime?> alarmCustomAt = const Value.absent(),
                 Value<String?> alarmMinutesBeforeList = const Value.absent(),
                 Value<String?> alarmCustomAtList = const Value.absent(),
+                Value<bool> showOvernightOnFollowingDays = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => EventRecordsCompanion.insert(
                 id: id,
@@ -2751,6 +2839,7 @@ class $$EventRecordsTableTableManager
                 alarmCustomAt: alarmCustomAt,
                 alarmMinutesBeforeList: alarmMinutesBeforeList,
                 alarmCustomAtList: alarmCustomAtList,
+                showOvernightOnFollowingDays: showOvernightOnFollowingDays,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0

@@ -29,28 +29,25 @@ void main() {
     expect(restored.calendarHolidayBackgroundEnabled, isFalse);
   });
 
-  test('keeps showing overnight events by default and persists off', () async {
+  test('exposes the removed overnight setting only to seed events', () async {
     SharedPreferences.setMockInitialValues({});
     final preferences = await SharedPreferences.getInstance();
-    final repository = SettingsRepository(preferences: preferences);
-    // Upgrading users keep the previous every-overlapped-date listing.
-    expect(
-      repository.load().calendarShowOvernightEventsOnFollowingDays,
-      isTrue,
-    );
-
-    await repository.save(
-      repository.load().copyWith(
-        calendarShowOvernightEventsOnFollowingDays: false,
-      ),
-      markSyncPending: false,
-    );
-
     expect(
       SettingsRepository(
         preferences: preferences,
-      ).load().calendarShowOvernightEventsOnFollowingDays,
-      isFalse,
+      ).legacyShowOvernightOnFollowingDays(),
+      isTrue,
+    );
+    await preferences.setBool(
+      'calendarShowOvernightEventsOnFollowingDays',
+      false,
+    );
+    final repository = SettingsRepository(preferences: preferences);
+    expect(repository.legacyShowOvernightOnFollowingDays(), isFalse);
+    // The app-wide value is no longer part of the synchronized settings.
+    expect(
+      repository.settingsSyncDocument().fields,
+      isNot(contains('calendarShowOvernightEventsOnFollowingDays')),
     );
   });
 }

@@ -1801,13 +1801,7 @@ List<CalendarEvent> _eventsForDay(
   final end = shiftCalendarDateByDays(start, 1);
   return sortedCalendarEvents(
     events.where(
-      (event) => calendarEventListedOnDay(
-        event,
-        start,
-        end,
-        showOvernightOnFollowingDays:
-            settings.calendarShowOvernightEventsOnFollowingDays,
-      ),
+      (event) => calendarEventListedOnDay(event, start, end),
     ),
     priority: settings.calendarEventSortPriority,
     categoryOrder: settings.categories.map((category) => category.id).toList(),

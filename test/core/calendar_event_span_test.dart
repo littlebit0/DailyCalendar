@@ -98,7 +98,7 @@ void main() {
     expect((span.startCol, span.endCol), (1, 1));
   });
 
-  group('overnight timed events (#696)', () {
+  group('overnight timed events (#696, #791)', () {
     CalendarEvent timed(DateTime start, DateTime end) =>
         event('night', start, end).copyWith(allDay: false);
     List<DateTime> listedDays(
@@ -113,10 +113,9 @@ void main() {
         ].where((day) {
           final next = DateTime(day.year, day.month, day.day + 1);
           return calendarEventListedOnDay(
-            item,
+            item.copyWith(showOvernightOnFollowingDays: showOvernight),
             day,
             next,
-            showOvernightOnFollowingDays: showOvernight,
           );
         }).toList();
 
@@ -178,6 +177,52 @@ void main() {
       expect(
         listedDays(item, DateTime(2026, 10, 31), 4, showOvernight: false),
         [DateTime(2026, 11, 1)],
+      );
+    });
+
+    test('new events default to listing every overlapped date', () {
+      final item = timed(DateTime(2026, 10, 29, 22), DateTime(2026, 10, 30, 2));
+      expect(item.showOvernightOnFollowingDays, isTrue);
+      expect(
+        calendarEventListedOnDay(
+          item,
+          DateTime(2026, 10, 30),
+          DateTime(2026, 10, 31),
+        ),
+        isTrue,
+      );
+    });
+
+    test('each event keeps its own choice on the same date', () {
+      final shift = timed(DateTime(2026, 10, 29, 22), DateTime(2026, 10, 30, 6));
+      final party = shift.copyWith(showOvernightOnFollowingDays: false);
+      final day = DateTime(2026, 10, 30);
+      final next = DateTime(2026, 10, 31);
+      expect(calendarEventListedOnDay(shift, day, next), isTrue);
+      expect(calendarEventListedOnDay(party, day, next), isFalse);
+    });
+
+    test('the editor switch only applies past the start date midnight', () {
+      final start = DateTime(2026, 10, 29, 22);
+      bool ends(DateTime end, {bool allDay = false}) =>
+          calendarEventEndsAfterStartDay(
+            allDay: allDay,
+            startAt: start,
+            endAt: end,
+          );
+      expect(ends(DateTime(2026, 10, 29, 23)), isFalse);
+      expect(ends(DateTime(2026, 10, 30)), isFalse);
+      expect(ends(DateTime(2026, 10, 30, 0, 1)), isTrue);
+      expect(ends(DateTime(2026, 11, 2, 1)), isTrue);
+      expect(ends(DateTime(2026, 11, 2), allDay: true), isFalse);
+      // A 25-hour daylight-saving day still compares local dates.
+      expect(
+        calendarEventEndsAfterStartDay(
+          allDay: false,
+          startAt: DateTime(2026, 11, 1, 23),
+          endAt: DateTime(2026, 11, 2, 0, 30),
+        ),
+        isTrue,
       );
     });
 

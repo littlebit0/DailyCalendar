@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:flutter/semantics.dart';
 
 import '../../../core/alarms/alarm_service.dart';
+import '../../../core/calendar/calendar_event_span.dart';
 import '../../../core/localization/app_localizations.dart';
 import '../../../core/localization/twelve_hour_material_localizations.dart';
 import '../../../core/theme/daily_ui.dart';
@@ -106,6 +107,7 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
   late int? _recurrenceCount;
   bool _recurrenceCountChanged = false;
   late bool _showDday;
+  late bool _showOvernightOnFollowingDays;
   late bool _alarmEnabled;
   late TimeOfDay _allDayAlarmTime;
   late List<int> _alarmMinutes;
@@ -184,6 +186,7 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
         ? _RecurrenceEndMode.count
         : _RecurrenceEndMode.never;
     _showDday = event?.showDday ?? false;
+    _showOvernightOnFollowingDays = event?.showOvernightOnFollowingDays ?? true;
     _alarmEnabled = event?.alarmEnabled ?? false;
     final allDayAlarmMinutes = event?.allDayAlarmMinutes ?? 9 * 60;
     _allDayAlarmTime = TimeOfDay(
@@ -658,6 +661,41 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
                           ),
                           contentPadding: EdgeInsets.zero,
                         ),
+                        if (!_isLms &&
+                            calendarEventEndsAfterStartDay(
+                              allDay: _allDay,
+                              startAt: DateTime(
+                                _startDate.year,
+                                _startDate.month,
+                                _startDate.day,
+                                _startTime.hour,
+                                _startTime.minute,
+                              ),
+                              endAt: DateTime(
+                                _endDate.year,
+                                _endDate.month,
+                                _endDate.day,
+                                _endTime.hour,
+                                _endTime.minute,
+                              ),
+                            ))
+                          SwitchListTile(
+                            key: const ValueKey('overnight-following-days'),
+                            value: _showOvernightOnFollowingDays,
+                            onChanged: (value) {
+                              _clearValidation();
+                              setState(
+                                () => _showOvernightOnFollowingDays = value,
+                              );
+                            },
+                            title: Text(context.tr('다음 날에도 표시')),
+                            subtitle: Text(
+                              context.tr(
+                                '월간 캘린더와 목록에서 이 일정이 걸친 날짜마다 표시합니다. 끄면 시작 날짜에만 표시하고, 스케줄 보기는 바뀌지 않습니다.',
+                              ),
+                            ),
+                            contentPadding: EdgeInsets.zero,
+                          ),
                         const SizedBox(height: 12),
                         if (!_isLms) ...[
                           if (widget.frequentPlaces != null &&
@@ -1095,6 +1133,7 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
             : _recurrenceCount,
       ),
       showDday: _showDday,
+      showOvernightOnFollowingDays: _showOvernightOnFollowingDays,
       alarmEnabled: _frequency == RecurrenceFrequency.none && _alarmEnabled,
       allDayAlarmMinutes: _allDayAlarmTime.hour * 60 + _allDayAlarmTime.minute,
       alarmMinutesBefore: _legacyAlarmMinutes,

@@ -6,6 +6,10 @@ import 'package:drift/native.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
+import '../../../core/sync/sync_version.dart';
+import '../domain/calendar_event.dart';
+import 'event_mapper.dart';
+
 part 'app_database.g.dart';
 
 class EventRecords extends Table {
@@ -54,6 +58,8 @@ class EventRecords extends Table {
   // earliest one for older app versions.
   TextColumn get alarmMinutesBeforeList => text().nullable()();
   TextColumn get alarmCustomAtList => text().nullable()();
+  BoolColumn get showOvernightOnFollowingDays =>
+      boolean().withDefault(const Constant(true))();
 
   @override
   Set<Column<Object>> get primaryKey => {id};
@@ -61,7 +67,7 @@ class EventRecords extends Table {
 
 @DriftDatabase(tables: [EventRecords])
 class AppDatabase extends _$AppDatabase {
-  static const currentSchemaVersion = 14;
+  static const currentSchemaVersion = 15;
   static const createDeletionTable = '''
     CREATE TABLE IF NOT EXISTS sync_event_deletions (
       id TEXT PRIMARY KEY NOT NULL,
@@ -84,11 +90,24 @@ class AppDatabase extends _$AppDatabase {
   final _openClock = Stopwatch()..start();
   final bool _recordStartupTiming;
 
-  AppDatabase() : _recordStartupTiming = true, super(_openConnection());
+  /// [legacyShowOvernightOnFollowingDays] is the removed app-wide setting
+  /// (#696). Upgrading from schema 13 or older copies it into every existing
+  /// event so their display does not change.
+  AppDatabase({this.legacyShowOvernightOnFollowingDays = true})
+    : _recordStartupTiming = true,
+      super(_openConnection());
 
-  AppDatabase.forTesting(super.executor) : _recordStartupTiming = true;
+  AppDatabase.forTesting(
+    super.executor, {
+    this.legacyShowOvernightOnFollowingDays = true,
+  }) : _recordStartupTiming = true;
 
-  AppDatabase.forMigration(super.executor) : _recordStartupTiming = false;
+  final bool legacyShowOvernightOnFollowingDays;
+
+  AppDatabase.forMigration(
+    super.executor, {
+    this.legacyShowOvernightOnFollowingDays = true,
+  }) : _recordStartupTiming = false;
 
   @override
   int get schemaVersion => currentSchemaVersion;
@@ -111,7 +130,13 @@ class AppDatabase extends _$AppDatabase {
         await customStatement(createRemoteEventFileTable);
       },
       onUpgrade: (migrator, from, to) async {
-        await repairEventSchema(migrator, rebuild: from < 6);
+        // user_version is written only after this callback, so an interrupted
+        // upgrade seeds again before any new event can exist.
+        await repairEventSchema(
+          migrator,
+          rebuild: from < 6,
+          seedOvernightDisplay: from < 15,
+        );
       },
     );
   }
@@ -124,6 +149,7 @@ class AppDatabase extends _$AppDatabase {
   Future<void> repairEventSchema(
     Migrator migrator, {
     bool rebuild = false,
+    bool seedOvernightDisplay = false,
   }) async {
     final columns = await customSelect(
       'PRAGMA table_info(event_records)',
@@ -133,6 +159,11 @@ class AppDatabase extends _$AppDatabase {
       if (!names.contains(column.$name)) {
         await migrator.addColumn(eventRecords, column);
       }
+    }
+    // Schema 15 (#791) moved the app-wide choice onto each event.
+    if (seedOvernightDisplay ||
+        !names.contains('show_overnight_on_following_days')) {
+      await _seedOvernightDisplay();
     }
     if (!names.contains('reminder_minutes_before_list')) {
       await customStatement(
@@ -156,6 +187,50 @@ class AppDatabase extends _$AppDatabase {
         'ALTER TABLE sync_event_deletions ADD COLUMN lms_owner_id TEXT',
       );
     }
+  }
+
+  Future<void> _seedOvernightDisplay() async {
+    final shown = legacyShowOvernightOnFollowingDays;
+    // Off enters each event's fingerprint: re-sign the precise timestamps
+    // verified before the change so they are not dropped to whole seconds.
+    final details = shown
+        ? const <String, String>{}
+        : {
+            for (final row in await (select(
+              eventRecords,
+            )..where((row) => row.syncTimestampDetails.isNotNull())).get())
+              row.id: encodeSyncTimestamps(
+                _verifiedTimestamps(
+                  row,
+                ).copyWith(showOvernightOnFollowingDays: false),
+              ),
+          };
+    await customStatement(
+      'UPDATE event_records SET show_overnight_on_following_days = ?',
+      [shown ? 1 : 0],
+    );
+    for (final entry in details.entries) {
+      await customStatement(
+        'UPDATE event_records SET sync_timestamp_details = ? WHERE id = ?',
+        [entry.value, entry.key],
+      );
+    }
+  }
+
+  // The stored details were signed before seeding (on), or by an interrupted
+  // seed (off); whichever verifies restores the sub-second timestamps.
+  static CalendarEvent _verifiedTimestamps(EventRecord row) {
+    for (final shown in const [true, false]) {
+      final event = row
+          .copyWith(showOvernightOnFollowingDays: shown)
+          .toDomain();
+      if (event.createdAt != row.createdAt ||
+          event.updatedAt != row.updatedAt ||
+          event.deletedAt != row.deletedAt) {
+        return event;
+      }
+    }
+    return row.toDomain();
   }
 
   Future<File> databaseFile() async {

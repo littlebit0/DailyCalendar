@@ -34,7 +34,6 @@ class CalendarMonthGrid extends StatefulWidget {
     this.eventSortPriority = CalendarEventSortPriority.time,
     this.categoryOrder = const <String>[],
     this.manualEventOrders = const <String, CalendarManualEventOrder>{},
-    this.showOvernightEventsOnFollowingDays = true,
     this.continuous = false,
     this.showWeekdayHeader = true,
     this.onRangeHitTestBoxChanged,
@@ -63,7 +62,6 @@ class CalendarMonthGrid extends StatefulWidget {
   final CalendarEventSortPriority eventSortPriority;
   final List<String> categoryOrder;
   final Map<String, CalendarManualEventOrder> manualEventOrders;
-  final bool showOvernightEventsOnFollowingDays;
   final bool continuous;
   final bool showWeekdayHeader;
   final ValueChanged<RenderBox?>? onRangeHitTestBoxChanged;
@@ -349,8 +347,6 @@ class _CalendarMonthGridState extends State<CalendarMonthGrid> {
                                     eventSortPriority: widget.eventSortPriority,
                                     categoryOrder: widget.categoryOrder,
                                     manualEventOrders: widget.manualEventOrders,
-                                    showOvernightEventsOnFollowingDays: widget
-                                        .showOvernightEventsOnFollowingDays,
                                     showLunarDates: widget.showLunarDates,
                                     showAdjacentMonthDates:
                                         widget.showAdjacentMonthDates,
@@ -708,7 +704,6 @@ class _WeekRow extends StatefulWidget {
     required this.eventSortPriority,
     required this.categoryOrder,
     required this.manualEventOrders,
-    required this.showOvernightEventsOnFollowingDays,
     required this.showLunarDates,
     required this.showAdjacentMonthDates,
     required this.showEventTimes,
@@ -740,7 +735,6 @@ class _WeekRow extends StatefulWidget {
   final CalendarEventSortPriority eventSortPriority;
   final List<String> categoryOrder;
   final Map<String, CalendarManualEventOrder> manualEventOrders;
-  final bool showOvernightEventsOnFollowingDays;
   final bool showLunarDates;
   final bool showAdjacentMonthDates;
   final bool showEventTimes;
@@ -777,8 +771,6 @@ class _WeekRowState extends State<_WeekRow> {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.month != widget.month ||
         oldWidget.showAdjacentMonthDates != widget.showAdjacentMonthDates ||
-        oldWidget.showOvernightEventsOnFollowingDays !=
-            widget.showOvernightEventsOnFollowingDays ||
         oldWidget.eventSortPriority != widget.eventSortPriority ||
         !_sameCategoryOrder(oldWidget.categoryOrder, widget.categoryOrder) ||
         !_sameManualEventOrders(
@@ -1274,7 +1266,7 @@ class _WeekRowState extends State<_WeekRow> {
                 event,
                 weekStart,
                 startDayOnly:
-                    !widget.showOvernightEventsOnFollowingDays && !event.allDay,
+                    !event.showOvernightOnFollowingDays && !event.allDay,
               ),
             )
             .where((segment) => segment != null)
@@ -1325,12 +1317,7 @@ class _WeekRowState extends State<_WeekRow> {
   }
 
   bool _listedOnDay(CalendarEvent event, DateTime dayStart, DateTime dayEnd) =>
-      calendarEventListedOnDay(
-        event,
-        dayStart,
-        dayEnd,
-        showOvernightOnFollowingDays: widget.showOvernightEventsOnFollowingDays,
-      );
+      calendarEventListedOnDay(event, dayStart, dayEnd);
 
   List<CalendarEvent> _eventsForDay(DateTime day) {
     final dayStart = _dayStart(day);

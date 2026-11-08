@@ -217,8 +217,6 @@ Map<String, Object?> syncSettingsValues(AppSettings settings) => {
   'calendarShowHolidays': settings.calendarShowHolidays,
   'calendarHolidayBackgroundEnabled': settings.calendarHolidayBackgroundEnabled,
   'calendarDdayOnly': settings.calendarDdayOnly,
-  'calendarShowOvernightEventsOnFollowingDays':
-      settings.calendarShowOvernightEventsOnFollowingDays,
   'use24HourTime': settings.use24HourTime,
   'themeMode': settings.themeMode.name,
   'monthNavigationMode': settings.monthNavigationMode.name,
