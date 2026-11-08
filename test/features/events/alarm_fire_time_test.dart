@@ -305,9 +305,7 @@ void main() {
     });
 
     test('stored lists contradicted by a legacy-only edit are dropped', () {
-      final base = DateTime(2026, 11, 10, 14);
       final kept = acceptedAlarmLists(
-        base: base,
         legacyMinutes: 30,
         legacyCustomAt: null,
         minutes: '[0,30]',
@@ -315,7 +313,6 @@ void main() {
       );
       expect(kept.minutes, [0, 30]);
       final edited = acceptedAlarmLists(
-        base: base,
         legacyMinutes: 60,
         legacyCustomAt: null,
         minutes: [0, 30],
@@ -323,9 +320,27 @@ void main() {
       );
       expect(edited.minutes, isNull);
       expect(edited.customs, isNull);
+      // The legacy custom time is still one of the lists' times even when a
+      // relative trigger is earliest on the reading device (another time
+      // zone for an all-day event, or a moved start).
+      final customAt = DateTime.utc(2026, 11, 10, 16);
+      final otherZone = acceptedAlarmLists(
+        legacyMinutes: 0,
+        legacyCustomAt: customAt,
+        minutes: [0],
+        customs: [customAt.toIso8601String()],
+      );
+      expect(otherZone.minutes, [0]);
+      expect(otherZone.customs, [customAt.toLocal()]);
+      final customEdited = acceptedAlarmLists(
+        legacyMinutes: 0,
+        legacyCustomAt: customAt.add(const Duration(hours: 1)),
+        minutes: [0],
+        customs: [customAt.toIso8601String()],
+      );
+      expect(customEdited.customs, isNull);
       expect(
         acceptedAlarmLists(
-          base: base,
           legacyMinutes: 0,
           legacyCustomAt: null,
           minutes: 'not json',

@@ -2503,11 +2503,6 @@ class GoogleDriveSyncService implements SyncService {
     final alarmMinutesBefore = json['alarmMinutesBefore'] as int? ?? 0;
     final alarmCustomAt = _readDate(json['alarmCustomAt']);
     final alarmLists = acceptedAlarmLists(
-      base: alarmBaseTimeFor(
-        startAt,
-        allDay,
-        allDayAlarmMinutes.clamp(0, 1439),
-      ),
       legacyMinutes: alarmMinutesBefore,
       legacyCustomAt: alarmCustomAt,
       minutes: json['alarmMinutesBeforeList'],

@@ -92,26 +92,30 @@ List<DateTime> alarmFireTimesOf(AlarmTriggers triggers, DateTime base) =>
 /// Whether an older client changed the legacy alarm fields without the lists
 /// (a list-preserving client that edited only `alarmMinutesBefore` or
 /// `alarmCustomAt`). Then the legacy value wins and the lists are dropped.
-bool alarmListsContradictLegacy(
-  AlarmTriggers fromLists, {
+///
+/// Membership, not "is it the earliest": which trigger is earliest depends on
+/// the reading device's time zone (all-day bases) and on the start time, so
+/// it can change without any alarm edit.
+bool alarmListsContradictLegacy({
+  required List<int> minutesList,
+  required List<DateTime> customList,
   required int legacyMinutes,
   required DateTime? legacyCustomAt,
 }) {
-  final custom = fromLists.customAt;
-  if (custom != null) {
+  if (legacyCustomAt != null) {
     // SQLite keeps the legacy column in whole seconds.
-    return legacyCustomAt == null ||
-        legacyCustomAt.millisecondsSinceEpoch ~/ 1000 !=
-            custom.millisecondsSinceEpoch ~/ 1000;
+    final seconds = legacyCustomAt.millisecondsSinceEpoch ~/ 1000;
+    return !customList.any(
+      (custom) => custom.millisecondsSinceEpoch ~/ 1000 == seconds,
+    );
   }
-  return legacyCustomAt != null || legacyMinutes != fromLists.minutesBefore;
+  return !minutesList.contains(legacyMinutes);
 }
 
 /// The stored alarm lists to use with the stored legacy fields: null (the
 /// single legacy trigger) when absent, unreadable or contradicted by an older
 /// client's legacy-only edit.
 ({List<int>? minutes, List<DateTime>? customs}) acceptedAlarmLists({
-  required DateTime base,
   required int legacyMinutes,
   required DateTime? legacyCustomAt,
   required Object? minutes,
@@ -122,15 +126,9 @@ bool alarmListsContradictLegacy(
   if (minutesList == null && customList == null) {
     return (minutes: null, customs: null);
   }
-  final fromLists = resolveAlarmTriggers(
-    base: base,
-    minutesBefore: legacyMinutes,
-    customAt: null,
-    minutesList: minutesList,
-    customList: customList,
-  );
   if (alarmListsContradictLegacy(
-    fromLists,
+    minutesList: minutesList ?? const [],
+    customList: customList ?? const [],
     legacyMinutes: legacyMinutes < 0 ? 0 : legacyMinutes,
     legacyCustomAt: legacyCustomAt,
   )) {
