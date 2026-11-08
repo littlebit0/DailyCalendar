@@ -1560,39 +1560,144 @@ class _DaySheetSwipeNavigator extends StatefulWidget {
       _DaySheetSwipeNavigatorState();
 }
 
-class _DaySheetSwipeNavigatorState extends State<_DaySheetSwipeNavigator> {
+class _DaySheetSwipeNavigatorState extends State<_DaySheetSwipeNavigator>
+    with SingleTickerProviderStateMixin {
+  // Horizontal content offset in logical pixels: follows the finger, then
+  // slides the old day out and the new day in from the opposite edge.
+  late final _offset = AnimationController.unbounded(vsync: this);
   var _dx = 0.0;
+  var _pending = 0;
+
+  @override
+  void dispose() {
+    _offset.dispose();
+    super.dispose();
+  }
+
+  /// Applies a day change whose slide-out was interrupted by a new gesture.
+  void _commitPending() {
+    final delta = _pending;
+    _pending = 0;
+    if (delta != 0) widget.onDayDelta(delta);
+  }
+
+  Future<void> _go(int delta) async {
+    _offset.stop();
+    _commitPending();
+    final width = context.size?.width ?? 0;
+    if (MediaQuery.disableAnimationsOf(context) || width <= 0) {
+      _offset.value = 0;
+      widget.onDayDelta(delta);
+      return;
+    }
+    // Next day: current content leaves to the left, new day enters from the
+    // right; previous day mirrors it.
+    _pending = delta;
+    try {
+      await _offset
+          .animateTo(
+            -delta * width,
+            duration: const Duration(milliseconds: 140),
+            curve: Curves.easeInCubic,
+          )
+          .orCancel;
+    } on TickerCanceled {
+      return;
+    }
+    _commitPending();
+    _offset.value = delta * width;
+    try {
+      await _offset
+          .animateTo(
+            0,
+            duration: const Duration(milliseconds: 220),
+            curve: Curves.easeOutCubic,
+          )
+          .orCancel;
+    } on TickerCanceled {
+      // A new drag took over the remaining slide-in.
+    }
+  }
+
+  void _settle() {
+    // A canceled gesture during the slide-out (e.g. a vertical scroll won the
+    // arena) must not cancel the requested day change; let it finish.
+    if (_pending != 0) return;
+    if (MediaQuery.disableAnimationsOf(context)) {
+      _offset.value = 0;
+      return;
+    }
+    _offset.animateTo(
+      0,
+      duration: const Duration(milliseconds: 180),
+      curve: Curves.easeOutCubic,
+    );
+  }
+
+  void _start(DragStartDetails _) {
+    _dx = 0;
+    _offset.stop();
+    if (_pending != 0) {
+      _commitPending();
+      _offset.value = 0;
+    }
+  }
+
+  void _update(DragUpdateDetails details) {
+    final delta = details.primaryDelta ?? 0;
+    _dx += delta;
+    if (widget.enabled() && !MediaQuery.disableAnimationsOf(context)) {
+      _offset.value += delta;
+    }
+  }
 
   void _end(DragEndDetails details) {
     final velocity = details.primaryVelocity ?? 0;
     final dx = _dx;
     _dx = 0;
-    if (!widget.enabled()) return;
+    if (!widget.enabled()) {
+      _settle();
+      return;
+    }
     final direction = velocity.abs() >= _DaySheetSwipeNavigator.minVelocity
         ? velocity.sign
         : dx.abs() >= _DaySheetSwipeNavigator.minDistance
         ? dx.sign
         : 0.0;
-    if (direction != 0) widget.onDayDelta(direction < 0 ? 1 : -1);
+    if (direction != 0) {
+      _go(direction < 0 ? 1 : -1);
+    } else {
+      _settle();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Semantics(
       customSemanticsActions: {
-        CustomSemanticsAction(label: context.tr('이전 날')): () =>
-            widget.onDayDelta(-1),
-        CustomSemanticsAction(label: context.tr('다음 날')): () =>
-            widget.onDayDelta(1),
+        CustomSemanticsAction(label: context.tr('이전 날')): () => _go(-1),
+        CustomSemanticsAction(label: context.tr('다음 날')): () => _go(1),
       },
       child: GestureDetector(
         key: const ValueKey('day-sheet-swipe-navigator'),
         behavior: HitTestBehavior.translucent,
-        onHorizontalDragStart: (_) => _dx = 0,
-        onHorizontalDragUpdate: (details) => _dx += details.primaryDelta ?? 0,
+        onHorizontalDragStart: _start,
+        onHorizontalDragUpdate: _update,
         onHorizontalDragEnd: _end,
-        onHorizontalDragCancel: () => _dx = 0,
-        child: widget.child,
+        onHorizontalDragCancel: () {
+          _dx = 0;
+          _settle();
+        },
+        child: AnimatedBuilder(
+          animation: _offset,
+          builder: (context, child) => Transform.translate(
+            key: const ValueKey('day-sheet-swipe-offset'),
+            offset: Offset(_offset.value, 0),
+            child: child,
+          ),
+          // Sliding must not repaint the whole schedule list every frame.
+          child: RepaintBoundary(child: widget.child),
+        ),
       ),
     );
   }
