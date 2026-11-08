@@ -67,7 +67,6 @@ class GoogleDriveSyncService implements SyncService {
     AlarmService alarmService = const UnsupportedAlarmService(),
     required SettingsRepository settingsRepository,
     http.Client? httpClient,
-    Duration backupRestoreDelay = _defaultBackupRestoreDelay,
     Duration changeSyncDelay = _defaultChangeSyncDelay,
     Duration driveRequestDelay = PacedHttpClient.defaultDelay,
     List<Duration> automaticRetryDelays = _automaticRetryDelays,
@@ -79,7 +78,6 @@ class GoogleDriveSyncService implements SyncService {
        _notificationService = notificationService,
        _alarmService = alarmService,
        _settingsRepository = settingsRepository,
-       _backupRestoreDelay = backupRestoreDelay,
        _changeSyncDelay = changeSyncDelay,
        _retryDelays = automaticRetryDelays,
        _analytics = analytics,
@@ -107,7 +105,6 @@ class GoogleDriveSyncService implements SyncService {
   static const _v2FilePrefix = 'daily-sync-v2-';
   static const _driveHost = 'www.googleapis.com';
   static const _defaultChangeSyncDelay = Duration(seconds: 1);
-  static const _defaultBackupRestoreDelay = Duration(seconds: 3);
   static const _automaticRetryDelays = <Duration>[
     Duration(seconds: 2),
     Duration(seconds: 10),
@@ -120,11 +117,8 @@ class GoogleDriveSyncService implements SyncService {
   final AlarmService _alarmService;
   final SettingsRepository _settingsRepository;
   TimetableStore get _timetableStore => _settingsRepository.timetableStore;
-  (String?, String?, String?)? _timetableBootstrapIdentity;
   ImogiStore get _imogiStore => _settingsRepository.imogiStore;
-  (String?, String?, String?)? _imogiBootstrapIdentity;
   EventTemplateStore get _templateStore => _settingsRepository.eventTemplates;
-  (String?, String?, String?)? _templatesBootstrapIdentity;
 
   /// Timetable, event templates and imogi travel in the same "documents"
   /// requests (`includeTimetable`); each one uploads only what it owns.
@@ -132,9 +126,7 @@ class GoogleDriveSyncService implements SyncService {
       _timetableStore.hasPendingSync ||
       _templateStore.hasPendingSync ||
       _imogiStore.hasPendingSync;
-  (String?, String?, String?)? _academicSettingsBootstrapIdentity;
   late final PacedHttpClient _httpClient;
-  final Duration _backupRestoreDelay;
   final Duration _changeSyncDelay;
   final List<Duration> _retryDelays;
   final ProductAnalytics _analytics;
@@ -166,6 +158,9 @@ class GoogleDriveSyncService implements SyncService {
   _SyncRequestKind? _automaticRetryKind;
   final _pendingSyncRequests = <_PendingSyncRequest>[];
   final _queuedEventIds = <String>{};
+  final _syncStageDurationsMs = <AnalyticsSyncStage, int>{};
+  final _syncStageStopwatch = Stopwatch();
+  AnalyticsSyncStage? _syncStage;
   var _started = false;
   var _automaticRetryIndex = 0;
   var _manualRestoreDepth = 0;
@@ -471,9 +466,6 @@ class GoogleDriveSyncService implements SyncService {
   Future<void> stop() async {
     _sessionGeneration++;
     _started = false;
-    _timetableBootstrapIdentity = null;
-    _imogiBootstrapIdentity = null;
-    _templatesBootstrapIdentity = null;
     _changeSyncTimer?.cancel();
     _automaticRetryTimer?.cancel();
     _changeSyncTimer = null;
@@ -646,6 +638,8 @@ class GoogleDriveSyncService implements SyncService {
 
     _validateSyncSession = validateSession;
     final stopwatch = Stopwatch()..start();
+    _syncStageDurationsMs.clear();
+    _syncStage = null;
     final analyticsOperation = _analyticsOperation(request.kind);
     final analyticsTrigger = _analyticsTrigger(request);
     // Only a request created by the automatic retry timer is numbered (from 2);
@@ -704,6 +698,7 @@ class GoogleDriveSyncService implements SyncService {
 
       switch (request.kind) {
         case _SyncRequestKind.backupOnly:
+          _enterSyncStage(AnalyticsSyncStage.backup);
           final conflicts = await _backup(
             headers,
             eventIds: request.eventIds,
@@ -741,6 +736,7 @@ class GoogleDriveSyncService implements SyncService {
           await _restore(headers);
           break;
         case _SyncRequestKind.backupThenRestore:
+          _enterSyncStage(AnalyticsSyncStage.backup);
           final eventIds = request.eventIds;
           if (eventIds != null && eventIds.isNotEmpty) {
             await _backupQueuedEvents(headers, eventIds);
@@ -749,10 +745,6 @@ class GoogleDriveSyncService implements SyncService {
             await _backupSettings(headers, _settingsRepository.load());
           }
           if (request.includeTimetable) await _backupDocuments(headers);
-          statusNotifier.value = statusNotifier.value.copyWith(
-            message: '복원 준비 중',
-          );
-          await Future<void>.delayed(_backupRestoreDelay);
           statusNotifier.value = statusNotifier.value.copyWith(message: '복원 중');
           await _restore(headers);
           break;
@@ -764,6 +756,7 @@ class GoogleDriveSyncService implements SyncService {
           completionMessage = restored ? '다른 기기 변경 복원 완료' : '최신 상태';
           break;
         case _SyncRequestKind.backupThenDetectRemoteChanges:
+          _enterSyncStage(AnalyticsSyncStage.backup);
           final eventIds = request.eventIds;
           final remoteConflictIds = <String>{};
           if (eventIds != null && eventIds.isNotEmpty) {
@@ -780,11 +773,6 @@ class GoogleDriveSyncService implements SyncService {
           statusNotifier.value = statusNotifier.value.copyWith(
             message: '다른 기기 변경 확인 준비 중',
           );
-          if ((eventIds?.isNotEmpty ?? false) ||
-              request.includeSettings ||
-              request.includeTimetable) {
-            await Future<void>.delayed(_backupRestoreDelay);
-          }
           final restored = await _detectAndRestoreExternalChanges(
             headers,
             initializeIfNeeded: request.initializeChangeToken,
@@ -792,6 +780,7 @@ class GoogleDriveSyncService implements SyncService {
           // A local edit with an older clock may conflict with a snapshot
           // already covered by the saved cursor. Fetch only those winners.
           var conflictRestored = false;
+          _enterSyncStage(AnalyticsSyncStage.download);
           if (remoteConflictIds.isNotEmpty) {
             conflictRestored = await _applyDownloadedEvents(
               await _downloadEventFiles(
@@ -817,6 +806,7 @@ class GoogleDriveSyncService implements SyncService {
       validateSession();
       if (request.kind == _SyncRequestKind.backupThenRestore ||
           request.kind == _SyncRequestKind.backupThenDetectRemoteChanges) {
+        _enterSyncStage(AnalyticsSyncStage.backup);
         final remaining = await _takePendingEventIds();
         final conflicts = await _backup(
           headers,
@@ -838,6 +828,7 @@ class GoogleDriveSyncService implements SyncService {
         clearError: true,
         clearProgress: true,
       );
+      _enterSyncStage(null);
       _recordAnalytics(
         AnalyticsRecord.sync(
           analyticsOperation,
@@ -845,9 +836,11 @@ class GoogleDriveSyncService implements SyncService {
           outcome: AnalyticsOutcome.succeeded,
           durationMs: stopwatch.elapsedMilliseconds,
           attempt: analyticsAttempt,
+          stageDurationsMs: _syncStageDurationsMs,
         ),
       );
     } on Object catch (error, stackTrace) {
+      _enterSyncStage(null);
       if (generation != _sessionGeneration || identity != _accountIdentity) {
         if (generation == _sessionGeneration) {
           statusNotifier.value = const GoogleDriveSyncStatus();
@@ -889,12 +882,28 @@ class GoogleDriveSyncService implements SyncService {
           durationMs: stopwatch.elapsedMilliseconds,
           errorCode: categorizeAnalyticsError(error),
           attempt: analyticsAttempt,
+          stageDurationsMs: _syncStageDurationsMs,
         ),
       );
       rethrow;
     } finally {
       _validateSyncSession = null;
     }
+  }
+
+  /// Ends the running sync stage, adds its time, and starts [stage]. Stages are
+  /// sequential within one run, so the times never overlap.
+  void _enterSyncStage(AnalyticsSyncStage? stage) {
+    final previous = _syncStage;
+    if (previous != null) {
+      _syncStageDurationsMs[previous] =
+          (_syncStageDurationsMs[previous] ?? 0) +
+          _syncStageStopwatch.elapsedMilliseconds;
+    }
+    _syncStage = stage;
+    _syncStageStopwatch
+      ..reset()
+      ..start();
   }
 
   AnalyticsSyncOperation _analyticsOperation(_SyncRequestKind kind) {
@@ -1035,6 +1044,7 @@ class GoogleDriveSyncService implements SyncService {
   }
 
   Future<void> _restore(Map<String, String> authHeaders) async {
+    _enterSyncStage(AnalyticsSyncStage.download);
     final remoteSettings = await _downloadRestorableSettings(authHeaders);
     final remoteFiles = await _listEventFiles(authHeaders);
     final remoteEvents = await _downloadEventFiles(authHeaders, remoteFiles);
@@ -1042,6 +1052,7 @@ class GoogleDriveSyncService implements SyncService {
     final remoteImogi = await _downloadRestorableImogi(authHeaders);
     final remoteTemplates = await _downloadRestorableTemplates(authHeaders);
     _validateSyncSession?.call();
+    _enterSyncStage(AnalyticsSyncStage.apply);
     await _applyDownloadedEvents(remoteEvents);
     await _queueEventsMissingFromDrive({
       for (final file in remoteFiles) ?_eventIdFromFileName(file.name),
@@ -1050,7 +1061,6 @@ class GoogleDriveSyncService implements SyncService {
     await _applyDownloadedTimetable(remoteTimetable);
     await _applyDownloadedImogi(remoteImogi);
     await _applyDownloadedTemplates(remoteTemplates);
-    _academicSettingsBootstrapIdentity = _accountIdentity;
     await _refreshWidgets();
   }
 
@@ -1207,6 +1217,7 @@ class GoogleDriveSyncService implements SyncService {
       if (!initializeIfNeeded) {
         return false;
       }
+      _enterSyncStage(AnalyticsSyncStage.changes);
       final startToken = await _getDriveStartPageToken(authHeaders);
       await _restore(authHeaders);
       _validateSyncSession?.call();
@@ -1214,10 +1225,13 @@ class GoogleDriveSyncService implements SyncService {
         accountEmail: accountEmail,
         pageToken: startToken,
       );
+      await _settingsRepository.markDriveDocumentsBootstrapped(accountEmail);
       return true;
     }
 
+    _enterSyncStage(AnalyticsSyncStage.changes);
     final batch = await _listDriveChanges(authHeaders, savedToken);
+    _enterSyncStage(AnalyticsSyncStage.download);
     _validateSyncSession?.call();
     final dailyChanges = <String, _DriveChange>{};
     for (final change in batch.changes) {
@@ -1234,16 +1248,22 @@ class GoogleDriveSyncService implements SyncService {
         .fields['academicProfile'];
     final explicitlyDeletedProfile =
         academicRegister != null && academicRegister.value == null;
+    // A token saved by an older client may already be newer than these
+    // documents, so each account reads them once per device even when the feed
+    // is empty. The mark is stored, so later app sessions use the feed only.
+    final bootstrapDocuments = !_settingsRepository.driveDocumentsBootstrapped(
+      accountEmail,
+    );
     final needsAcademicSettings =
-        _academicSettingsBootstrapIdentity != _accountIdentity &&
+        bootstrapDocuments &&
         _settingsRepository.dailyAccount()?.googleAccount != null &&
         !explicitlyDeletedProfile &&
         (academicProfile == null ||
             academicProfile.lmsUserId == null ||
             academicProfile.lmsIntegrationEnabled == null);
-    var needsTimetable = _timetableBootstrapIdentity != _accountIdentity;
-    var needsImogi = _imogiBootstrapIdentity != _accountIdentity;
-    var needsTemplates = _templatesBootstrapIdentity != _accountIdentity;
+    var needsTimetable = bootstrapDocuments;
+    var needsImogi = bootstrapDocuments;
+    var needsTemplates = bootstrapDocuments;
     final externalEvents = <_DownloadedEvent>[];
     final eventIds = <String>{};
     for (final change in dailyChanges.values) {
@@ -1281,13 +1301,12 @@ class GoogleDriveSyncService implements SyncService {
     }
     // Older clients can advance the cursor while omitting unknown LMS fields
     // from the decoded local profile, even with a complete raw LWW register.
-    // Bootstrap incomplete academic settings once per linked session, never an
-    // explicit profile deletion. This reads no event snapshots and adds no poll.
+    // Bootstrap incomplete academic settings once per account on this device,
+    // never an explicit profile deletion. This reads no event snapshots and adds
+    // no poll.
     if (needsAcademicSettings && !didLookupSettings) {
       externalSettings = await _downloadRestorableSettings(authHeaders);
     }
-    // A token saved by an older client may already be newer than the timetable
-    // file. Bootstrap once per linked session even when that feed is empty.
     final externalTimetable = needsTimetable
         ? await _downloadRestorableTimetable(authHeaders)
         : null;
@@ -1300,6 +1319,7 @@ class GoogleDriveSyncService implements SyncService {
 
     var restored = false;
     _validateSyncSession?.call();
+    _enterSyncStage(AnalyticsSyncStage.apply);
     if (externalSettings != null) {
       restored = await _applyDownloadedSettings(externalSettings);
     }
@@ -1313,9 +1333,6 @@ class GoogleDriveSyncService implements SyncService {
     if (needsTemplates) {
       restored = await _applyDownloadedTemplates(externalTemplates) || restored;
     }
-    if (needsAcademicSettings) {
-      _academicSettingsBootstrapIdentity = _accountIdentity;
-    }
     if (restored) {
       await _refreshWidgets();
     }
@@ -1324,6 +1341,9 @@ class GoogleDriveSyncService implements SyncService {
       accountEmail: accountEmail,
       pageToken: batch.newStartPageToken,
     );
+    if (bootstrapDocuments) {
+      await _settingsRepository.markDriveDocumentsBootstrapped(accountEmail);
+    }
     return restored;
   }
 
@@ -1474,7 +1494,6 @@ class GoogleDriveSyncService implements SyncService {
       _timetableChanged();
     }
     _validateSyncSession?.call();
-    _timetableBootstrapIdentity = _accountIdentity;
     return changed;
   }
 
@@ -1525,7 +1544,6 @@ class GoogleDriveSyncService implements SyncService {
         merged,
         validateSession: _validateSyncSession,
       );
-      _timetableBootstrapIdentity = _accountIdentity;
       return;
     }
     throw const GoogleDriveSyncException('동시에 변경된 시간표가 있어 동기화를 다시 시도해야 합니다.');
@@ -1590,7 +1608,6 @@ class GoogleDriveSyncService implements SyncService {
       _imogiChanged();
     }
     _validateSyncSession?.call();
-    _imogiBootstrapIdentity = _accountIdentity;
   }
 
   Future<void> _backupImogi(Map<String, String> headers) async {
@@ -1639,7 +1656,6 @@ class GoogleDriveSyncService implements SyncService {
         merged,
         validateSession: _validateSyncSession,
       );
-      _imogiBootstrapIdentity = _accountIdentity;
       return;
     }
     throw const GoogleDriveSyncException('동시에 변경된 잊모기가 있어 동기화를 다시 시도해야 합니다.');
@@ -1708,7 +1724,6 @@ class GoogleDriveSyncService implements SyncService {
       _templatesChanged();
     }
     _validateSyncSession?.call();
-    _templatesBootstrapIdentity = _accountIdentity;
     return changed;
   }
 
@@ -1758,7 +1773,6 @@ class GoogleDriveSyncService implements SyncService {
         merged,
         validateSession: _validateSyncSession,
       );
-      _templatesBootstrapIdentity = _accountIdentity;
       return;
     }
     throw const GoogleDriveSyncException(

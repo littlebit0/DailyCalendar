@@ -36,6 +36,9 @@ enum AnalyticsTrigger { automatic, manual, startup, resume, localChange }
 /// earlier point: it ends when the data migration finishes.
 enum AnalyticsStartupMilestone { firstCalendarFrame, localCalendarReady }
 
+/// Sequential parts of one Drive sync run; each is sent as `<name>Ms`.
+enum AnalyticsSyncStage { backup, changes, download, apply }
+
 /// Why a started sync ended without a success or failure result.
 enum AnalyticsSyncAbandonReason { sessionChanged }
 
@@ -201,6 +204,7 @@ class AnalyticsRecord {
     required int durationMs,
     AnalyticsErrorCode? errorCode,
     int attempt = 1,
+    Map<AnalyticsSyncStage, int> stageDurationsMs = const {},
   }) {
     final name = switch (outcome) {
       AnalyticsOutcome.succeeded => AnalyticsEventName.syncSucceeded,
@@ -215,6 +219,9 @@ class AnalyticsRecord {
       if (outcome != AnalyticsOutcome.succeeded)
         'errorCode': (errorCode ?? AnalyticsErrorCode.unknown).name,
       ..._attemptAttributes(attempt),
+      // Stage times are capped without a flag; the total keeps the exact flag.
+      for (final entry in stageDurationsMs.entries)
+        '${entry.key.name}Ms': entry.value.clamp(0, maxDurationMs),
     });
   }
 
