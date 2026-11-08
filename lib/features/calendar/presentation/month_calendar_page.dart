@@ -1620,6 +1620,9 @@ class _DaySheetSwipeNavigatorState extends State<_DaySheetSwipeNavigator>
   }
 
   void _settle() {
+    // A canceled gesture during the slide-out (e.g. a vertical scroll won the
+    // arena) must not cancel the requested day change; let it finish.
+    if (_pending != 0) return;
     if (MediaQuery.disableAnimationsOf(context)) {
       _offset.value = 0;
       return;

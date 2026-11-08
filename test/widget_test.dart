@@ -9543,6 +9543,24 @@ void main() {
       await tester.pumpAndSettle();
       expect(offset(), 0);
 
+      // A gesture canceled during the slide-out (vertical scroll won the
+      // arena) still completes the requested day change.
+      await tester.drag(label, const Offset(-200, 0));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+      expect(shownDate(), lastDay);
+      tester
+          .widget<GestureDetector>(
+            find.byKey(const ValueKey('day-sheet-swipe-navigator')),
+          )
+          .onHorizontalDragCancel!();
+      await tester.pumpAndSettle();
+      expect(shownDate(), nextDay);
+      expect(offset(), 0);
+      actions.entries.firstWhere((e) => e.key.label == '이전 날').value();
+      await tester.pumpAndSettle();
+      expect(shownDate(), lastDay);
+
       // Reduce motion: the date changes at once without sliding.
       tester.platformDispatcher.accessibilityFeaturesTestValue =
           const FakeAccessibilityFeatures(disableAnimations: true);
