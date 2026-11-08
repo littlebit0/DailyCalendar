@@ -91,8 +91,10 @@ class _DaySheetDragDismissListenerState
     }
     _pointer = event.pointer;
     _startSize = widget.controller.size;
-    _tracker = VelocityTracker.withKind(event.kind)
-      ..addPosition(event.timeStamp, event.position);
+    // Match the sheet's own fling estimate on each platform.
+    _tracker = ScrollConfiguration.of(context).velocityTrackerBuilder(context)(
+      event,
+    )..addPosition(event.timeStamp, event.position);
   }
 
   void _handleMove(PointerMoveEvent event) {
@@ -109,7 +111,9 @@ class _DaySheetDragDismissListenerState
     if (pointer != event.pointer || startSize == null || tracker == null) {
       return;
     }
-    tracker.addPosition(event.timeStamp, event.position);
+    // Like Flutter's drag recognizer, the up event is not a sample: iOS sends
+    // it a frame after the last move at the same spot, which would halve the
+    // fling velocity and turn a closing flick into a stage step.
     final controller = widget.controller;
     if (!controller.isAttached || (widget.isSuspended?.call() ?? false)) {
       return;
