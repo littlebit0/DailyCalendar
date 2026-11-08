@@ -824,8 +824,8 @@ final _analyticsOptionalAttributes =
         AnalyticsEventName.frameSummary: [_truncated],
         AnalyticsEventName.startupMilestone: [_truncated],
         AnalyticsEventName.syncStarted: [_attempt],
-        AnalyticsEventName.syncSucceeded: [_truncated, _attempt],
-        AnalyticsEventName.syncFailed: [_truncated, _attempt],
+        AnalyticsEventName.syncSucceeded: [_truncated, _attempt, ..._stages],
+        AnalyticsEventName.syncFailed: [_truncated, _attempt, ..._stages],
         AnalyticsEventName.syncAbandoned: [_truncated, _attempt],
         AnalyticsEventName.lmsLogin: [_lmsCause, _lmsSkipReason],
       }.entries)
@@ -837,6 +837,9 @@ final _analyticsOptionalAttributes =
 
 const _truncated = ('durationTruncated', _truncatedFlag);
 const _attempt = ('attempt', _syncAttempt);
+final _stages = [
+  for (final stage in AnalyticsSyncStage.values) ('${stage.name}Ms', _duration),
+];
 const _lmsCause = ('cause', _lmsCauseValue);
 const _lmsSkipReason = ('skipReason', _lmsSkipReasonValue);
 bool _lmsCauseValue(Object? value) =>

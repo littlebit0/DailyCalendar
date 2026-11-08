@@ -1,4 +1,5 @@
 import '../../../core/lms/lms_models.dart';
+import 'alarm_triggers.dart';
 import 'event_category.dart';
 import 'recurrence_rule.dart';
 
@@ -30,12 +31,24 @@ class CalendarEvent {
     this.alarmEnabled = false,
     int allDayAlarmMinutes = 9 * 60,
     int alarmMinutesBefore = 0,
-    this.alarmCustomAt,
+    DateTime? alarmCustomAt,
+    List<int>? alarmMinutesBeforeList,
+    List<DateTime>? alarmCustomAtList,
     this.readOnly = false,
     this.systemEvent = false,
     this.holiday = false,
   }) : allDayAlarmMinutes = allDayAlarmMinutes.clamp(0, 1439),
-       alarmMinutesBefore = alarmMinutesBefore < 0 ? 0 : alarmMinutesBefore,
+       _alarm = resolveAlarmTriggers(
+         base: alarmBaseTimeFor(
+           startAt,
+           allDay,
+           allDayAlarmMinutes.clamp(0, 1439),
+         ),
+         minutesBefore: alarmMinutesBefore,
+         customAt: alarmCustomAt,
+         minutesList: alarmMinutesBeforeList,
+         customList: alarmCustomAtList,
+       ),
        reminderMinutesBeforeList = normalizeReminderMinutes(
          reminderMinutesBeforeList ??
              (reminderMinutesBefore == null
@@ -68,12 +81,25 @@ class CalendarEvent {
   final bool alarmEnabled;
   final int allDayAlarmMinutes;
 
-  /// Minutes before [alarmBaseTime]; 0 rings at the base time (정시).
-  final int alarmMinutesBefore;
+  final AlarmTriggers _alarm;
 
-  /// A user-chosen absolute alarm time. It overrides [alarmMinutesBefore] and
-  /// is kept as-is when the event's date or start time changes.
-  final DateTime? alarmCustomAt;
+  /// Legacy single trigger (the earliest one) kept for 4.1.0 and older:
+  /// minutes before [alarmBaseTime]; 0 rings at the base time (정시).
+  int get alarmMinutesBefore => _alarm.minutesBefore;
+
+  /// Legacy single custom time; set when the earliest trigger is custom.
+  DateTime? get alarmCustomAt => _alarm.customAt;
+
+  /// Every "N minutes before" trigger, ascending.
+  List<int> get alarmMinutesBeforeList => _alarm.minutesList;
+
+  /// Every user-chosen absolute alarm time, ascending. They are kept as-is
+  /// when the event's date or start time changes.
+  List<DateTime> get alarmCustomAtList => _alarm.customList;
+
+  /// More than one trigger; only then are the list fields stored and synced.
+  bool get hasMultipleAlarmTimes =>
+      _alarm.minutesList.length + _alarm.customList.length > 1;
   final bool readOnly;
   final bool systemEvent;
   final bool holiday;
@@ -82,19 +108,14 @@ class CalendarEvent {
 
   /// Reference for relative alarms: the start time, or the all-day alarm
   /// clock time on the start date for all-day events.
-  DateTime get alarmBaseTime => allDay
-      ? DateTime(
-          startAt.year,
-          startAt.month,
-          startAt.day,
-          allDayAlarmMinutes ~/ 60,
-          allDayAlarmMinutes % 60,
-        )
-      : startAt;
+  DateTime get alarmBaseTime =>
+      alarmBaseTimeFor(startAt, allDay, allDayAlarmMinutes);
 
-  DateTime get alarmFireAt =>
-      alarmCustomAt ??
-      alarmBaseTime.subtract(Duration(minutes: alarmMinutesBefore));
+  /// Every alarm fire time, earliest first, each instant once.
+  List<DateTime> get alarmFireTimes => alarmFireTimesOf(_alarm, alarmBaseTime);
+
+  /// The earliest fire time (the legacy single alarm).
+  DateTime get alarmFireAt => alarmFireTimes.first;
 
   bool get isDeleted => deletedAt != null;
 
@@ -159,6 +180,8 @@ class CalendarEvent {
     int? allDayAlarmMinutes,
     int? alarmMinutesBefore,
     DateTime? alarmCustomAt,
+    List<int>? alarmMinutesBeforeList,
+    List<DateTime>? alarmCustomAtList,
     bool? readOnly,
     bool? systemEvent,
     bool? holiday,
@@ -178,6 +201,11 @@ class CalendarEvent {
               (reminderMinutesBefore == null
                   ? this.reminderMinutesBeforeList
                   : <int>[reminderMinutesBefore]);
+    // A legacy single-trigger change replaces the list; otherwise keep it.
+    final keepAlarmLists =
+        alarmMinutesBefore == null && alarmCustomAt == null && !clearAlarmCustomAt;
+    final alarmListsChanged =
+        alarmMinutesBeforeList != null || alarmCustomAtList != null;
     return CalendarEvent(
       id: id ?? this.id,
       occurrenceId: clearOccurrenceId
@@ -209,6 +237,12 @@ class CalendarEvent {
       alarmCustomAt: clearAlarmCustomAt
           ? null
           : alarmCustomAt ?? this.alarmCustomAt,
+      alarmMinutesBeforeList: alarmListsChanged || keepAlarmLists
+          ? alarmMinutesBeforeList ?? this.alarmMinutesBeforeList
+          : null,
+      alarmCustomAtList: alarmListsChanged || keepAlarmLists
+          ? alarmCustomAtList ?? this.alarmCustomAtList
+          : null,
       readOnly: readOnly ?? this.readOnly,
       systemEvent: systemEvent ?? this.systemEvent,
       holiday: holiday ?? this.holiday,

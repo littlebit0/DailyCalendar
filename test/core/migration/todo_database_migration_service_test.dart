@@ -380,7 +380,7 @@ void main() {
   }
 
   test(
-    'schema 12 gains the Drive file cache locally and retries after interruption (#786)',
+    'schema 13 gains the Drive file cache locally and retries after interruption (#786)',
     () async {
       final database = AppDatabase.forTesting(NativeDatabase(databaseFile));
       await DriftEventRepository(database).save(_event(id: 'synced'));
@@ -388,7 +388,7 @@ void main() {
       final before = sqlite3.open(databaseFile.path);
       try {
         before.execute('DROP TABLE sync_remote_event_files');
-        before.execute('PRAGMA user_version = 12');
+        before.execute('PRAGMA user_version = 13');
       } finally {
         before.close();
       }
@@ -419,7 +419,7 @@ void main() {
       );
       final observer = sqlite3.open(databaseFile.path);
       try {
-        expect(_userVersion(observer), 12);
+        expect(_userVersion(observer), 13);
         expect(
           observer.select(
             "SELECT 1 FROM sqlite_master WHERE name = 'sync_remote_event_files'",
@@ -436,7 +436,7 @@ void main() {
       expect(cloudCalls, 0);
       final migrated = sqlite3.open(databaseFile.path);
       try {
-        expect(_userVersion(migrated), 13);
+        expect(_userVersion(migrated), 14);
         expect(
           migrated.select(
             'SELECT sync_status FROM event_records WHERE id = ?',
@@ -460,14 +460,14 @@ void main() {
     },
   );
 
-  test('Drift upgrade from schema 12 creates the Drive file cache', () async {
+  test('Drift upgrade from schema 13 creates the Drive file cache', () async {
     final database = AppDatabase.forTesting(NativeDatabase(databaseFile));
     await DriftEventRepository(database).save(_event(id: 'kept'));
     await database.close();
     final raw = sqlite3.open(databaseFile.path);
     try {
       raw.execute('DROP TABLE sync_remote_event_files');
-      raw.execute('PRAGMA user_version = 12');
+      raw.execute('PRAGMA user_version = 13');
     } finally {
       raw.close();
     }

@@ -49,6 +49,11 @@ class EventRecords extends Table {
   IntColumn get alarmMinutesBefore =>
       integer().withDefault(const Constant(0))();
   DateTimeColumn get alarmCustomAt => dateTime().nullable()();
+  // Schema 13: JSON lists of every alarm trigger (minutes, UTC ISO times).
+  // Null keeps the single legacy trigger above, which always holds the
+  // earliest one for older app versions.
+  TextColumn get alarmMinutesBeforeList => text().nullable()();
+  TextColumn get alarmCustomAtList => text().nullable()();
 
   @override
   Set<Column<Object>> get primaryKey => {id};
@@ -56,7 +61,7 @@ class EventRecords extends Table {
 
 @DriftDatabase(tables: [EventRecords])
 class AppDatabase extends _$AppDatabase {
-  static const currentSchemaVersion = 13;
+  static const currentSchemaVersion = 14;
   static const createDeletionTable = '''
     CREATE TABLE IF NOT EXISTS sync_event_deletions (
       id TEXT PRIMARY KEY NOT NULL,
@@ -65,7 +70,7 @@ class AppDatabase extends _$AppDatabase {
       lms_owner_id TEXT
     )
   ''';
-  // Schema 13: device-local copy of Drive v2 event files, keyed by Drive file
+  // Schema 14: device-local copy of Drive v2 event files, keyed by Drive file
   // id and the content md5. Never uploaded; a listed md5 that matches lets
   // sync reuse the body instead of downloading it again.
   static const createRemoteEventFileTable = '''

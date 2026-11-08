@@ -141,7 +141,6 @@ void main() {
           if (++calls == 1) return http.Response('offline', 503);
           return _jsonResponse({'changes': [], 'newStartPageToken': 'next'});
         }),
-        backupRestoreDelay: const Duration(seconds: 3),
       );
       addTearDown(service.dispose);
       await expectLater(
@@ -219,7 +218,7 @@ void main() {
 
   for (final count in [1, 20, 100]) {
     test(
-      'default pacing restores $count events without missing or overlapping requests',
+      'default pacing restores $count events concurrently within the cap without missing requests',
       () async {
         SharedPreferences.setMockInitialValues({});
         final preferences = await SharedPreferences.getInstance();
@@ -276,8 +275,18 @@ void main() {
         );
         addTearDown(service.dispose);
         await service.restoreNow();
-        expect(peak, 1);
-        expect(downloaded, List.generate(count, (i) => 'sample-$i'));
+        expect(
+          peak,
+          count < GoogleDriveSyncService.defaultDriveConcurrency
+              ? lessThanOrEqualTo(
+                  GoogleDriveSyncService.defaultDriveConcurrency,
+                )
+              : GoogleDriveSyncService.defaultDriveConcurrency,
+        );
+        expect(downloaded.toSet(), {
+          for (var i = 0; i < count; i++) 'sample-$i',
+        });
+        expect(downloaded.length, count);
         expect(repository.events.map((e) => e.id).toSet(), downloaded.toSet());
         expect(notifications.scheduled.length, count);
       },
@@ -717,6 +726,122 @@ void main() {
         ),
         isFalse,
       );
+    },
+  );
+
+  test(
+    'several alarm times round-trip through the v2 event file and older '
+    'clients keep the earliest one',
+    () async {
+      SharedPreferences.setMockInitialValues({});
+      final preferences = await SharedPreferences.getInstance();
+      final repository = _MemoryEventRepository();
+      final start = DateTime(2026, 12, 3, 14);
+      final customAt = DateTime(2026, 12, 2, 21, 30);
+      final changed = CalendarEvent(
+        id: 'multi-alarm',
+        title: '발표',
+        startAt: start,
+        endAt: start.add(const Duration(hours: 1)),
+        allDay: false,
+        category: EventCategory.basic,
+        colorValue: EventCategory.basic.colorValue,
+        createdAt: DateTime.utc(2026, 11, 1),
+        updatedAt: DateTime.utc(2026, 11, 8),
+        syncStatus: 'pending',
+        alarmEnabled: true,
+        alarmMinutesBeforeList: const [0, 10, 30],
+        alarmCustomAtList: [customAt],
+      );
+      await repository.save(changed);
+
+      Map<String, Object?>? uploaded;
+      var serve = <String, Map<String, Object?>>{};
+      final httpClient = _versionedClient((request) async {
+        if (request.method == 'GET' && request.url.path == '/drive/v3/files') {
+          final query = request.url.queryParameters['q'] ?? '';
+          if (query.contains('daily-sync-v2-event-multi-alarm.json')) {
+            return _driveFiles([
+              {'id': 'remote', 'name': 'daily-sync-v2-event-multi-alarm.json'},
+            ]);
+          }
+          return _driveFiles([
+            for (final id in serve.keys)
+              {'id': id, 'name': 'daily-sync-v2-event-$id.json'},
+          ]);
+        }
+        if (request.method == 'GET' &&
+            request.url.path == '/drive/v3/files/remote') {
+          return _jsonResponse(
+            _eventFileJson(
+              id: changed.id,
+              title: '이전',
+              startAt: changed.startAt.toIso8601String(),
+              endAt: changed.endAt.toIso8601String(),
+              updatedAt: '2025-01-01T00:00:00.000Z',
+            ),
+          );
+        }
+        if (request.method == 'GET' &&
+            request.url.path.startsWith('/drive/v3/files/')) {
+          final id = request.url.pathSegments.last;
+          return _jsonResponse({
+            'schemaVersion': 2,
+            'type': 'event',
+            'event': serve[id],
+          });
+        }
+        if (request.method == 'PUT') {
+          uploaded =
+              (jsonDecode(request.body) as Map<String, Object?>)['event']
+                  as Map<String, Object?>;
+          return _jsonResponse({'id': 'remote'});
+        }
+        return http.Response('unexpected ${request.url}', 500);
+      });
+      final service = _service(
+        repository: repository,
+        notificationService: _FakeNotificationService(),
+        preferences: preferences,
+        httpClient: httpClient,
+      );
+      addTearDown(service.dispose);
+
+      await service.backupNow(eventIds: {changed.id});
+      final body = uploaded!;
+      // The legacy keys hold the earliest trigger (the custom time).
+      expect(body['alarmCustomAt'], customAt.toUtc().toIso8601String());
+      expect(body['alarmMinutesBefore'], 0);
+      expect(body['alarmMinutesBeforeList'], [0, 10, 30]);
+      expect(body['alarmCustomAtList'], [customAt.toUtc().toIso8601String()]);
+
+      // A 4.1.0 rewrite has no lists; one that kept the lists but changed
+      // only the legacy keys also wins with its single alarm.
+      final olderRewrite = Map<String, Object?>.from(body)
+        ..remove('alarmMinutesBeforeList')
+        ..remove('alarmCustomAtList')
+        ..['id'] = 'older';
+      final legacyEdit = Map<String, Object?>.from(body)
+        ..['id'] = 'edited'
+        ..['alarmCustomAt'] = null
+        ..['alarmMinutesBefore'] = 60;
+      serve = {
+        'multi-alarm': body,
+        'older': olderRewrite,
+        'edited': legacyEdit,
+      };
+      final events = {
+        for (final event in (await service.downloadEventsForMigration())!)
+          event.id: event,
+      };
+
+      final restored = events['multi-alarm']!;
+      expect(restored.alarmMinutesBeforeList, [0, 10, 30]);
+      expect(restored.alarmCustomAtList, [customAt]);
+      expect(restored.alarmFireTimes, changed.alarmFireTimes);
+      expect(events['older']!.alarmFireTimes, [customAt]);
+      expect(events['edited']!.alarmMinutesBeforeList, [60]);
+      expect(events['edited']!.alarmCustomAtList, isEmpty);
     },
   );
 
@@ -1292,13 +1417,10 @@ void main() {
       notificationService: notificationService,
       preferences: preferences,
       httpClient: httpClient,
-      backupRestoreDelay: const Duration(milliseconds: 20),
     );
     addTearDown(service.dispose);
 
-    final stopwatch = Stopwatch()..start();
     await service.syncNow();
-    stopwatch.stop();
 
     final uploadIndex = requests.indexWhere(
       (request) =>
@@ -1313,10 +1435,6 @@ void main() {
     expect(uploadIndex, isNonNegative);
     expect(restoreDownloadIndex, isNonNegative);
     expect(uploadIndex, lessThan(restoreDownloadIndex));
-    expect(
-      stopwatch.elapsed,
-      greaterThanOrEqualTo(const Duration(milliseconds: 20)),
-    );
     expect(await repository.findById('remote-event'), isNotNull);
     expect((await repository.findById('local-event'))!.syncStatus, 'synced');
     // #347: an event Drive has no file for is added even if marked synced.
@@ -2603,6 +2721,251 @@ void main() {
     expect((await repository.findById(second.id))?.syncStatus, 'synced');
   });
 
+  test(
+    'concurrent backup matches sequential results, caps requests and never overlaps one event',
+    () async {
+      const count = 12;
+      Future<
+        ({
+          Duration elapsed,
+          int peak,
+          Set<String> uploaded,
+          List<String?> statuses,
+        })
+      >
+      runBackup(int concurrency) async {
+        SharedPreferences.setMockInitialValues({});
+        final preferences = await SharedPreferences.getInstance();
+        final repository = _MemoryEventRepository();
+        for (var i = 0; i < count; i++) {
+          await repository.save(
+            _event(
+              id: 'bulk-$i',
+              title: '로컬 $i',
+              startAt: DateTime(2026, 8, 1 + i),
+              endAt: DateTime(2026, 8, 2 + i),
+              updatedAt: DateTime(2026, 7, 29, 16),
+              syncStatus: 'pending',
+            ),
+          );
+        }
+        var active = 0;
+        var peak = 0;
+        final activeById = <String, int>{};
+        final uploaded = <String>{};
+        final client = _versionedClient((request) async {
+          final match = RegExp(r'bulk-\d+').firstMatch(request.url.path);
+          final eventId = match?.group(0);
+          active++;
+          if (active > peak) peak = active;
+          if (eventId != null) {
+            activeById[eventId] = (activeById[eventId] ?? 0) + 1;
+            expect(activeById[eventId], 1, reason: 'overlap on $eventId');
+          }
+          try {
+            // Fake network round trip.
+            await Future<void>.delayed(const Duration(milliseconds: 20));
+            if (request.method == 'GET' &&
+                request.url.path == '/drive/v3/files') {
+              final query = request.url.queryParameters['q'] ?? '';
+              return _driveFiles([
+                for (var i = 0; i < count; i++)
+                  if (query.contains("'daily-sync-v2-event-bulk-$i.json'"))
+                    {
+                      'id': 'bulk-$i-file',
+                      'name': 'daily-sync-v2-event-bulk-$i.json',
+                    },
+              ]);
+            }
+            if (eventId != null && request.method == 'GET') {
+              return _jsonResponse(
+                _eventFileJson(
+                  id: eventId,
+                  title: '이전',
+                  startAt: '2026-08-01T00:00:00.000',
+                  endAt: '2026-08-02T00:00:00.000',
+                  updatedAt: '2025-07-29T15:00:00.000Z',
+                  sourceDeviceId: 'remote-device',
+                ),
+              );
+            }
+            if (eventId != null && request.method == 'PUT') {
+              uploaded.add(eventId);
+              return _jsonResponse({'id': '$eventId-file'});
+            }
+            return http.Response('unexpected ${request.url}', 500);
+          } finally {
+            active--;
+            if (eventId != null) activeById[eventId] = activeById[eventId]! - 1;
+          }
+        });
+        final service = _service(
+          repository: repository,
+          notificationService: _FakeNotificationService(),
+          preferences: preferences,
+          httpClient: client,
+          driveConcurrency: concurrency,
+        );
+        addTearDown(service.dispose);
+        final clock = Stopwatch()..start();
+        await service.syncPendingChangesNow();
+        clock.stop();
+        return (
+          elapsed: clock.elapsed,
+          peak: peak,
+          uploaded: uploaded,
+          statuses: [
+            for (var i = 0; i < count; i++)
+              (await repository.findById('bulk-$i'))?.syncStatus,
+          ],
+        );
+      }
+
+      final sequential = await runBackup(1);
+      final concurrent = await runBackup(6);
+      // ignore: avoid_print
+      print(
+        'backup of $count events with 20ms fake latency: '
+        'sequential ${sequential.elapsed.inMilliseconds}ms, '
+        'concurrent(6) ${concurrent.elapsed.inMilliseconds}ms',
+      );
+      expect(sequential.peak, 1);
+      expect(concurrent.peak, 6);
+      expect(concurrent.uploaded, sequential.uploaded);
+      expect(concurrent.uploaded.length, count);
+      expect(concurrent.statuses, sequential.statuses);
+      expect(concurrent.statuses, everyElement('synced'));
+      expect(concurrent.elapsed, lessThan(sequential.elapsed));
+    },
+  );
+
+  test(
+    'concurrent restore keeps the newest of duplicate files like sequential',
+    () async {
+      Future<CalendarEvent?> runRestore(int concurrency) async {
+        SharedPreferences.setMockInitialValues({});
+        final preferences = await SharedPreferences.getInstance();
+        final repository = _MemoryEventRepository();
+        final client = _versionedClient((request) async {
+          if (request.url.path == '/drive/v3/files') {
+            if ((request.url.queryParameters['q'] ?? '').contains(
+              'daily-sync-v2-event-',
+            )) {
+              return _driveFiles([
+                {'id': 'dup-new', 'name': 'daily-sync-v2-event-dup.json'},
+                for (var i = 0; i < 8; i++)
+                  {
+                    'id': 'other-$i',
+                    'name': 'daily-sync-v2-event-other-$i.json',
+                  },
+                {'id': 'dup-old', 'name': 'daily-sync-v2-event-dup.json'},
+              ]);
+            }
+            return _driveFiles([]);
+          }
+          final fileId = request.url.pathSegments.last;
+          // The newer copy answers last, so completion order differs from
+          // listing order.
+          await Future<void>.delayed(
+            Duration(milliseconds: fileId == 'dup-new' ? 30 : 1),
+          );
+          return _jsonResponse(
+            _eventFileJson(
+              id: fileId.startsWith('dup') ? 'dup' : fileId,
+              title: fileId,
+              startAt: '2026-06-01T00:00:00.000Z',
+              endAt: '2026-06-02T00:00:00.000Z',
+              updatedAt: fileId == 'dup-new'
+                  ? '2026-06-01T00:00:00.000Z'
+                  : '2026-05-01T00:00:00.000Z',
+            ),
+          );
+        });
+        final service = _service(
+          repository: repository,
+          notificationService: _FakeNotificationService(),
+          preferences: preferences,
+          httpClient: client,
+          driveConcurrency: concurrency,
+        );
+        addTearDown(service.dispose);
+        await service.restoreNow();
+        expect(repository.events.length, 9);
+        return repository.findById('dup');
+      }
+
+      final sequential = await runRestore(1);
+      final concurrent = await runRestore(6);
+      expect(sequential?.title, 'dup-new');
+      expect(concurrent?.title, sequential?.title);
+    },
+  );
+
+  test(
+    'account change during concurrent download stops all in-flight events',
+    () async {
+      SharedPreferences.setMockInitialValues({});
+      final preferences = await SharedPreferences.getInstance();
+      final settings = SettingsRepository(preferences: preferences);
+      await settings.saveGoogleAccount(
+        const GoogleAccount(email: 'tester@example.com'),
+      );
+      final repository = _MemoryEventRepository();
+      final responses = <Completer<http.Response>>[];
+      final inFlight = Completer<void>();
+      var started = 0;
+      final service = _service(
+        repository: repository,
+        notificationService: _FakeNotificationService(),
+        preferences: preferences,
+        httpClient: _versionedClient((request) async {
+          if (request.url.path == '/drive/v3/changes/startPageToken') {
+            return _jsonResponse({'startPageToken': 'baseline'});
+          }
+          if (request.url.path == '/drive/v3/files') {
+            if ((request.url.queryParameters['q'] ?? '').contains(
+              'daily-sync-v2-event-',
+            )) {
+              return _driveFiles([
+                for (var i = 0; i < 10; i++)
+                  {'id': 'old-$i', 'name': 'daily-sync-v2-event-old-$i.json'},
+              ]);
+            }
+            return _driveFiles([]);
+          }
+          final response = Completer<http.Response>();
+          responses.add(response);
+          if (++started == 3 && !inFlight.isCompleted) inFlight.complete();
+          return response.future;
+        }),
+      );
+      addTearDown(service.dispose);
+      final expectation = expectLater(
+        service.start(),
+        throwsA(isA<GoogleDriveAuthException>()),
+      );
+      await inFlight.future;
+      await settings.saveGoogleAccount(
+        const GoogleAccount(email: 'other@example.com'),
+      );
+      for (var i = 0; i < responses.length; i++) {
+        responses[i].complete(
+          _jsonResponse(
+            _eventFileJson(
+              id: 'old-$i',
+              title: 'old account data',
+              startAt: '2026-09-14T09:00:00',
+              endAt: '2026-09-14T10:00:00',
+            ),
+          ),
+        );
+      }
+      await expectation;
+      expect(started, lessThanOrEqualTo(6));
+      expect(repository.events, isEmpty);
+    },
+  );
+
   test('offline automatic backup retries a bounded number of times', () async {
     SharedPreferences.setMockInitialValues({});
     final preferences = await SharedPreferences.getInstance();
@@ -2854,20 +3217,22 @@ GoogleDriveSyncService _service({
   required _FakeNotificationService notificationService,
   required SharedPreferences preferences,
   required http.Client httpClient,
-  Duration backupRestoreDelay = Duration.zero,
   Duration changeSyncDelay = Duration.zero,
   Duration? driveRequestDelay = Duration.zero,
   List<Duration> automaticRetryDelays = const [],
+  int driveConcurrency = GoogleDriveSyncService.defaultDriveConcurrency,
+  List<Duration> driveRateLimitRetryDelays = const [],
   ProductAnalytics analytics = const NoopProductAnalytics(),
 }) {
   return GoogleDriveSyncService(
     driveRequestDelay: driveRequestDelay ?? PacedHttpClient.defaultDelay,
+    driveConcurrency: driveConcurrency,
+    driveRateLimitRetryDelays: driveRateLimitRetryDelays,
     authService: authService ?? _FakeGoogleDriveAuthService(),
     eventRepository: repository,
     notificationService: notificationService,
     settingsRepository: SettingsRepository(preferences: preferences),
     httpClient: httpClient,
-    backupRestoreDelay: backupRestoreDelay,
     changeSyncDelay: changeSyncDelay,
     automaticRetryDelays: automaticRetryDelays,
     analytics: analytics,
@@ -3227,7 +3592,6 @@ void _latestMergeTests() {
         settingsRepository: settings,
         httpClient: MockClient(drive.handle),
         changeSyncDelay: const Duration(hours: 1),
-        backupRestoreDelay: Duration.zero,
         automaticRetryDelays: const [],
         now: () => DateTime(2026, 9, 16),
         onEventsChanged: () async => widgetRefreshes++,
@@ -4043,7 +4407,6 @@ void _latestMergeTests() {
           settingsRepository: settings,
           httpClient: MockClient(drive.handle),
           driveRequestDelay: Duration.zero,
-          backupRestoreDelay: const Duration(seconds: 3),
           automaticRetryDelays: const [],
         );
         await service
@@ -4059,6 +4422,85 @@ void _latestMergeTests() {
         ]);
         expect(service.statusNotifier.value.completedItems, isNull);
         expect(service.statusNotifier.value.totalItems, isNull);
+      },
+    );
+
+    GoogleDriveSyncService newSession({
+      ProductAnalytics analytics = const NoopProductAnalytics(),
+    }) => GoogleDriveSyncService(
+      authService: _FakeGoogleDriveAuthService(),
+      eventRepository: repository,
+      notificationService: _FakeNotificationService(),
+      settingsRepository: settings,
+      httpClient: MockClient(drive.handle),
+      driveRequestDelay: Duration.zero,
+      changeSyncDelay: const Duration(hours: 1),
+      automaticRetryDelays: const [],
+      analytics: analytics,
+    );
+
+    test(
+      'issue787 a combined sync with a local edit has no fixed wait and records stage times',
+      () async {
+        await service.syncNow();
+        service.dispose();
+        final analytics = _RecordingAnalytics();
+        service = newSession(analytics: analytics);
+        await repository.save(local());
+        // The removed upload-to-download wait alone was 3 seconds.
+        await service.syncNow().timeout(const Duration(seconds: 1));
+        expect(drive.requests.any((r) => r.method == 'POST'), isTrue);
+        await Future<void>.delayed(Duration.zero);
+        final record = analytics.records.last;
+        expect(record.name, AnalyticsEventName.syncSucceeded);
+        expect(
+          record.attributes.keys.where((key) => key.endsWith('Ms')).toSet(),
+          {'durationMs', 'backupMs', 'changesMs', 'downloadMs', 'applyMs'},
+        );
+        for (final stage in AnalyticsSyncStage.values) {
+          expect(record.attributes['${stage.name}Ms'], isA<int>());
+        }
+      },
+    );
+
+    test(
+      'issue787 documents are read once per account on this device, then only on change',
+      () async {
+        // A token saved by an older app, before the stored bootstrap mark.
+        await service.syncNow();
+        final token = settings.driveChangePageToken('tester@example.com')!;
+        await settings.clearDriveChangePageToken();
+        await settings.saveDriveChangePageToken(
+          accountEmail: 'tester@example.com',
+          pageToken: token,
+        );
+        bool readsDocuments() => drive.requests.any(
+          (r) =>
+              r.url.path == '/drive/v3/files' &&
+              (r.url.queryParameters['q'] ?? '').contains(
+                'daily-sync-v2-timetable.json',
+              ),
+        );
+        service.dispose();
+        service = newSession();
+        drive.requests.clear();
+        await service.checkForRemoteChangesNow();
+        expect(readsDocuments(), isTrue);
+        expect(
+          settings.driveDocumentsBootstrapped('Tester@Example.com'),
+          isTrue,
+        );
+
+        // Each later app session starts with a fresh service instance.
+        service.dispose();
+        service = newSession();
+        drive.requests.clear();
+        await service.checkForRemoteChangesNow();
+        expect(drive.requests.map((r) => r.url.path), ['/drive/v3/changes']);
+        expect(
+          settings.driveDocumentsBootstrapped('other@example.com'),
+          isFalse,
+        );
       },
     );
 

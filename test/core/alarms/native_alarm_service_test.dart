@@ -118,7 +118,7 @@ void main() {
             'eventId': event.id,
             'title': '회의',
             'memo': '자료 지참',
-            'fireAtMilliseconds': start.millisecondsSinceEpoch,
+            'fireAtMillisecondsList': [start.millisecondsSinceEpoch],
             'snoozeMinutes': 10,
           });
         },
@@ -168,8 +168,8 @@ void main() {
         final expected = DateTime(start.year, start.month, start.day, 7, 30);
         expect(
           (scheduleCall?.arguments
-              as Map<Object?, Object?>)['fireAtMilliseconds'],
-          expected.millisecondsSinceEpoch,
+              as Map<Object?, Object?>)['fireAtMillisecondsList'],
+          [expected.millisecondsSinceEpoch],
         );
       });
     });

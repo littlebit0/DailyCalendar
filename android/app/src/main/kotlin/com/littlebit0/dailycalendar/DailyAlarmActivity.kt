@@ -18,6 +18,7 @@ import java.text.DateFormat
 import java.util.Date
 
 class DailyAlarmActivity : Activity() {
+    // The alarm's store key ([DailyAlarm.id]), not necessarily the event id.
     private var eventId = ""
     private val closed = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
@@ -68,7 +69,7 @@ class DailyAlarmActivity : Activity() {
         if (alarm.memo.isNotBlank()) label(alarm.memo, 18f)
         column.addView(Button(this).apply {
             text = getString(R.string.alarm_stop)
-            setOnClickListener { DailyAlarmScheduler.cancel(this@DailyAlarmActivity, eventId); finish() }
+            setOnClickListener { DailyAlarmScheduler.cancelAlarm(this@DailyAlarmActivity, eventId); finish() }
         }, LinearLayout.LayoutParams(-1, -2))
         if (alarm.fireAt <= System.currentTimeMillis()) {
             column.addView(Button(this).apply {

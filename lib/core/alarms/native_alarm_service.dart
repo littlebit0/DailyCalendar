@@ -60,8 +60,14 @@ class NativeAlarmService implements AlarmService, ReconciliableAlarmService {
     if (await authorizationState() != AlarmAuthorizationState.authorized) {
       return;
     }
-    final fireAt = event.alarmFireAt;
-    if (!reconcile && !fireAt.isAfter(DateTime.now())) {
+    // One native alarm per fire time. Passed times are not scheduled; on
+    // reconcile they are still sent so a ringing or snoozed alarm is kept.
+    final now = DateTime.now();
+    final fireTimes = [
+      for (final fireAt in event.alarmFireTimes)
+        if (reconcile || fireAt.isAfter(now)) fireAt.millisecondsSinceEpoch,
+    ];
+    if (fireTimes.isEmpty) {
       return;
     }
     final scheduled = await _channel
@@ -69,7 +75,7 @@ class NativeAlarmService implements AlarmService, ReconciliableAlarmService {
           'eventId': event.id,
           'title': event.title,
           'memo': event.memo,
-          'fireAtMilliseconds': fireAt.millisecondsSinceEpoch,
+          'fireAtMillisecondsList': fireTimes,
           'snoozeMinutes': 10,
         });
     if (scheduled == true) await onAlarmScheduled?.call(event);
