@@ -50,6 +50,7 @@ class EventDetailsPanel extends ConsumerWidget {
     this.dragFeedbackSpecListenable,
     this.dragOrigin = CalendarEventDragOrigin.calendar,
     this.colorWeekdayOnly = false,
+    this.prefetchAdjacentDays = false,
   });
 
   final DateTime date;
@@ -67,8 +68,22 @@ class EventDetailsPanel extends ConsumerWidget {
   final CalendarEventDragOrigin dragOrigin;
   final bool colorWeekdayOnly;
 
+  /// Keeps the previous and next day's queries loaded so a day swipe shows
+  /// the new day's events at once instead of a loading indicator.
+  final bool prefetchAdjacentDays;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    if (prefetchAdjacentDays) {
+      for (final delta in const [-1, 1]) {
+        ref.listen(
+          eventsInRangeProvider(
+            _dayRange(shiftCalendarDateByDays(date, delta)),
+          ),
+          (_, _) {},
+        );
+      }
+    }
     // Timetable edits and sync refresh lecture-mode change rows at once (#771).
     final timetable = ref.watch(timetableStoreProvider);
     return ListenableBuilder(
