@@ -151,51 +151,79 @@ class _StartupSyncGateState extends State<StartupSyncGate> {
   Widget build(BuildContext context) {
     if (widget.showLocalImmediately) {
       final strings = AppLocalizations.of(context);
+      final showBanner = _operation != null || _failure != null;
+      final reduceMotion =
+          MediaQuery.maybeDisableAnimationsOf(context) ?? false;
       return Column(
         children: [
-          if (_operation != null || _failure != null)
-            Material(
-              color: Theme.of(context).colorScheme.surfaceContainer,
-              child: SafeArea(
-                bottom: false,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 4,
-                  ),
-                  child: Row(
-                    children: [
-                      if (_operation != null)
-                        const SizedBox(
-                          width: 14,
-                          height: 14,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        )
-                      else
-                        const Icon(Icons.sync_problem_outlined, size: 18),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Semantics(
-                          liveRegion: true,
-                          child: Text(
-                            strings.text(
-                              _failure?.message ??
-                                  'Google Drive 동기화 중 · 저장된 일정을 사용할 수 있습니다.',
+          // The banner folds in and out instead of jumping the whole calendar
+          // up or down by its height when a sync starts or ends.
+          AnimatedSwitcher(
+            duration: reduceMotion
+                ? Duration.zero
+                : const Duration(milliseconds: 220),
+            switchInCurve: Curves.easeOutCubic,
+            switchOutCurve: Curves.easeInCubic,
+            layoutBuilder: (current, previous) => Stack(
+              alignment: Alignment.topCenter,
+              children: [...previous, ?current],
+            ),
+            transitionBuilder: (child, animation) => SizeTransition(
+              sizeFactor: animation,
+              alignment: Alignment.topCenter,
+              child: FadeTransition(opacity: animation, child: child),
+            ),
+            child: !showBanner
+                ? const SizedBox(
+                    key: ValueKey('startup-sync-banner-hidden'),
+                    width: double.infinity,
+                  )
+                : Material(
+                    key: const ValueKey('startup-sync-banner'),
+                    color: Theme.of(context).colorScheme.surfaceContainer,
+                    child: SafeArea(
+                      bottom: false,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 4,
+                        ),
+                        child: Row(
+                          children: [
+                            if (_operation != null)
+                              const SizedBox(
+                                width: 14,
+                                height: 14,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              )
+                            else
+                              const Icon(Icons.sync_problem_outlined, size: 18),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Semantics(
+                                liveRegion: true,
+                                child: Text(
+                                  strings.text(
+                                    _failure?.message ??
+                                        'Google Drive 동기화 중 · 저장된 일정을 사용할 수 있습니다.',
+                                  ),
+                                  style: Theme.of(context).textTheme.bodySmall,
+                                ),
+                              ),
                             ),
-                            style: Theme.of(context).textTheme.bodySmall,
-                          ),
+                            if (_operation == null)
+                              TextButton(
+                                onPressed: _run,
+                                child: Text(strings.text('다시 시도')),
+                              ),
+                          ],
                         ),
                       ),
-                      if (_operation == null)
-                        TextButton(
-                          onPressed: _run,
-                          child: Text(strings.text('다시 시도')),
-                        ),
-                    ],
+                    ),
                   ),
-                ),
-              ),
-            ),
+          ),
           Expanded(child: widget.child),
         ],
       );

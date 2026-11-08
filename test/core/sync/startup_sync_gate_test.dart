@@ -53,7 +53,29 @@ void main() {
     expect(find.text('calendar'), findsOneWidget);
     expect(calls, 1);
     operation.complete();
+    await tester.pumpAndSettle();
+    expect(find.byType(CircularProgressIndicator), findsNothing);
+  });
+
+  testWidgets('sync banner folds away instead of jumping the calendar', (
+    tester,
+  ) async {
+    final operation = Completer<void>();
+    await tester.pumpWidget(localApp(() => operation.future));
+    expect(tester.getTopLeft(find.text('calendar')).dy, 0);
+    // The banner folds in after the first frame too.
     await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+    final bannerTop = tester.getTopLeft(find.text('calendar')).dy;
+    expect(bannerTop, greaterThan(0));
+    operation.complete();
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 110));
+    final midway = tester.getTopLeft(find.text('calendar')).dy;
+    expect(midway, greaterThan(0));
+    expect(midway, lessThan(bannerTop));
+    await tester.pumpAndSettle();
+    expect(tester.getTopLeft(find.text('calendar')).dy, 0);
     expect(find.byType(CircularProgressIndicator), findsNothing);
   });
 
@@ -69,11 +91,15 @@ void main() {
         }),
       );
       await tester.pump();
+      // Let the banner finish folding in before tapping its button.
+      await tester.pump(const Duration(milliseconds: 300));
       expect(find.text('calendar'), findsOneWidget);
       expect(find.textContaining('private-account-secret'), findsNothing);
       await tester.tap(find.text('다시 시도'));
       await tester.pump();
       expect(calls, 2);
+      // The successful retry folds the banner away.
+      await tester.pumpAndSettle();
       expect(find.text('calendar'), findsOneWidget);
       expect(find.text('다시 시도'), findsNothing);
     },
