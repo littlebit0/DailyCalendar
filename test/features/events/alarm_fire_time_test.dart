@@ -243,6 +243,33 @@ void main() {
       );
     });
 
+    test('a native start_at update keeps every stored alarm time', () async {
+      final database = AppDatabase.forTesting(NativeDatabase.memory());
+      addTearDown(database.close);
+      final repository = DriftEventRepository(database);
+      final customAt = DateTime(2026, 11, 10, 13);
+      // 14:00 start: the 13:00 custom time is the stored representative.
+      final saved = event(minutesList: [30], customList: [customAt]);
+      await repository.save(saved);
+      expect(saved.alarmCustomAt, customAt);
+      // Siri moves only start_at/end_at, leaving the legacy alarm columns.
+      final moved = DateTime(2026, 11, 10, 12);
+      await database.customStatement(
+        'UPDATE event_records SET start_at = ?, end_at = ? WHERE id = ?',
+        [
+          moved.millisecondsSinceEpoch ~/ 1000,
+          moved.add(const Duration(hours: 1)).millisecondsSinceEpoch ~/ 1000,
+          saved.id,
+        ],
+      );
+      final loaded = (await repository.findById(saved.id))!;
+      expect(loaded.alarmMinutesBeforeList, [30]);
+      expect(loaded.alarmCustomAtList, [customAt]);
+      expect(loaded.alarmFireTimes, [DateTime(2026, 11, 10, 11, 30), customAt]);
+      expect(loaded.alarmMinutesBefore, 30);
+      expect(loaded.alarmCustomAt, isNull);
+    });
+
     test('schema 12 databases upgrade and keep their single alarm', () async {
       final directory = await Directory.systemTemp.createTemp('daily-alarm-');
       addTearDown(() => directory.delete(recursive: true));

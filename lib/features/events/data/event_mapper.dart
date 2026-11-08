@@ -17,13 +17,11 @@ extension EventRecordMapper on EventRecord {
       category,
       colorValue: colorValue,
     );
-    final alarmLists = acceptedAlarmLists(
-      base: alarmBaseTimeFor(startAt, allDay, allDayAlarmMinutes),
-      legacyMinutes: alarmMinutesBefore,
-      legacyCustomAt: alarmCustomAt,
-      minutes: alarmMinutesBeforeList,
-      customs: alarmCustomAtList,
-    );
+    // Only schema 13+ code writes these columns, so they are trusted as-is.
+    // Native partial updates (Siri moving start_at) leave the legacy alarm
+    // columns stale; the representative is recomputed from the lists.
+    final alarmMinutesList = decodeAlarmMinutesList(alarmMinutesBeforeList);
+    final alarmCustomList = decodeAlarmCustomList(alarmCustomAtList);
     final event = CalendarEvent(
       id: id,
       occurrenceId: occurrenceStart == null
@@ -70,8 +68,8 @@ extension EventRecordMapper on EventRecord {
       allDayAlarmMinutes: allDayAlarmMinutes,
       alarmMinutesBefore: alarmMinutesBefore,
       alarmCustomAt: alarmCustomAt,
-      alarmMinutesBeforeList: alarmLists.minutes,
-      alarmCustomAtList: alarmLists.customs,
+      alarmMinutesBeforeList: alarmMinutesList,
+      alarmCustomAtList: alarmCustomList,
       holiday: mappedCategory.id == EventCategory.holiday.id,
     ).normalizeAllDayBounds();
     return restoreSyncTimestamps(
