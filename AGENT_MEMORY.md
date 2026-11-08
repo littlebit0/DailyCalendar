@@ -14,8 +14,15 @@
   whose WKST is MO/absent or equals the start weekday; other WKST stays raw.
   Imported MO-week multi-day rules now expand from the start weekday, which can
   differ from the source calendar (accepted by the user).
+- Format change (user-approved after Codex P2 on PR #807): optional
+  `RecurrenceRule.weekStart` stored as `"weekStart": "MO".."SU"` inside the
+  existing details JSON (`recurrence_details` column, Drive v2
+  `recurrenceDetails` value). No schema bump, no new top-level Drive key.
+  Set only by `recurrenceRuleForMovedFuture` when a weekly BYDAY series is
+  split from an occurrence whose weekday differs from the kept week start;
+  whole-series moves rotate it. Old clients ignore it (Monday weeks) and drop
+  it when they rewrite the event, so release all platforms together.
 - No export path (ics/EventKit write) exists, so no WKST is written anywhere.
-  Storage format unchanged.
 
 ## #791 자정 넘김 일정의 다음 날 표시를 일정마다 — 2026-11-08
 

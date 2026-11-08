@@ -34,6 +34,7 @@ class RecurrenceRule {
     this.byMonthDay = const <int>[],
     this.byMonth = const <int>[],
     this.bySetPos = const <int>[],
+    this.weekStart,
     this.rawRule,
   });
 
@@ -51,6 +52,11 @@ class RecurrenceRule {
   final List<int> byMonthDay;
   final List<int> byMonth;
   final List<int> bySetPos;
+
+  /// Weekday ([DateTime.monday]..[DateTime.sunday]) a weekly period begins on.
+  /// Null means the start date's weekday. Set when a series split from a later
+  /// occurrence must keep the original week boundary.
+  final int? weekStart;
 
   /// Original RRULE text kept when its conditions cannot be expressed here.
   /// The event does not repeat in that case; the text is only preserved.
@@ -72,9 +78,13 @@ class RecurrenceRule {
           if (byMonthDay.isNotEmpty) 'byMonthDay': byMonthDay,
           if (byMonth.isNotEmpty) 'byMonth': byMonth,
           if (bySetPos.isNotEmpty) 'bySetPos': bySetPos,
+          if (weekStart != null) 'weekStart': weekdayCodes[weekStart! - 1],
           if (rawRule != null) 'rawRule': rawRule,
         })
       : null;
+
+  /// RFC 5545 weekday codes, Monday first ([DateTime.weekday] - 1).
+  static const weekdayCodes = ['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU'];
 
   static final _byDayToken = RegExp(r'^[+-]?\d{0,2}(MO|TU|WE|TH|FR|SA|SU)$');
 
@@ -88,6 +98,11 @@ class RecurrenceRule {
           ? value.whereType<num>().map((n) => n.toInt()).toList()
           : const <int>[];
       final days = decoded['byDay'];
+      final weekStart = weekdayCodes.indexOf(
+        decoded['weekStart'] is String
+            ? (decoded['weekStart'] as String).toUpperCase()
+            : '',
+      );
       return rule.copyWith(
         byDay: days is List
             ? days
@@ -99,6 +114,8 @@ class RecurrenceRule {
         byMonthDay: ints(decoded['byMonthDay']),
         byMonth: ints(decoded['byMonth']),
         bySetPos: ints(decoded['bySetPos']),
+        weekStart: weekStart < 0 ? null : weekStart + 1,
+        clearWeekStart: weekStart < 0,
         rawRule: decoded['rawRule'] is String
             ? decoded['rawRule'] as String
             : null,
@@ -122,6 +139,8 @@ class RecurrenceRule {
     List<int>? byMonthDay,
     List<int>? byMonth,
     List<int>? bySetPos,
+    int? weekStart,
+    bool clearWeekStart = false,
     String? rawRule,
     bool clearDetails = false,
   }) {
@@ -136,6 +155,9 @@ class RecurrenceRule {
       byMonthDay: clearDetails ? const [] : byMonthDay ?? this.byMonthDay,
       byMonth: clearDetails ? const [] : byMonth ?? this.byMonth,
       bySetPos: clearDetails ? const [] : bySetPos ?? this.bySetPos,
+      weekStart: clearDetails || clearWeekStart
+          ? null
+          : weekStart ?? this.weekStart,
       rawRule: clearDetails ? null : rawRule ?? this.rawRule,
     );
   }

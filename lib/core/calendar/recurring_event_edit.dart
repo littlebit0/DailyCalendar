@@ -71,6 +71,9 @@ CalendarEvent applyRecurringEventDraft({
           bySetPos: frequency == latest.recurrence.frequency
               ? inherited.bySetPos
               : const [],
+          weekStart: frequency == latest.recurrence.frequency
+              ? inherited.weekStart
+              : null,
         );
   return draft
       .applyTo(latest)

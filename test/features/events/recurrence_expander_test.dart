@@ -49,6 +49,9 @@ void main() {
           byMonthDay: List<int>.from(item['byMonthDay'] ?? const []),
           byMonth: List<int>.from(item['byMonth'] ?? const []),
           bySetPos: List<int>.from(item['bySetPos'] ?? const []),
+          weekStart: item['weekStart'] == null
+              ? null
+              : RecurrenceRule.weekdayCodes.indexOf(item['weekStart']) + 1,
           excludedDates: [
             for (final d in item['excluded'] ?? []) fixtureDate(d),
           ],
@@ -64,6 +67,7 @@ void main() {
         expect(restored.recurrence.byMonthDay, event.recurrence.byMonthDay);
         expect(restored.recurrence.byMonth, event.recurrence.byMonth);
         expect(restored.recurrence.bySetPos, event.recurrence.bySetPos);
+        expect(restored.recurrence.weekStart, event.recurrence.weekStart);
         final actual = RecurrenceExpander().expand(
           restored,
           fixtureDate(item['rangeStart']).subtract(const Duration(hours: 9)),
