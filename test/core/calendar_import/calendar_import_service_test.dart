@@ -142,6 +142,31 @@ void main() {
       }
     });
 
+    test('주 시작(WKST)이 시작일 요일과 같으면 격주 규칙을 지원한다 (#802)', () {
+      const text = 'FREQ=WEEKLY;INTERVAL=2;WKST=SU;BYDAY=SU,WE';
+      final sunday = DateTime(2026, 1, 4, 9);
+      var rule = CalendarImportService.recurrenceFromRrule(
+        text,
+        startAt: sunday,
+      );
+      expect(rule.frequency, RecurrenceFrequency.weekly);
+      expect(rule.interval, 2);
+      expect(rule.byDay, ['SU', 'WE']);
+      expect(rule.rawRule, isNull);
+      rule = CalendarImportService.recurrenceFromRrule(
+        text,
+        startAt: DateTime(2026, 1, 7, 9),
+      );
+      expect(rule.frequency, RecurrenceFrequency.none);
+      expect(rule.rawRule, text);
+      rule = CalendarImportService.recurrenceFromRrule(
+        'FREQ=WEEKLY;INTERVAL=2;BYDAY=TH,MO',
+        startAt: DateTime(2026, 1, 8, 9),
+      );
+      expect(rule.byDay, ['TH', 'MO']);
+      expect(rule.rawRule, isNull);
+    });
+
     test('UTC 종료 시각을 로컬 DateTime으로 변환한다', () {
       final rule = CalendarImportService.recurrenceFromRrule(
         'FREQ=DAILY;UNTIL=20260731T000000Z',

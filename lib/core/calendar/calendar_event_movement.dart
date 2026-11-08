@@ -120,6 +120,7 @@ RecurrenceRule _withShiftedDetails(
       byMonthDay: rule.byMonthDay,
       byMonth: rule.byMonth,
       bySetPos: rule.bySetPos,
+      weekStart: rule.weekStart,
     );
   }
   final weekdayRule =
@@ -137,8 +138,14 @@ RecurrenceRule _withShiftedDetails(
     byMonth: rule.frequency == RecurrenceFrequency.daily
         ? rule.byMonth
         : const [],
+    weekStart: rule.frequency == RecurrenceFrequency.weekly
+        ? _rotatedWeekday(rule.weekStart, days)
+        : null,
   );
 }
+
+int? _rotatedWeekday(int? weekday, int days) =>
+    weekday == null ? null : (weekday - 1 + days) % 7 + 1;
 
 RecurrenceRule shiftRecurrenceRuleByDays(RecurrenceRule rule, int days) {
   return _withShiftedDetails(
@@ -171,7 +178,7 @@ RecurrenceRule recurrenceRuleForMovedFuture({
     occurrence.startAt.month,
     occurrence.startAt.day,
   );
-  return _withShiftedDetails(
+  final shifted = _withShiftedDetails(
     RecurrenceRule(
       frequency: rule.frequency,
       interval: rule.interval,
@@ -188,6 +195,22 @@ RecurrenceRule recurrenceRuleForMovedFuture({
     rule,
     dayOffset,
   );
+  if (shifted.frequency != RecurrenceFrequency.weekly || !shifted.hasDetails) {
+    return shifted;
+  }
+  // The new series starts mid-period; keep the original week boundary so
+  // later dates stay where they were.
+  final weekStart = _rotatedWeekday(
+    rule.weekStart ?? base.startAt.weekday,
+    dayOffset,
+  )!;
+  final newStartWeekday = shiftCalendarDateByDays(
+    occurrence.startAt,
+    dayOffset,
+  ).weekday;
+  return weekStart == newStartWeekday
+      ? shifted.copyWith(clearWeekStart: true)
+      : shifted.copyWith(weekStart: weekStart);
 }
 
 int? _remainingRecurrenceCount(CalendarEvent base, CalendarEvent occurrence) {

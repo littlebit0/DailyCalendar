@@ -137,7 +137,7 @@ for item in detailFixtures {
   let until = (item["until"] as? String).map { String(Int64(fixtureDate($0).timeIntervalSince1970)) } ?? "NULL"
   let count = (item["count"] as? Int).map(String.init) ?? "NULL"
   var details: [String: Any] = [:]
-  for key in ["byDay", "byMonthDay", "byMonth", "bySetPos"] where item[key] != nil { details[key] = item[key] }
+  for key in ["byDay", "byMonthDay", "byMonth", "bySetPos", "weekStart"] where item[key] != nil { details[key] = item[key] }
   let detailsJSON = String(data: try JSONSerialization.data(withJSONObject: details), encoding: .utf8)!
   let exclusions = String(data: try JSONSerialization.data(withJSONObject: item["excluded"] as? [String] ?? []), encoding: .utf8)!
   try sql("UPDATE event_records SET recurrence_frequency='\(item["frequency"]!)', recurrence_interval=\(item["interval"]!), recurrence_count=\(count), recurrence_until=\(until), recurrence_details='\(detailsJSON)', recurrence_excluded_dates='\(exclusions)' WHERE id='\(event.id)'")

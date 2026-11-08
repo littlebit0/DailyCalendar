@@ -1114,6 +1114,7 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
             : const [],
         byMonth: _keepsDetails ? widget.event!.recurrence.byMonth : const [],
         bySetPos: _keepsDetails ? widget.event!.recurrence.bySetPos : const [],
+        weekStart: _keepsDetails ? widget.event!.recurrence.weekStart : null,
         rawRule: _frequency == RecurrenceFrequency.none
             ? widget.event?.recurrence.rawRule
             : null,

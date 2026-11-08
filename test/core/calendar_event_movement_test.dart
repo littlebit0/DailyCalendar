@@ -1,5 +1,6 @@
 import 'package:daily/core/calendar/calendar_event_movement.dart';
 import 'package:daily/core/lms/lms_models.dart';
+import 'package:daily/features/events/data/recurrence_expander.dart';
 import 'package:daily/features/events/domain/calendar_event.dart';
 import 'package:daily/features/events/domain/event_category.dart';
 import 'package:daily/features/events/domain/recurrence_rule.dart';
@@ -143,6 +144,140 @@ void main() {
     expect(shifted.count, 4);
     expect(shifted.until, DateTime(2026, 8, 12));
     expect(shifted.excludedDates, [DateTime(2026, 8, 6)]);
+  });
+
+  test('격주 다중 요일 일정을 옮기면 모든 회차가 같은 일수만큼 옮겨진다 (#802)', () {
+    final base = _event(
+      start: DateTime(2026, 1, 5, 9),
+      end: DateTime(2026, 1, 5, 10),
+      recurrence: RecurrenceRule(
+        frequency: RecurrenceFrequency.weekly,
+        interval: 2,
+        until: DateTime(2026, 3, 31),
+        byDay: const ['MO', 'FR'],
+        excludedDates: [DateTime(2026, 1, 19, 9)],
+      ),
+    ).copyWith(memo: '메모', completed: true);
+    final moved = base.copyWith(
+      startAt: DateTime(2026, 1, 8, 9),
+      endAt: DateTime(2026, 1, 8, 10),
+      recurrence: shiftRecurrenceRuleByDays(base.recurrence, 3),
+    );
+    expect(moved.recurrence.byDay, ['TH', 'MO']);
+    expect(moved.recurrence.excludedDates, [DateTime(2026, 1, 22, 9)]);
+    expect(moved.memo, '메모');
+    expect(moved.completed, isTrue);
+
+    final range = (DateTime(2026, 1, 1), DateTime(2026, 5, 1));
+    final before = RecurrenceExpander().expand(base, range.$1, range.$2);
+    final after = RecurrenceExpander().expand(moved, range.$1, range.$2);
+    expect(before.map((e) => e.startAt).take(4), [
+      DateTime(2026, 1, 5, 9),
+      DateTime(2026, 1, 9, 9),
+      DateTime(2026, 1, 23, 9),
+      DateTime(2026, 2, 2, 9),
+    ]);
+    expect(after.last.startAt, DateTime(2026, 4, 2, 9));
+    expect(
+      after.map((e) => e.startAt),
+      before.map((e) => e.startAt.add(const Duration(days: 3))),
+    );
+    for (final occurrence in after) {
+      expect(occurrence.memo, '메모');
+      expect(occurrence.completed, isTrue);
+    }
+  });
+
+  test('시작 요일이 아닌 회차부터 이후 일정을 나눠도 이후 날짜가 그대로다 (#802)', () {
+    final base = _event(
+      start: DateTime(2026, 1, 5, 9),
+      end: DateTime(2026, 1, 5, 10),
+      recurrence: const RecurrenceRule(
+        frequency: RecurrenceFrequency.weekly,
+        interval: 2,
+        count: 4,
+        byDay: ['MO', 'FR'],
+      ),
+    );
+    List<DateTime> starts(CalendarEvent event) => [
+      for (final item in RecurrenceExpander().expand(
+        event,
+        DateTime(2026, 1, 1),
+        DateTime(2026, 6, 1),
+      ))
+        item.startAt,
+    ];
+    expect(starts(base), [
+      DateTime(2026, 1, 5, 9),
+      DateTime(2026, 1, 9, 9),
+      DateTime(2026, 1, 19, 9),
+      DateTime(2026, 1, 23, 9),
+    ]);
+    final friday = base.copyWith(
+      startAt: DateTime(2026, 1, 9, 9),
+      endAt: DateTime(2026, 1, 9, 10),
+    );
+
+    final kept = recurrenceRuleForMovedFuture(
+      base: base,
+      occurrence: friday,
+      targetDate: DateTime(2026, 1, 9),
+    );
+    expect(kept.weekStart, DateTime.monday);
+    expect(kept.count, 3);
+    final restored = RecurrenceRule.withDetailsJson(
+      const RecurrenceRule(
+        frequency: RecurrenceFrequency.weekly,
+        interval: 2,
+        count: 3,
+      ),
+      kept.detailsJson,
+    );
+    expect(restored.weekStart, DateTime.monday);
+    expect(starts(friday.copyWith(recurrence: restored)), [
+      DateTime(2026, 1, 9, 9),
+      DateTime(2026, 1, 19, 9),
+      DateTime(2026, 1, 23, 9),
+    ]);
+
+    final moved = recurrenceRuleForMovedFuture(
+      base: base,
+      occurrence: friday,
+      targetDate: DateTime(2026, 1, 10),
+    );
+    expect(moved.byDay, ['TU', 'SA']);
+    expect(moved.weekStart, DateTime.tuesday);
+    expect(
+      starts(
+        friday.copyWith(
+          startAt: DateTime(2026, 1, 10, 9),
+          endAt: DateTime(2026, 1, 10, 10),
+          recurrence: moved,
+        ),
+      ),
+      [
+        DateTime(2026, 1, 10, 9),
+        DateTime(2026, 1, 20, 9),
+        DateTime(2026, 1, 24, 9),
+      ],
+    );
+
+    // Splitting on the start weekday needs no stored week start, and a
+    // whole-series move rotates a stored one with the dates.
+    final monday = base.copyWith(
+      startAt: DateTime(2026, 1, 19, 9),
+      endAt: DateTime(2026, 1, 19, 10),
+    );
+    expect(
+      recurrenceRuleForMovedFuture(
+        base: base,
+        occurrence: monday,
+        targetDate: DateTime(2026, 1, 19),
+      ).weekStart,
+      isNull,
+    );
+    expect(shiftRecurrenceRuleByDays(kept, 3).weekStart, DateTime.thursday);
+    expect(shiftRecurrenceRuleByDays(kept, -1).weekStart, DateTime.sunday);
   });
 }
 

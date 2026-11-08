@@ -414,6 +414,10 @@ Iterable<DateTime> _detailedStarts(
   final tokens = _dayTokens(rule.byDay);
   final weekdays = {for (final token in tokens) token.weekday};
   final startDay = DateTime(start.year, start.month, start.day);
+  // Weekly periods begin on the rule's week start (default: the start
+  // weekday), so each weekday repeats exactly 7 * interval days apart.
+  final firstWeekDay =
+      start.day - (start.weekday - (rule.weekStart ?? start.weekday)) % 7;
   final lastDay = lastDate == null
       ? null
       : DateTime(lastDate.year, lastDate.month, lastDate.day);
@@ -449,7 +453,7 @@ Iterable<DateTime> _detailedStarts(
       RecurrenceFrequency.weekly => DateTime(
         start.year,
         start.month,
-        start.day - (start.weekday - DateTime.monday) + 7 * interval * period,
+        firstWeekDay + 7 * interval * period,
       ),
       RecurrenceFrequency.monthly => DateTime(
         start.year,
@@ -485,7 +489,7 @@ Iterable<DateTime> _detailedStarts(
         final weekStart = DateTime(
           start.year,
           start.month,
-          start.day - (start.weekday - DateTime.monday) + 7 * interval * period,
+          firstWeekDay + 7 * interval * period,
         );
         final wanted = weekdays.isEmpty ? {start.weekday} : weekdays;
         for (var offset = 0; offset < 7; offset++) {

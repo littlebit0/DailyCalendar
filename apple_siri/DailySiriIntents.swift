@@ -3155,6 +3155,8 @@ private enum DailySiriDatabase {
     var byMonthDay: [Int]
     var byMonth: [Int]
     var bySetPos: [Int]
+    /// Calendar weekday a weekly period begins on; nil means the start weekday.
+    var weekStart: Int?
   }
 
   private static func recurrenceDetails(_ json: String?) -> RecurrenceDetails? {
@@ -3175,7 +3177,8 @@ private enum DailySiriDatabase {
       (object[key] as? [Any] ?? []).compactMap { ($0 as? NSNumber)?.intValue }
     }
     let details = RecurrenceDetails(
-      byDay: days, byMonthDay: ints("byMonthDay"), byMonth: ints("byMonth"), bySetPos: ints("bySetPos")
+      byDay: days, byMonthDay: ints("byMonthDay"), byMonth: ints("byMonth"), bySetPos: ints("bySetPos"),
+      weekStart: (object["weekStart"] as? String).flatMap { codes[$0.uppercased()] }
     )
     return days.isEmpty && details.byMonthDay.isEmpty && details.byMonth.isEmpty && details.bySetPos.isEmpty
       ? nil : details
@@ -3275,8 +3278,11 @@ private enum DailySiriDatabase {
         }
         if monthMatches && weekdayMatches && dayMatches { candidates.append((parts.year!, parts.month!, parts.day!)) }
       case "weekly":
-        let mondayOffset = (calendar.component(.weekday, from: start) + 5) % 7
-        guard let weekStart = calendar.date(byAdding: .day, value: -mondayOffset + 7 * interval * period, to: startDay) else { return result }
+        // A week runs from the rule's week start (default: the start weekday),
+        // matching the Dart expander.
+        let startWeekday = calendar.component(.weekday, from: start)
+        let backDays = (startWeekday - (details.weekStart ?? startWeekday) + 7) % 7
+        guard let weekStart = calendar.date(byAdding: .day, value: -backDays + 7 * interval * period, to: startDay) else { return result }
         periodStart = weekStart
         let wanted = wantedWeekdays.isEmpty ? [calendar.component(.weekday, from: start)] : wantedWeekdays
         for offset in 0..<7 {

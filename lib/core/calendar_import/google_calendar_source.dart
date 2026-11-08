@@ -169,6 +169,7 @@ class GoogleCalendarSource {
   bool _repeatsByRule(ExternalCalendarEvent event) {
     final rule = CalendarImportService.recurrenceFromRrule(
       event.recurrenceRule,
+      startAt: event.startAt,
     );
     return rule.isRepeating && rule.rawRule == null;
   }
@@ -231,6 +232,7 @@ class GoogleCalendarSource {
     if (lines.isEmpty) return const _Rdates();
     final rule = CalendarImportService.recurrenceFromRrule(
       series.recurrenceRule,
+      startAt: series.startAt,
     );
     final expandable = _repeatsByRule(series);
     final master = CalendarEvent(
@@ -626,7 +628,10 @@ class GoogleCalendarSource {
     allDay: allDay,
     category: EventCategory.basic,
     colorValue: EventCategory.basic.colorValue,
-    recurrence: CalendarImportService.recurrenceFromRrule(rawRule),
+    recurrence: CalendarImportService.recurrenceFromRrule(
+      rawRule,
+      startAt: start,
+    ),
     createdAt: start,
     updatedAt: start,
   );
