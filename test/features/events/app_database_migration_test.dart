@@ -1,6 +1,9 @@
 import 'dart:io';
 
 import 'package:daily/features/events/data/app_database.dart';
+import 'package:daily/features/events/data/drift_event_repository.dart';
+import 'package:daily/features/events/domain/calendar_event.dart';
+import 'package:daily/features/events/domain/event_category.dart';
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -127,6 +130,47 @@ void main() {
           )
           .getSingle();
       expect(created.read<int>('shown'), 1);
+    },
+  );
+
+  test(
+    'seeding off keeps sub-second revision timestamps verifiable',
+    () async {
+      final directory = await Directory.systemTemp.createTemp(
+        'daily-migration-',
+      );
+      addTearDown(() => directory.delete(recursive: true));
+      final file = File('${directory.path}/daily.sqlite');
+      final precise = DateTime.utc(2026, 7, 30, 1, 2, 3, 900, 7);
+      final oldDatabase = AppDatabase.forTesting(NativeDatabase(file));
+      await DriftEventRepository(oldDatabase).save(
+        CalendarEvent(
+          id: 'night',
+          title: '야간 근무',
+          startAt: DateTime(2026, 7, 30, 22),
+          endAt: DateTime(2026, 7, 31, 6),
+          allDay: false,
+          category: EventCategory.basic,
+          colorValue: EventCategory.basic.colorValue,
+          createdAt: precise,
+          updatedAt: precise,
+        ),
+      );
+      await oldDatabase.customStatement(
+        'ALTER TABLE event_records DROP COLUMN show_overnight_on_following_days',
+      );
+      await oldDatabase.customStatement('PRAGMA user_version = 12');
+      await oldDatabase.close();
+
+      final database = AppDatabase.forTesting(
+        NativeDatabase(file),
+        legacyShowOvernightOnFollowingDays: false,
+      );
+      addTearDown(database.close);
+      final event = (await DriftEventRepository(database).findById('night'))!;
+      expect(event.showOvernightOnFollowingDays, isFalse);
+      expect(event.updatedAt.toUtc(), precise);
+      expect(event.createdAt.toUtc(), precise);
     },
   );
 }

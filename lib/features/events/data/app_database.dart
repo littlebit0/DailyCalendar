@@ -6,6 +6,10 @@ import 'package:drift/native.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
+import '../../../core/sync/sync_version.dart';
+import '../domain/calendar_event.dart';
+import 'event_mapper.dart';
+
 part 'app_database.g.dart';
 
 class EventRecords extends Table {
@@ -143,10 +147,7 @@ class AppDatabase extends _$AppDatabase {
     // Schema 13 (#791) moved the app-wide choice onto each event.
     if (seedOvernightDisplay ||
         !names.contains('show_overnight_on_following_days')) {
-      await customStatement(
-        'UPDATE event_records SET show_overnight_on_following_days = ?',
-        [legacyShowOvernightOnFollowingDays ? 1 : 0],
-      );
+      await _seedOvernightDisplay();
     }
     if (!names.contains('reminder_minutes_before_list')) {
       await customStatement(
@@ -169,6 +170,50 @@ class AppDatabase extends _$AppDatabase {
         'ALTER TABLE sync_event_deletions ADD COLUMN lms_owner_id TEXT',
       );
     }
+  }
+
+  Future<void> _seedOvernightDisplay() async {
+    final shown = legacyShowOvernightOnFollowingDays;
+    // Off enters each event's fingerprint: re-sign the precise timestamps
+    // verified before the change so they are not dropped to whole seconds.
+    final details = shown
+        ? const <String, String>{}
+        : {
+            for (final row in await (select(
+              eventRecords,
+            )..where((row) => row.syncTimestampDetails.isNotNull())).get())
+              row.id: encodeSyncTimestamps(
+                _verifiedTimestamps(
+                  row,
+                ).copyWith(showOvernightOnFollowingDays: false),
+              ),
+          };
+    await customStatement(
+      'UPDATE event_records SET show_overnight_on_following_days = ?',
+      [shown ? 1 : 0],
+    );
+    for (final entry in details.entries) {
+      await customStatement(
+        'UPDATE event_records SET sync_timestamp_details = ? WHERE id = ?',
+        [entry.value, entry.key],
+      );
+    }
+  }
+
+  // The stored details were signed before seeding (on), or by an interrupted
+  // seed (off); whichever verifies restores the sub-second timestamps.
+  static CalendarEvent _verifiedTimestamps(EventRecord row) {
+    for (final shown in const [true, false]) {
+      final event = row
+          .copyWith(showOvernightOnFollowingDays: shown)
+          .toDomain();
+      if (event.createdAt != row.createdAt ||
+          event.updatedAt != row.updatedAt ||
+          event.deletedAt != row.deletedAt) {
+        return event;
+      }
+    }
+    return row.toDomain();
   }
 
   Future<File> databaseFile() async {

@@ -285,11 +285,15 @@ void main() {
   }
 
   group('per-event following-day display (#791)', () {
+    final uploads = <Map<String, Object?>>[];
+    late GoogleDriveSyncService lastService;
+    late _MemoryEventRepository lastRepository;
     Future<CalendarEvent?> restore({
       CalendarEvent? local,
       bool? remoteValue,
       String remoteUpdatedAt = '2026-06-10T00:00:00.000Z',
     }) async {
+      uploads.clear();
       SharedPreferences.setMockInitialValues({});
       final preferences = await SharedPreferences.getInstance();
       final repository = _MemoryEventRepository();
@@ -318,6 +322,11 @@ void main() {
             ),
           );
         }
+        if (request.method == 'PUT' &&
+            request.url.path == '/upload/drive/v2/files/night-file') {
+          uploads.add(jsonDecode(request.body) as Map<String, Object?>);
+          return _jsonResponse({'id': 'night-file'});
+        }
         return http.Response('unexpected ${request.method}', 500);
       });
       final service = _service(
@@ -327,6 +336,8 @@ void main() {
         httpClient: client,
       );
       addTearDown(service.dispose);
+      lastService = service;
+      lastRepository = repository;
       await service.restoreNow();
       return repository.findById('night');
     }
@@ -356,6 +367,15 @@ void main() {
         expect(restored!.title, '구버전에서 고친 제목');
         expect(restored.showOvernightOnFollowingDays, isFalse);
         expect(restored.syncStatus, 'pending');
+
+        // The repaired event then uploads instead of reporting a conflict.
+        await lastService.backupNow(eventIds: {'night'});
+        final uploaded = uploads.single['event'] as Map<String, Object?>;
+        expect(uploaded['showOvernightOnFollowingDays'], isFalse);
+        expect(uploaded['title'], '구버전에서 고친 제목');
+        final synced = (await lastRepository.findById('night'))!;
+        expect(synced.syncStatus, 'synced');
+        expect(synced.showOvernightOnFollowingDays, isFalse);
       },
     );
 

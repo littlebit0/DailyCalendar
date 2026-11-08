@@ -1134,12 +1134,11 @@ class GoogleDriveSyncService implements SyncService {
         }
         // A 4.1.0-or-older writer drops the per-event display choice; keep
         // this device's value and re-upload it instead of resetting to on.
-        if (!record.overnightDisplayKnown &&
-            local != null &&
-            local.showOvernightOnFollowingDays !=
-                event.showOvernightOnFollowingDays) {
+        final adopted = record.withLocalOvernightDisplay(local).event!;
+        if (adopted.showOvernightOnFollowingDays !=
+            event.showOvernightOnFollowingDays) {
           event = event.copyWith(
-            showOvernightOnFollowingDays: local.showOvernightOnFollowingDays,
+            showOvernightOnFollowingDays: adopted.showOvernightOnFollowingDays,
           );
           repairedMetadataIds.add(event.id);
         }
@@ -1986,11 +1985,13 @@ class GoogleDriveSyncService implements SyncService {
           );
           if (marker.compareTo(candidate) > 0) candidate = marker;
         }
-        final remote = await _mapSequentially(
+        // Compare a 4.1.0-or-older file as restore applies it, with this
+        // device's following-day value, so the repaired event can upload.
+        final remote = (await _mapSequentially(
           files,
           (file) =>
               _downloadEventFile(authHeaders, file.id, requireVersion: true),
-        );
+        )).map((item) => item.withLocalOvernightDisplay(local)).toList();
         for (final item in remote) {
           if (item.event?.lms != null && !_canSyncEvent(item.event!) ||
               item.deletion?.lmsOwnerId != null &&
@@ -2017,7 +2018,12 @@ class GoogleDriveSyncService implements SyncService {
             );
           } else {
             for (final item in remote) {
-              if (item.compareTo(candidate) == 0) continue;
+              // A file without the key that reads differently still needs it.
+              if (item.compareTo(candidate) == 0 &&
+                  (item.overnightDisplayKnown ||
+                      candidate.event?.showOvernightOnFollowingDays != false)) {
+                continue;
+              }
               await _uploadJsonFile(
                 authHeaders,
                 fileName: _eventFileName(eventId),
@@ -2864,6 +2870,27 @@ class _DownloadedEvent {
 
   /// False when the Drive file has no `showOvernightOnFollowingDays` key.
   final bool overnightDisplayKnown;
+
+  /// This record with [local]'s following-day value when the file lacks it.
+  _DownloadedEvent withLocalOvernightDisplay(CalendarEvent? local) {
+    final remoteEvent = event;
+    if (overnightDisplayKnown ||
+        remoteEvent == null ||
+        local == null ||
+        remoteEvent.showOvernightOnFollowingDays ==
+            local.showOvernightOnFollowingDays) {
+      return this;
+    }
+    return _DownloadedEvent(
+      event: remoteEvent.copyWith(
+        showOvernightOnFollowingDays: local.showOvernightOnFollowingDays,
+      ),
+      sourceDeviceId: sourceDeviceId,
+      etag: etag,
+      fileId: fileId,
+      overnightDisplayKnown: false,
+    );
+  }
   final EventDeletion? deletion;
   final String? sourceDeviceId;
   final String? etag;
