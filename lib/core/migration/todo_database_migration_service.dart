@@ -141,11 +141,12 @@ class TodoDatabaseMigrationService {
 
       // Schema 8 already has Todo completion, exact sync timestamps and compact
       // deletions. Schemas 9-12 only add nullable or defaulted columns (LMS
-      // metadata, the recurrence anchor day, recurrence details, alarm timing):
+      // metadata, the recurrence anchor day, recurrence details, alarm timing)
+      // and schema 13 only adds the device-local Drive file cache table:
       // they must not repeat the old cloud migration or turn every unchanged
       // event into an upload.
       final isAdditiveLmsMigration =
-          originalVersion >= 8 && AppDatabase.currentSchemaVersion <= 12;
+          originalVersion >= 8 && AppDatabase.currentSchemaVersion <= 13;
       final requiresLegacyCloudMigration = !isAdditiveLmsMigration;
       List<CalendarEvent>? remoteEvents = const <CalendarEvent>[];
       if (requiresLegacyCloudMigration) {
@@ -226,6 +227,7 @@ class TodoDatabaseMigrationService {
             _upsertRemoteWinner(working, event);
           }
           working.execute(AppDatabase.createDeletionTable);
+          working.execute(AppDatabase.createRemoteEventFileTable);
           if (!_hasColumn(working, 'sync_event_deletions', 'lms_owner_id')) {
             working.execute(
               'ALTER TABLE sync_event_deletions ADD COLUMN lms_owner_id TEXT',
@@ -396,7 +398,8 @@ class TodoDatabaseMigrationService {
     for (final name in ['all_day', 'show_dday', 'completed', 'alarm_enabled']) {
       if (!tableSql.contains('check(${name}in(0,1))')) return false;
     }
-    return _hasColumn(database, 'sync_event_deletions', 'lms_owner_id');
+    return _hasColumn(database, 'sync_event_deletions', 'lms_owner_id') &&
+        _hasColumn(database, 'sync_remote_event_files', 'body');
   }
 
   Map<String, CalendarEvent> _readLocalStates(Database database) => {
@@ -677,7 +680,11 @@ class TodoDatabaseMigrationService {
     // All DDL, rows, indexes and user_version commit together on the ORIGINAL
     // connection. SQLite rollback/WAL recovery handles interruption at any step.
     original.execute('ATTACH DATABASE ? AS migrated', [workingFile.path]);
-    for (final table in ['event_records', 'sync_event_deletions']) {
+    for (final table in [
+      'event_records',
+      'sync_event_deletions',
+      'sync_remote_event_files',
+    ]) {
       final definitions = original.select(
         "SELECT type, sql FROM migrated.sqlite_master WHERE tbl_name = ? "
         "AND sql IS NOT NULL ORDER BY CASE type WHEN 'table' THEN 0 ELSE 1 END",

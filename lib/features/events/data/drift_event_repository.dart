@@ -12,7 +12,8 @@ import '../domain/event_deletion.dart';
 import '../../../core/sync/sync_version.dart';
 import '../../../core/lms/lms_models.dart';
 
-class DriftEventRepository implements EventRepository, EventSyncMaintenance {
+class DriftEventRepository
+    implements EventRepository, EventSyncMaintenance, RemoteEventFileCache {
   DriftEventRepository(this._database, {RecurrenceExpander? expander})
     : _expander = expander ?? RecurrenceExpander();
 
@@ -332,6 +333,7 @@ class DriftEventRepository implements EventRepository, EventSyncMaintenance {
   Future<void> clearAll() {
     return _database.transaction(() async {
       await _database.customStatement('DELETE FROM sync_event_deletions');
+      await _database.customStatement('DELETE FROM sync_remote_event_files');
       await _database.delete(_database.eventRecords).go();
     });
   }
@@ -473,6 +475,35 @@ class DriftEventRepository implements EventRepository, EventSyncMaintenance {
           ]);
         }
       });
+
+  @override
+  Future<String?> cachedRemoteEventFile(
+    String fileId,
+    String md5Checksum,
+  ) async {
+    final row = await _database
+        .customSelect(
+          'SELECT body FROM sync_remote_event_files '
+          'WHERE file_id = ? AND md5_checksum = ?',
+          variables: [
+            Variable.withString(fileId),
+            Variable.withString(md5Checksum),
+          ],
+        )
+        .getSingleOrNull();
+    return row?.read<String>('body');
+  }
+
+  @override
+  Future<void> cacheRemoteEventFile(
+    String fileId,
+    String md5Checksum,
+    String body,
+  ) => _database.customStatement(
+    'INSERT OR REPLACE INTO sync_remote_event_files '
+    '(file_id, md5_checksum, body) VALUES (?, ?, ?)',
+    [fileId, md5Checksum, body],
+  );
 
   @override
   Future<void> markDeletionSynced(

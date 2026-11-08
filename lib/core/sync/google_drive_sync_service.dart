@@ -144,6 +144,10 @@ class GoogleDriveSyncService implements SyncService {
       _eventRepository is EventSyncMaintenance
       ? _eventRepository as EventSyncMaintenance
       : null;
+  RemoteEventFileCache? get _remoteFileCache =>
+      _eventRepository is RemoteEventFileCache
+      ? _eventRepository as RemoteEventFileCache
+      : null;
   Future<void>? _syncInFlight;
   int _sessionGeneration = 0;
   VoidCallback? _validateSyncSession;
@@ -1868,7 +1872,8 @@ class GoogleDriveSyncService implements SyncService {
   ) async {
     final downloaded = await _mapSequentially(
       files,
-      (file) => _downloadEventFile(headers, file.id),
+      (file) =>
+          _downloadEventFile(headers, file.id, md5Checksum: file.md5Checksum),
       progressMessage: '복원 중',
     );
     final winners = <String, _DownloadedEvent>{};
@@ -1977,8 +1982,12 @@ class GoogleDriveSyncService implements SyncService {
         }
         final remote = await _mapSequentially(
           files,
-          (file) =>
-              _downloadEventFile(authHeaders, file.id, requireVersion: true),
+          (file) => _downloadEventFile(
+            authHeaders,
+            file.id,
+            requireVersion: true,
+            md5Checksum: file.md5Checksum,
+          ),
         );
         for (final item in remote) {
           if (item.event?.lms != null && !_canSyncEvent(item.event!) ||
@@ -1999,20 +2008,27 @@ class GoogleDriveSyncService implements SyncService {
               );
         try {
           if (files.isEmpty) {
-            await _uploadJsonFile(
-              authHeaders,
-              fileName: _eventFileName(eventId),
-              jsonBody: json,
+            await _cacheUploadedEventFile(
+              await _uploadJsonFile(
+                authHeaders,
+                fileName: _eventFileName(eventId),
+                jsonBody: json,
+              ),
+              json,
             );
           } else {
             for (final item in remote) {
               if (item.compareTo(candidate) == 0) continue;
-              await _uploadJsonFile(
-                authHeaders,
-                fileName: _eventFileName(eventId),
-                fileId: item.fileId,
-                expectedEtag: item.etag,
-                jsonBody: json,
+              await _cacheUploadedEventFile(
+                await _uploadJsonFile(
+                  authHeaders,
+                  fileName: _eventFileName(eventId),
+                  fileId: item.fileId,
+                  expectedEtag:
+                      item.etag ?? await _cachedFileEtag(authHeaders, item),
+                  jsonBody: json,
+                ),
+                json,
               );
             }
           }
@@ -2156,7 +2172,7 @@ class GoogleDriveSyncService implements SyncService {
       final queryParameters = {
         'spaces': 'appDataFolder',
         'q': query,
-        'fields': 'nextPageToken,files(id,name,modifiedTime)',
+        'fields': 'nextPageToken,files(id,name,modifiedTime,md5Checksum)',
         'pageSize': '$pageSize',
       };
       final token = pageToken;
@@ -2185,18 +2201,87 @@ class GoogleDriveSyncService implements SyncService {
     return files;
   }
 
+  /// [md5Checksum] is the checksum Drive listed for [fileId]. When the local
+  /// cache holds that exact revision, its body is used instead of a download;
+  /// the result then has no etag, see [_cachedFileEtag].
   Future<_DownloadedEvent> _downloadEventFile(
     Map<String, String> authHeaders,
     String fileId, {
     bool requireVersion = false,
+    String? md5Checksum,
   }) async {
+    final cache = _remoteFileCache;
+    if (md5Checksum != null && cache != null) {
+      final cached = await cache.cachedRemoteEventFile(fileId, md5Checksum);
+      if (cached != null) {
+        return _decodeEventFile(cached, fileId, null, md5Checksum);
+      }
+    }
     final (response, etag) = await _downloadJson(
       authHeaders,
       fileId,
       requireVersion,
     );
+    final checksum = md5.convert(response.bodyBytes).toString();
+    final event = _decodeEventFile(response.body, fileId, etag, checksum);
+    if (cache != null) {
+      String? body;
+      try {
+        body = utf8.decode(response.bodyBytes);
+      } on FormatException {
+        body = null;
+      }
+      if (body != null) {
+        await cache.cacheRemoteEventFile(fileId, checksum, body);
+      }
+    }
+    return event;
+  }
 
-    final decoded = jsonDecode(response.body) as Map<String, Object?>;
+  /// Etag for a revision read from the cache, fetched only when it is about
+  /// to be overwritten. A different md5 means Drive changed after listing.
+  Future<String> _cachedFileEtag(
+    Map<String, String> headers,
+    _DownloadedEvent item,
+  ) async {
+    final metadata = await _httpClient.get(
+      Uri.https(_driveHost, '/drive/v2/files/${item.fileId}', {
+        'fields': 'etag,md5Checksum',
+      }),
+      headers: headers,
+    );
+    if (metadata.statusCode == 404) throw const _ConcurrentDriveWrite();
+    _throwIfFailed(metadata);
+    final data = jsonDecode(metadata.body) as Map<String, dynamic>;
+    final etag = data['etag'] as String?;
+    if (etag == null || etag.isEmpty || data['md5Checksum'] == null) {
+      throw const GoogleDriveSyncException(
+        'Google Drive 파일의 변경 확인 정보를 받지 못했습니다. 기존 데이터는 덮어쓰지 않았습니다.',
+      );
+    }
+    if (data['md5Checksum'] != item.md5Checksum) {
+      throw const _ConcurrentDriveWrite();
+    }
+    return etag;
+  }
+
+  Future<void> _cacheUploadedEventFile(
+    Map<String, Object?> uploaded,
+    String body,
+  ) async {
+    final fileId = uploaded['id'], checksum = uploaded['md5Checksum'];
+    if (fileId is String && checksum is String) {
+      await _remoteFileCache?.cacheRemoteEventFile(fileId, checksum, body);
+    }
+  }
+
+  _DownloadedEvent _decodeEventFile(
+    String body,
+    String fileId,
+    String? etag,
+    String md5Checksum,
+  ) {
+    final decoded = jsonDecode(body) as Map<String, Object?>;
     if (decoded['compacted'] == true) {
       return _DownloadedEvent(
         deletion: EventDeletion.fromJson(
@@ -2205,6 +2290,7 @@ class GoogleDriveSyncService implements SyncService {
         sourceDeviceId: decoded['sourceDeviceId'] as String?,
         etag: etag,
         fileId: fileId,
+        md5Checksum: md5Checksum,
       );
     }
     final event = decoded['event'];
@@ -2219,6 +2305,7 @@ class GoogleDriveSyncService implements SyncService {
       sourceDeviceId: decoded['sourceDeviceId'] as String?,
       etag: etag,
       fileId: fileId,
+      md5Checksum: md5Checksum,
     );
   }
 
@@ -2281,7 +2368,8 @@ class GoogleDriveSyncService implements SyncService {
     throw const GoogleDriveSyncException('동시에 변경된 파일이 있어 동기화를 다시 시도해야 합니다.');
   }
 
-  Future<void> _uploadJsonFile(
+  /// Returns Drive's `id` and `md5Checksum` for the stored file.
+  Future<Map<String, Object?>> _uploadJsonFile(
     Map<String, String> authHeaders, {
     required String fileName,
     required String jsonBody,
@@ -2298,7 +2386,7 @@ class GoogleDriveSyncService implements SyncService {
       final response = await _httpClient.put(
         Uri.https(_driveHost, '/upload/drive/v2/files/$fileId', {
           'uploadType': 'media',
-          'fields': 'id',
+          'fields': 'id,md5Checksum',
         }),
         headers: {
           ...authHeaders,
@@ -2311,7 +2399,7 @@ class GoogleDriveSyncService implements SyncService {
         throw const _ConcurrentDriveWrite();
       }
       _throwIfFailed(response);
-      return;
+      return _uploadedFile(response);
     }
 
     final boundary = 'daily-sync-v2-${DateTime.now().microsecondsSinceEpoch}';
@@ -2332,7 +2420,7 @@ class GoogleDriveSyncService implements SyncService {
     final response = await _httpClient.post(
       Uri.https(_driveHost, '/upload/drive/v3/files', {
         'uploadType': 'multipart',
-        'fields': 'id',
+        'fields': 'id,md5Checksum',
       }),
       headers: {
         ...authHeaders,
@@ -2341,6 +2429,18 @@ class GoogleDriveSyncService implements SyncService {
       body: body,
     );
     _throwIfFailed(response);
+    return _uploadedFile(response);
+  }
+
+  Map<String, Object?> _uploadedFile(http.Response response) {
+    try {
+      final decoded = jsonDecode(response.body);
+      return decoded is Map ? Map<String, Object?>.from(decoded) : const {};
+    } on FormatException {
+      // The write succeeded; without its checksum the file is simply not
+      // cached and is downloaded next time.
+      return const {};
+    }
   }
 
   void _throwIfFailed(http.Response response) {
@@ -2842,6 +2942,7 @@ class _DownloadedEvent {
     required this.sourceDeviceId,
     this.etag,
     this.fileId,
+    this.md5Checksum,
   });
 
   final CalendarEvent? event;
@@ -2849,6 +2950,7 @@ class _DownloadedEvent {
   final String? sourceDeviceId;
   final String? etag;
   final String? fileId;
+  final String? md5Checksum;
   String get id => event?.id ?? deletion!.id;
   DateTime get changedAt =>
       event == null ? deletion!.deletedAt : eventChangedAt(event!);
@@ -2974,7 +3076,7 @@ class _DriveChange {
 }
 
 class _DriveFile {
-  const _DriveFile({required this.id, required this.name});
+  const _DriveFile({required this.id, required this.name, this.md5Checksum});
 
   static _DriveFile? tryFromJson(Map<String, Object?> json) {
     final id = json['id'] as String?;
@@ -2982,9 +3084,14 @@ class _DriveFile {
     if (id == null || name == null) {
       return null;
     }
-    return _DriveFile(id: id, name: name);
+    return _DriveFile(
+      id: id,
+      name: name,
+      md5Checksum: json['md5Checksum'] as String?,
+    );
   }
 
   final String id;
   final String name;
+  final String? md5Checksum;
 }
