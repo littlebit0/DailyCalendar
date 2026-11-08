@@ -392,7 +392,13 @@ class GoogleDriveSyncService implements SyncService {
       promptIfNecessary: false,
     );
     if (headers == null) return null;
-    final records = await _downloadAllEvents(headers);
+    // Startup migration runs before the database may be opened through Drift;
+    // touching the file cache would upgrade it ahead of the protected snapshot.
+    final records = await _downloadEventFiles(
+      headers,
+      await _listEventFiles(headers),
+      useCache: false,
+    );
     migrationDeletions = records
         .map((record) => record.deletion)
         .whereType<EventDeletion>()
@@ -1861,19 +1867,19 @@ class GoogleDriveSyncService implements SyncService {
     return changed;
   }
 
-  Future<List<_DownloadedEvent>> _downloadAllEvents(
-    Map<String, String> authHeaders,
-  ) async =>
-      _downloadEventFiles(authHeaders, await _listEventFiles(authHeaders));
-
   Future<List<_DownloadedEvent>> _downloadEventFiles(
     Map<String, String> headers,
-    List<_DriveFile> files,
-  ) async {
+    List<_DriveFile> files, {
+    bool useCache = true,
+  }) async {
     final downloaded = await _mapSequentially(
       files,
-      (file) =>
-          _downloadEventFile(headers, file.id, md5Checksum: file.md5Checksum),
+      (file) => _downloadEventFile(
+        headers,
+        file.id,
+        md5Checksum: file.md5Checksum,
+        useCache: useCache,
+      ),
       progressMessage: '복원 중',
     );
     final winners = <String, _DownloadedEvent>{};
@@ -2209,8 +2215,9 @@ class GoogleDriveSyncService implements SyncService {
     String fileId, {
     bool requireVersion = false,
     String? md5Checksum,
+    bool useCache = true,
   }) async {
-    final cache = _remoteFileCache;
+    final cache = useCache ? _remoteFileCache : null;
     if (md5Checksum != null && cache != null) {
       final cached = await cache.cachedRemoteEventFile(fileId, md5Checksum);
       if (cached != null) {

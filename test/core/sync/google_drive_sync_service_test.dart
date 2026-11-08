@@ -3480,6 +3480,30 @@ void _latestMergeTests() {
         },
       );
 
+      test(
+        'startup migration downloads neither read nor write the cache',
+        () async {
+          drive.seed(
+            'file-a',
+            'daily-sync-v2-event-a.json',
+            file('a', 'Drive A', '2026-09-15T00:00:00.000Z'),
+          );
+          Future<int> cachedRows() async => (await database
+                  .customSelect('SELECT file_id FROM sync_remote_event_files')
+                  .get())
+              .length;
+
+          expect(await service.downloadEventsForMigration(), hasLength(1));
+          expect(mediaDownloads(), 1);
+          expect(await cachedRows(), 0);
+
+          await service.restoreNow();
+          expect(await cachedRows(), 1);
+          expect(await service.downloadEventsForMigration(), hasLength(1));
+          expect(mediaDownloads(), 3);
+        },
+      );
+
       test('a listing without md5 downloads every file as before', () async {
         drive.seed(
           'file-a',
