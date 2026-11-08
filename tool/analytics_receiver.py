@@ -119,6 +119,10 @@ OPTIONAL_SCHEMAS = {
         for name in ("sync_succeeded", "sync_failed", "sync_abandoned")
     },
 }
+# Per-stage sync times (newer apps only); capped like durationMs, without a flag.
+for _name in ("sync_succeeded", "sync_failed"):
+    for _stage in ("backup", "changes", "download", "apply"):
+        OPTIONAL_SCHEMAS[_name][f"{_stage}Ms"] = "duration"
 for _name in ("event_save_succeeded", "event_save_failed"):
     OPTIONAL_SCHEMAS[_name]["phase"] = "phase"
 

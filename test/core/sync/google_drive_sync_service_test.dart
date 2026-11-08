@@ -141,7 +141,6 @@ void main() {
           if (++calls == 1) return http.Response('offline', 503);
           return _jsonResponse({'changes': [], 'newStartPageToken': 'next'});
         }),
-        backupRestoreDelay: const Duration(seconds: 3),
       );
       addTearDown(service.dispose);
       await expectLater(
@@ -1292,13 +1291,10 @@ void main() {
       notificationService: notificationService,
       preferences: preferences,
       httpClient: httpClient,
-      backupRestoreDelay: const Duration(milliseconds: 20),
     );
     addTearDown(service.dispose);
 
-    final stopwatch = Stopwatch()..start();
     await service.syncNow();
-    stopwatch.stop();
 
     final uploadIndex = requests.indexWhere(
       (request) =>
@@ -1313,10 +1309,6 @@ void main() {
     expect(uploadIndex, isNonNegative);
     expect(restoreDownloadIndex, isNonNegative);
     expect(uploadIndex, lessThan(restoreDownloadIndex));
-    expect(
-      stopwatch.elapsed,
-      greaterThanOrEqualTo(const Duration(milliseconds: 20)),
-    );
     expect(await repository.findById('remote-event'), isNotNull);
     expect((await repository.findById('local-event'))!.syncStatus, 'synced');
     // #347: an event Drive has no file for is added even if marked synced.
@@ -2854,7 +2846,6 @@ GoogleDriveSyncService _service({
   required _FakeNotificationService notificationService,
   required SharedPreferences preferences,
   required http.Client httpClient,
-  Duration backupRestoreDelay = Duration.zero,
   Duration changeSyncDelay = Duration.zero,
   Duration? driveRequestDelay = Duration.zero,
   List<Duration> automaticRetryDelays = const [],
@@ -2867,7 +2858,6 @@ GoogleDriveSyncService _service({
     notificationService: notificationService,
     settingsRepository: SettingsRepository(preferences: preferences),
     httpClient: httpClient,
-    backupRestoreDelay: backupRestoreDelay,
     changeSyncDelay: changeSyncDelay,
     automaticRetryDelays: automaticRetryDelays,
     analytics: analytics,
@@ -3227,7 +3217,6 @@ void _latestMergeTests() {
         settingsRepository: settings,
         httpClient: MockClient(drive.handle),
         changeSyncDelay: const Duration(hours: 1),
-        backupRestoreDelay: Duration.zero,
         automaticRetryDelays: const [],
         now: () => DateTime(2026, 9, 16),
         onEventsChanged: () async => widgetRefreshes++,
@@ -3784,7 +3773,6 @@ void _latestMergeTests() {
           settingsRepository: settings,
           httpClient: MockClient(drive.handle),
           driveRequestDelay: Duration.zero,
-          backupRestoreDelay: const Duration(seconds: 3),
           automaticRetryDelays: const [],
         );
         await service
@@ -3800,6 +3788,85 @@ void _latestMergeTests() {
         ]);
         expect(service.statusNotifier.value.completedItems, isNull);
         expect(service.statusNotifier.value.totalItems, isNull);
+      },
+    );
+
+    GoogleDriveSyncService newSession({
+      ProductAnalytics analytics = const NoopProductAnalytics(),
+    }) => GoogleDriveSyncService(
+      authService: _FakeGoogleDriveAuthService(),
+      eventRepository: repository,
+      notificationService: _FakeNotificationService(),
+      settingsRepository: settings,
+      httpClient: MockClient(drive.handle),
+      driveRequestDelay: Duration.zero,
+      changeSyncDelay: const Duration(hours: 1),
+      automaticRetryDelays: const [],
+      analytics: analytics,
+    );
+
+    test(
+      'issue787 a combined sync with a local edit has no fixed wait and records stage times',
+      () async {
+        await service.syncNow();
+        service.dispose();
+        final analytics = _RecordingAnalytics();
+        service = newSession(analytics: analytics);
+        await repository.save(local());
+        // The removed upload-to-download wait alone was 3 seconds.
+        await service.syncNow().timeout(const Duration(seconds: 1));
+        expect(drive.requests.any((r) => r.method == 'POST'), isTrue);
+        await Future<void>.delayed(Duration.zero);
+        final record = analytics.records.last;
+        expect(record.name, AnalyticsEventName.syncSucceeded);
+        expect(
+          record.attributes.keys.where((key) => key.endsWith('Ms')).toSet(),
+          {'durationMs', 'backupMs', 'changesMs', 'downloadMs', 'applyMs'},
+        );
+        for (final stage in AnalyticsSyncStage.values) {
+          expect(record.attributes['${stage.name}Ms'], isA<int>());
+        }
+      },
+    );
+
+    test(
+      'issue787 documents are read once per account on this device, then only on change',
+      () async {
+        // A token saved by an older app, before the stored bootstrap mark.
+        await service.syncNow();
+        final token = settings.driveChangePageToken('tester@example.com')!;
+        await settings.clearDriveChangePageToken();
+        await settings.saveDriveChangePageToken(
+          accountEmail: 'tester@example.com',
+          pageToken: token,
+        );
+        bool readsDocuments() => drive.requests.any(
+          (r) =>
+              r.url.path == '/drive/v3/files' &&
+              (r.url.queryParameters['q'] ?? '').contains(
+                'daily-sync-v2-timetable.json',
+              ),
+        );
+        service.dispose();
+        service = newSession();
+        drive.requests.clear();
+        await service.checkForRemoteChangesNow();
+        expect(readsDocuments(), isTrue);
+        expect(
+          settings.driveDocumentsBootstrapped('Tester@Example.com'),
+          isTrue,
+        );
+
+        // Each later app session starts with a fresh service instance.
+        service.dispose();
+        service = newSession();
+        drive.requests.clear();
+        await service.checkForRemoteChangesNow();
+        expect(drive.requests.map((r) => r.url.path), ['/drive/v3/changes']);
+        expect(
+          settings.driveDocumentsBootstrapped('other@example.com'),
+          isFalse,
+        );
       },
     );
 

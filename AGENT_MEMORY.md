@@ -1,5 +1,12 @@
 # Daily Agent Memory — current handoff
 
+## #787 동기화 고정 대기 제거·문서 부트스트랩 저장·단계별 계측 — 2026-11-08
+
+- 백업 뒤 고정 3초 대기(`backupRestoreDelay`) 삭제. 2.0.1(`be38f04d2`)에 근거 기록 없이 들어왔고, 뒤의 읽기(변경 목록·전체 복원)는 방금 올린 자기 파일이 늦게 보여도 병합·재업로드로 처리됨.
+- 시간표·잊모기·템플릿·학사 설정 부트스트랩: 앱 세션(메모리)마다 → 계정별 기기 저장 1회(`driveDocumentsBootstrapped`). 이후에는 변경 목록에 파일이 있을 때만 받음. 초기화 시 토큰과 함께 지움.
+- `sync_succeeded`/`sync_failed`에 선택 필드 `backupMs`·`changesMs`·`downloadMs`·`applyMs`(0~120000). 앱 검증기와 `tool/analytics_receiver.py` 함께 갱신. 수신기를 먼저 배포해야 새 필드가 거부되지 않음.
+- Dart 공통 코드만 변경, 네이티브 대응 없음. 실제 기기 동기화 시간은 측정하지 않음.
+
 ## #771 시간표 강의 방식 변경을 캘린더에 표시 — 2026-11-07
 
 - Changed (shared Dart, all platforms): a timetable meeting whose dated mode

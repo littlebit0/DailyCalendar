@@ -188,6 +188,15 @@ queue (200 events / 7 days) or an unreachable receiver. Compute
 `unknown = started - (succeeded + failed + abandoned)` over a window that excludes
 the most recent minutes, and never treat it as a failure. Deploy the receiver first.
 
+## Sync stage times (#787)
+
+`sync_succeeded` and `sync_failed` may carry `backupMs`, `changesMs`, `downloadMs`
+and `applyMs`: the time one run spent uploading local changes, reading the Drive
+change feed (or start token), downloading Drive files, and merging them into local
+data. Only stages the run entered are sent. Each is an integer 0-120000 ms, capped
+without a separate flag. Older apps send none of them, and the receiver must accept
+both shapes. They carry no file names, counts or other content.
+
 ## Feature usage (#153)
 
 `feature_used` records only the features below, so **a missing record is never
