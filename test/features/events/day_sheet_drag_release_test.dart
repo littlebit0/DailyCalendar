@@ -135,6 +135,38 @@ void main() {
     });
   }
 
+  // iOS delivers the touch end one frame after the last move at the same
+  // position; that stationary sample must not halve the release velocity.
+  testWidgets(
+    'flick released one frame later still closes',
+    variant: const TargetPlatformVariant({
+      TargetPlatform.iOS,
+      TargetPlatform.android,
+    }),
+    (tester) async {
+      final (_, controller) = await openSheet(tester, .68);
+      var closed = false;
+      controller.closed.then((_) => closed = true);
+      final height = tester.getSize(find.byType(Scaffold)).height;
+      final gesture = await tester.startGesture(
+        tester.getTopLeft(find.byType(ListView)) + const Offset(20, 20),
+      );
+      // About 0.14 of the height in 64 ms; the up event follows 16 ms after
+      // the last move without moving.
+      const steps = 8;
+      var time = Duration.zero;
+      for (var i = 0; i < steps; i++) {
+        time += const Duration(milliseconds: 8);
+        await gesture.moveBy(Offset(0, height * .14 / steps), timeStamp: time);
+        await tester.pump(const Duration(milliseconds: 8));
+      }
+      await tester.pump(const Duration(milliseconds: 16));
+      await gesture.up(timeStamp: time + const Duration(milliseconds: 16));
+      await tester.pumpAndSettle();
+      expect(closed, isTrue);
+    },
+  );
+
   testWidgets('drag that first scrolls the list closes only from the top', (
     tester,
   ) async {
