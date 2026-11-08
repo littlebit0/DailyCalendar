@@ -24,6 +24,7 @@ class EventDraft {
     int allDayAlarmMinutes = 9 * 60,
     int alarmMinutesBefore = 0,
     this.alarmCustomAt,
+    this.showOvernightOnFollowingDays = true,
   }) : allDayAlarmMinutes = allDayAlarmMinutes.clamp(0, 1439),
        alarmMinutesBefore = alarmMinutesBefore < 0 ? 0 : alarmMinutesBefore,
        reminderMinutesBeforeList = normalizeReminderMinutes(
@@ -54,6 +55,7 @@ class EventDraft {
   final int allDayAlarmMinutes;
   final int alarmMinutesBefore;
   final DateTime? alarmCustomAt;
+  final bool showOvernightOnFollowingDays;
 
   int? get reminderMinutesBefore => reminderMinutesBeforeList.isEmpty
       ? null
@@ -89,6 +91,7 @@ class EventDraft {
       alarmMinutesBefore: alarmMinutesBefore,
       alarmCustomAt: alarmCustomAt,
       holiday: category.id == EventCategory.holiday.id,
+      showOvernightOnFollowingDays: showOvernightOnFollowingDays,
     ).normalizeAllDayBounds();
   }
 
@@ -112,6 +115,7 @@ class EventDraft {
       alarmMinutesBefore: alarmMinutesBefore,
       alarmCustomAt: alarmCustomAt,
       clearAlarmCustomAt: alarmCustomAt == null,
+      showOvernightOnFollowingDays: showOvernightOnFollowingDays,
       holiday: category.id == EventCategory.holiday.id,
       clearMemo: memo == null,
       clearLocation: location == null,
@@ -140,6 +144,7 @@ class EventDraft {
     int? allDayAlarmMinutes,
     int? alarmMinutesBefore,
     DateTime? alarmCustomAt,
+    bool? showOvernightOnFollowingDays,
     bool clearAlarmCustomAt = false,
     bool clearMemo = false,
     bool clearLocation = false,
@@ -175,6 +180,8 @@ class EventDraft {
       alarmCustomAt: clearAlarmCustomAt
           ? null
           : alarmCustomAt ?? this.alarmCustomAt,
+      showOvernightOnFollowingDays:
+          showOvernightOnFollowingDays ?? this.showOvernightOnFollowingDays,
     );
   }
 }

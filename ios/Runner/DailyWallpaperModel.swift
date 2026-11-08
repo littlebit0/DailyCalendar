@@ -110,6 +110,17 @@ struct DailyWallpaperEvent: Codable, Sendable {
   let color: Int64
   let completed: Bool
   let holiday: Bool
+
+  /// The end the month grid draws (#791): a timed event whose "다음 날에도 표시"
+  /// is off stops at the midnight after its start, like the app's month view.
+  static func displayEnd(start: Date, end: Date, allDay: Bool,
+                         showOnFollowingDays: Bool, calendar: Calendar) -> Date {
+    guard !allDay, !showOnFollowingDays,
+          let nextMidnight = calendar.date(byAdding: .day, value: 1,
+                                           to: calendar.startOfDay(for: start))
+    else { return end }
+    return min(end, nextMidnight)
+  }
 }
 
 // A wallpaper belongs to the built-in display, not the current app window.

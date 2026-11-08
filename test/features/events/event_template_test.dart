@@ -205,6 +205,44 @@ void main() {
     );
   });
 
+  group('EventTemplate following-day display (#791)', () {
+    test('keeps the choice through draft, JSON and a new draft', () {
+      final night = EventDraft(
+        title: '야간 근무',
+        startAt: DateTime(2026, 10, 30, 22),
+        endAt: DateTime(2026, 10, 31, 6),
+        category: _workout,
+        showOvernightOnFollowingDays: false,
+      );
+      final template = EventTemplate.fromDraft(night, id: 'n', name: '야간');
+      expect(template.showOvernightOnFollowingDays, isFalse);
+      expect(template.toJson()['showOvernightOnFollowingDays'], isFalse);
+      final restored = EventTemplate.tryFromJson(
+        jsonDecode(jsonEncode(template.toJson())),
+      )!;
+      expect(restored.showOvernightOnFollowingDays, isFalse);
+      expect(
+        restored
+            .draftOn(DateTime(2026, 11, 2), _workout)
+            .showOvernightOnFollowingDays,
+        isFalse,
+      );
+      expect(
+        restored.copyWith(favorite: true).showOvernightOnFollowingDays,
+        isFalse,
+      );
+    });
+
+    test('documents without the key (4.1.0) read as on', () {
+      final json = _template().toJson();
+      expect(json, isNot(contains('showOvernightOnFollowingDays')));
+      expect(
+        EventTemplate.tryFromJson(json)!.showOvernightOnFollowingDays,
+        isTrue,
+      );
+    });
+  });
+
   group('EventTemplate alarm trigger (#776)', () {
     EventDraft alarmDraft({int before = 0, DateTime? customAt}) => EventDraft(
       title: '회의',

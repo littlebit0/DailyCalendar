@@ -34,6 +34,7 @@ class CalendarEvent {
     this.readOnly = false,
     this.systemEvent = false,
     this.holiday = false,
+    this.showOvernightOnFollowingDays = true,
   }) : allDayAlarmMinutes = allDayAlarmMinutes.clamp(0, 1439),
        alarmMinutesBefore = alarmMinutesBefore < 0 ? 0 : alarmMinutesBefore,
        reminderMinutesBeforeList = normalizeReminderMinutes(
@@ -77,6 +78,10 @@ class CalendarEvent {
   final bool readOnly;
   final bool systemEvent;
   final bool holiday;
+
+  /// Whether a timed event that ends after its start date is also listed on
+  /// the following dates in month and list views. All-day events ignore it.
+  final bool showOvernightOnFollowingDays;
 
   Duration get duration => endAt.difference(startAt);
 
@@ -162,6 +167,7 @@ class CalendarEvent {
     bool? readOnly,
     bool? systemEvent,
     bool? holiday,
+    bool? showOvernightOnFollowingDays,
     bool clearOccurrenceId = false,
     bool clearMemo = false,
     bool clearLocation = false,
@@ -212,6 +218,8 @@ class CalendarEvent {
       readOnly: readOnly ?? this.readOnly,
       systemEvent: systemEvent ?? this.systemEvent,
       holiday: holiday ?? this.holiday,
+      showOvernightOnFollowingDays:
+          showOvernightOnFollowingDays ?? this.showOvernightOnFollowingDays,
     );
   }
 }

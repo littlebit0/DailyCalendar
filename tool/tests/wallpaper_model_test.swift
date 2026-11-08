@@ -54,6 +54,21 @@ struct WallpaperModelTests {
     let separate = [timed, event("later", date(2026, 9, 3), date(2026, 9, 4))]
     check(month.segments(events: separate, row: 0).allSatisfy { $0.lane == 0 }, "Reuse nonoverlapping lanes")
 
+    // #791: a timed event with "다음 날에도 표시" off draws only on its start date.
+    let nightStart = date(2026, 9, 1, hour: 22)
+    let nightEnd = date(2026, 9, 3, hour: 6)
+    func displayEnd(_ end: Date, allDay: Bool = false, following: Bool) -> Date {
+      DailyWallpaperEvent.displayEnd(start: nightStart, end: end, allDay: allDay,
+                                     showOnFollowingDays: following, calendar: calendar)
+    }
+    check(displayEnd(nightEnd, following: true) == nightEnd, "Following days keep the real end")
+    let startOnly = event("night", nightStart, displayEnd(nightEnd, following: false))
+    let startOnlyBar = month.segments(events: [startOnly], row: 0)[0]
+    check(startOnlyBar.startColumn == 2 && startOnlyBar.endColumn == 2, "Start-day-only bar stays on its date")
+    check(displayEnd(date(2026, 9, 1, hour: 23), following: false) == date(2026, 9, 1, hour: 23),
+          "Same-day end unchanged")
+    check(displayEnd(nightEnd, allDay: true, following: false) == nightEnd, "All-day spans ignore the choice")
+
     let zone = TimeZone(identifier: "America/New_York")!
     var local = calendar
     local.timeZone = zone

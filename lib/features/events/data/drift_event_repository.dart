@@ -538,6 +538,7 @@ class DriftEventRepository implements EventRepository, EventSyncMaintenance {
       allDayAlarmMinutes: Value(event.allDayAlarmMinutes),
       alarmMinutesBefore: Value(event.alarmMinutesBefore),
       alarmCustomAt: Value(event.alarmCustomAt),
+      showOvernightOnFollowingDays: Value(event.showOvernightOnFollowingDays),
     );
   }
 }

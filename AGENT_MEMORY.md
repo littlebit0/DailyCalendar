@@ -1,5 +1,22 @@
 # Daily Agent Memory — current handoff
 
+## #791 자정 넘김 일정의 다음 날 표시를 일정마다 — 2026-11-08
+
+- Format change (user-approved): `CalendarEvent.showOvernightOnFollowingDays`
+  (default on) in SQLite column `show_overnight_on_following_days` (schema 13),
+  Drive v2 event key `showOvernightOnFollowingDays` (always written), template
+  key of the same name (written only when off). Release with all platforms.
+- Removed the app-wide setting (#696) from Settings and the settings sync doc.
+  Its local pref is read only to seed existing rows on the schema-12 upgrade
+  (`AppDatabase.repairEventSchema`, both Drift `onUpgrade` and
+  `TodoDatabaseMigrationService`, whose additive gate is now `<= 13`).
+- Old files without the key read as on; a newer edit from a 4.1.0 writer keeps
+  the local value and re-uploads (`_DownloadedEvent.overnightDisplayKnown`).
+- Rule: `calendarEventListedOnDay` (no parameter). Widgets via
+  `CalendarWidgetService._eventsByDay`; iOS wallpaper via
+  `DailyWallpaperEvent.displayEnd`. Siri answers by real interval (unchanged).
+- Not verified on devices; test apps not updated (main session).
+
 ## #771 시간표 강의 방식 변경을 캘린더에 표시 — 2026-11-07
 
 - Changed (shared Dart, all platforms): a timetable meeting whose dated mode

@@ -13,6 +13,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  _overnightSwitchTests();
   for (final state in [
     AlarmAuthorizationState.unsupported,
     AlarmAuthorizationState.denied,
@@ -843,6 +844,95 @@ class _AuthorizedAlarmService implements AlarmService {
 
   @override
   Future<void> scheduleEventAlarm(CalendarEvent event) async {}
+}
+
+void _overnightSwitchTests() {
+  group('following-day switch (#791)', () {
+    CalendarEvent timed(DateTime start, DateTime end, {bool allDay = false}) =>
+        CalendarEvent(
+          id: 'night',
+          title: '야간 근무',
+          startAt: start,
+          endAt: end,
+          allDay: allDay,
+          category: EventCategory.basic,
+          colorValue: EventCategory.basic.colorValue,
+          createdAt: start,
+          updatedAt: start,
+        );
+    final switchFinder = find.byKey(const ValueKey('overnight-following-days'));
+
+    Future<void> open(WidgetTester tester, CalendarEvent event) async {
+      await tester.pumpWidget(
+        _DialogHost(
+          builder: (_) => EventEditorDialog(
+            initialDate: event.startAt,
+            event: event,
+            alarmService: const _AuthorizedAlarmService(),
+          ),
+          onSaved: (_) {},
+        ),
+      );
+      await tester.tap(find.text('열기'));
+      await tester.pumpAndSettle();
+    }
+
+    final cases = <String, (CalendarEvent, bool)>{
+      'same-day timed': (
+        timed(DateTime(2026, 10, 30, 9), DateTime(2026, 10, 30, 10)),
+        false,
+      ),
+      'exact next midnight': (
+        timed(DateTime(2026, 10, 30, 22), DateTime(2026, 10, 31)),
+        false,
+      ),
+      'all-day multi-day': (
+        timed(DateTime(2026, 10, 30), DateTime(2026, 11, 2), allDay: true),
+        false,
+      ),
+      'past midnight': (
+        timed(DateTime(2026, 10, 30, 22), DateTime(2026, 10, 31, 6)),
+        true,
+      ),
+    };
+    for (final MapEntry(key: label, value: (event, shown)) in cases.entries) {
+      testWidgets('$label ${shown ? 'shows' : 'hides'} the switch', (
+        tester,
+      ) async {
+        await open(tester, event);
+        expect(switchFinder, shown ? findsOneWidget : findsNothing);
+      });
+    }
+
+    testWidgets('saves the toggled value and starts from the event value', (
+      tester,
+    ) async {
+      final event = timed(
+        DateTime(2026, 10, 30, 22),
+        DateTime(2026, 10, 31, 6),
+      ).copyWith(showOvernightOnFollowingDays: false);
+      EventDraft? saved;
+      await tester.pumpWidget(
+        _DialogHost(
+          builder: (_) => EventEditorDialog(
+            initialDate: event.startAt,
+            event: event,
+            alarmService: const _AuthorizedAlarmService(),
+          ),
+          onSaved: (draft) => saved = draft,
+        ),
+      );
+      await tester.tap(find.text('열기'));
+      await tester.pumpAndSettle();
+      expect(tester.widget<SwitchListTile>(switchFinder).value, isFalse);
+      await tester.ensureVisible(switchFinder);
+      await tester.tap(switchFinder);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('저장'));
+      await tester.pumpAndSettle();
+      expect(saved!.showOvernightOnFollowingDays, isTrue);
+    });
+  });
 }
 
 class _DialogHost extends StatelessWidget {

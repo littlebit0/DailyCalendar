@@ -12,7 +12,8 @@ import 'event_draft.dart';
 /// time, end day offset and end time, category, reminders, D-day display,
 /// alarm, all-day alarm time and alarm trigger (N minutes before, or a custom
 /// alarm time kept as the same wall-clock time and day offset from the start
-/// day, e.g. "the day before at 21:00"). Never copied: event id, account/LMS source,
+/// day, e.g. "the day before at 21:00") and whether an overnight event is
+/// also listed on the following days. Never copied: event id, account/LMS source,
 /// creation history, completion state, weather (date-specific) and recurrence.
 class EventTemplate {
   EventTemplate({
@@ -35,6 +36,7 @@ class EventTemplate {
     this.alarmCustomDayOffset,
     int? alarmCustomMinutes,
     this.favorite = false,
+    this.showOvernightOnFollowingDays = true,
   }) : startMinutes = allDay ? 0 : startMinutes.clamp(0, 1439),
        endMinutes = allDay ? 0 : endMinutes.clamp(0, 1439),
        allDayAlarmMinutes = allDayAlarmMinutes.clamp(0, 1439),
@@ -80,6 +82,7 @@ class EventTemplate {
   final int? alarmCustomDayOffset;
   final int? alarmCustomMinutes;
   final bool favorite;
+  final bool showOvernightOnFollowingDays;
 
   bool get _hasCustomAlarm =>
       alarmCustomDayOffset != null && alarmCustomMinutes != null;
@@ -137,6 +140,7 @@ class EventTemplate {
           ? null
           : customAt.hour * 60 + customAt.minute,
       favorite: favorite,
+      showOvernightOnFollowingDays: draft.showOvernightOnFollowingDays,
     );
   }
 
@@ -188,6 +192,7 @@ class EventTemplate {
               alarmCustomMinutes! % 60,
             )
           : null,
+      showOvernightOnFollowingDays: showOvernightOnFollowingDays,
     );
   }
 
@@ -242,6 +247,7 @@ class EventTemplate {
     alarmCustomDayOffset: alarmCustomDayOffset,
     alarmCustomMinutes: alarmCustomMinutes,
     favorite: favorite ?? this.favorite,
+    showOvernightOnFollowingDays: showOvernightOnFollowingDays,
   );
 
   Map<String, Object?> toJson() => {
@@ -267,6 +273,8 @@ class EventTemplate {
       'alarmCustomMinutes': alarmCustomMinutes,
     },
     'favorite': favorite,
+    // Optional key: absent means on, which older documents and apps assume.
+    if (!showOvernightOnFollowingDays) 'showOvernightOnFollowingDays': false,
   };
 
   /// Returns null for unreadable or invalid data instead of guessing values.
@@ -297,6 +305,8 @@ class EventTemplate {
         alarmCustomDayOffset: json['alarmCustomDayOffset'] as int?,
         alarmCustomMinutes: json['alarmCustomMinutes'] as int?,
         favorite: json['favorite'] as bool? ?? false,
+        showOvernightOnFollowingDays:
+            json['showOvernightOnFollowingDays'] as bool? ?? true,
       );
       return template.isValid ? template : null;
     } on Object {

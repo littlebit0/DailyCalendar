@@ -93,6 +93,7 @@ Map<String, Object?> eventVersionValues(CalendarEvent event) => {
     'alarmMinutesBefore': event.alarmMinutesBefore,
   if (event.alarmCustomAt != null)
     'alarmCustomAt': event.alarmCustomAt!.toUtc().toIso8601String(),
+  if (!event.showOvernightOnFollowingDays) 'showOvernightOnFollowingDays': false,
 };
 
 String _day(DateTime date) =>

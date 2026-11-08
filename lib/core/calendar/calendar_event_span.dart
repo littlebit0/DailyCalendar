@@ -1,20 +1,31 @@
 import '../../features/events/domain/calendar_event.dart';
 
 /// Whether month and list views show [event] on the local date
-/// [dayStart, dayEnd). With [showOvernightOnFollowingDays] off, a timed event
-/// is listed only on its start date; all-day events keep their full span.
-/// Schedule timelines must not use this: they always place the real interval.
+/// [dayStart, dayEnd). With the event's [CalendarEvent.showOvernightOnFollowingDays]
+/// off, a timed event is listed only on its start date; all-day events keep
+/// their full span. Schedule timelines must not use this: they always place
+/// the real interval.
 bool calendarEventListedOnDay(
   CalendarEvent event,
   DateTime dayStart,
-  DateTime dayEnd, {
-  required bool showOvernightOnFollowingDays,
-}) {
-  if (showOvernightOnFollowingDays || event.allDay) {
+  DateTime dayEnd,
+) {
+  if (event.showOvernightOnFollowingDays || event.allDay) {
     return event.overlaps(dayStart, dayEnd);
   }
   return !event.startAt.isBefore(dayStart) && event.startAt.isBefore(dayEnd);
 }
+
+/// Whether a timed event continues past midnight of its start date, so the
+/// editor's "다음 날에도 표시" choice changes anything. An end at exactly the
+/// next midnight stays on the start date and does not count.
+bool calendarEventEndsAfterStartDay({
+  required bool allDay,
+  required DateTime startAt,
+  required DateTime endAt,
+}) =>
+    !allDay &&
+    endAt.isAfter(DateTime(startAt.year, startAt.month, startAt.day + 1));
 
 /// A visible, inclusive date span. The event itself keeps its exclusive end.
 class CalendarEventSpan {

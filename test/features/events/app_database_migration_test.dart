@@ -70,4 +70,63 @@ void main() {
       );
     },
   );
+
+  test(
+    'a Drift upgrade from schema 12 copies the removed overnight setting',
+    () async {
+      final directory = await Directory.systemTemp.createTemp(
+        'daily-migration-',
+      );
+      addTearDown(() => directory.delete(recursive: true));
+      final file = File('${directory.path}/daily.sqlite');
+      final oldDatabase = AppDatabase.forTesting(NativeDatabase(file));
+      await oldDatabase.customStatement(
+        '''
+      INSERT INTO event_records (
+        id, title, start_at, end_at, color_value, created_at, updated_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?)
+    ''',
+        [
+          'night',
+          '야간 근무',
+          DateTime(2026, 7, 30, 22).millisecondsSinceEpoch ~/ 1000,
+          DateTime(2026, 7, 31, 6).millisecondsSinceEpoch ~/ 1000,
+          0xff2563eb,
+          DateTime(2026, 7, 29).millisecondsSinceEpoch ~/ 1000,
+          DateTime(2026, 7, 29).millisecondsSinceEpoch ~/ 1000,
+        ],
+      );
+      await oldDatabase.customStatement(
+        'ALTER TABLE event_records DROP COLUMN show_overnight_on_following_days',
+      );
+      await oldDatabase.customStatement('PRAGMA user_version = 12');
+      await oldDatabase.close();
+
+      final database = AppDatabase.forTesting(
+        NativeDatabase(file),
+        legacyShowOvernightOnFollowingDays: false,
+      );
+      addTearDown(database.close);
+      final row = await database
+          .customSelect(
+            'SELECT show_overnight_on_following_days AS shown FROM event_records',
+          )
+          .getSingle();
+      expect(row.read<int>('shown'), 0);
+      // Rows created after the upgrade use the per-event default (on).
+      await database.customStatement(
+        '''
+      INSERT INTO event_records (
+        id, title, start_at, end_at, color_value, created_at, updated_at
+      ) VALUES ('new', 'new', 0, 1, 0, 0, 0)
+    ''',
+      );
+      final created = await database
+          .customSelect(
+            "SELECT show_overnight_on_following_days AS shown FROM event_records WHERE id = 'new'",
+          )
+          .getSingle();
+      expect(created.read<int>('shown'), 1);
+    },
+  );
 }

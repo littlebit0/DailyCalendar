@@ -403,6 +403,8 @@ class SettingsRepository {
   static const _calendarHolidayBackgroundEnabledKey =
       'calendarHolidayBackgroundEnabled';
   static const _calendarDdayOnlyKey = 'calendarDdayOnly';
+  // Removed app-wide setting (#696); read only to seed the per-event value
+  // when the event database upgrades (#791).
   static const _calendarShowOvernightEventsOnFollowingDaysKey =
       'calendarShowOvernightEventsOnFollowingDays';
   static const _appLockConfigurationKey = 'appLockConfiguration.v1';
@@ -483,11 +485,6 @@ class SettingsRepository {
       calendarHolidayBackgroundEnabled:
           _preferences.getBool(_calendarHolidayBackgroundEnabledKey) ?? true,
       calendarDdayOnly: _preferences.getBool(_calendarDdayOnlyKey) ?? false,
-      calendarShowOvernightEventsOnFollowingDays:
-          _preferences.getBool(
-            _calendarShowOvernightEventsOnFollowingDaysKey,
-          ) ??
-          true,
       appLockEnabled: lock.enabled,
       appLockBiometricsEnabled: lock.biometrics,
       appLockMethod: lock.method,
@@ -1050,15 +1047,6 @@ class SettingsRepository {
         _preferences.setBool(_calendarDdayOnlyKey, settings.calendarDdayOnly),
       );
     }
-    if (baseline.calendarShowOvernightEventsOnFollowingDays !=
-            settings.calendarShowOvernightEventsOnFollowingDays &&
-        previous.calendarShowOvernightEventsOnFollowingDays !=
-            settings.calendarShowOvernightEventsOnFollowingDays) {
-      await _preferences.setBool(
-        _calendarShowOvernightEventsOnFollowingDaysKey,
-        settings.calendarShowOvernightEventsOnFollowingDays,
-      );
-    }
     for (final legacyKey in const [
       'hideSensitiveEvents',
       'hideSensitiveNotifications',
@@ -1384,6 +1372,12 @@ class SettingsRepository {
     }
     return DailyAccount(id: const Uuid().v4(), appleAccount: apple);
   }
+
+  /// The removed app-wide "다음 날에도 표시" value (#696), used once to seed
+  /// each existing event when the event database upgrades past schema 12.
+  bool legacyShowOvernightOnFollowingDays() =>
+      _preferences.getBool(_calendarShowOvernightEventsOnFollowingDaysKey) ??
+      true;
 
   bool get hasStoredDailyAccount => _storedDailyAccount() != null;
 

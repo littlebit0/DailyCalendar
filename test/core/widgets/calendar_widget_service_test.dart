@@ -94,6 +94,37 @@ void main() {
     expect(snapshot['utcOffsetAtMs'], now.millisecondsSinceEpoch);
   });
 
+  test('widget day lists follow each event\'s following-day choice (#791)', () {
+    final shift = _event(
+      id: 'shift',
+      title: '야간 근무',
+      startAt: DateTime(2026, 10, 29, 22),
+    ).copyWith(endAt: DateTime(2026, 10, 30, 6));
+    final party = shift.copyWith(
+      id: 'party',
+      showOvernightOnFollowingDays: false,
+    );
+    final snapshot = CalendarWidgetSnapshotBuilder.build(
+      now: DateTime(2026, 10, 30, 9),
+      settings: AppSettings(language: AppLanguage.korean),
+      gridStart: DateTime(2026, 9, 27),
+      monthEvents: [shift, party],
+      allEvents: const [],
+    );
+    List<String> monthIdsOn(String date) => [
+      for (final day in (snapshot['monthDays'] as List).cast<Map>())
+        if (day['date'] == date)
+          for (final event in (day['events'] as List).cast<Map>())
+            event['eventId'] as String,
+    ];
+    expect(monthIdsOn('2026-10-29'), unorderedEquals(['shift', 'party']));
+    expect(monthIdsOn('2026-10-30'), ['shift']);
+    expect(
+      (snapshot['todayEvents'] as List).cast<Map>().map((e) => e['eventId']),
+      ['shift'],
+    );
+  });
+
   test(
     'widget action retains the tapped date and rejects legacy whole-series ambiguity',
     () {

@@ -68,8 +68,11 @@ class TodoDatabaseMigrationService {
     required Future<List<CalendarEvent>?> Function() loadRemoteEvents,
     required Future<void> Function() backupMigratedEvents,
     List<EventDeletion> Function()? remoteDeletionRecords,
+    bool Function()? legacyShowOvernightOnFollowingDays,
     @visibleForTesting this.beforeCommit,
   }) : _databaseFile = databaseFile,
+       _legacyShowOvernightOnFollowingDays =
+           legacyShowOvernightOnFollowingDays ?? (() => true),
        _hasLinkedGoogleAccount = hasLinkedGoogleAccount,
        _loadRemoteEvents = loadRemoteEvents,
        _backupMigratedEvents = backupMigratedEvents,
@@ -80,6 +83,9 @@ class TodoDatabaseMigrationService {
   final Future<List<CalendarEvent>?> Function() _loadRemoteEvents;
   final Future<void> Function() _backupMigratedEvents;
   final List<EventDeletion> Function() _remoteDeletionRecords;
+
+  /// The removed app-wide following-day display value (#696, #791).
+  final bool Function() _legacyShowOvernightOnFollowingDays;
 
   final progress = ValueNotifier<TodoMigrationProgress>(
     const TodoMigrationProgress(TodoMigrationStage.checking, '업데이트 확인 중'),
@@ -140,12 +146,12 @@ class TodoDatabaseMigrationService {
       }
 
       // Schema 8 already has Todo completion, exact sync timestamps and compact
-      // deletions. Schemas 9-12 only add nullable or defaulted columns (LMS
-      // metadata, the recurrence anchor day, recurrence details, alarm timing):
-      // they must not repeat the old cloud migration or turn every unchanged
-      // event into an upload.
+      // deletions. Schemas 9-13 only add nullable or defaulted columns (LMS
+      // metadata, the recurrence anchor day, recurrence details, alarm timing,
+      // the per-event following-day display): they must not repeat the old
+      // cloud migration or turn every unchanged event into an upload.
       final isAdditiveLmsMigration =
-          originalVersion >= 8 && AppDatabase.currentSchemaVersion <= 12;
+          originalVersion >= 8 && AppDatabase.currentSchemaVersion <= 13;
       final requiresLegacyCloudMigration = !isAdditiveLmsMigration;
       List<CalendarEvent>? remoteEvents = const <CalendarEvent>[];
       if (requiresLegacyCloudMigration) {
@@ -207,6 +213,8 @@ class TodoDatabaseMigrationService {
       // is confined to the snapshot copy, including already-mislabeled v9 DBs.
       final driftWorking = AppDatabase.forMigration(
         NativeDatabase(workingFile),
+        legacyShowOvernightOnFollowingDays:
+            _legacyShowOvernightOnFollowingDays(),
       );
       try {
         await driftWorking
@@ -445,6 +453,8 @@ class TodoDatabaseMigrationService {
     allDayAlarmMinutes: row['all_day_alarm_minutes'] as int? ?? 540,
     alarmMinutesBefore: row['alarm_minutes_before'] as int? ?? 0,
     alarmCustomAt: _dateFromSql(row['alarm_custom_at']),
+    // Absent before schema 13; seeded by the schema repair.
+    showOvernightOnFollowingDays: row['show_overnight_on_following_days'] != 0,
   ).toDomain();
 
   List<CalendarEvent> _remoteWinners(
@@ -492,9 +502,9 @@ class TodoDatabaseMigrationService {
         recurrence_excluded_dates, created_at, updated_at, deleted_at,
         device_id, sync_status, show_dday, completed, alarm_enabled,
         all_day_alarm_minutes, alarm_minutes_before, alarm_custom_at,
-        lms_metadata
+        lms_metadata, show_overnight_on_following_days
       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       ON CONFLICT(id) DO UPDATE SET
         title = excluded.title,
         memo = excluded.memo,
@@ -526,7 +536,9 @@ class TodoDatabaseMigrationService {
         all_day_alarm_minutes = excluded.all_day_alarm_minutes,
         alarm_minutes_before = excluded.alarm_minutes_before,
         alarm_custom_at = excluded.alarm_custom_at,
-        lms_metadata = excluded.lms_metadata
+        lms_metadata = excluded.lms_metadata,
+        show_overnight_on_following_days =
+          excluded.show_overnight_on_following_days
       ''',
       [
         normalized.id,
@@ -565,6 +577,7 @@ class TodoDatabaseMigrationService {
             ? null
             : _dateToSql(normalized.alarmCustomAt!),
         normalized.lms == null ? null : jsonEncode(normalized.lms!.toJson()),
+        normalized.showOvernightOnFollowingDays ? 1 : 0,
       ],
     );
     database.execute(

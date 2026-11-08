@@ -405,11 +405,14 @@ class CalendarWidgetSnapshotBuilder {
       if (cursor.isBefore(rangeStart)) {
         cursor = rangeStart;
       }
-      var eventEnd = _dateOnly(
-        event.lms != null && event.startAt == event.endAt
-            ? event.endAt
-            : event.endAt.subtract(const Duration(microseconds: 1)),
-      );
+      // Same per-event following-day rule as the app's month view (#791).
+      var eventEnd = !event.allDay && !event.showOvernightOnFollowingDays
+          ? _dateOnly(event.startAt)
+          : _dateOnly(
+              event.lms != null && event.startAt == event.endAt
+                  ? event.endAt
+                  : event.endAt.subtract(const Duration(microseconds: 1)),
+            );
       final lastRangeDay = shiftCalendarDateByDays(rangeEnd, -1);
       if (eventEnd.isAfter(lastRangeDay)) {
         eventEnd = lastRangeDay;

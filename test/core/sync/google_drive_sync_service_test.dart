@@ -284,6 +284,88 @@ void main() {
     );
   }
 
+  group('per-event following-day display (#791)', () {
+    Future<CalendarEvent?> restore({
+      CalendarEvent? local,
+      bool? remoteValue,
+      String remoteUpdatedAt = '2026-06-10T00:00:00.000Z',
+    }) async {
+      SharedPreferences.setMockInitialValues({});
+      final preferences = await SharedPreferences.getInstance();
+      final repository = _MemoryEventRepository();
+      if (local != null) await repository.save(local);
+      final client = _versionedClient((request) async {
+        if (request.method == 'GET' && request.url.path == '/drive/v3/files') {
+          if ((request.url.queryParameters['q'] ?? '').contains(
+            'daily-sync-v2-event-',
+          )) {
+            return _driveFiles([
+              {'id': 'night-file', 'name': 'daily-sync-v2-event-night.json'},
+            ]);
+          }
+          return _driveFiles([]);
+        }
+        if (request.method == 'GET' &&
+            request.url.path == '/drive/v3/files/night-file') {
+          return _jsonResponse(
+            _eventFileJson(
+              id: 'night',
+              title: '구버전에서 고친 제목',
+              startAt: '2026-06-01T00:00:00.000Z',
+              endAt: '2026-06-02T00:00:00.000Z',
+              updatedAt: remoteUpdatedAt,
+              showOvernightOnFollowingDays: remoteValue,
+            ),
+          );
+        }
+        return http.Response('unexpected ${request.method}', 500);
+      });
+      final service = _service(
+        repository: repository,
+        notificationService: _FakeNotificationService(),
+        preferences: preferences,
+        httpClient: client,
+      );
+      addTearDown(service.dispose);
+      await service.restoreNow();
+      return repository.findById('night');
+    }
+
+    CalendarEvent local() => _event(
+      id: 'night',
+      title: '로컬 제목',
+      startAt: DateTime(2026, 6, 1),
+      endAt: DateTime(2026, 6, 2),
+      updatedAt: DateTime.utc(2026, 6, 1),
+    ).copyWith(showOvernightOnFollowingDays: false);
+
+    test('a file without the key reads as on', () async {
+      final restored = await restore();
+      expect(restored!.showOvernightOnFollowingDays, isTrue);
+    });
+
+    test('an explicit value round-trips from the file', () async {
+      final restored = await restore(remoteValue: false);
+      expect(restored!.showOvernightOnFollowingDays, isFalse);
+    });
+
+    test(
+      'a newer edit from an older app keeps this device\'s value and re-uploads',
+      () async {
+        final restored = await restore(local: local());
+        expect(restored!.title, '구버전에서 고친 제목');
+        expect(restored.showOvernightOnFollowingDays, isFalse);
+        expect(restored.syncStatus, 'pending');
+      },
+    );
+
+    test('a newer file from 4.1.1 still replaces the value', () async {
+      final restored = await restore(local: local(), remoteValue: true);
+      expect(restored!.showOvernightOnFollowingDays, isTrue);
+      expect(restored.syncStatus, 'synced');
+    });
+  });
+
   test('restore sync downloads v2 event files without uploading', () async {
     SharedPreferences.setMockInitialValues({});
     final preferences = await SharedPreferences.getInstance();
@@ -634,6 +716,7 @@ void main() {
             completed: true,
             alarmMinutesBefore: 30,
             alarmCustomAt: DateTime.utc(2026, 6, 19, 22),
+            showOvernightOnFollowingDays: false,
             recurrence: const RecurrenceRule(
               frequency: RecurrenceFrequency.monthly,
               anchorDay: 31,
@@ -710,6 +793,7 @@ void main() {
       expect(event['recurrenceDetails'], '{"byDay":["MO","WE"]}');
       expect(event['alarmMinutesBefore'], 30);
       expect(event['alarmCustomAt'], '2026-06-19T22:00:00.000Z');
+      expect(event['showOvernightOnFollowingDays'], isFalse);
       expect((await repository.findById('queued-event'))!.syncStatus, 'synced');
       expect(
         requests.any(
@@ -1635,7 +1719,6 @@ void main() {
       expect(holiday.colorValue, 0xffa855f7);
       expect(holiday.locked, isTrue);
       expect(restored.calendarHolidayBackgroundEnabled, isFalse);
-      expect(restored.calendarShowOvernightEventsOnFollowingDays, isFalse);
       expect(
         restored.calendarEventTitleAlignment,
         CalendarEventTitleAlignment.center,
@@ -2931,6 +3014,7 @@ Map<String, Object?> _eventFileJson({
   String? deletedAt,
   String? sourceDeviceId,
   bool completed = false,
+  bool? showOvernightOnFollowingDays,
 }) {
   return {
     'schemaVersion': 2,
@@ -2948,6 +3032,7 @@ Map<String, Object?> _eventFileJson({
       'updatedAt': updatedAt,
       'deletedAt': ?deletedAt,
       'completed': completed,
+      'showOvernightOnFollowingDays': ?showOvernightOnFollowingDays,
     },
   };
 }

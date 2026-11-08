@@ -1132,6 +1132,17 @@ class GoogleDriveSyncService implements SyncService {
           event = event.copyWith(lms: local!.lms);
           repairedMetadataIds.add(event.id);
         }
+        // A 4.1.0-or-older writer drops the per-event display choice; keep
+        // this device's value and re-upload it instead of resetting to on.
+        if (!record.overnightDisplayKnown &&
+            local != null &&
+            local.showOvernightOnFollowingDays !=
+                event.showOvernightOnFollowingDays) {
+          event = event.copyWith(
+            showOvernightOnFollowingDays: local.showOvernightOnFollowingDays,
+          );
+          repairedMetadataIds.add(event.id);
+        }
         if (_canSyncEvent(event)) events.add(event);
         continue;
       }
@@ -2208,9 +2219,8 @@ class GoogleDriveSyncService implements SyncService {
       );
     }
     final event = decoded['event'];
-    final parsedEvent = _eventFromJson(
-      event is Map ? Map<String, Object?>.from(event) : decoded,
-    );
+    final eventJson = event is Map ? Map<String, Object?>.from(event) : decoded;
+    final parsedEvent = _eventFromJson(eventJson);
     if (parsedEvent == null) {
       throw const GoogleDriveSyncException('Google Drive 일정 백업 데이터가 손상되었습니다.');
     }
@@ -2219,6 +2229,9 @@ class GoogleDriveSyncService implements SyncService {
       sourceDeviceId: decoded['sourceDeviceId'] as String?,
       etag: etag,
       fileId: fileId,
+      overnightDisplayKnown: eventJson.containsKey(
+        'showOvernightOnFollowingDays',
+      ),
     );
   }
 
@@ -2466,6 +2479,7 @@ class GoogleDriveSyncService implements SyncService {
       'allDayAlarmMinutes': normalized.allDayAlarmMinutes,
       'alarmMinutesBefore': normalized.alarmMinutesBefore,
       'alarmCustomAt': normalized.alarmCustomAt?.toUtc().toIso8601String(),
+      'showOvernightOnFollowingDays': normalized.showOvernightOnFollowingDays,
     };
   }
 
@@ -2539,6 +2553,9 @@ class GoogleDriveSyncService implements SyncService {
       allDayAlarmMinutes: json['allDayAlarmMinutes'] as int? ?? 9 * 60,
       alarmMinutesBefore: json['alarmMinutesBefore'] as int? ?? 0,
       alarmCustomAt: _readDate(json['alarmCustomAt']),
+      // Files from 4.1.0 and older have no key: they read as on.
+      showOvernightOnFollowingDays:
+          json['showOvernightOnFollowingDays'] as bool? ?? true,
     ).normalizeAllDayBounds();
   }
 
@@ -2668,8 +2685,6 @@ class GoogleDriveSyncService implements SyncService {
       calendarHolidayBackgroundEnabled:
           json['calendarHolidayBackgroundEnabled'] as bool? ?? true,
       calendarDdayOnly: json['calendarDdayOnly'] as bool? ?? false,
-      calendarShowOvernightEventsOnFollowingDays:
-          json['calendarShowOvernightEventsOnFollowingDays'] as bool? ?? true,
       use24HourTime: json['use24HourTime'] as bool? ?? true,
       themeMode: AppThemeMode.fromName(json['themeMode'] as String?),
     );
@@ -2842,9 +2857,13 @@ class _DownloadedEvent {
     required this.sourceDeviceId,
     this.etag,
     this.fileId,
+    this.overnightDisplayKnown = true,
   });
 
   final CalendarEvent? event;
+
+  /// False when the Drive file has no `showOvernightOnFollowingDays` key.
+  final bool overnightDisplayKnown;
   final EventDeletion? deletion;
   final String? sourceDeviceId;
   final String? etag;

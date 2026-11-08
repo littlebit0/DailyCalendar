@@ -1325,10 +1325,11 @@ void main() {
               child: CalendarMonthGrid(
                 month: DateTime(2026, 10),
                 selectedDate: DateTime(2026, 10, 29),
-                events: [event],
+                events: [
+                  event.copyWith(showOvernightOnFollowingDays: showOvernight),
+                ],
                 weekStartsOnMonday: true,
                 showLunarDates: false,
-                showOvernightEventsOnFollowingDays: showOvernight,
                 onDateSelected: (_) {},
               ),
             ),
