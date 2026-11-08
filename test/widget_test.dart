@@ -9494,6 +9494,25 @@ void main() {
       await tester.pumpAndSettle();
       expect(shownDate(), lastDay);
       expect(offset(), 0);
+      // Both neighbouring days are already loading, so a swipe does not
+      // flash a loading indicator while the new day's query starts.
+      final container = ProviderScope.containerOf(
+        tester.element(find.byType(EventDetailsPanel)),
+      );
+      for (final day in [
+        DateTime(lastDay.year, lastDay.month, lastDay.day - 1),
+        nextDay,
+      ]) {
+        expect(
+          container.exists(
+            eventsInRangeProvider(
+              CalendarRange(day, DateTime(day.year, day.month, day.day + 1)),
+            ),
+          ),
+          isTrue,
+          reason: '$day',
+        );
+      }
 
       // While dragging, the content follows the finger.
       final gesture = await tester.startGesture(tester.getCenter(label));

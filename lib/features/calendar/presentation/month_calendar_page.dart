@@ -1446,6 +1446,7 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
                     events: DateUtils.isSameDay(shownDate, date)
                         ? events
                         : const <CalendarEvent>[],
+                    prefetchAdjacentDays: true,
                     scrollController: scrollController,
                     scrollPhysics: DaySheetScrollPhysics(
                       isCollapsed: () =>
