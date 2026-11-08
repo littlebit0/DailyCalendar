@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:daily/core/alarms/native_alarm_service.dart';
 import 'package:daily/core/sync/sync_version.dart';
 import 'package:daily/features/events/data/app_database.dart';
 import 'package:daily/features/events/data/drift_event_repository.dart';
+import 'package:daily/features/events/domain/alarm_triggers.dart';
 import 'package:daily/features/events/domain/calendar_event.dart';
 import 'package:daily/features/events/domain/event_category.dart';
 import 'package:daily/features/events/domain/event_draft.dart';
@@ -19,6 +22,8 @@ void main() {
     int allDayAlarmMinutes = 9 * 60,
     int alarmMinutesBefore = 0,
     DateTime? alarmCustomAt,
+    List<int>? minutesList,
+    List<DateTime>? customList,
   }) {
     final start = startAt ?? DateTime(2026, 11, 10, 14, 0);
     return CalendarEvent(
@@ -35,6 +40,8 @@ void main() {
       allDayAlarmMinutes: allDayAlarmMinutes,
       alarmMinutesBefore: alarmMinutesBefore,
       alarmCustomAt: alarmCustomAt,
+      alarmMinutesBeforeList: minutesList,
+      alarmCustomAtList: customList,
     );
   }
 
@@ -152,7 +159,7 @@ void main() {
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(channel, (call) async {
           if (call.method == 'authorizationState') return 'authorized';
-          fireAt = (call.arguments as Map)['fireAtMilliseconds'];
+          fireAt = ((call.arguments as Map)['fireAtMillisecondsList'] as List).single;
           return true;
         });
     final start = DateTime.now().add(const Duration(days: 2));
@@ -163,5 +170,188 @@ void main() {
       fireAt,
       start.subtract(const Duration(hours: 1)).millisecondsSinceEpoch,
     );
+  });
+
+  group('several alarm times (#784)', () {
+    test('fire times are sorted, deduplicated and the earliest is legacy', () {
+      final customAt = DateTime(2026, 11, 10, 12);
+      final multi = event(
+        minutesList: [30, 0, 10, 30],
+        customList: [customAt, DateTime(2026, 11, 10, 13, 50), customAt],
+      );
+      expect(multi.alarmMinutesBeforeList, [0, 10, 30]);
+      expect(multi.alarmFireTimes, [
+        customAt,
+        DateTime(2026, 11, 10, 13, 30),
+        DateTime(2026, 11, 10, 13, 50),
+        DateTime(2026, 11, 10, 14),
+      ]);
+      expect(multi.alarmFireAt, customAt);
+      expect(multi.alarmCustomAt, customAt);
+      expect(multi.hasMultipleAlarmTimes, isTrue);
+
+      // Moving the start keeps custom times and makes a relative one earliest.
+      final moved = multi.copyWith(startAt: DateTime(2026, 11, 10, 9));
+      expect(moved.alarmCustomAt, isNull);
+      expect(moved.alarmMinutesBefore, 30);
+      expect(moved.alarmCustomAtList, multi.alarmCustomAtList);
+      expect(moved.alarmFireAt, DateTime(2026, 11, 10, 8, 30));
+    });
+
+    test('a legacy single trigger change replaces the list', () {
+      final multi = event(minutesList: [0, 10]);
+      final single = multi.copyWith(alarmMinutesBefore: 5);
+      expect(single.alarmMinutesBeforeList, [5]);
+      expect(single.hasMultipleAlarmTimes, isFalse);
+      expect(event(minutesList: const []).alarmMinutesBeforeList, [0]);
+    });
+
+    test('single alarms keep their sync fingerprint keys', () {
+      final legacy = eventVersionValues(event(alarmMinutesBefore: 10));
+      final viaList = eventVersionValues(event(minutesList: [10]));
+      expect(viaList, legacy);
+      expect(legacy, isNot(contains('alarmMinutesBeforeList')));
+      final multi = eventVersionValues(event(minutesList: [0, 10]));
+      expect(multi['alarmMinutesBeforeList'], [0, 10]);
+      expect(multi['alarmMinutesBefore'], 10);
+    });
+
+    test('drift repository persists every alarm time', () async {
+      final database = AppDatabase.forTesting(NativeDatabase.memory());
+      addTearDown(database.close);
+      final repository = DriftEventRepository(database);
+      final customAt = DateTime(2026, 11, 9, 21, 5);
+      final saved = event(minutesList: [0, 15], customList: [customAt]);
+      await repository.save(saved);
+      final loaded = (await repository.findById(saved.id))!;
+      expect(loaded.alarmMinutesBeforeList, [0, 15]);
+      expect(loaded.alarmCustomAtList, [customAt]);
+      expect(loaded.alarmCustomAt, customAt);
+
+      // Single alarms leave the list columns empty.
+      await repository.save(event(alarmMinutesBefore: 20));
+      final row = await database
+          .customSelect(
+            'SELECT alarm_minutes_before_list, alarm_custom_at_list '
+            'FROM event_records',
+          )
+          .getSingle();
+      expect(row.data.values, everyElement(isNull));
+      expect(
+        (await repository.findById(saved.id))!.alarmMinutesBeforeList,
+        [20],
+      );
+    });
+
+    test('schema 12 databases upgrade and keep their single alarm', () async {
+      final directory = await Directory.systemTemp.createTemp('daily-alarm-');
+      addTearDown(() => directory.delete(recursive: true));
+      final file = File('${directory.path}/daily.sqlite');
+      final old = AppDatabase.forTesting(NativeDatabase(file));
+      await DriftEventRepository(
+        old,
+      ).save(event(alarmMinutesBefore: 45, alarmCustomAt: DateTime(2026, 11, 9)));
+      for (final column in ['alarm_minutes_before_list', 'alarm_custom_at_list']) {
+        await old.customStatement('ALTER TABLE event_records DROP COLUMN $column');
+      }
+      await old.customStatement('PRAGMA user_version = 12');
+      await old.close();
+
+      // Opening twice also covers a retry after an interrupted upgrade.
+      for (var attempt = 0; attempt < 2; attempt++) {
+        final database = AppDatabase.forTesting(NativeDatabase(file));
+        final loaded = (await DriftEventRepository(
+          database,
+        ).findById('22222222-2222-4222-8222-222222222222'))!;
+        final version = await database
+            .customSelect('PRAGMA user_version')
+            .getSingle();
+        await database.close();
+        expect(
+          version.read<int>('user_version'),
+          AppDatabase.currentSchemaVersion,
+        );
+        expect(loaded.alarmCustomAtList, [DateTime(2026, 11, 9)]);
+        expect(loaded.alarmMinutesBeforeList, isEmpty);
+        expect(loaded.alarmMinutesBefore, 45);
+      }
+    });
+
+    test('stored lists contradicted by a legacy-only edit are dropped', () {
+      final base = DateTime(2026, 11, 10, 14);
+      final kept = acceptedAlarmLists(
+        base: base,
+        legacyMinutes: 30,
+        legacyCustomAt: null,
+        minutes: '[0,30]',
+        customs: '[]',
+      );
+      expect(kept.minutes, [0, 30]);
+      final edited = acceptedAlarmLists(
+        base: base,
+        legacyMinutes: 60,
+        legacyCustomAt: null,
+        minutes: [0, 30],
+        customs: const [],
+      );
+      expect(edited.minutes, isNull);
+      expect(edited.customs, isNull);
+      expect(
+        acceptedAlarmLists(
+          base: base,
+          legacyMinutes: 0,
+          legacyCustomAt: null,
+          minutes: 'not json',
+          customs: null,
+        ).minutes,
+        isNull,
+      );
+    });
+
+    test('native alarms get every future time and reconcile gets all', () async {
+      const channel = MethodChannel('daily/alarm_multi_test');
+      debugDefaultTargetPlatformOverride = TargetPlatform.android;
+      addTearDown(() {
+        debugDefaultTargetPlatformOverride = null;
+        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+            .setMockMethodCallHandler(channel, null);
+      });
+      final calls = <MethodCall>[];
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(channel, (call) async {
+            if (call.method == 'authorizationState') return 'authorized';
+            calls.add(call);
+            return true;
+          });
+      final start = DateTime.now().add(const Duration(hours: 1));
+      final service = NativeAlarmService(channel: channel);
+      // 120 minutes before has already passed.
+      final multi = event(startAt: start, minutesList: [0, 10, 120]);
+      await service.scheduleEventAlarm(multi);
+      await service.reconcileEventAlarm(multi);
+      await service.cancelEventAlarm(multi.id);
+      expect(calls.map((call) => call.method), [
+        'schedule',
+        'reconcile',
+        'cancel',
+      ]);
+      int ms(int minutes) => start
+          .subtract(Duration(minutes: minutes))
+          .millisecondsSinceEpoch;
+      expect((calls[0].arguments as Map)['fireAtMillisecondsList'], [
+        ms(10),
+        ms(0),
+      ]);
+      expect((calls[1].arguments as Map)['fireAtMillisecondsList'], [
+        ms(120),
+        ms(10),
+        ms(0),
+      ]);
+      expect((calls[2].arguments as Map)['eventId'], multi.id);
+
+      calls.clear();
+      await service.scheduleEventAlarm(event(startAt: start, minutesList: [120]));
+      expect(calls, isEmpty);
+    });
   });
 }

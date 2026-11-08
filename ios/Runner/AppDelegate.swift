@@ -725,12 +725,16 @@ private final class DailyAlarmKit {
           let eventID = arguments["eventId"] as? String,
           !eventID.isEmpty,
           let title = arguments["title"] as? String,
-          let fireAtMilliseconds = int64Value(arguments["fireAtMilliseconds"]),
+          let rawFireTimes = arguments["fireAtMillisecondsList"] as? [Any],
           let snoozeMinutes = intValue(arguments["snoozeMinutes"]) else {
       result(FlutterError(code: "bad_arguments", message: "일정 알람 정보가 올바르지 않습니다.", details: nil))
       return
     }
-    let id = alarmID(for: eventID)
+    let fireTimes = rawFireTimes.compactMap { int64Value($0) }
+    guard fireTimes.count == rawFireTimes.count else {
+      result(FlutterError(code: "bad_arguments", message: "일정 알람 정보가 올바르지 않습니다.", details: nil))
+      return
+    }
     guard AlarmManager.shared.authorizationState == .authorized else {
       result(FlutterError(code: "alarm_permission_denied", message: "Daily의 알람 권한이 허용되지 않았습니다.", details: nil))
       return
@@ -738,78 +742,135 @@ private final class DailyAlarmKit {
 
     let memo = (arguments["memo"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines)
     let visibleMemo = memo.flatMap { $0.isEmpty ? nil : String($0.prefix(80)) }
-    let displayTitle = visibleMemo.map { "\(title)\n\($0)" } ?? title
-    let fireDate = Date(timeIntervalSince1970: Double(fireAtMilliseconds) / 1000)
-    let fingerprintData = (try? JSONSerialization.data(withJSONObject: [fireAtMilliseconds, title, memo ?? "", snoozeMinutes])) ?? Data()
-    let fingerprint = SHA256.hash(data: fingerprintData).map { String(format: "%02x", $0) }.joined()
-    let fingerprintKey = "daily.alarm.source.\(id.uuidString)"
+    let reconcile = call.method == "reconcile"
     Task { @MainActor in
       do {
-        if call.method == "reconcile", try AlarmManager.shared.alarms.contains(where: { $0.id == id }) {
-          let previous = UserDefaults.standard.string(forKey: fingerprintKey)
-          if previous == fingerprint || (previous == nil && fireDate <= Date()) {
-            // Legacy countdowns have no source fingerprint. Preserve them on
-            // first reconciliation; explicit mutation still uses cancel.
-            result(true)
-            return
+        let existing = Set(try AlarmManager.shared.alarms.map(\.id))
+        let now = Date()
+        // One AlarmKit alarm per fire time (#784). A 4.1.0 alarm keeps the
+        // event-id UUID and may satisfy one of the times on reconcile.
+        let legacyID = alarmID(for: eventID)
+        var keep = Set<UUID>()
+        var pending: [(id: UUID, fireDate: Date, fingerprint: String)] = []
+        var legacyUsed = false
+        var seen = Set<Int64>()
+        for fireAtMilliseconds in fireTimes where seen.insert(fireAtMilliseconds).inserted {
+          let fireDate = Date(timeIntervalSince1970: Double(fireAtMilliseconds) / 1000)
+          let fingerprint = sourceFingerprint(fireAtMilliseconds, title, memo, snoozeMinutes)
+          if reconcile, !legacyUsed, existing.contains(legacyID) {
+            let previous = UserDefaults.standard.string(forKey: fingerprintKey(legacyID))
+            if previous == fingerprint || (previous == nil && fireDate <= now) {
+              // Legacy countdowns have no source fingerprint. Preserve them on
+              // first reconciliation; explicit mutation still uses cancel.
+              legacyUsed = true
+              keep.insert(legacyID)
+              continue
+            }
           }
+          let id = alarmID(for: "\(eventID)#\(fireAtMilliseconds)")
+          if reconcile, existing.contains(id),
+             UserDefaults.standard.string(forKey: fingerprintKey(id)) == fingerprint {
+            keep.insert(id)
+            continue
+          }
+          if fireDate > now { pending.append((id, fireDate, fingerprint)) }
         }
-        guard fireDate > Date() else {
-          if call.method == "reconcile" { try? AlarmManager.shared.cancel(id: id) }
-          result(false)
-          return
+        for id in storedIDs(for: eventID).union([legacyID]) where !keep.contains(id) {
+          try? AlarmManager.shared.cancel(id: id)
+          UserDefaults.standard.removeObject(forKey: fingerprintKey(id))
         }
-        try? AlarmManager.shared.cancel(id: id)
-        let secondaryButton = AlarmButton(
-          text: "\(snoozeMinutes)분 후 다시 알림",
-          textColor: .white,
-          systemImageName: "clock.arrow.circlepath"
-        )
-        let alert: AlarmPresentation.Alert
-        if #available(iOS 26.1, *) {
-          alert = AlarmPresentation.Alert(
-            title: LocalizedStringResource(stringLiteral: displayTitle),
-            secondaryButton: secondaryButton,
-            secondaryButtonBehavior: .countdown
+        var scheduled = keep
+        for alarm in pending {
+          try? AlarmManager.shared.cancel(id: alarm.id)
+          _ = try await AlarmManager.shared.schedule(
+            id: alarm.id,
+            configuration: configuration(title: title, memo: visibleMemo, snoozeMinutes: snoozeMinutes, fireDate: alarm.fireDate)
           )
-        } else {
-          let stopButton = AlarmButton(
-            text: "중지",
-            textColor: .white,
-            systemImageName: "stop.circle"
-          )
-          alert = AlarmPresentation.Alert(
-            title: LocalizedStringResource(stringLiteral: displayTitle),
-            stopButton: stopButton,
-            secondaryButton: secondaryButton,
-            secondaryButtonBehavior: .countdown
-          )
+          UserDefaults.standard.set(alarm.fingerprint, forKey: fingerprintKey(alarm.id))
+          scheduled.insert(alarm.id)
+          setStoredIDs(scheduled, for: eventID)
         }
-        let countdown = AlarmPresentation.Countdown(
-          title: "다시 알림까지",
-          pauseButton: nil
-        )
-        let metadata = DailyAlarmMetadata(title: title, memo: visibleMemo)
-        let attributes = AlarmAttributes(
-          presentation: AlarmPresentation(alert: alert, countdown: countdown),
-          metadata: metadata,
-          tintColor: Color(red: 0.15, green: 0.39, blue: 0.92)
-        )
-        let configuration = AlarmManager.AlarmConfiguration(
-          countdownDuration: Alarm.CountdownDuration(
-            preAlert: nil,
-            postAlert: TimeInterval(snoozeMinutes * 60)
-          ),
-          schedule: .fixed(fireDate),
-          attributes: attributes,
-          sound: .default
-        )
-        _ = try await AlarmManager.shared.schedule(id: id, configuration: configuration)
-        UserDefaults.standard.set(fingerprint, forKey: fingerprintKey)
-        result(true)
+        setStoredIDs(scheduled, for: eventID)
+        result(!scheduled.isEmpty)
       } catch {
         result(FlutterError(code: "alarm_schedule_failed", message: error.localizedDescription, details: nil))
       }
+    }
+  }
+
+  @available(iOS 26.0, *)
+  private static func configuration(
+    title: String,
+    memo visibleMemo: String?,
+    snoozeMinutes: Int,
+    fireDate: Date
+  ) -> AlarmManager.AlarmConfiguration<DailyAlarmMetadata> {
+    let displayTitle = visibleMemo.map { "\(title)\n\($0)" } ?? title
+    let secondaryButton = AlarmButton(
+      text: "\(snoozeMinutes)분 후 다시 알림",
+      textColor: .white,
+      systemImageName: "clock.arrow.circlepath"
+    )
+    let alert: AlarmPresentation.Alert
+    if #available(iOS 26.1, *) {
+      alert = AlarmPresentation.Alert(
+        title: LocalizedStringResource(stringLiteral: displayTitle),
+        secondaryButton: secondaryButton,
+        secondaryButtonBehavior: .countdown
+      )
+    } else {
+      let stopButton = AlarmButton(
+        text: "중지",
+        textColor: .white,
+        systemImageName: "stop.circle"
+      )
+      alert = AlarmPresentation.Alert(
+        title: LocalizedStringResource(stringLiteral: displayTitle),
+        stopButton: stopButton,
+        secondaryButton: secondaryButton,
+        secondaryButtonBehavior: .countdown
+      )
+    }
+    let countdown = AlarmPresentation.Countdown(
+      title: "다시 알림까지",
+      pauseButton: nil
+    )
+    let metadata = DailyAlarmMetadata(title: title, memo: visibleMemo)
+    let attributes = AlarmAttributes(
+      presentation: AlarmPresentation(alert: alert, countdown: countdown),
+      metadata: metadata,
+      tintColor: Color(red: 0.15, green: 0.39, blue: 0.92)
+    )
+    return AlarmManager.AlarmConfiguration(
+      countdownDuration: Alarm.CountdownDuration(
+        preAlert: nil,
+        postAlert: TimeInterval(snoozeMinutes * 60)
+      ),
+      schedule: .fixed(fireDate),
+      attributes: attributes,
+      sound: .default
+    )
+  }
+
+  private static func sourceFingerprint(_ fireAtMilliseconds: Int64, _ title: String, _ memo: String?, _ snoozeMinutes: Int) -> String {
+    let data = (try? JSONSerialization.data(withJSONObject: [fireAtMilliseconds, title, memo ?? "", snoozeMinutes])) ?? Data()
+    return SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined()
+  }
+
+  private static func fingerprintKey(_ id: UUID) -> String { "daily.alarm.source.\(id.uuidString)" }
+
+  private static func idsKey(_ eventID: String) -> String { "daily.alarm.ids.\(eventID)" }
+
+  /// The per-time alarm IDs of an event (the legacy event-id UUID is implied).
+  private static func storedIDs(for eventID: String) -> Set<UUID> {
+    Set((UserDefaults.standard.stringArray(forKey: idsKey(eventID)) ?? []).compactMap(UUID.init(uuidString:)))
+  }
+
+  private static func setStoredIDs(_ ids: Set<UUID>, for eventID: String) {
+    if ids.isEmpty {
+      UserDefaults.standard.removeObject(forKey: idsKey(eventID))
+    } else {
+      UserDefaults.standard.set(ids.map(\.uuidString).sorted(), forKey: idsKey(eventID))
     }
   }
 
@@ -824,14 +885,13 @@ private final class DailyAlarmKit {
       result(FlutterError(code: "bad_arguments", message: "일정 알람 ID가 올바르지 않습니다.", details: nil))
       return
     }
-    let id = alarmID(for: eventID)
-    do {
-      try AlarmManager.shared.cancel(id: id)
-      result(nil)
-    } catch {
-      // AlarmKit removes completed one-shot alarms, so an absent ID is already cancelled.
-      result(nil)
+    // AlarmKit removes completed one-shot alarms, so an absent ID is already cancelled.
+    for id in storedIDs(for: eventID).union([alarmID(for: eventID)]) {
+      try? AlarmManager.shared.cancel(id: id)
+      UserDefaults.standard.removeObject(forKey: fingerprintKey(id))
     }
+    setStoredIDs([], for: eventID)
+    result(nil)
   }
 
   private static func cancelAll(_ result: @escaping FlutterResult) {

@@ -515,11 +515,11 @@ class LocalNotificationService implements NotificationService {
 
   Future<void> confirmAlarmScheduled(CalendarEvent event) async {
     if (!event.reminderMinutesBeforeList.contains(0)) return;
-    final alarmAt = event.alarmFireAt;
     // An alarm at a different time (offset, custom or all-day clock time) does
     // not replace the user's 0-minute reminder. Suppress only the exact
     // confirmed replacement.
-    if (alarmAt != _baseReminderTime(event, _settingsRepository.load())) return;
+    final base = _baseReminderTime(event, _settingsRepository.load());
+    if (!event.alarmFireTimes.contains(base)) return;
     final id = _settingsRepository.existingNotificationId(
       '${event.id}:reminder:0',
     );

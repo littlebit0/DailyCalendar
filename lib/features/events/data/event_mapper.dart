@@ -4,6 +4,7 @@ import '../../../core/sync/sync_version.dart';
 import '../../../core/lms/lms_models.dart';
 
 import 'app_database.dart';
+import '../domain/alarm_triggers.dart';
 import '../domain/calendar_event.dart';
 import '../domain/event_category.dart';
 import '../domain/recurrence_rule.dart';
@@ -15,6 +16,13 @@ extension EventRecordMapper on EventRecord {
     final mappedCategory = EventCategory.fromStored(
       category,
       colorValue: colorValue,
+    );
+    final alarmLists = acceptedAlarmLists(
+      base: alarmBaseTimeFor(startAt, allDay, allDayAlarmMinutes),
+      legacyMinutes: alarmMinutesBefore,
+      legacyCustomAt: alarmCustomAt,
+      minutes: alarmMinutesBeforeList,
+      customs: alarmCustomAtList,
     );
     final event = CalendarEvent(
       id: id,
@@ -62,6 +70,8 @@ extension EventRecordMapper on EventRecord {
       allDayAlarmMinutes: allDayAlarmMinutes,
       alarmMinutesBefore: alarmMinutesBefore,
       alarmCustomAt: alarmCustomAt,
+      alarmMinutesBeforeList: alarmLists.minutes,
+      alarmCustomAtList: alarmLists.customs,
       holiday: mappedCategory.id == EventCategory.holiday.id,
     ).normalizeAllDayBounds();
     return restoreSyncTimestamps(

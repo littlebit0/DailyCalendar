@@ -7,6 +7,7 @@ import 'package:crypto/crypto.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 
+import '../../features/events/domain/alarm_triggers.dart';
 import '../../features/events/domain/calendar_event.dart';
 import '../../features/events/domain/event_category.dart';
 import '../../features/events/domain/event_repository.dart';
@@ -2466,6 +2467,14 @@ class GoogleDriveSyncService implements SyncService {
       'allDayAlarmMinutes': normalized.allDayAlarmMinutes,
       'alarmMinutesBefore': normalized.alarmMinutesBefore,
       'alarmCustomAt': normalized.alarmCustomAt?.toUtc().toIso8601String(),
+      // Several alarm times (#784). The keys above keep the earliest one, so
+      // 4.1.0 and older still ring once; their rewrite drops these lists.
+      if (normalized.hasMultipleAlarmTimes) ...{
+        'alarmMinutesBeforeList': normalized.alarmMinutesBeforeList,
+        'alarmCustomAtList': encodeAlarmCustomList(
+          normalized.alarmCustomAtList,
+        ),
+      },
     };
   }
 
@@ -2490,6 +2499,20 @@ class GoogleDriveSyncService implements SyncService {
 
     final colorValue = json['colorValue'] as int?;
     final category = _categoryFromJson(json, colorValue);
+    final allDayAlarmMinutes = json['allDayAlarmMinutes'] as int? ?? 9 * 60;
+    final alarmMinutesBefore = json['alarmMinutesBefore'] as int? ?? 0;
+    final alarmCustomAt = _readDate(json['alarmCustomAt']);
+    final alarmLists = acceptedAlarmLists(
+      base: alarmBaseTimeFor(
+        startAt,
+        allDay,
+        allDayAlarmMinutes.clamp(0, 1439),
+      ),
+      legacyMinutes: alarmMinutesBefore,
+      legacyCustomAt: alarmCustomAt,
+      minutes: json['alarmMinutesBeforeList'],
+      customs: json['alarmCustomAtList'],
+    );
     return CalendarEvent(
       id: id,
       title: json['title'] as String? ?? 'New event',
@@ -2536,9 +2559,11 @@ class GoogleDriveSyncService implements SyncService {
       showDday: json['showDday'] as bool? ?? false,
       completed: json['completed'] as bool? ?? false,
       alarmEnabled: json['alarmEnabled'] as bool? ?? false,
-      allDayAlarmMinutes: json['allDayAlarmMinutes'] as int? ?? 9 * 60,
-      alarmMinutesBefore: json['alarmMinutesBefore'] as int? ?? 0,
-      alarmCustomAt: _readDate(json['alarmCustomAt']),
+      allDayAlarmMinutes: allDayAlarmMinutes,
+      alarmMinutesBefore: alarmMinutesBefore,
+      alarmCustomAt: alarmCustomAt,
+      alarmMinutesBeforeList: alarmLists.minutes,
+      alarmCustomAtList: alarmLists.customs,
     ).normalizeAllDayBounds();
   }
 

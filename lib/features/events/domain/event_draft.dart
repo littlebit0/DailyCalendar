@@ -1,3 +1,4 @@
+import 'alarm_triggers.dart';
 import 'calendar_event.dart';
 import 'event_category.dart';
 import 'recurrence_rule.dart';
@@ -23,9 +24,21 @@ class EventDraft {
     this.alarmEnabled = false,
     int allDayAlarmMinutes = 9 * 60,
     int alarmMinutesBefore = 0,
-    this.alarmCustomAt,
+    DateTime? alarmCustomAt,
+    List<int>? alarmMinutesBeforeList,
+    List<DateTime>? alarmCustomAtList,
   }) : allDayAlarmMinutes = allDayAlarmMinutes.clamp(0, 1439),
-       alarmMinutesBefore = alarmMinutesBefore < 0 ? 0 : alarmMinutesBefore,
+       _alarm = resolveAlarmTriggers(
+         base: alarmBaseTimeFor(
+           startAt,
+           allDay,
+           allDayAlarmMinutes.clamp(0, 1439),
+         ),
+         minutesBefore: alarmMinutesBefore,
+         customAt: alarmCustomAt,
+         minutesList: alarmMinutesBeforeList,
+         customList: alarmCustomAtList,
+       ),
        reminderMinutesBeforeList = normalizeReminderMinutes(
          reminderMinutesBeforeList ??
              (reminderMinutesBefore == null
@@ -52,8 +65,13 @@ class EventDraft {
   final bool showDday;
   final bool alarmEnabled;
   final int allDayAlarmMinutes;
-  final int alarmMinutesBefore;
-  final DateTime? alarmCustomAt;
+  final AlarmTriggers _alarm;
+
+  /// See [CalendarEvent.alarmMinutesBefore]: the earliest (legacy) trigger.
+  int get alarmMinutesBefore => _alarm.minutesBefore;
+  DateTime? get alarmCustomAt => _alarm.customAt;
+  List<int> get alarmMinutesBeforeList => _alarm.minutesList;
+  List<DateTime> get alarmCustomAtList => _alarm.customList;
 
   int? get reminderMinutesBefore => reminderMinutesBeforeList.isEmpty
       ? null
@@ -88,6 +106,8 @@ class EventDraft {
       allDayAlarmMinutes: allDayAlarmMinutes,
       alarmMinutesBefore: alarmMinutesBefore,
       alarmCustomAt: alarmCustomAt,
+      alarmMinutesBeforeList: alarmMinutesBeforeList,
+      alarmCustomAtList: alarmCustomAtList,
       holiday: category.id == EventCategory.holiday.id,
     ).normalizeAllDayBounds();
   }
@@ -112,6 +132,8 @@ class EventDraft {
       alarmMinutesBefore: alarmMinutesBefore,
       alarmCustomAt: alarmCustomAt,
       clearAlarmCustomAt: alarmCustomAt == null,
+      alarmMinutesBeforeList: alarmMinutesBeforeList,
+      alarmCustomAtList: alarmCustomAtList,
       holiday: category.id == EventCategory.holiday.id,
       clearMemo: memo == null,
       clearLocation: location == null,
@@ -140,6 +162,8 @@ class EventDraft {
     int? allDayAlarmMinutes,
     int? alarmMinutesBefore,
     DateTime? alarmCustomAt,
+    List<int>? alarmMinutesBeforeList,
+    List<DateTime>? alarmCustomAtList,
     bool clearAlarmCustomAt = false,
     bool clearMemo = false,
     bool clearLocation = false,
@@ -153,6 +177,11 @@ class EventDraft {
               (reminderMinutesBefore == null
                   ? this.reminderMinutesBeforeList
                   : <int>[reminderMinutesBefore]);
+    // A legacy single-trigger change replaces the list; otherwise keep it.
+    final keepAlarmLists =
+        alarmMinutesBefore == null && alarmCustomAt == null && !clearAlarmCustomAt;
+    final alarmListsChanged =
+        alarmMinutesBeforeList != null || alarmCustomAtList != null;
     return EventDraft(
       title: title ?? this.title,
       memo: clearMemo ? null : memo ?? this.memo,
@@ -175,6 +204,12 @@ class EventDraft {
       alarmCustomAt: clearAlarmCustomAt
           ? null
           : alarmCustomAt ?? this.alarmCustomAt,
+      alarmMinutesBeforeList: alarmListsChanged || keepAlarmLists
+          ? alarmMinutesBeforeList ?? this.alarmMinutesBeforeList
+          : null,
+      alarmCustomAtList: alarmListsChanged || keepAlarmLists
+          ? alarmCustomAtList ?? this.alarmCustomAtList
+          : null,
     );
   }
 }

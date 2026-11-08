@@ -59,10 +59,10 @@ class DailyAlarmService : Service() {
         .setPriority(NotificationCompat.PRIORITY_MAX)
         .setOngoing(true)
         .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
-        .setContentIntent(DailyAlarmScheduler.showIntent(this, alarm.eventId))
-        .setFullScreenIntent(DailyAlarmScheduler.showIntent(this, alarm.eventId), true)
-        .addAction(0, getString(R.string.alarm_stop), actionIntent(alarm.eventId, DailyAlarmScheduler.STOP))
-        .addAction(0, getString(R.string.alarm_snooze, alarm.snoozeMinutes), actionIntent(alarm.eventId, DailyAlarmScheduler.SNOOZE))
+        .setContentIntent(DailyAlarmScheduler.showIntent(this, alarm.id))
+        .setFullScreenIntent(DailyAlarmScheduler.showIntent(this, alarm.id), true)
+        .addAction(0, getString(R.string.alarm_stop), actionIntent(alarm.id, DailyAlarmScheduler.STOP))
+        .addAction(0, getString(R.string.alarm_snooze, alarm.snoozeMinutes), actionIntent(alarm.id, DailyAlarmScheduler.SNOOZE))
         .build()
 
     private fun actionIntent(id: String, action: String) = PendingIntent.getService(
