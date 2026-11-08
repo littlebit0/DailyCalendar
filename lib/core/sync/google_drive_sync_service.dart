@@ -781,21 +781,25 @@ class GoogleDriveSyncService implements SyncService {
           // already covered by the saved cursor. Fetch only those winners.
           var conflictRestored = false;
           _enterSyncStage(AnalyticsSyncStage.download);
-          if (remoteConflictIds.isNotEmpty) {
-            conflictRestored = await _applyDownloadedEvents(
-              await _downloadEventFiles(
-                headers,
-                await _listEventFilesForIds(headers, remoteConflictIds),
-              ),
-            );
+          final conflictEvents = remoteConflictIds.isEmpty
+              ? null
+              : await _downloadEventFiles(
+                  headers,
+                  await _listEventFilesForIds(headers, remoteConflictIds),
+                );
+          final remoteSettings =
+              request.includeSettings &&
+                  _settingsRepository.hasPendingSettingsSync
+              ? await _downloadRestorableSettings(headers)
+              : null;
+          _enterSyncStage(AnalyticsSyncStage.apply);
+          if (conflictEvents != null) {
+            conflictRestored = await _applyDownloadedEvents(conflictEvents);
           }
-          if (request.includeSettings &&
-              _settingsRepository.hasPendingSettingsSync) {
-            final remote = await _downloadRestorableSettings(headers);
-            if (remote != null) {
-              conflictRestored =
-                  await _applyDownloadedSettings(remote) || conflictRestored;
-            }
+          if (remoteSettings != null) {
+            conflictRestored =
+                await _applyDownloadedSettings(remoteSettings) ||
+                conflictRestored;
           }
           if (conflictRestored) await _refreshWidgets();
           completionMessage = restored || conflictRestored
