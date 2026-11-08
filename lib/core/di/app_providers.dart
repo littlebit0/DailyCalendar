@@ -366,7 +366,13 @@ const eventsInRangeRetention = Duration(minutes: 2);
 final eventsInRangeProvider = StreamProvider.autoDispose
     .family<List<CalendarEvent>, CalendarRange>((ref, range) {
       retainWhileRecentlyUsed(ref, eventsInRangeRetention);
-      final lms = ref.watch(lmsControllerProvider);
+      // Only visibility inputs rebuild the stream; LMS progress notifications
+      // must not recreate the query or show a loading state (#790).
+      ref.watch(
+        lmsControllerProvider.select(
+          (controller) => controller.sync.visibilityScope(),
+        ),
+      );
       final holidayConfiguration = ref.watch(
         appSettingsProvider.select(
           (settings) => (
@@ -394,6 +400,7 @@ final eventsInRangeProvider = StreamProvider.autoDispose
           .watch(eventRepositoryProvider)
           .watchEventsInRange(range.start, range.end)
           .map((events) {
+            final lms = ref.read(lmsControllerProvider);
             return [...events.where(lms.isEventVisible), ...holidays]
               ..sort((a, b) => a.startAt.compareTo(b.startAt));
           });
