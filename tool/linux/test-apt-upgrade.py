@@ -58,6 +58,10 @@ def main(bundle, package):
         try:
             run("sudo", "apt-get", "install", "-y", "--no-install-recommends", str(old))
             run("sudo", "systemctl", "disable", "--now", "dailycalendar-update.timer")
+            # postinst enables the timer with --now; on a runner booted more than
+            # OnBootSec ago it can start the updater at once. Stop that run too, or
+            # it holds the update lock and the checks below see "Daily is running".
+            run("sudo", "systemctl", "stop", "dailycalendar-update.service")
             run("sudo", "systemd-analyze", "verify", "/usr/lib/systemd/system/dailycalendar-update.service")
             assert installed() == "0.0.1-1"
             marker = pathlib.Path.home() / ".local/share/com.littlebit0.daily/daily.sqlite"
