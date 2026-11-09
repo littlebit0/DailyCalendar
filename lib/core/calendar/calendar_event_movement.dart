@@ -201,16 +201,25 @@ RecurrenceRule recurrenceRuleForMovedFuture({
   // The new series starts mid-period; keep the original week boundary so
   // later dates stay where they were.
   final weekStart = _rotatedWeekday(
-    rule.weekStart ?? base.startAt.weekday,
+    rule.weekStartFor(base.startAt),
     dayOffset,
   )!;
-  final newStartWeekday = shiftCalendarDateByDays(
-    occurrence.startAt,
-    dayOffset,
-  ).weekday;
-  return weekStart == newStartWeekday
-      ? shifted.copyWith(clearWeekStart: true)
-      : shifted.copyWith(weekStart: weekStart);
+  final newStart = _calendarDate(
+    shiftCalendarDateByDays(occurrence.startAt, dayOffset),
+  );
+  if (weekStart == newStart.weekday) {
+    return shifted.copyWith(clearWeekStart: true);
+  }
+  // Apps up to 4.1.0 drop weekStart but keep exclusions; the period's first
+  // day before the start restores the boundary (RecurrenceRule.weekStartFor).
+  final periodStart = shiftCalendarDateByDays(
+    newStart,
+    -((newStart.weekday - weekStart) % 7),
+  );
+  return shifted.copyWith(
+    weekStart: weekStart,
+    excludedDates: [periodStart, ...shifted.excludedDates],
+  );
 }
 
 int? _remainingRecurrenceCount(CalendarEvent base, CalendarEvent occurrence) {
@@ -223,10 +232,12 @@ int? _remainingRecurrenceCount(CalendarEvent base, CalendarEvent occurrence) {
     // before this one (excluded dates still use up the series count).
     final before = RecurrenceExpander().expand(
       base.copyWith(
+        // Clearing exclusions also drops a week-start marker; keep its week.
         recurrence: base.recurrence.copyWith(
           clearCount: true,
           clearUntil: true,
           excludedDates: const [],
+          weekStart: base.recurrence.weekStartFor(base.startAt),
         ),
       ),
       base.startAt,
