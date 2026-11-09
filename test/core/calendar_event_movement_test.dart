@@ -359,6 +359,43 @@ void main() {
       ]);
     });
 
+    test('횟수 있는 구버전 사본을 주 시작 요일 회차에서 다시 나눠도 남은 횟수가 맞다', () {
+      final base = _event(
+        start: DateTime(2026, 1, 5, 9),
+        end: DateTime(2026, 1, 5, 10),
+        recurrence: const RecurrenceRule(
+          frequency: RecurrenceFrequency.weekly,
+          interval: 2,
+          count: 6,
+          byDay: ['MO', 'FR'],
+        ),
+      );
+      final legacy = splitAndLegacySave(base, DateTime(2026, 1, 9, 9));
+      final monday = legacy.copyWith(
+        startAt: DateTime(2026, 1, 19, 9),
+        endAt: DateTime(2026, 1, 19, 10),
+      );
+      final again = recurrenceRuleForMovedFuture(
+        base: legacy,
+        occurrence: monday,
+        targetDate: DateTime(2026, 1, 19),
+      );
+      expect(again.count, 4);
+      expect(
+        starts(
+          monday.copyWith(recurrence: again),
+          DateTime(2026, 1, 1),
+          DateTime(2026, 3, 1),
+        ),
+        [
+          DateTime(2026, 1, 19, 9),
+          DateTime(2026, 1, 23, 9),
+          DateTime(2026, 2, 2, 9),
+          DateTime(2026, 2, 6, 9),
+        ],
+      );
+    });
+
     test('월말: 1/29(목) 시작 격주 목·월을 2/2(월)부터 나눔', () {
       final base = _event(
         start: DateTime(2026, 1, 29, 9),

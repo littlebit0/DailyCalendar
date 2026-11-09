@@ -232,10 +232,12 @@ int? _remainingRecurrenceCount(CalendarEvent base, CalendarEvent occurrence) {
     // before this one (excluded dates still use up the series count).
     final before = RecurrenceExpander().expand(
       base.copyWith(
+        // Clearing exclusions also drops a week-start marker; keep its week.
         recurrence: base.recurrence.copyWith(
           clearCount: true,
           clearUntil: true,
           excludedDates: const [],
+          weekStart: base.recurrence.weekStartFor(base.startAt),
         ),
       ),
       base.startAt,
