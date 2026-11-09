@@ -209,6 +209,31 @@ void main() {
     expect(closed, isFalse);
   });
 
+  for (final width in [320.0, 360.0, 430.0]) {
+    testWidgets('editor actions stay on one row at width $width', (
+      tester,
+    ) async {
+      tester.view.physicalSize = Size(width, 760);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+      await _open(
+        tester,
+        EventEditorDialog(
+          initialDate: DateTime(2026, 10, 30),
+          onSaveTemplate: (_) async {},
+        ),
+      );
+      expect(tester.takeException(), isNull);
+      final template = tester.getCenter(find.text('템플릿으로 저장'));
+      final cancel = tester.getCenter(find.text('취소'));
+      final save = tester.getCenter(find.text('저장'));
+      expect(cancel.dy, closeTo(template.dy, 1));
+      expect(save.dy, closeTo(template.dy, 1));
+      expect(template.dx, lessThan(cancel.dx));
+      expect(cancel.dx, lessThan(save.dx));
+    });
+  }
+
   testWidgets('an all-day span saved from the editor keeps every day', (
     tester,
   ) async {
