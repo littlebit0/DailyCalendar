@@ -395,6 +395,152 @@ void main() {
     });
   });
 
+  group('alarm lists across a 4.1.0 edit (#819)', () {
+    final uploads = <Map<String, Object?>>[];
+    late GoogleDriveSyncService lastService;
+    late _MemoryEventRepository lastRepository;
+    Future<CalendarEvent?> restore({
+      required CalendarEvent local,
+      required Map<String, Object?> remoteAlarm,
+      bool? remoteOvernight,
+    }) async {
+      uploads.clear();
+      SharedPreferences.setMockInitialValues({});
+      final preferences = await SharedPreferences.getInstance();
+      final repository = _MemoryEventRepository();
+      await repository.save(local);
+      final base = _eventFileJson(
+        id: 'alarms',
+        title: '구버전에서 고친 제목',
+        startAt: '2026-06-01T00:00:00.000Z',
+        endAt: '2026-06-02T00:00:00.000Z',
+        updatedAt: '2026-06-10T00:00:00.000Z',
+        showOvernightOnFollowingDays: remoteOvernight,
+      );
+      final file = {
+        ...base,
+        'event': {...base['event'] as Map<String, Object?>, ...remoteAlarm},
+      };
+      final client = _versionedClient((request) async {
+        if (request.method == 'GET' && request.url.path == '/drive/v3/files') {
+          if ((request.url.queryParameters['q'] ?? '').contains(
+            'daily-sync-v2-event-',
+          )) {
+            return _driveFiles([
+              {'id': 'alarms-file', 'name': 'daily-sync-v2-event-alarms.json'},
+            ]);
+          }
+          return _driveFiles([]);
+        }
+        if (request.method == 'GET' &&
+            request.url.path == '/drive/v3/files/alarms-file') {
+          return _jsonResponse(file);
+        }
+        if (request.method == 'PUT' &&
+            request.url.path == '/upload/drive/v2/files/alarms-file') {
+          uploads.add(jsonDecode(request.body) as Map<String, Object?>);
+          return _jsonResponse({'id': 'alarms-file'});
+        }
+        return http.Response('unexpected ${request.method}', 500);
+      });
+      final service = _service(
+        repository: repository,
+        notificationService: _FakeNotificationService(),
+        preferences: preferences,
+        httpClient: client,
+      );
+      addTearDown(service.dispose);
+      lastService = service;
+      lastRepository = repository;
+      await service.restoreNow();
+      return repository.findById('alarms');
+    }
+
+    final customAt = DateTime(2026, 5, 31, 20);
+    // Earliest trigger is the custom time, so 4.1.0 keeps only that one.
+    CalendarEvent local({bool enabled = true}) =>
+        _event(
+          id: 'alarms',
+          title: '로컬 제목',
+          startAt: DateTime(2026, 6, 1),
+          endAt: DateTime(2026, 6, 2),
+          updatedAt: DateTime.utc(2026, 6, 1),
+        ).copyWith(
+          alarmEnabled: enabled,
+          alarmMinutesBeforeList: const [0, 10, 60],
+          alarmCustomAtList: [customAt],
+        );
+    Map<String, Object?> legacyAlarm({
+      bool enabled = true,
+      int minutes = 0,
+      DateTime? custom,
+    }) => {
+      'alarmEnabled': enabled,
+      'allDayAlarmMinutes': 9 * 60,
+      'alarmMinutesBefore': minutes,
+      'alarmCustomAt': custom?.toUtc().toIso8601String(),
+    };
+
+    test(
+      'a 4.1.0 title edit keeps this device\'s alarm list and re-uploads',
+      () async {
+        final before = local();
+        expect(before.alarmCustomAt, customAt);
+        final restored = await restore(
+          local: before,
+          remoteAlarm: legacyAlarm(custom: customAt),
+        );
+        expect(restored!.title, '구버전에서 고친 제목');
+        expect(restored.alarmMinutesBeforeList, [0, 10, 60]);
+        expect(restored.alarmCustomAtList, [customAt]);
+        expect(restored.alarmFireTimes, before.alarmFireTimes);
+        expect(restored.syncStatus, 'pending');
+
+        await lastService.backupNow(eventIds: {'alarms'});
+        final uploaded = uploads.single['event'] as Map<String, Object?>;
+        expect(uploaded['title'], '구버전에서 고친 제목');
+        expect(uploaded['alarmMinutesBeforeList'], [0, 10, 60]);
+        expect(uploaded['alarmCustomAtList'], [
+          customAt.toUtc().toIso8601String(),
+        ]);
+        expect(uploaded['alarmCustomAt'], customAt.toUtc().toIso8601String());
+        final synced = (await lastRepository.findById('alarms'))!;
+        expect(synced.syncStatus, 'synced');
+        expect(synced.alarmFireTimes, before.alarmFireTimes);
+      },
+    );
+
+    test('a 4.1.0 edit of the single alarm still replaces the list', () async {
+      final restored = await restore(
+        local: local(),
+        remoteAlarm: legacyAlarm(minutes: 30),
+      );
+      expect(restored!.alarmMinutesBeforeList, [30]);
+      expect(restored.alarmCustomAtList, isEmpty);
+      expect(restored.syncStatus, 'synced');
+    });
+
+    test('a 4.1.0 edit that turns the alarm off is kept as-is', () async {
+      final restored = await restore(
+        local: local(),
+        remoteAlarm: legacyAlarm(enabled: false, custom: customAt),
+      );
+      expect(restored!.alarmEnabled, isFalse);
+      expect(restored.hasMultipleAlarmTimes, isFalse);
+      expect(restored.syncStatus, 'synced');
+    });
+
+    test('a 4.1.1 file reduced to one alarm is not refilled', () async {
+      final restored = await restore(
+        local: local(),
+        remoteAlarm: legacyAlarm(custom: customAt),
+        remoteOvernight: true,
+      );
+      expect(restored!.alarmFireTimes, [customAt]);
+      expect(restored.syncStatus, 'synced');
+    });
+  });
+
   test('restore sync downloads v2 event files without uploading', () async {
     SharedPreferences.setMockInitialValues({});
     final preferences = await SharedPreferences.getInstance();
@@ -833,121 +979,114 @@ void main() {
     },
   );
 
-  test(
-    'several alarm times round-trip through the v2 event file and older '
-    'clients keep the earliest one',
-    () async {
-      SharedPreferences.setMockInitialValues({});
-      final preferences = await SharedPreferences.getInstance();
-      final repository = _MemoryEventRepository();
-      final start = DateTime(2026, 12, 3, 14);
-      final customAt = DateTime(2026, 12, 2, 21, 30);
-      final changed = CalendarEvent(
-        id: 'multi-alarm',
-        title: '발표',
-        startAt: start,
-        endAt: start.add(const Duration(hours: 1)),
-        allDay: false,
-        category: EventCategory.basic,
-        colorValue: EventCategory.basic.colorValue,
-        createdAt: DateTime.utc(2026, 11, 1),
-        updatedAt: DateTime.utc(2026, 11, 8),
-        syncStatus: 'pending',
-        alarmEnabled: true,
-        alarmMinutesBeforeList: const [0, 10, 30],
-        alarmCustomAtList: [customAt],
-      );
-      await repository.save(changed);
+  test('several alarm times round-trip through the v2 event file and older '
+      'clients keep the earliest one', () async {
+    SharedPreferences.setMockInitialValues({});
+    final preferences = await SharedPreferences.getInstance();
+    final repository = _MemoryEventRepository();
+    final start = DateTime(2026, 12, 3, 14);
+    final customAt = DateTime(2026, 12, 2, 21, 30);
+    final changed = CalendarEvent(
+      id: 'multi-alarm',
+      title: '발표',
+      startAt: start,
+      endAt: start.add(const Duration(hours: 1)),
+      allDay: false,
+      category: EventCategory.basic,
+      colorValue: EventCategory.basic.colorValue,
+      createdAt: DateTime.utc(2026, 11, 1),
+      updatedAt: DateTime.utc(2026, 11, 8),
+      syncStatus: 'pending',
+      alarmEnabled: true,
+      alarmMinutesBeforeList: const [0, 10, 30],
+      alarmCustomAtList: [customAt],
+    );
+    await repository.save(changed);
 
-      Map<String, Object?>? uploaded;
-      var serve = <String, Map<String, Object?>>{};
-      final httpClient = _versionedClient((request) async {
-        if (request.method == 'GET' && request.url.path == '/drive/v3/files') {
-          final query = request.url.queryParameters['q'] ?? '';
-          if (query.contains('daily-sync-v2-event-multi-alarm.json')) {
-            return _driveFiles([
-              {'id': 'remote', 'name': 'daily-sync-v2-event-multi-alarm.json'},
-            ]);
-          }
+    Map<String, Object?>? uploaded;
+    var serve = <String, Map<String, Object?>>{};
+    final httpClient = _versionedClient((request) async {
+      if (request.method == 'GET' && request.url.path == '/drive/v3/files') {
+        final query = request.url.queryParameters['q'] ?? '';
+        if (query.contains('daily-sync-v2-event-multi-alarm.json')) {
           return _driveFiles([
-            for (final id in serve.keys)
-              {'id': id, 'name': 'daily-sync-v2-event-$id.json'},
+            {'id': 'remote', 'name': 'daily-sync-v2-event-multi-alarm.json'},
           ]);
         }
-        if (request.method == 'GET' &&
-            request.url.path == '/drive/v3/files/remote') {
-          return _jsonResponse(
-            _eventFileJson(
-              id: changed.id,
-              title: '이전',
-              startAt: changed.startAt.toIso8601String(),
-              endAt: changed.endAt.toIso8601String(),
-              updatedAt: '2025-01-01T00:00:00.000Z',
-            ),
-          );
-        }
-        if (request.method == 'GET' &&
-            request.url.path.startsWith('/drive/v3/files/')) {
-          final id = request.url.pathSegments.last;
-          return _jsonResponse({
-            'schemaVersion': 2,
-            'type': 'event',
-            'event': serve[id],
-          });
-        }
-        if (request.method == 'PUT') {
-          uploaded =
-              (jsonDecode(request.body) as Map<String, Object?>)['event']
-                  as Map<String, Object?>;
-          return _jsonResponse({'id': 'remote'});
-        }
-        return http.Response('unexpected ${request.url}', 500);
-      });
-      final service = _service(
-        repository: repository,
-        notificationService: _FakeNotificationService(),
-        preferences: preferences,
-        httpClient: httpClient,
-      );
-      addTearDown(service.dispose);
+        return _driveFiles([
+          for (final id in serve.keys)
+            {'id': id, 'name': 'daily-sync-v2-event-$id.json'},
+        ]);
+      }
+      if (request.method == 'GET' &&
+          request.url.path == '/drive/v3/files/remote') {
+        return _jsonResponse(
+          _eventFileJson(
+            id: changed.id,
+            title: '이전',
+            startAt: changed.startAt.toIso8601String(),
+            endAt: changed.endAt.toIso8601String(),
+            updatedAt: '2025-01-01T00:00:00.000Z',
+          ),
+        );
+      }
+      if (request.method == 'GET' &&
+          request.url.path.startsWith('/drive/v3/files/')) {
+        final id = request.url.pathSegments.last;
+        return _jsonResponse({
+          'schemaVersion': 2,
+          'type': 'event',
+          'event': serve[id],
+        });
+      }
+      if (request.method == 'PUT') {
+        uploaded =
+            (jsonDecode(request.body) as Map<String, Object?>)['event']
+                as Map<String, Object?>;
+        return _jsonResponse({'id': 'remote'});
+      }
+      return http.Response('unexpected ${request.url}', 500);
+    });
+    final service = _service(
+      repository: repository,
+      notificationService: _FakeNotificationService(),
+      preferences: preferences,
+      httpClient: httpClient,
+    );
+    addTearDown(service.dispose);
 
-      await service.backupNow(eventIds: {changed.id});
-      final body = uploaded!;
-      // The legacy keys hold the earliest trigger (the custom time).
-      expect(body['alarmCustomAt'], customAt.toUtc().toIso8601String());
-      expect(body['alarmMinutesBefore'], 0);
-      expect(body['alarmMinutesBeforeList'], [0, 10, 30]);
-      expect(body['alarmCustomAtList'], [customAt.toUtc().toIso8601String()]);
+    await service.backupNow(eventIds: {changed.id});
+    final body = uploaded!;
+    // The legacy keys hold the earliest trigger (the custom time).
+    expect(body['alarmCustomAt'], customAt.toUtc().toIso8601String());
+    expect(body['alarmMinutesBefore'], 0);
+    expect(body['alarmMinutesBeforeList'], [0, 10, 30]);
+    expect(body['alarmCustomAtList'], [customAt.toUtc().toIso8601String()]);
 
-      // A 4.1.0 rewrite has no lists; one that kept the lists but changed
-      // only the legacy keys also wins with its single alarm.
-      final olderRewrite = Map<String, Object?>.from(body)
-        ..remove('alarmMinutesBeforeList')
-        ..remove('alarmCustomAtList')
-        ..['id'] = 'older';
-      final legacyEdit = Map<String, Object?>.from(body)
-        ..['id'] = 'edited'
-        ..['alarmCustomAt'] = null
-        ..['alarmMinutesBefore'] = 60;
-      serve = {
-        'multi-alarm': body,
-        'older': olderRewrite,
-        'edited': legacyEdit,
-      };
-      final events = {
-        for (final event in (await service.downloadEventsForMigration())!)
-          event.id: event,
-      };
+    // A 4.1.0 rewrite has no lists; one that kept the lists but changed
+    // only the legacy keys also wins with its single alarm.
+    final olderRewrite = Map<String, Object?>.from(body)
+      ..remove('alarmMinutesBeforeList')
+      ..remove('alarmCustomAtList')
+      ..['id'] = 'older';
+    final legacyEdit = Map<String, Object?>.from(body)
+      ..['id'] = 'edited'
+      ..['alarmCustomAt'] = null
+      ..['alarmMinutesBefore'] = 60;
+    serve = {'multi-alarm': body, 'older': olderRewrite, 'edited': legacyEdit};
+    final events = {
+      for (final event in (await service.downloadEventsForMigration())!)
+        event.id: event,
+    };
 
-      final restored = events['multi-alarm']!;
-      expect(restored.alarmMinutesBeforeList, [0, 10, 30]);
-      expect(restored.alarmCustomAtList, [customAt]);
-      expect(restored.alarmFireTimes, changed.alarmFireTimes);
-      expect(events['older']!.alarmFireTimes, [customAt]);
-      expect(events['edited']!.alarmMinutesBeforeList, [60]);
-      expect(events['edited']!.alarmCustomAtList, isEmpty);
-    },
-  );
+    final restored = events['multi-alarm']!;
+    expect(restored.alarmMinutesBeforeList, [0, 10, 30]);
+    expect(restored.alarmCustomAtList, [customAt]);
+    expect(restored.alarmFireTimes, changed.alarmFireTimes);
+    expect(events['older']!.alarmFireTimes, [customAt]);
+    expect(events['edited']!.alarmMinutesBeforeList, [60]);
+    expect(events['edited']!.alarmCustomAtList, isEmpty);
+  });
 
   test(
     'migration download reads Todo completion without mutating local data',
@@ -3957,10 +4096,13 @@ void _latestMergeTests() {
             'daily-sync-v2-event-a.json',
             file('a', 'Drive A', '2026-09-15T00:00:00.000Z'),
           );
-          Future<int> cachedRows() async => (await database
-                  .customSelect('SELECT file_id FROM sync_remote_event_files')
-                  .get())
-              .length;
+          Future<int> cachedRows() async =>
+              (await database
+                      .customSelect(
+                        'SELECT file_id FROM sync_remote_event_files',
+                      )
+                      .get())
+                  .length;
 
           expect(await service.downloadEventsForMigration(), hasLength(1));
           expect(mediaDownloads(), 1);

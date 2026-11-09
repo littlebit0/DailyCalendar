@@ -1167,14 +1167,16 @@ class GoogleDriveSyncService implements SyncService {
           event = event.copyWith(lms: local!.lms);
           repairedMetadataIds.add(event.id);
         }
-        // A 4.1.0-or-older writer drops the per-event display choice; keep
-        // this device's value and re-upload it instead of resetting to on.
-        final adopted = record.withLocalOvernightDisplay(local).event!;
-        if (adopted.showOvernightOnFollowingDays !=
-            event.showOvernightOnFollowingDays) {
-          event = event.copyWith(
-            showOvernightOnFollowingDays: adopted.showOvernightOnFollowingDays,
-          );
+        // A 4.1.0-or-older writer drops the per-event display choice and the
+        // alarm lists (#819); keep this device's values and re-upload them.
+        final adopted = record.withLocalLegacyFields(local).event!;
+        final repaired = event.copyWith(
+          showOvernightOnFollowingDays: adopted.showOvernightOnFollowingDays,
+          alarmMinutesBeforeList: adopted.alarmMinutesBeforeList,
+          alarmCustomAtList: adopted.alarmCustomAtList,
+        );
+        if (!_sameEventSnapshot(repaired, event)) {
+          event = repaired;
           repairedMetadataIds.add(event.id);
         }
         if (_canSyncEvent(event)) events.add(event);
@@ -2030,7 +2032,7 @@ class GoogleDriveSyncService implements SyncService {
           if (marker.compareTo(candidate) > 0) candidate = marker;
         }
         // Compare a 4.1.0-or-older file as restore applies it, with this
-        // device's following-day value, so the repaired event can upload.
+        // device's following-day value and alarm lists, so it can upload.
         final remote = (await _mapSequentially(
           files,
           (file) => _downloadEventFile(
@@ -2039,7 +2041,7 @@ class GoogleDriveSyncService implements SyncService {
             requireVersion: true,
             md5Checksum: file.md5Checksum,
           ),
-        )).map((item) => item.withLocalOvernightDisplay(local)).toList();
+        )).map((item) => item.withLocalLegacyFields(local)).toList();
         for (final item in remote) {
           if (item.event?.lms != null && !_canSyncEvent(item.event!) ||
               item.deletion?.lmsOwnerId != null &&
@@ -2072,7 +2074,8 @@ class GoogleDriveSyncService implements SyncService {
               // A file without the key that reads differently still needs it.
               if (item.compareTo(candidate) == 0 &&
                   (item.overnightDisplayKnown ||
-                      candidate.event?.showOvernightOnFollowingDays != false)) {
+                      candidate.event?.showOvernightOnFollowingDays != false &&
+                          candidate.event?.hasMultipleAlarmTimes != true)) {
                 continue;
               }
               await _cacheUploadedEventFile(
@@ -3050,6 +3053,37 @@ class _DownloadedSettings {
   final String? etag;
 }
 
+/// [remote] (from a 4.1.0-or-older writer) with [local]'s several alarm
+/// times, or null when [remote] changed the alarm or [local] has one.
+/// The approved single-alarm overwrite (#798) still applies otherwise.
+CalendarEvent? _withUnchangedLegacyAlarmLists(
+  CalendarEvent remote,
+  CalendarEvent? local,
+) {
+  if (local == null ||
+      !local.hasMultipleAlarmTimes ||
+      remote.hasMultipleAlarmTimes ||
+      remote.alarmEnabled != local.alarmEnabled ||
+      !_sameLegacyAlarm(remote, local)) {
+    return null;
+  }
+  final kept = remote.copyWith(
+    alarmMinutesBeforeList: local.alarmMinutesBeforeList,
+    alarmCustomAtList: local.alarmCustomAtList,
+  );
+  // A moved start can make another trigger the earliest; then 4.1.0's single
+  // alarm would no longer match, so take its edit as written.
+  return _sameLegacyAlarm(kept, remote) ? kept : null;
+}
+
+bool _sameLegacyAlarm(CalendarEvent left, CalendarEvent right) {
+  // SQLite keeps the legacy custom time in whole seconds.
+  int? seconds(DateTime? value) =>
+      value == null ? null : value.millisecondsSinceEpoch ~/ 1000;
+  return left.alarmMinutesBefore == right.alarmMinutesBefore &&
+      seconds(left.alarmCustomAt) == seconds(right.alarmCustomAt);
+}
+
 class _DownloadedEvent {
   const _DownloadedEvent({
     this.event,
@@ -3066,20 +3100,19 @@ class _DownloadedEvent {
   /// False when the Drive file has no `showOvernightOnFollowingDays` key.
   final bool overnightDisplayKnown;
 
-  /// This record with [local]'s following-day value when the file lacks it.
-  _DownloadedEvent withLocalOvernightDisplay(CalendarEvent? local) {
+  /// This record with [local]'s following-day value and alarm lists when a
+  /// 4.1.0-or-older writer (no following-day key) dropped them.
+  _DownloadedEvent withLocalLegacyFields(CalendarEvent? local) {
     final remoteEvent = event;
-    if (overnightDisplayKnown ||
-        remoteEvent == null ||
-        local == null ||
-        remoteEvent.showOvernightOnFollowingDays ==
-            local.showOvernightOnFollowingDays) {
+    if (overnightDisplayKnown || remoteEvent == null || local == null) {
       return this;
     }
+    var adopted = remoteEvent.copyWith(
+      showOvernightOnFollowingDays: local.showOvernightOnFollowingDays,
+    );
+    adopted = _withUnchangedLegacyAlarmLists(adopted, local) ?? adopted;
     return _DownloadedEvent(
-      event: remoteEvent.copyWith(
-        showOvernightOnFollowingDays: local.showOvernightOnFollowingDays,
-      ),
+      event: adopted,
       sourceDeviceId: sourceDeviceId,
       etag: etag,
       fileId: fileId,
