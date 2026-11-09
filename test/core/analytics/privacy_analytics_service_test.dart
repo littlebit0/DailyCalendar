@@ -190,6 +190,101 @@ void main() {
     expect(service.pendingEventCount, 0);
   });
 
+  Future<void> seedScreenAndStagedSync() async {
+    final now = DateTime.now().toUtc();
+    final sync = AnalyticsRecord.sync(
+      AnalyticsSyncOperation.backup,
+      trigger: AnalyticsTrigger.manual,
+      outcome: AnalyticsOutcome.succeeded,
+      durationMs: 900,
+      stageDurationsMs: const {AnalyticsSyncStage.backup: 100},
+    );
+    // Both events already queued, so they go out together in one batch.
+    SharedPreferences.setMockInitialValues({
+      'anonymousAnalyticsEnabled': true,
+      'anonymousAnalyticsQueueV1': jsonEncode([
+        {
+          'eventId': 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',
+          'name': 'screen_view',
+          'occurredAt': now.toIso8601String(),
+          'attributes': {'screen': 'search'},
+        },
+        {
+          'eventId': 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb',
+          'name': sync.name.wireName,
+          'occurredAt': now.toIso8601String(),
+          'attributes': sync.attributes,
+        },
+      ]),
+    });
+  }
+
+  test(
+    'a batch rejected by an older receiver keeps the events it accepts (#818)',
+    () async {
+      await seedScreenAndStagedSync();
+      final preferences = await SharedPreferences.getInstance();
+      const stageKeys = {'backupMs', 'changesMs', 'downloadMs', 'applyMs'};
+      final accepted = <String>[];
+      var posts = 0;
+      final service = PrivacyAnalyticsService(
+        preferences: preferences,
+        endpoint: Uri.parse('http://localhost/v1/events'),
+        environmentLoader: () async => environment,
+        // v4.1.0 receiver: one unknown attribute rejects the whole batch.
+        httpClient: MockClient((request) async {
+          posts += 1;
+          final body = jsonDecode(request.body) as Map<String, Object?>;
+          final events = (body['events'] as List).cast<Map<String, Object?>>();
+          final unknown = events.any(
+            (event) => (event['attributes'] as Map).keys.any(stageKeys.contains),
+          );
+          if (unknown) {
+            return http.Response('{"error":"invalid_schema"}', 400);
+          }
+          accepted.addAll(events.map((event) => event['name'] as String));
+          return http.Response('{"accepted":${events.length}}', 202);
+        }),
+      );
+      addTearDown(service.dispose);
+
+      await service.initialize();
+      expect(service.pendingEventCount, 2);
+      await service.flush();
+
+      expect(accepted, ['screen_view']);
+      expect(service.pendingEventCount, 0);
+      expect(posts, 3, reason: 'batch, then each half');
+    },
+  );
+
+  test(
+    'a transient failure while splitting a rejected batch keeps every event',
+    () async {
+      await seedScreenAndStagedSync();
+      final preferences = await SharedPreferences.getInstance();
+      var posts = 0;
+      final service = PrivacyAnalyticsService(
+        preferences: preferences,
+        endpoint: Uri.parse('http://localhost/v1/events'),
+        environmentLoader: () async => environment,
+        httpClient: MockClient((request) async {
+          posts += 1;
+          return posts == 1
+              ? http.Response('{"error":"invalid_schema"}', 400)
+              : http.Response('{}', 503);
+        }),
+      );
+      addTearDown(service.dispose);
+
+      await service.initialize();
+      await service.flush();
+
+      expect(posts, 2, reason: 'stop splitting once the receiver is down');
+      expect(service.pendingEventCount, 2);
+    },
+  );
+
   test('unsafe free-text attributes are rejected by the schema', () {
     final unsafe = {
       'eventId': 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',

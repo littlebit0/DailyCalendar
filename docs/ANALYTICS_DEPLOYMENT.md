@@ -304,3 +304,24 @@ fingerprint in the issue body.
 Deploying a receiver change: copy `tool/analytics_receiver.py` to
 `~/.local/lib/daily-analytics/` on the Ubuntu host and run
 `systemctl --user restart daily-analytics.service`.
+
+### Schema changes: deploy the receiver first
+
+The receiver validates every event in a batch and answers
+`400 {"error":"invalid_schema"}` for the whole batch when one event carries an
+attribute it does not know (for example the `backupMs`, `changesMs`,
+`downloadMs` and `applyMs` sync stage times from #792 against the v4.1.0
+receiver, #818). Since #818 the app splits a rejected batch and resends the
+halves, so only the events the receiver actually refuses are dropped. Events
+with the new attribute are still lost until the receiver accepts them.
+
+Before publishing an app build that adds an analytics event or attribute:
+
+1. Deploy `tool/analytics_receiver.py` from the release commit as described above.
+2. On the Ubuntu host, confirm the deployed copy matches the repository:
+   `sha256sum ~/.local/lib/daily-analytics/analytics_receiver.py` against
+   `shasum -a 256 tool/analytics_receiver.py` at the release commit.
+3. Run `python3 -m unittest test/tool/analytics_receiver_test.py`; it includes a
+   batch mixing the new attribute with older events.
+4. After the release, check that the day's aggregate counts both the new event
+   and ordinary events such as `screen_view`.
