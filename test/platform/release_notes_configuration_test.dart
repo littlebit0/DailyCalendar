@@ -22,7 +22,7 @@ void main() {
     final notes = source('docs/RELEASE_NOTES_4.1.0.md');
 
     expect(notes, contains('모든 기기를 4.1.0 이상으로 업데이트'));
-    expect(notes, contains('일정·설정 복원도 함께 중단'));
-    expect(notes, contains('지워지지 않고'));
+    expect(notes, contains('일정·설정 복원도 함께 멈춥니다'));
+    expect(notes, contains('지우지 않고'));
   });
 }
