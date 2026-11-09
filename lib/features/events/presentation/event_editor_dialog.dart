@@ -759,34 +759,59 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
         ),
       ),
       actions: [
-        if (_canSaveTemplate)
-          TextButton.icon(
-            onPressed: _quickAdding ? null : _saveAsTemplate,
-            icon: const Icon(Icons.bookmark_add_outlined, size: 19),
-            label: Text(context.tr('템플릿으로 저장')),
-          ),
-        OutlinedButton(
-          onPressed: () => Navigator.of(context).pop(),
-          style: OutlinedButton.styleFrom(
-            minimumSize: const Size(88, 44),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
+        // One row: AlertDialog stacks actions vertically once they overflow,
+        // which wasted the bottom of the editor on phones.
+        Row(
+          children: [
+            // The template button takes the leftover width and shortens its
+            // label first; cancel and save keep their full size.
+            Expanded(
+              child: _canSaveTemplate
+                  ? Align(
+                      alignment: AlignmentDirectional.centerStart,
+                      child: TextButton.icon(
+                        onPressed: _quickAdding ? null : _saveAsTemplate,
+                        icon: const Icon(Icons.bookmark_add_outlined, size: 19),
+                        label: Text(
+                          context.tr('템플릿으로 저장'),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ),
+                        style: TextButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                        ),
+                      ),
+                    )
+                  : const SizedBox.shrink(),
             ),
-          ),
-          child: Text(context.tr('취소')),
-        ),
-        FilledButton.icon(
-          onPressed: _quickAdding ? null : _submit,
-          icon: const Icon(Icons.check_rounded, size: 19),
-          label: Text(context.tr('저장')),
-          style: FilledButton.styleFrom(
-            backgroundColor: DailyUi.primary,
-            foregroundColor: Colors.white,
-            minimumSize: const Size(104, 44),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
+            const SizedBox(width: 8),
+            OutlinedButton(
+              onPressed: () => Navigator.of(context).pop(),
+              style: OutlinedButton.styleFrom(
+                minimumSize: const Size(64, 44),
+                padding: const EdgeInsets.symmetric(horizontal: 14),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              child: Text(context.tr('취소')),
             ),
-          ),
+            const SizedBox(width: 8),
+            FilledButton.icon(
+              onPressed: _quickAdding ? null : _submit,
+              icon: const Icon(Icons.check_rounded, size: 19),
+              label: Text(context.tr('저장')),
+              style: FilledButton.styleFrom(
+                backgroundColor: DailyUi.primary,
+                foregroundColor: Colors.white,
+                minimumSize: const Size(72, 44),
+                padding: const EdgeInsets.symmetric(horizontal: 14),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+            ),
+          ],
         ),
       ],
     );
@@ -1257,7 +1282,8 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
           _startTime.minute,
         );
 
-  bool get _onlyBaseAlarm => _alarmMinutes.length == 1 && _alarmMinutes.first == 0;
+  bool get _onlyBaseAlarm =>
+      _alarmMinutes.length == 1 && _alarmMinutes.first == 0;
 
   /// Every selected fire time, earliest first.
   List<DateTime> get _alarmFireTimes => alarmFireTimesOf(
