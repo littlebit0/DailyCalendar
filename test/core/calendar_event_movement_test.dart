@@ -279,6 +279,146 @@ void main() {
     expect(shiftRecurrenceRuleByDays(kept, 3).weekStart, DateTime.thursday);
     expect(shiftRecurrenceRuleByDays(kept, -1).weekStart, DateTime.sunday);
   });
+
+  group('구버전이 weekStart를 지워도 나눈 격주 반복 날짜가 그대로다 (#820)', () {
+    // 4.1.0 rebuilds recurrenceDetails from the keys it knows, so it drops
+    // weekStart; every other recurrence field survives its save.
+    RecurrenceRule legacySave(RecurrenceRule rule) {
+      final details = rule.detailsJson!.replaceAll(
+        RegExp(r',?"weekStart":"[A-Z]{2}"'),
+        '',
+      );
+      expect(details, isNot(contains('weekStart')));
+      return RecurrenceRule.withDetailsJson(
+        rule.copyWith(clearDetails: true),
+        details,
+      );
+    }
+
+    List<DateTime> starts(CalendarEvent event, DateTime from, DateTime to) => [
+      for (final item in RecurrenceExpander().expand(event, from, to))
+        item.startAt,
+    ];
+
+    CalendarEvent splitAndLegacySave(
+      CalendarEvent base,
+      DateTime occurrenceStart,
+    ) {
+      final occurrence = base.copyWith(
+        startAt: occurrenceStart,
+        endAt: occurrenceStart.add(base.endAt.difference(base.startAt)),
+      );
+      final kept = recurrenceRuleForMovedFuture(
+        base: base,
+        occurrence: occurrence,
+        targetDate: occurrenceStart,
+      );
+      expect(kept.weekStart, isNotNull);
+      final legacy = legacySave(kept);
+      expect(legacy.weekStart, isNull);
+      return occurrence.copyWith(title: '구버전에서 바꾼 제목', recurrence: legacy);
+    }
+
+    test('이슈 재현: 1/5 시작 격주 월·금을 1/9부터 나눔', () {
+      final base = _event(
+        start: DateTime(2026, 1, 5, 9),
+        end: DateTime(2026, 1, 5, 10),
+        recurrence: const RecurrenceRule(
+          frequency: RecurrenceFrequency.weekly,
+          interval: 2,
+          count: 6,
+          byDay: ['MO', 'FR'],
+        ),
+      );
+      final split = splitAndLegacySave(base, DateTime(2026, 1, 9, 9));
+      expect(starts(split, DateTime(2026, 1, 1), DateTime(2026, 6, 1)), [
+        DateTime(2026, 1, 9, 9),
+        DateTime(2026, 1, 19, 9),
+        DateTime(2026, 1, 23, 9),
+        DateTime(2026, 2, 2, 9),
+        DateTime(2026, 2, 6, 9),
+      ]);
+      // A far query range skips ahead and still keeps the week boundary.
+      final open = split.copyWith(
+        recurrence: split.recurrence.copyWith(clearCount: true),
+      );
+      expect(starts(open, DateTime(2026, 3, 1), DateTime(2026, 3, 15)), [
+        DateTime(2026, 3, 2, 9),
+        DateTime(2026, 3, 6, 9),
+      ]);
+      // An older app moving the whole series shifts the exclusions with it.
+      final moved = open.copyWith(
+        startAt: DateTime(2026, 1, 10, 9),
+        endAt: DateTime(2026, 1, 10, 10),
+        recurrence: legacySave(shiftRecurrenceRuleByDays(open.recurrence, 1)),
+      );
+      expect(starts(moved, DateTime(2026, 1, 1), DateTime(2026, 1, 25)), [
+        DateTime(2026, 1, 10, 9),
+        DateTime(2026, 1, 20, 9),
+        DateTime(2026, 1, 24, 9),
+      ]);
+    });
+
+    test('월말: 1/29(목) 시작 격주 목·월을 2/2(월)부터 나눔', () {
+      final base = _event(
+        start: DateTime(2026, 1, 29, 9),
+        end: DateTime(2026, 1, 29, 10),
+        recurrence: const RecurrenceRule(
+          frequency: RecurrenceFrequency.weekly,
+          interval: 2,
+          byDay: ['TH', 'MO'],
+        ),
+      );
+      final split = splitAndLegacySave(base, DateTime(2026, 2, 2, 9));
+      expect(starts(split, DateTime(2026, 1, 1), DateTime(2026, 3, 3)), [
+        DateTime(2026, 2, 2, 9),
+        DateTime(2026, 2, 12, 9),
+        DateTime(2026, 2, 16, 9),
+        DateTime(2026, 2, 26, 9),
+        DateTime(2026, 3, 2, 9),
+      ]);
+    });
+
+    // Run under a DST zone (e.g. TZ=America/New_York; US DST starts on
+    // 2026-03-08) to cover the 23h day between the marker and later dates.
+    test('서머타임: 3/2 시작 격주 월·금을 3/6부터 나눔', () {
+      final base = _event(
+        start: DateTime(2026, 3, 2, 9),
+        end: DateTime(2026, 3, 2, 10),
+        recurrence: const RecurrenceRule(
+          frequency: RecurrenceFrequency.weekly,
+          interval: 2,
+          byDay: ['MO', 'FR'],
+        ),
+      );
+      final split = splitAndLegacySave(base, DateTime(2026, 3, 6, 9));
+      expect(starts(split, DateTime(2026, 3, 1), DateTime(2026, 4, 1)), [
+        DateTime(2026, 3, 6, 9),
+        DateTime(2026, 3, 16, 9),
+        DateTime(2026, 3, 20, 9),
+        DateTime(2026, 3, 30, 9),
+      ]);
+    });
+
+    test('구버전 사본을 다시 나눠도 원래 주 경계를 이어 받는다', () {
+      final base = _event(
+        start: DateTime(2026, 1, 5, 9),
+        end: DateTime(2026, 1, 5, 10),
+        recurrence: const RecurrenceRule(
+          frequency: RecurrenceFrequency.weekly,
+          interval: 2,
+          byDay: ['MO', 'FR'],
+        ),
+      );
+      final legacy = splitAndLegacySave(base, DateTime(2026, 1, 9, 9));
+      final again = splitAndLegacySave(legacy, DateTime(2026, 1, 23, 9));
+      expect(starts(again, DateTime(2026, 1, 1), DateTime(2026, 2, 10)), [
+        DateTime(2026, 1, 23, 9),
+        DateTime(2026, 2, 2, 9),
+        DateTime(2026, 2, 6, 9),
+      ]);
+    });
+  });
 }
 
 CalendarEvent _event({

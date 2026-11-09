@@ -162,6 +162,20 @@ class RecurrenceRule {
     );
   }
 
+  /// Weekday a weekly period begins on for a series starting on [start].
+  ///
+  /// Apps up to 4.1.0 drop [weekStart] when they save, so a split series also
+  /// excludes its first period day before [start]; expansion ignores dates
+  /// before the start, and the nearest one restores the week boundary.
+  int weekStartFor(DateTime start) {
+    if (weekStart != null) return weekStart!;
+    for (var back = 1; back < 7; back++) {
+      final day = DateTime(start.year, start.month, start.day - back);
+      if (excludes(day)) return day.weekday;
+    }
+    return start.weekday;
+  }
+
   bool excludes(DateTime date) {
     final target = DateTime(date.year, date.month, date.day);
     return excludedDates.any(

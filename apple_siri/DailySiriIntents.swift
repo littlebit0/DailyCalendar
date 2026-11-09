@@ -3281,7 +3281,14 @@ private enum DailySiriDatabase {
         // A week runs from the rule's week start (default: the start weekday),
         // matching the Dart expander.
         let startWeekday = calendar.component(.weekday, from: start)
-        let backDays = (startWeekday - (details.weekStart ?? startWeekday) + 7) % 7
+        // Apps up to 4.1.0 drop weekStart; a split also excludes its first
+        // period day before the start (Dart RecurrenceRule.weekStartFor).
+        let markedWeekStart = (1..<7).lazy.compactMap { back -> Int? in
+          guard let day = calendar.date(byAdding: .day, value: -back, to: startDay),
+                event.recurrenceExcludedDates.contains(dayKey(day)) else { return nil }
+          return calendar.component(.weekday, from: day)
+        }.first
+        let backDays = (startWeekday - (details.weekStart ?? markedWeekStart ?? startWeekday) + 7) % 7
         guard let weekStart = calendar.date(byAdding: .day, value: -backDays + 7 * interval * period, to: startDay) else { return result }
         periodStart = weekStart
         let wanted = wantedWeekdays.isEmpty ? [calendar.component(.weekday, from: start)] : wantedWeekdays

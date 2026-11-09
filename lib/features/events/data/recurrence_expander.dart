@@ -417,7 +417,7 @@ Iterable<DateTime> _detailedStarts(
   // Weekly periods begin on the rule's week start (default: the start
   // weekday), so each weekday repeats exactly 7 * interval days apart.
   final firstWeekDay =
-      start.day - (start.weekday - (rule.weekStart ?? start.weekday)) % 7;
+      start.day - (start.weekday - rule.weekStartFor(start)) % 7;
   final lastDay = lastDate == null
       ? null
       : DateTime(lastDate.year, lastDate.month, lastDate.day);
