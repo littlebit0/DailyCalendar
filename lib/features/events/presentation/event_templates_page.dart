@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/di/app_providers.dart';
 import '../../../core/localization/app_localizations.dart';
+import '../../../core/update/update_required_view.dart';
 import '../domain/event_category.dart';
 import '../domain/event_draft.dart';
 import '../domain/event_template.dart';
@@ -42,7 +43,7 @@ class EventTemplatesPage extends ConsumerWidget {
               final ids = [for (final t in templates) t.id];
               final moved = ids.removeAt(oldIndex);
               ids.insert(newIndex, moved);
-              _run(context, () => store.reorder(ids));
+              _run(context, ref, () => store.reorder(ids));
             },
             itemBuilder: (context, index) {
               final template = templates[index];
@@ -57,6 +58,7 @@ class EventTemplatesPage extends ConsumerWidget {
                   ),
                   onPressed: () => _run(
                     context,
+                    ref,
                     () => store.save(
                       template.copyWith(favorite: !template.favorite),
                     ),
@@ -67,10 +69,16 @@ class EventTemplatesPage extends ConsumerWidget {
                   '${template.title} · ${_timeSummary(context, ref, template)}',
                 ),
                 trailing: PopupMenuButton<String>(
-                  onSelected: (action) => switch (action) {
-                    'rename' => _rename(context, ref, template),
-                    'edit' => _edit(context, ref, template),
-                    _ => _delete(context, ref, template),
+                  onSelected: (action) {
+                    if (blockedByRequiredUpdate(context, ref)) return;
+                    switch (action) {
+                      case 'rename':
+                        _rename(context, ref, template);
+                      case 'edit':
+                        _edit(context, ref, template);
+                      default:
+                        _delete(context, ref, template);
+                    }
                   },
                   itemBuilder: (context) => [
                     PopupMenuItem(
@@ -130,6 +138,7 @@ class EventTemplatesPage extends ConsumerWidget {
     if (name == null || !context.mounted) return;
     await _run(
       context,
+      ref,
       () => ref
           .read(settingsRepositoryProvider)
           .eventTemplates
@@ -170,7 +179,7 @@ class EventTemplatesPage extends ConsumerWidget {
       ),
     );
     if (draft == null || !context.mounted) return;
-    await _run(context, () async {
+    await _run(context, ref, () async {
       final updated = EventTemplate.fromDraft(
         draft,
         id: template.id,
@@ -212,6 +221,7 @@ class EventTemplatesPage extends ConsumerWidget {
     if (confirmed != true || !context.mounted) return;
     await _run(
       context,
+      ref,
       () => ref
           .read(settingsRepositoryProvider)
           .eventTemplates
@@ -219,10 +229,13 @@ class EventTemplatesPage extends ConsumerWidget {
     );
   }
 
+  /// Every template write; a required update stops it like event edits (#821).
   Future<void> _run(
     BuildContext context,
+    WidgetRef ref,
     Future<void> Function() action,
   ) async {
+    if (blockedByRequiredUpdate(context, ref)) return;
     try {
       await action();
     } on Object catch (error) {

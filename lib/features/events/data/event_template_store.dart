@@ -14,6 +14,12 @@ import '../domain/event_template.dart';
 /// uploads or merges another account's templates. Inside a bucket every
 /// template is one last-writer-wins register (`template/<id>`, null = deleted)
 /// plus one register for the list order.
+///
+/// `templateFull/<id>` keeps a second copy of every template this version
+/// writes. 4.1.0 and older rewrite `template/<id>` with only the keys they
+/// know when renaming or starring a template; the copy restores the alarm
+/// list and following-day choice they dropped (#821). Older apps only read
+/// `template/` registers and keep the copy untouched.
 class EventTemplateStore extends ChangeNotifier {
   EventTemplateStore(
     this._preferences, {
@@ -27,6 +33,7 @@ class EventTemplateStore extends ChangeNotifier {
   static const storageKey = 'eventTemplates.v1';
   static const orderKey = 'order';
   static const _templatePrefix = 'template/';
+  static const _fullTemplatePrefix = 'templateFull/';
 
   final SharedPreferences _preferences;
   final String? Function() _readOwner;
@@ -97,7 +104,14 @@ class EventTemplateStore extends ChangeNotifier {
               Uri.decodeComponent(
                 entry.key.substring(_templatePrefix.length),
               )) {
-        items.add(template);
+        items.add(
+          _restoreOlderRewrite(
+                template,
+                entry.value,
+                document.fields[fullTemplateKey(template.id)],
+              ) ??
+              template,
+        );
       }
     }
     items.sort((a, b) {
@@ -114,6 +128,37 @@ class EventTemplateStore extends ChangeNotifier {
   static String templateKey(String id) =>
       '$_templatePrefix${Uri.encodeComponent(id)}';
 
+  static String fullTemplateKey(String id) =>
+      '$_fullTemplatePrefix${Uri.encodeComponent(id)}';
+
+  /// The kept copy with the older client's name and favorite, when [main] is a
+  /// newer rewrite that dropped the newer keys and changed only those two.
+  /// Any other older-client edit keeps its single representative alarm.
+  static EventTemplate? _restoreOlderRewrite(
+    EventTemplate main,
+    SettingsSyncValue mainRegister,
+    SettingsSyncValue? fullRegister,
+  ) {
+    if (fullRegister == null || mainRegister.compareTo(fullRegister) <= 0) {
+      return null;
+    }
+    final raw = mainRegister.value as Map;
+    if (EventTemplate.newerJsonKeys.any(raw.containsKey)) return null;
+    final full = EventTemplate.tryFromJson(fullRegister.value);
+    if (full == null || full.id != main.id) return null;
+    if (full.name == main.name && full.favorite == main.favorite) return null;
+    String content(EventTemplate t) => canonicalSyncJson(
+      t.toJson()..removeWhere(
+        (key, _) =>
+            key == 'name' ||
+            key == 'favorite' ||
+            EventTemplate.newerJsonKeys.contains(key),
+      ),
+    );
+    if (content(full) != content(main)) return null;
+    return full.copyWith(name: main.name, favorite: main.favorite);
+  }
+
   Future<void> save(EventTemplate template) {
     if (!template.isValid) {
       throw ArgumentError.value(template.id, 'template', 'Invalid template');
@@ -122,6 +167,7 @@ class EventTemplateStore extends ChangeNotifier {
       final ids = [for (final t in materialize(current)) t.id];
       return {
         templateKey(template.id): template.toJson(),
+        fullTemplateKey(template.id): template.toJson(),
         if (!ids.contains(template.id)) orderKey: [...ids, template.id],
       };
     });
@@ -131,6 +177,7 @@ class EventTemplateStore extends ChangeNotifier {
     final ids = [for (final t in materialize(current)) t.id];
     return {
       templateKey(id): null,
+      fullTemplateKey(id): null,
       if (ids.contains(id)) orderKey: [...ids]..remove(id),
     };
   });
@@ -158,10 +205,22 @@ class EventTemplateStore extends ChangeNotifier {
     }
     var document = bucket.document;
     var changed = false;
+    bool same(String key) {
+      final previous = bucket.document.fields[key];
+      return previous != null &&
+          canonicalSyncJson(previous.value) == canonicalSyncJson(updates[key]);
+    }
+
     for (final entry in updates.entries) {
-      final previous = document.fields[entry.key];
-      if (previous != null &&
-          canonicalSyncJson(previous.value) == canonicalSyncJson(entry.value)) {
+      // A template's two copies are one edit: when either changes, both take
+      // the new revision so an older rewrite cannot win the main one alone.
+      final partner = entry.key.startsWith(_templatePrefix)
+          ? '$_fullTemplatePrefix${entry.key.substring(_templatePrefix.length)}'
+          : entry.key.startsWith(_fullTemplatePrefix)
+          ? '$_templatePrefix${entry.key.substring(_fullTemplatePrefix.length)}'
+          : null;
+      if (same(entry.key) &&
+          (partner == null || !updates.containsKey(partner) || same(partner))) {
         continue;
       }
       document = document.withField(

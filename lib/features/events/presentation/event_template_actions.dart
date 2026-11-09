@@ -71,8 +71,10 @@ Future<void> saveDraftAsTemplate(
 ) async {
   final id = const Uuid().v4();
   checkTemplateSpan(EventTemplate.fromDraft(draft, id: id, name: draft.title));
+  if (blockedByRequiredUpdate(context, ref)) return;
   final name = await showTemplateNameDialog(context, initialName: draft.title);
-  if (name == null) return;
+  if (name == null || !context.mounted) return;
+  if (blockedByRequiredUpdate(context, ref)) return;
   await ref
       .read(settingsRepositoryProvider)
       .eventTemplates

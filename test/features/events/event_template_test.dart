@@ -497,6 +497,239 @@ void main() {
     );
   });
 
+  group('EventTemplateStore older-client rewrites (#821)', () {
+    late SharedPreferences preferences;
+    late DateTime now;
+
+    EventTemplateStore store() => EventTemplateStore(
+      preferences,
+      readOwner: () => 'tester@example.com',
+      deviceId: () async => 'device-new',
+      now: () => now,
+    );
+
+    // Five alarm times and "다음 날에도 표시" off: both unknown to 4.1.0.
+    EventTemplate rich({String id = 'rich', String name = '야간 근무'}) =>
+        EventTemplate(
+          id: id,
+          name: name,
+          title: '근무',
+          startMinutes: 22 * 60,
+          endDayOffset: 1,
+          endMinutes: 6 * 60,
+          categoryId: _workout.id,
+          alarmEnabled: true,
+          alarmMinutesBeforeList: const [0, 10, 30, 60],
+          alarmCustomTimes: const [(dayOffset: -1, minutes: 21 * 60)],
+          showOvernightOnFollowingDays: false,
+        );
+
+    /// What 4.1.0 writes after editing [template]: only the keys it knows.
+    Map<String, Object?> legacyJson(EventTemplate template) => template.toJson()
+      ..remove('alarmMinutesBeforeList')
+      ..remove('alarmCustomTimes')
+      ..remove('showOvernightOnFollowingDays');
+
+    Future<void> remoteWrite(
+      EventTemplateStore templates,
+      String id,
+      Object? value, {
+      Duration after = const Duration(minutes: 1),
+      String device = 'device-old',
+    }) => templates.mergeSyncDocument(
+      templates.syncDocument().withField(
+        EventTemplateStore.templateKey(id),
+        SettingsSyncValue(value, now.add(after), device),
+      ),
+    );
+
+    setUp(() async {
+      SharedPreferences.setMockInitialValues({});
+      preferences = await SharedPreferences.getInstance();
+      now = DateTime.utc(2026, 11, 9, 9);
+    });
+
+    test('a 4.1.0 rename keeps the alarms and following-day choice', () async {
+      final templates = store();
+      await templates.save(rich());
+      await templates.save(rich(id: 'other', name: '다른 템플릿'));
+      final renamed = legacyJson(rich().copyWith(name: '새 이름'));
+      await remoteWrite(templates, 'rich', renamed);
+
+      final byId = {for (final t in store().templates) t.id: t};
+      final restored = byId['rich']!;
+      expect(restored.name, '새 이름');
+      expect(restored.showOvernightOnFollowingDays, isFalse);
+      expect(restored.alarmMinutesBeforeList, [0, 10, 30, 60]);
+      expect(restored.alarmCustomTimes, [(dayOffset: -1, minutes: 21 * 60)]);
+      expect(
+        byId['other']!.toJson(),
+        rich(id: 'other', name: '다른 템플릿').toJson(),
+      );
+
+      // A favorite toggle on 4.1.0 is the same kind of rewrite.
+      await remoteWrite(
+        templates,
+        'rich',
+        legacyJson(rich().copyWith(name: '새 이름', favorite: true)),
+        after: const Duration(minutes: 2),
+      );
+      final favorite = store().templates.firstWhere((t) => t.id == 'rich');
+      expect(favorite.favorite, isTrue);
+      expect(favorite.alarmMinutesBeforeList, hasLength(4));
+      expect(favorite.showOvernightOnFollowingDays, isFalse);
+
+      // Saving it again on this version writes every value back out.
+      now = now.add(const Duration(minutes: 5));
+      await templates.save(favorite.copyWith(name: '최종'));
+      final main =
+          templates
+                  .syncDocument()
+                  .fields[EventTemplateStore.templateKey('rich')]!
+                  .value
+              as Map;
+      expect(main['alarmMinutesBeforeList'], [0, 10, 30, 60]);
+      expect(main['showOvernightOnFollowingDays'], isFalse);
+    });
+
+    test(
+      'a 4.1.0 content edit keeps its single representative alarm',
+      () async {
+        final templates = store();
+        await templates.save(rich());
+        final edited = legacyJson(
+          EventTemplate(
+            id: 'rich',
+            name: '새 이름',
+            title: '근무',
+            startMinutes: 22 * 60,
+            endDayOffset: 1,
+            endMinutes: 6 * 60,
+            categoryId: _workout.id,
+            alarmEnabled: true,
+            alarmMinutesBefore: 15,
+          ),
+        );
+        await remoteWrite(templates, 'rich', edited);
+        final result = store().templates.single;
+        expect(result.alarmMinutesBeforeList, [15]);
+        expect(result.alarmCustomTimes, isEmpty);
+        expect(result.showOvernightOnFollowingDays, isTrue);
+      },
+    );
+
+    test('a same-name single-alarm write is not undone (4.1.1 edit)', () async {
+      final templates = store();
+      await templates.save(rich());
+      // Only the earliest alarm left and the display turned back on, name kept.
+      final single = EventTemplate.tryFromJson(legacyJson(rich()))!;
+      expect(single.alarmCustomTimes, hasLength(1));
+      await remoteWrite(
+        templates,
+        'rich',
+        single.toJson(),
+        device: 'device-411',
+      );
+      final result = store().templates.single;
+      expect(result.alarmMinutesBeforeList, isEmpty);
+      expect(result.alarmCustomTimes, hasLength(1));
+      expect(result.showOvernightOnFollowingDays, isTrue);
+    });
+
+    test('a newer edit from this version wins over the kept copy', () async {
+      final templates = store();
+      await templates.save(rich());
+      await remoteWrite(
+        templates,
+        'rich',
+        legacyJson(rich().copyWith(name: 'B')),
+      );
+      // Another current device turns the display on and keeps two alarms.
+      final next = EventTemplate(
+        id: 'rich',
+        name: 'C',
+        title: '근무',
+        startMinutes: 22 * 60,
+        endDayOffset: 1,
+        endMinutes: 6 * 60,
+        categoryId: _workout.id,
+        alarmEnabled: true,
+        alarmMinutesBeforeList: const [0, 30],
+      );
+      final at = now.add(const Duration(minutes: 3));
+      await templates.mergeSyncDocument(
+        templates
+            .syncDocument()
+            .withField(
+              EventTemplateStore.templateKey('rich'),
+              SettingsSyncValue(next.toJson(), at, 'device-c'),
+            )
+            .withField(
+              EventTemplateStore.fullTemplateKey('rich'),
+              SettingsSyncValue(next.toJson(), at, 'device-c'),
+            ),
+      );
+      expect(store().templates.single.toJson(), next.toJson());
+    });
+
+    test(
+      'a save matching the older rewrite still advances both copies',
+      () async {
+        final templates = store();
+        await templates.save(rich());
+        final renamed = legacyJson(rich().copyWith(name: 'B'));
+        await remoteWrite(templates, 'rich', renamed);
+        // The user keeps only the representative alarm and turns the display
+        // on: the main register value is unchanged, the kept copy is not.
+        now = now.add(const Duration(minutes: 5));
+        await templates.save(EventTemplate.tryFromJson(renamed)!);
+        final document = templates.syncDocument();
+        final main = document.fields[EventTemplateStore.templateKey('rich')]!;
+        final full =
+            document.fields[EventTemplateStore.fullTemplateKey('rich')]!;
+        expect(main.changedAt, full.changedAt);
+        expect(main.deviceId, 'device-new');
+
+        // A delayed 4.1.0 alarm edit from before that save loses to it.
+        final delayed = Map<String, Object?>.from(renamed)
+          ..['alarmMinutesBefore'] = 45
+          ..remove('alarmCustomDayOffset')
+          ..remove('alarmCustomMinutes');
+        await remoteWrite(
+          templates,
+          'rich',
+          delayed,
+          // Between the 4.1.0 rename (+1 min) and this save (+5 min).
+          after: const Duration(minutes: -2),
+        );
+        final result = store().templates.single;
+        expect(result.alarmMinutesBefore, isNot(45));
+        expect(result.toJson(), EventTemplate.tryFromJson(renamed)!.toJson());
+      },
+    );
+
+    test('a 4.1.0 delete still deletes', () async {
+      final templates = store();
+      await templates.save(rich());
+      await remoteWrite(templates, 'rich', null);
+      expect(store().templates, isEmpty);
+    });
+
+    test('this version removes the kept copy with the template', () async {
+      final templates = store();
+      await templates.save(rich());
+      now = now.add(const Duration(minutes: 1));
+      await templates.delete('rich');
+      expect(
+        templates
+            .syncDocument()
+            .fields[EventTemplateStore.fullTemplateKey('rich')]!
+            .value,
+        isNull,
+      );
+    });
+  });
+
   group('EventTemplate several alarm times (#784)', () {
     final source = EventDraft(
       title: '회의',
@@ -511,7 +744,9 @@ void main() {
     test('stores, applies and round-trips every trigger', () {
       final template = EventTemplate.fromDraft(source, id: 'm', name: '회의');
       expect(template.alarmMinutesBeforeList, [0, 30]);
-      expect(template.alarmCustomTimes, [(dayOffset: -1, minutes: 21 * 60 + 30)]);
+      expect(template.alarmCustomTimes, [
+        (dayOffset: -1, minutes: 21 * 60 + 30),
+      ]);
       // Legacy keys hold the earliest trigger: the day-before custom time.
       final json = template.toJson();
       expect(json['alarmCustomDayOffset'], -1);
@@ -522,7 +757,9 @@ void main() {
 
       final draft = restored.draftOn(DateTime(2026, 11, 2), _workout);
       expect(
-        draft.toEvent(id: 'e', now: DateTime(2026), deviceId: 'd').alarmFireTimes,
+        draft
+            .toEvent(id: 'e', now: DateTime(2026), deviceId: 'd')
+            .alarmFireTimes,
         [
           DateTime(2026, 11, 1, 21, 30),
           DateTime(2026, 11, 2, 18, 30),
@@ -536,7 +773,11 @@ void main() {
     });
 
     test('older documents and legacy-only edits read as one alarm', () {
-      final json = EventTemplate.fromDraft(source, id: 'm', name: '회의').toJson();
+      final json = EventTemplate.fromDraft(
+        source,
+        id: 'm',
+        name: '회의',
+      ).toJson();
       final older = Map<String, Object?>.from(json)
         ..remove('alarmMinutesBeforeList')
         ..remove('alarmCustomTimes');
@@ -551,7 +792,10 @@ void main() {
       final editedTemplate = EventTemplate.tryFromJson(edited)!;
       expect(editedTemplate.alarmMinutesBeforeList, [15]);
       expect(editedTemplate.alarmCustomTimes, isEmpty);
-      expect(editedTemplate.toJson(), isNot(contains('alarmMinutesBeforeList')));
+      expect(
+        editedTemplate.toJson(),
+        isNot(contains('alarmMinutesBeforeList')),
+      );
     });
   });
 }
