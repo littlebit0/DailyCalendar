@@ -10,7 +10,7 @@
 
 <p align="center">
   <a href="https://github.com/littlebit0/DailyCalendar/releases/latest"><img src="https://img.shields.io/github/v/release/littlebit0/DailyCalendar?label=release" alt="Latest release"></a>
-  <img src="https://img.shields.io/badge/version-4.0.0-2f6feb" alt="Version 4.0.0">
+  <img src="https://img.shields.io/badge/version-4.1.1-2f6feb" alt="Version 4.1.1">
   <img src="https://img.shields.io/badge/Flutter-iOS%20%7C%20macOS%20%7C%20Android%20%7C%20Windows%20%7C%20Linux-02569B?logo=flutter" alt="Flutter platforms">
 </p>
 
@@ -25,17 +25,19 @@ DailyCalendar는 월간, 주간, 일간 및 연간 보기로 일정을 관리하
 
 [시간표 구조](docs/TIMETABLE.md) · [대학 목록 출처](docs/UNIVERSITY_DIRECTORY_SOURCES.md) · [미완료 대학 및 분류 개선 인계 #92](https://github.com/littlebit0/DailyCalendar/issues/92)
 
-## 4.0.0 주요 변경
+## 4.1.1 주요 변경
 
-- 지역별 대학 선택·교표, 지역에 맞는 분교 자동 선택을 추가했습니다.
-- 대학 학사일정을 확대하고 시간표의 교필·교선, 학과와 공식 전공제도 분류를 개선했습니다.
-- 기기별 보안 저장소를 사용하는 선택형 LMS 자동 로그인과 퀴즈 완료 상태 처리를 개선했습니다.
-- 반복 LMS 조회, 시작 동기화, 완료 취소선과 빠른 보기·시간표·대학 목록 애니메이션을 개선했습니다.
+- Google Drive 동기화를 빠르게 했습니다. 여러 파일을 동시에 주고받고, 내용이 같은 파일은 다시 받지 않습니다.
+- 동기화 중 캘린더 깜빡임, 보던 위치 이동, 동기화 배너로 화면이 튀던 문제를 고쳤습니다.
+- 일정 알람 시각을 여러 개 고를 수 있고, 자정을 넘는 일정의 다음 날 표시를 일정마다 정할 수 있습니다.
+- 요일을 지정한 주간 반복을 시작일 요일부터 계산해, 옮기거나 나눈 반복 일정도 같은 간격을 유지합니다.
+- 하루 일정 시트 닫기·날짜 넘김과 일정 추가·수정 팝업의 버튼 배치를 개선했습니다.
+- 4.1.0에서 잊모기 탭, 일정 템플릿, 71개 대학 학사일정 1차 지원, 원격·시간 미정 강좌 표시를 추가했습니다.
 
 LMS 로그인 정보는 다른 기기로 동기화하지 않으며 일정만 동기화합니다. 학교 정책에 따라 다른 기기의 LMS 세션이 종료될 수 있습니다.
 
-> Drive v2와 DB 스키마 9를 유지합니다. App Store 출시는 GitHub 릴리스와 별개입니다.
-> [4.0.0 릴리스 노트](docs/RELEASE_NOTES_4.0.0.md) · [스토어 문구](docs/STORE_TEXT_4.0.0_KO.md)
+> Drive v2를 유지하며 DB 스키마는 15입니다. Drive 일정 파일에 새 값을 쓰므로 같은 계정의 모든 기기를 4.1.1로 업데이트해 주세요. App Store 출시는 GitHub 릴리스와 별개입니다.
+> [4.1.1 릴리스 노트](docs/RELEASE_NOTES_4.1.1.md) · [4.1.0 릴리스 노트](docs/RELEASE_NOTES_4.1.0.md)
 
 ## 대학 지원 계획
 
@@ -89,12 +91,12 @@ LMS 로그인 정보는 다른 기기로 동기화하지 않으며 일정만 동
 | 플랫폼 | 배포 상태 | 파일 |
 | --- | --- | --- |
 | iPhone / iPad | App Store 무료 배포 중 | App Store의 `DailyCalendar` |
-| iOS 테스트 | 4.0.0 공개 검증용 미서명 파일 | [daily-ios-4.0.0-unsigned.ipa](https://github.com/littlebit0/DailyCalendar/releases/download/v4.0.0/daily-ios-4.0.0-unsigned.ipa) |
-| macOS 테스트 | 4.0.0 공개 검증용 미서명 파일 | [daily-macos-4.0.0-unsigned.dmg](https://github.com/littlebit0/DailyCalendar/releases/download/v4.0.0/daily-macos-4.0.0-unsigned.dmg) |
-| Android | 4.0.0 APK, 기존 3.4.0 배포 서명 유지 | [daily-android-4.0.0.apk](https://github.com/littlebit0/DailyCalendar/releases/download/v4.0.0/daily-android-4.0.0.apk) |
-| Windows | 4.0.0 설치 프로그램 및 ZIP | [설치 프로그램](https://github.com/littlebit0/DailyCalendar/releases/download/v4.0.0/daily-windows-4.0.0-setup.exe) · [ZIP](https://github.com/littlebit0/DailyCalendar/releases/download/v4.0.0/daily-windows-4.0.0.zip) |
-| Linux AMD64 | 3.6.0 유지, 4.0.0 검사 보류 | [amd64 .deb](https://github.com/littlebit0/DailyCalendar/releases/download/v3.6.0/daily-linux-3.6.0-1-amd64.deb) |
-| Linux ARM64 | 4.0.0-1 수동 설치 파일 | [arm64 .deb](https://github.com/littlebit0/DailyCalendar/releases/download/v4.0.0/daily-linux-4.0.0-1-arm64.deb) |
+| iOS 테스트 | 4.1.1 공개 검증용 미서명 파일 | [daily-ios-4.1.1-unsigned.ipa](https://github.com/littlebit0/DailyCalendar/releases/download/v4.1.1/daily-ios-4.1.1-unsigned.ipa) |
+| macOS 테스트 | 4.1.1 공개 검증용 미서명 파일 | [daily-macos-4.1.1-unsigned.dmg](https://github.com/littlebit0/DailyCalendar/releases/download/v4.1.1/daily-macos-4.1.1-unsigned.dmg) |
+| Android | 4.1.1 APK, 기존 3.4.0 배포 서명 유지 | [daily-android-4.1.1.apk](https://github.com/littlebit0/DailyCalendar/releases/download/v4.1.1/daily-android-4.1.1.apk) |
+| Windows | 4.1.1 설치 프로그램 및 ZIP | [설치 프로그램](https://github.com/littlebit0/DailyCalendar/releases/download/v4.1.1/daily-windows-4.1.1-setup.exe) · [ZIP](https://github.com/littlebit0/DailyCalendar/releases/download/v4.1.1/daily-windows-4.1.1.zip) |
+| Linux AMD64 | 4.1.1-1 설치 파일 | [amd64 .deb](https://github.com/littlebit0/DailyCalendar/releases/download/v4.1.1/daily-linux-4.1.1-1-amd64.deb) |
+| Linux ARM64 | 4.1.1-1 설치 파일 | [arm64 .deb](https://github.com/littlebit0/DailyCalendar/releases/download/v4.1.1/daily-linux-4.1.1-1-arm64.deb) |
 
 > GitHub의 IPA와 DMG는 App Store 제출 파일이 아닙니다. 미서명 IPA는 별도
 > 서명 없이는 iPhone에 직접 설치할 수 없으며, 재서명 과정에서 Sign in with
@@ -115,14 +117,14 @@ GitHub 릴리스를 확인하며 새 Windows 설치 프로그램이 있으면 �
 
 ### Linux
 
-4.0.0에서는 ARM64 수동 설치 파일을 제공합니다. AMD64는 보류 원자료 검사로 3.6.0을 유지하며, 자동 APT 채널도 기존 3.6.0을 유지합니다.
+4.1.1에서는 AMD64와 ARM64 설치 파일을 제공합니다. 자동 APT 채널의 4.1.1 반영은 아직 확인하지 않았습니다.
 
 Ubuntu/Debian 데스크톱용 `.deb`를 한 번 설치하면 Daily 전용 타이머가 약 6시간마다
 서명된 업데이트를 확인합니다. 앱 실행 중이거나 검증에 실패하면 업데이트를
 미루며, 일정과 설정은 삭제하지 않습니다. 설치 시 앱을 자동 실행하지 않습니다.
 
 ```sh
-sudo apt install ./daily-linux-3.6.0-1-amd64.deb
+sudo apt install ./daily-linux-4.1.1-1-amd64.deb
 ```
 
 Intel/AMD PC는 amd64, ARM64 PC는 arm64 파일을 사용하세요. amd64는 Ubuntu 22.04+,
@@ -195,7 +197,7 @@ arm64는 Ubuntu 24.04+를 빌드 기준으로 사용합니다. 두 아키텍처�
 | 홈 화면 위젯·미니 캘린더 | O | O | O | O |
 | 앱 잠금 | O | O | O | O |
 
-위 표는 플랫폼별 기본 기능 지원 범위입니다. 4.0.0의 공유 기능과 동기화 코드는
+위 표는 플랫폼별 기본 기능 지원 범위입니다. 4.1.1의 공유 기능과 동기화 코드는
 Windows/Linux 배포 빌드에도 포함합니다. 플랫폼별 실제 로그인·알람·위젯 동작은
 빌드 및 자동 테스트와 별도로 확인해야 합니다.
 
@@ -284,13 +286,14 @@ Google OAuth 및 Apple 서명 값은 저장소에 포함하지 않습니다. 로
 ./tool/flutter.sh test --no-pub
 ```
 
-릴리스 검증과 지원 범위는 [릴리스 노트](docs/RELEASE_NOTES_4.0.0.md)와
+릴리스 검증과 지원 범위는 [릴리스 노트](docs/RELEASE_NOTES_4.1.1.md)와
 [에이전트 작업 기록](AGENT_MEMORY.md)에 기록합니다. 자동 테스트와 빌드 성공은
 실제 사용자 기기의 로그인·알람·위젯 동작 검증과 구분합니다.
 
 ## 문서
 
-- [4.0.0 릴리스 노트](docs/RELEASE_NOTES_4.0.0.md)
+- [4.1.1 릴리스 노트](docs/RELEASE_NOTES_4.1.1.md)
+- [4.1.0 릴리스 노트](docs/RELEASE_NOTES_4.1.0.md)
 - [기능 로드맵](docs/FEATURE_ROADMAP.md)
 - [프로젝트 분석](PROJECT_ANALYSIS.md)
 - [Google Drive 동기화 설정](docs/GOOGLE_DRIVE_SYNC_SETUP.md)
