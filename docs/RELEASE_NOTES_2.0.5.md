@@ -2,17 +2,17 @@
 
 ## 적용 범위
 
-이번 버전은 Android Play Store 배포 준비를 우선 대상으로 한다.
-표시 버전은 `2.0.5`, Android versionCode는 `9`를 사용한다.
+이번 버전은 Android Play Store 배포 준비를 먼저 다룹니다.
+표시 버전은 `2.0.5`, Android versionCode는 `9`입니다.
 
 ## 변경 사항
 
-- Google Drive 연결, 권한 승인, 동기화 실패 메시지를 사용자 관점으로 정리했다.
-- OAuth 토큰 만료, 권한 부족, 요청 과다, 서버 장애를 구분해 안내한다.
-- Google Drive HTTP 오류 응답 본문과 내부 오류 코드가 화면에 그대로 노출되지 않도록 했다.
-- Windows Desktop OAuth의 토큰 및 계정 정보 오류 안내를 Google Drive 연결
-  흐름에 맞게 정리했다.
-- iOS/macOS Google 인증과 UX 후속 수정 사항을 포함한다.
+- Google Drive 연결, 권한 승인, 동기화 실패 메시지를 사용자가 이해하기 쉽게 고쳤습니다.
+- OAuth 토큰 만료, 권한 부족, 요청 과다, 서버 장애를 각각 다르게 안내합니다.
+- Google Drive HTTP 오류 응답 본문과 내부 오류 코드를 화면에 그대로 보여 주지 않습니다.
+- Windows Desktop OAuth의 토큰·계정 정보 오류 안내를 Google Drive 연결
+  흐름에 맞췄습니다.
+- iOS/macOS Google 인증과 UX 후속 수정 사항도 들어 있습니다.
 
 ## 검증 항목
 
@@ -30,10 +30,10 @@
 - versionCode: `9`
 - 제출 파일: `daily-android-2.0.5.aab`
 
-## Play Console 제출 전 확인
+## Play Console 제출 전 확인할 것
 
-- Play App Signing 인증서 SHA-1/SHA-256을 Google OAuth Android client에 등록
-- 개인정보처리방침 공개 URL 준비
-- 지원 이메일과 데이터 삭제 안내 URL 준비
-- 앱 액세스, 데이터 보안, 콘텐츠 등급, 광고 여부 설문 작성
-- 실제 Android 기기에서 Google Drive 연결, 동기화, 알림, 재설치 복원 확인
+- Play App Signing 인증서 SHA-1/SHA-256을 Google OAuth Android client에 등록합니다.
+- 개인정보처리방침 공개 URL을 준비합니다.
+- 지원 이메일과 데이터 삭제 안내 URL을 준비합니다.
+- 앱 액세스, 데이터 보안, 콘텐츠 등급, 광고 여부 설문을 작성합니다.
+- 실제 Android 기기에서 Google Drive 연결, 동기화, 알림, 재설치 복원을 확인합니다.
