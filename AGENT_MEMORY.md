@@ -1,5 +1,18 @@
 # Daily Agent Memory — current handoff
 
+## #819 구버전 편집 뒤 여러 알람 보존 — 2026-11-09
+
+- User decision: narrows the #798 rule "a 4.1.0 edit overwrites with its
+  single alarm". A file without `showOvernightOnFollowingDays` (4.1.0-or-older
+  writer) whose alarm on/off, `alarmMinutesBefore` and `alarmCustomAt` equal
+  this device's earliest trigger keeps this device's alarm lists and re-uploads
+  them (`_withUnchangedLegacyAlarmLists`, `_DownloadedEvent.withLocalLegacyFields`,
+  used by restore and by the backup conflict check). A changed or disabled
+  single alarm still overwrites as before.
+- No Drive key, fingerprint or schema change. Dart-only; no native Drive code.
+- Limit: recovery needs a 4.1.1+ device that still holds the list locally.
+- Not verified on devices or production Drive; test apps not updated.
+
 ## #802 요일 지정 주간 반복의 주를 시작일 요일부터 — 2026-11-09
 
 - User decision: weekly rules with BYDAY (any interval, incl. BYSETPOS) group
