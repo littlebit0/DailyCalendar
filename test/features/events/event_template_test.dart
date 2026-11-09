@@ -672,6 +672,42 @@ void main() {
       expect(store().templates.single.toJson(), next.toJson());
     });
 
+    test(
+      'a save matching the older rewrite still advances both copies',
+      () async {
+        final templates = store();
+        await templates.save(rich());
+        final renamed = legacyJson(rich().copyWith(name: 'B'));
+        await remoteWrite(templates, 'rich', renamed);
+        // The user keeps only the representative alarm and turns the display
+        // on: the main register value is unchanged, the kept copy is not.
+        now = now.add(const Duration(minutes: 5));
+        await templates.save(EventTemplate.tryFromJson(renamed)!);
+        final document = templates.syncDocument();
+        final main = document.fields[EventTemplateStore.templateKey('rich')]!;
+        final full =
+            document.fields[EventTemplateStore.fullTemplateKey('rich')]!;
+        expect(main.changedAt, full.changedAt);
+        expect(main.deviceId, 'device-new');
+
+        // A delayed 4.1.0 alarm edit from before that save loses to it.
+        final delayed = Map<String, Object?>.from(renamed)
+          ..['alarmMinutesBefore'] = 45
+          ..remove('alarmCustomDayOffset')
+          ..remove('alarmCustomMinutes');
+        await remoteWrite(
+          templates,
+          'rich',
+          delayed,
+          // Between the 4.1.0 rename (+1 min) and this save (+5 min).
+          after: const Duration(minutes: -2),
+        );
+        final result = store().templates.single;
+        expect(result.alarmMinutesBefore, isNot(45));
+        expect(result.toJson(), EventTemplate.tryFromJson(renamed)!.toJson());
+      },
+    );
+
     test('a 4.1.0 delete still deletes', () async {
       final templates = store();
       await templates.save(rich());

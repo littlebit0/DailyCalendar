@@ -205,10 +205,22 @@ class EventTemplateStore extends ChangeNotifier {
     }
     var document = bucket.document;
     var changed = false;
+    bool same(String key) {
+      final previous = bucket.document.fields[key];
+      return previous != null &&
+          canonicalSyncJson(previous.value) == canonicalSyncJson(updates[key]);
+    }
+
     for (final entry in updates.entries) {
-      final previous = document.fields[entry.key];
-      if (previous != null &&
-          canonicalSyncJson(previous.value) == canonicalSyncJson(entry.value)) {
+      // A template's two copies are one edit: when either changes, both take
+      // the new revision so an older rewrite cannot win the main one alone.
+      final partner = entry.key.startsWith(_templatePrefix)
+          ? '$_fullTemplatePrefix${entry.key.substring(_templatePrefix.length)}'
+          : entry.key.startsWith(_fullTemplatePrefix)
+          ? '$_templatePrefix${entry.key.substring(_fullTemplatePrefix.length)}'
+          : null;
+      if (same(entry.key) &&
+          (partner == null || !updates.containsKey(partner) || same(partner))) {
         continue;
       }
       document = document.withField(
