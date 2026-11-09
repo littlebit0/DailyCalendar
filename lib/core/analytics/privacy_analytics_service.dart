@@ -337,39 +337,61 @@ class PrivacyAnalyticsService implements ProductAnalytics {
     final environment = _environment ?? await _environmentLoader();
     if (!enabled || generation != _generation) return;
     _environment = environment;
-    try {
-      final response = await _httpClient
-          .post(
-            endpoint,
-            headers: const {
-              HttpHeaders.contentTypeHeader: 'application/json',
-              'X-Daily-Analytics-Schema': '1',
-            },
-            body: jsonEncode({
-              'schemaVersion': _schemaVersion,
-              'sessionId': _sessionId,
-              'environment': environment.toJson(),
-              'events': ready.map((event) => event.toPayloadJson()).toList(),
-            }),
-          )
-          .timeout(_requestTimeout);
-      if (!enabled || generation != _generation) return;
-      if (response.statusCode >= 200 && response.statusCode < 300) {
-        final sentIds = ready.map((event) => event.id).toSet();
-        _queue.removeWhere((event) => sentIds.contains(event.id));
-      } else if (response.statusCode >= 400 &&
-          response.statusCode < 500 &&
-          response.statusCode != 408 &&
-          response.statusCode != 429) {
-        final rejectedIds = ready.map((event) => event.id).toSet();
-        _queue.removeWhere((event) => rejectedIds.contains(event.id));
-      } else {
-        _markFailed(ready);
+    final delivered = <String>{};
+    final failed = <_QueuedAnalyticsEvent>[];
+    // A receiver rejects a whole batch over one event it does not know (an
+    // older receiver and a newer attribute, #818). Split a rejected batch so
+    // only the event it actually refuses is dropped.
+    final pending = [ready];
+    while (pending.isNotEmpty) {
+      final batch = pending.removeLast();
+      int? status;
+      try {
+        final response = await _httpClient
+            .post(
+              endpoint,
+              headers: const {
+                HttpHeaders.contentTypeHeader: 'application/json',
+                'X-Daily-Analytics-Schema': '1',
+              },
+              body: jsonEncode({
+                'schemaVersion': _schemaVersion,
+                'sessionId': _sessionId,
+                'environment': environment.toJson(),
+                'events': batch.map((event) => event.toPayloadJson()).toList(),
+              }),
+            )
+            .timeout(_requestTimeout);
+        status = response.statusCode;
+      } on Object {
+        status = null;
       }
-    } on Object {
       if (!enabled || generation != _generation) return;
-      _markFailed(ready);
+      if (status != null && status >= 200 && status < 300) {
+        delivered.addAll(batch.map((event) => event.id));
+      } else if (status != null &&
+          status >= 400 &&
+          status < 500 &&
+          status != 408 &&
+          status != 429) {
+        if (batch.length == 1) {
+          delivered.add(batch.single.id);
+        } else {
+          final middle = batch.length ~/ 2;
+          pending
+            ..add(batch.sublist(middle))
+            ..add(batch.sublist(0, middle));
+        }
+      } else {
+        // Transient failure: retry this and every unsent part later.
+        failed
+          ..addAll(batch)
+          ..addAll(pending.expand((part) => part));
+        pending.clear();
+      }
     }
+    _queue.removeWhere((event) => delivered.contains(event.id));
+    if (failed.isNotEmpty) _markFailed(failed);
     await _persistQueue();
     if (_queue.isNotEmpty) {
       _scheduleNextRetry();

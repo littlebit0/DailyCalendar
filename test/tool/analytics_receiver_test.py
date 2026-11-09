@@ -190,6 +190,28 @@ class SyncAttemptTests(unittest.TestCase):
         self.assertFalse(self.valid('sync_started', {'operation': 'backup', 'trigger': 'manual', 'backupMs': 5}))
 
 
+    def test_batch_mixing_stage_times_and_other_events_is_accepted(self):
+        # #818: the v4.1.0 receiver refused this whole batch.
+        stages = {'backupMs': 100, 'changesMs': 200, 'downloadMs': 0, 'applyMs': 50}
+        ok = {'operation': 'backup', 'trigger': 'manual', 'outcome': 'succeeded', 'durationMs': 900}
+        failed = {**ok, 'outcome': 'failed', 'errorCode': 'network'}
+        batch = {
+            'schemaVersion': 1,
+            'sessionId': 'cccccccc-cccc-4ccc-8ccc-cccccccccccc',
+            'environment': {'platform': 'ios', 'appVersion': '4.1.1', 'osMajor': 26},
+            'events': [
+                {**self.BASE, 'name': 'screen_view', 'attributes': {'screen': 'search'}},
+                {**self.BASE, 'eventId': 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb',
+                 'name': 'sync_succeeded', 'attributes': {**ok, **stages}},
+                {**self.BASE, 'eventId': 'dddddddd-dddd-4ddd-8ddd-dddddddddddd',
+                 'name': 'sync_failed', 'attributes': {**failed, **stages}},
+            ],
+        }
+        self.assertTrue(valid_batch(batch))
+        with tempfile.TemporaryDirectory() as directory:
+            self.assertEqual(Aggregator(directory).accept(batch), 3)
+
+
 class LmsLoginTests(unittest.TestCase):
     BASE = {'eventId': 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa', 'occurredAt': '2026-10-19T00:00:00Z',
             'name': 'lms_login'}
