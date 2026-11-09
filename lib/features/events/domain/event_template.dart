@@ -288,6 +288,13 @@ class EventTemplate {
     showOvernightOnFollowingDays: showOvernightOnFollowingDays,
   );
 
+  /// Keys 4.1.0 and older do not know and drop when they rewrite a template.
+  static const newerJsonKeys = {
+    'alarmMinutesBeforeList',
+    'alarmCustomTimes',
+    'showOvernightOnFollowingDays',
+  };
+
   Map<String, Object?> toJson() => {
     'id': id,
     'name': name,
