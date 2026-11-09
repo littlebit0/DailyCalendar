@@ -36,7 +36,7 @@ Windows는 `setup.exe` 설치를 권장합니다. 설치형 Release 앱은 시�
 
 ### Linux
 
-4.1.1은 AMD64와 ARM64 설치 파일을 제공합니다. 자동 APT 채널의 4.1.1 반영은 아직 확인하지 않았습니다.
+4.1.1은 AMD64와 ARM64 설치 파일을 제공합니다. 자동 APT 채널도 4.1.1로 업데이트됩니다.
 
 ```sh
 sudo apt install ./daily-linux-4.1.1-1-amd64.deb
