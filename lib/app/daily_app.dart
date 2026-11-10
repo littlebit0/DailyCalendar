@@ -723,6 +723,9 @@ class _AppHomeState extends ConsumerState<_AppHome>
   late final bool _requiresStartupSync;
   bool _startupGateOpen = false;
   Future<void>? _startupOperation;
+  // Set when the startup sync ran while Daily was not in the foreground.
+  bool _startupInterrupted = false;
+  Completer<void>? _startupResumeWaiter;
   Future<bool>? _syncStartOperation;
   Timer? _syncRestoreRetryTimer;
   var _syncRestoreRetryIndex = 0;
@@ -827,6 +830,7 @@ class _AppHomeState extends ConsumerState<_AppHome>
       _siriEventChangesChannel.setMethodCallHandler(null);
     }
     _syncRestoreRetryTimer?.cancel();
+    _completeStartupResumeWaiter();
     unawaited(_widgetTodoChangesSubscription?.cancel());
     final listener = _settingsRevisionListener;
     final notifier = _settingsRevisionNotifier;
@@ -1037,9 +1041,12 @@ class _AppHomeState extends ConsumerState<_AppHome>
     if (state == AppLifecycleState.resumed) {
       unawaited(ref.read(productAnalyticsProvider).flush().catchError((_) {}));
       unawaited(ref.read(errorReportServiceProvider)?.flush());
+    } else if (_startupOperation != null) {
+      _startupInterrupted = true;
     }
     switch (state) {
       case AppLifecycleState.resumed:
+        _completeStartupResumeWaiter();
         ref.read(lmsControllerProvider).setForeground(true);
         unawaited(ref.read(updateRequirementControllerProvider)?.check());
         _syncRestoreRetryTimer?.cancel();
@@ -1056,7 +1063,9 @@ class _AppHomeState extends ConsumerState<_AppHome>
       case AppLifecycleState.hidden:
       case AppLifecycleState.detached:
         ref.read(lmsControllerProvider).setForeground(false);
-        if (_startupGateOpen && _startupOperation == null) {
+        // A startup sync waiting for resume has no Drive request in flight.
+        if (_startupGateOpen &&
+            (_startupOperation == null || _startupResumeWaiter != null)) {
           _syncBeforeBackgroundOrExit();
         }
         break;
@@ -1122,10 +1131,47 @@ class _AppHomeState extends ConsumerState<_AppHome>
 
   Future<void> _runStartupSync() async {
     unawaited(_measureLocalCalendar());
-    await _tryStartSyncIfConnected(startup: true);
+    _startupInterrupted = !_isForeground;
+    try {
+      await _tryStartSyncIfConnected(startup: true);
+    } on Object catch (error) {
+      // iOS may not deliver Drive responses while inactive. Such a timeout is
+      // not a final startup failure: retry once in the foreground.
+      if (!mounted || !_startupInterrupted || !_isTransientSyncError(error)) {
+        rethrow;
+      }
+      if (!_isForeground) {
+        final waiter = _startupResumeWaiter = Completer<void>();
+        await waiter.future;
+        if (!mounted) rethrow;
+      }
+      _startupInterrupted = false;
+      await _tryStartSyncIfConnected(startup: true);
+    }
     if (!mounted) return;
     _refreshSettingsState();
     ref.invalidate(eventsInRangeProvider);
+  }
+
+  static bool get _isForeground {
+    final state = WidgetsBinding.instance.lifecycleState;
+    return state == null || state == AppLifecycleState.resumed;
+  }
+
+  void _completeStartupResumeWaiter() {
+    final waiter = _startupResumeWaiter;
+    _startupResumeWaiter = null;
+    waiter?.complete();
+  }
+
+  static bool _isTransientSyncError(Object error) {
+    if (error is GoogleDriveAuthException) {
+      // Silent token refresh timeouts are reported as auth exceptions.
+      return error.message.contains('응답 시간이 초과');
+    }
+    final code = categorizeAnalyticsError(error);
+    return code == AnalyticsErrorCode.timeout ||
+        code == AnalyticsErrorCode.network;
   }
 
   /// Primes the local calendar and reports when it is ready (once per process).
@@ -1346,7 +1392,8 @@ class _AppHomeState extends ConsumerState<_AppHome>
       }
       return true;
     } on Object catch (error) {
-      _syncRestoreRetryable = error is! GoogleDriveAuthException;
+      _syncRestoreRetryable =
+          error is! GoogleDriveAuthException || _isTransientSyncError(error);
       if (startup) rethrow;
       // Google Drive sync is optional; local calendar use stays available.
       return false;

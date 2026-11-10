@@ -6065,6 +6065,135 @@ void main() {
     },
   );
 
+  for (final resumeBeforeFailure in [false, true]) {
+    testWidgets(
+      'startup Drive timeout during inactive retries once in the foreground '
+      '(#828, resumeBeforeFailure: $resumeBeforeFailure)',
+      (tester) async {
+        SharedPreferences.setMockInitialValues({'onboardingCompleted': true});
+        final settings = SettingsRepository(
+          preferences: await SharedPreferences.getInstance(),
+        );
+        await settings.saveGoogleAccount(
+          const GoogleAccount(email: 'tester@example.com'),
+        );
+        final completion = Completer<void>();
+        final sync = _FakeSync(
+          startupCompletion: completion.future,
+          startErrors: [TimeoutException('Drive request timed out')],
+        );
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [
+              universityRegionsProvider.overrideWith(
+                (ref) async => UniversityRegions.fromJson(
+                  jsonDecode(
+                        File(
+                          'assets/academic/university_regions.json',
+                        ).readAsStringSync(),
+                      )
+                      as Map<String, dynamic>,
+                ),
+              ),
+              settingsRepositoryProvider.overrideWithValue(settings),
+              notificationServiceProvider.overrideWithValue(
+                _FakeNotification(),
+              ),
+              syncServiceProvider.overrideWithValue(sync),
+              eventRepositoryProvider.overrideWithValue(_FakeEventRepository()),
+              googleDriveAuthServiceProvider.overrideWithValue(
+                _FakeGoogleDriveAuthService(),
+              ),
+            ],
+            child: const DailyApp(),
+          ),
+        );
+        await tester.pump();
+        expect(sync.startCalls, 1);
+        tester.binding.handleAppLifecycleStateChanged(
+          AppLifecycleState.inactive,
+        );
+        if (resumeBeforeFailure) {
+          tester.binding.handleAppLifecycleStateChanged(
+            AppLifecycleState.resumed,
+          );
+        }
+        completion.complete();
+        await tester.pump();
+        await tester.pump();
+        expect(find.text('다시 시도'), findsNothing);
+        expect(sync.startCalls, resumeBeforeFailure ? 2 : 1);
+        if (!resumeBeforeFailure) {
+          tester.binding.handleAppLifecycleStateChanged(
+            AppLifecycleState.resumed,
+          );
+        }
+        await tester.pumpAndSettle();
+        expect(sync.startCalls, 2);
+        expect(find.byKey(const ValueKey('startup-sync-banner')), findsNothing);
+        await tester.pumpWidget(const SizedBox.shrink());
+      },
+    );
+  }
+
+  testWidgets(
+    'startup auth failure during inactive still shows the failure (#828)',
+    (tester) async {
+      SharedPreferences.setMockInitialValues({'onboardingCompleted': true});
+      final settings = SettingsRepository(
+        preferences: await SharedPreferences.getInstance(),
+      );
+      await settings.saveGoogleAccount(
+        const GoogleAccount(email: 'tester@example.com'),
+      );
+      final completion = Completer<void>();
+      final sync = _FakeSync(
+        startupCompletion: completion.future,
+        startErrors: [
+          const GoogleDriveAuthException(
+            'Google Drive 연결이 만료되었습니다. 다시 연결해 주세요.',
+          ),
+        ],
+      );
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            universityRegionsProvider.overrideWith(
+              (ref) async => UniversityRegions.fromJson(
+                jsonDecode(
+                      File(
+                        'assets/academic/university_regions.json',
+                      ).readAsStringSync(),
+                    )
+                    as Map<String, dynamic>,
+              ),
+            ),
+            settingsRepositoryProvider.overrideWithValue(settings),
+            notificationServiceProvider.overrideWithValue(_FakeNotification()),
+            syncServiceProvider.overrideWithValue(sync),
+            eventRepositoryProvider.overrideWithValue(_FakeEventRepository()),
+            googleDriveAuthServiceProvider.overrideWithValue(
+              _FakeGoogleDriveAuthService(),
+            ),
+          ],
+          child: const DailyApp(),
+        ),
+      );
+      await tester.pump();
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+      completion.complete();
+      await tester.pump();
+      await tester.pump();
+      expect(
+        find.text('Google Drive 연결이 만료되었습니다. 다시 연결해 주세요.'),
+        findsOneWidget,
+      );
+      expect(find.text('다시 시도'), findsOneWidget);
+      expect(sync.startCalls, 1);
+      await tester.pumpWidget(const SizedBox.shrink());
+    },
+  );
+
   testWidgets(
     'local-first startup failure preserves calendar and linked account',
     (tester) async {
@@ -10824,8 +10953,11 @@ class _GatedSettingsRepository extends SettingsRepository {
 }
 
 class _FakeSync implements SyncService {
-  _FakeSync({this.startupCompletion});
+  _FakeSync({this.startupCompletion, List<Object>? startErrors})
+    : startErrors = startErrors ?? [];
   final Future<void>? startupCompletion;
+  // Thrown by successive start calls before they succeed.
+  final List<Object> startErrors;
   @override
   Future<void> queueSettingsBackup() async {}
 
@@ -10841,6 +10973,7 @@ class _FakeSync implements SyncService {
   Future<void> start() async {
     startCalls += 1;
     await startupCompletion;
+    if (startErrors.isNotEmpty) throw startErrors.removeAt(0);
   }
 }
 
@@ -11454,18 +11587,17 @@ Future<ProviderContainer> _pumpDaySheetSwipeApp(
   final preferences = await SharedPreferences.getInstance();
   final settingsRepository = SettingsRepository(preferences: preferences);
   final now = DateTime.now();
-  CalendarEvent event(String id, String title, DateTime day) =>
-      CalendarEvent(
-        id: id,
-        title: title,
-        startAt: DateTime(day.year, day.month, day.day, 9),
-        endAt: DateTime(day.year, day.month, day.day, 10),
-        allDay: false,
-        category: EventCategory.basic,
-        colorValue: EventCategory.basic.colorValue,
-        createdAt: now,
-        updatedAt: now,
-      );
+  CalendarEvent event(String id, String title, DateTime day) => CalendarEvent(
+    id: id,
+    title: title,
+    startAt: DateTime(day.year, day.month, day.day, 9),
+    endAt: DateTime(day.year, day.month, day.day, 10),
+    allDay: false,
+    category: EventCategory.basic,
+    colorValue: EventCategory.basic.colorValue,
+    createdAt: now,
+    updatedAt: now,
+  );
 
   await tester.pumpWidget(
     ProviderScope(
