@@ -567,6 +567,14 @@ class GoogleDriveAuthService {
         return _toDriveAccount(user);
       } on GoogleSignInException catch (error) {
         if (!isCurrent()) return null;
+        // Credential Manager reports an unregistered package/SHA-1 as a
+        // cancellation after account selection; that is not a user cancel.
+        if (_isAndroidAccountReauthFailure(error)) {
+          debugPrint('GoogleAuthResult.FAILURE');
+          throw GoogleDriveAuthException(
+            _androidClientConfigurationMessage(_googleSignInDetailText(error)),
+          );
+        }
         if (error.code == GoogleSignInExceptionCode.canceled) {
           debugPrint('GoogleAuthResult.CANCELLED');
           return null;
@@ -1055,6 +1063,12 @@ class GoogleDriveAuthService {
       _defaultAuthorizationAccountId = user.id;
     }
     return headers;
+  }
+
+  bool _isAndroidAccountReauthFailure(GoogleSignInException error) {
+    return error.code == GoogleSignInExceptionCode.canceled &&
+        (error.description?.toLowerCase().contains('account reauth failed') ??
+            false);
   }
 
   bool _isMissingAuthorizationCredential(GoogleSignInException error) {
@@ -1858,27 +1872,35 @@ class GoogleDriveAuthService {
     return GoogleDriveAccount(email: user.email, displayName: user.displayName);
   }
 
+  String _googleSignInDetailText(GoogleSignInException error) {
+    final description = error.description;
+    final details = error.details;
+    return [
+      if (description != null && description.trim().isNotEmpty)
+        description.trim(),
+      if (details != null) '$details',
+    ].join(' / ');
+  }
+
+  String _androidClientConfigurationMessage(String detailText) =>
+      'Google Drive 연결 클라이언트 설정이 올바르지 않습니다. '
+      'Android 패키지명과 앱 서명 SHA-1이 Google Cloud OAuth 클라이언트에 등록되어 있는지 확인해 주세요.'
+      '${detailText.isEmpty ? '' : ' ($detailText)'}';
+
   String _googleSignInMessage(GoogleSignInException error) {
     if (_isMissingAuthorizationCredential(error)) {
       return '기기에 저장된 Google 계정의 Drive 권한을 확인하지 못했습니다. '
           'Google 계정 상태를 확인한 뒤 다시 연결해 주세요.';
     }
-    final description = error.description;
-    final details = error.details;
-    final detailText = [
-      if (description != null && description.trim().isNotEmpty)
-        description.trim(),
-      if (details != null) '$details',
-    ].join(' / ');
+    final detailText = _googleSignInDetailText(error);
 
     final hasKeychainError = detailText.toLowerCase().contains('keychain');
     final isApiConsoleRegistrationError = detailText.contains(
       'UNREGISTERED_ON_API_CONSOLE',
     );
-    final androidConfigurationMessage =
-        'Google Drive 연결 클라이언트 설정이 올바르지 않습니다. '
-        'Android 패키지명과 앱 서명 SHA-1이 Google Cloud OAuth 클라이언트에 등록되어 있는지 확인해 주세요.'
-        '${detailText.isEmpty ? '' : ' ($detailText)'}';
+    final androidConfigurationMessage = _androidClientConfigurationMessage(
+      detailText,
+    );
 
     if (isApiConsoleRegistrationError && !Platform.isIOS && !Platform.isMacOS) {
       return androidConfigurationMessage;

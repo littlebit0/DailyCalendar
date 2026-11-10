@@ -272,6 +272,31 @@ void main() {
   );
 
   test(
+    'account reauth failure after selection is reported as configuration error',
+    () async {
+      await initialize(signIn: false);
+      platform.signInError = const GoogleSignInException(
+        code: GoogleSignInExceptionCode.canceled,
+        description: '[16] Account reauth failed.',
+      );
+      await expectLater(
+        service.connectToDrive(),
+        throwsA(
+          isA<GoogleDriveAuthException>().having(
+            (error) => error.message,
+            'message',
+            allOf(contains('SHA-1'), contains('Account reauth failed')),
+          ),
+        ),
+      );
+      expect(service.currentAccount, isNull);
+      // A later genuine cancel still ends silently.
+      platform.signInError = _cancelled;
+      expect(await service.connectToDrive(), isNull);
+    },
+  );
+
+  test(
     'two cancellations then successful connection publish only success',
     () async {
       await initialize(signIn: false);
