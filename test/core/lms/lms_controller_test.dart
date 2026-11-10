@@ -631,6 +631,35 @@ void main() {
     },
   );
 
+  test(
+    'an inactive app window does not use up the automatic login attempt (#829)',
+    () async {
+      configure = (s) {
+        s.stored = false;
+        s.automaticOutcomes.addAll([
+          const LmsWebSessionException(LmsWebSessionError.hostUnavailable),
+          true,
+        ]);
+      };
+      await controller.saveAutomaticLogin('test-user', 'fixture-password');
+      final session = sessions.single;
+      expect(session.automaticLogins, 1);
+      expect(controller.lastLoginFailure, LmsLoginFailure.hostUnavailable);
+      expect(controller.automaticLoginPaused, isFalse);
+
+      // The next activation signs in once with the saved login.
+      await controller.refresh();
+      expect(session.automaticLogins, 2);
+      expect(controller.lastLoginFailure, isNull);
+      expect(controller.sync.state, LmsSyncState.ready);
+      final saved = await LmsCredentialsStore().read(
+        'student@example.com',
+        'smu',
+      );
+      expect(saved!.paused, isFalse);
+    },
+  );
+
   test('network restore failure never submits stored credentials', () async {
     configure = (s) => s.prepareError = const LmsWebSessionException(
       LmsWebSessionError.network,

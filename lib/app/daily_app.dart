@@ -728,6 +728,7 @@ class _AppHomeState extends ConsumerState<_AppHome>
   var _syncRestoreRetryIndex = 0;
   bool _syncRestoreRetryable = true;
   Future<void>? _academicRefreshOperation;
+  bool _academicRefreshSkippedLms = false;
   ValueNotifier<int>? _settingsRevisionNotifier;
   VoidCallback? _settingsRevisionListener;
   late final CoalescingRunner _siriChangeRunner = CoalescingRunner(() {
@@ -1211,7 +1212,17 @@ class _AppHomeState extends ConsumerState<_AppHome>
 
   Future<void> _refreshAcademicCalendars() {
     final running = _academicRefreshOperation;
-    if (running != null) return running;
+    if (running != null) {
+      // A run that started before the window was active skipped LMS; once
+      // resumed, run again after it instead of sharing its result.
+      if (!_academicRefreshSkippedLms ||
+          WidgetsBinding.instance.lifecycleState != AppLifecycleState.resumed) {
+        return running;
+      }
+      return running.then((_) {
+        if (mounted) return _refreshAcademicCalendars();
+      });
+    }
     final operation = _refreshAcademicCalendarsImpl();
     _academicRefreshOperation = operation;
     return operation.whenComplete(() {
@@ -1224,9 +1235,13 @@ class _AppHomeState extends ConsumerState<_AppHome>
   Future<void> _refreshAcademicCalendarsImpl() async {
     if (!mounted) return;
     final lms = ref.read(lmsControllerProvider);
+    // Only an actually resumed window counts. Before the first lifecycle
+    // message (null) Apple cannot host the private school browser yet, and an
+    // automatic login started then fails with hostUnavailable. The resumed
+    // lifecycle path runs this refresh again.
     final foreground =
-        WidgetsBinding.instance.lifecycleState == null ||
         WidgetsBinding.instance.lifecycleState == AppLifecycleState.resumed;
+    _academicRefreshSkippedLms = !foreground;
     lms.setForeground(foreground);
     // After the main Drive phase; it must not hold the startup gate open.
     // The private native browser needs an active application window.
