@@ -9734,6 +9734,26 @@ void main() {
       await finish(tester);
     });
 
+    testWidgets(
+      'starts the school refresh only after the window is resumed (#829)',
+      (tester) async {
+        final refreshes = <bool>[];
+        await pumpToolbar(tester, connected: true, refreshes: refreshes);
+        // Before the first lifecycle message the private school browser has no
+        // active window to run in.
+        expect(tester.binding.lifecycleState, isNull);
+        expect(refreshes, isEmpty);
+
+        tester.binding.handleAppLifecycleStateChanged(
+          AppLifecycleState.resumed,
+        );
+        await tester.pumpAndSettle();
+        expect(refreshes, isNotEmpty);
+        expect(refreshes, everyElement(isFalse));
+        await finish(tester);
+      },
+    );
+
     testWidgets('refreshes with force and reports completion', (tester) async {
       final refreshes = <bool>[];
       await pumpToolbar(

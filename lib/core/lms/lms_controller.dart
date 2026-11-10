@@ -465,10 +465,15 @@ class LmsController extends ChangeNotifier {
     try {
       success = await _loginAutomaticallyWithRetries(current, submitted, valid);
     } catch (error) {
+      final failure =
+          current.lastAutomaticLoginFailure ?? LmsLoginFailure.fromError(error);
+      if (failure == LmsLoginFailure.hostUnavailable) {
+        // The app window could not host the school browser, so nothing was
+        // submitted to the school: the next activation may sign in again.
+        _automaticAttempts.remove(key);
+      }
       if (valid()) {
-        lastLoginFailure =
-            current.lastAutomaticLoginFailure ??
-            LmsLoginFailure.fromError(error);
+        lastLoginFailure = failure;
         _reportAutomatic(
           AnalyticsLmsStage.authentication,
           AnalyticsLmsResult.failed,

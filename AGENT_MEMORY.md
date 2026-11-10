@@ -1,5 +1,16 @@
 # Daily Agent Memory — current handoff
 
+## #829 앱 시작 LMS 자동 재로그인 — 2026-11-10
+
+- Startup LMS refresh (`_refreshAcademicCalendarsImpl`) runs only when
+  `lifecycleState == resumed`; `null` no longer counts as foreground. A refresh
+  that skipped LMS reruns after the resumed path joins it.
+- `_tryAutomaticLogin`: a `hostUnavailable` failure (nothing submitted) no
+  longer consumes the per-process attempt. Rejection pause, the one-attempt
+  limit and manual re-login are unchanged.
+- Shared Dart only. Not verified on iPhone/Mac devices or the real school SSO;
+  confirm desktop/Android still deliver `resumed` at launch.
+
 ## #819 구버전 편집 뒤 여러 알람 보존 — 2026-11-09
 
 - User decision: narrows the #798 rule "a 4.1.0 edit overwrites with its
