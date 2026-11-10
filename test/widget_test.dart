@@ -9608,6 +9608,7 @@ void main() {
       List<bool>? refreshes,
       String? savedLogin,
       List<bool>? driveSyncs,
+      bool automaticRefreshing = false,
     }) async {
       tester.view.devicePixelRatio = 1;
       tester.view.physicalSize = size;
@@ -9681,7 +9682,7 @@ void main() {
                   if (force) loginLost = false;
                 },
                 savedLogin: savedLogin,
-              ),
+              )..automaticRefreshing = automaticRefreshing,
             ),
           ],
           child: const DailyApp(),
@@ -9838,6 +9839,81 @@ void main() {
       );
       expect(find.byTooltip('지금 동기화'), findsOneWidget);
       expect(tester.takeException(), isNull);
+      await finish(tester);
+    });
+
+    IconButton syncButton(WidgetTester tester) => tester.widget<IconButton>(
+      find.descendant(
+        of: find.byWidgetPredicate(
+          (widget) => widget is DailyIconAction && widget.tooltip == '지금 동기화',
+        ),
+        matching: find.byType(IconButton),
+      ),
+    );
+
+    testWidgets('waits for an automatic recovery before it appears (#830)', (
+      tester,
+    ) async {
+      final controller = await pumpToolbar(
+        tester,
+        connected: false,
+        needsLogin: true,
+        integrationEnabled: true,
+      );
+      controller.setAutomaticRefreshing(true);
+      await tester.pump();
+      expect(find.byTooltip('지금 동기화'), findsNothing);
+      // The recovery ended and the school still asks for a login.
+      controller.setAutomaticRefreshing(false);
+      await tester.pump();
+      expect(find.byTooltip('지금 동기화'), findsOneWidget);
+      expect(syncButton(tester).onPressed, isNotNull);
+      await finish(tester);
+    });
+
+    testWidgets('never appears when an automatic recovery succeeds (#830)', (
+      tester,
+    ) async {
+      final controller = await pumpToolbar(
+        tester,
+        connected: false,
+        needsLogin: true,
+        integrationEnabled: true,
+        automaticRefreshing: true,
+      );
+      expect(find.byTooltip('지금 동기화'), findsNothing);
+      controller.loginRecovered = true;
+      controller.setAutomaticRefreshing(false);
+      await tester.pump();
+      expect(find.byTooltip('지금 동기화'), findsNothing);
+      await finish(tester);
+    });
+
+    testWidgets('stays disabled while the requested sync runs (#830)', (
+      tester,
+    ) async {
+      final wait = Completer<void>();
+      final refreshes = <bool>[];
+      await pumpToolbar(
+        tester,
+        connected: false,
+        needsLogin: true,
+        integrationEnabled: true,
+        refreshWait: wait,
+        refreshes: refreshes,
+      );
+      final before = refreshes.length;
+      await tester.tap(find.byTooltip('지금 동기화'));
+      await tester.pump();
+      // The login state already cleared, but the user's request is running.
+      expect(find.byTooltip('지금 동기화'), findsOneWidget);
+      expect(syncButton(tester).onPressed, isNull);
+      await tester.tap(find.byTooltip('지금 동기화'), warnIfMissed: false);
+      await tester.pump();
+      expect(refreshes.skip(before), [true]);
+      wait.complete();
+      await tester.pumpAndSettle();
+      expect(find.byTooltip('지금 동기화'), findsNothing);
       await finish(tester);
     });
 
@@ -11445,9 +11521,12 @@ class _ToolbarLms extends LmsController {
   @override
   bool get connected => isConnected();
   @override
-  bool get needsLogin => isNeedsLogin();
+  bool get needsLogin => !loginRecovered && isNeedsLogin();
   @override
   String? get localLoginUsername => savedLogin;
+
+  /// The automatic recovery signed in again.
+  var loginRecovered = false;
   @override
   Future<void> retryAutomaticLogin() async {
     onRefresh(true);
@@ -11459,6 +11538,16 @@ class _ToolbarLms extends LmsController {
   Future<void> refresh({bool force = false}) async {
     onRefresh(force);
     await refreshWait?.future;
+  }
+
+  /// An automatic recovery the app started by itself, not the user.
+  var automaticRefreshing = false;
+  @override
+  bool get refreshing => automaticRefreshing;
+
+  void setAutomaticRefreshing(bool value) {
+    automaticRefreshing = value;
+    notifyListeners();
   }
 }
 

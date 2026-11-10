@@ -9,6 +9,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/weather/weather_widgets.dart';
@@ -5514,6 +5515,9 @@ Future<void> _openRangeEventEditor(
   }
 }
 
+/// The calendar's LMS sync action the user started is still running.
+final _calendarLmsSyncRequestedProvider = StateProvider<bool>((ref) => false);
+
 class _CalendarHeader extends ConsumerWidget {
   const _CalendarHeader({
     required this.desktop,
@@ -5563,12 +5567,14 @@ class _CalendarHeader extends ConsumerWidget {
         dailyWindowClassFor(windowSize) != DailyWindowClass.compact;
     final actionSize = androidTablet ? 48.0 : 40.0;
     final lms = ref.watch(lmsControllerProvider);
-    final lmsBusy = lms.restoring || lms.sync.state == LmsSyncState.loading;
+    final lmsSyncRequested = ref.watch(_calendarLmsSyncRequestedProvider);
     final lmsActions = [
       // Only a lost school login needs this action; while the login holds,
-      // LMS refreshes by itself.
+      // LMS refreshes by itself. An automatic recovery still running may yet
+      // succeed, so the action waits for it unless the user started it.
       if (lms.supported &&
-          lms.needsLogin &&
+          (lmsSyncRequested ||
+              (lms.needsLogin && !lms.refreshing && !lms.restoring)) &&
           ref
                   .watch(appSettingsProvider)
                   .academicProfile
@@ -5576,7 +5582,7 @@ class _CalendarHeader extends ConsumerWidget {
               true)
         DailyIconAction(
           tooltip: context.tr('지금 동기화'),
-          onPressed: lmsBusy ? null : () => _syncLms(context, ref),
+          onPressed: lmsSyncRequested ? null : () => _syncLms(context, ref),
           icon: Icons.sync_rounded,
           size: actionSize,
           borderless: true,
@@ -5946,6 +5952,18 @@ class _CalendarHeader extends ConsumerWidget {
   /// Backs up and pulls Google Drive changes and signs in to the school again
   /// in one action. A failure of one does not stop the other.
   Future<void> _syncLms(BuildContext context, WidgetRef ref) async {
+    final requested = ref.read(_calendarLmsSyncRequestedProvider.notifier);
+    if (requested.state) return;
+    requested.state = true;
+    try {
+      await _runLmsSync(context, ref);
+    } finally {
+      // The app can be torn down while the sync is still running.
+      if (requested.mounted) requested.state = false;
+    }
+  }
+
+  Future<void> _runLmsSync(BuildContext context, WidgetRef ref) async {
     final controller = ref.read(lmsControllerProvider);
     final driveLinked =
         ref.read(settingsRepositoryProvider).dailyAccount()?.googleAccount !=

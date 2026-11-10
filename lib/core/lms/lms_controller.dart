@@ -147,6 +147,10 @@ class LmsController extends ChangeNotifier {
       _matchesSelectedPrincipal(_session?.principalId ?? _restoredPrincipal) &&
       (_stored || _session?.isAuthenticated == true);
   bool get needsLogin => sync.state == LmsSyncState.needsLogin;
+
+  /// True while a refresh is running, including the session recovery and saved
+  /// login it may try; its needsLogin state is not final until it ends.
+  bool get refreshing => _operation != null;
   LmsWebSession? get session => _session;
 
   String? get _desiredKey {
@@ -256,7 +260,10 @@ class LmsController extends ChangeNotifier {
     });
     _operation = operation;
     return operation.whenComplete(() {
-      if (identical(_operation, operation)) _operation = null;
+      if (identical(_operation, operation)) {
+        _operation = null;
+        _notify();
+      }
     });
   }
 
