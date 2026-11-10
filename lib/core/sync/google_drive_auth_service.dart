@@ -787,6 +787,7 @@ class GoogleDriveAuthService {
       } on TimeoutException {
         throw const GoogleDriveAuthException(
           'Google Drive 연결 응답 시간이 초과되었습니다. 네트워크 상태를 확인한 뒤 다시 시도해 주세요.',
+          timedOut: true,
         );
       }
     }
@@ -825,6 +826,7 @@ class GoogleDriveAuthService {
       } on TimeoutException {
         throw const GoogleDriveAuthException(
           'Google Drive 연결 응답 시간이 초과되었습니다. 네트워크 상태를 확인한 뒤 다시 시도해 주세요.',
+          timedOut: true,
         );
       }
     }
@@ -874,6 +876,7 @@ class GoogleDriveAuthService {
     } on TimeoutException {
       throw const GoogleDriveAuthException(
         'Google Drive 권한 승인이 완료되지 않았습니다. 승인 창을 닫았다면 다시 연결해 주세요.',
+        timedOut: true,
       );
     }
   }
@@ -1939,9 +1942,13 @@ class GoogleDriveAuthService {
 }
 
 class GoogleDriveAuthException implements Exception {
-  const GoogleDriveAuthException(this.message);
+  const GoogleDriveAuthException(this.message, {this.timedOut = false});
 
   final String message;
+
+  /// An auth step did not answer in time (e.g. while the app was inactive),
+  /// as opposed to a rejected or missing authorization.
+  final bool timedOut;
 
   @override
   String toString() => message;

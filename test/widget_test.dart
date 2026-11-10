@@ -6065,10 +6065,21 @@ void main() {
     },
   );
 
-  for (final resumeBeforeFailure in [false, true]) {
+  for (final (resumeBeforeFailure, startupError) in <(bool, Object)>[
+    (false, TimeoutException('Drive request timed out')),
+    (true, TimeoutException('Drive request timed out')),
+    (
+      false,
+      const GoogleDriveAuthException(
+        'Google Drive 권한 승인이 완료되지 않았습니다. 승인 창을 닫았다면 다시 연결해 주세요.',
+        timedOut: true,
+      ),
+    ),
+  ]) {
     testWidgets(
       'startup Drive timeout during inactive retries once in the foreground '
-      '(#828, resumeBeforeFailure: $resumeBeforeFailure)',
+      '(#828, resumeBeforeFailure: $resumeBeforeFailure, '
+      '${startupError.runtimeType})',
       (tester) async {
         SharedPreferences.setMockInitialValues({'onboardingCompleted': true});
         final settings = SettingsRepository(
@@ -6080,7 +6091,7 @@ void main() {
         final completion = Completer<void>();
         final sync = _FakeSync(
           startupCompletion: completion.future,
-          startErrors: [TimeoutException('Drive request timed out')],
+          startErrors: [startupError],
         );
         await tester.pumpWidget(
           ProviderScope(

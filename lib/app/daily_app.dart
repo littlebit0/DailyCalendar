@@ -1165,10 +1165,7 @@ class _AppHomeState extends ConsumerState<_AppHome>
   }
 
   static bool _isTransientSyncError(Object error) {
-    if (error is GoogleDriveAuthException) {
-      // Silent token refresh timeouts are reported as auth exceptions.
-      return error.message.contains('응답 시간이 초과');
-    }
+    if (error is GoogleDriveAuthException) return error.timedOut;
     final code = categorizeAnalyticsError(error);
     return code == AnalyticsErrorCode.timeout ||
         code == AnalyticsErrorCode.network;
