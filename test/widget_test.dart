@@ -257,7 +257,7 @@ void main() {
       );
       expect(find.byTooltip('이전'), findsNothing);
       expect(find.byTooltip('다음'), findsNothing);
-      expect(find.byTooltip('LLM'), findsOneWidget);
+      expect(find.byTooltip('LLM'), findsNothing);
       expect(find.byTooltip('Siri'), findsNothing);
       final track = find.byKey(const ValueKey('bottom-mode-track'));
       final compactSize = tester.getSize(track);
@@ -269,11 +269,6 @@ void main() {
       await tester.tap(find.byTooltip('검색'));
       await tester.pumpAndSettle();
       expect(tester.getSize(track), compactSize);
-      await tester.tap(find.byTooltip('LLM'));
-      await tester.pumpAndSettle();
-      expect(find.byKey(const ValueKey('inline-ai-input')), findsOneWidget);
-      expect(find.widgetWithText(TextField, '일정을 입력하세요'), findsOneWidget);
-      expect(find.text('지금 듣는 중...'), findsNothing);
       expect(tester.takeException(), isNull);
 
       debugDefaultTargetPlatformOverride = null;
@@ -1767,7 +1762,7 @@ void main() {
       driveSyncService.syncPendingChangesNowCalls,
       greaterThanOrEqualTo(1),
     );
-    expect(find.byTooltip('LLM'), findsOneWidget);
+    expect(find.byTooltip('LLM'), findsNothing);
 
     await tester.pumpWidget(const SizedBox.shrink());
   });
@@ -2743,16 +2738,16 @@ void main() {
       final track = tester.getRect(switcher);
       expect(
         tester.getCenter(thumb).dx,
-        closeTo(track.left + 5 + (track.width - 10) * (index + 0.5) / 6, 0.5),
+        closeTo(track.left + 5 + (track.width - 10) * (index + 0.5) / 5, 0.5),
       );
     }
 
     expectCenteredNavigation(compactSize);
     expectSelectedSegment(1);
     expect(tester.getSize(thumb).height, 28);
-    // The old separate calendar slider is now part of the six-segment bar.
+    // The old separate calendar slider is now part of the five-segment bar.
     expect(find.byKey(const ValueKey('calendar-view-button')), findsNothing);
-    for (final label in ['빠른 보기', '주간', '월간', '일간', 'Siri', '시간표']) {
+    for (final label in ['빠른 보기', '주간', '월간', '일간', '시간표']) {
       expect(find.byTooltip(label), findsOneWidget);
     }
     final track = tester.widget<AnimatedContainer>(
@@ -2766,7 +2761,8 @@ void main() {
     expect(tester.takeException(), isNull);
     expect(find.byType(PageView), findsOneWidget);
     expect(find.text('일정 없음'), findsWidgets);
-    expect(find.byIcon(Icons.graphic_eq_rounded), findsOneWidget);
+    expect(find.byIcon(Icons.graphic_eq_rounded), findsNothing);
+    expect(find.byTooltip('Siri'), findsNothing);
     expect(find.byTooltip('오늘'), findsOneWidget);
 
     final period = tester.getRect(
@@ -2799,7 +2795,7 @@ void main() {
     final gesture = await tester.startGesture(
       tester.getCenter(find.byTooltip('주간')),
     );
-    await gesture.moveBy(Offset(-expandedSize.width / 6, 0));
+    await gesture.moveBy(Offset(-expandedSize.width / 5, 0));
     await gesture.up();
     await tester.pump(const Duration(milliseconds: 80));
     expect(tester.getRect(toolbar), headerBeforeQuickView);
@@ -2832,50 +2828,11 @@ void main() {
       DateTime(startDate.year, startDate.month, startDate.day + 7),
     );
 
-    final headerBeforeAi = tester.getRect(toolbar);
-    final calendarHeightBeforeAi = tester.getSize(find.byType(PageView)).height;
-    await tester.tap(find.byTooltip('Siri'));
-    await tester.pumpAndSettle();
-    expect(
-      find.byKey(const ValueKey('inline-ai-layout-panel')),
-      findsOneWidget,
-    );
-    expect(find.byKey(const ValueKey('inline-ai-input')), findsOneWidget);
-    expect(find.byKey(const ValueKey('inline-ai-panel')), findsNothing);
-    expect(
-      tester
-          .getSize(find.byKey(const ValueKey('inline-ai-layout-panel')))
-          .height,
-      greaterThan(0),
-    );
-    expect(
-      tester.getSize(find.byType(PageView)).height,
-      lessThan(calendarHeightBeforeAi),
-    );
-    expect(tester.getRect(toolbar), headerBeforeAi);
-    expect(find.byType(BottomSheet), findsNothing);
-    expect(find.byTooltip('AI 입력 닫기'), findsOneWidget);
-    expectSelectedSegment(4);
-    await tester.tap(find.byTooltip('AI 입력 닫기'));
-    await tester.pumpAndSettle();
-    expect(
-      tester
-          .getSize(find.byKey(const ValueKey('inline-ai-layout-panel')))
-          .height,
-      0,
-    );
-    expect(find.byKey(const ValueKey('inline-ai-input')), findsNothing);
-    expect(
-      tester.getSize(find.byType(PageView)).height,
-      calendarHeightBeforeAi,
-    );
-    expect(tester.getRect(toolbar), headerBeforeAi);
-
     debugDefaultTargetPlatformOverride = null;
     await tester.pumpWidget(const SizedBox.shrink());
   });
 
-  testWidgets('iOS uses one liquid-style six-segment calendar navigation', (
+  testWidgets('iOS uses one liquid-style five-segment calendar navigation', (
     tester,
   ) async {
     tester.view.physicalSize = const Size(393, 852);
@@ -2985,14 +2942,14 @@ void main() {
     expect(find.byTooltip('주간'), findsOneWidget);
     expect(find.byTooltip('월간'), findsOneWidget);
     expect(find.byTooltip('일간'), findsOneWidget);
-    expect(find.byTooltip('Siri'), findsOneWidget);
+    expect(find.byTooltip('Siri'), findsNothing);
     expect(find.byTooltip('시간표'), findsOneWidget);
 
     final trackRect = tester.getRect(switcher);
     final thumb = find.byKey(const ValueKey('bottom-mode-thumb-circle'));
     expect(
       tester.getCenter(thumb).dx,
-      closeTo(trackRect.left + trackRect.width * 0.25, 3),
+      closeTo(trackRect.left + trackRect.width * 0.3, 3),
     );
 
     await tester.tap(find.byTooltip('빠른 보기'));
@@ -3005,7 +2962,7 @@ void main() {
     expect(find.byType(PageView), findsOneWidget);
     expect(
       tester.getCenter(thumb).dx,
-      closeTo(trackRect.left + trackRect.width * (2.5 / 6), 3),
+      closeTo(trackRect.left + trackRect.width * (2.5 / 5), 3),
     );
 
     final thumbSize = tester.getSize(thumb);
@@ -3024,20 +2981,6 @@ void main() {
     expect(tester.getSize(switcher).height, inExclusiveRange(42, 50));
     await tester.pumpAndSettle();
     expect(tester.getSize(switcher), const Size(281.6, 42));
-
-    final toolbarBeforeSiri = tester.getRect(
-      find.byKey(const ValueKey('ios-calendar-toolbar')),
-    );
-    await tester.tap(find.byTooltip('Siri'));
-    await tester.pumpAndSettle();
-    expect(
-      find.byKey(const ValueKey('inline-ai-layout-panel')),
-      findsOneWidget,
-    );
-    expect(
-      tester.getRect(find.byKey(const ValueKey('ios-calendar-toolbar'))),
-      toolbarBeforeSiri,
-    );
 
     debugDefaultTargetPlatformOverride = null;
     await tester.pumpWidget(const SizedBox.shrink());
@@ -3091,201 +3034,13 @@ void main() {
     expect(find.text('Week'), findsOneWidget);
     expect(find.text('Month'), findsOneWidget);
     expect(find.text('Day'), findsOneWidget);
-    expect(find.byTooltip('Siri'), findsOneWidget);
+    expect(find.byTooltip('Siri'), findsNothing);
     expect(tester.getSize(viewSlider), const Size(281.6, 42));
     expect(find.byKey(const ValueKey('calendar-view-button')), findsNothing);
 
     debugDefaultTargetPlatformOverride = null;
     await tester.pumpWidget(const SizedBox.shrink());
   });
-
-  testWidgets('Signal typed event changes require explicit confirmation', (
-    tester,
-  ) async {
-    tester.view.physicalSize = const Size(393, 852);
-    tester.view.devicePixelRatio = 1;
-    addTearDown(tester.view.resetPhysicalSize);
-    addTearDown(tester.view.resetDevicePixelRatio);
-    debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
-    addTearDown(() => debugDefaultTargetPlatformOverride = null);
-
-    const signalChannel = MethodChannel('daily/signal_voice');
-    final signalCalls = <MethodCall>[];
-    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
-        .setMockMethodCallHandler(signalChannel, (call) async {
-          signalCalls.add(call);
-          return switch (call.method) {
-            'startListening' => throw PlatformException(
-              code: 'listening_cancelled',
-            ),
-            'cancelListening' || 'speak' => null,
-            'runSignal'
-                when (call.arguments as Map<Object?, Object?>)['confirmed'] ==
-                    false =>
-              throw PlatformException(code: 'signal_confirmation_required'),
-            'runSignal' => <String, Object?>{
-              'message': '일정을 추가했습니다.',
-              'success': true,
-            },
-            _ => throw PlatformException(code: 'unexpected_method'),
-          };
-        });
-    addTearDown(() {
-      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
-          .setMockMethodCallHandler(signalChannel, null);
-    });
-
-    SharedPreferences.setMockInitialValues({
-      'onboardingCompleted': true,
-      'appleUserIdentifier': 'apple-user',
-      'appleEmail': 'hwi@example.com',
-    });
-    final preferences = await SharedPreferences.getInstance();
-    final settingsRepository = SettingsRepository(preferences: preferences);
-
-    await tester.pumpWidget(
-      ProviderScope(
-        overrides: [
-          universityRegionsProvider.overrideWith(
-            (ref) async => UniversityRegions.fromJson(
-              jsonDecode(
-                    File(
-                      'assets/academic/university_regions.json',
-                    ).readAsStringSync(),
-                  )
-                  as Map<String, dynamic>,
-            ),
-          ),
-          settingsRepositoryProvider.overrideWithValue(settingsRepository),
-          notificationServiceProvider.overrideWithValue(_FakeNotification()),
-          syncServiceProvider.overrideWithValue(_FakeSync()),
-          eventRepositoryProvider.overrideWithValue(_FakeEventRepository()),
-          googleDriveAuthServiceProvider.overrideWithValue(
-            _FakeGoogleDriveAuthService(),
-          ),
-        ],
-        child: const DailyApp(),
-      ),
-    );
-    await tester.pumpAndSettle();
-
-    await tester.tap(find.byTooltip('Siri'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.byTooltip('텍스트로 입력'));
-    await tester.pumpAndSettle();
-    await tester.enterText(
-      find.byKey(const ValueKey('signal-text-input')),
-      '내일 오전 9시부터 10시까지 운동 일정 추가',
-    );
-    await tester.testTextInput.receiveAction(TextInputAction.send);
-    await tester.pumpAndSettle();
-
-    expect(find.text('이 명령을 실행할까요?'), findsOneWidget);
-    final previewCall = signalCalls.singleWhere(
-      (call) => call.method == 'runSignal',
-    );
-    expect(previewCall.arguments, {
-      'command': '내일 오전 9시부터 10시까지 운동 일정 추가',
-      'confirmed': false,
-    });
-
-    await tester.tap(find.widgetWithText(FilledButton, '실행'));
-    await tester.pumpAndSettle();
-
-    final runCall = signalCalls
-        .where((call) => call.method == 'runSignal')
-        .last;
-    expect(runCall.arguments, {
-      'command': '내일 오전 9시부터 10시까지 운동 일정 추가',
-      'confirmed': true,
-    });
-    expect(find.text('일정을 추가했습니다.'), findsOneWidget);
-
-    debugDefaultTargetPlatformOverride = null;
-    await tester.pumpWidget(const SizedBox.shrink());
-  });
-
-  for (final cancelPath in ['text', 'background', 'dispose']) {
-    testWidgets('Signal permission pending cancellation via $cancelPath', (
-      tester,
-    ) async {
-      tester.view.physicalSize = const Size(393, 852);
-      tester.view.devicePixelRatio = 1;
-      addTearDown(tester.view.resetPhysicalSize);
-      addTearDown(tester.view.resetDevicePixelRatio);
-      debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
-      addTearDown(() => debugDefaultTargetPlatformOverride = null);
-      const signalChannel = MethodChannel('daily/signal_voice');
-      final reply = Completer<String>();
-      final calls = <MethodCall>[];
-      final messenger =
-          TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger;
-      messenger.setMockMethodCallHandler(signalChannel, (call) async {
-        calls.add(call);
-        if (call.method == 'startListening') return reply.future;
-        return null;
-      });
-      addTearDown(
-        () => messenger.setMockMethodCallHandler(signalChannel, null),
-      );
-      SharedPreferences.setMockInitialValues({
-        'onboardingCompleted': true,
-        'appleUserIdentifier': 'apple-user',
-        'appleEmail': 'hwi@example.com',
-      });
-      final preferences = await SharedPreferences.getInstance();
-      final settingsRepository = SettingsRepository(preferences: preferences);
-
-      await tester.pumpWidget(
-        ProviderScope(
-          overrides: [
-            universityRegionsProvider.overrideWith(
-              (ref) async => UniversityRegions.fromJson(
-                jsonDecode(
-                      File(
-                        'assets/academic/university_regions.json',
-                      ).readAsStringSync(),
-                    )
-                    as Map<String, dynamic>,
-              ),
-            ),
-            settingsRepositoryProvider.overrideWithValue(settingsRepository),
-            notificationServiceProvider.overrideWithValue(_FakeNotification()),
-            syncServiceProvider.overrideWithValue(_FakeSync()),
-            eventRepositoryProvider.overrideWithValue(_FakeEventRepository()),
-            googleDriveAuthServiceProvider.overrideWithValue(
-              _FakeGoogleDriveAuthService(),
-            ),
-          ],
-          child: const DailyApp(),
-        ),
-      );
-      await tester.pumpAndSettle();
-
-      await tester.tap(find.byTooltip('Siri'));
-      await tester.pumpAndSettle();
-      // The OS permission prompt temporarily makes the app inactive.
-      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
-      await tester.pump();
-      expect(calls.where((c) => c.method == 'cancelListening'), isEmpty);
-      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
-      if (cancelPath == 'text') {
-        await tester.tap(find.byTooltip('텍스트로 입력'));
-      } else if (cancelPath == 'background') {
-        tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
-      } else {
-        await tester.pumpWidget(const SizedBox.shrink());
-      }
-      await tester.pumpAndSettle();
-      expect(calls.where((c) => c.method == 'cancelListening'), isNotEmpty);
-      reply.complete('이전 요청의 늦은 응답');
-      await tester.pumpAndSettle();
-      expect(calls.where((c) => c.method == 'runSignal'), isEmpty);
-      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
-      await tester.pumpWidget(const SizedBox.shrink());
-      debugDefaultTargetPlatformOverride = null;
-    });
-  }
 
   for (final platform in [
     TargetPlatform.macOS,

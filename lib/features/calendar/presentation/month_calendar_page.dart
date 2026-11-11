@@ -44,7 +44,7 @@ import '../../timetable/presentation/timetable_schedule.dart';
 
 enum _BottomCenterAction { quickAccess, calendar, ai, timetable }
 
-enum _BottomNavigationItem { quickAccess, week, month, day, siri, timetable }
+enum _BottomNavigationItem { quickAccess, week, month, day, timetable }
 
 enum _RecurringDragScope { onlyThis, future, all }
 
@@ -246,7 +246,6 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
                       setState(() => _quickAccessSelected = true);
                     },
                     onCalendarViewSelected: _selectCalendarView,
-                    onLlmPressed: _toggleAiPanel,
                   ),
                   Expanded(
                     child: Row(
@@ -5162,7 +5161,6 @@ class _CalendarHeader extends ConsumerWidget {
     required this.onQuickAccessPressed,
     required this.onTimetablePressed,
     required this.onCalendarViewSelected,
-    required this.onLlmPressed,
   });
 
   final DateTime month;
@@ -5178,7 +5176,6 @@ class _CalendarHeader extends ConsumerWidget {
   final VoidCallback onQuickAccessPressed;
   final VoidCallback onTimetablePressed;
   final ValueChanged<CalendarViewMode> onCalendarViewSelected;
-  final VoidCallback onLlmPressed;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -5359,9 +5356,6 @@ class _CalendarHeader extends ConsumerWidget {
     );
 
     if (desktop) {
-      final assistantLabel = platform == TargetPlatform.macOS || ios
-          ? 'Siri'
-          : 'LLM';
       final viewSwitch = SegmentedButton<CalendarViewMode>(
         selected: quickAccessSelected || timetableSelected
             ? const {}
@@ -5420,13 +5414,6 @@ class _CalendarHeader extends ConsumerWidget {
         selectedIcon: Icons.view_agenda_rounded,
         borderless: true,
       );
-      final llmButton = DailyIconAction(
-        tooltip: assistantLabel,
-        onPressed: onLlmPressed,
-        icon: Icons.stars_rounded,
-        accentColor: DailyUi.purple,
-        borderless: true,
-      );
 
       return Padding(
         key: const ValueKey('macos-calendar-toolbar'),
@@ -5448,7 +5435,6 @@ class _CalendarHeader extends ConsumerWidget {
               ...navigationActions,
               ...utilityActions.take(2),
             ],
-            llmButton,
             DailyIconAction(
               tooltip: context.tr('시간표'),
               onPressed: onTimetablePressed,
@@ -5939,18 +5925,12 @@ class _CalendarBottomBarState extends State<_CalendarBottomBar> {
       return _BottomNavigationItem.timetable;
     }
     final selectedAction = widget.selectedAction;
-    if (selectedAction == _BottomCenterAction.ai) {
-      return _BottomNavigationItem.siri;
-    }
     if (selectedAction == _BottomCenterAction.quickAccess) {
       return _BottomNavigationItem.quickAccess;
     }
     if (!widget.calendarActive ||
         widget.activeAction == _BottomCenterAction.quickAccess) {
       return _BottomNavigationItem.quickAccess;
-    }
-    if (widget.activeAction == _BottomCenterAction.ai) {
-      return _BottomNavigationItem.siri;
     }
     return switch (widget.viewMode) {
       CalendarViewMode.week => _BottomNavigationItem.week,
@@ -6154,8 +6134,6 @@ class _CalendarBottomBarState extends State<_CalendarBottomBar> {
       case _BottomNavigationItem.day:
         widget.onCalendarViewInteractionStarted();
         widget.onCalendarViewSelected(CalendarViewMode.day);
-      case _BottomNavigationItem.siri:
-        widget.onCenterActionSelected(_BottomCenterAction.ai);
     }
   }
 }
@@ -6189,8 +6167,6 @@ class _UnifiedBottomNavigationButton extends StatelessWidget {
       _BottomNavigationItem.day => context.l10n.calendarViewName(
         CalendarViewMode.day,
       ),
-      _BottomNavigationItem.siri =>
-        Theme.of(context).platform == TargetPlatform.android ? 'LLM' : 'Siri',
     };
     return Expanded(
       child: Tooltip(
@@ -6213,9 +6189,6 @@ class _UnifiedBottomNavigationButton extends StatelessWidget {
     }
     if (item == _BottomNavigationItem.quickAccess) {
       return Icon(Icons.view_agenda_outlined, size: 20, color: color);
-    }
-    if (item == _BottomNavigationItem.siri) {
-      return Icon(Icons.graphic_eq_rounded, size: 21, color: color);
     }
     final mode = switch (item) {
       _BottomNavigationItem.week => CalendarViewMode.week,
@@ -6329,7 +6302,11 @@ class _LegacyCalendarBottomBar extends StatelessWidget {
                     thumbLayerKey: const ValueKey('bottom-mode-thumb-layer'),
                     thumbKey: const ValueKey('bottom-mode-thumb'),
                     thumbShapeKey: const ValueKey('bottom-mode-thumb-circle'),
-                    values: _BottomCenterAction.values,
+                    values: const [
+                      _BottomCenterAction.quickAccess,
+                      _BottomCenterAction.calendar,
+                      _BottomCenterAction.timetable,
+                    ],
                     value: selectedAction ?? activeAction,
                     width: centerWidth,
                     height: centerHeight,
