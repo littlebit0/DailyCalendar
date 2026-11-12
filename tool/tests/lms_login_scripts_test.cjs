@@ -39,7 +39,10 @@ async function verify(doc, preferences, result={}) {
   r=await verify(document(),null,{url:'https://other.test/user/preferences.php'}); assert.equal(r.value.unexpectedOrigin,true); checks++;
   r=await verify(document(),null,{url:origin+'/user/preferences.php?userid=456'}); assert.equal(r.value.unexpectedOrigin,true); checks++;
   r=await verify(document(),null,{status:401,ok:false}); assert.equal(r.value.authenticationRequired,true); checks++;
-  const automatic = new AsyncFunction('document','location','window','stage','username','password','setTimeout',scripts.automaticLoginScript);
+  // The school values the app passes for Sangmyung (LmsSchool.scriptArguments).
+  const school={lmsHost:'ecampus.smu.ac.kr',loginForm:'form.form-login',ssoHost:'smsso.smu.ac.kr',ssoEntryForm:'form.form-sso-login',ssoEntryPath:'/exsignon/sso/sso_idp_login.php',ssoForm:'form#loginFrm',ssoPath:'/Login.do',ssoUser:'#user_id',ssoPassword:'#user_password',ssoFunction:'doLogin',ssoRemember:'#saveIdIpt'};
+  const configured = new AsyncFunction(...Object.keys(school),'document','location','window','stage','username','password','setTimeout',scripts.automaticLoginScript);
+  const automatic = (...args) => configured(...Object.values(school),...args);
   const field=type=>({type,value:'',dispatchEvent(){}});
   const user=field('text'),pwd=field('password'); let submissions=0;
   const form={method:'post',action:origin+'/login/index.php',dataset:{},requestSubmit(){submissions++},querySelector:s=>s.includes('username')?user:s.includes('password')?pwd:null,querySelectorAll:()=>[]};
