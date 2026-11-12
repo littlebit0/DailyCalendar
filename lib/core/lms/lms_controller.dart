@@ -9,6 +9,7 @@ import '../analytics/product_analytics.dart';
 import '../settings/settings_repository.dart';
 import 'lms_login_analytics.dart';
 import 'lms_models.dart';
+import 'lms_school.dart';
 import 'lms_sync_service.dart';
 import 'lms_web_session.dart';
 import 'lms_credentials_store.dart';
@@ -136,8 +137,9 @@ class LmsController extends ChangeNotifier {
   String? _configuredLmsUserId;
 
   String? get schoolId => _settings.load().academicProfile?.timetableUniversity;
-  // Only the adapter verified against actual authenticated responses is enabled.
-  static bool supportsSchool(String? schoolId) => schoolId == 'smu';
+  // Supported schools are the rows of the single school configuration list.
+  static bool supportsSchool(String? schoolId) =>
+      LmsSchool.of(schoolId) != null;
   bool get supported => supportsSchool(schoolId);
   bool get restoring => _restoring || _disconnecting;
   bool get connected =>

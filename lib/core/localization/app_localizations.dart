@@ -238,8 +238,8 @@ const Map<String, Map<String, String>> _translations = {
     "이 학교의 LMS 연결은 아직 지원하지 않습니다.":
         "LMS connections for this school are not yet supported.",
     "학교 계정으로 로그인해 연결하세요.": "Sign in with your school account to connect.",
-    "현재 상명대학교 LMS 일정을 지원합니다. 다른 학교는 확인 후 지원합니다.":
-        "LMS events at Sangmyung University are currently supported. Other schools will be added after verification.",
+    "현재 상명대·전남대·국립창원대·전주교대·경기대·국립목포대·가천대 LMS 일정을 지원합니다. 다른 학교는 확인 후 지원합니다.":
+        "LMS events are currently supported at Sangmyung, Chonnam National, Changwon National, Jeonju NUE, Kyonggi, Mokpo National and Gachon. Other schools will be added after verification.",
     "학교의 공식 로그인 화면에서 인증하면 과제·퀴즈 마감과 출석 조건이 확인된 학습 일정을 자동으로 가져옵니다.":
         "Sign in on the official school page to automatically import assignment and quiz deadlines, and learning events with verified attendance requirements.",
     "앱 시작·복귀 시와 사용 중 5분 간격으로 확인합니다. 학교 인증이 만료되면 다시 로그인해야 합니다.":
@@ -1372,8 +1372,8 @@ const Map<String, Map<String, String>> _translations = {
     "학교 로그인이 필요합니다.": "大学へのログインが必要です。",
     "이 학교의 LMS 연결은 아직 지원하지 않습니다.": "この大学のLMS連携にはまだ対応していません。",
     "학교 계정으로 로그인해 연결하세요.": "大学のアカウントでログインして連携してください。",
-    "현재 상명대학교 LMS 일정을 지원합니다. 다른 학교는 확인 후 지원합니다.":
-        "現在、祥明大学校のLMS予定に対応しています。他の大学は確認後に対応します。",
+    "현재 상명대·전남대·국립창원대·전주교대·경기대·국립목포대·가천대 LMS 일정을 지원합니다. 다른 학교는 확인 후 지원합니다.":
+        "現在、祥明大・全南大・国立昌原大・全州教育大・京畿大・国立木浦大・嘉泉大のLMS予定に対応しています。他の大学は確認後に対応します。",
     "학교의 공식 로그인 화면에서 인증하면 과제·퀴즈 마감과 출석 조건이 확인된 학습 일정을 자동으로 가져옵니다.":
         "大学の公式ログイン画面で認証すると、課題・小テストの締切と出席条件が確認できた学習予定を自動で取得します。",
     "앱 시작·복귀 시와 사용 중 5분 간격으로 확인합니다. 학교 인증이 만료되면 다시 로그인해야 합니다.":
@@ -2403,8 +2403,8 @@ const Map<String, Map<String, String>> _translations = {
     "학교 로그인이 필요합니다.": "需要登入學校帳號。",
     "이 학교의 LMS 연결은 아직 지원하지 않습니다.": "尚未支援此學校的 LMS 連線。",
     "학교 계정으로 로그인해 연결하세요.": "請使用學校帳號登入以建立連線。",
-    "현재 상명대학교 LMS 일정을 지원합니다. 다른 학교는 확인 후 지원합니다.":
-        "目前支援祥明大學的 LMS 行程。其他學校將於確認後提供支援。",
+    "현재 상명대·전남대·국립창원대·전주교대·경기대·국립목포대·가천대 LMS 일정을 지원합니다. 다른 학교는 확인 후 지원합니다.":
+        "目前支援祥明大、全南大、國立昌原大、全州教育大、京畿大、國立木浦大、嘉泉大的 LMS 行程。其他學校將於確認後提供支援。",
     "학교의 공식 로그인 화면에서 인증하면 과제·퀴즈 마감과 출석 조건이 확인된 학습 일정을 자동으로 가져옵니다.":
         "在學校官方登入頁面完成驗證後，即可自動匯入作業、測驗截止時間與已確認出席條件的學習行程。",
     "앱 시작·복귀 시와 사용 중 5분 간격으로 확인합니다. 학교 인증이 만료되면 다시 로그인해야 합니다.":
