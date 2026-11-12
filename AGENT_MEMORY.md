@@ -1,5 +1,23 @@
 # Daily Agent Memory — current handoff
 
+## #838 LMS 학교 설정 목록과 6개 대학 추가 — 2026-11-12
+
+- LMS support is one list: `LmsSchool.all` (`lib/core/lms/lms_school.dart`).
+  Rows: smu (SSO), jnu, changwon, jnue, kyonggi, mokpo, gachon (own
+  `POST /login/index.php` form only). The login script takes these values as
+  arguments; it has no per-school branch.
+- `DailyLmsCookieStore.hosts` (iOS and macOS Swift) must list the same hosts;
+  `test/core/lms/lms_school_test.dart` checks it. Windows/Android have no
+  native host list.
+- No per-school remote switch exists. Withdrawing a school (e.g. Gachon, whose
+  2026-11-06 notice forbids entering school accounts into outside services)
+  means deleting its row and host and releasing; the #698 update-required
+  restriction then stops LMS refresh on older release builds.
+- Chinju NUE is excluded: it has no `timetableUniversity` id.
+- Live login was not run for any school in this change. The six new schools
+  were checked against their public login pages only. Not built or run on
+  Windows/Android.
+
 ## #829 앱 시작 LMS 자동 재로그인 — 2026-11-10
 
 - Startup LMS refresh (`_refreshAcademicCalendarsImpl`) runs only when
