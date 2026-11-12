@@ -14,6 +14,7 @@ import 'package:uuid/uuid.dart';
 import 'lms_models.dart';
 import 'lms_learning_report_client.dart';
 import 'lms_credentials_store.dart';
+import 'lms_school.dart';
 
 enum LmsWebSessionError {
   authenticationRequired,
@@ -207,10 +208,9 @@ class LmsWebRequestPolicy {
 
   bool allowsLoginNavigation(Uri uri) {
     if (uri.toString() == 'about:blank') return true;
-    final domain = baseUrl.host == 'ecampus.smu.ac.kr'
-        ? 'smu.ac.kr'
-        : 'jnu.ac.kr';
-    return uri.scheme == 'https' &&
+    final domain = LmsSchool.byHost(baseUrl.host)?.domain;
+    return domain != null &&
+        uri.scheme == 'https' &&
         uri.port == 443 &&
         uri.userInfo.isEmpty &&
         (uri.host == domain || uri.host.endsWith('.$domain'));
@@ -241,7 +241,7 @@ class LmsWebSession extends ChangeNotifier {
     FlutterSecureStorage? secureStorage,
   }) : ownerId = ownerId.trim().toLowerCase(),
        _storage = secureStorage ?? const FlutterSecureStorage() {
-    if (this.ownerId.isEmpty || !const {'smu', 'jnu'}.contains(schoolId)) {
+    if (this.ownerId.isEmpty || LmsSchool.of(schoolId) == null) {
       throw const LmsWebSessionException(LmsWebSessionError.unsupported);
     }
   }
@@ -288,8 +288,8 @@ class LmsWebSession extends ChangeNotifier {
   bool get _usesAppleStore => Platform.isIOS || Platform.isMacOS;
   final Set<Uri> _visitedLoginUrls = {};
 
-  Uri get baseUrl =>
-      Uri.https(schoolId == 'smu' ? 'ecampus.smu.ac.kr' : 'sel.jnu.ac.kr', '/');
+  LmsSchool get school => LmsSchool.of(schoolId)!;
+  Uri get baseUrl => school.baseUrl;
   LmsWebRequestPolicy get policy => LmsWebRequestPolicy(baseUrl);
   String? get principalId => _principalId;
   String? get storedPrincipalId => _expectedPrincipal;
@@ -657,7 +657,7 @@ class LmsWebSession extends ChangeNotifier {
                 ((_automaticLogin &&
                         (policy.isSchoolOrigin(uri) ||
                             uri.scheme == 'https' &&
-                                uri.host == 'smsso.smu.ac.kr' &&
+                                uri.host == school.sso?.host &&
                                 uri.port == 443 &&
                                 uri.userInfo.isEmpty)) ||
                     policy.isSchoolOrigin(uri) &&
@@ -958,8 +958,7 @@ class LmsWebSession extends ChangeNotifier {
       return false;
     }
 
-    if (schoolId != 'smu' ||
-        credentials.paused ||
+    if (credentials.paused ||
         _loginVisible ||
         _automaticLogin ||
         _authenticationRejectedReason ==
@@ -1008,6 +1007,7 @@ class LmsWebSession extends ChangeNotifier {
             .callAsyncJavaScript(
               functionBody: automaticLoginScript,
               arguments: {
+                ...school.scriptArguments,
                 'stage': stage,
                 'username': credentials.username,
                 'password': credentials.password,
@@ -1066,49 +1066,50 @@ class LmsWebSession extends ChangeNotifier {
   static const automaticLoginScript =
       r'''    if (location.protocol !== 'https:' || (location.port && location.port !== '443')) return {state:'blocked'};
     if (document.readyState !== 'complete') return {state:'waiting'};
-    if (!['ecampus.smu.ac.kr', 'smsso.smu.ac.kr'].includes(location.hostname)) return {state:'blocked'};
+    if (location.hostname !== lmsHost && !(ssoHost && location.hostname === ssoHost)) return {state:'blocked'};
     const schoolErrors = [...document.querySelectorAll('.alert-danger, .loginerrors, #loginerrormsg, #error_message')]
       .filter(e => e.getClientRects().length).map(e => e.textContent || '').join(' ');
     if (/계정.*잠[금김]|로그인.*(시도.*초과|제한)|account.*locked|too many.*attempt/i.test(schoolErrors)) return {state:'blocked', failure:'accountLocked'};
     if (/비밀번호.*(만료|변경.*필요)|password.*(expired|must.*change)/i.test(schoolErrors)) return {state:'blocked', failure:'passwordExpired'};
     if (/(아이디|비밀번호).*(일치하지|올바르지|틀렸|잘못|오류)|invalid (username|password)|incorrect (username|password)/i.test(schoolErrors)) return {state:'blocked', failure:'credentialsRejected'};
     if (/추가.?인증|보안.?문자|인증.?번호|captcha|one.time.password/i.test(schoolErrors)) return {state:'blocked', failure:'additionalAuthentication'};
-    if (location.hostname === 'ecampus.smu.ac.kr') {
+    if (location.hostname === lmsHost) {
       if (!document.querySelector('input[type="password"]')) return {state:'authenticated'};
       if (stage !== 'entry') return {state:'waiting'};
-      const f = document.querySelector('form.form-sso-login');
+      const f = ssoEntryForm ? document.querySelector(ssoEntryForm) : null;
       if (!f) {
-        // The official Coursemos mobile theme offers this local login form,
-        // without the desktop SSO entry form. Submit it once, on its own origin.
-        const mobile = document.querySelector('form.form-login');
+        // The official Coursemos theme offers this local login form when the
+        // school has no SSO entry form. Submit it once, on its own origin.
+        const mobile = document.querySelector(loginForm);
         if (!mobile || mobile.method.toLowerCase() !== 'post' || new URL(mobile.action).origin !== location.origin || new URL(mobile.action).pathname !== '/login/index.php') return {state:'blocked'};
         const user = mobile.querySelector('input[name="username"]'), pwd = mobile.querySelector('input[name="password"]');
         if (!user || !pwd || pwd.type !== 'password' || mobile.dataset.dailyAutoSubmitted === 'true') return {state:'blocked'};
         if ([...mobile.querySelectorAll('input')].some(e => e.getClientRects().length && /captcha|otp|motp/i.test(e.id + ' ' + e.name))) return {state:'blocked', failure:'additionalAuthentication'};
+        const keep = mobile.querySelector('input[name="rememberusername"]');
+        if (keep) keep.checked = false;
         mobile.dataset.dailyAutoSubmitted = 'true';
         user.value = username; pwd.value = password;
         user.dispatchEvent(new Event('input', {bubbles:true})); pwd.dispatchEvent(new Event('input', {bubbles:true}));
         setTimeout(() => mobile.requestSubmit(), 0);
         return {state:'credentialsSubmitted'};
       }
-      if (f.method.toLowerCase() !== 'post' || new URL(f.action).origin !== location.origin || new URL(f.action).pathname !== '/exsignon/sso/sso_idp_login.php') return {state:'blocked'};
+      if (f.method.toLowerCase() !== 'post' || new URL(f.action).origin !== location.origin || new URL(f.action).pathname !== ssoEntryPath) return {state:'blocked'};
       setTimeout(() => f.requestSubmit(), 0);
       return {state:'entrySubmitted'};
     }
-    if (location.hostname !== 'smsso.smu.ac.kr') return {state:'blocked'};
-    const f = document.querySelector('form#loginFrm');
+    const f = document.querySelector(ssoForm);
     if (!f) return {state:'waiting'};
     if (stage === 'submitted') return {state: f.dataset.dailyAutoSubmitted === 'true' ? 'waiting' : 'blocked'};
-    if (stage !== 'sso' || f.method.toLowerCase() !== 'post' || new URL(f.action).origin !== location.origin || new URL(f.action).pathname !== '/Login.do') return {state:'blocked'};
-    const user = f.querySelector('#user_id'), pwd = f.querySelector('#user_password');
-    if (!user || !pwd || pwd.type !== 'password' || typeof window.doLogin !== 'function') return {state:'blocked'};
+    if (stage !== 'sso' || f.method.toLowerCase() !== 'post' || new URL(f.action).origin !== location.origin || new URL(f.action).pathname !== ssoPath) return {state:'blocked'};
+    const user = f.querySelector(ssoUser), pwd = f.querySelector(ssoPassword);
+    if (!user || !pwd || pwd.type !== 'password' || typeof window[ssoFunction] !== 'function') return {state:'blocked'};
     if ([...f.querySelectorAll('input')].some(e => e.getClientRects().length && /captcha|otp|motp/i.test(e.id + ' ' + e.name))) return {state:'blocked', failure:'additionalAuthentication'};
-    const remember = document.querySelector('#saveIdIpt');
+    const remember = document.querySelector(ssoRemember);
     if (remember) remember.checked = false;
     f.dataset.dailyAutoSubmitted = 'true';
     user.value = username; pwd.value = password;
     user.dispatchEvent(new Event('input', {bubbles:true})); pwd.dispatchEvent(new Event('input', {bubbles:true}));
-    setTimeout(() => window.doLogin(), 0);
+    setTimeout(() => window[ssoFunction](), 0);
     return {state:'credentialsSubmitted'};
   ''';
 
@@ -1128,7 +1129,12 @@ class LmsWebSession extends ChangeNotifier {
         final result = await controller
             .callAsyncJavaScript(
               functionBody: automaticLoginScript,
-              arguments: {'stage': 'inspect', 'username': '', 'password': ''},
+              arguments: {
+                ...school.scriptArguments,
+                'stage': 'inspect',
+                'username': '',
+                'password': '',
+              },
             )
             .timeout(const Duration(seconds: 2));
         _checkGeneration(started);
@@ -1597,7 +1603,7 @@ class LmsWebSession extends ChangeNotifier {
     final roots = <Uri>{
       baseUrl,
       ..._visitedLoginUrls,
-      if (schoolId == 'smu') Uri.https('smsso.smu.ac.kr', '/'),
+      if (school.sso != null) Uri.https(school.sso!.host, '/'),
     };
     for (final uri in roots) {
       final cookies = await _cookies.getCookies(url: WebUri(uri.toString()));

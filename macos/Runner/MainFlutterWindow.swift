@@ -1117,7 +1117,10 @@ private final class DailyPasswordInputBridge {
 private final class DailyLmsCookieStore {
   private static var stores: [String: WKWebsiteDataStore] = [:]
   // BEGIN LMS COOKIE READ POLICY
-  private static let hosts: Set<String> = ["ecampus.smu.ac.kr", "sel.jnu.ac.kr"]
+  private static let hosts: Set<String> = [
+    "ecampus.smu.ac.kr", "sel.jnu.ac.kr", "ecampus.changwon.ac.kr", "lms.jnue.kr",
+    "lms.kyonggi.ac.kr", "lms.mokpo.ac.kr", "cyber.gachon.ac.kr",
+  ]
   private static func sessionName(_ name: String) -> Bool {
     name == "MoodleSession" || name.hasPrefix("MoodleSession_")
   }

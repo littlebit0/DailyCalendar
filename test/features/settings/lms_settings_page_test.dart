@@ -469,7 +469,7 @@ void main() {
     });
   }
 
-  for (final school in ['smu', 'jnu']) {
+  for (final school in ['smu', 'inje']) {
     testWidgets(
       '$school LMS settings supports narrow large-text layout without opening login',
       (tester) async {
@@ -485,8 +485,8 @@ void main() {
           AcademicProfile(
             universityId: school == 'smu'
                 ? 'institution:academyinfo:0000117'
-                : 'institution:academyinfo:0000023',
-            universityName: school == 'smu' ? '상명대학교' : '전남대학교',
+                : 'institution:academyinfo:0000164',
+            universityName: school == 'smu' ? '상명대학교' : '인제대학교',
             schoolKind: 'fourYear',
           ),
           expectedGoogleEmail: 'student@example.com',
