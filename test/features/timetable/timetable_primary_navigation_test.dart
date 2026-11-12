@@ -320,7 +320,6 @@ void main() {
             _toolbarAction('검색'),
             _toolbarAction('검색/필터'),
           ],
-          _toolbarAction('Siri'),
           _toolbarAction('시간표'),
           _toolbarAction('잊모기'),
           _toolbarAction('빠른 보기'),
@@ -334,7 +333,6 @@ void main() {
             reason: 'toolbar actions must be contiguous and ordered',
           );
         }
-        expect(find.byTooltip('Siri').hitTestable(), findsOneWidget);
         expect(find.byTooltip('설정').hitTestable(), findsOneWidget);
         expect(tester.takeException(), isNull);
       }

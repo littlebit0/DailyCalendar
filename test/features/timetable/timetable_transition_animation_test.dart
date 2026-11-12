@@ -310,32 +310,6 @@ void main() {
     }
   }
 
-  for (final platform in [TargetPlatform.iOS, TargetPlatform.android]) {
-    testWidgets('$platform AI action animates timetable back to calendar', (
-      tester,
-    ) async {
-      await _mount(tester, platform);
-      await _choose(tester, -1);
-      await tester.pumpAndSettle();
-      final switcherElement = tester.element(_switcher);
-      final toolbar = tester.getRect(_toolbar);
-      await tester.tap(
-        find.byTooltip(platform == TargetPlatform.android ? 'LLM' : 'Siri'),
-      );
-      await _assertMoving(
-        tester,
-        from: -1,
-        to: 2,
-        direction: -1,
-        toolbar: toolbar,
-        switcherElement: switcherElement,
-      );
-      expect(find.byTooltip('AI 입력 닫기'), findsOneWidget);
-      expect(find.byType(TimetablePage), findsNothing);
-      await _unmount(tester);
-    });
-  }
-
   for (final platform in [TargetPlatform.macOS, TargetPlatform.android]) {
     testWidgets('$platform rapid reversal settles on a single timetable', (
       tester,
