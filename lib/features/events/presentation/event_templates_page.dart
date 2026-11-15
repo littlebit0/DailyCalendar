@@ -10,7 +10,7 @@ import '../domain/event_template.dart';
 import 'event_editor_dialog.dart';
 import 'event_template_actions.dart';
 
-/// Lists saved event templates: favorite, rename, edit, delete and reorder.
+/// Lists saved event templates: favorite, edit, delete and reorder.
 /// Changing or deleting a template never touches events created from it.
 class EventTemplatesPage extends ConsumerWidget {
   const EventTemplatesPage({super.key});
@@ -68,30 +68,26 @@ class EventTemplatesPage extends ConsumerWidget {
                 subtitle: Text(
                   '${template.title} · ${_timeSummary(context, ref, template)}',
                 ),
-                trailing: PopupMenuButton<String>(
-                  onSelected: (action) {
-                    if (blockedByRequiredUpdate(context, ref)) return;
-                    switch (action) {
-                      case 'rename':
-                        _rename(context, ref, template);
-                      case 'edit':
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      key: ValueKey('event-template-edit-${template.id}'),
+                      tooltip: context.tr('수정'),
+                      icon: const Icon(Icons.edit_outlined),
+                      onPressed: () {
+                        if (blockedByRequiredUpdate(context, ref)) return;
                         _edit(context, ref, template);
-                      default:
+                      },
+                    ),
+                    IconButton(
+                      key: ValueKey('event-template-delete-${template.id}'),
+                      tooltip: context.tr('삭제'),
+                      icon: const Icon(Icons.delete_outline),
+                      onPressed: () {
+                        if (blockedByRequiredUpdate(context, ref)) return;
                         _delete(context, ref, template);
-                    }
-                  },
-                  itemBuilder: (context) => [
-                    PopupMenuItem(
-                      value: 'rename',
-                      child: Text(context.tr('이름 변경')),
-                    ),
-                    PopupMenuItem(
-                      value: 'edit',
-                      child: Text(context.tr('내용 수정')),
-                    ),
-                    PopupMenuItem(
-                      value: 'delete',
-                      child: Text(context.tr('삭제')),
+                      },
                     ),
                   ],
                 ),
@@ -124,26 +120,6 @@ class EventTemplatesPage extends ConsumerWidget {
     return days == 0
         ? range
         : '$range ${context.tr('(+{count}일)', args: {'count': days})}';
-  }
-
-  Future<void> _rename(
-    BuildContext context,
-    WidgetRef ref,
-    EventTemplate template,
-  ) async {
-    final name = await showTemplateNameDialog(
-      context,
-      initialName: template.name,
-    );
-    if (name == null || !context.mounted) return;
-    await _run(
-      context,
-      ref,
-      () => ref
-          .read(settingsRepositoryProvider)
-          .eventTemplates
-          .save(template.copyWith(name: name)),
-    );
   }
 
   Future<void> _edit(

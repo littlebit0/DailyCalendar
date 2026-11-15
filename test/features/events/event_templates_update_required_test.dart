@@ -67,32 +67,26 @@ void main() {
     await tester.pumpAndSettle();
   }
 
-  Future<void> openMenu(WidgetTester tester, String item) async {
-    await tester.tap(find.byType(PopupMenuButton<String>));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text(item));
+  Future<void> tapAction(WidgetTester tester, String tooltip) async {
+    await tester.tap(find.byTooltip(tooltip));
     await tester.pumpAndSettle();
   }
 
-  testWidgets('no required update: renaming keeps every value', (tester) async {
+  testWidgets('the edit button opens the template editor', (tester) async {
     await pump(tester);
-    await openMenu(tester, '이름 변경');
-    await tester.enterText(find.byType(TextField), '수영');
-    await tester.tap(find.text('저장'));
-    await tester.pumpAndSettle();
-    final stored = settings.eventTemplates.templates.single;
-    expect(stored.name, '수영');
-    expect(stored.alarmMinutesBeforeList, [0, 30]);
-    expect(stored.showOvernightOnFollowingDays, isFalse);
+    expect(find.byType(PopupMenuButton<String>), findsNothing);
+    expect(find.byTooltip('이름 변경'), findsNothing);
+    await tapAction(tester, '수정');
+    expect(find.text('템플릿 수정'), findsOneWidget);
   });
 
-  testWidgets('a required update blocks rename, edit, delete and favorite', (
+  testWidgets('a required update blocks edit, delete and favorite', (
     tester,
   ) async {
     await pump(tester, requiredVersion: '9.9.9');
     final before = settings.eventTemplates.syncDocument();
-    for (final item in ['이름 변경', '내용 수정', '삭제']) {
-      await openMenu(tester, item);
+    for (final item in ['수정', '삭제']) {
+      await tapAction(tester, item);
       expect(find.text(_notice), findsOneWidget, reason: item);
       expect(find.byType(TextField), findsNothing, reason: item);
       await tester.tap(find.text('닫기'));
@@ -102,19 +96,6 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text(_notice), findsOneWidget);
     expect(settings.eventTemplates.syncDocument().sameAs(before), isTrue);
-  });
-
-  testWidgets('an update found while the name dialog is open stops the save', (
-    tester,
-  ) async {
-    await pump(tester);
-    await openMenu(tester, '이름 변경');
-    await tester.enterText(find.byType(TextField), '수영');
-    required.value = '9.9.9';
-    await tester.tap(find.text('저장'));
-    await tester.pumpAndSettle();
-    expect(find.text(_notice), findsOneWidget);
-    expect(settings.eventTemplates.templates.single.name, '운동');
   });
 
   testWidgets('a required update blocks saving a draft as a template', (
