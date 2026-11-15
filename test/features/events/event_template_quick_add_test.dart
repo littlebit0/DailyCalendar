@@ -303,4 +303,50 @@ void main() {
     await tester.pumpAndSettle();
     expect(saved!.startAt, DateTime(2026, 10, 30, 19));
   });
+
+  testWidgets('template mode edits the span in days instead of dates', (
+    tester,
+  ) async {
+    final multiDay = EventTemplate(
+      id: 't2',
+      name: '출장',
+      title: '출장',
+      endDayOffset: 1,
+      startMinutes: 9 * 60,
+      endMinutes: 18 * 60,
+      categoryId: EventCategory.basic.id,
+    );
+    final seed = multiDay
+        .draftOn(DateTime(2026, 10, 30), EventCategory.basic)
+        .toEvent(id: 't2', now: DateTime(2026, 10, 30), deviceId: '');
+    EventDraft? saved;
+    await _open(
+      tester,
+      EventEditorDialog(
+        initialDate: seed.startAt,
+        event: seed,
+        templateMode: true,
+      ),
+      onClosed: (draft) => saved = draft,
+    );
+    expect(find.text('시작일'), findsNothing);
+    expect(find.text('종료일'), findsNothing);
+    expect(find.text('2일간'), findsOneWidget);
+    await tester.tap(find.byKey(const ValueKey('template-span-increase')));
+    await tester.pump();
+    expect(find.text('3일간'), findsOneWidget);
+    await tester.tap(find.text('저장'));
+    await tester.pumpAndSettle();
+    expect(saved!.endAt.difference(saved!.startAt).inDays, 2);
+  });
+
+  testWidgets('normal editor keeps start and end date pickers', (tester) async {
+    await _open(
+      tester,
+      EventEditorDialog(initialDate: DateTime(2026, 10, 30)),
+    );
+    expect(find.text('시작일'), findsOneWidget);
+    expect(find.text('종료일'), findsOneWidget);
+    expect(find.text('기간'), findsNothing);
+  });
 }
