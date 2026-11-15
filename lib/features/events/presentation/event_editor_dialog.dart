@@ -926,7 +926,11 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
   }
 
   /// Templates carry no calendar date, only how many days an event spans.
-  int get _spanDays => _endDate.difference(_startDate).inDays;
+  int get _spanDays => DateTime.utc(
+    _endDate.year,
+    _endDate.month,
+    _endDate.day,
+  ).difference(DateTime.utc(_startDate.year, _startDate.month, _startDate.day)).inDays;
 
   void _changeSpan(int delta) {
     final next = (_spanDays + delta).clamp(0, EventTemplate.maxDaySpan);
