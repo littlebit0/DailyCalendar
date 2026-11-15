@@ -1196,8 +1196,8 @@ void main() {
       final previous = await controller.prepareLogin();
       await settings.saveAcademicProfile(
         const AcademicProfile(
-          universityId: 'institution:academyinfo:0000023',
-          universityName: '전남대학교',
+          universityId: 'institution:academyinfo:0000164',
+          universityName: '인제대학교',
           schoolKind: 'fourYear',
         ),
         expectedGoogleEmail: 'student@example.com',

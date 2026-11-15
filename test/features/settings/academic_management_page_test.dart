@@ -91,8 +91,8 @@ void main() {
         AcademicProfile(
           universityId: university == 'smu'
               ? 'institution:academyinfo:0000117'
-              : 'institution:academyinfo:0000023',
-          universityName: university == 'smu' ? '상명대학교' : '전남대학교',
+              : 'institution:academyinfo:0000164',
+          universityName: university == 'smu' ? '상명대학교' : '인제대학교',
           schoolKind: 'fourYear',
         ),
         expectedGoogleEmail: 'student@example.com',
@@ -290,7 +290,7 @@ void main() {
     },
   );
 
-  for (final university in ['smu', 'jnu']) {
+  for (final university in ['smu', 'inje']) {
     testWidgets(
       '$university profile form has no LMS button; management preserves LMS support gate',
       (tester) async {
@@ -313,7 +313,7 @@ void main() {
           find.byKey(const ValueKey('lms-local-login-configure')),
           university == 'smu' ? findsOneWidget : findsNothing,
         );
-        if (university == 'jnu') {
+        if (university == 'inje') {
           expect(find.text('해당 대학의 LMS 연결은 아직 지원하지 않습니다.'), findsOneWidget);
         }
         expect(settings.load().academicProfile, before);

@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import 'lms_school.dart';
+
 /// Never serialized into settings, events, diagnostics or Drive payloads.
 class LmsLocalCredentials {
   const LmsLocalCredentials(
@@ -62,7 +64,7 @@ class LmsCredentialsStore {
     LmsLocalCredentials value,
   ) async {
     if (owner.trim().isEmpty ||
-        school != 'smu' ||
+        LmsSchool.of(school) == null ||
         value.username.trim().isEmpty ||
         value.password.isEmpty) {
       throw ArgumentError('Invalid local LMS credential configuration');

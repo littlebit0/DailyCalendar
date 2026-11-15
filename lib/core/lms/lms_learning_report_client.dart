@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'lms_school.dart';
+
 /// The mobile report omits identities used by the desktop progress parser.
 /// Request only this verified read-only report in its desktop representation;
 /// keep the user's login view, cookie store and all other requests unchanged.
@@ -15,8 +17,9 @@ class LmsLearningReportClient {
     Uri uri,
     List<Map<String, dynamic>> cookies,
   ) async {
-    if (uri.scheme != 'https' ||
-        uri.host != 'ecampus.smu.ac.kr' ||
+    final school = LmsSchool.byHost(uri.host);
+    if (school == null ||
+        uri.scheme != 'https' ||
         uri.port != 443 ||
         uri.userInfo.isNotEmpty ||
         uri.fragment.isNotEmpty ||
@@ -32,6 +35,7 @@ class LmsLearningReportClient {
         client,
         uri,
         cookies,
+        school.domain,
       ).timeout(const Duration(seconds: 20));
     } catch (_) {
       // No URL, cookies, headers, response text or native exception is logged.
@@ -45,6 +49,7 @@ class LmsLearningReportClient {
     HttpClient client,
     Uri uri,
     List<Map<String, dynamic>> cookies,
+    String schoolDomain,
   ) async {
     final request = await client.getUrl(uri);
     request.followRedirects = false;
@@ -94,7 +99,7 @@ class LmsLearningReportClient {
         continue;
       }
       final domain = cookie.domain?.replaceFirst(RegExp(r'^\.'), '');
-      if (domain != null && domain != uri.host && domain != 'smu.ac.kr') {
+      if (domain != null && domain != uri.host && domain != schoolDomain) {
         return {'status': 'invalid'};
       }
       if (cookie.path != null && cookie.path != '/') {

@@ -13,6 +13,7 @@ import '../../features/events/domain/recurrence_rule.dart';
 import '../settings/settings_repository.dart';
 import 'coursemos_parser.dart';
 import 'lms_models.dart';
+import 'lms_school.dart';
 
 class LmsSyncSession {
   LmsSyncSession({
@@ -308,8 +309,8 @@ class LmsSyncService extends ChangeNotifier {
       _state = LmsSyncState.needsLogin;
       _displaySession = null;
       errorCode = 'authentication_required';
-    } else if (session.schoolId != 'smu' ||
-        session.baseUrl.origin != 'https://ecampus.smu.ac.kr') {
+    } else if (LmsSchool.of(session.schoolId)?.origin !=
+        session.baseUrl.origin) {
       _state = LmsSyncState.unsupported;
       _displaySession = null;
       errorCode = 'unsupported';
@@ -349,8 +350,8 @@ class LmsSyncService extends ChangeNotifier {
       _notify();
       return Future.value();
     }
-    if (session.schoolId != 'smu' ||
-        session.baseUrl.origin != 'https://ecampus.smu.ac.kr') {
+    if (LmsSchool.of(session.schoolId)?.origin !=
+        session.baseUrl.origin) {
       _state = LmsSyncState.unsupported;
       _displaySession = null;
       _notify();

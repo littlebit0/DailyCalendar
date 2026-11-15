@@ -11,7 +11,7 @@ Read `lib/core/lms/lms_controller.dart`, `lms_sync_service.dart`, `lms_models.da
 
 - `LmsController` owns lifecycle, active Google owner/school/principal, generation invalidation, session restoration and queued refreshes. Reading the controller must not itself start a browser/network request.
 - `LmsSyncService` performs paced reads, parses snapshots and applies local changes through commands. Its current refresh interval is five minutes and request spacing 400ms; verify constants before changing scheduling. LMS foreground refresh is distinct from Drive sync; the ban on idle Drive whole-file polling is not a reason to remove LMS refresh.
-- Current enabled adapter is `smu` with origin `https://ecampus.smu.ac.kr`; course catalogs or academic sources for other schools do not establish LMS support.
+- Supported schools are the rows of `LmsSchool.all` in `lib/core/lms/lms_school.dart` (host, login form, optional SSO). Only `smu` is verified with a live account; course catalogs or academic sources for other schools do not establish LMS support.
 
 ## Import invariants
 
