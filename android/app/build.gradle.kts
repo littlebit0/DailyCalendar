@@ -33,7 +33,7 @@ android {
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         // Android requires a monotonically increasing integer versionCode.
-        versionCode = 411
+        versionCode = 420
         versionName = flutter.versionName
     }
 
