@@ -16,17 +16,17 @@
 
 ## 설치
 
-iPhone과 iPad는 App Store에서 `DailyCalendar`를 무료로 설치합니다. App Store 출시는 GitHub 릴리스와 별개입니다. 다른 플랫폼은 [GitHub Releases](https://github.com/littlebit0/DailyCalendar/releases/latest)에서 4.1.1 파일을 받습니다.
+iPhone과 iPad는 App Store에서 `DailyCalendar`를 무료로 설치합니다. App Store 출시는 GitHub 릴리스와 별개입니다. 다른 플랫폼은 [GitHub Releases](https://github.com/littlebit0/DailyCalendar/releases/latest)에서 4.2.0 파일을 받습니다.
 
 | 플랫폼 | 배포 상태 | 파일 |
 | --- | --- | --- |
 | iPhone / iPad | App Store 무료 배포 중 | App Store의 `DailyCalendar` |
-| iOS 테스트 | 4.1.1 공개 검증용 미서명 파일 | [daily-ios-4.1.1-unsigned.ipa](https://github.com/littlebit0/DailyCalendar/releases/download/v4.1.1/daily-ios-4.1.1-unsigned.ipa) |
-| macOS 테스트 | 4.1.1 공개 검증용 미서명 파일 | [daily-macos-4.1.1-unsigned.dmg](https://github.com/littlebit0/DailyCalendar/releases/download/v4.1.1/daily-macos-4.1.1-unsigned.dmg) |
-| Android | 4.1.1 APK, 기존 3.4.0 배포 서명 유지 | [daily-android-4.1.1.apk](https://github.com/littlebit0/DailyCalendar/releases/download/v4.1.1/daily-android-4.1.1.apk) |
-| Windows | 4.1.1 설치 프로그램 및 ZIP | [설치 프로그램](https://github.com/littlebit0/DailyCalendar/releases/download/v4.1.1/daily-windows-4.1.1-setup.exe) · [ZIP](https://github.com/littlebit0/DailyCalendar/releases/download/v4.1.1/daily-windows-4.1.1.zip) |
-| Linux AMD64 | 4.1.1-1 설치 파일 | [amd64 .deb](https://github.com/littlebit0/DailyCalendar/releases/download/v4.1.1/daily-linux-4.1.1-1-amd64.deb) |
-| Linux ARM64 | 4.1.1-1 설치 파일 | [arm64 .deb](https://github.com/littlebit0/DailyCalendar/releases/download/v4.1.1/daily-linux-4.1.1-1-arm64.deb) |
+| iOS 테스트 | 4.2.0 공개 검증용 미서명 파일 | [daily-ios-4.2.0-unsigned.ipa](https://github.com/littlebit0/DailyCalendar/releases/download/v4.2.0/daily-ios-4.2.0-unsigned.ipa) |
+| macOS 테스트 | 4.2.0 공개 검증용 미서명 파일 | [daily-macos-4.2.0-unsigned.dmg](https://github.com/littlebit0/DailyCalendar/releases/download/v4.2.0/daily-macos-4.2.0-unsigned.dmg) |
+| Android | 4.2.0 APK, 기존 3.4.0 배포 서명 유지 | [daily-android-4.2.0.apk](https://github.com/littlebit0/DailyCalendar/releases/download/v4.2.0/daily-android-4.2.0.apk) |
+| Windows | 4.2.0 설치 프로그램 및 ZIP | [설치 프로그램](https://github.com/littlebit0/DailyCalendar/releases/download/v4.2.0/daily-windows-4.2.0-setup.exe) · [ZIP](https://github.com/littlebit0/DailyCalendar/releases/download/v4.2.0/daily-windows-4.2.0.zip) |
+| Linux AMD64 | 4.2.0-1 설치 파일 | [amd64 .deb](https://github.com/littlebit0/DailyCalendar/releases/download/v4.2.0/daily-linux-4.2.0-1-amd64.deb) |
+| Linux ARM64 | 4.2.0-1 설치 파일 | [arm64 .deb](https://github.com/littlebit0/DailyCalendar/releases/download/v4.2.0/daily-linux-4.2.0-1-arm64.deb) |
 
 GitHub의 IPA와 DMG는 App Store 제출 파일이 아닙니다. 미서명 IPA는 따로 서명하지 않으면 iPhone에 설치할 수 없고, 재서명하면 Sign in with Apple 같은 entitlement가 빠질 수 있습니다. 일반 사용자는 App Store 설치본을 쓰세요.
 
@@ -36,10 +36,10 @@ Windows는 `setup.exe` 설치를 권장합니다. 설치형 Release 앱은 시�
 
 ### Linux
 
-4.1.1은 AMD64와 ARM64 설치 파일을 제공합니다. 자동 APT 채널도 4.1.1로 업데이트됩니다.
+4.2.0은 AMD64와 ARM64 설치 파일을 제공합니다. 자동 APT 채널도 4.2.0으로 업데이트됩니다.
 
 ```sh
-sudo apt install ./daily-linux-4.1.1-1-amd64.deb
+sudo apt install ./daily-linux-4.2.0-1-amd64.deb
 ```
 
 Intel/AMD PC는 amd64, ARM64 PC는 arm64 파일을 씁니다. 빌드 기준은 amd64가 Ubuntu 22.04+, arm64가 Ubuntu 24.04+입니다.
@@ -59,7 +59,7 @@ Ubuntu/Debian 데스크톱용 `.deb`를 한 번 설치하면 Daily 전용 타이
 | 홈 화면 위젯·미니 캘린더 | O | O | O | O |
 | 앱 잠금 | O | O | O | O |
 
-표는 플랫폼별 기본 기능 범위입니다. 4.1.1의 공유 기능과 동기화 코드는 Windows와 Linux 배포 빌드에도 들어 있습니다. 플랫폼별 실제 로그인·알람·위젯 동작은 빌드와 자동 테스트와는 따로 확인해야 합니다.
+표는 플랫폼별 기본 기능 범위입니다. 4.2.0의 공유 기능과 동기화 코드는 Windows와 Linux 배포 빌드에도 들어 있습니다. 플랫폼별 실제 로그인·알람·위젯 동작은 빌드와 자동 테스트와는 따로 확인해야 합니다.
 
 ## 처음 사용
 
@@ -69,21 +69,21 @@ Ubuntu/Debian 데스크톱용 `.deb`를 한 번 설치하면 Daily 전용 타이
 
 학사일정이나 학교 시간표를 쓰려면 지역 지도와 이름·초성 검색으로 대학을 고릅니다. 지역이 다른 분교는 선택한 지역에 맞게 등록됩니다.
 
-## 4.1.1 변경 사항
+## 4.2.0 변경 사항
 
-- Google Drive 동기화가 빨라졌습니다. 여러 파일을 동시에 주고받고, 내용이 같은 파일은 다시 받지 않습니다.
-- 동기화 중 캘린더가 깜빡이거나, 보던 위치가 바뀌거나, 동기화 배너 때문에 화면이 튀던 문제를 고쳤습니다.
-- 일정 알람 시각을 여러 개 고를 수 있고, 자정을 넘는 일정의 다음 날 표시를 일정마다 정할 수 있습니다.
-- 요일을 지정한 주간 반복을 시작일 요일부터 계산합니다. 옮기거나 나눈 반복 일정도 같은 간격을 유지합니다.
-- 하루 일정 시트의 닫기·날짜 넘김과 일정 추가·수정 팝업의 버튼 배치를 고쳤습니다.
-- 4.1.0 이하 기기와 같이 써도 구버전에서 고친 일정의 여러 알람과 나눈 격주 반복의 주 경계가 유지됩니다. 템플릿은 보조 사본을 함께 저장해, 구버전에서 이름을 바꿔도 여러 알람과 다음 날 표시를 되살립니다.
-- 분석 수신기가 이벤트 일부를 거부해도 같은 묶음의 정상 이벤트는 버리지 않습니다.
-- 4.1.0에서는 잊모기 탭, 일정 템플릿, 71개 대학 학사일정 1차 지원, 원격·시간 미정 강좌 표시가 추가됐습니다.
+- LMS 연동을 학교 설정 목록 방식으로 바꾸고 6개 대학을 추가했습니다. 가천대 LMS의 미개설 강좌와 진도율 열 없는 학습 현황 표도 읽습니다.
+- 기간이 없는 학습은 설정의 기한 없는 학습 목록에 표시하고, 잠긴 학습 항목은 강좌 화면 번호로 복구합니다.
+- 앱 화면이 다시 활성화된 뒤에 LMS 자동 재로그인을 실행합니다.
+- 상하 스크롤 달력이 스크롤 중 이전 달로 끌려가지 않고, 스크롤 중 누른 '오늘로 이동'도 무시하지 않습니다.
+- 일정 템플릿 목록에 수정·삭제 버튼을 두고, 수정 화면은 기간(일수)만 편집합니다.
+- 앱 안의 Siri 입력 버튼을 없앴습니다. Siri는 단축어로만 씁니다.
+- Android 계정 선택 뒤 재인증 실패와 iOS 조용한 승인 시간 초과를 각각 설정 오류와 일시 실패로 처리합니다.
+- 4.1.1에서는 Google Drive 동기화 속도, 여러 알람 시각, 일정별 다음 날 표시, 주간 반복 계산이 개선됐습니다. 4.1.0에서는 잊모기 탭, 일정 템플릿, 71개 대학 학사일정 1차 지원, 원격·시간 미정 강좌 표시가 추가됐습니다.
 
 > [!NOTE]
-> Drive v2를 유지하며 DB 스키마는 15입니다. 4.1.1은 Drive 일정 파일에 새 값을 쓰므로 같은 계정의 모든 기기를 4.1.1로 업데이트하세요.
+> Drive v2와 DB 스키마 15는 4.1.1과 같습니다. 4.1.1 기기와 함께 써도 되지만, 알람·다음 날 표시 같은 4.1.1 값을 안전하게 쓰려면 같은 계정의 기기를 4.1.1 이상으로 맞추세요.
 
-[4.1.1 릴리스 노트](docs/RELEASE_NOTES_4.1.1.md) · [4.1.0 릴리스 노트](docs/RELEASE_NOTES_4.1.0.md)
+[4.2.0 릴리스 노트](docs/RELEASE_NOTES_4.2.0.md) · [4.1.1 릴리스 노트](docs/RELEASE_NOTES_4.1.1.md) · [4.1.0 릴리스 노트](docs/RELEASE_NOTES_4.1.0.md)
 
 ## 할 수 있는 일
 

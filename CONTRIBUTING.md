@@ -44,7 +44,7 @@ Google OAuth 및 Apple 서명 값은 저장소에 포함하지 않습니다. 로
 ./tool/flutter.sh test --no-pub
 ```
 
-릴리스 검증과 지원 범위는 [릴리스 노트](docs/RELEASE_NOTES_4.1.1.md)와
+릴리스 검증과 지원 범위는 [릴리스 노트](docs/RELEASE_NOTES_4.2.0.md)와
 [에이전트 작업 기록](AGENT_MEMORY.md)에 기록합니다. 자동 테스트와 빌드 성공은
 실제 사용자 기기의 로그인·알람·위젯 동작 검증과 구분합니다.
 
@@ -61,6 +61,7 @@ daily-sync-v2-settings.json
 
 ## 문서
 
+- [4.2.0 릴리스 노트](docs/RELEASE_NOTES_4.2.0.md)
 - [4.1.1 릴리스 노트](docs/RELEASE_NOTES_4.1.1.md)
 - [4.1.0 릴리스 노트](docs/RELEASE_NOTES_4.1.0.md)
 - [기능 로드맵](docs/FEATURE_ROADMAP.md)
