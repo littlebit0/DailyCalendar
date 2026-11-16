@@ -168,10 +168,13 @@ class CoursemosLearningParser {
     if (headers.isNotEmpty && headers.first == '주제') {
       headers[0] = '주';
     }
+    // Gachon's report omits the optional progress column (4 columns).
     const expected = ['주', '강의자료', '출석인정요구시간', '총학습시간', '진도율'];
-    if (headers.length != expected.length ||
+    final hasProgress = headers.length == expected.length;
+    final columns = hasProgress ? expected.length : expected.length - 1;
+    if (headers.length != columns ||
         Iterable<int>.generate(
-          expected.length,
+          columns,
         ).any((index) => headers[index] != expected[index])) {
       throw const CoursemosParseException('learning_headers_changed');
     }
@@ -189,9 +192,9 @@ class CoursemosLearningParser {
     final spans = <int, _Span>{};
     var ignoredEmpty = 0;
     for (final sourceRow in sourceRows) {
-      final cells = _expandRow(sourceRow, expected.length, spans);
+      final cells = _expandRow(sourceRow, columns, spans);
       // The current report explicitly renders unused weeks as a numeric week
-      // cell followed by four empty cells. Unstudied named rows are not empty.
+      // cell followed by empty cells. Unstudied named rows are not empty.
       final week = _text(cells[0]);
       if ((week.isEmpty || RegExp(r'^\d+$').hasMatch(week)) &&
           cells.skip(1).every((cell) => _text(cell).isEmpty) &&
@@ -221,9 +224,9 @@ class CoursemosLearningParser {
         start = _nonemptyAttribute(marker, 'data-sterm');
         end = _nonemptyAttribute(marker, 'data-eterm');
       }
-      final progress = RegExp(
-        r'^(\d+(?:\.\d+)?)%$',
-      ).firstMatch(_text(cells[4]));
+      final progress = hasProgress
+          ? RegExp(r'^(\d+(?:\.\d+)?)%$').firstMatch(_text(cells[4]))
+          : null;
       final percent = progress == null ? null : double.tryParse(progress[1]!);
       rows.add(
         CoursemosLearningRow(

@@ -92,7 +92,19 @@ class CoursemosParser {
     }
     final courses = <String, CoursemosCourse>{};
     final referencedIds = <String>{};
+    var unopenedCourses = 0;
     for (final anchor in listing.querySelectorAll('a.course_link[href]')) {
+      // Some schools (Gachon) list enrolled courses whose LMS course space is
+      // not open yet as a titled card linking to "#". It has no course ID to
+      // read, so skip it; absence pruning only covers courses actually read.
+      if (anchor.attributes['href']!.trim() == '#') {
+        final titleElement = anchor.querySelector('.course-title h3');
+        if (titleElement == null || _text(titleElement).isEmpty) {
+          throw const CoursemosParseException('unrecognized_course_link');
+        }
+        unopenedCourses++;
+        continue;
+      }
       final url = _resolve(page.url, anchor.attributes['href']!);
       if (url == null || url.path != '/course/view.php') {
         throw const CoursemosParseException('unrecognized_course_link');
@@ -118,7 +130,8 @@ class CoursemosParser {
     }
     // A changed dashboard must not look like a successfully empty enrollment.
     // Add an empty-dashboard marker only after verifying its official markup.
-    if (courses.isEmpty) {
+    // Titled cards for unopened courses verify the dashboard itself.
+    if (courses.isEmpty && unopenedCourses == 0) {
       throw const CoursemosParseException('unverified_empty_dashboard');
     }
     return List.unmodifiable(courses.values);

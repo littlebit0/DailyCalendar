@@ -52,6 +52,32 @@ void main() {
     course: course,
   );
 
+  test('a report without the progress column parses rows (Gachon)', () {
+    final fourColumns = _currentShape
+        .replaceFirst('<th>진도율</th>', '')
+        .replaceAll(RegExp(r'<td>[0-9.]+%</td>'), '')
+        .replaceFirst('<td></td><td></td><td></td><td></td>', '<td></td><td></td><td></td>');
+    expect(fourColumns, isNot(contains('%')));
+    final report = parse(fourColumns);
+    final full = parse(_currentShape);
+    expect(report.rows, hasLength(full.rows.length));
+    expect(report.ignoredEmptyCount, full.ignoredEmptyCount);
+    for (var i = 0; i < report.rows.length; i++) {
+      expect(report.rows[i].title, full.rows[i].title);
+      expect(report.rows[i].moduleId, full.rows[i].moduleId);
+      expect(report.rows[i].learnedSeconds, full.rows[i].learnedSeconds);
+      expect(
+        report.rows[i].requiredLearningSeconds,
+        full.rows[i].requiredLearningSeconds,
+      );
+      expect(report.rows[i].progressPercent, isNull);
+    }
+    expect(
+      () => parse(fourColumns.replaceFirst('<th>총 학습시간</th>', '<th>기타</th>')),
+      throwsA(isA<CoursemosParseException>()),
+    );
+  });
+
   test(
     'explicit tracking-disabled response is not a failed or prunable report',
     () {

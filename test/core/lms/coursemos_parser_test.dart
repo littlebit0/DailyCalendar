@@ -278,6 +278,46 @@ void main() {
     },
   );
 
+  String unopenedCard(String title) =>
+      '<a class="course_link" href="#"><div class="course-title">'
+      '<h3>$title</h3></div></a>';
+
+  test('unopened courses linking to # are skipped, not fatal (Gachon)', () {
+    final html = fixture('dashboard').replaceFirst(
+      '<div class="course_lists">',
+      '<div class="course_lists">${unopenedCard('미개설 수업')}',
+    );
+    expect(html, contains('href="#"'));
+    final courses = parser.courses(page('/', html));
+    expect(courses, hasLength(11));
+    expect(courses.every((c) => c.url.path == '/course/view.php'), isTrue);
+  });
+
+  test('a dashboard of only unopened courses is a verified empty list', () {
+    final html =
+        '<main id="region-main"><div class="course_lists">'
+        '${unopenedCard('미개설 수업 1')}${unopenedCard('미개설 수업 2')}'
+        '</div></main>';
+    expect(parser.courses(page('/', html)), isEmpty);
+  });
+
+  test('an untitled # card is still an unrecognized dashboard', () {
+    for (final html in [
+      '<main id="region-main"><div class="course_lists">'
+          '<a class="course_link" href="#"></a></div></main>',
+      fixture('dashboard').replaceFirst(
+        '<div class="course_lists">',
+        '<div class="course_lists"><a class="course_link" href="#x">'
+            '<div class="course-title"><h3>다른 링크</h3></div></a>',
+      ),
+    ]) {
+      expect(
+        () => parser.courses(page('/', html)),
+        throwsA(isA<CoursemosParseException>()),
+      );
+    }
+  });
+
   test(
     'missing dashboard structure, unknown empty and pagination cannot prune courses',
     () {
