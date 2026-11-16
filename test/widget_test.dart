@@ -8594,11 +8594,8 @@ void main() {
       final draggedOffset = controller.offset;
       expect(draggedOffset - startOffset, greaterThan(itemExtent * 2.5));
 
-      container.read(selectedDateProvider.notifier).state = DateTime(
-        2026,
-        8,
-        11,
-      );
+      (tester.element(find.byType(MonthCalendarPage)) as StatefulElement)
+          .markNeedsBuild();
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 300));
       expect(controller.offset, closeTo(draggedOffset, 1));
@@ -8610,6 +8607,21 @@ void main() {
       await tester.pumpAndSettle();
       final settledMonth = container.read(visibleMonthProvider);
       expect(settledMonth.isAfter(DateTime(2026, 10)), isTrue);
+
+      // An explicit request (Today) for the last reported month still stops a
+      // fling that is carrying the calendar into later months.
+      await tester.fling(listFinder, Offset(0, -itemExtent), 4000);
+      await tester.pump(const Duration(milliseconds: 50));
+      container.read(selectedDateProvider.notifier).state = DateTime(
+        settledMonth.year,
+        settledMonth.month,
+        2,
+      );
+      await tester.pumpAndSettle();
+      expect(container.read(visibleMonthProvider), settledMonth);
+      final settledList = tester.widget<ListView>(listFinder);
+      final settledPages = settledList.controller!.offset / itemExtent;
+      expect(settledPages, closeTo(settledPages.roundToDouble(), 0.001));
 
       debugDefaultTargetPlatformOverride = null;
       await tester.pumpWidget(const SizedBox.shrink());
