@@ -31,6 +31,14 @@ class CoursemosLearningRow {
   /// no calendar date and is listed separately, not counted as unresolved.
   final bool undated;
 
+  /// Undated and complete enough to list. Incomplete undated rows stay
+  /// unresolved so the missing-information notice still reports them.
+  bool get listedUndated =>
+      undated &&
+      title.isNotEmpty &&
+      requiredLearningSeconds != null &&
+      requiredLearningSeconds! > 0;
+
   /// This is an opaque report identity, not a Moodle course-module link ID.
   String? get sourceIdentity => module != null && courseModuleId != null
       ? 'cm:$module:$courseModuleId'
@@ -88,21 +96,14 @@ class CoursemosLearningIndex {
       .where(
         (row) =>
             row.requiredLearningSeconds != 0 &&
-            !row.undated &&
+            !row.listedUndated &&
             !row.hasRequiredFields,
       )
       .length;
 
   /// Learning items the school gave no period, with a known requirement.
-  List<CoursemosLearningRow> get undatedRows => List.unmodifiable(
-    rows.where(
-      (row) =>
-          row.undated &&
-          row.title.isNotEmpty &&
-          row.requiredLearningSeconds != null &&
-          row.requiredLearningSeconds! > 0,
-    ),
-  );
+  List<CoursemosLearningRow> get undatedRows =>
+      List.unmodifiable(rows.where((row) => row.listedUndated));
 
   /// Only describes extraction of this table. It does not establish that the
   /// server returned every enrolled course or that an absent activity is deleted.

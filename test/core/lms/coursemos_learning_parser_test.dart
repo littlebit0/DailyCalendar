@@ -444,6 +444,18 @@ data-progresstime="1">상세보기 (2)</button></td></tr>
     expect(recovered.undatedRows.last.learnedSeconds, isNull);
   });
 
+  test('an undated row with an unreadable requirement stays unresolved', () {
+    final report = parse(
+      undatedReport
+          .replaceFirst('<td>14:23</td>', '<td>알 수 없음</td>')
+          .replaceFirst(RegExp(r'<tr><td>2</td>.*?</tr>', dotAll: true), ''),
+    );
+    expect(report.rows.single.undated, isTrue);
+    expect(report.undatedRows, isEmpty);
+    expect(report.unresolvedRowCount, 1);
+    expect(report.coverageComplete, isFalse);
+  });
+
   test('items locked behind another activity recover from their module id', () {
     final pending = parse(_shape.replaceFirst('10:31', ''));
     const locked =
