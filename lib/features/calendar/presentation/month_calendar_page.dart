@@ -3864,13 +3864,15 @@ class _MonthPageViewState extends ConsumerState<_MonthPageView> {
         widget.settings.monthNavigationMode == MonthNavigationMode.vertical
         ? _verticalController
         : _controller;
-    if (_sameMonth(_monthForPage(_currentPage), widget.month) ||
+    // Compare with the month last reported to the parent, not the live page:
+    // any parent rebuild mid-scroll would otherwise pull the scroll back.
+    final reportedMonth = _monthForPage(_reportedPage);
+    if (_sameMonth(reportedMonth, widget.month) ||
         activeController == null ||
         !activeController.hasClients) {
       return;
     }
-    final targetPage =
-        _currentPage + _monthDelta(_monthForPage(_currentPage), widget.month);
+    final targetPage = _reportedPage + _monthDelta(reportedMonth, widget.month);
     _animateToExternalPage(targetPage);
   }
 
@@ -3904,6 +3906,9 @@ class _MonthPageViewState extends ConsumerState<_MonthPageView> {
                 final verticalController = _verticalControllerFor(itemExtent);
                 return NotificationListener<ScrollNotification>(
                   onNotification: (notification) {
+                    if (notification.depth != 0) {
+                      return false;
+                    }
                     if (notification is ScrollUpdateNotification &&
                         !_applyingExternalMonth &&
                         !_preservingVerticalExtent) {

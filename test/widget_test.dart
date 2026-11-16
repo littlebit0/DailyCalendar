@@ -8521,6 +8521,101 @@ void main() {
     await tester.pumpWidget(const SizedBox.shrink());
   });
 
+  testWidgets(
+    'vertical month scroll is not pulled back by mid-scroll rebuilds',
+    (tester) async {
+      tester.view.physicalSize = const Size(430, 932);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+      addTearDown(() => debugDefaultTargetPlatformOverride = null);
+      SharedPreferences.setMockInitialValues({
+        'onboardingCompleted': true,
+        'defaultCalendarView': 'month',
+      });
+      final preferences = await SharedPreferences.getInstance();
+      final settingsRepository = SettingsRepository(preferences: preferences);
+      await settingsRepository.save(
+        settingsRepository.load().copyWith(
+          monthNavigationMode: MonthNavigationMode.vertical,
+        ),
+      );
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            universityRegionsProvider.overrideWith(
+              (ref) async => UniversityRegions.fromJson(
+                jsonDecode(
+                      File(
+                        'assets/academic/university_regions.json',
+                      ).readAsStringSync(),
+                    )
+                    as Map<String, dynamic>,
+              ),
+            ),
+            settingsRepositoryProvider.overrideWithValue(settingsRepository),
+            notificationServiceProvider.overrideWithValue(_FakeNotification()),
+            syncServiceProvider.overrideWithValue(_FakeSync()),
+            eventRepositoryProvider.overrideWithValue(_FakeEventRepository()),
+            googleDriveAuthServiceProvider.overrideWithValue(
+              _FakeGoogleDriveAuthService(),
+            ),
+          ],
+          child: const DailyApp(),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final container = ProviderScope.containerOf(
+        tester.element(find.byType(DailyApp)),
+      );
+      container.read(selectedDateProvider.notifier).state = DateTime(
+        2026,
+        8,
+        10,
+      );
+      container.read(visibleMonthProvider.notifier).state = DateTime(2026, 8);
+      await tester.pumpAndSettle();
+
+      final listFinder = find.byKey(const ValueKey('continuous-month-scroll'));
+      final controller = tester.widget<ListView>(listFinder).controller!;
+      final itemExtent = tester.widget<ListView>(listFinder).itemExtent!;
+      final startOffset = controller.offset;
+
+      // Hold a drag across several months, then let the page rebuild while the
+      // finger is still down (as async event loads or a caught fling do).
+      final gesture = await tester.startGesture(tester.getCenter(listFinder));
+      for (var i = 0; i < 30; i += 1) {
+        await gesture.moveBy(Offset(0, -itemExtent / 10));
+        await tester.pump(const Duration(milliseconds: 8));
+      }
+      final draggedOffset = controller.offset;
+      expect(draggedOffset - startOffset, greaterThan(itemExtent * 2.5));
+
+      container.read(selectedDateProvider.notifier).state = DateTime(
+        2026,
+        8,
+        11,
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
+      expect(controller.offset, closeTo(draggedOffset, 1));
+
+      await gesture.moveBy(Offset(0, -itemExtent / 10));
+      await tester.pump();
+      expect(controller.offset, greaterThan(draggedOffset));
+      await gesture.up();
+      await tester.pumpAndSettle();
+      final settledMonth = container.read(visibleMonthProvider);
+      expect(settledMonth.isAfter(DateTime(2026, 10)), isTrue);
+
+      debugDefaultTargetPlatformOverride = null;
+      await tester.pumpWidget(const SizedBox.shrink());
+    },
+  );
+
   for (final (platform, themeMode) in [
     for (final platform in [TargetPlatform.iOS, TargetPlatform.android])
       for (final mode in [AppThemeMode.light, AppThemeMode.dark])
