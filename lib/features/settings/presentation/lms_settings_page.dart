@@ -486,6 +486,11 @@ class _LmsSettingsPageState extends ConsumerState<LmsSettingsPage> {
                                     args: {'count': result.unscheduled},
                                   ),
                                 ),
+                              if (result != null &&
+                                  result.undatedLearning.isNotEmpty)
+                                _UndatedLearningList(
+                                  items: result.undatedLearning,
+                                ),
                               if ((result?.learningCoverageIncomplete == true ||
                                   (result?.unresolvedQuizStatuses ?? 0) >
                                       0)) ...[
@@ -771,4 +776,64 @@ class _LocalLmsLoginDialogState extends State<_LocalLmsLoginDialog>
       ),
     ],
   );
+}
+
+/// Learning the school gave no period: shown here, never as calendar events.
+class _UndatedLearningList extends StatelessWidget {
+  const _UndatedLearningList({required this.items});
+  final List<LmsUndatedLearning> items;
+
+  String _time(BuildContext context, int seconds) => context.tr(
+    '{minutes}분 {seconds}초',
+    args: {'minutes': seconds ~/ 60, 'seconds': seconds % 60},
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Padding(
+      key: const ValueKey('lms-undated-learning'),
+      padding: const EdgeInsets.only(top: 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            context.tr('기한 없는 학습 {count}개', args: {'count': items.length}),
+            style: theme.textTheme.titleSmall,
+          ),
+          Text(
+            context.tr('학교가 학습 기간을 정하지 않아 달력 대신 여기에 표시합니다.'),
+            style: theme.textTheme.bodySmall,
+          ),
+          for (final item in items)
+            Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('[${item.courseTitle}] ${item.title}'),
+                  Text(
+                    [
+                      context.tr(item.completed ? '완료' : '미완료'),
+                      if (item.learnedSeconds != null)
+                        context.tr(
+                          '학습시간: {learned} / 출석 요구시간: {required}',
+                          args: {
+                            'learned': _time(context, item.learnedSeconds!),
+                            'required': _time(
+                              context,
+                              item.requiredLearningSeconds,
+                            ),
+                          },
+                        ),
+                    ].join(' · '),
+                    style: theme.textTheme.bodySmall,
+                  ),
+                ],
+              ),
+            ),
+        ],
+      ),
+    );
+  }
 }

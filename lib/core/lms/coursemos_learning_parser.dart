@@ -13,6 +13,7 @@ class CoursemosLearningRow {
     this.learnedSeconds,
     this.progressPercent,
     this.courseModuleId,
+    this.undated = false,
   });
 
   final String title;
@@ -24,6 +25,19 @@ class CoursemosLearningRow {
   final int? learnedSeconds;
   final double? progressPercent;
   final String? courseModuleId;
+
+  /// The school sets no learning period for this item (Gachon topic courses:
+  /// report periods are 0 and the course page shows only a duration). It has
+  /// no calendar date and is listed separately, not counted as unresolved.
+  final bool undated;
+
+  /// Undated and complete enough to list. Incomplete undated rows stay
+  /// unresolved so the missing-information notice still reports them.
+  bool get listedUndated =>
+      undated &&
+      title.isNotEmpty &&
+      requiredLearningSeconds != null &&
+      requiredLearningSeconds! > 0;
 
   /// This is an opaque report identity, not a Moodle course-module link ID.
   String? get sourceIdentity => module != null && courseModuleId != null
@@ -80,9 +94,16 @@ class CoursemosLearningIndex {
       rows.where((row) => row.requiredLearningSeconds == 0).length;
   int get unresolvedRowCount => rows
       .where(
-        (row) => row.requiredLearningSeconds != 0 && !row.hasRequiredFields,
+        (row) =>
+            row.requiredLearningSeconds != 0 &&
+            !row.listedUndated &&
+            !row.hasRequiredFields,
       )
       .length;
+
+  /// Learning items the school gave no period, with a known requirement.
+  List<CoursemosLearningRow> get undatedRows =>
+      List.unmodifiable(rows.where((row) => row.listedUndated));
 
   /// Only describes extraction of this table. It does not establish that the
   /// server returned every enrolled course or that an absent activity is deleted.
@@ -168,10 +189,13 @@ class CoursemosLearningParser {
     if (headers.isNotEmpty && headers.first == '주제') {
       headers[0] = '주';
     }
+    // Gachon's report omits the optional progress column (4 columns).
     const expected = ['주', '강의자료', '출석인정요구시간', '총학습시간', '진도율'];
-    if (headers.length != expected.length ||
+    final hasProgress = headers.length == expected.length;
+    final columns = hasProgress ? expected.length : expected.length - 1;
+    if (headers.length != columns ||
         Iterable<int>.generate(
-          expected.length,
+          columns,
         ).any((index) => headers[index] != expected[index])) {
       throw const CoursemosParseException('learning_headers_changed');
     }
@@ -189,9 +213,9 @@ class CoursemosLearningParser {
     final spans = <int, _Span>{};
     var ignoredEmpty = 0;
     for (final sourceRow in sourceRows) {
-      final cells = _expandRow(sourceRow, expected.length, spans);
+      final cells = _expandRow(sourceRow, columns, spans);
       // The current report explicitly renders unused weeks as a numeric week
-      // cell followed by four empty cells. Unstudied named rows are not empty.
+      // cell followed by empty cells. Unstudied named rows are not empty.
       final week = _text(cells[0]);
       if ((week.isEmpty || RegExp(r'^\d+$').hasMatch(week)) &&
           cells.skip(1).every((cell) => _text(cell).isEmpty) &&
@@ -221,9 +245,10 @@ class CoursemosLearningParser {
         start = _nonemptyAttribute(marker, 'data-sterm');
         end = _nonemptyAttribute(marker, 'data-eterm');
       }
-      final progress = RegExp(
-        r'^(\d+(?:\.\d+)?)%$',
-      ).firstMatch(_text(cells[4]));
+      final undated = markers.length == 1 && start == '0' && end == '0';
+      final progress = hasProgress
+          ? RegExp(r'^(\d+(?:\.\d+)?)%$').firstMatch(_text(cells[4]))
+          : null;
       final percent = progress == null ? null : double.tryParse(progress[1]!);
       rows.add(
         CoursemosLearningRow(
@@ -237,6 +262,7 @@ class CoursemosLearningParser {
             _text(cells[3]).replaceFirst(RegExp(r'\s*상세보기\s*\(\d+\)\s*$'), ''),
           ),
           progressPercent: percent != null && percent <= 100 ? percent : null,
+          undated: undated,
         ),
       );
     }
@@ -272,16 +298,20 @@ class CoursemosLearningParser {
     }
     _checkPagination(document);
     final resources =
-        <String, ({String title, String module, String start, String end})>{};
+        <String, ({String title, String module, String? start, String? end})>{};
     for (final element in document.querySelectorAll(
       '#region-main li.activity.vod, #region-main li.activity.econtents',
     )) {
       final id = RegExp(r'^module-([1-9]\d*)$').firstMatch(element.id)?[1];
       if (id == null) continue;
       final module = element.classes.contains('vod') ? 'vod' : 'econtents';
-      final linked = element.querySelectorAll('.activityinstance a[href]').any((
-        anchor,
-      ) {
+      final anchors = element.querySelectorAll('.activityinstance a[href]');
+      // Items locked behind another activity (Gachon "available after ...")
+      // render no link at all; their list-item module ID still identifies them.
+      final restricted =
+          anchors.isEmpty &&
+          element.querySelector('.availabilityinfo') != null;
+      final linked = restricted || anchors.any((anchor) {
         final url = _resolve(page.url, anchor.attributes['href']!);
         return url?.origin == page.url.origin &&
             url?.path == '/mod/$module/view.php' &&
@@ -304,16 +334,35 @@ class CoursemosLearningParser {
         ).firstMatch(text);
         if (match != null) parsed.add((match[1]!, match[2]!));
       }
-      if (parsed.length != 1) continue;
-      final period = parsed.single;
-      final start = CoursemosParser.parseKoreanDate(period.$1)!;
-      final end = CoursemosParser.parseKoreanDate(period.$2)!;
-      if (!end.isAfter(start)) continue;
+      final String? startValue;
+      final String? endValue;
+      if (parsed.length == 1) {
+        final period = parsed.single;
+        final start = CoursemosParser.parseKoreanDate(period.$1)!;
+        final end = CoursemosParser.parseKoreanDate(period.$2)!;
+        if (!end.isAfter(start)) continue;
+        startValue = (start.millisecondsSinceEpoch ~/ 1000).toString();
+        endValue = (end.millisecondsSinceEpoch ~/ 1000).toString();
+      } else if (parsed.isEmpty &&
+          periods.any(
+            (text) => RegExp(r'^\d+(?::\d{2}){1,2}$').hasMatch(text),
+          ) &&
+          periods.every(
+            (text) =>
+                RegExp(r'^\d+(?::\d{2}){1,2}$').hasMatch(text) ||
+                !RegExp(r'\d{4}-\d{2}-\d{2}').hasMatch(text),
+          )) {
+        // The school shows only a duration: no learning period exists.
+        startValue = null;
+        endValue = null;
+      } else {
+        continue;
+      }
       final resource = (
         title: _text(name),
         module: module,
-        start: (start.millisecondsSinceEpoch ~/ 1000).toString(),
-        end: (end.millisecondsSinceEpoch ~/ 1000).toString(),
+        start: startValue,
+        end: endValue,
       );
       if (resources.containsKey(id) && resources[id] != resource) {
         throw const CoursemosParseException(
@@ -343,10 +392,14 @@ class CoursemosLearningParser {
 
   CoursemosLearningRow _recoverRow(
     CoursemosLearningRow row,
-    Map<String, ({String title, String module, String start, String end})>
+    Map<String, ({String title, String module, String? start, String? end})>
     resources,
   ) {
-    if (row.hasRequiredFields || row.requiredLearningSeconds == 0) return row;
+    if (row.hasRequiredFields ||
+        row.undated ||
+        row.requiredLearningSeconds == 0) {
+      return row;
+    }
     final matches = resources.entries
         .where(
           (entry) =>
@@ -358,6 +411,18 @@ class CoursemosLearningParser {
         .toList();
     if (matches.length != 1) return row;
     final match = matches.single;
+    if (match.value.start == null) {
+      return CoursemosLearningRow(
+        title: row.title,
+        module: match.value.module,
+        moduleId: row.moduleId,
+        courseModuleId: match.key,
+        requiredLearningSeconds: row.requiredLearningSeconds,
+        learnedSeconds: row.learnedSeconds,
+        progressPercent: row.progressPercent,
+        undated: true,
+      );
+    }
     return CoursemosLearningRow(
       title: row.title,
       module: match.value.module,

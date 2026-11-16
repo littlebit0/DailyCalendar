@@ -40,6 +40,26 @@ class LmsSyncSession {
 
 enum LmsSyncState { idle, loading, ready, fallback, needsLogin, unsupported }
 
+/// A learning item the school gave no period: listed, never a calendar event.
+class LmsUndatedLearning {
+  const LmsUndatedLearning({
+    required this.courseTitle,
+    required this.title,
+    required this.requiredLearningSeconds,
+    this.learnedSeconds,
+  });
+  final String courseTitle;
+  final String title;
+  final int requiredLearningSeconds;
+
+  /// Null when the school shows no learning time yet.
+  final int? learnedSeconds;
+
+  /// Same rule as dated lectures: learned time reaches the required time.
+  bool get completed =>
+      learnedSeconds != null && learnedSeconds! >= requiredLearningSeconds;
+}
+
 class LmsSyncResult {
   const LmsSyncResult({
     required this.courses,
@@ -56,6 +76,7 @@ class LmsSyncResult {
     this.unresolvedQuizStatuses = 0,
     this.frozenPastActivities = 0,
     this.skippedQuizDetails = 0,
+    this.undatedLearning = const [],
   });
   final int courses,
       activities,
@@ -75,6 +96,7 @@ class LmsSyncResult {
   final int unresolvedLearningActivities;
   final int excludedLearningActivities;
   final int failedLearningCourses;
+  final List<LmsUndatedLearning> undatedLearning;
   bool get learningCoverageIncomplete =>
       unresolvedLearningActivities > 0 || failedLearningCourses > 0;
 
@@ -457,6 +479,7 @@ class LmsSyncService extends ChangeNotifier {
       // Activities whose learning values the school confirmed in this sync.
       final confirmedLearning = Set<CoursemosActivity>.identity();
       var unresolvedLearningActivities = 0;
+      final undatedLearning = <LmsUndatedLearning>[];
       var excludedLearningActivities = 0;
       var failedLearningCourses = 0;
       var unresolvedQuizStatuses = 0;
@@ -545,6 +568,15 @@ class LmsSyncService extends ChangeNotifier {
           fetched.addAll(reported);
           confirmedLearning.addAll(reported);
           unresolvedLearningActivities += learning.unresolvedRowCount;
+          undatedLearning.addAll([
+            for (final row in learning.undatedRows)
+              LmsUndatedLearning(
+                courseTitle: course.title,
+                title: row.title,
+                requiredLearningSeconds: row.requiredLearningSeconds!,
+                learnedSeconds: row.learnedSeconds,
+              ),
+          ]);
           excludedLearningActivities += learning.excludedNonAttendanceCount;
           // An empty table has no independently verified empty marker. Report
           // it as unavailable rather than silently claiming complete coverage.
@@ -572,6 +604,7 @@ class LmsSyncService extends ChangeNotifier {
         failedLearningCourses: failedLearningCourses,
         unresolvedQuizStatuses: unresolvedQuizStatuses,
         skippedQuizDetails: skippedQuizDetails,
+        undatedLearning: undatedLearning,
       );
       if (!kReleaseMode) {
         debugPrint(
@@ -726,6 +759,7 @@ class LmsSyncService extends ChangeNotifier {
     required int failedLearningCourses,
     required int unresolvedQuizStatuses,
     required int skippedQuizDetails,
+    List<LmsUndatedLearning> undatedLearning = const [],
   }) async {
     final previous = await _repository.allEventsForSync();
     _check(session, epoch);
@@ -914,6 +948,7 @@ class LmsSyncService extends ChangeNotifier {
       unresolvedQuizStatuses: unresolvedQuizStatuses,
       frozenPastActivities: frozen.length,
       skippedQuizDetails: skippedQuizDetails,
+      undatedLearning: List.unmodifiable(undatedLearning),
     );
   }
 

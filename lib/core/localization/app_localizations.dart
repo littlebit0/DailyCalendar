@@ -781,6 +781,10 @@ const Map<String, Map<String, String>> _translations = {
     '반복': 'Repeat',
     '없음': 'None',
     '완료': 'Done',
+    '미완료': 'Not done',
+    '기한 없는 학습 {count}개': '{count} learning items without a period',
+    '학교가 학습 기간을 정하지 않아 달력 대신 여기에 표시합니다.':
+        'The school set no learning period, so these are listed here instead of on the calendar.',
     '지도 바로가기': 'Open in Maps',
     '월간 미니 캘린더': 'Mini Month Calendar',
     '오늘 일정': "Today's Events",
@@ -1859,6 +1863,10 @@ const Map<String, Map<String, String>> _translations = {
     '반복': '繰り返し',
     '없음': 'なし',
     '완료': '完了',
+    '미완료': '未完了',
+    '기한 없는 학습 {count}개': '期間のない学習 {count}件',
+    '학교가 학습 기간을 정하지 않아 달력 대신 여기에 표시합니다.':
+        '学校が学習期間を設定していないため、カレンダーではなくここに表示します。',
     '지도 바로가기': '地図で開く',
     '월간 미니 캘린더': '月間ミニカレンダー',
     '오늘 일정': '今日の予定',
@@ -2881,6 +2889,10 @@ const Map<String, Map<String, String>> _translations = {
     '반복': '重複',
     '없음': '無',
     '완료': '完成',
+    '미완료': '未完成',
+    '기한 없는 학습 {count}개': '無期限學習 {count} 項',
+    '학교가 학습 기간을 정하지 않아 달력 대신 여기에 표시합니다.':
+        '學校未設定學習期間，因此列於此處而非行事曆。',
     '지도 바로가기': '在地圖中開啟',
     '월간 미니 캘린더': '月份迷你行事曆',
     '오늘 일정': '今日行程',
