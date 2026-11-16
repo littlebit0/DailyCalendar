@@ -3864,13 +3864,35 @@ class _MonthPageViewState extends ConsumerState<_MonthPageView> {
         widget.settings.monthNavigationMode == MonthNavigationMode.vertical
         ? _verticalController
         : _controller;
-    if (_sameMonth(_monthForPage(_currentPage), widget.month) ||
-        activeController == null ||
-        !activeController.hasClients) {
+    if (activeController == null || !activeController.hasClients) {
       return;
     }
-    final targetPage =
-        _currentPage + _monthDelta(_monthForPage(_currentPage), widget.month);
+    final reportedMonth = _monthForPage(_reportedPage);
+    final monthChanged = !_sameMonth(oldWidget.month, widget.month);
+    // The parent echoing the month this view just reported is not a request.
+    final echo = monthChanged && _sameMonth(widget.month, reportedMonth);
+    final explicitRequest =
+        !echo &&
+        (monthChanged ||
+            !DateUtils.isSameDay(oldWidget.selectedDate, widget.selectedDate));
+    if (!explicitRequest) {
+      // Plain rebuilds (e.g. async event loads) compare with the reported
+      // month, so they never pull an active scroll back.
+      if (!_sameMonth(reportedMonth, widget.month)) {
+        _animateToExternalPage(
+          _reportedPage + _monthDelta(reportedMonth, widget.month),
+        );
+      }
+      return;
+    }
+    // Explicit navigation (Today, month picker) wins over an in-flight scroll,
+    // even when it targets the month that was last reported.
+    final currentMonth = _monthForPage(_currentPage);
+    if (_sameMonth(currentMonth, widget.month) &&
+        !activeController.position.isScrollingNotifier.value) {
+      return;
+    }
+    final targetPage = _currentPage + _monthDelta(currentMonth, widget.month);
     _animateToExternalPage(targetPage);
   }
 
@@ -3904,6 +3926,9 @@ class _MonthPageViewState extends ConsumerState<_MonthPageView> {
                 final verticalController = _verticalControllerFor(itemExtent);
                 return NotificationListener<ScrollNotification>(
                   onNotification: (notification) {
+                    if (notification.depth != 0) {
+                      return false;
+                    }
                     if (notification is ScrollUpdateNotification &&
                         !_applyingExternalMonth &&
                         !_preservingVerticalExtent) {
