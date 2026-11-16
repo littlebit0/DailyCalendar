@@ -400,4 +400,78 @@ void main() {
       expect(CoursemosLearningParser.parseDuration('01:02:03'), 3723);
     },
   );
+
+  // Gachon 2026-11-16 live shapes, anonymized: topic course without periods.
+  const undatedReport = '''
+<main id="region-main"><div id="ubcompletion-progress-wrapper"><div class="well">
+<table class="table table-bordered user_progress"><thead><tr>
+<th>주제</th><th>강의 자료</th><th>출석인정 요구시간</th><th>총 학습시간</th>
+</tr></thead><tbody>
+<tr><td>1</td><td>자료 A</td><td>14:23</td><td>18:00<br><button class="track_detail"
+data-modname="vod" data-modid="9101" data-sterm="0" data-eterm="0"
+data-progresstime="1">상세보기 (2)</button></td></tr>
+<tr><td>2</td><td>자료 B</td><td>32:30</td><td></td></tr>
+</tbody></table></div></div></main>
+''';
+
+  test('school-set zero periods are undated items, not unresolved', () {
+    final report = parse(undatedReport);
+    expect(report.rows.first.undated, isTrue);
+    expect(report.activities, isEmpty);
+    expect(report.undatedRows.map((row) => row.title), ['자료 A']);
+    // The unstudied row has no identity yet: recovered from the course page.
+    expect(report.unresolvedRowCount, 1);
+    const coursePage =
+        '<html><body id="page-course-view-ubstopics"><main id="region-main">'
+        '<li class="activity vod modtype_vod" id="module-7101">'
+        '<div class="activityinstance"><a href="/mod/vod/view.php?id=7101">'
+        '<span class="instancename">자료 A</span></a></div>'
+        '<div class="displayoptions">17:59</div></li>'
+        '<li class="activity vod modtype_vod" id="module-7102">'
+        '<div class="activityinstance"><a href="/mod/vod/view.php?id=7102">'
+        '<span class="instancename">자료 B</span></a></div>'
+        '<div class="displayoptions">32:30</div>'
+        '<div class="contentafterlink">설명 문구</div></li>'
+        '</main></body></html>';
+    final recovered = parser.recoverFromCourse(
+      LmsHtmlPage(url: course.url, html: coursePage),
+      report: report,
+    );
+    expect(recovered.unresolvedRowCount, 0);
+    expect(recovered.coverageComplete, isTrue);
+    expect(recovered.activities, isEmpty);
+    expect(recovered.undatedRows.map((row) => row.title), ['자료 A', '자료 B']);
+    expect(recovered.undatedRows.last.learnedSeconds, isNull);
+  });
+
+  test('items locked behind another activity recover from their module id', () {
+    final pending = parse(_shape.replaceFirst('10:31', ''));
+    const locked =
+        '<html><body id="page-course-view-ubsweeks"><main id="region-main">'
+        '<li class="activity vod modtype_vod" id="module-7001">'
+        '<div class="activityinstance"><div class="dimmed dimmed_text">'
+        '<span class="instancename">자료 A</span></div></div>'
+        '<div class="displayoptions">2026-10-01 00:00:00 ~ 2026-10-18 23:59:00, 10:30</div>'
+        '<div class="availabilityinfo">다음 조건 하에서만 이용이 가능합니다</div></li>'
+        '</main></body></html>';
+    final fixed = parser.recoverFromCourse(
+      LmsHtmlPage(url: course.url, html: locked),
+      report: pending,
+    );
+    expect(fixed.activities.single.id, 'report:cm:vod:7001');
+    expect(fixed.activities.single.dueAt, DateTime.utc(2026, 10, 18, 14, 59));
+    // Without the lock notice a link-less item still does not establish identity.
+    final unlinked = parser.recoverFromCourse(
+      LmsHtmlPage(
+        url: course.url,
+        html: locked.replaceFirst(
+          '<div class="availabilityinfo">다음 조건 하에서만 이용이 가능합니다</div>',
+          '',
+        ),
+      ),
+      report: pending,
+    );
+    expect(unlinked.activities, isEmpty);
+  });
 }
+
