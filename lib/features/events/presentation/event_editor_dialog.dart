@@ -349,6 +349,9 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
                             },
                           ),
                           const SizedBox(height: 12),
+                          if (widget.templateMode)
+                            _buildTemplateSpan(context)
+                          else
                           Row(
                             children: [
                               Expanded(
@@ -920,6 +923,60 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
         _recurrenceEndMode = _RecurrenceEndMode.count;
       });
     }
+  }
+
+  /// Templates carry no calendar date, only how many days an event spans.
+  int get _spanDays => DateTime.utc(
+    _endDate.year,
+    _endDate.month,
+    _endDate.day,
+  ).difference(DateTime.utc(_startDate.year, _startDate.month, _startDate.day)).inDays;
+
+  void _changeSpan(int delta) {
+    final next = (_spanDays + delta).clamp(0, EventTemplate.maxDaySpan);
+    _clearValidation();
+    setState(
+      () => _endDate = DateTime(
+        _startDate.year,
+        _startDate.month,
+        _startDate.day + next,
+      ),
+    );
+  }
+
+  Widget _buildTemplateSpan(BuildContext context) {
+    final days = _spanDays;
+    return InputDecorator(
+      decoration: InputDecoration(
+        labelText: context.tr('기간'),
+        prefixIcon: const Icon(Icons.date_range_outlined),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              days == 0
+                  ? context.tr('당일')
+                  : context.tr('{count}일간', args: {'count': days + 1}),
+            ),
+          ),
+          IconButton(
+            key: const ValueKey('template-span-decrease'),
+            tooltip: context.tr('하루 줄이기'),
+            icon: const Icon(Icons.remove_circle_outline),
+            onPressed: days > 0 ? () => _changeSpan(-1) : null,
+          ),
+          IconButton(
+            key: const ValueKey('template-span-increase'),
+            tooltip: context.tr('하루 늘리기'),
+            icon: const Icon(Icons.add_circle_outline),
+            onPressed: days < EventTemplate.maxDaySpan
+                ? () => _changeSpan(1)
+                : null,
+          ),
+        ],
+      ),
+    );
   }
 
   Future<void> _pickStartDate() async {
