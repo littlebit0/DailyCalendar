@@ -1273,6 +1273,21 @@ void main() {
     expect(tester.getSize(firstGap).height, greaterThan(30));
     expect(tester.getTopLeft(firstDrag).dy, greaterThan(firstTop + 30));
 
+    // #857: another date's order is merged in while the drag is in progress.
+    final mergedOrder = CalendarManualEventOrder(
+      eventKeys: const ['from-another-device'],
+      updatedAt: now,
+      deviceId: 'other-device',
+    );
+    await settingsRepository.updateLatest(
+      (latest) => latest.copyWith(
+        calendarManualEventOrders: {
+          ...latest.calendarManualEventOrders,
+          '2020-01-01': mergedOrder,
+        },
+      ),
+    );
+
     await gesture.up();
     await tester.pump();
     expect(find.byType(CircularProgressIndicator), findsNothing);
@@ -1283,6 +1298,13 @@ void main() {
         .calendarManualEventOrders[dateKey]
         ?.eventKeys;
     expect(savedOrder, [second.id, first.id]);
+    expect(
+      settingsRepository
+          .load()
+          .calendarManualEventOrders['2020-01-01']
+          ?.eventKeys,
+      ['from-another-device'],
+    );
     expect(find.byType(CircularProgressIndicator), findsNothing);
     expect(
       tester.getTopLeft(secondDrag).dy,
@@ -8058,6 +8080,100 @@ void main() {
         .where((c) => c.id.startsWith('custom_'))
         .map((c) => (c.id, c.label));
     expect(custom, [('custom_19470', 'a~'), ('custom_19470_2', 'b_')]);
+    await tester.pumpWidget(const SizedBox.shrink());
+  });
+
+  testWidgets('category dialogs keep a category merged while they are open '
+      '(#857)', (tester) async {
+    tester.view.physicalSize = const Size(900, 2600);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    SharedPreferences.setMockInitialValues({'onboardingCompleted': true});
+    FlutterSecureStorage.setMockInitialValues({});
+    final preferences = await SharedPreferences.getInstance();
+    final settingsRepository = SettingsRepository(preferences: preferences);
+    final authService = _FakeGoogleDriveAuthService(account: null);
+    final notificationService = _FakeNotification();
+    final eventRepository = _FakeEventRepository();
+    final driveSyncService = _FakeGoogleDriveSyncService(
+      authService: authService,
+      eventRepository: eventRepository,
+      notificationService: notificationService,
+      settingsRepository: settingsRepository,
+    );
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          universityRegionsProvider.overrideWith(
+            (ref) async => UniversityRegions.fromJson(
+              jsonDecode(
+                    File(
+                      'assets/academic/university_regions.json',
+                    ).readAsStringSync(),
+                  )
+                  as Map<String, dynamic>,
+            ),
+          ),
+          settingsRepositoryProvider.overrideWithValue(settingsRepository),
+          notificationServiceProvider.overrideWithValue(notificationService),
+          syncServiceProvider.overrideWithValue(_FakeSync()),
+          eventRepositoryProvider.overrideWithValue(eventRepository),
+          googleDriveAuthServiceProvider.overrideWithValue(authService),
+          googleDriveSyncServiceProvider.overrideWithValue(driveSyncService),
+        ],
+        child: const MaterialApp(home: SettingsPage()),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(
+      find.byKey(const ValueKey('category-settings-navigation')),
+    );
+    await tester.pumpAndSettle();
+    // Stands in for a Drive merge: stored, but this screen is not rebuilt.
+    Future<void> mergeFromAnotherDevice(String id) =>
+        settingsRepository.ensureCategory(
+          EventCategory(id: id, label: id, colorValue: 0xff7c3aed),
+        );
+    List<String> storedIds() =>
+        settingsRepository.load().categories.map((c) => c.id).toList();
+
+    await tester.tap(find.text('분류 추가'));
+    await tester.pumpAndSettle();
+    await mergeFromAnotherDevice('during-add');
+    await tester.enterText(find.byType(TextField).last, '새 분류');
+    await tester.tap(find.widgetWithText(FilledButton, '추가'));
+    await tester.pumpAndSettle();
+    expect(storedIds(), contains('during-add'));
+    expect(
+      settingsRepository.load().categories.map((c) => c.label),
+      contains('새 분류'),
+    );
+
+    await tester.tap(find.byTooltip('분류 수정').first);
+    await tester.pumpAndSettle();
+    await mergeFromAnotherDevice('during-edit');
+    await tester.enterText(find.byType(TextField).last, '바뀐 이름');
+    await tester.tap(find.text('저장'));
+    await tester.pumpAndSettle();
+    expect(storedIds(), containsAll(['during-add', 'during-edit']));
+    expect(
+      settingsRepository.load().categories.map((c) => c.label),
+      contains('바뀐 이름'),
+    );
+
+    await tester.tap(find.byTooltip('분류 삭제').first);
+    await tester.pumpAndSettle();
+    await mergeFromAnotherDevice('during-delete');
+    final before = storedIds().length;
+    await tester.tap(find.widgetWithText(FilledButton, '삭제'));
+    await tester.pumpAndSettle();
+    expect(
+      storedIds(),
+      containsAll(['during-add', 'during-edit', 'during-delete']),
+    );
+    expect(storedIds(), hasLength(before - 1));
     await tester.pumpWidget(const SizedBox.shrink());
   });
 

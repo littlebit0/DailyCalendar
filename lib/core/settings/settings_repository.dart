@@ -541,6 +541,19 @@ class SettingsRepository {
     );
   }
 
+  /// Applies [update] to the latest stored settings inside the settings queue.
+  /// A caller that waited (dialog, drag, save) with an older snapshot uses this
+  /// so values merged or imported meanwhile are not written back as removed.
+  Future<void> updateLatest(AppSettings Function(AppSettings latest) update) =>
+      _enqueueSettingsMutation(() async {
+        final latest = load();
+        await _saveSettings(
+          update(latest),
+          markSyncPending: true,
+          changedFrom: latest,
+        );
+      });
+
   /// Adds [category] to the latest list inside the settings queue unless its
   /// id already exists, so a concurrent category edit is never overwritten by
   /// an older snapshot. Completes with the stored category.
