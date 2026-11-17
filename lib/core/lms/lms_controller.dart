@@ -367,6 +367,29 @@ class LmsController extends ChangeNotifier {
     _notify();
   }
 
+  /// Deletes every saved school login and stored web session on this device,
+  /// whether or not a session was created in this run. For logout and reset,
+  /// once the Daily account is gone; unlike [disconnect] it changes no synced
+  /// setting.
+  Future<void> forgetLocalSecrets() async {
+    final current = _session;
+    settingsChanged();
+    try {
+      // A live session must not save its cookies again after the deletion.
+      await current?.retire();
+    } on Object {
+      // The stored values below are deleted either way.
+    }
+    await _credentials.deleteAll();
+    await LmsWebSession.deleteStoredSessions();
+    _credentialRevision++;
+    _credentialKey = null;
+    _localLoginUsername = null;
+    _localLoginLoading = false;
+    _localLoginReadFailed = false;
+    _notify();
+  }
+
   /// Failures that say nothing about the saved login. A rejected password or a
   /// required extra step is never repeated: the same password would be sent to
   /// the school again and could lock the account.

@@ -9243,7 +9243,11 @@ void main() {
     tester,
   ) async {
     SharedPreferences.setMockInitialValues({'onboardingCompleted': true});
-    FlutterSecureStorage.setMockInitialValues({});
+    // #913: the reset also removes saved school logins and sessions.
+    FlutterSecureStorage.setMockInitialValues({
+      'daily.lms.credentials.v1.any-account': '{}',
+      'daily.lms.session.v1.any-account': '{}',
+    });
     final preferences = await SharedPreferences.getInstance();
     final settingsRepository = SettingsRepository(preferences: preferences);
     final authService = _FakeGoogleDriveAuthService(account: null);
@@ -9295,6 +9299,7 @@ void main() {
 
     expect(find.text('오늘을 더\n가볍게 정리하세요.'), findsOneWidget);
     expect(driveSyncService.deleteCloudBackupCalls, 0);
+    expect(await const FlutterSecureStorage().readAll(), isEmpty);
     expect(authService.signOutCalls, 0);
     expect(eventRepository.clearAllCalls, 1);
     expect(notificationService.cancelMorningBriefingCalls, 1);
@@ -10169,12 +10174,34 @@ void main() {
   testWidgets('logout clears local accounts and keeps Drive cloud backup', (
     tester,
   ) async {
+    // #913: the Siri activity log exists on iOS and macOS only.
+    debugDefaultTargetPlatformOverride = TargetPlatform.macOS;
+    addTearDown(() => debugDefaultTargetPlatformOverride = null);
+    const siriLogs = MethodChannel('daily/siri_logs');
+    final siriLogCalls = <String>[];
+    tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(siriLogs, (
+      call,
+    ) async {
+      siriLogCalls.add(call.method);
+      return null;
+    });
+    addTearDown(
+      () => tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+        siriLogs,
+        null,
+      ),
+    );
     SharedPreferences.setMockInitialValues({
       'onboardingCompleted': true,
       'appleUserIdentifier': 'apple-user',
       'appleEmail': 'hwi@example.com',
     });
-    FlutterSecureStorage.setMockInitialValues({});
+    // #913: saved without an LMS session being created in this run.
+    FlutterSecureStorage.setMockInitialValues({
+      'daily.lms.credentials.v1.other-account': '{}',
+      'daily.lms.session.v1.other-account': '{}',
+      'unrelated.secret': 'kept',
+    });
     final preferences = await SharedPreferences.getInstance();
     final settingsRepository = SettingsRepository(preferences: preferences);
     final authService = _FakeGoogleDriveAuthService();
@@ -10202,6 +10229,10 @@ void main() {
           ),
           settingsRepositoryProvider.overrideWithValue(settingsRepository),
           notificationServiceProvider.overrideWithValue(notificationService),
+          // The native alarm bridge has no handler in tests.
+          alarmServiceProvider.overrideWithValue(
+            const UnsupportedAlarmService(),
+          ),
           eventRepositoryProvider.overrideWithValue(eventRepository),
           googleDriveAuthServiceProvider.overrideWithValue(authService),
           googleDriveSyncServiceProvider.overrideWithValue(driveSyncService),
@@ -10221,7 +10252,10 @@ void main() {
     await tester.tap(find.text('로그아웃'));
     await tester.pumpAndSettle();
     await tester.tap(find.widgetWithText(FilledButton, '로그아웃'));
-    await tester.pumpAndSettle();
+    // This welcome screen never settles, so pump a fixed time instead.
+    for (var i = 0; i < 10; i++) {
+      await tester.pump(const Duration(milliseconds: 200));
+    }
 
     expect(authService.signOutCalls, 1);
     expect(driveSyncService.syncNowCalls, 0);
@@ -10230,7 +10264,12 @@ void main() {
     expect(settingsRepository.load().onboardingCompleted, isFalse);
     expect(settingsRepository.appleAccount(), isNull);
     expect(find.text('오늘을 더\n가볍게 정리하세요.'), findsOneWidget);
+    expect((await const FlutterSecureStorage().readAll()).keys, [
+      'unrelated.secret',
+    ]);
+    expect(siriLogCalls, ['clearLogs']);
 
+    debugDefaultTargetPlatformOverride = null;
     await tester.pumpWidget(const SizedBox.shrink());
   });
 

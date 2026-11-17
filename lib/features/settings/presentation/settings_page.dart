@@ -2501,6 +2501,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       }
       await ref.read(eventRepositoryProvider).clearAll();
       await ref.read(settingsRepositoryProvider).resetAll();
+      await _clearDeviceSecretsAndLogs();
       ref.read(appSettingsProvider.notifier).state = AppSettings();
       unawaited(
         ref.read(calendarWidgetServiceProvider).refresh().catchError((_) {}),
@@ -2515,6 +2516,20 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     } finally {
       if (mounted) {
         setState(() => _syncBusy = false);
+      }
+    }
+  }
+
+  /// What [SettingsRepository.resetAll] cannot reach: saved school logins and
+  /// web sessions in secure storage, and the Siri activity log file.
+  Future<void> _clearDeviceSecretsAndLogs() async {
+    await ref.read(lmsControllerProvider).forgetLocalSecrets();
+    if (defaultTargetPlatform == TargetPlatform.iOS ||
+        defaultTargetPlatform == TargetPlatform.macOS) {
+      try {
+        await clearSiriActivityLogs();
+      } on MissingPluginException {
+        // No Siri log handler in this build, so there is no log to delete.
       }
     }
   }
@@ -2597,6 +2612,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       }
       await ref.read(eventRepositoryProvider).clearAll();
       await ref.read(settingsRepositoryProvider).resetAll();
+      await _clearDeviceSecretsAndLogs();
       if (hasGoogleAccount) {
         await authService.signOut();
       }

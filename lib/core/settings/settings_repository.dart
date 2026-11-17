@@ -1668,6 +1668,15 @@ class SettingsRepository {
     await _preferences.remove(_settingsSyncDocumentKey);
     await clearDriveChangePageToken();
     await _preferences.remove(_deviceIdKey);
+    await _preferences.remove(_eventFollowUpKey);
+    // Per-account LMS check times (`daily.lms.lastSuccess`, `learningChecked`).
+    for (final key in _preferences.getKeys().toList()) {
+      if (key.startsWith('daily.lms.')) await _preferences.remove(key);
+    }
+    // An unfinished notification cleanup still looks its ids up here.
+    if (notificationCleanupJournal == null) {
+      await _preferences.remove(_notificationIdsKey);
+    }
     await deleteDailyAccount();
     await deleteGeminiApiKey();
     await deleteAppLockPin();
