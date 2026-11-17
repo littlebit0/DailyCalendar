@@ -2529,8 +2529,8 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       }
       await ref.read(eventRepositoryProvider).clearAll();
       await ref.read(settingsRepositoryProvider).resetAll();
+      await _requestDeviceSecretCleanup();
       ref.read(appSettingsProvider.notifier).state = AppSettings();
-      await _clearDeviceSecretsAndLogs();
       unawaited(
         ref.read(calendarWidgetServiceProvider).refresh().catchError((_) {}),
       );
@@ -2548,21 +2548,16 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     }
   }
 
-  /// Runs after the account is gone and never stops the logout or reset: a
-  /// failure is shown and retried on the next app start.
-  Future<void> _clearDeviceSecretsAndLogs() async {
-    final messenger = mounted ? ScaffoldMessenger.of(context) : null;
-    final failureMessage = mounted
-        ? context.tr(
-            '저장된 학교 로그인 정보나 Siri 작업 기록을 모두 지우지 못했습니다. 다음 실행에서 다시 시도합니다.',
-          )
-        : '';
-    final cleared = await clearDeviceSecretsAndLogs(
-      ref.read(settingsRepositoryProvider),
-      ref.read(lmsControllerProvider),
-    );
-    if (!cleared) {
-      messenger?.showSnackBar(SnackBar(content: Text(failureMessage)));
+  /// Marks the saved school logins and the Siri log for deletion. The app
+  /// root deletes them once the fresh settings are published, so neither a
+  /// failure nor this screen closing can stop the logout or reset.
+  Future<void> _requestDeviceSecretCleanup() async {
+    try {
+      await ref
+          .read(settingsRepositoryProvider)
+          .setDeviceSecretCleanupPending(true);
+    } on Object {
+      // Nothing else can be done here; the account is already removed.
     }
   }
 
@@ -2648,8 +2643,8 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
         await authService.signOut();
       }
       await ref.read(appleSignInServiceProvider).signOut();
+      await _requestDeviceSecretCleanup();
       ref.read(appSettingsProvider.notifier).state = AppSettings();
-      await _clearDeviceSecretsAndLogs();
       unawaited(
         ref.read(calendarWidgetServiceProvider).refresh().catchError((_) {}),
       );

@@ -165,19 +165,49 @@ class _DeviceCleanupRetry extends ConsumerStatefulWidget {
 }
 
 class _DeviceCleanupRetryState extends ConsumerState<_DeviceCleanupRetry> {
+  var _running = false;
+
   @override
   void initState() {
     super.initState();
+    _clearIfPending();
+  }
+
+  /// Logout and reset only set the mark; the deletion runs here, outside the
+  /// settings screen they close, so a failure can still be shown.
+  void _clearIfPending() {
     final settings = ref.read(settingsRepositoryProvider);
-    if (settings.deviceSecretCleanupPending &&
-        settings.dailyAccount() == null) {
-      final lms = ref.read(lmsControllerProvider);
-      unawaited(Future(() => clearDeviceSecretsAndLogs(settings, lms)));
+    if (_running ||
+        !settings.deviceSecretCleanupPending ||
+        settings.dailyAccount() != null) {
+      return;
     }
+    _running = true;
+    final lms = ref.read(lmsControllerProvider);
+    unawaited(
+      Future(() async {
+        final cleared = await clearDeviceSecretsAndLogs(settings, lms);
+        _running = false;
+        if (cleared || !mounted) return;
+        ScaffoldMessenger.maybeOf(context)?.showSnackBar(
+          SnackBar(
+            content: Text(
+              context.tr(
+                '저장된 학교 로그인 정보나 Siri 작업 기록을 모두 지우지 못했습니다. 다음 실행에서 다시 시도합니다.',
+              ),
+            ),
+          ),
+        );
+      }),
+    );
   }
 
   @override
-  Widget build(BuildContext context) => widget.child;
+  Widget build(BuildContext context) {
+    // A reset publishes fresh settings right after it sets the mark.
+    ref.listen(appSettingsProvider, (_, _) => _clearIfPending());
+    return widget.child;
+  }
 }
 
 class _AppLockGate extends ConsumerStatefulWidget {

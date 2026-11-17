@@ -9310,6 +9310,11 @@ void main() {
       expect(driveSyncService.deleteCloudBackupCalls, 0);
       // #913 review: a failed cleanup neither stops the reset nor is forgotten.
       expect(settingsRepository.deviceSecretCleanupPending, cleanupFails);
+      // Shown on the welcome screen, after the settings screen is gone.
+      expect(
+        find.textContaining('다음 실행에서 다시 시도합니다'),
+        cleanupFails ? findsOneWidget : findsNothing,
+      );
       if (!cleanupFails) {
         expect(await const FlutterSecureStorage().readAll(), isEmpty);
       }
