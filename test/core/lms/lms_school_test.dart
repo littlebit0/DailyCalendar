@@ -100,6 +100,20 @@ void main() {
     expect(LmsWebSession.automaticLoginScript, isNot(contains('smu.ac.kr')));
   });
 
+  test('only Jeonnam opens the external (ID/password) login, never its SSO', () {
+    expect(
+      LmsSchool.all.where((s) => s.externalLoginToggle != null).map((s) => s.id),
+      ['jnu'],
+    );
+    expect(LmsSchool.of('jnu')!.externalLoginToggle, 'button.btn-person');
+    expect(LmsSchool.of('jnu')!.sso, isNull);
+    expect(
+      LmsSchool.of('jnu')!.scriptArguments['externalLoginToggle'],
+      'button.btn-person',
+    );
+    expect(LmsSchool.of('smu')!.scriptArguments['externalLoginToggle'], '');
+  });
+
   test('schools outside the list are blocked at every entry point', () async {
     for (final school in ['cue', 'hansung', 'scnu', '', null]) {
       expect(LmsController.supportsSchool(school), isFalse);

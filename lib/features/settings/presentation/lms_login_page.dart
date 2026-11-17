@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
@@ -241,9 +242,23 @@ class _LmsLoginPageState extends State<LmsLoginPage> {
                         widget.session.recordLoginNavigation(uri?.uriValue);
                         if (mounted) setState(() => _visibleHost = uri?.host);
                       },
-                      onLoadStop: (_, url) {
+                      onLoadStop: (controller, url) {
                         widget.session.pageLoadFinished();
                         final uri = url?.uriValue;
+                        final toggle = widget.session.school.externalLoginToggle;
+                        if (toggle != null &&
+                            uri != null &&
+                            widget.session.policy.isSchoolOrigin(uri) &&
+                            uri.path == '/login.php') {
+                          // Open the ID/password form instead of the SSO that
+                          // asks for a second factor the app cannot complete.
+                          unawaited(
+                            controller.evaluateJavascript(
+                              source:
+                                  'document.querySelector(${jsonEncode(toggle)})?.click()',
+                            ),
+                          );
+                        }
                         if (uri != null &&
                             widget.session.policy.isSchoolOrigin(uri) &&
                             !const {

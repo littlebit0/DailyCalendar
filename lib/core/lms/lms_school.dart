@@ -32,6 +32,7 @@ class LmsSchool {
     required this.host,
     required this.domain,
     this.loginForm = 'form.form-login',
+    this.externalLoginToggle,
     this.sso,
   });
 
@@ -45,6 +46,11 @@ class LmsSchool {
   /// The LMS's own `POST /login/index.php` form. Some desktop themes name it
   /// `form.loginform` while the mobile theme keeps `form.form-login`.
   final String loginForm;
+
+  /// Button that reveals the school's own ID/password form on `/login.php`
+  /// (Jeonnam shows "SSO 로그인" and "외부인 로그인"; only the latter avoids the
+  /// SSO second factor). Null when the form is already visible.
+  final String? externalLoginToggle;
   final LmsSchoolSso? sso;
 
   Uri get baseUrl => Uri.https(host, '/');
@@ -54,6 +60,7 @@ class LmsSchool {
   Map<String, String> get scriptArguments => {
     'lmsHost': host,
     'loginForm': loginForm,
+    'externalLoginToggle': externalLoginToggle ?? '',
     'ssoHost': sso?.host ?? '',
     'ssoEntryForm': sso?.entryForm ?? '',
     'ssoEntryPath': sso?.entryPath ?? '',
@@ -84,7 +91,12 @@ class LmsSchool {
         rememberField: '#saveIdIpt',
       ),
     ),
-    LmsSchool(id: 'jnu', host: 'sel.jnu.ac.kr', domain: 'jnu.ac.kr'),
+    LmsSchool(
+      id: 'jnu',
+      host: 'sel.jnu.ac.kr',
+      domain: 'jnu.ac.kr',
+      externalLoginToggle: 'button.btn-person',
+    ),
     LmsSchool(
       id: 'changwon',
       host: 'ecampus.changwon.ac.kr',

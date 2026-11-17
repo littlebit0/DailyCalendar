@@ -1084,6 +1084,8 @@ class LmsWebSession extends ChangeNotifier {
         const user = mobile.querySelector('input[name="username"]'), pwd = mobile.querySelector('input[name="password"]');
         if (!user || !pwd || pwd.type !== 'password' || mobile.dataset.dailyAutoSubmitted === 'true') return {state:'blocked'};
         if ([...mobile.querySelectorAll('input')].some(e => e.getClientRects().length && /captcha|otp|motp/i.test(e.id + ' ' + e.name))) return {state:'blocked', failure:'additionalAuthentication'};
+        // Pick the school's ID/password (external) login, never its SSO.
+        if (externalLoginToggle) document.querySelector(externalLoginToggle)?.click();
         const keep = mobile.querySelector('input[name="rememberusername"]');
         if (keep) keep.checked = false;
         mobile.dataset.dailyAutoSubmitted = 'true';
