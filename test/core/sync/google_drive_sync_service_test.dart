@@ -2314,6 +2314,151 @@ void main() {
     );
   });
 
+  group('unreadable Drive event file (#845)', () {
+    // One readable file and one whose body cannot be parsed.
+    MockClient client(String corruptBody, {bool networkError = false}) {
+      return _versionedClient((request) async {
+        if (request.method == 'GET' && request.url.path == '/drive/v3/files') {
+          final query = request.url.queryParameters['q'] ?? '';
+          if (query.contains('daily-sync-v2-settings.json')) {
+            return _driveFiles([]);
+          }
+          return _driveFiles([
+            {'id': 'good-file', 'name': 'daily-sync-v2-event-good.json'},
+            {'id': 'bad-file', 'name': 'daily-sync-v2-event-bad.json'},
+          ]);
+        }
+        if (request.method == 'GET' &&
+            request.url.path == '/drive/v3/changes/startPageToken') {
+          return _jsonResponse({'startPageToken': 'token-1'});
+        }
+        if (request.method == 'GET' &&
+            request.url.path == '/drive/v3/changes') {
+          return _jsonResponse({
+            'newStartPageToken': 'token-2',
+            'changes': [
+              for (final name in ['good', 'bad'])
+                {
+                  'fileId': '$name-file',
+                  'removed': false,
+                  'file': {
+                    'id': '$name-file',
+                    'name': 'daily-sync-v2-event-$name.json',
+                  },
+                },
+            ],
+          });
+        }
+        if (request.method == 'GET' &&
+            request.url.path == '/drive/v3/files/good-file') {
+          return _jsonResponse(
+            _eventFileJson(
+              id: 'good',
+              title: '다른 기기 수정',
+              startAt: '2026-07-30T00:00:00.000Z',
+              endAt: '2026-07-31T00:00:00.000Z',
+              updatedAt: '2026-06-02T00:00:00.000Z',
+              sourceDeviceId: 'remote-device',
+            ),
+          );
+        }
+        if (request.method == 'GET' &&
+            request.url.path == '/drive/v3/files/bad-file') {
+          if (networkError) return http.Response('unavailable', 503);
+          return http.Response(corruptBody, 200);
+        }
+        if (request.url.path.startsWith('/upload/drive/v3/files')) {
+          fail('an unreadable file must not be overwritten');
+        }
+        return http.Response('unexpected ${request.method}', 500);
+      });
+    }
+
+    Future<(GoogleDriveSyncService, _MemoryEventRepository, SharedPreferences)>
+    setUpService(MockClient httpClient, {required bool savedToken}) async {
+      SharedPreferences.setMockInitialValues({
+        'deviceId': 'local-device',
+        if (savedToken) 'driveChangeAccount': 'tester@example.com',
+        if (savedToken) 'driveChangePageToken': 'token-1',
+      });
+      final preferences = await SharedPreferences.getInstance();
+      final repository = _MemoryEventRepository();
+      // The local copy of the event whose Drive file is unreadable.
+      await repository.save(
+        _event(
+          id: 'bad',
+          title: '로컬 원본',
+          startAt: DateTime(2026, 7, 1),
+          endAt: DateTime(2026, 7, 2),
+          updatedAt: DateTime.utc(2026, 6, 1),
+        ),
+      );
+      final service = _service(
+        repository: repository,
+        notificationService: _FakeNotificationService(),
+        preferences: preferences,
+        httpClient: httpClient,
+      );
+      addTearDown(service.dispose);
+      return (service, repository, preferences);
+    }
+
+    for (final corruptBody in ['{"event": "text"', '{"event": "text"}', '[]']) {
+      test('restore skips it and keeps the others: $corruptBody', () async {
+        final (service, repository, _) = await setUpService(
+          client(corruptBody),
+          savedToken: false,
+        );
+
+        await service.restoreNow();
+
+        expect((await repository.findById('good'))?.title, '다른 기기 수정');
+        final local = await repository.findById('bad');
+        expect(local?.title, '로컬 원본');
+        expect(local?.syncStatus, 'synced');
+        expect(service.statusNotifier.value.message, contains('1개 건너뜀'));
+        expect(service.statusNotifier.value.error, isNull);
+      });
+    }
+
+    test('change detection skips it and advances the cursor', () async {
+      final (service, repository, preferences) = await setUpService(
+        client('{"compacted": true, "deletion": 3}'),
+        savedToken: true,
+      );
+
+      await service.checkForRemoteChangesNow();
+
+      expect((await repository.findById('good'))?.title, '다른 기기 수정');
+      expect((await repository.findById('bad'))?.title, '로컬 원본');
+      expect(service.statusNotifier.value.message, contains('1개 건너뜀'));
+      expect(
+        SettingsRepository(
+          preferences: preferences,
+        ).driveChangePageToken('tester@example.com'),
+        'token-2',
+      );
+    });
+
+    test('a network error on one file still fails the whole run', () async {
+      final (service, _, preferences) = await setUpService(
+        client('', networkError: true),
+        savedToken: true,
+      );
+
+      await expectLater(
+        service.checkForRemoteChangesNow(),
+        throwsA(isA<GoogleDriveSyncException>()),
+      );
+      expect(
+        SettingsRepository(
+          preferences: preferences,
+        ).driveChangePageToken('tester@example.com'),
+        'token-1',
+      );
+    });
+  });
+
   test('change detection ignores the current device upload', () async {
     SharedPreferences.setMockInitialValues({
       'deviceId': 'local-device',
