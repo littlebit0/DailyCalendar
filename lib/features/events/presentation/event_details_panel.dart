@@ -623,11 +623,12 @@ class EventDetailsPanel extends ConsumerWidget {
   }
 
   CalendarEvent _endBefore(CalendarEvent base, DateTime occurrence) {
+    // A calendar day earlier, not 24 hours: the day before may have 23 hours.
     final until = DateTime(
       occurrence.year,
       occurrence.month,
-      occurrence.day,
-    ).subtract(const Duration(days: 1));
+      occurrence.day - 1,
+    );
     return base.copyWith(
       recurrence: base.recurrence.copyWith(until: until, clearCount: true),
     );
