@@ -509,6 +509,32 @@ void main() {
     },
   );
 
+  test("another account's cached LMS events take no pending room", () async {
+    SharedPreferences.setMockInitialValues({});
+    final settings = SettingsRepository(
+      preferences: await SharedPreferences.getInstance(),
+    );
+    final database = AppDatabase.forTesting(NativeDatabase.memory());
+    addTearDown(database.close);
+    final repository = DriftEventRepository(database);
+    final start = DateTime.now().add(const Duration(days: 1));
+    await repository.save(dailySeries('daily', start));
+    // An `lms:` event without this account's metadata is not visible to it.
+    for (var i = 0; i < 60; i++) {
+      await repository.save(
+        singleShot('lms:other-$i', start.add(Duration(days: i + 1))),
+      );
+    }
+    debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+    addTearDown(() => debugDefaultTargetPlatformOverride = null);
+    final service = LocalNotificationService(
+      settingsRepository: settings,
+      eventRepository: repository,
+    );
+    final allowance = (await service.repeatingSlotAllowance(settings.load()))!;
+    expect(allowance['daily:reminder:10'], greaterThan(1));
+  });
+
   test(
     'far single-shot reminders give way so pending never exceeds the limit',
     () async {
@@ -527,6 +553,10 @@ void main() {
             if (call.method == 'initialize') return true;
             final args = call.arguments as Map;
             if (call.method == 'schedule') {
+              // Like iOS, a request made while the queue is full is dropped.
+              if (pending.length >= 64 && !pending.containsKey(args['id'])) {
+                return null;
+              }
               pending[args['id'] as int] = args['payload'] as String;
             }
             if (call.method == 'cancel' || call.method == 'cancelPending') {

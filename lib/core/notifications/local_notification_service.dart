@@ -259,6 +259,11 @@ class LocalNotificationService implements NotificationService {
     final base = _baseReminderTime(event, settings);
     var deliveredImmediateReminder = false;
     final slotAllowance = await _sharedSlotAllowance(snapshot, settings);
+    // Free what the other events must give up before adding this event's
+    // requests: iOS drops a request made while its queue is full.
+    if (retireLegacy) {
+      await _trimOtherRepeatingSlots(_snapshot(settings), settings, event.id);
+    }
     for (final reminderMinutes in reminderMinutesList) {
       if (event.recurrence.isRepeating) {
         deliveredImmediateReminder = await _scheduleRepeatingReminders(
@@ -330,7 +335,6 @@ class LocalNotificationService implements NotificationService {
         _legacyIds(event.id, reminderMinutesList),
         exceptEventId: event.id,
       );
-      await _trimOtherRepeatingSlots(_snapshot(settings), settings, event.id);
     }
   }
 
@@ -427,8 +431,11 @@ class LocalNotificationService implements NotificationService {
     final candidates = <MapEntry<String, DateTime>>[];
     final singles = <MapEntry<String, DateTime>>[];
     final keys = <String>[];
+    final owner = _settingsRepository.dailyAccount()?.googleAccount?.email;
     for (final other in await _events(snapshot)) {
-      if (other.isDeleted ||
+      // Another account's cached LMS events are never scheduled.
+      if (!other.isVisibleToOwner(owner) ||
+          other.isDeleted ||
           other.completed ||
           other.systemEvent ||
           other.readOnly) {
