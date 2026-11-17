@@ -17,7 +17,6 @@ import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-TESTS = ROOT / "tool" / "tests"
 
 # Privacy and platform policy checks.
 POLICY_SUITES = [
@@ -56,7 +55,7 @@ IMPORT_SUITES = [
     "test_uos_import",
 ]
 
-SUITES = POLICY_SUITES + IMPORT_SUITES
+SUITES = POLICY_SUITES + IMPORT_SUITES + ["test_run_tool_tests"]
 
 # Suites that cannot run from a clean checkout, with the reason. Remove an
 # entry (and add the suite above) once its input is available in CI.
@@ -75,48 +74,50 @@ ALLOWED_SKIPS = {
 }
 
 
-def uncovered_suites():
+def uncovered_suites(root, suites, excluded):
     workflows = "".join(
         path.read_text(encoding="utf-8")
-        for path in sorted((ROOT / ".github" / "workflows").glob("*.yml"))
+        for path in sorted((root / ".github" / "workflows").glob("*.yml"))
     )
     return sorted(
         path.stem
-        for path in TESTS.glob("test_*.py")
-        if path.stem not in SUITES
-        and path.stem not in EXCLUDED
+        for path in (root / "tool" / "tests").glob("test_*.py")
+        if path.stem not in suites
+        and path.stem not in excluded
         and path.name not in workflows
     )
 
 
-def main():
+def run(root, suites, excluded, allowed_skips, stream=None):
+    """Runs [suites] under root/tool/tests and returns the exit code."""
+    tests = root / "tool" / "tests"
     problems = [
         f"{name}: not run by a workflow step, SUITES or EXCLUDED"
-        for name in uncovered_suites()
+        for name in uncovered_suites(root, suites, excluded)
     ]
     problems += [
         f"{name}: listed but tool/tests/{name}.py does not exist"
-        for name in [*SUITES, *EXCLUDED]
-        if not (TESTS / f"{name}.py").is_file()
+        for name in [*suites, *excluded]
+        if not (tests / f"{name}.py").is_file()
     ]
 
     # Same lookup as `python3 -m unittest discover -s tool/tests` from the root.
-    os.chdir(ROOT)
-    sys.path[:0] = [str(TESTS), str(ROOT)]
-    suite = unittest.defaultTestLoader.loadTestsFromNames(SUITES)
-    result = unittest.TextTestRunner(verbosity=2).run(suite)
+    os.chdir(root)
+    sys.path[:0] = [str(tests), str(root)]
+    suite = unittest.defaultTestLoader.loadTestsFromNames(suites)
+    result = unittest.TextTestRunner(stream=stream, verbosity=2).run(suite)
     problems += [
         f"{test.id()}: skipped ({reason})"
         for test, reason in result.skipped
-        if test.id() not in ALLOWED_SKIPS
+        if test.id() not in allowed_skips
     ]
 
-    for name, reason in EXCLUDED.items():
-        print(f"not run: {name}: {reason}")
+    for name, reason in excluded.items():
+        print(f"not run: {name}: {reason}", file=stream or sys.stdout)
     for problem in problems:
-        print(f"error: {problem}", file=sys.stderr)
+        print(f"error: {problem}", file=stream or sys.stderr)
     return 0 if result.wasSuccessful() and not problems else 1
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(run(ROOT, SUITES, EXCLUDED, ALLOWED_SKIPS))
