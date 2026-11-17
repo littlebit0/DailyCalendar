@@ -705,7 +705,10 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(InputChip), findsOneWidget);
     // The only remaining trigger has no delete button.
-    expect(tester.widget<InputChip>(find.byType(InputChip)).onDeleted, isNull);
+    expect(
+      tester.widget<InputChip>(find.byType(InputChip)).onDeleted,
+      isNull,
+    );
     await tester.tap(find.text('저장'));
     await tester.pumpAndSettle();
 
@@ -714,7 +717,9 @@ void main() {
     expect(savedDraft?.alarmMinutesBeforeList, isEmpty);
   });
 
-  testWidgets('keeps an existing custom alarm time on save', (tester) async {
+  testWidgets('keeps an existing custom alarm time on save', (
+    tester,
+  ) async {
     final customAt = DateTime.now().add(const Duration(days: 3));
     final customMinute = DateTime(
       customAt.year,

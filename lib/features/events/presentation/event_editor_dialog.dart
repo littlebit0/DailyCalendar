@@ -352,27 +352,27 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
                           if (widget.templateMode)
                             _buildTemplateSpan(context)
                           else
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: _LabeledPickerButton(
-                                    label: context.tr('시작일'),
-                                    icon: Icons.calendar_today_outlined,
-                                    value: startDateLabel,
-                                    onPressed: _pickStartDate,
-                                  ),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: _LabeledPickerButton(
+                                  label: context.tr('시작일'),
+                                  icon: Icons.calendar_today_outlined,
+                                  value: startDateLabel,
+                                  onPressed: _pickStartDate,
                                 ),
-                                const SizedBox(width: 8),
-                                Expanded(
-                                  child: _LabeledPickerButton(
-                                    label: context.tr('종료일'),
-                                    icon: Icons.event_available_outlined,
-                                    value: endDateLabel,
-                                    onPressed: _pickEndDate,
-                                  ),
+                              ),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: _LabeledPickerButton(
+                                  label: context.tr('종료일'),
+                                  icon: Icons.event_available_outlined,
+                                  value: endDateLabel,
+                                  onPressed: _pickEndDate,
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
+                          ),
                           if (!_allDay) ...[
                             const SizedBox(height: 8),
                             Row(
@@ -926,11 +926,11 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
   }
 
   /// Templates carry no calendar date, only how many days an event spans.
-  int get _spanDays => DateTime.utc(_endDate.year, _endDate.month, _endDate.day)
-      .difference(
-        DateTime.utc(_startDate.year, _startDate.month, _startDate.day),
-      )
-      .inDays;
+  int get _spanDays => DateTime.utc(
+    _endDate.year,
+    _endDate.month,
+    _endDate.day,
+  ).difference(DateTime.utc(_startDate.year, _startDate.month, _startDate.day)).inDays;
 
   void _changeSpan(int delta) {
     final next = (_spanDays + delta).clamp(0, EventTemplate.maxDaySpan);
