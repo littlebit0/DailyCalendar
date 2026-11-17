@@ -11,6 +11,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
+import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import org.json.JSONObject
 
@@ -41,6 +42,10 @@ internal object DailyAlarmScheduler {
     const val STOP = "daily.alarm.STOP"
     const val SNOOZE = "daily.alarm.SNOOZE"
     const val CLOSED = "daily.alarm.CLOSED"
+    // An alarm that passed this recently while the device was off or the
+    // clock moved is shown as a missed alarm instead of dropped (#844).
+    const val MISSED_WINDOW = 60 * 60_000L
+    const val MISSED_NOTIFICATION_ID = 0xDA12
     private fun store(context: Context) = context.getSharedPreferences("daily_event_alarms", Context.MODE_PRIVATE)
     private fun manager(context: Context) = context.getSystemService(AlarmManager::class.java)
 
@@ -65,6 +70,9 @@ internal object DailyAlarmScheduler {
     fun fullScreenAllowed(context: Context) = Build.VERSION.SDK_INT < 34 ||
         context.getSystemService(NotificationManager::class.java).canUseFullScreenIntent()
     fun authorized(context: Context) = exactAllowed(context) && notificationsAllowed(context) && fullScreenAllowed(context)
+    // An already accepted alarm stays armed without the full-screen
+    // permission: it then rings as a plain alarm notification (#840).
+    private fun armable(context: Context) = exactAllowed(context) && notificationsAllowed(context)
 
     @Synchronized
     fun read(context: Context, id: String): DailyAlarm? = store(context).getString(id, null)?.let {
@@ -80,7 +88,7 @@ internal object DailyAlarmScheduler {
     fun schedule(context: Context, alarm: DailyAlarm) {
         require(alarm.eventId.isNotBlank() && alarm.title.isNotBlank())
         require(alarm.fireAt > System.currentTimeMillis())
-        check(authorized(context)) { "System alarm permissions are required" }
+        check(armable(context)) { "System alarm permissions are required" }
         val previous = store(context).getString(alarm.id, null)
         check(store(context).edit().putString(alarm.id, alarm.json()).commit())
         try {
@@ -153,13 +161,42 @@ internal object DailyAlarmScheduler {
 
     fun cancelAll(context: Context) = store(context).all.keys.toList().forEach { cancelAlarm(context, it) }
 
+    @Synchronized
     fun restore(context: Context) {
-        if (!authorized(context)) return
+        if (!notificationsAllowed(context)) return
+        val now = System.currentTimeMillis()
         store(context).all.keys.toList().forEach { id ->
             val alarm = read(context, id) ?: return@forEach
-            if (alarm.fireAt > System.currentTimeMillis()) schedule(context, alarm)
-            else cancelAlarm(context, id)
+            when {
+                // Time, time-zone and update broadcasts must not stop or
+                // rearm an alarm that is ringing right now (#844).
+                DailyAlarmService.ringing(id) -> Unit
+                alarm.fireAt > now -> if (exactAllowed(context)) schedule(context, alarm)
+                else -> {
+                    cancelAlarm(context, id)
+                    if (now - alarm.fireAt <= MISSED_WINDOW) notifyMissed(context, alarm)
+                }
+            }
         }
+    }
+
+    private fun notifyMissed(context: Context, alarm: DailyAlarm) {
+        createChannel(context)
+        val time = android.text.format.DateFormat.getTimeFormat(context).format(java.util.Date(alarm.fireAt))
+        val open = context.packageManager.getLaunchIntentForPackage(context.packageName)
+        context.getSystemService(NotificationManager::class.java).notify(
+            alarm.id, MISSED_NOTIFICATION_ID,
+            NotificationCompat.Builder(context, CHANNEL)
+                .setSmallIcon(R.drawable.ic_alarm_notification)
+                .setContentTitle(alarm.title)
+                .setContentText(context.getString(R.string.alarm_missed, time))
+                .setCategory(NotificationCompat.CATEGORY_REMINDER)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setWhen(alarm.fireAt)
+                .setAutoCancel(true)
+                .setContentIntent(open?.let { PendingIntent.getActivity(context, 0, it, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE) })
+                .build(),
+        )
     }
 
     @Synchronized
@@ -195,7 +232,8 @@ class DailyAlarmReceiver : BroadcastReceiver() {
         val id = intent.getStringExtra(DailyAlarmScheduler.EVENT_ID) ?: return
         val alarm = DailyAlarmScheduler.read(context, id) ?: return
         if (alarm.fireAt != intent.getLongExtra(DailyAlarmScheduler.FIRE_AT, -1)) return
-        if (!DailyAlarmScheduler.authorized(context)) return
+        // Only the notification permission is required to ring (#840).
+        if (!DailyAlarmScheduler.notificationsAllowed(context)) return
         ContextCompat.startForegroundService(context, Intent(context, DailyAlarmService::class.java).putExtra(DailyAlarmScheduler.EVENT_ID, id))
     }
 }
