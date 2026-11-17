@@ -18,6 +18,9 @@ class WindowsSingleInstanceTest(unittest.TestCase):
         guard = MAIN[MAIN.index("CreateMutexW") : MAIN.index("FlutterWindow window")]
         self.assertIn("kSingleInstanceMutexName", guard)
         branch = guard[guard.index("ERROR_ALREADY_EXISTS") :]
+        # An elevated first instance: the mutex cannot be opened at all.
+        self.assertRegex(branch, r"instance_mutex == nullptr && mutex_error == ERROR_ACCESS_DENIED")
+        self.assertLess(guard.index("CreateMutexW"), guard.index("mutex_error = ::GetLastError()"))
         self.assertLess(branch.index("AllowSetForegroundWindow"), branch.index("PostMessageW(HWND_BROADCAST"))
         self.assertIn("kShowWindowMessageName", branch)
         self.assertLess(branch.index("PostMessageW"), branch.index("return EXIT_SUCCESS;"))

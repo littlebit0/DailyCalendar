@@ -14,14 +14,21 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
   // handle is released when this process exits.
   HANDLE instance_mutex = ::CreateMutexW(
       nullptr, FALSE, daily::app_identity::kSingleInstanceMutexName);
-  if (instance_mutex != nullptr && ::GetLastError() == ERROR_ALREADY_EXISTS) {
+  const DWORD mutex_error = ::GetLastError();
+  // An elevated first instance owns a mutex this process may not open: the
+  // call then fails with access denied instead of returning the handle. Any
+  // other failure starts the app unguarded rather than not at all.
+  if (mutex_error == ERROR_ALREADY_EXISTS ||
+      (instance_mutex == nullptr && mutex_error == ERROR_ACCESS_DENIED)) {
     // Lets the first process bring its window in front of this launch.
     ::AllowSetForegroundWindow(ASFW_ANY);
     ::PostMessageW(HWND_BROADCAST,
                    ::RegisterWindowMessageW(
                        daily::app_identity::kShowWindowMessageName),
                    0, 0);
-    ::CloseHandle(instance_mutex);
+    if (instance_mutex != nullptr) {
+      ::CloseHandle(instance_mutex);
+    }
     return EXIT_SUCCESS;
   }
 
