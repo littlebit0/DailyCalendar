@@ -1176,6 +1176,17 @@ class LmsWebSession extends ChangeNotifier {
     _notify();
   }
 
+  /// Script that opens the school's external (ID/password) login form, or null
+  /// when [uri] is not this school's own `/login.php` or it needs no toggle.
+  String? externalLoginClickScript(Uri? uri) {
+    final toggle = school.externalLoginToggle;
+    if (toggle == null || uri == null || !policy.isSchoolOrigin(uri)) {
+      return null;
+    }
+    if (uri.path != '/login.php') return null;
+    return 'document.querySelector(${jsonEncode(toggle)})?.click()';
+  }
+
   void attachLoginController(InAppWebViewController controller) {
     if (_disposed || !_loginVisible || !identical(_active, this)) return;
     _controller = controller;
