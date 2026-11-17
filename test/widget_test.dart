@@ -9303,6 +9303,85 @@ void main() {
     await tester.pumpWidget(const SizedBox.shrink());
   });
 
+  for (final offline in [true, false]) {
+    testWidgets(
+      'Daily account deletion with Drive '
+      '${offline ? 'unreachable keeps reminders and alarms (#847)' : 'reachable clears everything'}',
+      (tester) async {
+        SharedPreferences.setMockInitialValues({'onboardingCompleted': true});
+        FlutterSecureStorage.setMockInitialValues({});
+        final preferences = await SharedPreferences.getInstance();
+        final settingsRepository = SettingsRepository(preferences: preferences);
+        final authService = _FakeGoogleDriveAuthService();
+        final notificationService = _FakeNotification();
+        final alarmService = _RecordingAlarmService();
+        final eventRepository = _FakeEventRepository();
+        final driveSyncService = _FakeGoogleDriveSyncService(
+          authService: authService,
+          eventRepository: eventRepository,
+          notificationService: notificationService,
+          settingsRepository: settingsRepository,
+        )..failDeleteCloudBackup = offline;
+
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [
+              universityRegionsProvider.overrideWith(
+                (ref) async => UniversityRegions.fromJson(
+                  jsonDecode(
+                        File(
+                          'assets/academic/university_regions.json',
+                        ).readAsStringSync(),
+                      )
+                      as Map<String, dynamic>,
+                ),
+              ),
+              settingsRepositoryProvider.overrideWithValue(settingsRepository),
+              notificationServiceProvider.overrideWithValue(
+                notificationService,
+              ),
+              alarmServiceProvider.overrideWithValue(alarmService),
+              eventRepositoryProvider.overrideWithValue(eventRepository),
+              googleDriveAuthServiceProvider.overrideWithValue(authService),
+              googleDriveSyncServiceProvider.overrideWithValue(
+                driveSyncService,
+              ),
+              syncServiceProvider.overrideWithValue(_FakeSync()),
+            ],
+            child: const DailyApp(),
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byTooltip('설정'));
+        await tester.pumpAndSettle();
+        await _openAccountSettings(tester);
+        await tester.drag(find.byType(ListView), const Offset(0, -2200));
+        await tester.pumpAndSettle();
+        final briefingCancelsBefore =
+            notificationService.cancelMorningBriefingCalls;
+
+        await tester.tap(find.text('Daily 계정 탈퇴'));
+        await tester.pumpAndSettle();
+        await tester.tap(find.widgetWithText(FilledButton, 'Daily 계정 탈퇴'));
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 400));
+
+        expect(driveSyncService.deleteCloudBackupCalls, 1);
+        expect(
+          notificationService.cancelMorningBriefingCalls -
+              briefingCancelsBefore,
+          offline ? 0 : 1,
+        );
+        expect(alarmService.cancelAllCalls, offline ? 0 : 1);
+        expect(eventRepository.clearAllCalls, offline ? 0 : 1);
+        expect(settingsRepository.load().onboardingCompleted, offline);
+
+        await tester.pumpWidget(const SizedBox.shrink());
+      },
+    );
+  }
+
   testWidgets('local data reset continues when notification cleanup fails', (
     tester,
   ) async {
@@ -10786,6 +10865,7 @@ class _FakeGoogleDriveSyncService extends GoogleDriveSyncService {
   final Future<void> Function()? onSyncPending;
   var settingsBackupCalls = 0;
   var deleteCloudBackupCalls = 0;
+  var failDeleteCloudBackup = false;
   var startListeningOnlyCalls = 0;
   var syncNowCalls = 0;
   var syncOnResumeCalls = 0;
@@ -10835,7 +10915,17 @@ class _FakeGoogleDriveSyncService extends GoogleDriveSyncService {
   @override
   Future<void> deleteCloudBackup({bool promptIfNecessary = false}) async {
     deleteCloudBackupCalls += 1;
+    if (failDeleteCloudBackup) {
+      throw const GoogleDriveSyncException('Google Drive에 연결하지 못했습니다.');
+    }
   }
+}
+
+class _RecordingAlarmService extends UnsupportedAlarmService {
+  var cancelAllCalls = 0;
+
+  @override
+  Future<void> cancelAllEventAlarms() async => cancelAllCalls += 1;
 }
 
 class _FakeNotification implements NotificationService {
