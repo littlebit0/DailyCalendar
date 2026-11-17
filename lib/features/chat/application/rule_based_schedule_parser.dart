@@ -336,12 +336,34 @@ class RuleBasedScheduleParser implements ScheduleParser {
     return _ParsedTime(hour, minute, dayOffset: endOfDay ? 1 : 0);
   }
 
+  /// The end for the typed range, always after [startAt]: a "밤 12시" start
+  /// moves to the next day and can pass an end taken from the typed dates.
   DateTime _resolveEndAt({
     required DateTime startAt,
     required DateTime? endDate,
     required _ParsedTime? endTime,
     required bool allDay,
     int startDayOffset = 0,
+  }) {
+    var endAt = _typedEndAt(
+      startAt: startAt,
+      endDate: endDate,
+      endTime: endTime,
+      allDay: allDay,
+      startDayOffset: startDayOffset,
+    );
+    while (!endAt.isAfter(startAt)) {
+      endAt = shiftCalendarDateByDays(endAt, 1);
+    }
+    return endAt;
+  }
+
+  DateTime _typedEndAt({
+    required DateTime startAt,
+    required DateTime? endDate,
+    required _ParsedTime? endTime,
+    required bool allDay,
+    required int startDayOffset,
   }) {
     if (endDate != null) {
       if (allDay) {
@@ -356,9 +378,7 @@ class RuleBasedScheduleParser implements ScheduleParser {
           endTime.hour,
           endTime.minute,
         );
-        return endAt.isAfter(startAt)
-            ? endAt
-            : shiftCalendarDateByDays(endAt, 1);
+        return endAt;
       }
       return DateTime(endDate.year, endDate.month, endDate.day + 1);
     }
@@ -366,18 +386,13 @@ class RuleBasedScheduleParser implements ScheduleParser {
     if (endTime != null) {
       // Count from the typed date: a "밤 12시" start already moved [startAt]
       // to the next day, and a "밤 12시" end belongs to the day after it.
-      var endAt = DateTime(
+      return DateTime(
         startAt.year,
         startAt.month,
         startAt.day - startDayOffset + endTime.dayOffset,
         endTime.hour,
         endTime.minute,
       );
-      // After a midnight start one day may not be enough to pass the start.
-      while (!endAt.isAfter(startAt)) {
-        endAt = shiftCalendarDateByDays(endAt, 1);
-      }
-      return endAt;
     }
 
     return allDay
