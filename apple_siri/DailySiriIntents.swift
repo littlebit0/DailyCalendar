@@ -2658,32 +2658,51 @@ private enum DailySiriDatabase {
     } else {
       updatedStart = newStartAt ?? base.startAt
     }
-    let shiftedUntil = base.recurrenceUntil.map { calendar.date(byAdding: .day, value: dayShift, to: $0) ?? $0 }
-    let shiftedExclusions = dayShift == 0 ? base.recurrenceExcludedDates : Set(base.recurrenceExcludedDates.map { key in
-      shiftedDayKey(key, days: dayShift)
-    })
-    let shiftedDetails = dayShift == 0 ? base.recurrenceDetails : shiftedRecurrenceDetails(
-      base.recurrenceDetails, frequency: base.recurrenceFrequency, days: dayShift
-    )
+    typealias SeriesFields = (until: Date?, exclusions: Set<String>, details: String?)
+    func shiftedSeriesFields(_ source: DailySiriEvent) -> SeriesFields {
+      guard dayShift != 0 else {
+        return (source.recurrenceUntil, source.recurrenceExcludedDates, source.recurrenceDetails)
+      }
+      return (
+        source.recurrenceUntil.map { calendar.date(byAdding: .day, value: dayShift, to: $0) ?? $0 },
+        Set(source.recurrenceExcludedDates.map { shiftedDayKey($0, days: dayShift) }),
+        shiftedRecurrenceDetails(source.recurrenceDetails, frequency: source.recurrenceFrequency, days: dayShift)
+      )
+    }
+    // The series keeps the length of [from, to]. An all-day event keeps its
+    // calendar days: elapsed seconds differ across a daylight-saving change.
+    func seriesEnd(lengthFrom from: Date, to: Date) -> Date {
+      guard newAllDay ?? event.allDay,
+            let days = calendar.dateComponents([.day], from: from, to: to).day,
+            let end = calendar.date(byAdding: .day, value: max(days, 1), to: updatedStart) else {
+        return updatedStart.addingTimeInterval(to.timeIntervalSince(from))
+      }
+      return end
+    }
     let updatedEnd: Date
     if let newEndAt, entireSeries, let newStartAt {
-      updatedEnd = updatedStart.addingTimeInterval(newEndAt.timeIntervalSince(newStartAt))
+      updatedEnd = seriesEnd(lengthFrom: newStartAt, to: newEndAt)
     } else if let newEndAt {
       updatedEnd = newEndAt
     } else if newStartAt != nil {
-      updatedEnd = updatedStart.addingTimeInterval(base.endAt.timeIntervalSince(base.startAt))
+      updatedEnd = entireSeries
+        ? seriesEnd(lengthFrom: base.startAt, to: base.endAt)
+        : updatedStart.addingTimeInterval(base.endAt.timeIntervalSince(base.startAt))
     } else {
       updatedEnd = base.endAt
     }
     guard updatedEnd > updatedStart else { throw DailySiriError.invalidTime }
     let resolvedReminders = reminderMinutesBefore.map { [$0] } ?? event.reminderMinutesBefore
-    let mutationID = try withDatabase { database in
+    let (mutationID, series): (String, SeriesFields) = try withDatabase { database in
       try beginMutation(database)
       var committed = false
       defer { if !committed { sqlite3_exec(database, "ROLLBACK", nil, nil, nil) } }
       let target = try prepareMutation(database, event: event, entireSeries: entireSeries, deleting: false)
       // A series moved to another day moves its conditions, end and
-      // exclusions by the same days; an unmoved one keeps them.
+      // exclusions by the same days; an unmoved one keeps them. They are read
+      // again under the write lock so a change made meanwhile is not lost.
+      let current = entireSeries ? try events(withIDs: [sourceID], database: database).first ?? base : base
+      let (shiftedUntil, shiftedExclusions, shiftedDetails) = shiftedSeriesFields(current)
       var seriesUpdate = ""
       var seriesBindings: [Binding] = []
       if dayShift != 0 {
@@ -2748,7 +2767,7 @@ private enum DailySiriDatabase {
       guard sqlite3_changes(database) == 1 else { throw DailySiriError.eventNotFound }
       try commitMutation(database)
       committed = true
-      return target
+      return (target, (shiftedUntil, shiftedExclusions, shiftedDetails))
     }
     if #available(iOS 18.0, macOS 15.0, *) {
       DailySiriSearchIndexer.scheduleRefresh()
@@ -2780,11 +2799,11 @@ private enum DailySiriDatabase {
       allDayAlarmMinutes: event.allDayAlarmMinutes,
       recurrenceFrequency: entireSeries ? event.recurrenceFrequency : "none",
       recurrenceInterval: event.recurrenceInterval,
-      recurrenceUntil: entireSeries ? shiftedUntil : nil,
+      recurrenceUntil: entireSeries ? series.until : nil,
       recurrenceCount: entireSeries ? event.recurrenceCount : nil,
       recurrenceAnchorDay: entireSeries && dayShift == 0 ? base.recurrenceAnchorDay : nil,
-      recurrenceDetails: entireSeries ? shiftedDetails : nil,
-      recurrenceExcludedDates: entireSeries ? shiftedExclusions : []
+      recurrenceDetails: entireSeries ? series.details : nil,
+      recurrenceExcludedDates: entireSeries ? series.exclusions : []
     )
   }
 

@@ -190,6 +190,24 @@ for item in seriesFixtures {
     if saved.recurrenceFrequency != item["frequency"] as! String { fatalError("series fixture \(name): frequency changed") }
   }
 }
+
+// An all-day series keeps its calendar days when the edited occurrence
+// crosses a daylight-saving change that the series start does not.
+let savedZone = NSTimeZone.default
+NSTimeZone.default = TimeZone(identifier: "America/New_York")!
+do {
+  let zoned = Calendar.current
+  func day(_ month: Int, _ day: Int) -> Date { zoned.date(from: DateComponents(year: 2026, month: month, day: day))! }
+  assert(day(3, 10).timeIntervalSince(day(3, 8)) == 47 * 3600, "the occurrence must cross the DST change")
+  let allDay = try DailySiriDatabase.add(title: "all-day dst", startAt: day(2, 1), endAt: day(2, 3), allDay: true, category: DailySiriCategory(id: "basic", colorValue: 1), location: nil, memo: nil)
+  try sql("UPDATE event_records SET recurrence_frequency='weekly' WHERE id='\(allDay.id)'")
+  let crossing = DailySiriOccurrenceIdentity.make(sourceID: allDay.id, start: day(3, 8))
+  guard try DailySiriDatabase.events(withIDs: [crossing]).count == 1 else { fatalError("all-day occurrence not found") }
+  _ = try DailySiriDatabase.update(id: crossing, newTitle: nil, newStartAt: day(3, 8), newEndAt: day(3, 10), entireSeries: true)
+  let saved = try DailySiriDatabase.events(withIDs: [allDay.id]).first!
+  if saved.startAt != day(2, 1) || saved.endAt != day(2, 3) { fatalError("all-day DST span: \(saved.startAt) ... \(saved.endAt)") }
+}
+NSTimeZone.default = savedZone
 print("Siri entire-series edit fixtures passed")
 
 // #123: the until day is inclusive and a last occurrence may run past it.
