@@ -1,4 +1,4 @@
-"""Production iOS alarm replacement plan against a fake AlarmKit with schedule failures."""
+"""Production iOS and macOS alarm replacement against fakes with schedule failures."""
 from pathlib import Path
 import shutil
 import subprocess
@@ -21,6 +21,20 @@ class IosAlarmReplacementTest(unittest.TestCase):
             result = subprocess.run([str(executable)], capture_output=True, text=True)
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertIn('iOS alarm replacement checks passed', result.stdout)
+
+    @unittest.skipUnless(shutil.which('swiftc'), 'Swift compiler required')
+    def test_macos_production_replacement(self):
+        source = (ROOT / 'macos/Runner/MainFlutterWindow.swift').read_text()
+        replacement = source.split('enum DailyMacAlarmReplacement {', 1)[1].split('\nprivate final class DailyMacAlarms {', 1)[0]
+        with tempfile.TemporaryDirectory() as d:
+            main = Path(d) / 'main.swift'
+            main.write_text((ROOT / 'tool/tests/macos_alarm_replacement_test.swift').read_text() + '\nenum DailyMacAlarmReplacement {' + replacement)
+            executable = Path(d) / 'test'
+            compiled = subprocess.run(['swiftc', str(main), '-o', str(executable)], capture_output=True, text=True)
+            self.assertEqual(compiled.returncode, 0, compiled.stderr)
+            result = subprocess.run([str(executable)], capture_output=True, text=True)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertIn('macOS alarm replacement checks passed', result.stdout)
 
 if __name__ == '__main__':
     unittest.main()

@@ -6,6 +6,7 @@ final class FakeAlarms {
   var alarms: [UUID: String] = [:]  // id -> fingerprint
   var stored = Set<UUID>()
   var failing = false
+  var failAfter: Int?  // schedules that succeed before one fails
   struct Failure: Error {}
 
   func id(_ value: String) -> UUID {
@@ -26,6 +27,10 @@ final class FakeAlarms {
       _ = try await plan.apply(
         schedule: { alarm in
           if self.failing { throw Failure() }
+          if let remaining = self.failAfter {
+            if remaining == 0 { throw Failure() }
+            self.failAfter = remaining - 1
+          }
           precondition(self.alarms[alarm.id] == nil, "AlarmKit IDs are unique")
           self.alarms[alarm.id] = alarm.fingerprint
         },
@@ -85,6 +90,21 @@ struct Main {
     await fake.run([2000], text: "b")
     await fake.run([2000], text: "b")
     check(fake.fingerprints == ["2000|b"], "repeated schedule leaves one alarm")
+
+    // Several times: a later failure removes what this call added, so no
+    // time has both its previous and its new alarm.
+    await fake.run([2000, 3000], text: "b", reconcile: true)
+    fake.failAfter = 1
+    check(!(await fake.run([4000, 5000], text: "b")), "partial failure is reported")
+    check(fake.fingerprints == ["2000|b", "3000|b"], "partial failure restores the previous set")
+    check(fake.stored.isSuperset(of: fake.alarms.keys), "every remaining alarm stays stored after rollback")
+    fake.failAfter = 1
+    await fake.run([2000, 3000], text: "c")
+    check(fake.fingerprints.count == 2 && Set(fake.fingerprints.map { $0.prefix(4) }).count == 2,
+          "same-time partial failure leaves one alarm per time: \(fake.fingerprints)")
+    fake.failAfter = nil
+    await fake.run([2000, 3000], text: "c", reconcile: true)
+    check(fake.fingerprints == ["2000|c", "3000|c"], "next reconciliation completes the change")
 
     // No future time: the previous alarms are removed.
     await fake.run([-1], text: "b")

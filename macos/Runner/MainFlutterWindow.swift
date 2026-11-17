@@ -239,6 +239,43 @@ private final class DailySiriEventChangesBridge {
   }
 }
 
+/// Replacement of one event's alarm requests. The previous requests are
+/// removed only after every new one is added, so a failed add keeps them (#924).
+enum DailyMacAlarmReplacement {
+  static func run(
+    additions: [String],
+    previous: Set<String>,
+    stale: Set<String>,
+    add: (String, @escaping (Error?) -> Void) -> Void,
+    remove: @escaping ([String]) -> Void,
+    completion: @escaping (Error?) -> Void
+  ) {
+    let lock = NSLock()
+    var failure: Error?
+    var added: [String] = []
+    let group = DispatchGroup()
+    for identifier in additions {
+      group.enter()
+      add(identifier) { error in
+        lock.lock()
+        if let error = error { failure = failure ?? error } else { added.append(identifier) }
+        lock.unlock()
+        group.leave()
+      }
+    }
+    group.notify(queue: .global()) {
+      if failure == nil {
+        // A new request already replaced the pending one of its identifier.
+        remove(Array(stale.subtracting(additions)))
+      } else {
+        // Keep the previous requests and drop the ones only this call added.
+        remove(added.filter { !previous.contains($0) })
+      }
+      completion(failure)
+    }
+  }
+}
+
 private final class DailyMacAlarms {
   static let channelName = "daily/alarm_kit"
   static let categoryIdentifier = "daily.event.alarm"
@@ -419,34 +456,22 @@ private final class DailyMacAlarms {
           )
         ))
       }
-      // Adding a request replaces the pending one of the same identifier. The
-      // other previous requests are removed only after every new one is
-      // added, so a failed add keeps them (#924).
-      let stale = Set(existing.map(\.identifier) + [legacyIdentifier])
-        .subtracting(keep)
-        .subtracting(additions.map(\.identifier))
-      let removeStale = {
-        center.removePendingNotificationRequests(withIdentifiers: Array(stale))
-        center.removeDeliveredNotifications(withIdentifiers: Array(stale))
-      }
-      guard !additions.isEmpty else {
-        removeStale()
-        finish(result, value: !keep.isEmpty)
-        return
-      }
-      let group = DispatchGroup()
-      var failure: Error?
-      for request in additions {
-        group.enter()
-        center.add(request) { error in
-          if let error = error { failure = failure ?? error }
-          group.leave()
+      let previous = Set(existing.map(\.identifier))
+      DailyMacAlarmReplacement.run(
+        additions: additions.map(\.identifier),
+        previous: previous,
+        stale: previous.union([legacyIdentifier]).subtracting(keep),
+        add: { identifier, done in
+          center.add(additions.first { $0.identifier == identifier }!, withCompletionHandler: done)
+        },
+        remove: { identifiers in
+          center.removePendingNotificationRequests(withIdentifiers: identifiers)
+          center.removeDeliveredNotifications(withIdentifiers: identifiers)
+        },
+        completion: { failure in
+          finish(result, error: failure, value: !keep.isEmpty || !additions.isEmpty)
         }
-      }
-      group.notify(queue: .main) {
-        if failure == nil { removeStale() }
-        finish(result, error: failure, value: true)
-      }
+      )
     }
   }
 

@@ -739,18 +739,28 @@ struct DailyAlarmPlan {
   }
 
   /// Returns the IDs that remain scheduled. A thrown error leaves [stale]
-  /// scheduled and stored for the next reconciliation.
+  /// scheduled and stored for the next reconciliation, and removes the alarms
+  /// this call added so no time rings twice.
   func apply(
     schedule: (Pending) async throws -> Void,
     cancel: (UUID) -> Void,
     store: (Set<UUID>) -> Void
   ) async throws -> Set<UUID> {
     var scheduled = keep
-    for alarm in pending {
-      if alarm.occupied { cancel(alarm.id) }
-      try await schedule(alarm)
-      scheduled.insert(alarm.id)
-      store(scheduled.union(stale))
+    var added = Set<UUID>()
+    do {
+      for alarm in pending {
+        if alarm.occupied { cancel(alarm.id) }
+        try await schedule(alarm)
+        scheduled.insert(alarm.id)
+        // An occupied ID replaced its own previous alarm and has no other copy.
+        if !alarm.occupied { added.insert(alarm.id) }
+        store(scheduled.union(stale))
+      }
+    } catch {
+      added.forEach(cancel)
+      store(scheduled.subtracting(added).union(stale))
+      throw error
     }
     stale.forEach(cancel)
     store(scheduled)
