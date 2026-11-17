@@ -10961,11 +10961,6 @@ class _FakeGoogleDriveSyncService extends GoogleDriveSyncService {
   }
 }
 
-class _UndeletableLmsCredentials extends LmsCredentialsStore {
-  @override
-  Future<void> deleteAll() async => throw StateError('keystore unavailable');
-}
-
 class _FakeNotification implements NotificationService {
   _FakeNotification({
     this.failCancelEventReminder = false,
@@ -11740,4 +11735,9 @@ Future<ProviderContainer> _pumpDaySheetSwipeApp(
   );
   await tester.pumpAndSettle();
   return ProviderScope.containerOf(tester.element(find.byType(DailyApp)));
+}
+
+class _UndeletableLmsCredentials extends LmsCredentialsStore {
+  @override
+  Future<void> deleteAll() async => throw StateError('keystore unavailable');
 }
