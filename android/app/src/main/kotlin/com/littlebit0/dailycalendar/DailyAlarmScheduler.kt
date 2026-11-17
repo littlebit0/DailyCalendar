@@ -159,7 +159,15 @@ internal object DailyAlarmScheduler {
         DailyAlarmService.stopEvent(context, id)
     }
 
-    fun cancelAll(context: Context) = store(context).all.keys.toList().forEach { cancelAlarm(context, it) }
+    fun cancelAll(context: Context) {
+        store(context).all.keys.toList().forEach { cancelAlarm(context, it) }
+        // Missed-alarm notifications outlive their stored entry; logout and
+        // reset must not leave their event titles in the shade.
+        if (Build.VERSION.SDK_INT >= 23) {
+            val manager = context.getSystemService(NotificationManager::class.java)
+            manager.activeNotifications.filter { it.id == MISSED_NOTIFICATION_ID }.forEach { manager.cancel(it.tag, it.id) }
+        }
+    }
 
     @Synchronized
     fun restore(context: Context) {

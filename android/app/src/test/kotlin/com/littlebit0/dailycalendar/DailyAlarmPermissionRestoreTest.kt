@@ -166,6 +166,15 @@ internal class DailyAlarmRestoreTest : DailyAlarmServiceTestBase() {
         assertNull(missed(recent))
     }
 
+    @Test fun cancelAllRemovesMissedAlarmNotifications() {
+        val recent = DailyAlarm("recent", "Private title", "", System.currentTimeMillis() - 60_000, 10)
+        put(recent)
+        DailyAlarmScheduler.restore(context)
+        assertNotNull(missed(recent))
+        DailyAlarmScheduler.cancelAll(context)
+        assertNull(missed(recent))
+    }
+
     @Test fun alarmOlderThanTheWindowIsRemovedSilently() {
         val old = DailyAlarm("old", "Event", "", System.currentTimeMillis() - DailyAlarmScheduler.MISSED_WINDOW - 60_000, 10)
         put(old)
