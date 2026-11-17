@@ -1,0 +1,122 @@
+#!/usr/bin/env python3
+"""Runs the tool/tests Python suites that no workflow step names on its own.
+
+Run from the repository root on macOS (several suites compile Swift):
+
+    python3 tool/run_tool_tests.py
+
+Fails on a failure, an error, or a skipped test that is not listed in
+ALLOWED_SKIPS: a skipped policy check must not look like a pass. It also fails
+when a tool/tests/test_*.py file is covered by neither a workflow step, SUITES
+nor EXCLUDED, so a new suite cannot be left out of CI unnoticed.
+"""
+
+import os
+import sys
+import unittest
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+TESTS = ROOT / "tool" / "tests"
+
+# Privacy and platform policy checks.
+POLICY_SUITES = [
+    "test_inappwebview_android_keep_rules",
+    "test_ios_location_privacy",
+    "test_lms_cookie_read_policy",
+    "test_macos_test_host",
+    "test_package_info_privacy_manifest",
+    "test_password_input_scope",
+    "test_shared_store_namespace",
+    "test_siri_lms_visibility",
+    "test_wallpaper_shortcut",
+]
+
+# University timetable import and fetch checks.
+IMPORT_SUITES = [
+    "test_dankook_import",
+    "test_fetch_konkuk",
+    "test_gachon_fetch",
+    "test_hansung_import",
+    "test_hknu_import",
+    "test_hufs_fetch",
+    "test_hufs_import",
+    "test_import_chosun",
+    "test_import_daegu_missing_rows",
+    "test_import_konkuk",
+    "test_import_pcu",
+    "test_kmu_import",
+    "test_kookmin_import",
+    "test_pnu_import",
+    "test_sejong_import",
+    "test_seoultech_import",
+    "test_timetable_import",
+    "test_tuk_import",
+    "test_ulsan_view",
+    "test_uos_import",
+]
+
+SUITES = POLICY_SUITES + IMPORT_SUITES
+
+# Suites that cannot run from a clean checkout, with the reason. Remove an
+# entry (and add the suite above) once its input is available in CI.
+EXCLUDED = {
+    "test_expanded_university_courses": "reads test/fixtures/academic HTML that is not in the repository (#939)",
+    "test_jnu_import": "reads test/fixtures/academic HTML that is not in the repository (#939)",
+    "test_kangwon_research_import": "reads work/university-research, which is not in the repository (#939)",
+    "test_knu_import": "reads work/university-research, which is not in the repository (#939)",
+    "test_yongin_import": "needs the pdfplumber package, which CI does not install",
+}
+
+# Tests that may skip in CI, with the reason.
+ALLOWED_SKIPS = {
+    # Needs a built app passed in DAILY_WALLPAPER_BUILT_APP.
+    "test_wallpaper_shortcut.WallpaperShortcutTests.test_compiled_intents_match_workflow_and_include_signed_file",
+}
+
+
+def uncovered_suites():
+    workflows = "".join(
+        path.read_text(encoding="utf-8")
+        for path in sorted((ROOT / ".github" / "workflows").glob("*.yml"))
+    )
+    return sorted(
+        path.stem
+        for path in TESTS.glob("test_*.py")
+        if path.stem not in SUITES
+        and path.stem not in EXCLUDED
+        and path.name not in workflows
+    )
+
+
+def main():
+    problems = [
+        f"{name}: not run by a workflow step, SUITES or EXCLUDED"
+        for name in uncovered_suites()
+    ]
+    problems += [
+        f"{name}: listed but tool/tests/{name}.py does not exist"
+        for name in [*SUITES, *EXCLUDED]
+        if not (TESTS / f"{name}.py").is_file()
+    ]
+
+    # Same lookup as `python3 -m unittest discover -s tool/tests` from the root.
+    os.chdir(ROOT)
+    sys.path[:0] = [str(TESTS), str(ROOT)]
+    suite = unittest.defaultTestLoader.loadTestsFromNames(SUITES)
+    result = unittest.TextTestRunner(verbosity=2).run(suite)
+    problems += [
+        f"{test.id()}: skipped ({reason})"
+        for test, reason in result.skipped
+        if test.id() not in ALLOWED_SKIPS
+    ]
+
+    for name, reason in EXCLUDED.items():
+        print(f"not run: {name}: {reason}")
+    for problem in problems:
+        print(f"error: {problem}", file=sys.stderr)
+    return 0 if result.wasSuccessful() and not problems else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())
