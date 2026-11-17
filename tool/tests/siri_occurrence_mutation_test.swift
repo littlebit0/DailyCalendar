@@ -150,6 +150,48 @@ for item in detailFixtures {
 }
 print("Siri recurrence detail fixtures passed")
 
+// #930: "entire series" edits, from the same fixture as the Dart all-occurrences edit.
+let seriesFixtures = try JSONSerialization.jsonObject(with: Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[4]))) as! [[String: Any]]
+let stamp = DateFormatter()
+stamp.locale = Locale(identifier: "en_US_POSIX")
+stamp.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+for item in seriesFixtures {
+  let name = item["name"] as! String
+  let seriesStart = stamp.date(from: item["start"] as! String)!
+  let event = try DailySiriDatabase.add(title: name, startAt: seriesStart, endAt: seriesStart.addingTimeInterval(3600), allDay: false, category: DailySiriCategory(id: "basic", colorValue: 1), location: nil, memo: nil)
+  var details: [String: Any] = [:]
+  for key in ["byDay", "byMonthDay", "byMonth", "bySetPos", "weekStart"] where item[key] != nil { details[key] = item[key] }
+  let detailsSQL = details.isEmpty ? "NULL" : "'" + String(data: try JSONSerialization.data(withJSONObject: details), encoding: .utf8)! + "'"
+  let until = (item["until"] as? String).map { String(Int64(formatter.date(from: $0)!.timeIntervalSince1970)) } ?? "NULL"
+  let anchor = (item["anchorDay"] as? Int).map(String.init) ?? "NULL"
+  let exclusions = String(data: try JSONSerialization.data(withJSONObject: item["excluded"] as? [String] ?? []), encoding: .utf8)!
+  try sql("UPDATE event_records SET recurrence_frequency='\(item["frequency"]!)', recurrence_interval=\(item["interval"]!), recurrence_until=\(until), recurrence_anchor_day=\(anchor), recurrence_details=\(detailsSQL), recurrence_excluded_dates='\(exclusions)' WHERE id='\(event.id)'")
+  let occurrence = stamp.date(from: item["occurrence"] as! String)!
+  let target = occurrence == seriesStart ? event.id : DailySiriOccurrenceIdentity.make(sourceID: event.id, start: occurrence)
+  guard try DailySiriDatabase.events(withIDs: [target]).count == 1 else { fatalError("series fixture \(name): occurrence not found") }
+  let returned = try DailySiriDatabase.update(
+    id: target, newTitle: nil, newStartAt: stamp.date(from: item["newStart"] as! String)!,
+    newEndAt: stamp.date(from: item["newEnd"] as! String)!, entireSeries: true
+  )
+  let stored = try DailySiriDatabase.events(withIDs: [event.id]).first!
+  let expected = item["expected"] as! [String: Any]
+  for (label, saved) in [("stored", stored), ("returned", returned)] {
+    let savedDetails = (saved.recurrenceDetails?.data(using: .utf8)).flatMap { try? JSONSerialization.jsonObject(with: $0) as? [String: Any] } ?? [:]
+    var actual: [String: Any] = [
+      "start": stamp.string(from: saved.startAt), "end": stamp.string(from: saved.endAt),
+    ]
+    if let until = saved.recurrenceUntil { actual["until"] = formatter.string(from: until) }
+    if let anchorDay = saved.recurrenceAnchorDay { actual["anchorDay"] = anchorDay }
+    if !saved.recurrenceExcludedDates.isEmpty { actual["excluded"] = saved.recurrenceExcludedDates.sorted() }
+    for key in ["byDay", "byMonthDay", "byMonth", "bySetPos", "weekStart"] { actual[key] = savedDetails[key] }
+    if !NSDictionary(dictionary: actual).isEqual(to: expected) {
+      fatalError("series fixture \(name) \(label): expected \(expected), got \(actual)")
+    }
+    if saved.recurrenceFrequency != item["frequency"] as! String { fatalError("series fixture \(name): frequency changed") }
+  }
+}
+print("Siri entire-series edit fixtures passed")
+
 // #123: the until day is inclusive and a last occurrence may run past it.
 func localDate(_ day: Int, _ hour: Int) -> Date {
   Calendar.current.date(from: DateComponents(year: 2026, month: 8, day: day, hour: hour))!
