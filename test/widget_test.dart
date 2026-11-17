@@ -16,6 +16,7 @@ import 'package:daily/core/auth/google_account.dart';
 import 'package:daily/core/analytics/product_analytics.dart';
 import 'package:daily/core/di/app_providers.dart';
 import 'package:daily/core/lms/lms_controller.dart';
+import 'package:daily/core/lms/lms_credentials_store.dart';
 import 'package:daily/core/lms/lms_sync_service.dart';
 import 'package:daily/core/diagnostics/startup_timing.dart';
 import 'package:daily/core/notifications/notification_service.dart';
@@ -9239,74 +9240,97 @@ void main() {
     await tester.pumpWidget(const SizedBox.shrink());
   });
 
-  testWidgets('local data reset does not require Google account deletion', (
-    tester,
-  ) async {
-    SharedPreferences.setMockInitialValues({'onboardingCompleted': true});
-    // #913: the reset also removes saved school logins and sessions.
-    FlutterSecureStorage.setMockInitialValues({
-      'daily.lms.credentials.v1.any-account': '{}',
-      'daily.lms.session.v1.any-account': '{}',
-    });
-    final preferences = await SharedPreferences.getInstance();
-    final settingsRepository = SettingsRepository(preferences: preferences);
-    final authService = _FakeGoogleDriveAuthService(account: null);
-    final notificationService = _FakeNotification();
-    final eventRepository = _FakeEventRepository();
-    final driveSyncService = _FakeGoogleDriveSyncService(
-      authService: authService,
-      eventRepository: eventRepository,
-      notificationService: notificationService,
-      settingsRepository: settingsRepository,
-    );
+  for (final cleanupFails in [false, true]) {
+    testWidgets('local data reset does not require Google account deletion, '
+        'LMS secret cleanup fails: $cleanupFails', (tester) async {
+      SharedPreferences.setMockInitialValues({
+        'onboardingCompleted': true,
+        // Left by an earlier reset whose cleanup failed.
+        if (!cleanupFails) 'deviceSecretCleanupPending.v1': true,
+      });
+      // #913: the reset also removes saved school logins and sessions.
+      FlutterSecureStorage.setMockInitialValues({
+        'daily.lms.credentials.v1.any-account': '{}',
+        'daily.lms.session.v1.any-account': '{}',
+      });
+      final preferences = await SharedPreferences.getInstance();
+      final settingsRepository = SettingsRepository(preferences: preferences);
+      final authService = _FakeGoogleDriveAuthService(account: null);
+      final notificationService = _FakeNotification();
+      final eventRepository = _FakeEventRepository();
+      final driveSyncService = _FakeGoogleDriveSyncService(
+        authService: authService,
+        eventRepository: eventRepository,
+        notificationService: notificationService,
+        settingsRepository: settingsRepository,
+      );
 
-    await tester.pumpWidget(
-      ProviderScope(
-        overrides: [
-          universityRegionsProvider.overrideWith(
-            (ref) async => UniversityRegions.fromJson(
-              jsonDecode(
-                    File(
-                      'assets/academic/university_regions.json',
-                    ).readAsStringSync(),
-                  )
-                  as Map<String, dynamic>,
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            universityRegionsProvider.overrideWith(
+              (ref) async => UniversityRegions.fromJson(
+                jsonDecode(
+                      File(
+                        'assets/academic/university_regions.json',
+                      ).readAsStringSync(),
+                    )
+                    as Map<String, dynamic>,
+              ),
             ),
-          ),
-          settingsRepositoryProvider.overrideWithValue(settingsRepository),
-          notificationServiceProvider.overrideWithValue(notificationService),
-          eventRepositoryProvider.overrideWithValue(eventRepository),
-          googleDriveAuthServiceProvider.overrideWithValue(authService),
-          googleDriveSyncServiceProvider.overrideWithValue(driveSyncService),
-          syncServiceProvider.overrideWithValue(_FakeSync()),
-        ],
-        child: const DailyApp(),
-      ),
-    );
-    await tester.pumpAndSettle();
+            settingsRepositoryProvider.overrideWithValue(settingsRepository),
+            notificationServiceProvider.overrideWithValue(notificationService),
+            eventRepositoryProvider.overrideWithValue(eventRepository),
+            googleDriveAuthServiceProvider.overrideWithValue(authService),
+            googleDriveSyncServiceProvider.overrideWithValue(driveSyncService),
+            syncServiceProvider.overrideWithValue(_FakeSync()),
+            if (cleanupFails)
+              lmsControllerProvider.overrideWith(
+                (ref) => LmsController(
+                  settings: settingsRepository,
+                  repository: eventRepository,
+                  commands: ref.watch(eventCommandServiceProvider),
+                  credentialsStore: _UndeletableLmsCredentials(),
+                ),
+              ),
+          ],
+          child: const DailyApp(),
+        ),
+      );
+      await tester.pumpAndSettle();
+      if (!cleanupFails) {
+        // The app start without an account finished the earlier cleanup.
+        expect(settingsRepository.deviceSecretCleanupPending, isFalse);
+        expect(await const FlutterSecureStorage().readAll(), isEmpty);
+      }
 
-    await tester.tap(find.byTooltip('설정'));
-    await tester.pumpAndSettle();
-    await _openAccountSettings(tester);
-    await tester.drag(find.byType(ListView), const Offset(0, -2200));
-    await tester.pumpAndSettle();
+      await tester.tap(find.byTooltip('설정'));
+      await tester.pumpAndSettle();
+      await _openAccountSettings(tester);
+      await tester.drag(find.byType(ListView), const Offset(0, -2200));
+      await tester.pumpAndSettle();
 
-    await tester.tap(find.text('로컬 데이터 초기화'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('초기화'));
-    await tester.pump();
-    await tester.pump(const Duration(milliseconds: 400));
+      await tester.tap(find.text('로컬 데이터 초기화'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('초기화'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
 
-    expect(find.text('오늘을 더\n가볍게 정리하세요.'), findsOneWidget);
-    expect(driveSyncService.deleteCloudBackupCalls, 0);
-    expect(await const FlutterSecureStorage().readAll(), isEmpty);
-    expect(authService.signOutCalls, 0);
-    expect(eventRepository.clearAllCalls, 1);
-    expect(notificationService.cancelMorningBriefingCalls, 1);
-    expect(settingsRepository.load().onboardingCompleted, isFalse);
+      expect(find.text('오늘을 더\n가볍게 정리하세요.'), findsOneWidget);
+      expect(driveSyncService.deleteCloudBackupCalls, 0);
+      // #913 review: a failed cleanup neither stops the reset nor is forgotten.
+      expect(settingsRepository.deviceSecretCleanupPending, cleanupFails);
+      if (!cleanupFails) {
+        expect(await const FlutterSecureStorage().readAll(), isEmpty);
+      }
+      expect(authService.signOutCalls, 0);
+      expect(eventRepository.clearAllCalls, 1);
+      expect(notificationService.cancelMorningBriefingCalls, 1);
+      expect(settingsRepository.load().onboardingCompleted, isFalse);
 
-    await tester.pumpWidget(const SizedBox.shrink());
-  });
+      await tester.pumpWidget(const SizedBox.shrink());
+    });
+  }
 
   testWidgets('local data reset continues when notification cleanup fails', (
     tester,
@@ -10875,6 +10899,11 @@ class _FakeGoogleDriveSyncService extends GoogleDriveSyncService {
   Future<void> deleteCloudBackup({bool promptIfNecessary = false}) async {
     deleteCloudBackupCalls += 1;
   }
+}
+
+class _UndeletableLmsCredentials extends LmsCredentialsStore {
+  @override
+  Future<void> deleteAll() async => throw StateError('keystore unavailable');
 }
 
 class _FakeNotification implements NotificationService {

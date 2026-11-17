@@ -676,6 +676,8 @@ const Map<String, Map<String, String>> _translations = {
         'Could not delete queued analytics data. Please try again.',
     '일부 이전 알림을 정리하지 못했습니다. 다음 실행에서 다시 시도합니다. 정리 전까지 새 알림 예약이 보류됩니다.':
         'Some old notifications could not be cleared. Cleanup will retry on the next launch. New reminders are paused until cleanup finishes.',
+    '저장된 학교 로그인 정보나 Siri 작업 기록을 모두 지우지 못했습니다. 다음 실행에서 다시 시도합니다.':
+        'Some saved school sign-in details or Siri activity records could not be deleted. Daily will try again on the next launch.',
     '이 기기에 전송 대기 중인 익명 분석 데이터를 삭제합니다.':
         'Delete anonymous analytics waiting to be sent from this device.',
     '이 기기에 전송 대기 중인 익명 분석 데이터를 삭제할까요? 이미 전송되어 집계된 데이터는 계정이나 기기와 연결되지 않아 특정 사용자를 식별하거나 되돌릴 수 없습니다.':
@@ -832,8 +834,7 @@ const Map<String, Map<String, String>> _translations = {
         'This alarm time stays the same even if the event time changes.',
     '지난 시각이라 알람이 울리지 않습니다.':
         'This time has passed, so the alarm will not ring.',
-    '지난 시각의 알람은 울리지 않습니다.':
-        'Alarms at times that have passed will not ring.',
+    '지난 시각의 알람은 울리지 않습니다.': 'Alarms at times that have passed will not ring.',
     'URL / 링크': 'URL / Link',
     '날씨': 'Weather',
     '예: 흐림': 'e.g. Cloudy',
@@ -1779,6 +1780,8 @@ const Map<String, Map<String, String>> _translations = {
         '送信待ちの分析データを削除できませんでした。もう一度お試しください。',
     '일부 이전 알림을 정리하지 못했습니다. 다음 실행에서 다시 시도합니다. 정리 전까지 새 알림 예약이 보류됩니다.':
         '一部の以前の通知を削除できませんでした。次回起動時に再試行します。削除完了まで新しい通知の予約は保留されます。',
+    '저장된 학교 로그인 정보나 Siri 작업 기록을 모두 지우지 못했습니다. 다음 실행에서 다시 시도합니다.':
+        '保存された学校のログイン情報またはSiriの操作履歴を一部削除できませんでした。次回起動時に再試行します。',
     '이 기기에 전송 대기 중인 익명 분석 데이터를 삭제합니다.': 'このデバイスで送信待ちの匿名分析データを削除します。',
     '이 기기에 전송 대기 중인 익명 분석 데이터를 삭제할까요? 이미 전송되어 집계된 데이터는 계정이나 기기와 연결되지 않아 특정 사용자를 식별하거나 되돌릴 수 없습니다.':
         'このデバイスで送信待ちの匿名分析データを削除しますか？送信済みデータはアカウントやデバイスに結び付けず集計されるため、特定ユーザーの識別や復元はできません。',
@@ -2808,6 +2811,8 @@ const Map<String, Map<String, String>> _translations = {
     '전송 대기 분석 데이터를 삭제하지 못했습니다. 다시 시도해 주세요.': '無法刪除待傳送的分析資料。請再試一次。',
     '일부 이전 알림을 정리하지 못했습니다. 다음 실행에서 다시 시도합니다. 정리 전까지 새 알림 예약이 보류됩니다.':
         '部分舊通知無法清除，將於下次啟動時重試。清除完成前暫停排程新提醒。',
+    '저장된 학교 로그인 정보나 Siri 작업 기록을 모두 지우지 못했습니다. 다음 실행에서 다시 시도합니다.':
+        '部分已儲存的學校登入資訊或 Siri 操作紀錄無法刪除，將於下次啟動時重試。',
     '이 기기에 전송 대기 중인 익명 분석 데이터를 삭제합니다.': '刪除此裝置上等待傳送的匿名分析資料。',
     '이 기기에 전송 대기 중인 익명 분석 데이터를 삭제할까요? 이미 전송되어 집계된 데이터는 계정이나 기기와 연결되지 않아 특정 사용자를 식별하거나 되돌릴 수 없습니다.':
         '要刪除此裝置上等待傳送的匿名分析資料嗎？已傳送的資料不會連結帳號或裝置，且只會彙總，因此無法識別或還原特定使用者的資料。',
@@ -2891,8 +2896,7 @@ const Map<String, Map<String, String>> _translations = {
     '완료': '完成',
     '미완료': '未完成',
     '기한 없는 학습 {count}개': '無期限學習 {count} 項',
-    '학교가 학습 기간을 정하지 않아 달력 대신 여기에 표시합니다.':
-        '學校未設定學習期間，因此列於此處而非行事曆。',
+    '학교가 학습 기간을 정하지 않아 달력 대신 여기에 표시합니다.': '學校未設定學習期間，因此列於此處而非行事曆。',
     '지도 바로가기': '在地圖中開啟',
     '월간 미니 캘린더': '月份迷你行事曆',
     '오늘 일정': '今日行程',

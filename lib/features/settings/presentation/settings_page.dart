@@ -22,7 +22,9 @@ import '../../../core/update/update_required_view.dart';
 import '../../../core/security/biometric_auth_service.dart';
 import '../../../core/security/app_lock_privacy_service.dart';
 import '../../../core/siri/siri_shortcut_installer.dart';
+import '../../../core/lms/lms_controller.dart';
 import '../../../core/settings/app_settings.dart';
+import '../../../core/settings/settings_repository.dart';
 import '../../../core/localization/app_localizations.dart';
 import '../../../core/support/bug_report_service.dart';
 import '../../../core/sync/google_drive_auth_service.dart';
@@ -82,6 +84,32 @@ bool supportsAdjacentMonthDateSetting(TargetPlatform platform) {
       platform == TargetPlatform.macOS ||
       platform == TargetPlatform.windows ||
       platform == TargetPlatform.linux;
+}
+
+/// Deletes what [SettingsRepository.resetAll] cannot reach: saved school
+/// logins and web sessions in secure storage, and the Siri activity log file.
+/// Returns false when something is left; the stored mark then makes the next
+/// app start without an account call this again.
+Future<bool> clearDeviceSecretsAndLogs(
+  SettingsRepository settings,
+  LmsController lms,
+) async {
+  try {
+    await settings.setDeviceSecretCleanupPending(true);
+    await lms.forgetLocalSecrets();
+    if (defaultTargetPlatform == TargetPlatform.iOS ||
+        defaultTargetPlatform == TargetPlatform.macOS) {
+      try {
+        await clearSiriActivityLogs();
+      } on MissingPluginException {
+        // No Siri log handler in this build, so there is no log to delete.
+      }
+    }
+    await settings.setDeviceSecretCleanupPending(false);
+    return true;
+  } on Object {
+    return false;
+  }
 }
 
 class SettingsPage extends ConsumerStatefulWidget {
@@ -2501,8 +2529,8 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       }
       await ref.read(eventRepositoryProvider).clearAll();
       await ref.read(settingsRepositoryProvider).resetAll();
-      await _clearDeviceSecretsAndLogs();
       ref.read(appSettingsProvider.notifier).state = AppSettings();
+      await _clearDeviceSecretsAndLogs();
       unawaited(
         ref.read(calendarWidgetServiceProvider).refresh().catchError((_) {}),
       );
@@ -2520,17 +2548,21 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     }
   }
 
-  /// What [SettingsRepository.resetAll] cannot reach: saved school logins and
-  /// web sessions in secure storage, and the Siri activity log file.
+  /// Runs after the account is gone and never stops the logout or reset: a
+  /// failure is shown and retried on the next app start.
   Future<void> _clearDeviceSecretsAndLogs() async {
-    await ref.read(lmsControllerProvider).forgetLocalSecrets();
-    if (defaultTargetPlatform == TargetPlatform.iOS ||
-        defaultTargetPlatform == TargetPlatform.macOS) {
-      try {
-        await clearSiriActivityLogs();
-      } on MissingPluginException {
-        // No Siri log handler in this build, so there is no log to delete.
-      }
+    final messenger = mounted ? ScaffoldMessenger.of(context) : null;
+    final failureMessage = mounted
+        ? context.tr(
+            '저장된 학교 로그인 정보나 Siri 작업 기록을 모두 지우지 못했습니다. 다음 실행에서 다시 시도합니다.',
+          )
+        : '';
+    final cleared = await clearDeviceSecretsAndLogs(
+      ref.read(settingsRepositoryProvider),
+      ref.read(lmsControllerProvider),
+    );
+    if (!cleared) {
+      messenger?.showSnackBar(SnackBar(content: Text(failureMessage)));
     }
   }
 
@@ -2612,12 +2644,12 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       }
       await ref.read(eventRepositoryProvider).clearAll();
       await ref.read(settingsRepositoryProvider).resetAll();
-      await _clearDeviceSecretsAndLogs();
       if (hasGoogleAccount) {
         await authService.signOut();
       }
       await ref.read(appleSignInServiceProvider).signOut();
       ref.read(appSettingsProvider.notifier).state = AppSettings();
+      await _clearDeviceSecretsAndLogs();
       unawaited(
         ref.read(calendarWidgetServiceProvider).refresh().catchError((_) {}),
       );

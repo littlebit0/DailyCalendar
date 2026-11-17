@@ -24,6 +24,7 @@ import '../features/calendar/presentation/month_calendar_page.dart';
 import '../features/onboarding/presentation/analytics_consent_page.dart';
 import '../features/onboarding/presentation/welcome_page.dart';
 import '../features/settings/presentation/academic_profile_page.dart';
+import '../features/settings/presentation/settings_page.dart';
 import '../features/onboarding/presentation/update_features_gate.dart';
 import '../core/weather/weather_widgets.dart';
 import '../core/sync/startup_sync_gate.dart';
@@ -749,6 +750,17 @@ class _AppHomeState extends ConsumerState<_AppHome>
   void initState() {
     super.initState();
     _lmsController = ref.read(lmsControllerProvider);
+    final settingsRepository = ref.read(settingsRepositoryProvider);
+    // A logout or reset left school logins or the Siri log behind. Only with
+    // no account: a login saved after signing in again must be kept.
+    if (settingsRepository.deviceSecretCleanupPending &&
+        settingsRepository.dailyAccount() == null) {
+      unawaited(
+        Future(
+          () => clearDeviceSecretsAndLogs(settingsRepository, _lmsController),
+        ),
+      );
+    }
     _initialRestoreOwner = ref.read(onboardingRestoreOwnerProvider);
     _scheduledLmsOwner = ref
         .read(settingsRepositoryProvider)

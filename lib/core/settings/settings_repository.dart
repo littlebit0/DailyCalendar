@@ -72,6 +72,20 @@ class SettingsRepository {
     }
   }
 
+  static const _deviceSecretCleanupPendingKey = 'deviceSecretCleanupPending.v1';
+
+  /// Set while a logout or reset could not yet delete the saved school logins
+  /// or the Siri activity log. It survives [resetAll] so the next app start
+  /// can try again.
+  bool get deviceSecretCleanupPending =>
+      _preferences.getBool(_deviceSecretCleanupPendingKey) ?? false;
+
+  Future<void> setDeviceSecretCleanupPending(bool pending) => _persist(
+    pending
+        ? _preferences.setBool(_deviceSecretCleanupPendingKey, true)
+        : _preferences.remove(_deviceSecretCleanupPendingKey),
+  );
+
   static const _notificationIdsKey = 'notificationIds.v2';
   static final _notificationIdTails = Expando<Future<void>>();
 
