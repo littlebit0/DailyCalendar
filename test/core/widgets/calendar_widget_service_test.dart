@@ -94,6 +94,104 @@ void main() {
     expect(snapshot['utcOffsetAtMs'], now.millisecondsSinceEpoch);
   });
 
+  group('repeating D-day (#883)', () {
+    Map<dynamic, dynamic> ddayOf(
+      CalendarEvent event, {
+      DateTime? now,
+      String? on,
+    }) {
+      final snapshot = CalendarWidgetSnapshotBuilder.build(
+        now: now ?? DateTime(2026, 11, 15, 9),
+        settings: AppSettings(language: AppLanguage.korean),
+        gridStart: DateTime(2026, 10, 25),
+        monthEvents: const [],
+        allEvents: [event.copyWith(showDday: true)],
+      );
+      if (on == null) return (snapshot['ddays'] as List).cast<Map>().single;
+      final view = (snapshot['dailyViews'] as List).cast<Map>().firstWhere(
+        (view) => view['date'] == on,
+      );
+      return (view['ddays'] as List).cast<Map>().single;
+    }
+
+    final birthday =
+        _event(
+          id: 'birthday',
+          title: '생일',
+          startAt: DateTime(2024, 12, 1),
+        ).copyWith(
+          endAt: DateTime(2024, 12, 2),
+          allDay: true,
+          recurrence: const RecurrenceRule(
+            frequency: RecurrenceFrequency.yearly,
+          ),
+        );
+
+    test('a yearly event counts down to its next occurrence', () {
+      final dday = ddayOf(birthday);
+      expect(dday['id'], 'birthday');
+      expect(dday['dateLabel'], '2026.12.01');
+      expect(dday['daysRemaining'], 16);
+    });
+
+    test('each cached day measures from its own next occurrence', () {
+      expect(ddayOf(birthday, on: '2026-12-01')['daysRemaining'], 0);
+      final after = ddayOf(birthday, on: '2026-12-02');
+      expect(after['dateLabel'], '2027.12.01');
+      expect(after['daysRemaining'], 364);
+    });
+
+    test('an excluded occurrence is skipped', () {
+      final dday = ddayOf(
+        birthday.copyWith(
+          recurrence: birthday.recurrence.copyWith(
+            excludedDates: [DateTime(2026, 12, 1)],
+          ),
+        ),
+      );
+      expect(dday['dateLabel'], '2027.12.01');
+    });
+
+    test('an ended series counts up from its last occurrence', () {
+      final dday = ddayOf(
+        birthday.copyWith(
+          recurrence: birthday.recurrence.copyWith(
+            until: DateTime(2025, 12, 31),
+          ),
+        ),
+      );
+      expect(dday['dateLabel'], '2025.12.01');
+      expect(dday['daysRemaining'], -349);
+    });
+
+    test('a non-repeating D-day is unchanged', () {
+      final dday = ddayOf(
+        birthday.copyWith(recurrence: const RecurrenceRule()),
+      );
+      expect(dday['dateLabel'], '2024.12.01');
+      expect(dday['daysRemaining'], -714);
+    });
+
+    test('the nearest six are ranked by the next occurrence', () {
+      final snapshot = CalendarWidgetSnapshotBuilder.build(
+        now: DateTime(2026, 11, 15, 9),
+        settings: AppSettings(language: AppLanguage.korean),
+        gridStart: DateTime(2026, 10, 25),
+        monthEvents: const [],
+        allEvents: [
+          for (var index = 0; index < 6; index++)
+            _event(
+              id: 'later-$index',
+              title: 'Later',
+              startAt: DateTime(2027, 1, 10 + index),
+            ).copyWith(showDday: true),
+          birthday.copyWith(showDday: true),
+        ],
+      );
+      expect((snapshot['ddays'] as List).cast<Map>().first['id'], 'birthday');
+    });
+  });
+
   test('widget day lists follow each event\'s following-day choice (#791)', () {
     final shift = _event(
       id: 'shift',
