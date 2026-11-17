@@ -3,7 +3,7 @@ import SQLite3
 let dailySQLiteTransient = unsafeBitCast(-1, to: sqlite3_destructor_type.self)
 let testURL = URL(fileURLWithPath: CommandLine.arguments[1])
 struct DailySiriCategory { let id: String; let colorValue: Int64 }
-enum DailySiriError: Error { case databaseUnavailable, eventNotFound, ambiguousEvent, invalidTime, lmsOriginalReadOnly, updateRequired }
+enum DailySiriError: Error { case databaseUnavailable, eventNotFound, ambiguousEvent, occurrenceRequired, invalidTime, lmsOriginalReadOnly, updateRequired }
 enum DailySiriUpdateRequirement { static var isActive = false }
 enum DailySiriText {
   static func recurrenceScope(title: String, start: Date, entireSeries: Bool) -> String { "scope" }
@@ -93,6 +93,21 @@ rejected { _ = try DailySiriDatabase.update(id: thirdID, newTitle: "failed", new
 verify(try DailySiriDatabase.events(withIDs: [thirdID]).count == 1)
 assert(DailySiriEventChangeSignal.changes.count == countBefore)
 try sql("DROP TRIGGER fail_clone")
+// #927: a series found by name is its stored row; "this occurrence only" must
+// not fall back to the first occurrence.
+let named = try DailySiriDatabase.searchEditable("same title").first { $0.id == base.id }!
+func needsOccurrence(_ operation: () throws -> Void) {
+  do { try operation(); fatalError("series row must need an occurrence") } catch DailySiriError.occurrenceRequired {} catch { fatalError("unexpected error: \(error)") }
+}
+let rowsBefore = try DailySiriDatabase.searchEditable("").count
+needsOccurrence { _ = try DailySiriDatabase.delete(id: named.id) }
+needsOccurrence { _ = try DailySiriDatabase.update(id: named.id, newTitle: "first", newStartAt: nil, newEndAt: nil) }
+needsOccurrence { _ = try DailySiriDatabase.mutationScopeLabel(id: named.id, entireSeries: false) }
+verify(try DailySiriDatabase.mutationScopeLabel(id: named.id, entireSeries: true) == "scope")
+verify(try DailySiriDatabase.mutationScopeLabel(id: thirdID, entireSeries: false) == "scope")
+verify(try DailySiriDatabase.events(withIDs: [base.id]).first!.recurrenceExcludedDates.count == 1)
+verify(try DailySiriDatabase.searchEditable("").count == rowsBefore)
+assert(DailySiriEventChangeSignal.changes.count == countBefore)
 _ = try DailySiriDatabase.delete(id: thirdID)
 verify(try DailySiriDatabase.events(withIDs: [thirdID]).isEmpty)
 verify(try DailySiriDatabase.events(withIDs: [base.id]).count == 1)

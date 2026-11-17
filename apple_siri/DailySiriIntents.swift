@@ -862,6 +862,13 @@ private enum DailySiriText {
     }
   }
 
+  static var occurrenceRequired: String { localized(
+    "반복 일정입니다. 바꿀 회차를 선택하거나 범위를 '전체 반복'으로 지정해 주세요.",
+    "This event repeats. Choose the occurrence to change, or set the scope to the entire series.",
+    "繰り返しの予定です。変更する回を選ぶか、範囲を「繰り返し全体」にしてください。",
+    "這是重複行程。請選擇要變更的那一次，或將範圍設為整個重複行程。"
+  ) }
+
   static var ambiguousEvent: String {
     switch language {
     case .korean: "일치하는 일정이 여러 개 있습니다. 더 구체적인 제목을 사용해 주세요."
@@ -2259,6 +2266,7 @@ private enum DailySiriError: Error, CustomLocalizedStringResourceConvertible {
   case databaseUnavailable
   case eventNotFound
   case ambiguousEvent
+  case occurrenceRequired
   case invalidTime
   case lmsOriginalReadOnly
   case updateRequired
@@ -2271,6 +2279,8 @@ private enum DailySiriError: Error, CustomLocalizedStringResourceConvertible {
       LocalizedStringResource(stringLiteral: DailySiriText.eventNotFound)
     case .ambiguousEvent:
       LocalizedStringResource(stringLiteral: DailySiriText.ambiguousEvent)
+    case .occurrenceRequired:
+      LocalizedStringResource(stringLiteral: DailySiriText.occurrenceRequired)
     case .invalidTime:
       LocalizedStringResource(stringLiteral: DailySiriText.invalidTime)
     case .lmsOriginalReadOnly:
@@ -2528,7 +2538,16 @@ private enum DailySiriDatabase {
   static func mutationScopeLabel(id: String, entireSeries: Bool) throws -> String? {
     guard let event = try events(withIDs: [id]).first else { throw DailySiriError.eventNotFound }
     guard event.recurrenceFrequency != "none" else { return nil }
+    try requireOccurrence(id: id, entireSeries: entireSeries)
     return DailySiriText.recurrenceScope(title: event.title, start: event.startAt, entireSeries: entireSeries)
+  }
+
+  /// A series found by name is its stored row, whose start is the first
+  /// occurrence. "This occurrence only" needs an occurrence the user chose (#927).
+  private static func requireOccurrence(id: String, entireSeries: Bool) throws {
+    guard entireSeries || DailySiriOccurrenceIdentity.parse(id) != nil else {
+      throw DailySiriError.occurrenceRequired
+    }
   }
 
   static func ddayEvents() throws -> [DailySiriEvent] {
@@ -2819,6 +2838,7 @@ private enum DailySiriDatabase {
       guard event.id == sourceID else { throw DailySiriError.eventNotFound }
       return sourceID
     }
+    try requireOccurrence(id: event.id, entireSeries: entireSeries)
     if entireSeries { return sourceID }
     let occurrenceID = DailySiriOccurrenceIdentity.make(sourceID: sourceID, start: event.startAt)
     guard let occurrence = try events(withIDs: [occurrenceID], database: database).first else {
@@ -3712,6 +3732,8 @@ struct UpdateDailyEventIntent: AppIntent {
 
   func perform() async throws -> some IntentResult & ProvidesDialog {
     try DailySiriDatabase.requireEditable(id: event.id)
+    // Before the value prompts, so a series row without an occurrence fails first.
+    let scope = try DailySiriDatabase.mutationScopeLabel(id: event.id, entireSeries: repeatScope == .entireSeries)
     guard let newTitle, !newTitle.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
       throw $newTitle.requestValue(IntentDialog(stringLiteral: DailySiriText.addTitleRequest))
     }
@@ -3729,7 +3751,7 @@ struct UpdateDailyEventIntent: AppIntent {
       throw $newCategory.requestValue(IntentDialog(stringLiteral: DailySiriText.categoryRequest))
     }
     let resolvedEnd = newEndAt ?? Calendar.current.date(byAdding: .day, value: 1, to: Calendar.current.startOfDay(for: newStartAt))!
-    if let scope = try DailySiriDatabase.mutationScopeLabel(id: event.id, entireSeries: repeatScope == .entireSeries) {
+    if let scope {
       try await requestConfirmation(result: .result(dialog: IntentDialog(stringLiteral: scope + " · " + DailySiriText.commandConfirmation)))
     }
     let updatedEvent = try loggedSiriOperation(action: "update", summary: event.title) {
