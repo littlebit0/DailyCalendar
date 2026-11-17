@@ -9243,6 +9243,27 @@ void main() {
   for (final cleanupFails in [false, true]) {
     testWidgets('local data reset does not require Google account deletion, '
         'LMS secret cleanup fails: $cleanupFails', (tester) async {
+      // The Siri log exists on Apple platforms; it must be deleted even when
+      // the LMS logins cannot be.
+      final siriLogCalls = <String>[];
+      if (cleanupFails) {
+        debugDefaultTargetPlatformOverride = TargetPlatform.macOS;
+        addTearDown(() => debugDefaultTargetPlatformOverride = null);
+        const siriLogs = MethodChannel('daily/siri_logs');
+        tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+          siriLogs,
+          (call) async {
+            siriLogCalls.add(call.method);
+            return null;
+          },
+        );
+        addTearDown(
+          () => tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+            siriLogs,
+            null,
+          ),
+        );
+      }
       SharedPreferences.setMockInitialValues({'onboardingCompleted': true});
       // #913: the reset also removes saved school logins and sessions.
       FlutterSecureStorage.setMockInitialValues({
@@ -9281,6 +9302,10 @@ void main() {
             googleDriveSyncServiceProvider.overrideWithValue(driveSyncService),
             syncServiceProvider.overrideWithValue(_FakeSync()),
             if (cleanupFails)
+              alarmServiceProvider.overrideWithValue(
+                const UnsupportedAlarmService(),
+              ),
+            if (cleanupFails)
               lmsControllerProvider.overrideWith(
                 (ref) => LmsController(
                   settings: settingsRepository,
@@ -9315,14 +9340,18 @@ void main() {
         find.textContaining('다음 실행에서 다시 시도합니다'),
         cleanupFails ? findsOneWidget : findsNothing,
       );
-      if (!cleanupFails) {
-        expect(await const FlutterSecureStorage().readAll(), isEmpty);
-      }
+      expect(siriLogCalls, cleanupFails ? ['clearLogs'] : isEmpty);
+      // The stored session goes even when the saved logins cannot be deleted.
+      expect(
+        (await const FlutterSecureStorage().readAll()).keys,
+        cleanupFails ? ['daily.lms.credentials.v1.any-account'] : isEmpty,
+      );
       expect(authService.signOutCalls, 0);
       expect(eventRepository.clearAllCalls, 1);
       expect(notificationService.cancelMorningBriefingCalls, 1);
       expect(settingsRepository.load().onboardingCompleted, isFalse);
 
+      debugDefaultTargetPlatformOverride = null;
       await tester.pumpWidget(const SizedBox.shrink());
     });
   }

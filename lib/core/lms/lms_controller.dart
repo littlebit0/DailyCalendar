@@ -380,8 +380,12 @@ class LmsController extends ChangeNotifier {
     } on Object {
       // The stored values below are deleted either way.
     }
-    await _credentials.deleteAll();
-    await LmsWebSession.deleteStoredSessions();
+    try {
+      await _credentials.deleteAll();
+    } finally {
+      // Still deleted when the saved logins could not be.
+      await LmsWebSession.deleteStoredSessions();
+    }
     _credentialRevision++;
     _credentialKey = null;
     _localLoginUsername = null;

@@ -94,17 +94,31 @@ Future<bool> clearDeviceSecretsAndLogs(
   SettingsRepository settings,
   LmsController lms,
 ) async {
+  // Each store is tried on its own: one that fails must not keep the other
+  // from being deleted.
+  var cleared = true;
   try {
     await settings.setDeviceSecretCleanupPending(true);
+  } on Object {
+    cleared = false;
+  }
+  try {
     await lms.forgetLocalSecrets();
-    if (defaultTargetPlatform == TargetPlatform.iOS ||
-        defaultTargetPlatform == TargetPlatform.macOS) {
-      try {
-        await clearSiriActivityLogs();
-      } on MissingPluginException {
-        // No Siri log handler in this build, so there is no log to delete.
-      }
+  } on Object {
+    cleared = false;
+  }
+  if (defaultTargetPlatform == TargetPlatform.iOS ||
+      defaultTargetPlatform == TargetPlatform.macOS) {
+    try {
+      await clearSiriActivityLogs();
+    } on MissingPluginException {
+      // No Siri log handler in this build, so there is no log to delete.
+    } on Object {
+      cleared = false;
     }
+  }
+  if (!cleared) return false;
+  try {
     await settings.setDeviceSecretCleanupPending(false);
     return true;
   } on Object {

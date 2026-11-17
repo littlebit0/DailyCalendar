@@ -165,29 +165,22 @@ class _DeviceCleanupRetry extends ConsumerStatefulWidget {
 }
 
 class _DeviceCleanupRetryState extends ConsumerState<_DeviceCleanupRetry> {
-  var _running = false;
-
+  /// Logout and reset only set the mark; the deletion runs here, outside the
+  /// settings screen they close, so a failure can still be shown. They end on
+  /// the welcome screen, whose `MaterialApp` key differs from the home one, so
+  /// this state is created again right after them and on every app start.
   @override
   void initState() {
     super.initState();
-    _clearIfPending();
-  }
-
-  /// Logout and reset only set the mark; the deletion runs here, outside the
-  /// settings screen they close, so a failure can still be shown.
-  void _clearIfPending() {
     final settings = ref.read(settingsRepositoryProvider);
-    if (_running ||
-        !settings.deviceSecretCleanupPending ||
+    if (!settings.deviceSecretCleanupPending ||
         settings.dailyAccount() != null) {
       return;
     }
-    _running = true;
     final lms = ref.read(lmsControllerProvider);
     unawaited(
       Future(() async {
         final cleared = await clearDeviceSecretsAndLogs(settings, lms);
-        _running = false;
         if (cleared || !mounted) return;
         ScaffoldMessenger.maybeOf(context)?.showSnackBar(
           SnackBar(
@@ -203,11 +196,7 @@ class _DeviceCleanupRetryState extends ConsumerState<_DeviceCleanupRetry> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    // A reset publishes fresh settings right after it sets the mark.
-    ref.listen(appSettingsProvider, (_, _) => _clearIfPending());
-    return widget.child;
-  }
+  Widget build(BuildContext context) => widget.child;
 }
 
 class _AppLockGate extends ConsumerStatefulWidget {
