@@ -2670,11 +2670,17 @@ private enum DailySiriDatabase {
       )
     }
     // The series keeps the length of [from, to]. An all-day event keeps its
-    // calendar days: elapsed seconds differ across a daylight-saving change.
+    // calendar days: elapsed seconds differ across a daylight-saving change,
+    // and a time of day on either side must not shorten the span. The days
+    // are counted between dates, as the app's all-day bounds are.
     func seriesEnd(lengthFrom from: Date, to: Date) -> Date {
       guard newAllDay ?? event.allDay,
-            let days = calendar.dateComponents([.day], from: from, to: to).day,
-            let end = calendar.date(byAdding: .day, value: max(days, 1), to: updatedStart) else {
+            let days = calendar.dateComponents(
+              [.day], from: calendar.startOfDay(for: from), to: calendar.startOfDay(for: to)
+            ).day,
+            let end = calendar.date(
+              byAdding: .day, value: max(days, 1), to: calendar.startOfDay(for: updatedStart)
+            ) else {
         return updatedStart.addingTimeInterval(to.timeIntervalSince(from))
       }
       return end

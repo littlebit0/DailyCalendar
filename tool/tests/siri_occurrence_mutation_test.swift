@@ -206,6 +206,17 @@ do {
   _ = try DailySiriDatabase.update(id: crossing, newTitle: nil, newStartAt: day(3, 8), newEndAt: day(3, 10), entireSeries: true)
   let saved = try DailySiriDatabase.events(withIDs: [allDay.id]).first!
   if saved.startAt != day(2, 1) || saved.endAt != day(2, 3) { fatalError("all-day DST span: \(saved.startAt) ... \(saved.endAt)") }
+
+  // A timed series turned into an all-day one: the start still has its time
+  // of day, and the span is counted between dates, not from 09:00.
+  let nine = day(2, 1).addingTimeInterval(9 * 3600)
+  let timed = try DailySiriDatabase.add(title: "timed to all-day", startAt: nine, endAt: nine.addingTimeInterval(3600), allDay: false, category: DailySiriCategory(id: "basic", colorValue: 1), location: nil, memo: nil)
+  try sql("UPDATE event_records SET recurrence_frequency='weekly' WHERE id='\(timed.id)'")
+  let converted = try DailySiriDatabase.update(id: timed.id, newTitle: nil, newStartAt: nine, newEndAt: day(2, 3), newAllDay: true, entireSeries: true)
+  let storedConverted = try DailySiriDatabase.events(withIDs: [timed.id]).first!
+  for event in [converted, storedConverted] where event.endAt != day(2, 3) || !event.allDay {
+    fatalError("timed to all-day span: \(event.startAt) ... \(event.endAt)")
+  }
 }
 NSTimeZone.default = savedZone
 print("Siri entire-series edit fixtures passed")
