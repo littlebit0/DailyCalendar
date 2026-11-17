@@ -9243,11 +9243,7 @@ void main() {
   for (final cleanupFails in [false, true]) {
     testWidgets('local data reset does not require Google account deletion, '
         'LMS secret cleanup fails: $cleanupFails', (tester) async {
-      SharedPreferences.setMockInitialValues({
-        'onboardingCompleted': true,
-        // Left by an earlier reset whose cleanup failed.
-        if (!cleanupFails) 'deviceSecretCleanupPending.v1': true,
-      });
+      SharedPreferences.setMockInitialValues({'onboardingCompleted': true});
       // #913: the reset also removes saved school logins and sessions.
       FlutterSecureStorage.setMockInitialValues({
         'daily.lms.credentials.v1.any-account': '{}',
@@ -9298,12 +9294,6 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
-      if (!cleanupFails) {
-        // The app start without an account finished the earlier cleanup.
-        expect(settingsRepository.deviceSecretCleanupPending, isFalse);
-        expect(await const FlutterSecureStorage().readAll(), isEmpty);
-      }
-
       await tester.tap(find.byTooltip('설정'));
       await tester.pumpAndSettle();
       await _openAccountSettings(tester);
@@ -9331,6 +9321,42 @@ void main() {
       await tester.pumpWidget(const SizedBox.shrink());
     });
   }
+
+  testWidgets('the start after a reset whose secret cleanup failed finishes '
+      'it on the welcome screen (#913)', (tester) async {
+    // A reset leaves onboarding incomplete and no account.
+    SharedPreferences.setMockInitialValues({
+      'deviceSecretCleanupPending.v1': true,
+    });
+    FlutterSecureStorage.setMockInitialValues({
+      'daily.lms.credentials.v1.any-account': '{}',
+      'daily.lms.session.v1.any-account': '{}',
+    });
+    final preferences = await SharedPreferences.getInstance();
+    final settingsRepository = SettingsRepository(preferences: preferences);
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          settingsRepositoryProvider.overrideWithValue(settingsRepository),
+          notificationServiceProvider.overrideWithValue(_FakeNotification()),
+          eventRepositoryProvider.overrideWithValue(_FakeEventRepository()),
+          googleDriveAuthServiceProvider.overrideWithValue(
+            _FakeGoogleDriveAuthService(account: null),
+          ),
+          syncServiceProvider.overrideWithValue(_FakeSync()),
+        ],
+        child: const DailyApp(),
+      ),
+    );
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 400));
+
+    expect(find.text('오늘을 더\n가볍게 정리하세요.'), findsOneWidget);
+    expect(settingsRepository.deviceSecretCleanupPending, isFalse);
+    expect(await const FlutterSecureStorage().readAll(), isEmpty);
+    await tester.pumpWidget(const SizedBox.shrink());
+  });
 
   testWidgets('local data reset continues when notification cleanup fails', (
     tester,

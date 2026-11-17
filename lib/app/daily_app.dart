@@ -114,7 +114,7 @@ class DailyApp extends ConsumerWidget {
                   ),
                 ),
               ),
-              child: content,
+              child: _DeviceCleanupRetry(child: content),
             ),
           );
         },
@@ -148,6 +148,36 @@ bool shouldAutomaticallyRequestBiometrics(
   bool alreadyAttempted = false,
 }) {
   return !alreadyAttempted;
+}
+
+/// Finishes a logout or reset that left school logins or the Siri log behind.
+/// It sits above every screen, so it also runs on the welcome screen a reset
+/// leads to. Only with no account: a login saved after signing in again is
+/// kept.
+class _DeviceCleanupRetry extends ConsumerStatefulWidget {
+  const _DeviceCleanupRetry({required this.child});
+
+  final Widget child;
+
+  @override
+  ConsumerState<_DeviceCleanupRetry> createState() =>
+      _DeviceCleanupRetryState();
+}
+
+class _DeviceCleanupRetryState extends ConsumerState<_DeviceCleanupRetry> {
+  @override
+  void initState() {
+    super.initState();
+    final settings = ref.read(settingsRepositoryProvider);
+    if (settings.deviceSecretCleanupPending &&
+        settings.dailyAccount() == null) {
+      final lms = ref.read(lmsControllerProvider);
+      unawaited(Future(() => clearDeviceSecretsAndLogs(settings, lms)));
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) => widget.child;
 }
 
 class _AppLockGate extends ConsumerStatefulWidget {
@@ -750,17 +780,6 @@ class _AppHomeState extends ConsumerState<_AppHome>
   void initState() {
     super.initState();
     _lmsController = ref.read(lmsControllerProvider);
-    final settingsRepository = ref.read(settingsRepositoryProvider);
-    // A logout or reset left school logins or the Siri log behind. Only with
-    // no account: a login saved after signing in again must be kept.
-    if (settingsRepository.deviceSecretCleanupPending &&
-        settingsRepository.dailyAccount() == null) {
-      unawaited(
-        Future(
-          () => clearDeviceSecretsAndLogs(settingsRepository, _lmsController),
-        ),
-      );
-    }
     _initialRestoreOwner = ref.read(onboardingRestoreOwnerProvider);
     _scheduledLmsOwner = ref
         .read(settingsRepositoryProvider)

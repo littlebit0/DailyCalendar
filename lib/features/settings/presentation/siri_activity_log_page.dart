@@ -168,7 +168,12 @@ class _SiriActivityLogPageState extends State<SiriActivityLogPage> {
       ),
     );
     if (confirmed != true) return;
-    await clearSiriActivityLogs();
+    try {
+      await clearSiriActivityLogs();
+    } on PlatformException {
+      // The file is still there, so the list keeps showing it.
+      return;
+    }
     if (!mounted) return;
     setState(() {
       _logs = const [];
