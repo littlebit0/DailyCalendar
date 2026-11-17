@@ -228,6 +228,11 @@ void main() {
       final until = (await parse('오늘 오후 9시부터 밤 12시까지 작업')).draft!;
       expect(until.startAt, DateTime(2026, 5, 11, 21));
       expect(until.endAt, DateTime(2026, 5, 12));
+
+      // An explicit end date ends at its own midnight, a full day later.
+      final dated = (await parse('5월 30일 오후 2시부터 5월 31일 밤 12시까지 작업')).draft!;
+      expect(dated.startAt, DateTime(2026, 5, 30, 14));
+      expect(dated.endAt, DateTime(2026, 6, 1));
     });
 
     test('"다음 주" without a weekday asks instead of using today', () async {

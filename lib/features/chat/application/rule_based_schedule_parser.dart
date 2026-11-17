@@ -344,7 +344,8 @@ class RuleBasedScheduleParser implements ScheduleParser {
         final endAt = DateTime(
           endDate.year,
           endDate.month,
-          endDate.day,
+          // "5월 31일 밤 12시까지" ends when the typed end date ends.
+          endDate.day + endTime.dayOffset,
           endTime.hour,
           endTime.minute,
         );
