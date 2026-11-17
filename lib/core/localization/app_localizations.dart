@@ -448,6 +448,8 @@ const Map<String, Map<String, String>> _translations = {
     '요일을 바꾸면 이 수업의 휴강·수업 방식 변경 {count}건을 새 요일에 적용할 수 없어 삭제됩니다. 계속할까요?':
         'Changing the weekday removes {count} cancellation or lecture-mode change(s) of this class, because they cannot apply to the new weekday. Continue?',
     '삭제하고 저장': 'Delete and save',
+    '다른 기기에서 삭제된 수업이라 저장하지 않았습니다.':
+        'This class was deleted on another device, so it was not saved.',
     '수업 시간': 'Class time',
     '수업 시간 추가': 'Add meeting',
     '과목명': 'Course name',
@@ -1578,6 +1580,7 @@ const Map<String, Map<String, String>> _translations = {
     '요일을 바꾸면 이 수업의 휴강·수업 방식 변경 {count}건을 새 요일에 적용할 수 없어 삭제됩니다. 계속할까요?':
         '曜日を変更すると、この授業の休講・授業形式の変更{count}件を新しい曜日に適用できないため削除されます。続行しますか？',
     '삭제하고 저장': '削除して保存',
+    '다른 기기에서 삭제된 수업이라 저장하지 않았습니다.': '他の端末で削除された授業のため、保存しませんでした。',
     '수업 시간': '授業時間',
     '수업 시간 추가': '授業時間を追加',
     '과목명': '科目名',
@@ -2614,6 +2617,7 @@ const Map<String, Map<String, String>> _translations = {
     '요일을 바꾸면 이 수업의 휴강·수업 방식 변경 {count}건을 새 요일에 적용할 수 없어 삭제됩니다. 계속할까요?':
         '變更星期後，此課程的停課／授課方式變更 {count} 筆無法套用到新的星期，將被刪除。要繼續嗎？',
     '삭제하고 저장': '刪除並儲存',
+    '다른 기기에서 삭제된 수업이라 저장하지 않았습니다.': '此課程已在其他裝置上刪除，因此未儲存。',
     '수업 시간': '上課時間',
     '수업 시간 추가': '新增上課時段',
     '과목명': '課程名稱',
