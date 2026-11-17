@@ -223,37 +223,40 @@ void main() {
     );
   }
 
-  test('failed delete cleanup still replays after tombstone compaction', () async {
-    SharedPreferences.setMockInitialValues({});
-    final settings = SettingsRepository(
-      preferences: await SharedPreferences.getInstance(),
-    );
-    final database = AppDatabase.forTesting(NativeDatabase.memory());
-    addTearDown(database.close);
-    final repository = DriftEventRepository(database);
-    final event = _event('compacted', EventCategory.basic);
-    await repository.save(event);
-    final notifications = _FailingCancelNotifications()..fail = true;
-    final alarms = _CountingAlarmService();
-    final commands = EventCommandService(
-      repository: repository,
-      settingsRepository: settings,
-      notificationService: notifications,
-      alarmService: alarms,
-      syncService: _CountingSyncService(),
-    );
-    await commands.delete(event.id);
-    expect(settings.pendingEventFollowUps()[event.id]['stages'], [
-      'notification',
-    ]);
-    await repository.compactDeletedEvents(DateTime(2030));
-    expect(await repository.findById(event.id), isNull);
-    notifications.fail = false;
-    expect(await commands.retryPendingFollowUps(), isTrue);
-    expect(notifications.cancelCalls, 1);
-    expect(alarms.cancelCalls, 2);
-    expect(settings.pendingEventFollowUps(), isEmpty);
-  });
+  test(
+    'failed delete cleanup still replays after tombstone compaction',
+    () async {
+      SharedPreferences.setMockInitialValues({});
+      final settings = SettingsRepository(
+        preferences: await SharedPreferences.getInstance(),
+      );
+      final database = AppDatabase.forTesting(NativeDatabase.memory());
+      addTearDown(database.close);
+      final repository = DriftEventRepository(database);
+      final event = _event('compacted', EventCategory.basic);
+      await repository.save(event);
+      final notifications = _FailingCancelNotifications()..fail = true;
+      final alarms = _CountingAlarmService();
+      final commands = EventCommandService(
+        repository: repository,
+        settingsRepository: settings,
+        notificationService: notifications,
+        alarmService: alarms,
+        syncService: _CountingSyncService(),
+      );
+      await commands.delete(event.id);
+      expect(settings.pendingEventFollowUps()[event.id]['stages'], [
+        'notification',
+      ]);
+      await repository.compactDeletedEvents(DateTime(2030));
+      expect(await repository.findById(event.id), isNull);
+      notifications.fail = false;
+      expect(await commands.retryPendingFollowUps(), isTrue);
+      expect(notifications.cancelCalls, 1);
+      expect(alarms.cancelCalls, 2);
+      expect(settings.pendingEventFollowUps(), isEmpty);
+    },
+  );
 
   test('replay racing a delete cannot consume its record early', () async {
     SharedPreferences.setMockInitialValues({});
@@ -293,47 +296,50 @@ void main() {
   });
 
   for (final point in ['queued', 'write']) {
-    test('delete cancelled while $point does not tombstone the event', () async {
-      SharedPreferences.setMockInitialValues({});
-      final settings = SettingsRepository(
-        preferences: await SharedPreferences.getInstance(),
-      );
-      final database = AppDatabase.forTesting(NativeDatabase.memory());
-      addTearDown(database.close);
-      final repository = _GatedDeleteRepository(database);
-      final event = _event('cancelled-delete', EventCategory.basic);
-      await repository.save(event);
-      var current = true;
-      final notifications = _GatedCancelNotifications();
-      final sync = _CountingSyncService();
-      final commands = EventCommandService(
-        repository: repository,
-        settingsRepository: settings,
-        notificationService: notifications,
-        syncService: sync,
-      );
-      Future<bool>? replay;
-      if (point == 'queued') {
-        // An unrelated replay holds the queue on a slow cancellation.
-        await settings.stageEventFollowUp('other', 'token', const []);
-        notifications.gate = Completer<void>();
-        replay = commands.retryPendingFollowUps();
-        await notifications.started.future;
-      } else {
-        repository.gate.complete();
-        repository.beforeDelete = () => current = false;
-      }
-      final deletion = commands.delete(event.id, isCurrent: () => current);
-      if (point == 'queued') {
-        await Future<void>.delayed(Duration.zero);
-        current = false;
-        notifications.gate!.complete();
-        expect(await replay, isTrue);
-      }
-      await deletion;
-      expect((await repository.findById(event.id))!.isDeleted, isFalse);
-      expect(sync.deletedIds, isEmpty);
-    });
+    test(
+      'delete cancelled while $point does not tombstone the event',
+      () async {
+        SharedPreferences.setMockInitialValues({});
+        final settings = SettingsRepository(
+          preferences: await SharedPreferences.getInstance(),
+        );
+        final database = AppDatabase.forTesting(NativeDatabase.memory());
+        addTearDown(database.close);
+        final repository = _GatedDeleteRepository(database);
+        final event = _event('cancelled-delete', EventCategory.basic);
+        await repository.save(event);
+        var current = true;
+        final notifications = _GatedCancelNotifications();
+        final sync = _CountingSyncService();
+        final commands = EventCommandService(
+          repository: repository,
+          settingsRepository: settings,
+          notificationService: notifications,
+          syncService: sync,
+        );
+        Future<bool>? replay;
+        if (point == 'queued') {
+          // An unrelated replay holds the queue on a slow cancellation.
+          await settings.stageEventFollowUp('other', 'token', const []);
+          notifications.gate = Completer<void>();
+          replay = commands.retryPendingFollowUps();
+          await notifications.started.future;
+        } else {
+          repository.gate.complete();
+          repository.beforeDelete = () => current = false;
+        }
+        final deletion = commands.delete(event.id, isCurrent: () => current);
+        if (point == 'queued') {
+          await Future<void>.delayed(Duration.zero);
+          current = false;
+          notifications.gate!.complete();
+          expect(await replay, isTrue);
+        }
+        await deletion;
+        expect((await repository.findById(event.id))!.isDeleted, isFalse);
+        expect(sync.deletedIds, isEmpty);
+      },
+    );
   }
 
   test('delete that fails before the write is not journaled as done', () async {
@@ -1680,8 +1686,9 @@ class _CountingAlarmService implements AlarmService {
   Future<void> cancelEventAlarm(String eventId) async => cancelCalls += 1;
 
   @override
-  Future<AlarmAuthorizationState> requestAuthorization() async =>
-      AlarmAuthorizationState.authorized;
+  Future<AlarmAuthorizationState> requestAuthorization({
+    bool openSettings = false,
+  }) async => AlarmAuthorizationState.authorized;
 
   @override
   Future<void> scheduleEventAlarm(CalendarEvent event) async =>
@@ -1828,7 +1835,8 @@ class _MultiCompletionRepository implements EventRepository {
   Future<void> clearAll() async => events.clear();
 
   @override
-  Future<void> delete(String eventId, {void Function()? beforeWrite}) async => events.remove(eventId);
+  Future<void> delete(String eventId, {void Function()? beforeWrite}) async =>
+      events.remove(eventId);
 
   @override
   Future<List<CalendarEvent>> eventsInRange(

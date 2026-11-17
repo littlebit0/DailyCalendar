@@ -2,18 +2,56 @@ package com.littlebit0.dailycalendar
 
 import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodChannel
 
+internal enum class AlarmPermissionStep { RUNTIME_NOTIFICATION, NOTIFICATION_SETTINGS, EXACT_ALARM, FULL_SCREEN, AUTHORIZED, DENIED }
+
+/**
+ * Next step of one alarm authorization request. [attempted] remembers what this request already
+ * launched, so each screen opens at most once. Above API 32 the notification settings screen opens
+ * only when [openSettings] is set (the user turned an alarm on) and a runtime request cannot help:
+ * the permission is granted but the app or channel is muted, or the dialog is no longer shown.
+ */
+internal fun nextAlarmPermissionStep(
+    sdk: Int,
+    notificationsAllowed: Boolean,
+    permissionGranted: Boolean,
+    permissionBlocked: Boolean,
+    exactAllowed: Boolean,
+    fullScreenAllowed: Boolean,
+    openSettings: Boolean,
+    attempted: MutableSet<String>,
+): AlarmPermissionStep = when {
+    !notificationsAllowed && sdk >= 33 && !permissionGranted && attempted.add("notifications") -> AlarmPermissionStep.RUNTIME_NOTIFICATION
+    !notificationsAllowed && (sdk < 33 || (openSettings && (permissionGranted || permissionBlocked))) &&
+        attempted.add("notificationSettings") -> AlarmPermissionStep.NOTIFICATION_SETTINGS
+    !notificationsAllowed -> AlarmPermissionStep.DENIED
+    !exactAllowed && attempted.add("exact") -> AlarmPermissionStep.EXACT_ALARM
+    !exactAllowed -> AlarmPermissionStep.DENIED
+    !fullScreenAllowed && attempted.add("fullScreen") -> AlarmPermissionStep.FULL_SCREEN
+    else -> if (notificationsAllowed && exactAllowed && fullScreenAllowed) AlarmPermissionStep.AUTHORIZED else AlarmPermissionStep.DENIED
+}
+
 internal class DailyAlarmBridge(private val activity: FragmentActivity) {
     private var pending: MethodChannel.Result? = null
     private val attempted = mutableSetOf<String>()
-    private val permission = activity.registerForActivityResult(ActivityResultContracts.RequestPermission()) { nextPermission() }
+    private var openSettings = false
+    private var rationaleBeforeRequest = false
+    private var permissionBlocked = false
+    private val permission = activity.registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+        // No rationale before and after a refused request: the system did not ask (refused for good) or the dialog was dismissed.
+        permissionBlocked = !granted && !rationaleBeforeRequest && !showsNotificationRationale()
+        nextPermission()
+    }
     private val settings = activity.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { nextPermission() }
 
     fun register(messenger: BinaryMessenger) {
@@ -26,6 +64,8 @@ internal class DailyAlarmBridge(private val activity: FragmentActivity) {
                         check(pending == null) { "Alarm authorization is already in progress" }
                         pending = result
                         attempted.clear()
+                        openSettings = call.argument<Boolean>("openSettings") == true
+                        permissionBlocked = false
                         nextPermission()
                     }
                     "schedule", "reconcile" -> {
@@ -57,24 +97,53 @@ internal class DailyAlarmBridge(private val activity: FragmentActivity) {
     private fun nextPermission() {
         val result = pending ?: return
         try {
-            when {
-                !DailyAlarmScheduler.notificationsAllowed(activity) && attempted.add("notifications") -> {
-                    if (Build.VERSION.SDK_INT >= 33) permission.launch(Manifest.permission.POST_NOTIFICATIONS)
-                    else settings.launch(Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).putExtra(Settings.EXTRA_APP_PACKAGE, activity.packageName))
+            val step = nextAlarmPermissionStep(
+                Build.VERSION.SDK_INT,
+                DailyAlarmScheduler.notificationsAllowed(activity),
+                notificationPermissionGranted(),
+                permissionBlocked,
+                DailyAlarmScheduler.exactAllowed(activity),
+                DailyAlarmScheduler.fullScreenAllowed(activity),
+                openSettings,
+                attempted,
+            )
+            when (step) {
+                AlarmPermissionStep.RUNTIME_NOTIFICATION -> {
+                    rationaleBeforeRequest = showsNotificationRationale()
+                    permission.launch(Manifest.permission.POST_NOTIFICATIONS)
                 }
-                !DailyAlarmScheduler.notificationsAllowed(activity) -> complete("denied")
-                !DailyAlarmScheduler.exactAllowed(activity) && attempted.add("exact") -> settings.launch(
+                AlarmPermissionStep.NOTIFICATION_SETTINGS -> settings.launch(notificationSettingsIntent())
+                AlarmPermissionStep.EXACT_ALARM -> settings.launch(
                     Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM, Uri.parse("package:${activity.packageName}")),
                 )
-                !DailyAlarmScheduler.exactAllowed(activity) -> complete("denied")
-                !DailyAlarmScheduler.fullScreenAllowed(activity) && attempted.add("fullScreen") -> settings.launch(
+                AlarmPermissionStep.FULL_SCREEN -> settings.launch(
                     Intent(Settings.ACTION_MANAGE_APP_USE_FULL_SCREEN_INTENT, Uri.parse("package:${activity.packageName}")),
                 )
-                else -> complete(if (DailyAlarmScheduler.authorized(activity)) "authorized" else "denied")
+                AlarmPermissionStep.AUTHORIZED -> complete("authorized")
+                AlarmPermissionStep.DENIED -> complete("denied")
             }
         } catch (error: Exception) {
             pending = null
             result.error("alarm_permission_failed", error.message, null)
+        }
+    }
+
+    private fun notificationPermissionGranted() = Build.VERSION.SDK_INT < 33 ||
+        ContextCompat.checkSelfPermission(activity, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
+
+    private fun showsNotificationRationale() = Build.VERSION.SDK_INT >= 33 &&
+        ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.POST_NOTIFICATIONS)
+
+    /** The alarm channel screen when only that channel is muted, otherwise the app notification screen. */
+    private fun notificationSettingsIntent(): Intent {
+        val onlyChannelMuted = Build.VERSION.SDK_INT >= 26 && notificationPermissionGranted() &&
+            activity.getSystemService(android.app.NotificationManager::class.java).areNotificationsEnabled()
+        return if (onlyChannelMuted) {
+            Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS)
+                .putExtra(Settings.EXTRA_APP_PACKAGE, activity.packageName)
+                .putExtra(Settings.EXTRA_CHANNEL_ID, DailyAlarmScheduler.CHANNEL)
+        } else {
+            Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).putExtra(Settings.EXTRA_APP_PACKAGE, activity.packageName)
         }
     }
 
