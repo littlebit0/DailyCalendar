@@ -283,9 +283,14 @@ class CalendarWidgetSnapshotBuilder {
     // as the calendar shows it, not the first date of the series.
     CalendarEvent ddayTarget(CalendarEvent event, DateTime day) {
       if (!event.recurrence.isRepeating) return event;
-      // Widening windows: a daily series resolves in the first one, a yearly
-      // one (29 February included) within eight years.
-      for (final days in const [1, 31, 366, 366 * 8]) {
+      // Widening windows: a daily series resolves in the first one. The last
+      // one spans eight repeats of the longest period (a 29 February yearly
+      // rule needs up to eight years per interval), so an occurrence that is
+      // merely far away is not mistaken for an ended series.
+      final interval = event.recurrence.interval < 1
+          ? 1
+          : event.recurrence.interval;
+      for (final days in [1, 31, 366, 366 * 8 * interval]) {
         for (final occurrence in expander.expand(
           event,
           day,

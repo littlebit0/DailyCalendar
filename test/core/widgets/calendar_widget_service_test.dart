@@ -141,6 +141,21 @@ void main() {
       expect(after['daysRemaining'], 364);
     });
 
+    test('a long interval still counts down to its far occurrence', () {
+      final dday = ddayOf(
+        birthday.copyWith(
+          startAt: DateTime(2025, 12, 1),
+          endAt: DateTime(2025, 12, 2),
+          recurrence: const RecurrenceRule(
+            frequency: RecurrenceFrequency.yearly,
+            interval: 10,
+          ),
+        ),
+      );
+      expect(dday['dateLabel'], '2035.12.01');
+      expect(dday['daysRemaining'], greaterThan(3000));
+    });
+
     test('an excluded occurrence is skipped', () {
       final dday = ddayOf(
         birthday.copyWith(
