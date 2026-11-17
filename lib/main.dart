@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'app/daily_bootstrap.dart';
@@ -41,9 +42,23 @@ Future<Widget> _initializeApplication() async {
     ..installGlobalHandlers();
 
   final updates = AppUpdateService();
+  // Store platforms wait for the reviewed store release; others follow GitHub.
+  final source = updateSourceFor(defaultTargetPlatform);
   final requirement = UpdateRequirementController(
     preferences: preferences,
-    latestVersion: updates.latestReleaseVersion,
+    source: source,
+    latestVersion: switch (source) {
+      UpdateSource.appStore => () => updates.appStoreVersion(
+        mac: defaultTargetPlatform == TargetPlatform.macOS,
+        preferences: preferences,
+      ),
+      UpdateSource.play => playRequiredVersionCode,
+      UpdateSource.github => updates.latestReleaseVersion,
+    },
+    currentVersion: source == UpdateSource.play
+        ? () async => (await PackageInfo.fromPlatform()).buildNumber
+        : null,
+    isNewer: source == UpdateSource.play ? isNewerVersionCode : null,
     // Release builds only: a debug or test build is routinely older than the feed.
     enabled: !kDebugMode,
     onDetected: updates.checkAndInstallIfAvailable,

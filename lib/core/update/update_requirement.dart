@@ -20,20 +20,29 @@ class UpdateRequirementController {
     this.interval = const Duration(hours: 6),
     this.enabled = true,
     this.onDetected,
+    this.source = UpdateSource.github,
+    bool Function(String candidate, String current)? isNewer,
   }) : _preferences = preferences,
        _latestVersion = latestVersion,
        _currentVersion =
            currentVersion ??
            (() async => (await PackageInfo.fromPlatform()).version),
-       _now = now ?? DateTime.now;
+       _now = now ?? DateTime.now,
+       _isNewer = isNewer ?? isNewerVersion;
 
   static const requiredVersionKey = 'update.requiredVersion';
   static const lastCheckedKey = 'update.lastCheckedAtMs';
+  static const requiredSourceKey = 'update.requiredSource';
 
   final SharedPreferences _preferences;
   final Future<String?> Function() _latestVersion;
   final Future<String> Function() _currentVersion;
   final DateTime Function() _now;
+  final bool Function(String candidate, String current) _isNewer;
+
+  /// Which feed [requiredVersion] came from; values from another feed (such
+  /// as a GitHub tag stored by an older build) are dropped and re-checked.
+  final UpdateSource source;
   final Duration interval;
   final bool enabled;
 
@@ -111,7 +120,8 @@ class UpdateRequirementController {
       final latest = await _latestVersion();
       if (latest == null) return;
       await _preferences.setInt(lastCheckedKey, now.millisecondsSinceEpoch);
-      if (!isNewerVersion(latest, await _currentVersion())) return;
+      if (!_isNewer(latest, await _currentVersion())) return;
+      await _preferences.setString(requiredSourceKey, source.name);
       await _preferences.setString(requiredVersionKey, latest);
       requiredVersion.value = latest;
       await onDetected?.call();
@@ -127,11 +137,17 @@ class UpdateRequirementController {
       requiredVersion.value = null;
       return;
     }
-    if (isNewerVersion(stored, await _currentVersion())) {
+    final storedSource =
+        _preferences.getString(requiredSourceKey) ?? UpdateSource.github.name;
+    if (storedSource != source.name) {
+      // Check this platform's store now instead of waiting out the interval.
+      await _preferences.remove(lastCheckedKey);
+    } else if (_isNewer(stored, await _currentVersion())) {
       requiredVersion.value = stored;
       return;
     }
     await _preferences.remove(requiredVersionKey);
+    await _preferences.remove(requiredSourceKey);
     requiredVersion.value = null;
   }
 }
