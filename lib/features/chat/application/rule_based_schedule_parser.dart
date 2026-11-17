@@ -26,8 +26,9 @@ class RuleBasedScheduleParser implements ScheduleParser {
   static final _relativeMonthDayPattern = RegExp(
     r'(이번|다음)\s*달\s*(\d{1,2})\s*일',
   );
-  static final _nextWeekPattern = RegExp(r'다음\s*주');
-  static final _nextMonthPattern = RegExp(r'다음\s*달');
+  // Only as their own words: "다음 주제" and "다음 달리기" are titles.
+  static final _nextWeekPattern = RegExp(r'다음\s*주(?=\s|$|에|엔|부터|까지|중|[,，])');
+  static final _nextMonthPattern = RegExp(r'다음\s*달(?=\s|$|에|엔|부터|까지|중|[,，])');
   static final _hourReminderPattern = RegExp(r'(\d{1,2})\s*시간\s*전');
   static final _minuteReminderPattern = RegExp(r'(\d{1,3})\s*분\s*전');
 
@@ -97,6 +98,7 @@ class RuleBasedScheduleParser implements ScheduleParser {
       endDate: dateRange?.endDate,
       endTime: parsedEndTime,
       allDay: allDay,
+      startDayOffset: parsedTime?.dayOffset ?? 0,
     );
 
     return EventParseResult(
@@ -295,8 +297,12 @@ class RuleBasedScheduleParser implements ScheduleParser {
     final times = <_ParsedTime>[];
     String? previousMarker;
     for (final match in _timePattern.allMatches(input)) {
-      times.add(_parseTimeMatch(match, previousMarker));
-      previousMarker = match.group(1) ?? previousMarker;
+      final time = _parseTimeMatch(match, previousMarker);
+      times.add(time);
+      // What follows the midnight of "밤 12시" is the early morning.
+      previousMarker = time.dayOffset > 0
+          ? '오전'
+          : match.group(1) ?? previousMarker;
     }
     return times;
   }
@@ -335,6 +341,7 @@ class RuleBasedScheduleParser implements ScheduleParser {
     required DateTime? endDate,
     required _ParsedTime? endTime,
     required bool allDay,
+    int startDayOffset = 0,
   }) {
     if (endDate != null) {
       if (allDay) {
@@ -357,10 +364,12 @@ class RuleBasedScheduleParser implements ScheduleParser {
     }
 
     if (endTime != null) {
+      // Count from the typed date: a "밤 12시" start already moved [startAt]
+      // to the next day, and a "밤 12시" end belongs to the day after it.
       final endAt = DateTime(
         startAt.year,
         startAt.month,
-        startAt.day,
+        startAt.day - startDayOffset + endTime.dayOffset,
         endTime.hour,
         endTime.minute,
       );

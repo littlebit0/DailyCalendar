@@ -229,6 +229,15 @@ void main() {
       expect(until.startAt, DateTime(2026, 5, 11, 21));
       expect(until.endAt, DateTime(2026, 5, 12));
 
+      // Without an end date the midnight still belongs to the typed day.
+      final sameDay = (await parse('오늘 오전 12시부터 밤 12시 반까지 작업')).draft!;
+      expect(sameDay.startAt, DateTime(2026, 5, 11));
+      expect(sameDay.endAt, DateTime(2026, 5, 12, 0, 30));
+      // A midnight start is not shifted twice.
+      final fromMidnight = (await parse('오늘 밤 12시부터 2시까지 작업')).draft!;
+      expect(fromMidnight.startAt, DateTime(2026, 5, 12));
+      expect(fromMidnight.endAt, DateTime(2026, 5, 12, 2));
+
       // An explicit end date ends at its own midnight, a full day later.
       final dated = (await parse('5월 30일 오후 2시부터 5월 31일 밤 12시까지 작업')).draft!;
       expect(dated.startAt, DateTime(2026, 5, 30, 14));
@@ -244,6 +253,16 @@ void main() {
         (await parse('다음 주 화요일 회의')).draft!.startAt,
         DateTime(2026, 5, 19),
       );
+
+      // Title words that merely start with these syllables are not dates.
+      for (final text in ['오후 3시 다음 달리기 코스 검토', '오후 3시 다음 주제 정리']) {
+        final draft = (await parse(
+          text,
+          selected: DateTime(2026, 5, 20),
+        )).draft!;
+        expect(draft.startAt, DateTime(2026, 5, 20, 15), reason: text);
+      }
+      expect((await parse('다음 주에 회의')).question, contains('요일'));
     });
 
     test('"다음달 N일" and "이번 달 N일" resolve to that month', () async {
