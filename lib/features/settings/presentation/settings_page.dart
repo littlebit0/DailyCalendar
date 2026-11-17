@@ -1788,13 +1788,10 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       case AppLockMethod.noPin:
         return true;
       case AppLockMethod.appPin:
+        // Only reached when PIN lock is being turned on, so a PIN still in
+        // secure storage is a leftover (failed delete, restored keychain) the
+        // user may not know. Always ask for a new one (#915).
         final repository = ref.read(settingsRepositoryProvider);
-        if (await repository.appLockPinLength() != null) {
-          return true;
-        }
-        if (!mounted) {
-          return false;
-        }
         final pin = await _showPinSetupDialog(
           context: context,
           title: context.tr('앱 잠금 PIN 설정'),
