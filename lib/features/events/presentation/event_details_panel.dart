@@ -22,6 +22,7 @@ import '../../../core/theme/calendar_date_color.dart';
 import '../../../core/theme/daily_ui.dart';
 import '../../../core/weather/weather_widgets.dart';
 import '../../calendar/widgets/calendar_event_drag_layer.dart';
+import '../data/recurrence_expander.dart';
 import '../domain/calendar_event.dart';
 import '../domain/event_category.dart';
 import '../domain/event_draft.dart';
@@ -593,7 +594,19 @@ class EventDetailsPanel extends ConsumerWidget {
         case _RecurringChangeScope.onlyThis:
           await commandService.save(_excludeOccurrence(base, event.startAt));
         case _RecurringChangeScope.future:
-          await commandService.save(_endBefore(base, event.startAt));
+          final ended = _endBefore(base, event.startAt);
+          // Nothing before this occurrence (first one, or the earlier ones
+          // were excluded): a series without occurrences must not stay behind.
+          final remaining = RecurrenceExpander().expand(
+            ended,
+            base.startAt.subtract(const Duration(microseconds: 1)),
+            event.startAt,
+          );
+          if (remaining.isEmpty) {
+            await commandService.delete(event.id);
+          } else {
+            await commandService.save(ended);
+          }
         case _RecurringChangeScope.all:
           await commandService.delete(event.id);
       }
