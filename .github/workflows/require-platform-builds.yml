@@ -1,0 +1,45 @@
+name: Require Platform Builds
+
+# Release workflows call this first: a tag whose commit did not pass
+# Platform Builds must not produce installers or a draft release.
+on:
+  workflow_call:
+    inputs:
+      tag:
+        description: "Release tag to verify, for example v3.5.2"
+        required: true
+        type: string
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  verify:
+    name: Platform Builds passed for the tag
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check the latest Platform Builds run of the tag commit
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          RELEASE_TAG: ${{ inputs.tag }}
+        run: |
+          set -euo pipefail
+          sha="$(gh api "repos/$REPO/commits/tags/$RELEASE_TAG" --jq .sha)"
+          # The newest run decides, so a rerun or a manual run replaces an
+          # earlier failure.
+          latest="$(gh api "repos/$REPO/actions/workflows/platform-builds.yml/runs?head_sha=$sha&per_page=100" \
+            --jq '.workflow_runs | sort_by(.run_number) | last | select(. != null) | "\(.status) \(.conclusion) \(.html_url)"')"
+          if [[ -z "$latest" ]]; then
+            echo "No Platform Builds run exists for $RELEASE_TAG ($sha)." >&2
+            echo "Run the Platform Builds workflow on the tag (Actions > Platform Builds > Run workflow > $RELEASE_TAG), then start the release again." >&2
+            exit 1
+          fi
+          read -r status conclusion url <<< "$latest"
+          if [[ "$status" != "completed" || "$conclusion" != "success" ]]; then
+            echo "Platform Builds is '$status/$conclusion' for $RELEASE_TAG ($sha): $url" >&2
+            exit 1
+          fi
+          echo "Platform Builds passed for $RELEASE_TAG ($sha): $url"

@@ -47,6 +47,7 @@
 
 - [ ] 3.0.1 변경 사항 커밋 및 main push
 - [ ] `v3.0.1` 태그 생성 및 push
+- [ ] 태그 커밋의 Platform Builds 성공 확인. 성공이 아니면 Release Installers·Release Apple Installers가 첫 단계에서 멈춥니다. 실행 기록이 없는 태그는 Actions > Platform Builds > Run workflow에서 태그를 골라 먼저 실행합니다.
 - [ ] Release Installers workflow 4개 플랫폼 성공
 - [ ] 릴리스 본문이 `docs/RELEASE_NOTES_3.0.1.md`인지 확인
 - [ ] IPA, DMG, APK, ZIP 파일명과 체크섬 확인
