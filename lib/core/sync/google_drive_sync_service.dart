@@ -1009,7 +1009,7 @@ class GoogleDriveSyncService implements SyncService {
       return true;
     }
     if (error is GoogleDriveAuthException) {
-      return false;
+      return error.timedOut;
     }
     final text = error.toString().toLowerCase();
     return text.contains('network') ||
