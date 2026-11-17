@@ -964,13 +964,14 @@ class _AppHomeState extends ConsumerState<_AppHome>
             ...?event?.reminderMinutesBeforeList,
           }.toList(),
         );
-        await alarmService.cancelEventAlarm(change.eventId);
         if (event != null && !event.isDeleted) {
           await notificationService.scheduleEventReminder(
             event,
             allowImmediate: true,
           );
           await alarmService.scheduleEventAlarm(event);
+        } else {
+          await alarmService.cancelEventAlarm(change.eventId);
         }
       }
       await ref.read(calendarWidgetServiceProvider).refresh();

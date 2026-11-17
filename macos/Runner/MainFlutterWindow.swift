@@ -419,10 +419,21 @@ private final class DailyMacAlarms {
           )
         ))
       }
-      let stale = Set(existing.map(\.identifier) + [legacyIdentifier]).subtracting(keep)
-      center.removePendingNotificationRequests(withIdentifiers: Array(stale))
-      center.removeDeliveredNotifications(withIdentifiers: Array(stale))
-      guard !additions.isEmpty else { finish(result, value: !keep.isEmpty); return }
+      // Adding a request replaces the pending one of the same identifier. The
+      // other previous requests are removed only after every new one is
+      // added, so a failed add keeps them (#924).
+      let stale = Set(existing.map(\.identifier) + [legacyIdentifier])
+        .subtracting(keep)
+        .subtracting(additions.map(\.identifier))
+      let removeStale = {
+        center.removePendingNotificationRequests(withIdentifiers: Array(stale))
+        center.removeDeliveredNotifications(withIdentifiers: Array(stale))
+      }
+      guard !additions.isEmpty else {
+        removeStale()
+        finish(result, value: !keep.isEmpty)
+        return
+      }
       let group = DispatchGroup()
       var failure: Error?
       for request in additions {
@@ -433,6 +444,7 @@ private final class DailyMacAlarms {
         }
       }
       group.notify(queue: .main) {
+        if failure == nil { removeStale() }
         finish(result, error: failure, value: true)
       }
     }
