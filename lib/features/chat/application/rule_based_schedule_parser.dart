@@ -366,14 +366,18 @@ class RuleBasedScheduleParser implements ScheduleParser {
     if (endTime != null) {
       // Count from the typed date: a "밤 12시" start already moved [startAt]
       // to the next day, and a "밤 12시" end belongs to the day after it.
-      final endAt = DateTime(
+      var endAt = DateTime(
         startAt.year,
         startAt.month,
         startAt.day - startDayOffset + endTime.dayOffset,
         endTime.hour,
         endTime.minute,
       );
-      return endAt.isAfter(startAt) ? endAt : shiftCalendarDateByDays(endAt, 1);
+      // After a midnight start one day may not be enough to pass the start.
+      while (!endAt.isAfter(startAt)) {
+        endAt = shiftCalendarDateByDays(endAt, 1);
+      }
+      return endAt;
     }
 
     return allDay

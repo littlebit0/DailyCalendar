@@ -238,6 +238,11 @@ void main() {
       expect(fromMidnight.startAt, DateTime(2026, 5, 12));
       expect(fromMidnight.endAt, DateTime(2026, 5, 12, 2));
 
+      // The end always lands after a start that midnight moved a day on.
+      final wrapped = (await parse('오늘 밤 12시 30분부터 오전 12시 15분까지 작업')).draft!;
+      expect(wrapped.startAt, DateTime(2026, 5, 12, 0, 30));
+      expect(wrapped.endAt, DateTime(2026, 5, 13, 0, 15));
+
       // An explicit end date ends at its own midnight, a full day later.
       final dated = (await parse('5월 30일 오후 2시부터 5월 31일 밤 12시까지 작업')).draft!;
       expect(dated.startAt, DateTime(2026, 5, 30, 14));
