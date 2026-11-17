@@ -18,9 +18,16 @@ class RuleBasedScheduleParser implements ScheduleParser {
   static final _durationNightsPattern = RegExp(
     r'(\d{1,2})\s*박\s*(\d{1,2})\s*일',
   );
+  // "반" (half past) counts only as its own word, not as the start of a title
+  // such as "반상회".
   static final _timePattern = RegExp(
-    r'(오전|오후|아침|점심|저녁|밤)?\s*(\d{1,2})(?:\s*시(?!간)|:)(?:\s*(\d{1,2})\s*분?)?',
+    r'(오전|오후|아침|점심|저녁|밤)?\s*(\d{1,2})(?:\s*시(?!간)|:)(?:\s*(\d{1,2})\s*분?|\s*(반)(?=\s|$|에|부터|까지|[,，~-]))?',
   );
+  static final _relativeMonthDayPattern = RegExp(
+    r'(이번|다음)\s*달\s*(\d{1,2})\s*일',
+  );
+  static final _nextWeekPattern = RegExp(r'다음\s*주');
+  static final _nextMonthPattern = RegExp(r'다음\s*달');
   static final _hourReminderPattern = RegExp(r'(\d{1,2})\s*시간\s*전');
   static final _minuteReminderPattern = RegExp(r'(\d{1,3})\s*분\s*전');
 
@@ -81,7 +88,7 @@ class RuleBasedScheduleParser implements ScheduleParser {
         : DateTime(
             date.year,
             date.month,
-            date.day,
+            date.day + parsedTime.dayOffset,
             parsedTime.hour,
             parsedTime.minute,
           );
@@ -204,6 +211,18 @@ class RuleBasedScheduleParser implements ScheduleParser {
       return _resolveMonthDay(month, day, today);
     }
 
+    final relativeMonthDay = _relativeMonthDayPattern.firstMatch(input);
+    if (relativeMonthDay != null) {
+      final offset = relativeMonthDay.group(1) == '다음' ? 1 : 0;
+      final day = int.parse(relativeMonthDay.group(2)!);
+      // DateTime normalizes month 13 to January of the next year.
+      final month = DateTime(today.year, today.month + offset);
+      return _exactDate(month.year, month.month, day) ??
+          (throw _InvalidScheduleInput(
+            '${month.month}월 $day일은 올바른 날짜가 아닙니다. 날짜를 확인해 주세요.',
+          ));
+    }
+
     final weekday = _parseWeekday(input);
     if (weekday != null) {
       final startOfWeek = shiftCalendarDateByDays(today, 1 - today.weekday);
@@ -216,6 +235,14 @@ class RuleBasedScheduleParser implements ScheduleParser {
         return shiftCalendarDateByDays(candidate, 7);
       }
       return candidate;
+    }
+
+    // Without a day these would silently fall back to today.
+    if (_nextWeekPattern.hasMatch(input)) {
+      throw const _InvalidScheduleInput('다음 주 무슨 요일인지 알려 주세요. 예: 다음 주 화요일');
+    }
+    if (_nextMonthPattern.hasMatch(input)) {
+      throw const _InvalidScheduleInput('다음 달 며칠인지 알려 주세요. 예: 다음 달 15일');
     }
 
     if (selectedDate != null) {
@@ -277,7 +304,8 @@ class RuleBasedScheduleParser implements ScheduleParser {
   _ParsedTime _parseTimeMatch(RegExpMatch match, String? fallbackMarker) {
     final marker = match.group(1) ?? fallbackMarker;
     var hour = int.parse(match.group(2)!);
-    final minute = int.tryParse(match.group(3) ?? '') ?? 0;
+    final minute =
+        int.tryParse(match.group(3) ?? '') ?? (match.group(4) == null ? 0 : 30);
 
     final isPm =
         marker == '오후' || marker == '저녁' || marker == '밤' || marker == '점심';
@@ -289,12 +317,17 @@ class RuleBasedScheduleParser implements ScheduleParser {
     if (isAm && hour == 12) {
       hour = 0;
     }
+    // "밤 12시" is midnight at the end of that day, not noon.
+    final endOfDay = marker == '밤' && hour == 12;
+    if (endOfDay) {
+      hour = 0;
+    }
     if (hour > 23 || minute > 59) {
       throw _InvalidScheduleInput(
         '${match.group(0)!.trim()}은 올바른 시각이 아닙니다. 시각을 확인해 주세요.',
       );
     }
-    return _ParsedTime(hour, minute);
+    return _ParsedTime(hour, minute, dayOffset: endOfDay ? 1 : 0);
   }
 
   DateTime _resolveEndAt({
@@ -391,6 +424,7 @@ class RuleBasedScheduleParser implements ScheduleParser {
       _durationNightsPattern,
       _durationDaysPattern,
       _monthDayPattern,
+      _relativeMonthDayPattern,
       // Reminders first: otherwise the time pattern eats the "20분" of "20분 전".
       _hourReminderPattern,
       _minuteReminderPattern,
@@ -416,10 +450,13 @@ class _InvalidScheduleInput implements Exception {
 }
 
 class _ParsedTime {
-  const _ParsedTime(this.hour, this.minute);
+  const _ParsedTime(this.hour, this.minute, {this.dayOffset = 0});
 
   final int hour;
   final int minute;
+
+  /// Days after the typed date: 1 for "밤 12시".
+  final int dayOffset;
 }
 
 class _ParsedDateRange {
