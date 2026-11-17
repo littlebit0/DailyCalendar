@@ -232,7 +232,7 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
         showEventSidebar &&
         !(viewMode == CalendarViewMode.day && !showScheduleDaySidebar);
 
-    return Scaffold(
+    final page = Scaffold(
       key: _scaffoldKey,
       body: Listener(
         key: const ValueKey('calendar-page-pointer-listener'),
@@ -527,6 +527,22 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
           ),
         ),
       ),
+    );
+    // The search and AI panels are state, not routes: without this the system
+    // back button pops the root route and leaves the app (#965).
+    return ValueListenableBuilder<bool>(
+      valueListenable: _aiOpen,
+      builder: (context, aiOpen, child) => PopScope(
+        canPop: !_searchOpen && !aiOpen,
+        onPopInvokedWithResult: (didPop, _) {
+          if (!didPop) {
+            _closeSearch();
+            _closeAiPanel();
+          }
+        },
+        child: child!,
+      ),
+      child: page,
     );
   }
 
