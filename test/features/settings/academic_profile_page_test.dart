@@ -813,12 +813,16 @@ void main() {
                       as RenderRepaintBoundary)
                   .toImage();
           final png = await image.toByteData(format: ui.ImageByteFormat.png);
-          final captureDirectory = await Directory.systemTemp.createTemp(
-            'daily-ui-audit-',
-          );
-          await File(
-            '${captureDirectory.path}/profile-${dark ? 'dark' : 'light'}.png',
-          ).writeAsBytes(png!.buffer.asUint8List());
+          // 로컬 시각 확인용 PNG는 LMS 설정 테스트처럼 요청할 때만 남긴다.
+          if (Platform.environment['DAILY_PROFILE_UI_AUDIT'] == '1') {
+            final captureDirectory = await Directory.systemTemp.createTemp(
+              'daily-ui-audit-',
+            );
+            await File(
+              '${captureDirectory.path}/profile-${dark ? 'dark' : 'light'}.png',
+            ).writeAsBytes(png!.buffer.asUint8List());
+          }
+          expect(png, isNotNull);
           image.dispose();
         });
         await save(tester);

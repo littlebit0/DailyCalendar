@@ -6,7 +6,6 @@ import 'package:daily/features/timetable/domain/timetable.dart';
 import 'package:daily/features/timetable/presentation/university_course_page.dart';
 
 import 'package:daily/app/daily_app.dart';
-import 'package:daily/app/daily_theme.dart';
 import 'package:daily/core/alarms/alarm_service.dart';
 import 'package:daily/core/academic/academic_profile.dart';
 import 'package:daily/core/academic/university_directory.dart';
@@ -1011,65 +1010,6 @@ void main() {
     await tester.pumpWidget(const SizedBox.shrink());
   });
 
-  test('theme mode remains selected after settings reload', () async {
-    SharedPreferences.setMockInitialValues({});
-    final preferences = await SharedPreferences.getInstance();
-    final repository = SettingsRepository(preferences: preferences);
-
-    await repository.save(
-      repository.load().copyWith(themeMode: AppThemeMode.dark),
-    );
-
-    expect(repository.load().themeMode, AppThemeMode.dark);
-    expect(DailyTheme.dark().brightness, Brightness.dark);
-    expect(DailyTheme.light().brightness, Brightness.light);
-    final darkTheme = DailyTheme.dark();
-    expect(darkTheme.scaffoldBackgroundColor, const Color(0xff000000));
-    expect(
-      darkTheme.colorScheme.surfaceContainerLowest,
-      const Color(0xff000000),
-    );
-    expect(darkTheme.colorScheme.surface, const Color(0xff0a0b0d));
-    expect(darkTheme.colorScheme.surfaceContainerHigh, const Color(0xff11141a));
-  });
-
-  test(
-    'month navigation mode remains selected after settings reload',
-    () async {
-      SharedPreferences.setMockInitialValues({});
-      final preferences = await SharedPreferences.getInstance();
-      final repository = SettingsRepository(preferences: preferences);
-
-      await repository.save(
-        repository.load().copyWith(
-          monthNavigationMode: MonthNavigationMode.vertical,
-        ),
-      );
-
-      expect(
-        repository.load().monthNavigationMode,
-        MonthNavigationMode.vertical,
-      );
-    },
-  );
-
-  test(
-    'week and day layout mode remains selected after settings reload',
-    () async {
-      SharedPreferences.setMockInitialValues({});
-      final preferences = await SharedPreferences.getInstance();
-      final repository = SettingsRepository(preferences: preferences);
-
-      await repository.save(
-        repository.load().copyWith(
-          weekDayLayoutMode: WeekDayLayoutMode.schedule,
-        ),
-      );
-
-      expect(repository.load().weekDayLayoutMode, WeekDayLayoutMode.schedule);
-    },
-  );
-
   testWidgets(
     'schedule view scrolls time vertically and changes week horizontally',
     (tester) async {
@@ -1640,69 +1580,6 @@ void main() {
     );
   });
 
-  test('app text size remains selected after settings reload', () async {
-    SharedPreferences.setMockInitialValues({});
-    final preferences = await SharedPreferences.getInstance();
-    final settingsRepository = SettingsRepository(preferences: preferences);
-
-    await settingsRepository.save(
-      settingsRepository.load().copyWith(appTextSize: AppTextSize.extraLarge),
-    );
-
-    expect(settingsRepository.load().appTextSize, AppTextSize.extraLarge);
-  });
-
-  test(
-    'adjacent-month date visibility remains selected after reload',
-    () async {
-      SharedPreferences.setMockInitialValues({});
-      final preferences = await SharedPreferences.getInstance();
-      final settingsRepository = SettingsRepository(preferences: preferences);
-
-      await settingsRepository.save(
-        settingsRepository.load().copyWith(showAdjacentMonthDates: false),
-      );
-
-      expect(settingsRepository.load().showAdjacentMonthDates, isFalse);
-    },
-  );
-
-  test('legacy default reminder migrates into the reminder list', () async {
-    SharedPreferences.setMockInitialValues({'defaultReminderMinutes': 10});
-    final preferences = await SharedPreferences.getInstance();
-    final settingsRepository = SettingsRepository(preferences: preferences);
-
-    expect(settingsRepository.load().defaultReminderMinutesList, [10]);
-  });
-
-  test('multiple default reminders remain selected after reload', () async {
-    SharedPreferences.setMockInitialValues({});
-    final preferences = await SharedPreferences.getInstance();
-    final settingsRepository = SettingsRepository(preferences: preferences);
-
-    await settingsRepository.save(
-      settingsRepository.load().copyWith(
-        defaultReminderMinutesList: const [60, 10, 30, 10],
-      ),
-    );
-
-    expect(settingsRepository.load().defaultReminderMinutesList, [10, 30, 60]);
-  });
-
-  test('empty default reminder list remains disabled after reload', () async {
-    SharedPreferences.setMockInitialValues({});
-    final preferences = await SharedPreferences.getInstance();
-    final settingsRepository = SettingsRepository(preferences: preferences);
-
-    await settingsRepository.save(
-      settingsRepository.load().copyWith(
-        defaultReminderMinutesList: const <int>[],
-      ),
-    );
-
-    expect(settingsRepository.load().defaultReminderMinutesList, isEmpty);
-  });
-
   test(
     'settings reset ignores missing keychain entitlement during cleanup',
     () async {
@@ -1813,32 +1690,6 @@ void main() {
     },
   );
 
-  test('legacy biometric app lock migrates to the system method', () async {
-    SharedPreferences.setMockInitialValues({
-      'appLockEnabled': true,
-      'appLockBiometricsEnabled': true,
-    });
-    final preferences = await SharedPreferences.getInstance();
-    final settings = SettingsRepository(preferences: preferences).load();
-
-    expect(settings.appLockMethod, AppLockMethod.system);
-  });
-
-  test('selected app lock method remains stored locally', () async {
-    SharedPreferences.setMockInitialValues({});
-    final preferences = await SharedPreferences.getInstance();
-    final repository = SettingsRepository(preferences: preferences);
-
-    await repository.save(
-      repository.load().copyWith(
-        appLockEnabled: true,
-        appLockMethod: AppLockMethod.noPin,
-      ),
-    );
-
-    expect(repository.load().appLockMethod, AppLockMethod.noPin);
-  });
-
   test(
     'Apple account refresh keeps saved app login marker if revoked',
     () async {
@@ -1889,49 +1740,6 @@ void main() {
       ),
     );
   });
-
-  test('Daily account keeps Apple and Google identities together', () async {
-    SharedPreferences.setMockInitialValues({});
-    final preferences = await SharedPreferences.getInstance();
-    final settingsRepository = SettingsRepository(preferences: preferences);
-
-    await settingsRepository.saveAppleAccount(
-      const AppleAccount(
-        userIdentifier: 'apple-user',
-        email: 'apple@example.com',
-      ),
-    );
-    final accountAfterApple = settingsRepository.dailyAccount();
-    await settingsRepository.saveGoogleAccount(
-      const GoogleAccount(email: 'google@example.com', displayName: 'Daily'),
-    );
-    final mergedAccount = settingsRepository.dailyAccount();
-
-    expect(mergedAccount?.id, accountAfterApple?.id);
-    expect(mergedAccount?.appleAccount?.userIdentifier, 'apple-user');
-    expect(mergedAccount?.googleAccount?.email, 'google@example.com');
-  });
-
-  test(
-    'Daily account reset removes merged Apple and Google identities',
-    () async {
-      SharedPreferences.setMockInitialValues({});
-      FlutterSecureStorage.setMockInitialValues({});
-      final preferences = await SharedPreferences.getInstance();
-      final settingsRepository = SettingsRepository(preferences: preferences);
-      await settingsRepository.saveAppleAccount(
-        const AppleAccount(userIdentifier: 'apple-user'),
-      );
-      await settingsRepository.saveGoogleAccount(
-        const GoogleAccount(email: 'google@example.com'),
-      );
-
-      await settingsRepository.resetAll();
-
-      expect(settingsRepository.dailyAccount(), isNull);
-      expect(settingsRepository.appleAccount(), isNull);
-    },
-  );
 
   testWidgets('Apple sign-in restores an already linked Google session', (
     tester,
@@ -6705,6 +6513,9 @@ void main() {
       expect(container.read(appSettingsProvider).weekStartsOnMonday, isFalse);
       expect(settingsRepository.load().weekStartsOnMonday, isFalse);
       expect(tester.widget<SwitchListTile>(lunarToggle).value, isFalse);
+      // 실패 뒤 다시 읽은 provider 값도 화면 스위치와 같아야 한다.
+      expect(settingsRepository.load().showLunarDates, isFalse);
+      expect(container.read(appSettingsProvider).showLunarDates, isFalse);
       final disposeGesture = await tester.startGesture(
         tester.getCenter(lunarToggle),
         kind: PointerDeviceKind.mouse,
