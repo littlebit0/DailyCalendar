@@ -3,6 +3,7 @@
     <string name="event_alarm">Event alarm</string>
     <string name="alarm_stop">Stop</string>
     <string name="alarm_snooze">Snooze %1$d minutes</string>
+    <string name="alarm_missed">Missed alarm · %1$s</string>
     <string name="app_name">DailyCalendar</string>
     <string name="widget_month_description">DailyCalendar monthly calendar</string>
     <string name="widget_today_description">DailyCalendar today schedule</string>

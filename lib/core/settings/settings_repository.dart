@@ -72,6 +72,20 @@ class SettingsRepository {
     }
   }
 
+  static const _deviceSecretCleanupPendingKey = 'deviceSecretCleanupPending.v1';
+
+  /// Set while a logout or reset could not yet delete the saved school logins
+  /// or the Siri activity log. It survives [resetAll] so the next app start
+  /// can try again.
+  bool get deviceSecretCleanupPending =>
+      _preferences.getBool(_deviceSecretCleanupPendingKey) ?? false;
+
+  Future<void> setDeviceSecretCleanupPending(bool pending) => _persist(
+    pending
+        ? _preferences.setBool(_deviceSecretCleanupPendingKey, true)
+        : _preferences.remove(_deviceSecretCleanupPendingKey),
+  );
+
   static const _notificationIdsKey = 'notificationIds.v2';
   static final _notificationIdTails = Expando<Future<void>>();
 
@@ -550,6 +564,19 @@ class SettingsRepository {
       ),
     );
   }
+
+  /// Applies [update] to the latest stored settings inside the settings queue.
+  /// A caller that waited (dialog, drag, save) with an older snapshot uses this
+  /// so values merged or imported meanwhile are not written back as removed.
+  Future<void> updateLatest(AppSettings Function(AppSettings latest) update) =>
+      _enqueueSettingsMutation(() async {
+        final latest = load();
+        await _saveSettings(
+          update(latest),
+          markSyncPending: true,
+          changedFrom: latest,
+        );
+      });
 
   /// Adds [category] to the latest list inside the settings queue unless its
   /// id already exists, so a concurrent category edit is never overwritten by
@@ -1678,6 +1705,15 @@ class SettingsRepository {
     await _preferences.remove(_settingsSyncDocumentKey);
     await clearDriveChangePageToken();
     await _preferences.remove(_deviceIdKey);
+    await _preferences.remove(_eventFollowUpKey);
+    // Per-account LMS check times (`daily.lms.lastSuccess`, `learningChecked`).
+    for (final key in _preferences.getKeys().toList()) {
+      if (key.startsWith('daily.lms.')) await _preferences.remove(key);
+    }
+    // An unfinished notification cleanup still looks its ids up here.
+    if (notificationCleanupJournal == null) {
+      await _preferences.remove(_notificationIdsKey);
+    }
     await deleteDailyAccount();
     await deleteGeminiApiKey();
     await deleteAppLockPin();

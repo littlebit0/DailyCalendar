@@ -95,8 +95,13 @@ class InhaAcademicSource implements AcademicSource {
           continue;
         }
         final identity = '${start.toIso8601String()}:$title';
-        if (events.containsKey(identity)) {
-          throw const FormatException('Duplicate INHA event');
+        final previous = events[identity];
+        if (previous != null) {
+          // The same row listed twice is one event; a differing one is not.
+          if (previous.end != end) {
+            throw const FormatException('Duplicate INHA event');
+          }
+          continue;
         }
         events[identity] = AcademicEvent(
           sourceId: identity,

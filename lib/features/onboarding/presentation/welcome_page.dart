@@ -10,6 +10,8 @@ import '../../settings/presentation/academic_profile_page.dart';
 import '../../../core/di/app_providers.dart';
 import '../../../core/localization/app_localizations.dart';
 import '../../../core/siri/siri_shortcut_installer.dart';
+import '../../../core/support/error_report_service.dart';
+import '../../../core/sync/google_drive_auth_service.dart';
 import '../../../core/theme/daily_ui.dart';
 import 'analytics_consent_page.dart';
 import '../feature_announcements.dart';
@@ -238,7 +240,7 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
             if (_message.isNotEmpty) ...[
               const SizedBox(height: 12),
               Text(
-                _message,
+                context.tr(_message),
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   color: DailyUi.destructive,
@@ -303,7 +305,7 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
             if (_message.isNotEmpty) ...[
               const SizedBox(height: 12),
               Text(
-                _message,
+                context.tr(_message),
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   color: DailyUi.destructive,
@@ -382,7 +384,7 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
             if (_message.isNotEmpty) ...[
               const SizedBox(height: 12),
               Text(
-                _message,
+                context.tr(_message),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: DailyUi.secondaryText(context),
@@ -423,13 +425,13 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
       await ref.read(notificationServiceProvider).initialize();
       await ref.read(alarmServiceProvider).requestAuthorization();
       if (mounted) _advance();
-    } on Object catch (error) {
+    } on Object catch (error, stack) {
+      _report(error, stack);
       if (mounted) {
         setState(() {
           _busyAction = null;
           _message = context.tr(
-            '권한 설정을 완료하지 못했습니다. 나중에 설정에서 다시 시도할 수 있습니다. ({error})',
-            args: {'error': error},
+            '권한 설정을 완료하지 못했습니다. 나중에 설정에서 다시 시도할 수 있습니다.',
           );
         });
       }
@@ -462,14 +464,13 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
             : 'Apple 로그인이 완료되었습니다.';
       });
       await _completeOnboarding(offerProfile: !restoredGoogleSync);
-    } on AppleSignInException catch (error) {
+    } on AppleSignInException catch (error, stack) {
+      if (error.cause case final cause?) _report(cause, stack);
       if (mounted) {
         setState(() => _message = error.message);
       }
-    } on Object catch (error) {
-      if (mounted) {
-        setState(() => _message = '$error');
-      }
+    } on Object catch (error, stack) {
+      _showFailure(error, stack);
     } finally {
       if (mounted) {
         setState(() => _busyAction = null);
@@ -488,6 +489,9 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
         if (!mounted) return;
         await _completeOnboarding(offerProfile: false);
       }
+    } on Object catch (error, stack) {
+      // The Google account stays connected; pressing the button again retries.
+      _showFailure(error, stack);
     } finally {
       if (mounted) {
         setState(() => _busyAction = null);
@@ -528,14 +532,22 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
       ref.read(onboardingRestoreOwnerProvider.notifier).state = account.email;
 
       return true;
-    } on UnsupportedError catch (error) {
-      if (mounted && _isCurrentGoogleDriveAttempt(attempt)) {
-        setState(() => _message = error.message ?? '$error');
+    } on GoogleDriveAuthException catch (error) {
+      // Written for the user, unlike the exceptions below.
+      if (_isCurrentGoogleDriveAttempt(attempt)) {
+        setState(() => _message = error.message);
       }
-    } on Object catch (error) {
-      if (mounted && _isCurrentGoogleDriveAttempt(attempt)) {
-        setState(() => _message = '$error');
+    } on UnsupportedError catch (error, stack) {
+      if (_isCurrentGoogleDriveAttempt(attempt)) {
+        final message = error.message;
+        if (message == null) {
+          _showFailure(error, stack);
+        } else {
+          setState(() => _message = message);
+        }
       }
+    } on Object catch (error, stack) {
+      if (_isCurrentGoogleDriveAttempt(attempt)) _showFailure(error, stack);
     }
     return false;
   }
@@ -600,15 +612,34 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
     });
     try {
       await _completeOnboarding();
-    } on Object catch (error) {
-      if (mounted) {
-        setState(() => _message = '$error');
-      }
+    } on Object catch (error, stack) {
+      _showFailure(error, stack);
     } finally {
       if (mounted) {
         setState(() => _busyAction = null);
       }
     }
+  }
+
+  /// Shows a translated notice; the exception text only goes to the report.
+  void _showFailure(Object error, StackTrace stack) {
+    if (!mounted) return;
+    _report(error, stack);
+    setState(() {
+      _message = context.tr('요청을 완료하지 못했습니다. 잠시 후 다시 시도해 주세요.');
+    });
+  }
+
+  void _report(Object error, StackTrace stack) {
+    if (!mounted) return;
+    ref
+        .read(errorReportServiceProvider)
+        ?.record(
+          error,
+          stack,
+          feature: 'onboarding',
+          severity: ErrorReportSeverity.nonFatal,
+        );
   }
 
   Future<void> _completeOnboarding({bool offerProfile = true}) async {

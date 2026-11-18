@@ -129,15 +129,24 @@ class DailyAndroidParityTest {
         assertNull(shadowOf(RuntimeEnvironment.getApplication()).nextStartedService)
     }
 
-    @Test fun restoringAfterBootKeepsFutureAlarmsAndRemovesExpiredOnes() {
-        val alarm = DailyAlarm("future", "Event", "", System.currentTimeMillis() + 60_000, 10)
+    @Test fun restoringAfterBootKeepsFutureAlarmsShowsRecentOnesAsMissedAndRemovesOldOnes() {
+        val now = System.currentTimeMillis()
+        val alarm = DailyAlarm("future", "Event", "", now + 60_000, 10)
         DailyAlarmScheduler.schedule(context, alarm)
+        val recent = alarm.copy(eventId = "recent", fireAt = now - 5 * 60_000, id = "recent")
         context.getSharedPreferences("daily_event_alarms", Context.MODE_PRIVATE).edit()
-            .putString("expired", alarm.copy(eventId = "expired", fireAt = 1L, id = "expired").json()).commit()
+            .putString("expired", alarm.copy(eventId = "expired", fireAt = 1L, id = "expired").json())
+            .putString("recent", recent.json()).commit()
         DailyAlarmScheduler.restore(context)
         assertEquals(alarm, DailyAlarmScheduler.read(context, alarm.id))
         assertNull(DailyAlarmScheduler.read(context, "expired"))
+        assertNull(DailyAlarmScheduler.read(context, "recent"))
         assertEquals(1, shadowOf(context.getSystemService(AlarmManager::class.java)).scheduledAlarms.size)
+        val notifications = shadowOf(context.getSystemService(NotificationManager::class.java))
+        assertNotNull(notifications.getNotification("recent", DailyAlarmScheduler.MISSED_NOTIFICATION_ID))
+        assertNull(notifications.getNotification("expired", DailyAlarmScheduler.MISSED_NOTIFICATION_ID))
+        // A missed alarm is shown, not rung.
+        assertNull(shadowOf(RuntimeEnvironment.getApplication()).nextStartedService)
     }
 
     @Test fun todayWidgetPreservesStoredCategoryAndPaintsReadableTitleInBothThemes() {

@@ -1,0 +1,3 @@
+"NSLocationUsageDescription" = "近くの地域の気象庁予報を表示するため、おおよその位置を使用します。位置情報を許可せずに地域を選択することもできます。";
+"NSMicrophoneUsageDescription" = "Signalにカレンダー操作を話すときだけマイクを使用します。";
+"NSSpeechRecognitionUsageDescription" = "Signalに話したカレンダー操作を実行するため、音声をテキストに変換します。";
