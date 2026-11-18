@@ -449,14 +449,9 @@ class SettingsRepository {
   static const _appLockPinLengthKey = 'appLockPinLength';
 
   AppSettings load() {
-    final rawProfile = _preferences.getString(_academicProfileKey);
     final lock = _loadLockConfiguration();
     return AppSettings(
-      academicProfile: rawProfile != null
-          ? AcademicProfile.fromJson(
-              Map<String, Object?>.from(jsonDecode(rawProfile) as Map),
-            )
-          : null,
+      academicProfile: _loadAcademicProfile(),
       defaultReminderMinutesList: _loadDefaultReminderMinutes(),
       allDayReminderHour: _preferences.getInt(_allDayReminderHourKey) ?? 9,
       allDayReminderMinute: _preferences.getInt(_allDayReminderMinuteKey) ?? 0,
@@ -510,6 +505,21 @@ class SettingsRepository {
       ),
       language: AppLanguage.fromName(_preferences.getString(_languageKey)),
     );
+  }
+
+  /// A stored value this version cannot read (newer `schoolKind`, damaged
+  /// JSON) must not block startup. The raw value stays stored for a version
+  /// that can read it; it is replaced only when the user saves a profile.
+  AcademicProfile? _loadAcademicProfile() {
+    try {
+      final raw = _preferences.get(_academicProfileKey);
+      if (raw is! String) return null;
+      return AcademicProfile.fromJson(
+        Map<String, Object?>.from(jsonDecode(raw) as Map),
+      );
+    } on Object {
+      return null;
+    }
   }
 
   ({bool enabled, bool biometrics, AppLockMethod method})
