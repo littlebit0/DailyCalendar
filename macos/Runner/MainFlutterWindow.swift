@@ -1153,13 +1153,32 @@ private final class DailyPasswordInputBridge {
   }
 }
 
+// BEGIN LMS COOKIE BIND REGISTRY
+// A bind answered after Daily gave up on it (a newer bind or a clear came
+// first) must not replace the current store.
+struct DailyLmsBindRegistry<Store> {
+  private var generation = 0
+  private var stores: [String: Store] = [:]
+  mutating func begin() -> Int {
+    generation += 1
+    return generation
+  }
+  /// Registers the store only for the latest bind.
+  mutating func finish(_ bind: Int, store: Store, host: String) -> Bool {
+    guard bind == generation else { return false }
+    stores[host] = store
+    return true
+  }
+  mutating func supersedeBinds() { generation += 1 }
+  func store(host: String) -> Store? { stores[host] }
+  mutating func remove(host: String) { stores.removeValue(forKey: host) }
+}
+// END LMS COOKIE BIND REGISTRY
+
 // The school browser uses a nonpersistent WKWebsiteDataStore. This channel is
 // callable only by Daily, never exposed as a JavaScript message handler.
 private final class DailyLmsCookieStore {
-  private static var stores: [String: WKWebsiteDataStore] = [:]
-  // A bind answered after Daily gave up on it (a newer bind or a clear came
-  // first) must not replace the current store.
-  private static var bindGeneration = 0
+  private static var registry = DailyLmsBindRegistry<WKWebsiteDataStore>()
   // BEGIN LMS COOKIE READ POLICY
   private static let hosts: Set<String> = [
     "ecampus.smu.ac.kr", "sel.jnu.ac.kr", "ecampus.changwon.ac.kr", "lms.jnue.kr",
@@ -1198,8 +1217,7 @@ private final class DailyLmsCookieStore {
         guard !candidates.isEmpty else {
           result(FlutterError(code: "school_view_missing", message: nil, details: nil)); return
         }
-        bindGeneration += 1
-        let generation = bindGeneration
+        let bind = registry.begin()
         let group = DispatchGroup()
         var matches: [WKWebsiteDataStore] = []
         var scriptFailures = 0
@@ -1220,16 +1238,15 @@ private final class DailyLmsCookieStore {
               : scriptFailures > 0 ? "school_script_unavailable" : "school_marker_missing"
             result(FlutterError(code: code, message: nil, details: nil)); return
           }
-          guard generation == bindGeneration else {
+          guard registry.finish(bind, store: store, host: host) else {
             result(FlutterError(code: "school_bind_superseded", message: nil, details: nil)); return
           }
-          stores[host] = store
           result(true)
         }
         return
       }
-      if call.method == "clear" { bindGeneration += 1 }
-      guard let store = stores[host], !store.isPersistent else {
+      if call.method == "clear" { registry.supersedeBinds() }
+      guard let store = registry.store(host: host), !store.isPersistent else {
         if call.method == "clear" { result(true) }
         else { result(FlutterError(code: "school_view_missing", message: nil, details: nil)) }
         return
@@ -1278,7 +1295,7 @@ private final class DailyLmsCookieStore {
         }
         group.notify(queue: .main) { result(true) }
       case "clear":
-        stores.removeValue(forKey: host)
+        registry.remove(host: host)
         // This store belongs exclusively to the bound private school WebView.
         store.removeData(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes(),
                          modifiedSince: .distantPast) { result(true) }
