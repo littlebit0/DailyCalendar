@@ -55,37 +55,32 @@ class UniversityCatalog {
     final files =
         jsonDecode(await assets.loadString('assets/timetable/catalog.json'))
             as List;
+    // Raw JSON is read uncached so it is released after parsing, and one
+    // isolate both decodes and builds it. File names start with the school id,
+    // which the isolate checks against each file's own universityId.
     final texts = <String>[];
+    final organizationTexts = <String, String>{};
     for (final path in files.cast<String>()) {
-      if (university != null &&
-          !path.split('/').last.startsWith('$university-')) {
+      final name = path.split('/').last;
+      if (university != null && !name.startsWith('$university-')) {
         continue;
       }
-      texts.add(await assets.loadString(path));
+      texts.add(await assets.loadString(path, cache: false));
+      final school = name.split('-').first;
+      organizationTexts[school] ??= await assets.loadString(
+        'assets/timetable/organizations/$school.json',
+        cache: false,
+      );
     }
     if (texts.isEmpty) return [];
-    final decoded = await compute(_decodeDatasets, texts);
-    final organizationTexts = <String, String>{};
-    for (final json in decoded) {
-      final school = json['universityId'] as String? ?? 'smu';
-      if (!organizationTexts.containsKey(school)) {
-        organizationTexts[school] = await assets.loadString(
-          'assets/timetable/organizations/$school.json',
-        );
-      }
-    }
-    return compute(_buildDatasets, (decoded, organizationTexts, university));
+    return compute(_buildDatasets, (texts, organizationTexts, university));
   }
 }
 
-List<Map<String, dynamic>> _decodeDatasets(List<String> texts) => [
-  for (final text in texts) jsonDecode(text) as Map<String, dynamic>,
-];
-
 List<UniversityDataset> _buildDatasets(
-  (List<Map<String, dynamic>>, Map<String, String>, String?) input,
+  (List<String>, Map<String, String>, String?) input,
 ) {
-  final (decoded, texts, university) = input;
+  final (datasetTexts, texts, university) = input;
   final organizations = <String, CourseOrganizationDirectory>{};
   for (final entry in texts.entries) {
     final directory = CourseOrganizationDirectory.fromJson(
@@ -97,11 +92,18 @@ List<UniversityDataset> _buildDatasets(
     organizations[entry.key] = directory;
   }
   final datasets = <UniversityDataset>[];
-  for (final json in decoded) {
-    final school = json['universityId'] as String? ?? 'smu';
+  for (final text in datasetTexts) {
+    final json = jsonDecode(text) as Map<String, dynamic>;
+    final organization =
+        organizations[json['universityId'] as String? ?? 'smu'];
+    if (organization == null) {
+      throw const FormatException(
+        'Catalog file name does not match its school',
+      );
+    }
     final dataset = UniversityDataset.fromJson(
       json,
-      organizationDirectory: organizations[school],
+      organizationDirectory: organization,
     );
     if (university != null && dataset.university != university) {
       throw const FormatException('Catalog university does not match its file');

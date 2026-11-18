@@ -6,7 +6,7 @@
 
 ## 확인 환경
 
-- macOS: `/Users/kimhwi/Applications/Daily Test.app`
+- macOS: `~/Applications/Daily Test.app`
 - iOS: 기존 iPhone 17 시뮬레이터의 Daily Test
 - Android: 기존 Daily_Pixel_9_API_36 에뮬레이터의 Daily
 - Windows/Linux: 공유 Flutter 수정은 포함되나 이번 환경에서 설치·실사용은 미검증.

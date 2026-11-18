@@ -156,7 +156,7 @@ void main() {
           for (
             var d = DateTime(2026, 8, 31);
             !d.isAfter(DateTime(2026, 12, 18));
-            d = d.add(const Duration(days: 1))
+            d = DateTime(d.year, d.month, d.day + 1)
           ) {
             final day = d.toIso8601String().substring(0, 10);
             if (d.weekday == '월화수목금'.indexOf(m[1]!) + 1 &&

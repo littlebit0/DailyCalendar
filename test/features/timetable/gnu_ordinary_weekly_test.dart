@@ -175,7 +175,7 @@ void main() {
           for (
             var date = DateTime(2026, 9, 1);
             !date.isAfter(DateTime(2026, 12, 7));
-            date = date.add(const Duration(days: 1))
+            date = DateTime(date.year, date.month, date.day + 1)
           ) {
             final iso = date.toIso8601String().substring(0, 10);
             if (date.weekday != day || iso == '2026-10-03') {

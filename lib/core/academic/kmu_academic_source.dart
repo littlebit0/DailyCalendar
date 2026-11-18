@@ -105,7 +105,8 @@ class KmuAcademicSource implements AcademicSource {
             throw const FormatException('Empty KMU title');
           }
           // Graduate-school ceremonies are excluded, as in earlier releases.
-          if (title.contains('대학원')) {
+          // Rows that also name undergraduates ("학부·대학원 …") are shared.
+          if (title.contains('대학원') && !title.contains('학부')) {
             continue;
           }
           final occurrence = occurrences.update(
