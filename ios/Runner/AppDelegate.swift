@@ -347,11 +347,9 @@ private final class DailyCalendarImport {
       calendarIds.contains($0.calendarIdentifier) && !isGoogleSource($0.source)
     }
     guard !selected.isEmpty else { return [] }
-    var seen = Set<String>()
     var values: [[String: Any]] = []
     for event in eventsInChunks(calendars: selected) {
       let sourceId = event.calendarItemIdentifier
-      guard !sourceId.isEmpty, seen.insert(sourceId).inserted else { continue }
       var value: [String: Any] = [
         "sourceId": sourceId,
         "calendarId": event.calendar.calendarIdentifier,
@@ -386,19 +384,48 @@ private final class DailyCalendarImport {
 
   /// EventKit truncates a predicate longer than four years to its first four, so
   /// the full 1970-2100 range is read in three-year windows, oldest first.
+  /// EventKit returns every occurrence of a repeating event; only the first one
+  /// of each calendar item is used, so each window is reduced to its new items
+  /// before the next is read instead of holding every occurrence up to 2100 (#923).
   private static func eventsInChunks(calendars: [EKCalendar]) -> [EKEvent] {
     let gregorian = Calendar(identifier: .gregorian)
     let rangeEnd = gregorian.date(from: DateComponents(year: 2101, month: 1, day: 1))!
     var windowStart = gregorian.date(from: DateComponents(year: 1970, month: 1, day: 1))!
+    var seen = Set<String>()
     var collected: [EKEvent] = []
     while windowStart < rangeEnd {
       let windowEnd = min(gregorian.date(byAdding: .year, value: 3, to: windowStart)!, rangeEnd)
       let predicate = store.predicateForEvents(withStart: windowStart, end: windowEnd, calendars: calendars)
-      collected += store.events(matching: predicate).sorted { $0.startDate < $1.startDate }
+      autoreleasepool {
+        appendFirstOccurrences(
+          of: store.events(matching: predicate),
+          into: &collected,
+          seen: &seen,
+          id: { $0.calendarItemIdentifier },
+          start: { $0.startDate }
+        )
+      }
       windowStart = windowEnd
     }
     return collected
   }
+
+  // BEGIN FIRST OCCURRENCES
+  /// Appends, oldest first, the items of one window whose id has not been seen.
+  static func appendFirstOccurrences<Item>(
+    of window: [Item],
+    into collected: inout [Item],
+    seen: inout Set<String>,
+    id: (Item) -> String,
+    start: (Item) -> Date
+  ) {
+    for item in window.sorted(by: { start($0) < start($1) }) {
+      let key = id(item)
+      guard !key.isEmpty, seen.insert(key).inserted else { continue }
+      collected.append(item)
+    }
+  }
+  // END FIRST OCCURRENCES
 
   private static func recurrenceValue(_ rule: EKRecurrenceRule) -> String? {
     let frequency: String
