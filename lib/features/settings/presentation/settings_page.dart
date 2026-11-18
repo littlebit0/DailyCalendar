@@ -1786,15 +1786,20 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
   /// Runs a settings change from a control. On failure the control shows the
   /// stored value again and the user is told; returns whether it succeeded.
   Future<bool> _runLockChange(Future<void> Function() change) async {
+    final windowsSaveRevision = _windowsSettingsSaveRevision;
     try {
       await change();
       return true;
     } on Object {
       if (!mounted) return false;
-      ref.read(appSettingsProvider.notifier).state = ref
-          .read(settingsRepositoryProvider)
-          .load();
-      setState(() => _pendingWindowsSettings = null);
+      // A Windows `_save` already restored the stored value when it was the
+      // newest change; a newer pending choice must stay on screen.
+      if (windowsSaveRevision == _windowsSettingsSaveRevision) {
+        ref.read(appSettingsProvider.notifier).state = ref
+            .read(settingsRepositoryProvider)
+            .load();
+        setState(() => _pendingWindowsSettings = null);
+      }
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(context.tr('선택을 저장하지 못했습니다. 다시 시도해 주세요.'))),
       );

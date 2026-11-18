@@ -6697,6 +6697,41 @@ void main() {
   );
 
   testWidgets(
+    'Windows older save failure keeps a newer pending choice on screen (#916)',
+    (tester) async {
+      final (_, settingsRepository) = await _pumpWindowsAppearanceSettings(
+        tester,
+      );
+      final adjacentToggle = find.byKey(
+        const ValueKey('show-adjacent-month-dates-toggle'),
+      );
+      final lunarToggle = find.byKey(const ValueKey('show-lunar-dates-toggle'));
+      expect(tester.widget<SwitchListTile>(lunarToggle).value, isTrue);
+
+      settingsRepository.failNextSave();
+      await tester.tap(adjacentToggle);
+      await tester.pump(const Duration(milliseconds: 240));
+      expect(settingsRepository.saveCalls, 1);
+      await tester.tap(lunarToggle);
+      await tester.pump();
+      expect(tester.widget<SwitchListTile>(lunarToggle).value, isFalse);
+
+      settingsRepository.releasePendingSave();
+      await tester.pump();
+      await tester.pump();
+      expect(find.text('선택을 저장하지 못했습니다. 다시 시도해 주세요.'), findsOneWidget);
+      // The newer lunar choice is still saving and must not flip back.
+      expect(tester.widget<SwitchListTile>(lunarToggle).value, isFalse);
+
+      await tester.pumpAndSettle();
+      expect(settingsRepository.load().showLunarDates, isFalse);
+      expect(tester.widget<SwitchListTile>(lunarToggle).value, isFalse);
+      await tester.pumpWidget(const SizedBox.shrink());
+      debugDefaultTargetPlatformOverride = null;
+    },
+  );
+
+  testWidgets(
     'Windows delayed save publishes settings merged with an external change',
     (tester) async {
       final (container, settingsRepository) =
