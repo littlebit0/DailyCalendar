@@ -29,7 +29,13 @@ class AjouAcademicSource implements AcademicSource {
           .timeout(const Duration(seconds: 20));
       checkAcademicResponse(response);
       events.addAll(
-        parse(utf8.decode(response.bodyBytes), academicYear).where(
+        parse(
+          utf8.decode(response.bodyBytes),
+          academicYear,
+          // January–February of [year] belong to the prior academic year, so
+          // a not yet published [year] page must not discard them.
+          allowUnpublished: academicYear == year,
+        ).where(
           (event) =>
               event.start.isBefore(DateTime(year + 1)) &&
               event.end.isAfter(DateTime(year)),
@@ -40,11 +46,24 @@ class AjouAcademicSource implements AcademicSource {
     return events..sort((a, b) => a.start.compareTo(b.start));
   }
 
-  static List<AcademicEvent> parse(String body, int academicYear) {
+  /// [allowUnpublished] returns no events for a year page that shows its
+  /// "no schedule" notice (observed for 2027 on 2026-11-19).
+  static List<AcademicEvent> parse(
+    String body,
+    int academicYear, {
+    bool allowUnpublished = false,
+  }) {
     final document = html.parse(body);
     if (document.querySelector('.b-cal-day-box span')?.text.trim() !=
         '$academicYear') {
       throw const FormatException('Unexpected Ajou academic year');
+    }
+    final list = document.querySelector('.b-cal-list-box');
+    if (allowUnpublished &&
+        list != null &&
+        list.querySelector('.b-cal-wrap') == null &&
+        list.querySelector('p.b-no-post')?.text.trim() == '등록된 일정이 없습니다.') {
+      return const [];
     }
     final events = <AcademicEvent>[];
     final occurrences = <String, int>{};

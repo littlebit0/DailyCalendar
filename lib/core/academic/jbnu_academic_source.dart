@@ -62,7 +62,14 @@ class JbnuAcademicSource implements AcademicSource {
         throw const FormatException('JBNU annual calendar unavailable');
       }
       events.addAll(
-        parse(utf8.decode(response.bodyBytes), academicYear, semester).where(
+        parse(
+          utf8.decode(response.bodyBytes),
+          academicYear,
+          semester,
+          // January–February of [year] belong to the prior academic year, so
+          // not yet published [year] semesters must not discard them.
+          allowUnpublished: academicYear == year,
+        ).where(
           (e) =>
               e.start.isBefore(DateTime(year + 1)) &&
               e.end.isAfter(DateTime(year)),
@@ -73,11 +80,14 @@ class JbnuAcademicSource implements AcademicSource {
     return events..sort((a, b) => a.start.compareTo(b.start));
   }
 
+  /// [allowUnpublished] returns no events for a semester whose six months
+  /// show only "일정이 없습니다." (observed for 2027-1 on 2026-11-19).
   static List<AcademicEvent> parse(
     String body,
     int academicYear,
-    int semester,
-  ) {
+    int semester, {
+    bool allowUnpublished = false,
+  }) {
     if (![1, 2].contains(semester) ||
         !RegExp("var semesterVal = '$semester';").hasMatch(body) ||
         !RegExp("var yearVal = '$academicYear';").hasMatch(body)) {
@@ -86,6 +96,7 @@ class JbnuAcademicSource implements AcademicSource {
     final document = html.parse(body);
     final events = <AcademicEvent>[];
     final months = <int>{};
+    var unpublished = 0;
     DateTime date(String value) {
       final match = RegExp(
         r'^\s*(\d{4})-(\d{2})-(\d{2})\s*$',
@@ -113,7 +124,17 @@ class JbnuAcademicSource implements AcademicSource {
         throw const FormatException('Unexpected JBNU month');
       }
       months.add(m);
-      for (final row in monthBlock.querySelectorAll('dl.academic > div')) {
+      final rows = monthBlock.querySelectorAll('dl.academic > div');
+      final cells = rows.singleOrNull?.children ?? const [];
+      if (allowUnpublished &&
+          cells.length == 1 &&
+          cells.single.localName == 'dt' &&
+          cells.single.classes.contains('empty') &&
+          cells.single.text.trim() == '일정이 없습니다.') {
+        unpublished++;
+        continue;
+      }
+      for (final row in rows) {
         final dt = row.querySelector('dt');
         final dd = row.querySelector('dd');
         if (dt == null || dd == null) {
@@ -149,7 +170,8 @@ class JbnuAcademicSource implements AcademicSource {
         );
       }
     }
-    if (months.length != 6 || events.isEmpty) {
+    if (months.length == 6 && unpublished == 6) return const [];
+    if (months.length != 6 || events.isEmpty || unpublished != 0) {
       throw const FormatException('Incomplete JBNU semester');
     }
     return events;

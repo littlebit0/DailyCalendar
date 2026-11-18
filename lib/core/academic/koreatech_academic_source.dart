@@ -37,7 +37,13 @@ class KoreatechAcademicSource implements AcademicSource {
       if (response.statusCode != 200 || response.bodyBytes.length > 8000000) {
         throw const FormatException('Koreatech calendar unavailable');
       }
-      for (final event in parse(utf8.decode(response.bodyBytes), selected)) {
+      for (final event in parse(
+        utf8.decode(response.bodyBytes),
+        selected,
+        // January–February of [year] belong to the prior academic year, so
+        // a not yet published [year] page must not discard them.
+        allowUnpublished: selected == year,
+      )) {
         if (event.start.isBefore(DateTime(year + 1)) &&
             event.end.isAfter(DateTime(year))) {
           events[event.sourceId] = event;
@@ -50,7 +56,13 @@ class KoreatechAcademicSource implements AcademicSource {
     return events.values.toList()..sort((a, b) => a.start.compareTo(b.start));
   }
 
-  static List<AcademicEvent> parse(String body, int academicYear) {
+  /// [allowUnpublished] returns no events for a year page whose every month
+  /// shows "일정이 없습니다." (observed for 2027 on 2026-11-19).
+  static List<AcademicEvent> parse(
+    String body,
+    int academicYear, {
+    bool allowUnpublished = false,
+  }) {
     final document = html.parse(body);
     if (document.querySelector('.year_area > div > strong')?.text.trim() !=
         '$academicYear') {
@@ -58,6 +70,7 @@ class KoreatechAcademicSource implements AcademicSource {
     }
     final months = <int>{};
     final events = <String, AcademicEvent>{};
+    var emptyMonths = 0;
     for (final section in document.querySelectorAll('.CalendarList')) {
       final match = RegExp(
         r'^(\d{4})\. (\d{2})$',
@@ -71,9 +84,18 @@ class KoreatechAcademicSource implements AcademicSource {
           !months.add(month)) {
         throw const FormatException('Invalid Koreatech month');
       }
-      for (final row in section.parent!.querySelectorAll(
-        '.lst table tbody > tr',
-      )) {
+      final rows = section.parent!.querySelectorAll('.lst table tbody > tr');
+      final marker = rows.length == 1
+          ? rows.single.querySelectorAll('td')
+          : null;
+      if (allowUnpublished &&
+          marker?.length == 1 &&
+          marker!.single.attributes['colspan'] == '2' &&
+          marker.single.text.trim() == '일정이 없습니다.') {
+        emptyMonths++;
+        continue;
+      }
+      for (final row in rows) {
         final cells = row.querySelectorAll('td');
         if (cells.length != 2) {
           throw const FormatException('Invalid Koreatech event');
@@ -117,6 +139,13 @@ class KoreatechAcademicSource implements AcademicSource {
           url: 'https://www.koreatech.ac.kr/board.es?bid=0006&mid=a10501010000',
         );
       }
+    }
+    if (emptyMonths > 0) {
+      // Only a page with no month published at all counts as unpublished.
+      if (emptyMonths != 12) {
+        throw const FormatException('Partially empty Koreatech calendar');
+      }
+      return const [];
     }
     if (months.length != 12 || events.isEmpty) {
       throw const FormatException('Incomplete Koreatech calendar');

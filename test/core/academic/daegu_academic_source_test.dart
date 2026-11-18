@@ -1,6 +1,8 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:daily/core/academic/academic_profile.dart';
+import 'package:daily/core/academic/academic_source.dart';
 import 'package:daily/core/academic/daegu_academic_source.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:html/parser.dart' as html;
@@ -70,6 +72,58 @@ void main() {
       );
     }
   });
+  test(
+    'Daegu keeps prior-year January while the next year is unpublished',
+    () async {
+      // Live 2027 page recorded on 2026-11-19, before 2027 was published.
+      final unpublished = File(
+        'test/fixtures/academic/daegu-2027-unpublished.html',
+      ).readAsStringSync();
+      expect(
+        DaeguAcademicSource.parse(unpublished, 2027, allowUnpublished: true),
+        isEmpty,
+      );
+      expect(
+        () => DaeguAcademicSource.parse(unpublished, 2027),
+        throwsFormatException,
+      );
+      // The notice never stands in for another year's page.
+      expect(
+        () => DaeguAcademicSource.parse(
+          unpublished,
+          2026,
+          allowUnpublished: true,
+        ),
+        throwsFormatException,
+      );
+      Future<List<AcademicEvent>> fetch(Map<int, String> pages, int year) {
+        final source = DaeguAcademicSource(
+          client: MockClient((request) async {
+            final y = int.parse(
+              request.url.queryParameters['schedule_start_date']!,
+            );
+            return http.Response.bytes(utf8.encode(pages[y]!), 200);
+          }),
+        );
+        addTearDown(source.close);
+        return source.fetch(year);
+      }
+
+      final events = await fetch({
+        2026: fixture(2026),
+        2027: unpublished,
+      }, 2027);
+      expect(events, isNotEmpty);
+      expect(events.every((e) => e.sourceId.startsWith('2026:')), isTrue);
+      expect(events.every((e) => e.start.isBefore(DateTime(2027, 3))), isTrue);
+      // An unpublished prior academic year is still a failure.
+      await expectLater(
+        fetch({2027: unpublished}, 2028),
+        throwsFormatException,
+      );
+    },
+  );
+
   test('Daegu profile resolves to its registered calendar', () {
     for (final id in [
       'institution:academyinfo:0000084',

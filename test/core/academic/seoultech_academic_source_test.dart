@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'dart:io';
+import 'package:daily/core/academic/academic_source.dart';
 import 'package:daily/core/academic/academic_profile.dart';
 import 'package:daily/core/academic/seoultech_academic_source.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -141,6 +143,81 @@ void main() {
       throwsFormatException,
     );
   });
+
+  test(
+    'Seoultech keeps prior-year January while next year semesters are unpublished',
+    () async {
+      // Live 2027 1st-semester page recorded on 2026-11-19, before 2027 was
+      // published. The 2nd-semester page was not recorded; it is derived by
+      // switching the semester markers the parser checks.
+      final first = File(
+        'test/fixtures/academic/seoultech-2027-1-unpublished.html',
+      ).readAsStringSync();
+      final second = first
+          .replaceFirst('var type = "2";', 'var type = "3";')
+          .replaceFirst(
+            '<caption class="screen_hide">1학기 일정</caption>',
+            '<caption class="screen_hide">2학기 일정</caption>',
+          );
+      expect(second, isNot(first));
+      for (final (body, semester) in [(first, 1), (second, 2)]) {
+        expect(
+          SeoultechAcademicSource.parse(
+            body,
+            2027,
+            semester,
+            allowUnpublished: true,
+          ),
+          isEmpty,
+        );
+        expect(
+          () => SeoultechAcademicSource.parse(body, 2027, semester),
+          throwsFormatException,
+        );
+        // The notice never stands in for another year's or semester's page.
+        expect(
+          () => SeoultechAcademicSource.parse(
+            body,
+            2026,
+            semester,
+            allowUnpublished: true,
+          ),
+          throwsFormatException,
+        );
+        expect(
+          () => SeoultechAcademicSource.parse(
+            body,
+            2027,
+            3 - semester,
+            allowUnpublished: true,
+          ),
+          throwsFormatException,
+        );
+      }
+      Future<List<AcademicEvent>> fetch(Map<String, String> pages, int year) {
+        final source = SeoultechAcademicSource(
+          client: MockClient((r) async {
+            final key =
+                '${r.url.queryParameters['year']}-${r.url.queryParameters['typ']}';
+            return http.Response.bytes(utf8.encode(pages[key]!), 200);
+          }),
+        );
+        addTearDown(source.close);
+        return source.fetch(year);
+      }
+
+      final events = await fetch({
+        '2026-3': fixture(2026, 2),
+        '2027-2': first,
+        '2027-3': second,
+      }, 2027);
+      expect(events, isNotEmpty);
+      expect(events.every((e) => e.sourceId.startsWith('2026:2:')), isTrue);
+      expect(events.every((e) => e.start.isBefore(DateTime(2027, 3))), isTrue);
+      // An unpublished prior year's 2nd semester is still a failure.
+      await expectLater(fetch({'2027-3': second}, 2028), throwsFormatException);
+    },
+  );
 
   test('Seoultech profile resolves to its registered calendar', () {
     for (final id in [

@@ -9,7 +9,10 @@ import 'package:http/testing.dart';
 String fixture(int year, int semester) =>
     File('test/fixtures/academic/jbnu-$year-$semester.html').readAsStringSync();
 
-JbnuAcademicSource mockSource(List<String> requests) => JbnuAcademicSource(
+JbnuAcademicSource mockSource(
+  List<String> requests, [
+  Map<String, String> pages = const {},
+]) => JbnuAcademicSource(
   client: MockClient((request) async {
     if (request.method == 'GET') {
       return http.Response(
@@ -25,7 +28,7 @@ JbnuAcademicSource mockSource(List<String> requests) => JbnuAcademicSource(
     final semester = body['acSemester']!;
     requests.add('$year-$semester');
     return http.Response(
-      fixture(int.parse(year), int.parse(semester)),
+      pages['$year-$semester'] ?? fixture(int.parse(year), int.parse(semester)),
       200,
       headers: {'content-type': 'text/html; charset=utf-8'},
     );
@@ -95,6 +98,72 @@ void main() {
       }
     },
   );
+  test(
+    'JBNU keeps prior-year January while the next year is unpublished',
+    () async {
+      // Live 2027-1 response recorded on 2026-11-19, before 2027 was published.
+      final first = File(
+        'test/fixtures/academic/jbnu-2027-1-unpublished.html',
+      ).readAsStringSync();
+      // 2027-2 was never requested live; derive it from the 2027-1 shape.
+      var second = first.replaceFirst(
+        "var semesterVal = '1';",
+        "var semesterVal = '2';",
+      );
+      for (final (from, to) in [
+        ('03', '09'),
+        ('04', '10'),
+        ('05', '11'),
+        ('06', '12'),
+        ('07', '01'),
+        ('08', '02'),
+      ]) {
+        second = second.replaceFirst(
+          '<li id="calendar-$from">',
+          '<li id="calendar-$to">',
+        );
+      }
+      expect(
+        JbnuAcademicSource.parse(first, 2027, 1, allowUnpublished: true),
+        isEmpty,
+      );
+      expect(
+        JbnuAcademicSource.parse(second, 2027, 2, allowUnpublished: true),
+        isEmpty,
+      );
+      expect(
+        () => JbnuAcademicSource.parse(first, 2027, 1),
+        throwsFormatException,
+      );
+      // The notice never stands in for another year's or semester's page.
+      expect(
+        () => JbnuAcademicSource.parse(first, 2026, 1, allowUnpublished: true),
+        throwsFormatException,
+      );
+      expect(
+        () => JbnuAcademicSource.parse(first, 2027, 2, allowUnpublished: true),
+        throwsFormatException,
+      );
+      final pages = {'2027-1': first, '2027-2': second};
+      final requests = <String>[];
+      final source = mockSource(requests, pages);
+      addTearDown(source.close);
+      final events = await source.fetch(2027);
+      expect(requests, ['2026-2', '2027-1', '2027-2']);
+      expect(events, isNotEmpty);
+      expect(events.every((e) => e.end.isAfter(DateTime(2027))), isTrue);
+      expect(events.every((e) => e.start.isBefore(DateTime(2027, 3))), isTrue);
+      // An unpublished prior academic year is still a failure.
+      final later = mockSource([], {
+        ...pages,
+        '2028-1': first,
+        '2028-2': second,
+      });
+      addTearDown(later.close);
+      await expectLater(later.fetch(2028), throwsFormatException);
+    },
+  );
+
   test('JBNU profile resolves to its registered calendar', () {
     for (final id in [
       'institution:academyinfo:0000025',

@@ -25,7 +25,13 @@ class DeuAcademicSource implements AcademicSource {
         throw const FormatException('DEU calendar unavailable');
       }
       events.addAll(
-        parse(utf8.decode(response.bodyBytes), academicYear).where(
+        parse(
+          utf8.decode(response.bodyBytes),
+          academicYear,
+          // January–February of [year] belong to the prior academic year, so
+          // a not yet published [year] page must not discard them.
+          allowUnpublished: academicYear == year,
+        ).where(
           (e) =>
               e.start.isBefore(DateTime(year + 1)) &&
               e.end.isAfter(DateTime(year)),
@@ -38,13 +44,20 @@ class DeuAcademicSource implements AcademicSource {
     return events..sort((a, b) => a.start.compareTo(b.start));
   }
 
-  static List<AcademicEvent> parse(String body, int academicYear) {
+  /// [allowUnpublished] returns no events for a year page whose two semester
+  /// tables show only their "no schedule" row (observed for 2028 on 2026-11-19).
+  static List<AcademicEvent> parse(
+    String body,
+    int academicYear, {
+    bool allowUnpublished = false,
+  }) {
     final document = html.parse(body);
     if (document.querySelector('.calendar-select .subject')?.text.trim() !=
         '$academicYear년') {
       throw const FormatException('Unexpected DEU academic year');
     }
     final semesters = <int>{};
+    var unpublished = 0;
     final occurrences = <String, int>{};
     final events = <AcademicEvent>[];
     for (final table in document.querySelectorAll('table.tbl-basic-dleft')) {
@@ -58,7 +71,17 @@ class DeuAcademicSource implements AcademicSource {
       if (term[1] != '$academicYear' || !semesters.add(int.parse(term[2]!))) {
         throw const FormatException('Invalid DEU semester coverage');
       }
-      for (final row in table.querySelectorAll('tbody tr')) {
+      final rows = table.querySelectorAll('tbody tr');
+      final cells = rows.singleOrNull?.children ?? const [];
+      if (allowUnpublished &&
+          cells.length == 1 &&
+          cells.single.localName == 'td' &&
+          cells.single.attributes['colspan'] == '2' &&
+          cells.single.text.trim() == '등록된 ${term[2]}학기 일정이 없습니다.') {
+        unpublished++;
+        continue;
+      }
+      for (final row in rows) {
         final dateText = row.querySelector('th')?.text.trim() ?? '';
         final title = row.querySelector('td')?.text.trim() ?? '';
         final range = RegExp(
@@ -109,7 +132,8 @@ class DeuAcademicSource implements AcademicSource {
         );
       }
     }
-    if (semesters.length != 2 || events.isEmpty) {
+    if (semesters.length == 2 && unpublished == 2) return const [];
+    if (semesters.length != 2 || events.isEmpty || unpublished != 0) {
       throw const FormatException('Incomplete DEU calendar');
     }
     return events;
