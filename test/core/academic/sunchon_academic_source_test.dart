@@ -132,4 +132,19 @@ void main() {
       source.close();
     }
   });
+
+  test('Sunchon keeps joint rows and skips graduate-only rows', () {
+    Iterable<String> titles(String title) {
+      final rows = jsonDecode(fixture()) as List;
+      (rows.firstWhere((r) => r['schdulSeq'] == 2424) as Map)['schdulTitle'] =
+          title;
+      return SunchonAcademicSource.parse(
+        jsonEncode(rows),
+        2026,
+      ).map((e) => e.title);
+    }
+
+    expect(titles('학부·대학원 수강신청'), contains('학부·대학원 수강신청'));
+    expect(titles('일반대학원 신입생 수강신청'), isNot(contains('일반대학원 신입생 수강신청')));
+  });
 }

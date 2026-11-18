@@ -321,12 +321,10 @@ class EventCommandService {
           });
           await stage('alarm', () async {
             if (event != null && !_isCurrentOwner(event)) return;
-            await _alarmService.cancelEventAlarm(entry.key);
-            if (event != null &&
-                !event.isDeleted &&
-                !event.completed &&
-                _isCurrentOwner(event)) {
+            if (event != null && !event.isDeleted && !event.completed) {
               await _alarmService.scheduleEventAlarm(event);
+            } else {
+              await _alarmService.cancelEventAlarm(entry.key);
             }
           });
           await stage('sync', () async {
@@ -515,7 +513,6 @@ class EventCommandService {
         await _notificationService.scheduleEventReminder(event);
       });
       await attempt(() async {
-        await _alarmService.cancelEventAlarm(event.id);
         await _alarmService.scheduleEventAlarm(event);
       });
       await attempt(() => _syncService.queueEventUpsert(event));

@@ -715,7 +715,7 @@ void main() {
               for (
                 var d = operatingStart;
                 !d.isAfter(operatingEnd);
-                d = d.add(const Duration(days: 1))
+                d = DateTime(d.year, d.month, d.day + 1)
               ) {
                 if (!m[1]!.contains('월화수목금토일'[d.weekday - 1])) continue;
                 final date = d.toIso8601String().substring(0, 10);

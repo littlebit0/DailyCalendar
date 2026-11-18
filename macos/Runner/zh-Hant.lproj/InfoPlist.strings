@@ -1,0 +1,3 @@
+"NSLocationUsageDescription" = "使用概略位置顯示附近地區的氣象廳預報。您也可以不授予位置權限而自行選擇地區。";
+"NSMicrophoneUsageDescription" = "僅在您向 Signal 說出行事曆指令時使用麥克風。";
+"NSSpeechRecognitionUsageDescription" = "Daily 會將您對 Signal 說出的行事曆指令轉成文字，以執行要求的操作。";

@@ -58,6 +58,11 @@ typedef AcademicCalendarRecord = ({
   DateTime last,
 });
 
+/// Calendar year of a period's last day when only its month is published:
+/// a last month earlier than the start month is in the following year.
+int academicRangeEndYear(DateTime start, int lastMonth) =>
+    lastMonth < start.month ? start.year + 1 : start.year;
+
 /// Rejects failed or oversized responses before parsing.
 void checkAcademicResponse(http.Response response) {
   if (response.statusCode != 200 || response.bodyBytes.length > 8000000) {

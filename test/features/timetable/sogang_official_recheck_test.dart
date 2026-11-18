@@ -61,7 +61,7 @@ void main() {
       for (
         var d = DateTime(2026, 9, 1);
         !d.isAfter(DateTime(2026, 12, 21));
-        d = d.add(const Duration(days: 1))
+        d = DateTime(d.year, d.month, d.day + 1)
       ) {
         final key = timetableDateKey(d);
         if (days.contains(d.weekday) && !skip.contains(key)) expected.add(key);
