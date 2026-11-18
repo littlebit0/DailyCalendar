@@ -98,14 +98,17 @@ class _AcademicCalendarPageState extends ConsumerState<AcademicCalendarPage> {
     }
   }
 
-  Future<void> _perform(Future<void> Function() action) async {
+  /// Returns whether [action] ran and completed without an error.
+  Future<bool> _perform(Future<void> Function() action) async {
     // A dialog can outlive the gate that replaced this page underneath it.
-    if (blockedByRequiredUpdate(context, ref)) return;
+    if (blockedByRequiredUpdate(context, ref)) return false;
     setState(() => _localError = false);
     try {
       await action();
+      return true;
     } on Object {
       if (mounted) setState(() => _localError = true);
+      return false;
     } finally {
       if (mounted) {
         ref.read(appSettingsProvider.notifier).state = ref
@@ -542,8 +545,17 @@ class _AcademicCalendarPageState extends ConsumerState<AcademicCalendarPage> {
                           ],
                         ),
                       );
-                      if (confirmed == true && mounted) {
-                        await _perform(() => service.removeImported(entry.key));
+                      if (confirmed != true || !mounted) return;
+                      final removed = await _perform(
+                        () => service.removeImported(entry.key),
+                      );
+                      if (removed && mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            key: const ValueKey('academic-removed'),
+                            content: Text(text(AcademicText.removed)),
+                          ),
+                        );
                       }
                     },
               icon: const Icon(Icons.delete_outline),

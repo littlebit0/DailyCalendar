@@ -5,9 +5,11 @@ import 'package:daily/core/academic/academic_calendar_service.dart';
 import 'package:daily/core/academic/academic_profile.dart';
 import 'package:daily/core/academic/academic_source.dart';
 import 'package:daily/core/academic/academic_source_registry.dart';
+import 'package:daily/core/academic/academic_strings.dart';
 import 'package:daily/core/academic/academic_store.dart';
 import 'package:daily/core/auth/google_account.dart';
 import 'package:daily/core/di/app_providers.dart';
+import 'package:daily/core/localization/app_localizations.dart';
 import 'package:daily/core/settings/settings_repository.dart';
 import 'package:daily/core/theme/daily_ui.dart';
 import 'package:daily/features/settings/presentation/academic_calendar_page.dart';
@@ -296,6 +298,70 @@ void main() {
     await tester.pumpAndSettle();
     expect(service.removals, 0);
     expect(find.text('업데이트가 필요합니다'), findsWidgets);
+  });
+
+  testWidgets('removal warns that removed events never come back', (
+    tester,
+  ) async {
+    service.retained = {
+      'smu': AcademicSubscription(universityId: 'smu', year: 2026),
+    };
+    await mount(tester);
+    await tester.tap(find.byIcon(Icons.delete_outline));
+    await tester.pumpAndSettle();
+    expect(
+      find.textContaining('다시 가져오거나 다시 연결해도 돌아오지 않습니다'),
+      findsOneWidget,
+    );
+    await tester.tap(find.widgetWithText(TextButton, '가져온 일정 제거').last);
+    await tester.pumpAndSettle();
+    expect(service.removals, 1);
+    expect(find.byKey(const ValueKey('academic-removed')), findsOneWidget);
+    expect(
+      find.text('가져온 일정을 제거했습니다. 다시 가져오거나 다시 연결해도 돌아오지 않습니다.'),
+      findsOneWidget,
+    );
+  });
+
+  testWidgets('failed removal shows no removal result', (tester) async {
+    service
+      ..retained = {
+        'smu': AcademicSubscription(universityId: 'smu', year: 2026),
+      }
+      ..failRemoval = true;
+    await mount(tester);
+    await tester.tap(find.byIcon(Icons.delete_outline));
+    await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(TextButton, '가져온 일정 제거').last);
+    await tester.pumpAndSettle();
+    expect(service.removals, 1);
+    expect(find.byKey(const ValueKey('academic-removed')), findsNothing);
+  });
+
+  testWidgets('removal permanence copy exists in every supported locale', (
+    tester,
+  ) async {
+    final seen = <String>{};
+    for (final locale in AppLocalizations.supportedLocales) {
+      late String confirm;
+      late String removed;
+      await tester.pumpWidget(
+        Localizations(
+          locale: locale,
+          delegates: const [DefaultWidgetsLocalizations.delegate],
+          child: Builder(
+            builder: (context) {
+              confirm = academicText(context, AcademicText.removeConfirm);
+              removed = academicText(context, AcademicText.removed);
+              return const SizedBox();
+            },
+          ),
+        ),
+      );
+      expect(confirm, isNotEmpty, reason: '$locale');
+      expect(removed, isNotEmpty, reason: '$locale');
+      expect(seen.add(removed), isTrue, reason: '$locale reuses another text');
+    }
   });
 
   testWidgets('failed removal without an adapter shows the failure', (
