@@ -91,7 +91,8 @@ class SsuAcademicSource implements AcademicSource {
         }
         // Graduate-only rows are labelled "대학원" in the title: "(대학원)"
         // suffix or "대학원 학위수여식"; they are not undergraduate schedules.
-        if (title.contains('대학원')) {
+        // Rows that also name undergraduates ("학부·대학원 …") are shared.
+        if (title.contains('대학원') && !title.contains('학부')) {
           continue;
         }
         final occurrence = occurrences.update(
