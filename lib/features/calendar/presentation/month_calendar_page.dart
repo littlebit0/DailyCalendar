@@ -4930,14 +4930,13 @@ class _CalendarMonthPage extends ConsumerWidget {
                   settings.defaultReminderMinutesList,
                 ),
                 onEventDropped: (event, targetDate, targetIndex) =>
-                    _handleEventDrop(
+                    _handleCalendarEventDrop(
                       context,
                       ref,
                       event,
                       targetDate,
                       targetIndex,
-                      displayEvents,
-                      settings,
+                      shown: (events: displayEvents, settings: settings),
                     ),
               ),
             );
@@ -5006,172 +5005,6 @@ class _CalendarMonthPage extends ConsumerWidget {
     categories,
     defaultReminderMinutesList,
   );
-
-  Future<void> _handleEventDrop(
-    BuildContext context,
-    WidgetRef ref,
-    CalendarEvent event,
-    DateTime targetDate,
-    int targetIndex,
-    List<CalendarEvent> visibleEvents,
-    AppSettings settings,
-  ) async {
-    if (event.readOnly || event.systemEvent || event.holiday) {
-      return;
-    }
-    if (blockedByRequiredUpdate(context, ref)) return;
-    final sourceDate = _dateOnly(event.startAt);
-    final normalizedTarget = _dateOnly(targetDate);
-    var movedEvent = event;
-
-    if (!_sameDay(sourceDate, normalizedTarget)) {
-      if (event.isRecurring) {
-        final scope = await _showRecurringDragScopeDialog(context);
-        if (scope == null || !context.mounted) {
-          return;
-        }
-        if (updateRequired(ref)) {
-          if (context.mounted) showUpdateRequiredNotice(context, ref);
-          return;
-        }
-        final result = await _moveRecurringEvent(
-          ref,
-          event,
-          normalizedTarget,
-          scope,
-        );
-        if (result == null) {
-          return;
-        }
-        movedEvent = result;
-      } else {
-        movedEvent = shiftCalendarEventToDate(event, normalizedTarget);
-        await ref.read(eventCommandServiceProvider).save(movedEvent);
-      }
-    }
-
-    await _saveManualOrderAfterDrop(
-      ref,
-      sourceDate: sourceDate,
-      targetDate: normalizedTarget,
-      targetIndex: targetIndex,
-      originalEvent: event,
-      movedEvent: movedEvent,
-      visibleEvents: visibleEvents,
-      settings: settings,
-    );
-  }
-
-  Future<CalendarEvent?> _moveRecurringEvent(
-    WidgetRef ref,
-    CalendarEvent occurrence,
-    DateTime targetDate,
-    _RecurringDragScope scope,
-  ) => _moveRecurringCalendarEvent(ref, occurrence, targetDate, scope);
-
-  Future<void> _saveManualOrderAfterDrop(
-    WidgetRef ref, {
-    required DateTime sourceDate,
-    required DateTime targetDate,
-    required int targetIndex,
-    required CalendarEvent originalEvent,
-    required CalendarEvent movedEvent,
-    required List<CalendarEvent> visibleEvents,
-    required AppSettings settings,
-  }) async {
-    final sourceKey = calendarDateKey(sourceDate);
-    final targetKey = calendarDateKey(targetDate);
-    final originalOrderKey = calendarEventOrderKey(originalEvent);
-    final movedOrderKey = calendarEventOrderKey(movedEvent);
-    final categoryOrder = settings.categories
-        .map((category) => category.id)
-        .toList();
-    final manualOrders = <String, CalendarManualEventOrder>{
-      ...settings.calendarManualEventOrders,
-    };
-    final deviceId = await ref.read(settingsRepositoryProvider).deviceId();
-    final now = DateTime.now();
-
-    if (sourceKey != targetKey) {
-      final sourceEvents = _eventsForDay(visibleEvents, sourceDate)
-          .where(
-            (candidate) =>
-                calendarEventOrderKey(candidate) != originalOrderKey &&
-                candidate.id != originalEvent.id,
-          )
-          .toList();
-      manualOrders[sourceKey] = CalendarManualEventOrder(
-        eventKeys: _storedOrderKeys(sourceEvents),
-        updatedAt: now,
-        deviceId: deviceId,
-      );
-    }
-
-    final existingTarget = _eventsForDay(visibleEvents, targetDate)
-        .where(
-          (candidate) =>
-              calendarEventOrderKey(candidate) != originalOrderKey &&
-              calendarEventOrderKey(candidate) != movedOrderKey &&
-              candidate.id != originalEvent.id,
-        )
-        .toList();
-    final sortedTarget = sortedCalendarEvents(
-      existingTarget,
-      priority: settings.calendarEventSortPriority,
-      categoryOrder: categoryOrder,
-      manualOrder:
-          settings.calendarManualEventOrders[targetKey]?.eventKeys ??
-          const <String>[],
-    );
-    final insertionIndex = targetIndex.clamp(0, sortedTarget.length);
-    sortedTarget.insert(insertionIndex, movedEvent);
-    manualOrders[targetKey] = CalendarManualEventOrder(
-      eventKeys: _storedOrderKeys(sortedTarget),
-      updatedAt: now,
-      deviceId: deviceId,
-    );
-
-    final updatedSettings = settings.copyWith(
-      calendarManualEventOrders: manualOrders,
-    );
-    await _persistCalendarManualOrder(
-      ref,
-      previous: settings,
-      updated: updatedSettings,
-    );
-  }
-
-  Future<_RecurringDragScope?> _showRecurringDragScopeDialog(
-    BuildContext context,
-  ) {
-    return showDialog<_RecurringDragScope>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(context.tr('반복 일정 이동')),
-        content: Text(context.tr('이 반복 일정의 어느 범위를 이동할까요?')),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text(context.tr('취소')),
-          ),
-          TextButton(
-            onPressed: () =>
-                Navigator.of(context).pop(_RecurringDragScope.onlyThis),
-            child: Text(context.tr('이 일정만')),
-          ),
-          TextButton(
-            onPressed: () =>
-                Navigator.of(context).pop(_RecurringDragScope.future),
-            child: Text(context.tr('이후 일정')),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.of(context).pop(_RecurringDragScope.all),
-            child: Text(context.tr('전체 반복')),
-          ),
-        ],
-      ),
-    );
-  }
 }
 
 Future<void> _handleCalendarEventDrop(
@@ -5179,44 +5012,28 @@ Future<void> _handleCalendarEventDrop(
   WidgetRef ref,
   CalendarEvent event,
   DateTime targetDate,
-  int targetIndex,
-) async {
+  int targetIndex, {
+  // The month grid passes the rows it drew (search-filtered) and its settings
+  // so the drop index is read against what the user saw.
+  ({List<CalendarEvent> events, AppSettings settings})? shown,
+}) async {
   if (!calendarEventCanMove(event)) {
     return;
   }
   if (blockedByRequiredUpdate(context, ref)) return;
   final sourceDate = _dateOnly(event.startAt);
   final normalizedTarget = _dateOnly(targetDate);
-  final rangeStart = sourceDate.isBefore(normalizedTarget)
-      ? sourceDate
-      : normalizedTarget;
-  final rangeLastDate = sourceDate.isAfter(normalizedTarget)
-      ? sourceDate
-      : normalizedTarget;
-  final rangeEnd = shiftCalendarDateByDays(rangeLastDate, 1);
-  final settings = ref.read(appSettingsProvider);
-  final repository = ref.read(visibleEventRepositoryProvider);
-  final storedEvents = await repository.eventsInRange(rangeStart, rangeEnd);
-  final holidayEvents = ref
-      .read(koreanHolidayServiceProvider)
-      .holidayEventsInRange(
-        rangeStart,
-        rangeEnd,
-        category: settings.holidayCategory,
+  final AppSettings settings = shown?.settings ?? ref.read(appSettingsProvider);
+  final visibleEvents =
+      shown?.events ??
+      await _calendarDropRangeEvents(
+        context,
+        ref,
+        settings,
+        sourceDate,
+        normalizedTarget,
       );
-  if (!context.mounted) {
-    return;
-  }
-  // Lists show lecture-mode rows; include them so the drop index matches.
-  final visibleEvents = withLectureModeChanges(
-    context,
-    ref.read(timetableStoreProvider),
-    lectureModeChangesShown(settings, ref.read(calendarSearchQueryProvider))
-        ? [normalizedTarget]
-        : const [],
-    _filterVisibleEvents([...storedEvents, ...holidayEvents], settings, ''),
-  );
-  if (!context.mounted) {
+  if (visibleEvents == null || !context.mounted) {
     return;
   }
   if (updateRequired(ref)) {
@@ -5260,6 +5077,43 @@ Future<void> _handleCalendarEventDrop(
     movedEvent: movedEvent,
     visibleEvents: visibleEvents,
     settings: settings,
+  );
+}
+
+/// Events of the drop's source-to-target range as the day lists show them,
+/// or null when [context] unmounted while loading.
+Future<List<CalendarEvent>?> _calendarDropRangeEvents(
+  BuildContext context,
+  WidgetRef ref,
+  AppSettings settings,
+  DateTime sourceDate,
+  DateTime targetDate,
+) async {
+  final rangeStart = sourceDate.isBefore(targetDate) ? sourceDate : targetDate;
+  final rangeLastDate = sourceDate.isAfter(targetDate)
+      ? sourceDate
+      : targetDate;
+  final rangeEnd = shiftCalendarDateByDays(rangeLastDate, 1);
+  final repository = ref.read(visibleEventRepositoryProvider);
+  final storedEvents = await repository.eventsInRange(rangeStart, rangeEnd);
+  final holidayEvents = ref
+      .read(koreanHolidayServiceProvider)
+      .holidayEventsInRange(
+        rangeStart,
+        rangeEnd,
+        category: settings.holidayCategory,
+      );
+  if (!context.mounted) {
+    return null;
+  }
+  // Lists show lecture-mode rows; include them so the drop index matches.
+  return withLectureModeChanges(
+    context,
+    ref.read(timetableStoreProvider),
+    lectureModeChangesShown(settings, ref.read(calendarSearchQueryProvider))
+        ? [targetDate]
+        : const [],
+    _filterVisibleEvents([...storedEvents, ...holidayEvents], settings, ''),
   );
 }
 
