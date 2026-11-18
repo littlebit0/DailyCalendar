@@ -21,6 +21,7 @@ enum AcademicText {
   reconnect,
   remove,
   removeConfirm,
+  removed,
   cancel,
   result,
   preserved,
@@ -124,10 +125,16 @@ const _strings = <AcademicText, List<String>>{
     '移除匯入的行程',
   ],
   AcademicText.removeConfirm: [
-    '이 대학에서 가져온 일정만 삭제하고 연동을 해제합니다. 개인 일정과 분류는 유지됩니다. 삭제는 연결된 기기에도 동기화됩니다.',
-    'Delete only events imported from this university and disconnect. Personal events and categories are kept. Deletions sync to linked devices.',
-    'この大学から取り込んだ予定のみ削除し、連携を解除します。個人の予定と分類は保持します。削除は連携端末にも同期されます。',
-    '僅刪除此大學匯入的行程並解除連結。保留個人行程與分類，刪除會同步至已連結的裝置。',
+    '이 대학에서 가져온 일정만 삭제하고 연동을 해제합니다. 개인 일정과 분류는 유지됩니다. 삭제는 연결된 기기에도 동기화됩니다. 삭제한 일정은 다시 가져오거나 다시 연결해도 돌아오지 않습니다.',
+    'Delete only events imported from this university and disconnect. Personal events and categories are kept. Deletions sync to linked devices. Removed events will not come back, even if you import again or reconnect.',
+    'この大学から取り込んだ予定のみ削除し、連携を解除します。個人の予定と分類は保持します。削除は連携端末にも同期されます。削除した予定は、再度取り込んだり再接続したりしても戻りません。',
+    '僅刪除此大學匯入的行程並解除連結。保留個人行程與分類，刪除會同步至已連結的裝置。已移除的行程即使重新匯入或重新連結也不會恢復。',
+  ],
+  AcademicText.removed: [
+    '가져온 일정을 제거했습니다. 다시 가져오거나 다시 연결해도 돌아오지 않습니다.',
+    'Imported events removed. They will not come back, even if you import again or reconnect.',
+    '取り込んだ予定を削除しました。再度取り込んだり再接続したりしても戻りません。',
+    '已移除匯入的行程。即使重新匯入或重新連結也不會恢復。',
   ],
   AcademicText.cancel: ['취소', 'Cancel', 'キャンセル', '取消'],
   AcademicText.result: [
