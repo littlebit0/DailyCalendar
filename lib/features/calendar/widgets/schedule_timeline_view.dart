@@ -383,6 +383,7 @@ class _ScheduleDayHeader extends StatelessWidget {
       day,
       isHoliday: _isHoliday(day),
       holidayColorValue: holidayColorValue,
+      brightness: scheme.brightness,
     );
     if (accent != null) return accent;
     if (_isSameDay(day, selectedDate)) {

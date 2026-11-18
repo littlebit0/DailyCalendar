@@ -2899,8 +2899,16 @@ void main() {
         );
         for (final dark in [false, true]) {
           for (final (date, weekday, color) in [
-            (DateTime(2026, 9, 5), '토요일', const Color(0xff2563eb)),
-            (DateTime(2026, 9, 6), '일요일', const Color(0xffef4444)),
+            (
+              DateTime(2026, 9, 5),
+              '토요일',
+              dark ? const Color(0xff60a5fa) : const Color(0xff2563eb),
+            ),
+            (
+              DateTime(2026, 9, 6),
+              '일요일',
+              dark ? const Color(0xfff87171) : const Color(0xffb91c1c),
+            ),
             (DateTime(2026, 3, 2), '월요일', const Color(0xff10b981)),
           ]) {
             container.read(selectedDateProvider.notifier).state = date;
