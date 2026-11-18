@@ -1012,6 +1012,7 @@ const Map<String, Map<String, String>> _translations = {
     '브리핑을 받을 시간': 'Time to receive the briefing',
     'D-day 알림 직접 입력': 'Custom D-day reminder',
     'D-day 기준 일수. 예: -7, 0': 'Days relative to D-day, e.g. -7, 0',
+    '{min}~{max} 사이의 숫자를 입력하세요': 'Enter a number from {min} to {max}',
     '앱 잠금 PIN 설정': 'Set App Lock PIN',
     '잠금 방식': 'Lock method',
     '버전 {version} · 더블 클릭하여 Github 확인하기':
@@ -2080,6 +2081,7 @@ const Map<String, Map<String, String>> _translations = {
     '브리핑을 받을 시간': 'ブリーフィングを受け取る時刻',
     'D-day 알림 직접 입력': 'D-day通知を直接入力',
     'D-day 기준 일수. 예: -7, 0': 'D-day基準の日数。例：-7、0',
+    '{min}~{max} 사이의 숫자를 입력하세요': '{min}〜{max}の数値を入力してください',
     '앱 잠금 PIN 설정': 'アプリロックPINを設定',
     '잠금 방식': 'ロック方式',
     '버전 {version} · 더블 클릭하여 Github 확인하기': 'バージョン{version}・ダブルクリックでGitHubを表示',
@@ -3111,6 +3113,7 @@ const Map<String, Map<String, String>> _translations = {
     '브리핑을 받을 시간': '接收摘要的時間',
     'D-day 알림 직접 입력': '自訂 D-day 提醒',
     'D-day 기준 일수. 예: -7, 0': '相對 D-day 的天數，例如 -7、0',
+    '{min}~{max} 사이의 숫자를 입력하세요': '請輸入 {min} 到 {max} 之間的數字',
     '앱 잠금 PIN 설정': '設定 App 鎖定 PIN',
     '잠금 방식': '鎖定方式',
     '버전 {version} · 더블 클릭하여 Github 확인하기': '版本 {version}・按兩下查看 GitHub',
