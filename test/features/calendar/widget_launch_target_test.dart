@@ -8,6 +8,8 @@ import 'package:daily/features/calendar/presentation/month_calendar_page.dart';
 import 'package:daily/features/events/domain/calendar_event.dart';
 import 'package:daily/features/events/domain/event_category.dart';
 import 'package:daily/features/events/domain/event_repository.dart';
+import 'package:daily/features/events/domain/recurrence_rule.dart';
+import 'package:daily/features/imogi/presentation/imogi_page.dart';
 import 'package:daily/features/events/presentation/event_details_panel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -43,6 +45,7 @@ final _event = CalendarEvent(
   allDay: false,
   category: EventCategory.basic,
   colorValue: EventCategory.basic.colorValue,
+  recurrence: const RecurrenceRule(frequency: RecurrenceFrequency.weekly),
   createdAt: DateTime(2026, 9, 1),
   updatedAt: DateTime(2026, 9, 1),
 );
@@ -150,7 +153,32 @@ void main() {
         );
     await tester.pumpAndSettle();
     expect(container.read(selectedDateProvider), DateTime(2026, 9, 15));
-    expect(find.byType(EventDetailsPanel), findsOneWidget);
+    // Edits and deletes from these details apply to the tapped occurrence.
+    final panel = tester.widget<EventDetailsPanel>(
+      find.byType(EventDetailsPanel),
+    );
+    expect(panel.initialEvent!.startAt, DateTime(2026, 9, 15, 9));
+    expect(panel.initialEvent!.occurrenceId, isNotNull);
     expect(find.text('Weekly review'), findsWidgets);
+  });
+
+  testWidgets('a date tap leaves the Imogi tab for the calendar', (
+    tester,
+  ) async {
+    final container = await pumpPage(tester);
+    await tester.tap(find.byTooltip('잊모기'));
+    await tester.pumpAndSettle();
+    expect(find.byType(ImogiPage), findsOneWidget);
+    targets.add({'date': '2026-12-24'});
+    await container
+        .read(calendarWidgetServiceProvider)
+        .handleNativeMethodCall(
+          const MethodCall(
+            CalendarWidgetChannelContract.launchTargetOpenedCallback,
+          ),
+        );
+    await tester.pumpAndSettle();
+    expect(find.byType(ImogiPage), findsNothing);
+    expect(container.read(selectedDateProvider), DateTime(2026, 12, 24));
   });
 }

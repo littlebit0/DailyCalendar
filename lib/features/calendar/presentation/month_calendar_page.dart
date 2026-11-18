@@ -43,6 +43,7 @@ import '../../events/presentation/day_sheet_drag_release.dart';
 import '../../events/presentation/event_editor_dialog.dart';
 import '../../events/presentation/event_template_actions.dart';
 import '../../settings/presentation/settings_page.dart';
+import '../../events/data/recurrence_expander.dart';
 import '../widgets/calendar_event_drag_layer.dart';
 import '../widgets/calendar_month_grid.dart';
 import '../widgets/schedule_timeline_view.dart';
@@ -1370,11 +1371,18 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
         .takeLaunchTarget();
     if (target == null || !mounted) return;
     final eventId = target.eventId;
-    final event = eventId == null
+    final stored = eventId == null
         ? null
         : await ref.read(visibleEventRepositoryProvider).findById(eventId);
     if (!mounted) return;
-    final date = target.date ?? event?.startAt;
+    final date = target.date ?? stored?.startAt;
+    // Details edit and delete the event they are given, so a repeating event
+    // must open as the tapped occurrence, never as its first one.
+    final event = stored == null || date == null
+        ? stored
+        : _widgetOccurrence(stored, date);
+    // The widget shows the calendar, not the timetable or Imogi tab.
+    _selectBottomAction(_BottomCenterAction.calendar);
     if (date != null) {
       ref.read(visibleMonthProvider.notifier).state = DateTime(
         date.year,
@@ -1387,21 +1395,39 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
       );
     }
     if (event != null && context.mounted) {
-      await _showQuickEventDetails(context, event, date: date);
+      await _showQuickEventDetails(context, event);
     }
+  }
+
+  /// The occurrence of [event] starting on [date], or null when the series
+  /// has none there (deleted or moved since the widget was drawn).
+  CalendarEvent? _widgetOccurrence(CalendarEvent event, DateTime date) {
+    if (!event.recurrence.isRepeating) return event;
+    final day = DateTime(date.year, date.month, date.day);
+    final occurrences = RecurrenceExpander().expand(
+      event,
+      day,
+      DateTime(day.year, day.month, day.day + 1),
+    );
+    for (final occurrence in occurrences) {
+      final start = occurrence.startAt;
+      if (DateTime(start.year, start.month, start.day) == day) {
+        return occurrence;
+      }
+    }
+    return null;
   }
 
   Future<void> _showQuickEventDetails(
     BuildContext context,
-    CalendarEvent event, {
-    DateTime? date,
-  }) {
+    CalendarEvent event,
+  ) {
     return showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
       showDragHandle: true,
       builder: (_) => EventDetailsPanel(
-        date: date ?? event.startAt,
+        date: event.startAt,
         events: [event],
         initialEvent: event,
       ),
