@@ -887,6 +887,20 @@ void main() {
       await tester.tap(find.text('이 일정만'));
       await tester.pumpAndSettle();
       expect(repository.writes, greaterThan(0));
+      // 옮긴 한 회는 새 시각으로, 원래 반복은 그 회를 뺀 채 저장된다.
+      final moved = repository.saved.singleWhere((e) => e.id != repeating.id);
+      expect(moved.startAt, target);
+      expect(
+        moved.endAt,
+        target.add(repeating.endAt.difference(repeating.startAt)),
+      );
+      expect(moved.recurrence.isRepeating, isFalse);
+      final series = repository.saved.lastWhere((e) => e.id == repeating.id);
+      expect(series.startAt, repeating.startAt);
+      expect(
+        series.recurrence.excludedDates,
+        contains(DateUtils.dateOnly(repeating.startAt)),
+      );
     });
 
     testWidgets('refuses every drop when already required', (tester) async {
@@ -1509,6 +1523,9 @@ class _SingleEventRepository implements EventRepository {
   /// Writes the panel or a drop handler actually asked for.
   int writes = 0;
 
+  /// Every event passed to [save] or resolved by an atomic merge, in order.
+  final saved = <CalendarEvent>[];
+
   /// How many of those writes were deletions.
   int deletes = 0;
 
@@ -1572,6 +1589,7 @@ class _SingleEventRepository implements EventRepository {
       final previous = incoming.id == event.id ? event : null;
       final current = resolve(previous, incoming);
       resolved++;
+      saved.add(current);
       // A plain editor save now resolves against the stored row.
       if (previous != null &&
           !identical(previous, current) &&
@@ -1591,6 +1609,7 @@ class _SingleEventRepository implements EventRepository {
   @override
   Future<void> save(CalendarEvent event) async {
     writes++;
+    saved.add(event);
     this.event = event;
     afterSave?.call();
   }
