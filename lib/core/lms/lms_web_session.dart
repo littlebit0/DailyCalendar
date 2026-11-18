@@ -238,6 +238,7 @@ class LmsWebSession extends ChangeNotifier {
     required String ownerId,
     required this.schoolId,
     FlutterSecureStorage? secureStorage,
+    this.verificationCallTimeout = const Duration(seconds: 15),
   }) : ownerId = ownerId.trim().toLowerCase(),
        _storage = secureStorage ?? const FlutterSecureStorage() {
     if (this.ownerId.isEmpty || LmsSchool.of(schoolId) == null) {
@@ -247,6 +248,10 @@ class LmsWebSession extends ChangeNotifier {
 
   final String ownerId;
   final String schoolId;
+
+  /// Limit for each browser or cookie-store call of a login check. Longer
+  /// than the check script's own 10 second fetch limit.
+  final Duration verificationCallTimeout;
   final FlutterSecureStorage _storage;
   static LmsWebSession? _active;
   static Future<void> _activationTail = Future<void>.value();
@@ -280,6 +285,10 @@ class LmsWebSession extends ChangeNotifier {
   bool _keptAlive = false;
   bool _disposed = false;
   bool _nativeCookieBound = false;
+  // Binds that outlived their limit, one token each so an older bind finishing
+  // cannot hide a newer one: close still sends `clear`, which makes the native
+  // side drop them instead of registering this view's store late.
+  final _unsettledNativeBinds = <Object>{};
   bool _authenticationRecoveryPending = false;
   bool _authenticationRecoveryAttempted = false;
   Completer<void>? _pageLoaded;
@@ -784,12 +793,22 @@ class LmsWebSession extends ChangeNotifier {
     }
   }
 
+  /// An unanswered call ends as a network failure, which keeps the stored
+  /// session, instead of blocking close and manual login forever.
+  Future<T> _bounded<T>(Future<T> call) => call.timeout(
+    verificationCallTimeout,
+    onTimeout: () =>
+        throw const LmsWebSessionException(LmsWebSessionError.network),
+  );
+
   Future<void> _bindCookieStore() async {
     if (!_usesAppleStore || _nativeCookieBound) return;
     final startedGeneration = _generation;
     _checkGeneration(startedGeneration);
     final controller = _controller;
-    final uri = (await controller?.getUrl())?.uriValue;
+    final uri = controller == null
+        ? null
+        : (await _bounded(controller.getUrl()))?.uriValue;
     _checkGeneration(startedGeneration);
     if (controller == null || uri == null) {
       throw const LmsWebSessionException(LmsWebSessionError.viewUnavailable);
@@ -798,10 +817,12 @@ class LmsWebSession extends ChangeNotifier {
       throw const LmsWebSessionException(LmsWebSessionError.invalidResponse);
     }
     final marker = 'daily-lms-${const Uuid().v4()}';
-    final result = await controller.callAsyncJavaScript(
-      functionBody:
-          'const previous = window.name; window.name = marker; return previous;',
-      arguments: {'marker': marker},
+    final result = await _bounded(
+      controller.callAsyncJavaScript(
+        functionBody:
+            'const previous = window.name; window.name = marker; return previous;',
+        arguments: {'marker': marker},
+      ),
     );
     final originalName = result?.value;
     if (result?.error != null) {
@@ -812,12 +833,23 @@ class LmsWebSession extends ChangeNotifier {
     }
     try {
       _checkGeneration(startedGeneration);
-      _nativeCookieBound =
-          await _cookieChannel.invokeMethod<bool>('bind', {
-            'marker': marker,
-            'host': baseUrl.host,
-          }) ==
-          true;
+      // A bind answered after the limit still marks this view's store as
+      // bound, so close clears it; a closed view is left alone.
+      final bind = Object();
+      _unsettledNativeBinds.add(bind);
+      await _bounded(
+        _cookieChannel
+            .invokeMethod<bool>('bind', {
+              'marker': marker,
+              'host': baseUrl.host,
+            })
+            .then((bound) {
+              if (identical(_controller, controller)) {
+                _nativeCookieBound = bound == true;
+              }
+            })
+            .whenComplete(() => _unsettledNativeBinds.remove(bind)),
+      );
       // Keep the native binding flag even if retirement happened during bind;
       // close awaits this operation, then clears that exact dedicated store.
       _checkGeneration(startedGeneration);
@@ -827,9 +859,11 @@ class LmsWebSession extends ChangeNotifier {
     } on PlatformException catch (error) {
       throw _cookieStoreError(error);
     } finally {
-      await controller.callAsyncJavaScript(
-        functionBody: 'if (window.name === marker) window.name = previous;',
-        arguments: {'marker': marker, 'previous': originalName},
+      await _bounded(
+        controller.callAsyncJavaScript(
+          functionBody: 'if (window.name === marker) window.name = previous;',
+          arguments: {'marker': marker, 'previous': originalName},
+        ),
       );
     }
     _checkGeneration(startedGeneration);
@@ -1283,7 +1317,7 @@ class LmsWebSession extends ChangeNotifier {
       throw const LmsWebSessionException(LmsWebSessionError.viewUnavailable);
     }
     _checkGeneration(startedGeneration);
-    final at = (await controller.getUrl())?.uriValue;
+    final at = (await _bounded(controller.getUrl()))?.uriValue;
     _checkGeneration(startedGeneration);
     if (at == null) {
       throw const LmsWebSessionException(LmsWebSessionError.viewUnavailable);
@@ -1294,9 +1328,11 @@ class LmsWebSession extends ChangeNotifier {
     }
     await _bindCookieStore();
     _checkGeneration(startedGeneration);
-    final value = await controller.callAsyncJavaScript(
-      functionBody: authenticationScript,
-      arguments: {'origin': baseUrl.origin},
+    final value = await _bounded(
+      controller.callAsyncJavaScript(
+        functionBody: authenticationScript,
+        arguments: {'origin': baseUrl.origin},
+      ),
     );
     _checkGeneration(startedGeneration);
     if (value == null || value.error != null) {
@@ -1608,7 +1644,7 @@ class LmsWebSession extends ChangeNotifier {
 
   Future<void> _clearSchoolCookies() async {
     if (_usesAppleStore) {
-      if (_nativeCookieBound) {
+      if (_nativeCookieBound || _unsettledNativeBinds.isNotEmpty) {
         await _cookieChannel.invokeMethod<bool>('clear', {
           'host': baseUrl.host,
         });
@@ -1705,6 +1741,7 @@ class LmsWebSession extends ChangeNotifier {
       }
       await _environment?.dispose();
       _nativeCookieBound = false;
+      _unsettledNativeBinds.clear();
       _environment = null;
       _headless = null;
       _controller = null;

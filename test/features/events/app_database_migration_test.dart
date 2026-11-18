@@ -173,4 +173,64 @@ void main() {
       expect(event.createdAt.toUtc(), precise);
     },
   );
+
+  test('a row with damaged sync timestamp details does not fail queries or the '
+      'schema 14 upgrade', () async {
+    final directory = await Directory.systemTemp.createTemp('daily-migration-');
+    addTearDown(() => directory.delete(recursive: true));
+    final file = File('${directory.path}/daily.sqlite');
+    final precise = DateTime.utc(2026, 7, 30, 1, 2, 3, 900, 7);
+    CalendarEvent event(String id) => CalendarEvent(
+      id: id,
+      title: id,
+      startAt: DateTime(2026, 7, 30, 10),
+      endAt: DateTime(2026, 7, 30, 11),
+      allDay: false,
+      category: EventCategory.basic,
+      colorValue: EventCategory.basic.colorValue,
+      createdAt: precise,
+      updatedAt: precise,
+    );
+    final oldDatabase = AppDatabase.forTesting(NativeDatabase(file));
+    final oldRepository = DriftEventRepository(oldDatabase);
+    for (final id in ['damaged', 'wrong-shape', 'intact']) {
+      await oldRepository.save(event(id));
+    }
+    await oldDatabase.customStatement(
+      "UPDATE event_records SET sync_timestamp_details = 'x' WHERE id = 'damaged'",
+    );
+    await oldDatabase.customStatement(
+      "UPDATE event_records SET sync_timestamp_details = '{\"createdAt\":1}' WHERE id = 'wrong-shape'",
+    );
+    final from = DateTime(2026, 7, 30);
+    final to = DateTime(2026, 7, 31);
+    expect(
+      (await oldRepository.eventsInRange(from, to)).map((e) => e.id).toSet(),
+      {'damaged', 'wrong-shape', 'intact'},
+    );
+    await oldDatabase.customStatement('PRAGMA user_version = 14');
+    await oldDatabase.close();
+
+    final database = AppDatabase.forTesting(
+      NativeDatabase(file),
+      legacyShowOvernightOnFollowingDays: false,
+    );
+    addTearDown(database.close);
+    final repository = DriftEventRepository(database);
+    final version = await database
+        .customSelect('PRAGMA user_version')
+        .getSingle();
+    expect(version.read<int>('user_version'), AppDatabase.currentSchemaVersion);
+    final events = {
+      for (final e in await repository.eventsInRange(from, to)) e.id: e,
+    };
+    expect(events.keys.toSet(), {'damaged', 'wrong-shape', 'intact'});
+    // Only the precision of the damaged rows is lost.
+    expect(events['intact']!.updatedAt.toUtc(), precise);
+    expect(
+      events['damaged']!.updatedAt.toUtc(),
+      DateTime.utc(2026, 7, 30, 1, 2, 3),
+    );
+    expect(events['damaged']!.showOvernightOnFollowingDays, isFalse);
+  });
 }

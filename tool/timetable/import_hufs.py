@@ -131,8 +131,8 @@ def parse_rows(rows, clocks, year=2026, semester='2'):
 
 
 def load_complete(directory):
-    manifest = json.loads((directory / 'manifest.json').read_text())
-    rows = json.loads((directory / 'courses.json').read_text())
+    manifest = json.loads((directory / 'manifest.json').read_text(encoding='utf-8'))
+    rows = json.loads((directory / 'courses.json').read_text(encoding='utf-8'))
     expected = {f'{campus}/{category}' for campus in CAMPUS_IDS for category in '1234'}
     if manifest.get('complete') is not True or set(manifest['counts']) != expected:
         raise ValueError('Incomplete HUFS campus/category scope')
@@ -153,7 +153,7 @@ if __name__ == '__main__':
     parser.add_argument('--checked-at', required=True)
     args = parser.parse_args()
     manifest, rows = load_complete(args.raw)
-    clocks = json.loads(args.clock.read_text())
+    clocks = json.loads(args.clock.read_text(encoding='utf-8'))
     courses = parse_rows(rows, clocks, manifest['year'], manifest['semester'])
     args.output.mkdir(parents=True, exist_ok=True)
     for campus, campus_id in CAMPUS_IDS.items():
@@ -165,5 +165,5 @@ if __name__ == '__main__':
             'sourceUrl': manifest['sourceUrl'], 'courses': selected,
         }
         filename = f'hufs-{campus_id}-{manifest["year"]}-{manifest["semester"]}.json'
-        (args.output / filename).write_text(json.dumps(document, ensure_ascii=False, indent=2) + '\n')
+        (args.output / filename).write_text(json.dumps(document, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
         print(campus_id, len(selected), sum(bool(c['schedules']) for c in selected))

@@ -196,13 +196,15 @@ private enum DailyWidgetTodoActionStore {
       ])
       let data = try JSONSerialization.data(withJSONObject: actions)
       try data.write(to: actionsURL, options: .atomic)
+      // Still under the lock the app takes for its own snapshot write, so this
+      // read-modify-write can never put back a snapshot the app replaced (#920).
+      try updateSnapshot(
+        at: containerURL.appendingPathComponent(snapshotFileName),
+        eventId: eventId,
+        completed: completed,
+        occurrenceId: occurrenceId
+      )
     }
-    try updateSnapshot(
-      at: containerURL.appendingPathComponent(snapshotFileName),
-      eventId: eventId,
-      completed: completed,
-      occurrenceId: occurrenceId
-    )
     notifyApp()
   }
 
@@ -713,20 +715,66 @@ struct DailyWidgetProvider: TimelineProvider {
   }
 
   func getTimeline(in context: Context, completion: @escaping (Timeline<DailyWidgetEntry>) -> Void) {
-    let now = Date.now
-    let snapshot = DailyWidgetSnapshot.load(for: now)
-    let entry = DailyWidgetEntry(date: now, snapshot: snapshot)
-    let calendar = Calendar.current
-    // Calendar arithmetic keeps the refresh on local midnight across DST changes.
-    let midnight = calendar.date(byAdding: .day, value: 1, to: calendar.startOfDay(for: now))
-      ?? now.addingTimeInterval(24 * 60 * 60)
-    let eventBoundaries = (snapshot.scheduleEvents ?? []).flatMap { event in
-      [event.startDate, event.endDate].compactMap { $0 }.filter { $0 > now }
-    }
-    let nextRefresh = ([midnight] + eventBoundaries).min() ?? now.addingTimeInterval(3600)
-    completion(Timeline(entries: [entry], policy: .after(nextRefresh)))
+    let plan = dailyWidgetTimelinePlan(now: .now)
+    completion(Timeline(
+      entries: plan.entries.map { DailyWidgetEntry(date: $0.date, snapshot: $0.snapshot) },
+      policy: .after(plan.reload)
+    ))
   }
 }
+
+// BEGIN WIDGET TIMELINE PLAN
+/// Entry dates between `start` and `end`: `start` itself, then every later
+/// event start/end before `end`. Boundaries closer than `minimumGap` to the
+/// first one of their group become one entry at the group's last boundary, so
+/// back-to-back events do not produce entries seconds apart.
+func dailyWidgetTimelineDates(
+  from start: Date,
+  until end: Date,
+  boundaries: [Date],
+  minimumGap: TimeInterval = 5 * 60
+) -> [Date] {
+  var dates = [start]
+  var groupStart: Date?
+  for boundary in boundaries.filter({ $0 > start && $0 < end }).sorted() {
+    if let first = groupStart, boundary.timeIntervalSince(first) < minimumGap {
+      dates[dates.count - 1] = boundary
+    } else {
+      groupStart = boundary
+      dates.append(boundary)
+    }
+  }
+  return dates
+}
+
+/// The timeline is built ahead instead of relying on WidgetKit calling back at
+/// midnight: it already holds the entry for each event boundary of today, the
+/// next midnight (rolled to that day's cached values, or the refresh
+/// placeholder when the cache cannot cover it) and the day after it (#919).
+/// The reload is asked for once, at the next midnight.
+func dailyWidgetTimelinePlan(
+  now: Date,
+  calendar: Calendar = .current
+) -> (entries: [(date: Date, snapshot: DailyWidgetSnapshot)], reload: Date) {
+  var entries: [(date: Date, snapshot: DailyWidgetSnapshot)] = []
+  var start = now
+  var reload = now
+  // shortcut: two days ahead only, extend if widgets are seen stale after a missed reload.
+  for day in 0..<2 {
+    let snapshot = DailyWidgetSnapshot.load(for: start)
+    // Calendar arithmetic keeps the entry on local midnight across DST changes.
+    let midnight = calendar.date(byAdding: .day, value: 1, to: calendar.startOfDay(for: start))
+      ?? start.addingTimeInterval(24 * 60 * 60)
+    let boundaries = snapshot.events(on: start).flatMap { [$0.startDate, $0.endDate].compactMap { $0 } }
+    for date in dailyWidgetTimelineDates(from: start, until: midnight, boundaries: boundaries) {
+      entries.append((date: date, snapshot: snapshot))
+    }
+    if day == 0 { reload = midnight }
+    start = midnight
+  }
+  return (entries, reload)
+}
+// END WIDGET TIMELINE PLAN
 
 private struct DailyWidgetHeader: View {
   let title: String

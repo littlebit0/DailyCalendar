@@ -206,15 +206,15 @@ if __name__=='__main__':
     parser.add_argument('--research-root',type=Path,required=True)
     parser.add_argument('--output',type=Path,required=True)
     args=parser.parse_args();root=args.research_root
-    rows=json.loads((root/'kookmin-current-college-scope.json').read_text())['records']+json.loads((root/'kookmin-current-unmapped-department-courses.json').read_text())['records']
-    courses, unresolved=convert(rows,json.loads((root/'kookmin-commoncodes.json').read_text()),json.loads((root/'kookmin-concentrated-periods.json').read_text()),
-        json.loads((root/'kookmin-verified-department-names.json').read_text()),
-        json.loads((root/'kookmin-special-dated-meeting-candidates.json').read_text())
-        + json.loads((root/'kookmin-general-operating-meeting-candidates.json').read_text()),
-        json.loads((root/'kookmin-current-weekly-operating-rows.json').read_text()))
+    rows=json.loads((root/'kookmin-current-college-scope.json').read_text(encoding='utf-8'))['records']+json.loads((root/'kookmin-current-unmapped-department-courses.json').read_text(encoding='utf-8'))['records']
+    courses, unresolved=convert(rows,json.loads((root/'kookmin-commoncodes.json').read_text(encoding='utf-8')),json.loads((root/'kookmin-concentrated-periods.json').read_text(encoding='utf-8')),
+        json.loads((root/'kookmin-verified-department-names.json').read_text(encoding='utf-8')),
+        json.loads((root/'kookmin-special-dated-meeting-candidates.json').read_text(encoding='utf-8'))
+        + json.loads((root/'kookmin-general-operating-meeting-candidates.json').read_text(encoding='utf-8')),
+        json.loads((root/'kookmin-current-weekly-operating-rows.json').read_text(encoding='utf-8')))
     result={'schemaVersion':2,'researchOnly':True,'productionReady':False,'completionClaim':False,
       'universityId':'kookmin','campus':'main','academicYear':2026,'semester':'2','publishedDate':'2026-10-07',
       'sourceUrl':'https://sugang.kookmin.ac.kr/front/enrollment/course-catalog','courses':courses,
       'unresolvedActualPeriod':unresolved,'remaining':['campus/building scope','special and concentrated operation','actual department40053name','source short period and semester corroboration']}
-    args.output.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
+    args.output.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n', encoding='utf-8')
     print('Current undergraduate courses',len(courses),'unresolved actual periods',len(unresolved))

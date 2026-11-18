@@ -35,7 +35,7 @@ void main() {
 
       await expectLater(
         repository.save(before.copyWith(morningBriefingEnabled: false)),
-        throwsA(isA<Object>()),
+        throwsStateError,
       );
 
       expect(repository.load().morningBriefingEnabled, isTrue);
@@ -61,7 +61,7 @@ void main() {
           morningBriefingEnabled: false,
         ),
       ),
-      throwsA(isA<Object>()),
+      throwsStateError,
     );
 
     final reread = await cold();
@@ -95,7 +95,7 @@ void main() {
 
       await expectLater(
         repository.mergeSettingsSyncDocument(remote, decode),
-        throwsA(isA<Object>()),
+        throwsStateError,
       );
 
       final reread = await cold();
@@ -147,7 +147,7 @@ void main() {
 
       await expectLater(
         repository.mergeSettingsSyncDocument(remote, decode),
-        throwsA(isA<Object>()),
+        throwsStateError,
       );
       final reread = await cold();
       expect(reread.load().themeMode, current.themeMode);

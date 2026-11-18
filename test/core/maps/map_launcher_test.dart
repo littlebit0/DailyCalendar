@@ -38,4 +38,86 @@ void main() {
 
     expect(called, isFalse);
   });
+
+  void answer(Object? Function() native) {
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(channel, (_) async => native());
+  }
+
+  test('handled and cancelled native choices count as opened', () async {
+    var webOpened = false;
+    answer(() => 'handled');
+    final launcher = MapLauncher(
+      channel: channel,
+      openUrl: (_) async => webOpened = true,
+    );
+    expect(await launcher.openLocation('서울역'), isTrue);
+    expect(webOpened, isFalse);
+  });
+
+  test('a native failure result reports failure', () async {
+    answer(() => 'failed');
+    final launcher = MapLauncher(channel: channel, openUrl: (_) async => true);
+    expect(await launcher.openLocation('서울역'), isFalse);
+  });
+
+  test('a desktop choice opens the matching web map', () async {
+    final opened = <Uri>[];
+    answer(() => 'naver');
+    final launcher = MapLauncher(
+      channel: channel,
+      openUrl: (uri) async {
+        opened.add(uri);
+        return true;
+      },
+    );
+    expect(await launcher.openLocation('서울역'), isTrue);
+    expect(opened.single.host, 'map.naver.com');
+  });
+
+  test('a web map that cannot be opened reports failure', () async {
+    answer(() => 'kakao');
+    final launcher = MapLauncher(channel: channel, openUrl: (_) async => false);
+    expect(await launcher.openLocation('서울역'), isFalse);
+  });
+
+  test(
+    'a launch error retries the default map, then reports failure',
+    () async {
+      var attempts = 0;
+      answer(() => 'naver');
+      final launcher = MapLauncher(
+        channel: channel,
+        openUrl: (_) async {
+          attempts++;
+          throw PlatformException(code: 'open_error');
+        },
+      );
+      expect(await launcher.openLocation('서울역'), isFalse);
+      expect(attempts, 2);
+    },
+  );
+
+  test('a native channel error falls back to the web map', () async {
+    final opened = <Uri>[];
+    answer(() => throw PlatformException(code: 'boom'));
+    final launcher = MapLauncher(
+      channel: channel,
+      openUrl: (uri) async {
+        opened.add(uri);
+        return true;
+      },
+    );
+    expect(await launcher.openLocation('서울역'), isTrue);
+    expect(opened, hasLength(1));
+  });
+
+  test('an unexpected error reports failure instead of escaping', () async {
+    answer(() => 'apple');
+    final launcher = MapLauncher(
+      channel: channel,
+      openUrl: (_) async => throw StateError('no browser'),
+    );
+    expect(await launcher.openLocation('서울역'), isFalse);
+  });
 }

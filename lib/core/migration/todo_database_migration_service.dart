@@ -153,9 +153,15 @@ class TodoDatabaseMigrationService {
       // only adds the device-local Drive file cache table: they must not
       // repeat the old cloud migration or turn every unchanged event into an
       // upload.
-      final isAdditiveLmsMigration =
-          originalVersion >= 8 && AppDatabase.currentSchemaVersion <= 15;
-      final requiresLegacyCloudMigration = !isAdditiveLmsMigration;
+      //
+      // Every schema after 8 is additive by default, so raising
+      // AppDatabase.currentSchemaVersion needs no edit here. A future schema
+      // that is not additive (existing rows must be re-uploaded or restored
+      // from Drive) must be listed in [requiresLegacyCloudMigrationFrom]
+      // with a test for the versions below it.
+      final requiresLegacyCloudMigration = requiresLegacyCloudMigrationFrom(
+        originalVersion,
+      );
       List<CalendarEvent>? remoteEvents = const <CalendarEvent>[];
       if (requiresLegacyCloudMigration) {
         stage = TodoMigrationStage.restoring;
@@ -747,3 +753,13 @@ class TodoDatabaseMigrationService {
         : event.category.label;
   }
 }
+
+/// Whether upgrading a database last written at [originalVersion] must run the
+/// old cloud migration (restore from Drive, then mark every event for upload).
+///
+/// Schemas after 8 only added nullable or defaulted columns and device-local
+/// tables. When a later schema changes that, raise the bound here: a
+/// non-additive schema 17 makes this `originalVersion < 17`.
+@visibleForTesting
+bool requiresLegacyCloudMigrationFrom(int originalVersion) =>
+    originalVersion < 8;

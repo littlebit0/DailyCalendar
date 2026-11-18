@@ -75,6 +75,8 @@ void main() {
 
     final approved = courses.where((c) => c.hasSchedulableMeetings).toList();
     expect(approved, hasLength(23));
+    // 출처: tool/timetable/ulsan_honors_clock.json의 source(아너스칼리지 자율전공학부
+    // 학년별 시간표). 공개 강의시간 조회는 요일·교시만 있어 나머지는 unrecognized다.
     // The honors 학년별 시간표 prints 1~9교시 as 09:00~17:50 (50분 수업 + 10분
     // 쉬는 시간 = 60분 슬롯). Each period owns its break, so every meeting
     // starts and ends on the 60-minute grid from 09:00, and a same-room run of

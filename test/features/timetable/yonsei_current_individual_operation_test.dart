@@ -178,12 +178,20 @@ void main() {
         current.map((c) => c['sourceId']).toSet(),
         previous.map((c) => c['sourceId']).toSet(),
       );
-      final oldMap = {for (final c in previous) c['sourceId']: c};
-      for (final c in current) {
+      // 다른 세 캠퍼스는 previous와 current가 같은 파일이라 비교하지 않는다.
+      final oldMap = {
+        for (final c
+            in read('baseline-international-frozen-v3.json')['courses'] as List)
+          c['sourceId']: c,
+      };
+      var compared = 0;
+      for (final c in raw['courses'] as List) {
         if (c['sourceId'] != id) {
           expect(c, oldMap[c['sourceId']]);
+          compared++;
         }
       }
+      expect(compared, (raw['courses'] as List).length - 1);
       final union = campusNames
           .map(
             (n) => UniversityDataset.fromJson(
