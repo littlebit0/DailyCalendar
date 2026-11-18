@@ -1101,6 +1101,8 @@ const Map<String, Map<String, String>> _translations = {
     'Google Drive 복원 완료': 'Google Drive restore completed',
     '요청을 완료하지 못했습니다. 잠시 후 다시 시도해 주세요.':
         'The request could not be completed. Try again shortly.',
+    '아침 브리핑 알림 예약을 바꾸지 못했습니다. 알림 권한을 확인한 뒤 다시 시도해 주세요.':
+        'Could not update the morning briefing notification. Check notification permission and try again.',
     '네트워크 연결을 확인한 뒤 다시 시도해 주세요.':
         'Check your network connection and try again.',
     'Google Drive 연결이 만료되었습니다. 다시 연결해 주세요.':
@@ -2166,6 +2168,7 @@ const Map<String, Map<String, String>> _translations = {
     'Google Drive 연결이 완료되었습니다.': 'Google Driveに接続しました。',
     'Google Drive 복원 완료': 'Google Driveからの復元が完了しました',
     '요청을 완료하지 못했습니다. 잠시 후 다시 시도해 주세요.': 'リクエストを完了できませんでした。しばらくしてから再試行してください。',
+    '아침 브리핑 알림 예약을 바꾸지 못했습니다. 알림 권한을 확인한 뒤 다시 시도해 주세요.': '朝のブリーフィング通知を更新できませんでした。通知の許可を確認してから再試行してください。',
     '네트워크 연결을 확인한 뒤 다시 시도해 주세요.': 'ネットワーク接続を確認して再試行してください。',
     'Google Drive 연결이 만료되었습니다. 다시 연결해 주세요.':
         'Google Drive接続の有効期限が切れました。再接続してください。',
@@ -3189,6 +3192,7 @@ const Map<String, Map<String, String>> _translations = {
     'Google Drive 연결이 완료되었습니다.': 'Google Drive 連線完成。',
     'Google Drive 복원 완료': 'Google Drive 還原完成',
     '요청을 완료하지 못했습니다. 잠시 후 다시 시도해 주세요.': '無法完成要求，請稍後再試。',
+    '아침 브리핑 알림 예약을 바꾸지 못했습니다. 알림 권한을 확인한 뒤 다시 시도해 주세요.': '無法更新晨間摘要通知，請確認通知權限後再試。',
     '네트워크 연결을 확인한 뒤 다시 시도해 주세요.': '請檢查網路連線後再試。',
     'Google Drive 연결이 만료되었습니다. 다시 연결해 주세요.': 'Google Drive 連線已過期，請重新連線。',
     'Google Drive 권한이 부족합니다. 다시 연결해 권한을 승인해 주세요.':
