@@ -75,4 +75,32 @@ class DailyAlarmReconcileTest {
         assertEquals(listOf(second), times("other"))
         assertFalse(DailyAlarmScheduler.scheduleAll(context, "past", "event", "", 10, listOf(now - 1)))
     }
+
+    @Test fun startupReconcileParsesEachStoredAlarmOnceAndKeepsThem() {
+        val now = System.currentTimeMillis()
+        val events = 40
+        for (index in 0 until events) {
+            DailyAlarmScheduler.scheduleAll(context, "event$index", "event", "", 10, listOf(now + 600_000 + index))
+        }
+        // Simulates the app start: one reconcile per event, nothing changed (#873).
+        val before = DailyAlarmScheduler.parseCount
+        for (index in 0 until events) {
+            assertTrue(DailyAlarmScheduler.reconcile(context, "event$index", "event", "", 10, listOf(now + 600_000 + index)))
+        }
+        assertTrue(DailyAlarmScheduler.parseCount - before <= events)
+        assertEquals(events, store.all.size)
+        // A text change still replaces the alarm stored under the same id.
+        assertTrue(DailyAlarmScheduler.reconcile(context, "event0", "renamed", "", 10, listOf(now + 600_000)))
+        assertEquals(listOf("renamed"), DailyAlarmScheduler.alarms(context, "event0").map { it.title })
+    }
+
+    @Test fun restoreRearmsFutureAlarmsAndDropsPassedOnesTogether() {
+        val now = System.currentTimeMillis()
+        val future = DailyAlarm("future", "event", "", now + 600_000, 10)
+        val passed = (0 until 3).map { DailyAlarm("passed$it", "event", "", now - 7_200_000, 10) }
+        store.edit().putString(future.id, future.json()).apply { passed.forEach { putString(it.id, it.json()) } }.commit()
+        DailyAlarmScheduler.restore(context)
+        assertEquals(setOf(future.id), store.all.keys)
+        assertEquals(future, DailyAlarmScheduler.read(context, future.id))
+    }
 }
