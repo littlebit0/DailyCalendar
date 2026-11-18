@@ -40,8 +40,9 @@ public class FlutterSecureStorage {
     private final Context context;
 
     private SharedPreferences preferences;
-    private StorageCipher storageCipher;
-    private StorageCipherFactory storageCipherFactory;
+    // Package-private for the #937 initialization tests; not part of the plugin API.
+    StorageCipher storageCipher;
+    StorageCipherFactory storageCipherFactory;
 
     public FlutterSecureStorage(Context context) {
         this.context = context.getApplicationContext();
@@ -286,7 +287,7 @@ public class FlutterSecureStorage {
         callback.onError(new Exception("EncryptedSharedPreferences migration failed; original data retained", error));
     }
 
-    private void initializeStorageCipher(NamespacedConfigSource configSource, SecurePreferencesCallback<Void> callback) {
+    /* package */ void initializeStorageCipher(NamespacedConfigSource configSource, SecurePreferencesCallback<Void> callback) {
         try {
             storageCipherFactory = new StorageCipherFactory(configSource, config.getPrefOptionKeyCipherAlgorithm(), config.getPrefOptionStorageCipherAlgorithm(), config, context.getSharedPreferences(config.getEffectiveDataPrefsName(), Context.MODE_PRIVATE));
 
@@ -1261,7 +1262,7 @@ public class FlutterSecureStorage {
         Log.i(TAG, "Migration complete: " + migratedCount + " items migrated from EncryptedSharedPreferences to custom cipher storage");
     }
 
-    private SharedPreferences initializeEncryptedSharedPreferencesManager(Context context) throws GeneralSecurityException, IOException {
+    /* package */ SharedPreferences initializeEncryptedSharedPreferencesManager(Context context) throws GeneralSecurityException, IOException {
         MasterKey key = new MasterKey.Builder(context)
                 .setKeyGenParameterSpec(
                         new KeyGenParameterSpec
