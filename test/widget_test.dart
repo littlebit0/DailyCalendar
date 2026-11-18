@@ -6698,8 +6698,10 @@ void main() {
 
       settingsRepository.releasePendingSave();
       await tester.pump();
-      expect(saveError, isA<StateError>());
+      // The failed save is reported on screen (#916), not thrown out of the control.
+      expect(saveError, isNull);
       await tester.pumpAndSettle();
+      expect(find.text('선택을 저장하지 못했습니다. 다시 시도해 주세요.'), findsOneWidget);
       expect(container.read(appSettingsProvider).weekStartsOnMonday, isFalse);
       expect(settingsRepository.load().weekStartsOnMonday, isFalse);
       expect(tester.widget<SwitchListTile>(lunarToggle).value, isFalse);
@@ -6748,6 +6750,41 @@ void main() {
       expect(container.read(appSettingsProvider).showLunarDates, isTrue);
       expect(tester.widget<SwitchListTile>(lunarToggle).value, isTrue);
 
+      await tester.pumpWidget(const SizedBox.shrink());
+      debugDefaultTargetPlatformOverride = null;
+    },
+  );
+
+  testWidgets(
+    'Windows older save failure keeps a newer pending choice on screen (#916)',
+    (tester) async {
+      final (_, settingsRepository) = await _pumpWindowsAppearanceSettings(
+        tester,
+      );
+      final adjacentToggle = find.byKey(
+        const ValueKey('show-adjacent-month-dates-toggle'),
+      );
+      final lunarToggle = find.byKey(const ValueKey('show-lunar-dates-toggle'));
+      expect(tester.widget<SwitchListTile>(lunarToggle).value, isTrue);
+
+      settingsRepository.failNextSave();
+      await tester.tap(adjacentToggle);
+      await tester.pump(const Duration(milliseconds: 240));
+      expect(settingsRepository.saveCalls, 1);
+      await tester.tap(lunarToggle);
+      await tester.pump();
+      expect(tester.widget<SwitchListTile>(lunarToggle).value, isFalse);
+
+      settingsRepository.releasePendingSave();
+      await tester.pump();
+      await tester.pump();
+      expect(find.text('선택을 저장하지 못했습니다. 다시 시도해 주세요.'), findsOneWidget);
+      // The newer lunar choice is still saving and must not flip back.
+      expect(tester.widget<SwitchListTile>(lunarToggle).value, isFalse);
+
+      await tester.pumpAndSettle();
+      expect(settingsRepository.load().showLunarDates, isFalse);
+      expect(tester.widget<SwitchListTile>(lunarToggle).value, isFalse);
       await tester.pumpWidget(const SizedBox.shrink());
       debugDefaultTargetPlatformOverride = null;
     },
