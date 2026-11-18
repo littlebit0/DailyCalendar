@@ -94,4 +94,24 @@ class RunnerTests: XCTestCase {
     XCTAssertTrue(identifiers.contains("kr-holiday-2026-08-17-대체공휴일"))
   }
 
+  func testSubstituteHolidaysFollowEnforcementDates() throws {
+    var calendar = Calendar(identifier: .gregorian)
+    calendar.timeZone = .current
+    let start = try XCTUnwrap(calendar.date(from: DateComponents(year: 2013, month: 1, day: 1)))
+    let end = try XCTUnwrap(calendar.date(from: DateComponents(year: 2028, month: 1, day: 1)))
+    let identifiers = Set(
+      DailyKoreanHolidayService.events(
+        from: start,
+        to: end,
+        respectVisibilitySetting: false
+      ).map(\.id)
+    )
+    for date in ["2013-02-12", "2013-05-06", "2020-10-05", "2021-12-27", "2022-05-09", "2022-12-26"] {
+      XCTAssertFalse(identifiers.contains("kr-holiday-\(date)-대체공휴일"), date)
+    }
+    for date in ["2014-09-10", "2019-05-06", "2021-08-16", "2021-10-04", "2021-10-11", "2027-12-27"] {
+      XCTAssertTrue(identifiers.contains("kr-holiday-\(date)-대체공휴일"), date)
+    }
+  }
+
 }
