@@ -285,9 +285,10 @@ class LmsWebSession extends ChangeNotifier {
   bool _keptAlive = false;
   bool _disposed = false;
   bool _nativeCookieBound = false;
-  // A bind that outlived its limit: close still sends `clear`, which makes the
-  // native side drop that bind instead of registering this view's store late.
-  bool _nativeBindUnsettled = false;
+  // Binds that outlived their limit, one token each so an older bind finishing
+  // cannot hide a newer one: close still sends `clear`, which makes the native
+  // side drop them instead of registering this view's store late.
+  final _unsettledNativeBinds = <Object>{};
   bool _authenticationRecoveryPending = false;
   bool _authenticationRecoveryAttempted = false;
   Completer<void>? _pageLoaded;
@@ -834,7 +835,8 @@ class LmsWebSession extends ChangeNotifier {
       _checkGeneration(startedGeneration);
       // A bind answered after the limit still marks this view's store as
       // bound, so close clears it; a closed view is left alone.
-      _nativeBindUnsettled = true;
+      final bind = Object();
+      _unsettledNativeBinds.add(bind);
       await _bounded(
         _cookieChannel
             .invokeMethod<bool>('bind', {
@@ -846,11 +848,7 @@ class LmsWebSession extends ChangeNotifier {
                 _nativeCookieBound = bound == true;
               }
             })
-            .whenComplete(() {
-              if (identical(_controller, controller)) {
-                _nativeBindUnsettled = false;
-              }
-            }),
+            .whenComplete(() => _unsettledNativeBinds.remove(bind)),
       );
       // Keep the native binding flag even if retirement happened during bind;
       // close awaits this operation, then clears that exact dedicated store.
@@ -1646,7 +1644,7 @@ class LmsWebSession extends ChangeNotifier {
 
   Future<void> _clearSchoolCookies() async {
     if (_usesAppleStore) {
-      if (_nativeCookieBound || _nativeBindUnsettled) {
+      if (_nativeCookieBound || _unsettledNativeBinds.isNotEmpty) {
         await _cookieChannel.invokeMethod<bool>('clear', {
           'host': baseUrl.host,
         });
@@ -1743,7 +1741,7 @@ class LmsWebSession extends ChangeNotifier {
       }
       await _environment?.dispose();
       _nativeCookieBound = false;
-      _nativeBindUnsettled = false;
+      _unsettledNativeBinds.clear();
       _environment = null;
       _headless = null;
       _controller = null;

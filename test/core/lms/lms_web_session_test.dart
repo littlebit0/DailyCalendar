@@ -1363,6 +1363,55 @@ void main() {
     },
     skip: !Platform.isMacOS && !Platform.isIOS,
   );
+
+  test(
+    'an older bind finishing late keeps a newer pending bind cancellable',
+    () async {
+      FlutterSecureStorage.setMockInitialValues({});
+      final calls = <String>[];
+      final binds = <Completer<Object?>>[];
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(
+            const MethodChannel('daily/lms_cookie_store'),
+            (call) {
+              calls.add(call.method);
+              if (call.method != 'bind') return Future<Object?>.value(true);
+              final bind = Completer<Object?>();
+              binds.add(bind);
+              return bind.future;
+            },
+          );
+      final session = LmsWebSession(
+        ownerId: 'student@example.com',
+        schoolId: 'smu',
+        verificationCallTimeout: const Duration(milliseconds: 50),
+      );
+      final network = throwsA(
+        isA<LmsWebSessionException>().having(
+          (error) => error.code,
+          'code',
+          LmsWebSessionError.network,
+        ),
+      );
+      try {
+        await session.beginLogin();
+        session.attachLoginController(_AuthenticatedWebController());
+        await expectLater(session.verifyAuthentication(), network);
+        await expectLater(session.verifyAuthentication(), network);
+        expect(binds, hasLength(2));
+        // The first bind is answered late and unbound; the second still waits.
+        binds.first.complete(false);
+        await Future<void>.delayed(Duration.zero);
+        await session.close().timeout(const Duration(seconds: 5));
+        expect(calls, ['bind', 'bind', 'clear']);
+      } finally {
+        await session.retire();
+        session.dispose();
+        _clearMockCookieBridge();
+      }
+    },
+    skip: !Platform.isMacOS && !Platform.isIOS,
+  );
 }
 
 final _authError = isA<LmsWebSessionException>().having(
