@@ -406,6 +406,21 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
                                                             )
                                                             .state =
                                                         date;
+                                                    // Week/day taps can cross a month
+                                                    // boundary; keep the month view on
+                                                    // the selected date's month.
+                                                    if (viewMode !=
+                                                        CalendarViewMode.month) {
+                                                      ref
+                                                          .read(
+                                                            visibleMonthProvider
+                                                                .notifier,
+                                                          )
+                                                          .state = DateTime(
+                                                        date.year,
+                                                        date.month,
+                                                      );
+                                                    }
                                                     if (viewMode !=
                                                             CalendarViewMode
                                                                 .day &&
