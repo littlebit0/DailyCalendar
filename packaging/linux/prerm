@@ -2,7 +2,9 @@
 set -eu
 if [ "$1" = remove ] || [ "$1" = deconfigure ]; then
   if [ -d /run/systemd/system ]; then
-    systemctl disable --now dailycalendar-update.timer || true
+    # Only stop it: the enablement is kept so a reinstall after "remove"
+    # starts the timer again, and is dropped by postrm on purge.
+    systemctl stop dailycalendar-update.timer || true
   fi
   # Stop only Daily's user timer in currently logged-in desktop sessions.
   for session in /run/user/*; do

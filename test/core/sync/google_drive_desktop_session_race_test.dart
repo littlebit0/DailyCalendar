@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:daily/core/sync/google_drive_auth_service.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -83,6 +84,42 @@ void main() {
       },
     );
   }
+
+  for (final (label, error) in <(String, Object)>[
+    ('socket error', const SocketException('offline')),
+    ('timeout', TimeoutException('slow')),
+    ('client error', http.ClientException('connection closed')),
+  ]) {
+    test('a $label during token refresh is transient, not a lost link '
+        '(#852)', () async {
+      expiredA();
+      final auth = service(request: (_) async => throw error);
+      await auth.restorePreviousSignIn();
+      for (final prompt in [false, true]) {
+        await expectLater(
+          auth.authorizationHeaders(promptIfNecessary: prompt),
+          throwsA(
+            isA<GoogleDriveAuthException>().having(
+              (error) => error.timedOut,
+              'timedOut',
+              isTrue,
+            ),
+          ),
+        );
+      }
+      expect(auth.currentAccount?.email, 'a@example.test');
+    });
+  }
+
+  test('a rejected refresh token still means the link is needed', () async {
+    expiredA();
+    final auth = service(
+      request: (_) async =>
+          http.Response(jsonEncode({'error': 'invalid_grant'}), 400),
+    );
+    await auth.restorePreviousSignIn();
+    expect(await auth.authorizationHeaders(), isNull);
+  });
 
   test(
     'logout while account-selection storage clear is pending cancels login',

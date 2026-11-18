@@ -8,8 +8,14 @@ import 'package:daily/core/settings/settings_repository.dart';
 import 'package:daily/core/sync/google_drive_auth_service.dart';
 import 'package:daily/core/sync/sync_service.dart';
 import 'package:daily/features/events/application/event_command_service.dart';
+import 'package:daily/features/events/data/app_database.dart';
+import 'package:daily/features/events/data/drift_event_repository.dart';
+import 'package:daily/features/events/data/recurrence_expander.dart';
+import 'package:daily/features/events/domain/calendar_event.dart';
+import 'package:daily/features/events/domain/event_category.dart';
 import 'package:daily/features/events/domain/event_repository.dart';
 import 'package:daily/features/events/domain/recurrence_rule.dart';
+import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -167,6 +173,71 @@ void main() {
       expect(rule.rawRule, isNull);
     });
 
+    test('격주 규칙은 주 시작(WKST, 기본 월요일)을 저장해 같은 주로 확장한다 (#843)', () {
+      final thursday = DateTime(2026, 1, 8, 9);
+      List<String> dates(RecurrenceRule rule) => [
+        for (final occurrence in RecurrenceExpander().expand(
+          CalendarEvent(
+            id: 'imported',
+            title: '격주',
+            startAt: thursday,
+            endAt: thursday.add(const Duration(hours: 1)),
+            allDay: false,
+            category: EventCategory.basic,
+            colorValue: EventCategory.basic.colorValue,
+            recurrence: rule,
+            createdAt: thursday,
+            updatedAt: thursday,
+          ),
+          DateTime(2026, 1, 1),
+          DateTime(2026, 2, 6),
+        ))
+          occurrence.startAt.toIso8601String().substring(0, 10),
+      ];
+
+      final imported = CalendarImportService.recurrenceFromRrule(
+        'FREQ=WEEKLY;INTERVAL=2;BYDAY=MO,TH',
+        startAt: thursday,
+      );
+      expect(imported.weekStart, DateTime.monday);
+      expect(dates(imported), [
+        '2026-01-08',
+        '2026-01-19',
+        '2026-01-22',
+        '2026-02-02',
+        '2026-02-05',
+      ]);
+
+      final explicit = CalendarImportService.recurrenceFromRrule(
+        'FREQ=WEEKLY;INTERVAL=2;WKST=TH;BYDAY=MO,TH',
+        startAt: thursday,
+      );
+      expect(explicit.weekStart, DateTime.thursday);
+
+      // 앱에서 만든 격주 규칙은 시작 요일을 주 시작으로 본다.
+      const inApp = RecurrenceRule(
+        frequency: RecurrenceFrequency.weekly,
+        interval: 2,
+        byDay: ['MO', 'TH'],
+      );
+      expect(dates(explicit), dates(inApp));
+      expect(dates(inApp), [
+        '2026-01-08',
+        '2026-01-12',
+        '2026-01-22',
+        '2026-01-26',
+        '2026-02-05',
+      ]);
+
+      // 매주 규칙은 주 시작과 무관하므로 저장하지 않는다.
+      final weekly = CalendarImportService.recurrenceFromRrule(
+        'FREQ=WEEKLY;BYDAY=MO,TH',
+        startAt: thursday,
+      );
+      expect(weekly.weekStart, isNull);
+      expect(dates(weekly).take(3), ['2026-01-08', '2026-01-12', '2026-01-15']);
+    });
+
     test('UTC 종료 시각을 로컬 DateTime으로 변환한다', () {
       final rule = CalendarImportService.recurrenceFromRrule(
         'FREQ=DAILY;UNTIL=20260731T000000Z',
@@ -256,6 +327,93 @@ void main() {
       throwsA(isA<CalendarImportCancelled>()),
     );
   });
+
+  test('삭제한 외부 일정은 삭제 기록 정리 전후 모두 다시 가져오지 않는다 (#841)', () async {
+    SharedPreferences.setMockInitialValues({'onboardingCompleted': true});
+    final preferences = await SharedPreferences.getInstance();
+    final settingsRepository = SettingsRepository(preferences: preferences);
+    final database = AppDatabase.forTesting(NativeDatabase.memory());
+    addTearDown(database.close);
+    final eventRepository = DriftEventRepository(database);
+    final commands = EventCommandService(
+      repository: eventRepository,
+      settingsRepository: settingsRepository,
+      notificationService: _SilentNotificationService(),
+      syncService: _SilentSyncService(),
+    );
+    final source = _ListNativeCalendarSource([_pastEvent('one')]);
+    final service = CalendarImportService(
+      nativeSource: source,
+      googleSource: GoogleCalendarSource(
+        authService: GoogleDriveAuthService(useDesktopOAuth: false),
+      ),
+      eventRepository: eventRepository,
+      eventCommandService: commands,
+      settingsRepository: settingsRepository,
+    );
+    const calendar = ImportableCalendar(
+      id: 'work-calendar',
+      title: 'Work',
+      provider: CalendarImportProvider.samsung,
+      colorValue: 0xff123456,
+    );
+
+    final first = await service.importCalendars(const [calendar]);
+    expect((first.imported, first.skipped, first.failed), (1, 0, 0));
+    final id = (await eventRepository.allEventsForSync()).single.id;
+
+    // 기존 일정 건너뛰기는 그대로다.
+    final again = await service.importCalendars(const [calendar]);
+    expect((again.imported, again.skipped, again.failed), (0, 1, 0));
+
+    await commands.delete(id);
+    final softDeleted = await service.importCalendars(const [calendar]);
+    expect(
+      (softDeleted.imported, softDeleted.skipped, softDeleted.failed),
+      (0, 1, 0),
+    );
+
+    await eventRepository.compactDeletedEvents(DateTime(2026, 11, 17));
+    expect(await eventRepository.findById(id), isNull);
+    // 처음 보는 일정은 삭제 기록이 있는 일정과 함께 와도 저장된다.
+    source.events.add(_pastEvent('two'));
+    final compacted = await service.importCalendars(const [calendar]);
+    expect(
+      (compacted.imported, compacted.skipped, compacted.failed),
+      (1, 1, 0),
+    );
+    expect(await eventRepository.findById(id), isNull);
+    expect((await eventRepository.allEventsForSync()).single.id, isNot(id));
+  });
+}
+
+ExternalCalendarEvent _pastEvent(String sourceId) => ExternalCalendarEvent(
+  sourceId: sourceId,
+  calendarId: 'work-calendar',
+  provider: CalendarImportProvider.samsung,
+  title: '회의',
+  startAt: DateTime(2020, 11, 2, 9),
+  endAt: DateTime(2020, 11, 2, 10),
+  allDay: false,
+);
+
+class _ListNativeCalendarSource extends NativeCalendarSource {
+  _ListNativeCalendarSource(this.events);
+  final List<ExternalCalendarEvent> events;
+  @override
+  Future<List<ExternalCalendarEvent>> loadEvents(
+    Iterable<ImportableCalendar> calendars,
+  ) async => List.of(events);
+}
+
+class _SilentNotificationService implements NotificationService {
+  @override
+  dynamic noSuchMethod(Invocation invocation) => Future<void>.value();
+}
+
+class _SilentSyncService implements SyncService {
+  @override
+  dynamic noSuchMethod(Invocation invocation) => Future<void>.value();
 }
 
 class _OneEventNativeCalendarSource extends NativeCalendarSource {

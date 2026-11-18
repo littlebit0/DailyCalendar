@@ -22,7 +22,9 @@ import '../../../core/update/update_required_view.dart';
 import '../../../core/security/biometric_auth_service.dart';
 import '../../../core/security/app_lock_privacy_service.dart';
 import '../../../core/siri/siri_shortcut_installer.dart';
+import '../../../core/lms/lms_controller.dart';
 import '../../../core/settings/app_settings.dart';
+import '../../../core/settings/settings_repository.dart';
 import '../../../core/localization/app_localizations.dart';
 import '../../../core/support/bug_report_service.dart';
 import '../../../core/sync/google_drive_auth_service.dart';
@@ -82,6 +84,46 @@ bool supportsAdjacentMonthDateSetting(TargetPlatform platform) {
       platform == TargetPlatform.macOS ||
       platform == TargetPlatform.windows ||
       platform == TargetPlatform.linux;
+}
+
+/// Deletes what [SettingsRepository.resetAll] cannot reach: saved school
+/// logins and web sessions in secure storage, and the Siri activity log file.
+/// Returns false when something is left; the stored mark then makes the next
+/// app start without an account call this again.
+Future<bool> clearDeviceSecretsAndLogs(
+  SettingsRepository settings,
+  LmsController lms,
+) async {
+  // Each store is tried on its own: one that fails must not keep the other
+  // from being deleted.
+  var cleared = true;
+  try {
+    await settings.setDeviceSecretCleanupPending(true);
+  } on Object {
+    cleared = false;
+  }
+  try {
+    await lms.forgetLocalSecrets();
+  } on Object {
+    cleared = false;
+  }
+  if (defaultTargetPlatform == TargetPlatform.iOS ||
+      defaultTargetPlatform == TargetPlatform.macOS) {
+    try {
+      await clearSiriActivityLogs();
+    } on MissingPluginException {
+      // No Siri log handler in this build, so there is no log to delete.
+    } on Object {
+      cleared = false;
+    }
+  }
+  if (!cleared) return false;
+  try {
+    await settings.setDeviceSecretCleanupPending(false);
+    return true;
+  } on Object {
+    return false;
+  }
 }
 
 class SettingsPage extends ConsumerStatefulWidget {
@@ -540,13 +582,14 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                           changedFrom: settings,
                         ),
                         onCustom: () async {
-                          final value = await _showNumberDialog(
+                          final value = await showSettingsNumberDialog(
                             context: context,
                             title: context.tr('기본 알림 직접 입력'),
                             label: context.tr('몇 분 전에 알릴까요?'),
                             initialValue: settings.defaultReminderMinutes,
+                            range: customReminderMinutesRange,
                           );
-                          if (value != null && value >= 0) {
+                          if (value != null) {
                             await _save(
                               settings.copyWith(
                                 defaultReminderMinutesList:
@@ -644,11 +687,12 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                           changedFrom: settings,
                         ),
                         onCustom: () async {
-                          final value = await _showNumberDialog(
+                          final value = await showSettingsNumberDialog(
                             context: context,
                             title: context.tr('D-day 알림 직접 입력'),
                             label: context.tr('D-day 기준 일수. 예: -7, 0'),
                             initialValue: -7,
+                            range: customDdayOffsetRange,
                           );
                           if (value != null) {
                             final offsets = {
@@ -1519,6 +1563,11 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text(context.tr(error.message))));
+    } on GoogleDriveAuthException catch (error) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(context.tr(error.message))));
     } finally {
       if (mounted) setState(() => _bugReportBusy = false);
     }
@@ -1788,13 +1837,10 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       case AppLockMethod.noPin:
         return true;
       case AppLockMethod.appPin:
+        // Only reached when PIN lock is being turned on, so a PIN still in
+        // secure storage is a leftover (failed delete, restored keychain) the
+        // user may not know. Always ask for a new one (#915).
         final repository = ref.read(settingsRepositoryProvider);
-        if (await repository.appLockPinLength() != null) {
-          return true;
-        }
-        if (!mounted) {
-          return false;
-        }
         final pin = await _showPinSetupDialog(
           context: context,
           title: context.tr('앱 잠금 PIN 설정'),
@@ -1993,16 +2039,26 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     if (category == null) {
       return;
     }
-    final categories = [
-      ...settings.categories.where((item) => item.id != category.id),
-      category,
-    ];
-    await _save(
-      settings.copyWith(categories: _normalizeCategories(categories)),
-      changedFrom: settings,
-      backup: false,
+    await _updateLatestSettings(
+      (latest) => latest.copyWith(
+        categories: _normalizeCategories([
+          ...latest.categories.where((item) => item.id != category.id),
+          category,
+        ]),
+      ),
     );
     _queueCategoryBackup();
+  }
+
+  /// Changes the stored settings as they are now, not the snapshot this screen
+  /// was built with: a dialog may have been open while a sync merged changes.
+  Future<void> _updateLatestSettings(
+    AppSettings Function(AppSettings latest) update,
+  ) async {
+    final repository = ref.read(settingsRepositoryProvider);
+    final settingsNotifier = ref.read(appSettingsProvider.notifier);
+    await repository.updateLatest(update);
+    settingsNotifier.state = repository.load();
   }
 
   Future<void> _setCategoryVisible(
@@ -2048,8 +2104,21 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     final failureMessage = context.tr('선택을 저장하지 못했습니다. 다시 시도해 주세요.');
     _categoryReorderSaveQueue = _categoryReorderSaveQueue.then((_) async {
       try {
-        await repository.save(updated, changedFrom: settings);
+        // Reorder the list as stored now; a category merged since this screen
+        // was built keeps its place after the reordered ones.
+        final order = [for (final item in categories) item.id];
+        await repository.updateLatest((latest) {
+          final byId = {for (final item in latest.categories) item.id: item};
+          return latest.copyWith(
+            categories: [
+              for (final id in order) ?byId[id],
+              for (final item in latest.categories)
+                if (!order.contains(item.id)) item,
+            ],
+          );
+        });
         if (revision == _categoryReorderRevision) {
+          settingsState.state = repository.load();
           unawaited(syncService.syncPendingChangesNow().catchError((_) {}));
         }
       } on Object {
@@ -2080,19 +2149,28 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     if (updatedCategory == null) {
       return;
     }
-    final categories = settings.categories
-        .map((item) => item.id == category.id ? updatedCategory : item)
-        .toList();
-    final hiddenCategoryIds = settings.hiddenCategoryIds
-        .map((id) => id == category.id ? updatedCategory.id : id)
-        .toSet()
-        .toList();
-    final updatedSettings = settings.copyWith(
-      categories: _normalizeCategories(categories),
-      hiddenCategoryIds: hiddenCategoryIds,
+    // Replaces [from] with [to] in the list and hidden ids as stored now.
+    AppSettings replace(
+      AppSettings latest,
+      EventCategory from,
+      EventCategory to,
+    ) => latest.copyWith(
+      categories: _normalizeCategories([
+        for (final item in latest.categories) item.id == from.id ? to : item,
+      ]),
+      hiddenCategoryIds: latest.hiddenCategoryIds
+          .map((id) => id == from.id ? to.id : id)
+          .toSet()
+          .toList(),
     );
     if (!mounted || blockedByRequiredUpdate(context, ref)) return;
-    await _save(updatedSettings, changedFrom: settings, backup: false);
+    var found = false;
+    await _updateLatestSettings((latest) {
+      found = latest.categories.any((item) => item.id == category.id);
+      return replace(latest, category, updatedCategory);
+    });
+    // Deleted while the dialog was open: nothing to rename.
+    if (!found) return;
     try {
       await ref
           .read(eventCommandServiceProvider)
@@ -2101,7 +2179,9 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       // The event rows are updated in one transaction, so a failure leaves them
       // on the old category. Put the settings back so both stay consistent.
       try {
-        await _save(settings, changedFrom: updatedSettings, backup: false);
+        await _updateLatestSettings(
+          (latest) => replace(latest, updatedCategory, category),
+        );
       } on Object {
         /* the snackbar below still asks the user to retry */
       }
@@ -2150,18 +2230,15 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     if (confirmed != true) {
       return;
     }
-    final categories = settings.categories
-        .where((item) => item.id != category.id)
-        .toList();
-    await _save(
-      settings.copyWith(
-        categories: _normalizeCategories(categories),
-        hiddenCategoryIds: settings.hiddenCategoryIds
+    await _updateLatestSettings(
+      (latest) => latest.copyWith(
+        categories: _normalizeCategories(
+          latest.categories.where((item) => item.id != category.id).toList(),
+        ),
+        hiddenCategoryIds: latest.hiddenCategoryIds
             .where((id) => id != category.id)
             .toList(),
       ),
-      changedFrom: settings,
-      backup: false,
     );
     _queueCategoryBackup();
   }
@@ -2501,6 +2578,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       }
       await ref.read(eventRepositoryProvider).clearAll();
       await ref.read(settingsRepositoryProvider).resetAll();
+      await _requestDeviceSecretCleanup();
       ref.read(appSettingsProvider.notifier).state = AppSettings();
       unawaited(
         ref.read(calendarWidgetServiceProvider).refresh().catchError((_) {}),
@@ -2516,6 +2594,19 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       if (mounted) {
         setState(() => _syncBusy = false);
       }
+    }
+  }
+
+  /// Marks the saved school logins and the Siri log for deletion. The app
+  /// root deletes them once the fresh settings are published, so neither a
+  /// failure nor this screen closing can stop the logout or reset.
+  Future<void> _requestDeviceSecretCleanup() async {
+    try {
+      await ref
+          .read(settingsRepositoryProvider)
+          .setDeviceSecretCleanupPending(true);
+    } on Object {
+      // Nothing else can be done here; the account is already removed.
     }
   }
 
@@ -2585,8 +2676,8 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     });
     try {
       final events = await ref.read(eventRepositoryProvider).allEventsForSync();
-      await _tryCancelNotificationsBeforeReset(events);
-      await ref.read(alarmServiceProvider).cancelAllEventAlarms();
+      // The remote step can fail (offline). It runs first so a failure leaves
+      // the kept events with their reminders and alarms.
       if (hasGoogleAccount) {
         await ref
             .read(googleDriveSyncServiceProvider)
@@ -2595,12 +2686,15 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                   defaultTargetPlatform != TargetPlatform.android,
             );
       }
+      await _tryCancelNotificationsBeforeReset(events);
+      await ref.read(alarmServiceProvider).cancelAllEventAlarms();
       await ref.read(eventRepositoryProvider).clearAll();
       await ref.read(settingsRepositoryProvider).resetAll();
       if (hasGoogleAccount) {
         await authService.signOut();
       }
       await ref.read(appleSignInServiceProvider).signOut();
+      await _requestDeviceSecretCleanup();
       ref.read(appSettingsProvider.notifier).state = AppSettings();
       unawaited(
         ref.read(calendarWidgetServiceProvider).refresh().catchError((_) {}),
@@ -4663,16 +4757,32 @@ Future<EventCategory?> _showCategoryDialog(
   );
 }
 
-Future<int?> _showNumberDialog({
+/// Custom reminder lead time: up to four weeks before the event (#914).
+@visibleForTesting
+const customReminderMinutesRange = (min: 0, max: 40320);
+
+/// Custom D-day reminder: up to a year before or after the day (#914).
+@visibleForTesting
+const customDdayOffsetRange = (min: -365, max: 365);
+
+/// Asks for a whole number inside [range]. Anything else keeps the dialog open
+/// with an error instead of closing as if the entry had been cancelled.
+@visibleForTesting
+Future<int?> showSettingsNumberDialog({
   required BuildContext context,
   required String title,
   required String label,
   required int initialValue,
+  required ({int min, int max}) range,
 }) async {
   return showDialog<int>(
     context: context,
-    builder: (context) =>
-        _NumberDialog(title: title, label: label, initialValue: initialValue),
+    builder: (context) => _NumberDialog(
+      title: title,
+      label: label,
+      initialValue: initialValue,
+      range: range,
+    ),
   );
 }
 
@@ -4844,11 +4954,13 @@ class _NumberDialog extends StatefulWidget {
     required this.title,
     required this.label,
     required this.initialValue,
+    required this.range,
   });
 
   final String title;
   final String label;
   final int initialValue;
+  final ({int min, int max}) range;
 
   @override
   State<_NumberDialog> createState() => _NumberDialogState();
@@ -4856,11 +4968,28 @@ class _NumberDialog extends StatefulWidget {
 
 class _NumberDialogState extends State<_NumberDialog> {
   late final TextEditingController _controller;
+  String? _error;
 
   @override
   void initState() {
     super.initState();
     _controller = TextEditingController(text: '${widget.initialValue}');
+  }
+
+  void _apply() {
+    final value = int.tryParse(_controller.text.trim());
+    final range = widget.range;
+    if (value == null || value < range.min || value > range.max) {
+      setState(() {
+        _error = context.tr(
+          '{min}~{max} 사이의 숫자를 입력하세요',
+          args: {'min': range.min, 'max': range.max},
+        );
+      });
+      return;
+    }
+    FocusManager.instance.primaryFocus?.unfocus();
+    Navigator.of(context).pop(value);
   }
 
   @override
@@ -4884,9 +5013,15 @@ class _NumberDialogState extends State<_NumberDialog> {
         child: TextField(
           controller: _controller,
           autofocus: true,
-          keyboardType: TextInputType.number,
+          // The plain iOS number pad has no minus key.
+          keyboardType: TextInputType.numberWithOptions(
+            signed: widget.range.min < 0,
+          ),
+          onSubmitted: (_) => _apply(),
           decoration: InputDecoration(
             labelText: widget.label,
+            errorText: _error,
+            errorMaxLines: 2,
             prefixIcon: const Icon(Icons.pin_outlined),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
           ),
@@ -4901,11 +5036,7 @@ class _NumberDialogState extends State<_NumberDialog> {
           child: Text(context.tr('취소')),
         ),
         FilledButton(
-          onPressed: () {
-            final value = int.tryParse(_controller.text.trim());
-            FocusManager.instance.primaryFocus?.unfocus();
-            Navigator.of(context).pop(value);
-          },
+          onPressed: _apply,
           style: FilledButton.styleFrom(
             backgroundColor: DailyUi.primary,
             foregroundColor: Colors.white,
