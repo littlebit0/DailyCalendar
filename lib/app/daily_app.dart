@@ -24,6 +24,7 @@ import '../features/calendar/presentation/month_calendar_page.dart';
 import '../features/onboarding/presentation/analytics_consent_page.dart';
 import '../features/onboarding/presentation/welcome_page.dart';
 import '../features/settings/presentation/academic_profile_page.dart';
+import '../features/settings/presentation/settings_page.dart';
 import '../features/onboarding/presentation/update_features_gate.dart';
 import '../core/weather/weather_widgets.dart';
 import '../core/sync/startup_sync_gate.dart';
@@ -113,7 +114,7 @@ class DailyApp extends ConsumerWidget {
                   ),
                 ),
               ),
-              child: content,
+              child: _DeviceCleanupRetry(child: content),
             ),
           );
         },
@@ -147,6 +148,55 @@ bool shouldAutomaticallyRequestBiometrics(
   bool alreadyAttempted = false,
 }) {
   return !alreadyAttempted;
+}
+
+/// Finishes a logout or reset that left school logins or the Siri log behind.
+/// It sits above every screen, so it also runs on the welcome screen a reset
+/// leads to. Only with no account: a login saved after signing in again is
+/// kept.
+class _DeviceCleanupRetry extends ConsumerStatefulWidget {
+  const _DeviceCleanupRetry({required this.child});
+
+  final Widget child;
+
+  @override
+  ConsumerState<_DeviceCleanupRetry> createState() =>
+      _DeviceCleanupRetryState();
+}
+
+class _DeviceCleanupRetryState extends ConsumerState<_DeviceCleanupRetry> {
+  /// Logout and reset only set the mark; the deletion runs here, outside the
+  /// settings screen they close, so a failure can still be shown. They end on
+  /// the welcome screen, whose `MaterialApp` key differs from the home one, so
+  /// this state is created again right after them and on every app start.
+  @override
+  void initState() {
+    super.initState();
+    final settings = ref.read(settingsRepositoryProvider);
+    if (!settings.deviceSecretCleanupPending ||
+        settings.dailyAccount() != null) {
+      return;
+    }
+    final lms = ref.read(lmsControllerProvider);
+    unawaited(
+      Future(() async {
+        final cleared = await clearDeviceSecretsAndLogs(settings, lms);
+        if (cleared || !mounted) return;
+        ScaffoldMessenger.maybeOf(context)?.showSnackBar(
+          SnackBar(
+            content: Text(
+              context.tr(
+                '저장된 학교 로그인 정보나 Siri 작업 기록을 모두 지우지 못했습니다. 다음 실행에서 다시 시도합니다.',
+              ),
+            ),
+          ),
+        );
+      }),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) => widget.child;
 }
 
 class _AppLockGate extends ConsumerStatefulWidget {

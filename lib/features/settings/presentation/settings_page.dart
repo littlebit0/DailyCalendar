@@ -22,7 +22,9 @@ import '../../../core/update/update_required_view.dart';
 import '../../../core/security/biometric_auth_service.dart';
 import '../../../core/security/app_lock_privacy_service.dart';
 import '../../../core/siri/siri_shortcut_installer.dart';
+import '../../../core/lms/lms_controller.dart';
 import '../../../core/settings/app_settings.dart';
+import '../../../core/settings/settings_repository.dart';
 import '../../../core/localization/app_localizations.dart';
 import '../../../core/support/bug_report_service.dart';
 import '../../../core/sync/google_drive_auth_service.dart';
@@ -82,6 +84,46 @@ bool supportsAdjacentMonthDateSetting(TargetPlatform platform) {
       platform == TargetPlatform.macOS ||
       platform == TargetPlatform.windows ||
       platform == TargetPlatform.linux;
+}
+
+/// Deletes what [SettingsRepository.resetAll] cannot reach: saved school
+/// logins and web sessions in secure storage, and the Siri activity log file.
+/// Returns false when something is left; the stored mark then makes the next
+/// app start without an account call this again.
+Future<bool> clearDeviceSecretsAndLogs(
+  SettingsRepository settings,
+  LmsController lms,
+) async {
+  // Each store is tried on its own: one that fails must not keep the other
+  // from being deleted.
+  var cleared = true;
+  try {
+    await settings.setDeviceSecretCleanupPending(true);
+  } on Object {
+    cleared = false;
+  }
+  try {
+    await lms.forgetLocalSecrets();
+  } on Object {
+    cleared = false;
+  }
+  if (defaultTargetPlatform == TargetPlatform.iOS ||
+      defaultTargetPlatform == TargetPlatform.macOS) {
+    try {
+      await clearSiriActivityLogs();
+    } on MissingPluginException {
+      // No Siri log handler in this build, so there is no log to delete.
+    } on Object {
+      cleared = false;
+    }
+  }
+  if (!cleared) return false;
+  try {
+    await settings.setDeviceSecretCleanupPending(false);
+    return true;
+  } on Object {
+    return false;
+  }
 }
 
 class SettingsPage extends ConsumerStatefulWidget {
@@ -2534,6 +2576,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       }
       await ref.read(eventRepositoryProvider).clearAll();
       await ref.read(settingsRepositoryProvider).resetAll();
+      await _requestDeviceSecretCleanup();
       ref.read(appSettingsProvider.notifier).state = AppSettings();
       unawaited(
         ref.read(calendarWidgetServiceProvider).refresh().catchError((_) {}),
@@ -2549,6 +2592,19 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       if (mounted) {
         setState(() => _syncBusy = false);
       }
+    }
+  }
+
+  /// Marks the saved school logins and the Siri log for deletion. The app
+  /// root deletes them once the fresh settings are published, so neither a
+  /// failure nor this screen closing can stop the logout or reset.
+  Future<void> _requestDeviceSecretCleanup() async {
+    try {
+      await ref
+          .read(settingsRepositoryProvider)
+          .setDeviceSecretCleanupPending(true);
+    } on Object {
+      // Nothing else can be done here; the account is already removed.
     }
   }
 
@@ -2636,6 +2692,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
         await authService.signOut();
       }
       await ref.read(appleSignInServiceProvider).signOut();
+      await _requestDeviceSecretCleanup();
       ref.read(appSettingsProvider.notifier).state = AppSettings();
       unawaited(
         ref.read(calendarWidgetServiceProvider).refresh().catchError((_) {}),

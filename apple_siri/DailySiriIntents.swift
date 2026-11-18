@@ -126,11 +126,13 @@ enum DailySiriLogStore {
     return loadUnlocked()
   }
 
-  static func clear() {
+  /// A missing file is already cleared; a file that cannot be removed throws.
+  static func clear() throws {
     lock.lock()
     defer { lock.unlock() }
-    guard let url = fileURL() else { return }
-    try? FileManager.default.removeItem(at: url)
+    guard let url = fileURL(), FileManager.default.fileExists(atPath: url.path)
+    else { return }
+    try FileManager.default.removeItem(at: url)
   }
 
   private static func loadUnlocked() -> [DailySiriLogRecord] {
