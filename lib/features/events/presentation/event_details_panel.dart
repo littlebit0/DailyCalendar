@@ -502,7 +502,7 @@ class EventDetailsPanel extends ConsumerWidget {
     final scope = await _showRecurringScopeDialog(
       context,
       title: context.tr('반복 일정 수정'),
-      actionLabel: context.tr('수정'),
+      message: context.tr('이 반복 일정의 어느 범위를 수정할까요?'),
     );
     if (scope == null) {
       return;
@@ -572,7 +572,7 @@ class EventDetailsPanel extends ConsumerWidget {
       final scope = await _showRecurringScopeDialog(
         context,
         title: context.tr('반복 일정 삭제'),
-        actionLabel: context.tr('삭제'),
+        message: context.tr('이 반복 일정의 어느 범위를 삭제할까요?'),
         allScopeLabel: context.tr('전체 삭제'),
       );
       if (scope == null) {
@@ -636,19 +636,14 @@ class EventDetailsPanel extends ConsumerWidget {
   Future<_RecurringChangeScope?> _showRecurringScopeDialog(
     BuildContext context, {
     required String title,
-    required String actionLabel,
+    required String message,
     String? allScopeLabel,
   }) {
     return showDialog<_RecurringChangeScope>(
       context: context,
       builder: (context) => AlertDialog(
         title: Text(title),
-        content: Text(
-          context.tr(
-            '이 반복 일정의 어느 범위에 {action}을 적용할까요?',
-            args: {'action': actionLabel},
-          ),
-        ),
+        content: Text(message),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),

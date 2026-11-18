@@ -29,7 +29,10 @@ class AppLocalizations {
   }
 
   String text(String korean, {Map<String, Object>? args}) {
-    var translated = _translations[languageCode]?[korean] ?? korean;
+    final singular = languageCode == 'en' && '${args?['count']}' == '1'
+        ? _englishSingular[korean]
+        : null;
+    var translated = singular ?? _translations[languageCode]?[korean] ?? korean;
     for (final entry in (args ?? const <String, Object>{}).entries) {
       translated = translated.replaceAll('{${entry.key}}', '${entry.value}');
     }
@@ -151,6 +154,36 @@ class _AppLocalizationsDelegate
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
 }
+
+/// English wording for a count of exactly one; every other count uses the
+/// plural entry in [_translations].
+const Map<String, String> _englishSingular = {
+  '{count}분 전': '{count} minute before',
+  '{count}시간 전': '{count} hour before',
+  '{count}일 전': '{count} day before',
+  '일정 {count}개': '{count} event',
+  '{month} · 일정 {count}개': '{month} · {count} event',
+  'D-day {count}개': '{count} D-day event',
+  '공휴일 {count}개': '{count} holiday',
+  '수업 {count}개': '{count} course',
+  '{count}개 캠퍼스': '{count} campus',
+  '{count}개 캘린더 가져오기': 'Import {count} calendar',
+  '{count}회': '{count} time',
+  '종일 · {count}일': 'All day · {count} day',
+  '{count}일간': '{count} day',
+  '기한 없는 학습 {count}개': '{count} learning item without a period',
+  '퀴즈 {count}개의 응시 상태를 확인하지 못했습니다. 기존 완료 상태는 유지됩니다.':
+      'Attempt status could not be verified for {count} quiz. Existing completion states are kept.',
+  '학습 정보가 충분하지 않은 항목 {count}개는 추가하지 않았습니다.':
+      '{count} item was not added because its learning information is incomplete.',
+  '강좌 {count}개의 학습 정보를 확인하지 못했습니다. 기존 학습 일정은 유지됩니다.':
+      'Learning information could not be verified for {count} course. Existing learning events are kept.',
+  '마감일이 없는 항목 {count}개는 달력에 표시하지 않습니다.':
+      '{count} item without a deadline is not shown on the calendar.',
+  '{count}개 일정은 지원하지 않는 반복 조건이 있어 한 번만 가져왔고 원래 규칙은 보존했습니다.':
+      '{count} event has a repeat rule that is not supported, so it was imported once and the original rule was kept.',
+  '대학 {count}개': '{count} university',
+};
 
 const Map<String, Map<String, String>> _translations = {
   'en': {
@@ -1015,8 +1048,10 @@ const Map<String, Map<String, String>> _translations = {
     '반복 일정 삭제': 'Delete Repeating Event',
     '일정 삭제': 'Delete Event',
     '"{title}" 일정을 삭제할까요?': 'Delete “{title}”?',
-    '이 반복 일정의 어느 범위에 {action}을 적용할까요?':
-        'Which occurrences should this {action} apply to?',
+    '이 반복 일정의 어느 범위를 수정할까요?':
+        'Which occurrences of this repeating event should be edited?',
+    '이 반복 일정의 어느 범위를 삭제할까요?':
+        'Which occurrences of this repeating event should be deleted?',
     '이 일정만': 'Only This Event',
     '이후 일정': 'This and Future Events',
     '전체 반복': 'All Events',
@@ -2067,7 +2102,8 @@ const Map<String, Map<String, String>> _translations = {
     '반복 일정 삭제': '繰り返し予定を削除',
     '일정 삭제': '予定を削除',
     '"{title}" 일정을 삭제할까요?': '「{title}」を削除しますか？',
-    '이 반복 일정의 어느 범위에 {action}을 적용할까요?': 'この繰り返し予定のどの範囲に{action}を適用しますか？',
+    '이 반복 일정의 어느 범위를 수정할까요?': 'この繰り返し予定のどの範囲を編集しますか？',
+    '이 반복 일정의 어느 범위를 삭제할까요?': 'この繰り返し予定のどの範囲を削除しますか？',
     '이 일정만': 'この予定のみ',
     '이후 일정': 'これ以降の予定',
     '전체 반복': 'すべての予定',
@@ -3093,7 +3129,8 @@ const Map<String, Map<String, String>> _translations = {
     '반복 일정 삭제': '刪除重複行程',
     '일정 삭제': '刪除行程',
     '"{title}" 일정을 삭제할까요?': '要刪除「{title}」嗎？',
-    '이 반복 일정의 어느 범위에 {action}을 적용할까요?': '要將{action}套用到此重複行程的哪個範圍？',
+    '이 반복 일정의 어느 범위를 수정할까요?': '要編輯此重複行程的哪個範圍？',
+    '이 반복 일정의 어느 범위를 삭제할까요?': '要刪除此重複行程的哪個範圍？',
     '이 일정만': '僅此行程',
     '이후 일정': '此行程及之後',
     '전체 반복': '所有行程',
