@@ -372,6 +372,13 @@ void main() {
     expect(isNewerVersion('invalid', '3.0.1'), isFalse);
   });
 
+  test('an unreadable running version is never older than a release', () {
+    expect(isNewerVersion('4.1.1', ''), isFalse);
+    expect(isNewerVersion('4.1.1', 'abc'), isFalse);
+    expect(isNewerVersion('4.1.2', '4.1.1+411'), isTrue);
+    expect(isNewerVersion('4.1.1', '4.1.1+411'), isFalse);
+  });
+
   test('runs the Windows auto updater only in release mode', () {
     expect(
       shouldRunWindowsAutoUpdater(
