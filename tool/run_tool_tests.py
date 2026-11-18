@@ -58,6 +58,7 @@ IMPORT_SUITES = [
 # Apple widget behaviour checks (compile Swift).
 WIDGET_SUITES = [
     "test_widget_unreadable_snapshot",
+    "test_apple_widget_text",
 ]
 
 SUITES = POLICY_SUITES + IMPORT_SUITES + WIDGET_SUITES + ["test_run_tool_tests"]
