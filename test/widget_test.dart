@@ -6534,8 +6534,10 @@ void main() {
 
       settingsRepository.releasePendingSave();
       await tester.pump();
-      expect(saveError, isA<StateError>());
+      // The failed save is reported on screen (#916), not thrown out of the control.
+      expect(saveError, isNull);
       await tester.pumpAndSettle();
+      expect(find.text('선택을 저장하지 못했습니다. 다시 시도해 주세요.'), findsOneWidget);
       expect(container.read(appSettingsProvider).weekStartsOnMonday, isFalse);
       expect(settingsRepository.load().weekStartsOnMonday, isFalse);
       expect(tester.widget<SwitchListTile>(lunarToggle).value, isFalse);
