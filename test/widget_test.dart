@@ -5417,16 +5417,7 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
-            universityRegionsProvider.overrideWith(
-              (ref) async => UniversityRegions.fromJson(
-                jsonDecode(
-                      File(
-                        'assets/academic/university_regions.json',
-                      ).readAsStringSync(),
-                    )
-                    as Map<String, dynamic>,
-              ),
-            ),
+            universityRegionsFromAsset(),
             settingsRepositoryProvider.overrideWithValue(settingsRepository),
             notificationServiceProvider.overrideWithValue(_FakeNotification()),
             syncServiceProvider.overrideWithValue(_FakeSync()),
