@@ -215,4 +215,57 @@ void main() {
       expect(source, contains('shortTitle: "Signal"'));
     },
   );
+
+  test('macOS permission prompts are localized like the app (#957)', () async {
+    const languages = ['en', 'ko', 'ja', 'zh-Hant'];
+    final plist = await _readNormalized('macos/Runner/Info.plist');
+    final project = await _readNormalized(
+      'macos/Runner.xcodeproj/project.pbxproj',
+    );
+    final usageKeys = RegExp(
+      r'<key>(NS\w+UsageDescription)</key>',
+    ).allMatches(plist).map((match) => match.group(1)!).toSet();
+    expect(usageKeys, {
+      'NSLocationUsageDescription',
+      'NSMicrophoneUsageDescription',
+      'NSSpeechRecognitionUsageDescription',
+    });
+    expect(project, contains('InfoPlist.strings in Resources'));
+
+    final entry = RegExp(r'^"(\w+)" = "(.+)";$', multiLine: true);
+    final texts = <String, Map<String, String>>{};
+    for (final language in languages) {
+      expect(plist, contains('<string>$language</string>'));
+      expect(project, contains('$language.lproj/InfoPlist.strings'));
+      final strings = await _readNormalized(
+        'macos/Runner/$language.lproj/InfoPlist.strings',
+      );
+      texts[language] = {
+        for (final match in entry.allMatches(strings))
+          match.group(1)!: match.group(2)!,
+      };
+      // Every prompt the app can raise has wording in every language.
+      expect(texts[language]!.keys.toSet(), usageKeys, reason: language);
+    }
+    for (final key in usageKeys) {
+      expect(
+        {for (final language in languages) texts[language]![key]},
+        hasLength(languages.length),
+        reason: '$key must not reuse one language for another',
+      );
+    }
+
+    // The wording matches the iOS prompts for the same permission.
+    for (final language in languages) {
+      final ios = await _readNormalized(
+        'ios/Runner/$language.lproj/InfoPlist.strings',
+      );
+      for (final key in [
+        'NSMicrophoneUsageDescription',
+        'NSSpeechRecognitionUsageDescription',
+      ]) {
+        expect(ios, contains('"$key" = "${texts[language]![key]}";'));
+      }
+    }
+  });
 }
