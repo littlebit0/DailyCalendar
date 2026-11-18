@@ -512,8 +512,13 @@ void main() {
     // The professor extends the deadline by one day in the same sync.
     final extended =
         DateTime.utc(2026, 10, 5, 14, 59).millisecondsSinceEpoch ~/ 1000;
-    String learnedRow(String id, {String title = '미학습 자료', int? end}) =>
-        '<tr><td>5</td><td>$title</td><td>27:00</td><td>05:00'
+    String learnedRow(
+      String id, {
+      String title = '미학습 자료',
+      int? end,
+      String required = '27:00',
+    }) =>
+        '<tr><td>5</td><td>$title</td><td>$required</td><td>05:00'
         '<button data-modname="vod" data-modid="$id" data-sterm="$start" '
         'data-eterm="${end ?? extended}">상세보기 (1)</button></td><td>10%</td></tr>';
 
@@ -622,6 +627,61 @@ void main() {
       expect(added.id, isNot(original.id));
       expect(added.memo, isNull);
       expect(added.completed, isFalse);
+    });
+
+    test('a stored id kept only as a nonattendance row is not reused', () async {
+      h.pages['/report/ubcompletion/user_progress.php'] = _learning
+          .replaceFirst(
+            '</tbody>',
+            '${learnedRow('9002', title: '옛 자료')}</tbody>',
+          );
+      await h.service.refresh(force: true);
+      final stored = h.repository.events.values.singleWhere(
+        (e) =>
+            e.lms!.activityId == 'report:vod:9002' && e.title.endsWith('옛 자료'),
+      );
+      h.repository.events[stored.id] = stored.copyWith(memo: '개인 메모');
+      // 9002 is renamed into zero-requirement material (still read but not
+      // scheduled) and course-page lecture 7001 now carries the old title.
+      h.pages['/course/view.php'] = coursePage.replaceFirst('미학습 자료', '옛 자료');
+      h.pages['/report/ubcompletion/user_progress.php'] = _learning.replaceFirst(
+        '</tbody>',
+        '${_unlearned.replaceFirst('미학습 자료', '옛 자료')}'
+            '${learnedRow('9002', title: '자료 안내', required: '00:00')}</tbody>',
+      );
+      final result = await h.service.refresh(force: true);
+      expect(result!.unresolvedLearningActivities, 0);
+      final kept = h.repository.events[stored.id]!;
+      expect(kept.lms!.activityId, 'report:vod:9002');
+      expect(kept.memo, '개인 메모');
+      final added = lectures(
+        '옛 자료',
+      ).singleWhere((e) => e.lms!.activityId == 'report:cm:vod:7001');
+      expect(added.id, isNot(stored.id));
+      expect(added.memo, isNull);
+    });
+
+    test('an event already stored under the incoming id is updated', () async {
+      final original = await storeRecovered();
+      h.pages['/report/ubcompletion/user_progress.php'] = _learning
+          .replaceFirst(
+            '</tbody>',
+            '$_unlearned${learnedRow('9999', title: '다른 자료')}</tbody>',
+          );
+      await h.service.refresh(force: true);
+      final other = h.repository.events.values.singleWhere(
+        (e) => e.lms!.activityId == 'report:vod:9999',
+      );
+      // 7001 disappears and 9999 is renamed to its title with new dates.
+      h.pages['/report/ubcompletion/user_progress.php'] = _learning
+          .replaceFirst('</tbody>', '${learnedRow('9999')}</tbody>');
+      await h.service.refresh(force: true);
+      final renamed = h.repository.events[other.id]!;
+      expect(renamed.title, '[수업 8001] 미학습 자료');
+      expect(renamed.memo, isNull);
+      final kept = h.repository.events[original.id]!;
+      expect(kept.lms!.activityId, 'report:cm:vod:7001');
+      expect(kept.memo, '개인 메모');
     });
 
     test('a stored id still read in this sync is not reused', () async {
