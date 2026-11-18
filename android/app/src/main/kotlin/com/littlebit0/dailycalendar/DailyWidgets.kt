@@ -502,7 +502,13 @@ private class DailyEventWidgetFactory(
         )
         views.setOnClickFillInIntent(
             R.id.widget_item_root,
-            DailyWidgetActionReceiver.openFillInIntent(eventId = eventId),
+            DailyWidgetActionReceiver.openFillInIntent(
+                // The occurrence's day, so a repeating event opens on the tapped date.
+                date = event.optLong("startAt", 0L).takeIf { it > 0L }?.let {
+                    java.text.SimpleDateFormat("yyyy-MM-dd", Locale.US).format(Date(it))
+                },
+                eventId = eventId,
+            ),
         )
         return views
     }
@@ -567,6 +573,8 @@ class DailyWidgetActionReceiver : BroadcastReceiver() {
         source.getStringExtra(EXTRA_DATE)?.let {
             intent.putExtra(EXTRA_DATE, it)
         }
+        // Read by MainActivity and handed to Dart (#874).
+        intent.putExtra(DailyAndroidWidgetBridge.EXTRA_WIDGET_OPEN, true)
         context.startActivity(intent)
     }
 

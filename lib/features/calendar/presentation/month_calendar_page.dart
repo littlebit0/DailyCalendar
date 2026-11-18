@@ -125,6 +125,7 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
   final _aiOpen = ValueNotifier(false);
   final _bottomBarUiState = ValueNotifier(const _BottomBarUiState());
   Timer? _searchDebounce;
+  StreamSubscription<void>? _widgetLaunchSubscription;
   Timer? _eventDragEdgeTimer;
   // null once resolved means the lookup failed (an empty list is a real answer).
   Future<List<CalendarEvent>?>? _searchResults;
@@ -148,6 +149,15 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
     _quickAccessSelected =
         ref.read(appSettingsProvider).appStartView == AppStartView.quickView;
     recordFirstCalendarFrame(context, ref);
+    // A widget tap opens its day or event (#874). Behind the app lock the
+    // page is offstage, so the result shows once the app is unlocked.
+    _widgetLaunchSubscription = ref
+        .read(calendarWidgetServiceProvider)
+        .launchTargetChanges
+        .listen((_) => unawaited(_openWidgetLaunchTarget()));
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => unawaited(_openWidgetLaunchTarget()),
+    );
     Future.microtask(() {
       if (!mounted) return;
       _recordAnalytics(AnalyticsRecord.screenView(AnalyticsScreen.calendar));
@@ -162,6 +172,7 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
 
   @override
   void dispose() {
+    unawaited(_widgetLaunchSubscription?.cancel());
     _searchDebounce?.cancel();
     _eventDragEdgeTimer?.cancel();
     _searchController.dispose();
@@ -1352,16 +1363,45 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
     return quickTodoColumnCountForPlatform(defaultTargetPlatform, width);
   }
 
+  Future<void> _openWidgetLaunchTarget() async {
+    if (!mounted) return;
+    final target = await ref
+        .read(calendarWidgetServiceProvider)
+        .takeLaunchTarget();
+    if (target == null || !mounted) return;
+    final eventId = target.eventId;
+    final event = eventId == null
+        ? null
+        : await ref.read(visibleEventRepositoryProvider).findById(eventId);
+    if (!mounted) return;
+    final date = target.date ?? event?.startAt;
+    if (date != null) {
+      ref.read(visibleMonthProvider.notifier).state = DateTime(
+        date.year,
+        date.month,
+      );
+      ref.read(selectedDateProvider.notifier).state = DateTime(
+        date.year,
+        date.month,
+        date.day,
+      );
+    }
+    if (event != null && context.mounted) {
+      await _showQuickEventDetails(context, event, date: date);
+    }
+  }
+
   Future<void> _showQuickEventDetails(
     BuildContext context,
-    CalendarEvent event,
-  ) {
+    CalendarEvent event, {
+    DateTime? date,
+  }) {
     return showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
       showDragHandle: true,
       builder: (_) => EventDetailsPanel(
-        date: event.startAt,
+        date: date ?? event.startAt,
         events: [event],
         initialEvent: event,
       ),
