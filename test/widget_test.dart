@@ -5872,6 +5872,65 @@ void main() {
   );
 
   testWidgets(
+    'resume during a pending sync restore retry reschedules the retries',
+    (tester) async {
+      SharedPreferences.setMockInitialValues({'onboardingCompleted': true});
+      final settingsRepository = SettingsRepository(
+        preferences: await SharedPreferences.getInstance(),
+      );
+      await settingsRepository.saveGoogleAccount(
+        const GoogleAccount(email: 'restored@example.com'),
+      );
+      final authService = _TimedOutRestoreAuthService();
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            universityRegionsProvider.overrideWith(
+              (ref) async => UniversityRegions.fromJson(
+                jsonDecode(
+                      File(
+                        'assets/academic/university_regions.json',
+                      ).readAsStringSync(),
+                    )
+                    as Map<String, dynamic>,
+              ),
+            ),
+            settingsRepositoryProvider.overrideWithValue(settingsRepository),
+            notificationServiceProvider.overrideWithValue(_FakeNotification()),
+            syncServiceProvider.overrideWithValue(_FakeSync()),
+            eventRepositoryProvider.overrideWithValue(_FakeEventRepository()),
+            googleDriveAuthServiceProvider.overrideWithValue(authService),
+          ],
+          child: const DailyApp(),
+        ),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+      expect(authService.restorePreviousSignInCalls, 1);
+
+      // The 1s retry is pending; background and return before it fires.
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+      expect(authService.restorePreviousSignInCalls, 2);
+
+      // The resume attempt failed too, so 1s/3s/8s retries run again.
+      await tester.pump(const Duration(seconds: 1));
+      expect(authService.restorePreviousSignInCalls, 3);
+      await tester.pump(const Duration(seconds: 3));
+      expect(authService.restorePreviousSignInCalls, 4);
+      await tester.pump(const Duration(seconds: 8));
+      expect(authService.restorePreviousSignInCalls, 5);
+      await tester.pump(const Duration(seconds: 30));
+      expect(authService.restorePreviousSignInCalls, 5);
+
+      await tester.pumpWidget(const SizedBox.shrink());
+    },
+  );
+
+  testWidgets(
     'local-first startup keeps calendar visible and resume does not duplicate sync',
     (tester) async {
       SharedPreferences.setMockInitialValues({'onboardingCompleted': true});
@@ -11076,6 +11135,16 @@ class _FakeGoogleDriveAuthService extends GoogleDriveAuthService {
       return null;
     }
     return const {'Authorization': 'Bearer test-token'};
+  }
+}
+
+class _TimedOutRestoreAuthService extends _FakeGoogleDriveAuthService {
+  _TimedOutRestoreAuthService() : super(account: null);
+
+  @override
+  Future<GoogleDriveAccount?> restorePreviousSignIn() async {
+    restorePreviousSignInCalls += 1;
+    throw TimeoutException('offline');
   }
 }
 
