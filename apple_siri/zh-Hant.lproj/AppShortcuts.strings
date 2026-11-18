@@ -1,0 +1,21 @@
+/* App Shortcut invocation phrases (#958). Keys are the English source in DailySiriIntents.swift; short titles are in Localizable.xcstrings. */
+"Add an event in ${applicationName}" = "在${applicationName}新增行程";
+"Create an event with ${applicationName}" = "用${applicationName}建立行程";
+"Show today's events in ${applicationName}" = "在${applicationName}顯示今天的行程";
+"Check today's schedule in ${applicationName}" = "用${applicationName}查看今天的行程表";
+"Show tomorrow's events in ${applicationName}" = "在${applicationName}顯示明天的行程";
+"Check tomorrow's schedule in ${applicationName}" = "用${applicationName}查看明天的行程表";
+"Show events on a date in ${applicationName}" = "在${applicationName}顯示指定日期的行程";
+"Check events by date in ${applicationName}" = "用${applicationName}依日期查看行程";
+"What's next in ${applicationName}" = "在${applicationName}顯示下一個行程";
+"Show my nearest event in ${applicationName}" = "用${applicationName}查看最近的行程";
+"Search events in ${applicationName}" = "在${applicationName}搜尋行程";
+"Find an event in ${applicationName}" = "用${applicationName}尋找行程";
+"Update an event in ${applicationName}" = "在${applicationName}修改行程";
+"Change an event in ${applicationName}" = "用${applicationName}更改行程";
+"Delete an event in ${applicationName}" = "在${applicationName}刪除行程";
+"Remove an event from ${applicationName}" = "用${applicationName}移除行程";
+"Show D-day events in ${applicationName}" = "在${applicationName}顯示 D-day";
+"Check D-days in ${applicationName}" = "用${applicationName}查看 D-day 行程";
+"Run Signal in ${applicationName}" = "在${applicationName}執行 Signal";
+"${applicationName} Signal" = "${applicationName} Signal";
