@@ -257,11 +257,17 @@ public class FlutterSecureStoragePlugin implements MethodCallHandler, FlutterPlu
 
 
         private void handleException(Exception e) {
-            StringWriter stringWriter = new StringWriter();
-            e.printStackTrace(new PrintWriter(stringWriter));
             // Send exception message as the message field so Flutter can parse it
             String errorMessage = e.getMessage() != null ? e.getMessage() : "Unknown error";
-            result.error("Exception encountered", errorMessage, stringWriter.toString());
+            result.error("Exception encountered", errorMessage, errorDetails(e, BuildConfig.DEBUG));
         }
+    }
+
+    /** Daily (#971): the Java stack trace goes to Dart only in debug builds. */
+    static String errorDetails(Exception e, boolean debug) {
+        if (!debug) return null;
+        StringWriter stringWriter = new StringWriter();
+        e.printStackTrace(new PrintWriter(stringWriter));
+        return stringWriter.toString();
     }
 }
