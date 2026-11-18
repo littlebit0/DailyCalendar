@@ -26,6 +26,8 @@ def production_source():
         "let testDirectory = URL(fileURLWithPath: CommandLine.arguments[1])",
         'let snapshotFileName = "snapshot.json"',
         store.replace(lookup, "Optional<String>.none"),
+        # The snapshot model reads its wording from this table once #921 is in.
+        between("// BEGIN WIDGET TEXT", "// END WIDGET TEXT") if "// BEGIN WIDGET TEXT" in SWIFT else "",
         between("struct DailyWidgetEvent: Codable, Identifiable {", "private enum DailyWidgetTodoActionStore {"),
         between("struct DailyWidgetDay: Codable, Identifiable {", "private struct DailyWidgetEventSpan"),
         between("struct DailyWidgetDday: Codable, Identifiable {", "// BEGIN WIDGET WEEKDAY COLUMNS"),
