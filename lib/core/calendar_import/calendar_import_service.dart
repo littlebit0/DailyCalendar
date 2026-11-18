@@ -53,6 +53,20 @@ class CalendarImportService {
   Future<List<ImportableCalendar>> listGoogleCalendars() =>
       _googleSource.listCalendars();
 
+  /// Google counts an all-day event's reminder in minutes before 00:00 of its
+  /// start date (`reminders.overrides[].minutes` is "minutes before the start
+  /// of the event", and an all-day event starts at midnight), while Daily
+  /// counts it back from the all-day reminder time. Timed events need no change.
+  // shortcut: stored relative to the all-day reminder time at import, so changing that setting later shifts these reminders too; keeping them exact needs a 00:00-based reminder field in the event schema.
+  static List<int> googleAllDayReminderMinutes(
+    List<int> minutes, {
+    required int hour,
+    required int minute,
+  }) {
+    final offset = hour * 60 + minute;
+    return [for (final value in minutes) value + offset];
+  }
+
   Future<CalendarImportResult> importCalendars(
     Iterable<ImportableCalendar> calendars,
   ) async {
@@ -74,6 +88,7 @@ class CalendarImportService {
     var skipped = 0;
     final now = DateTime.now();
     final deviceId = await _settingsRepository.deviceId();
+    final settings = _settingsRepository.load();
     final pending = <CalendarEvent>[];
     for (final external in events) {
       try {
@@ -105,7 +120,15 @@ class CalendarImportService {
                   ?.colorValue ??
               external.colorValue ??
               EventCategory.basic.colorValue,
-          reminderMinutesBeforeList: external.reminderMinutesBeforeList,
+          reminderMinutesBeforeList:
+              external.provider == CalendarImportProvider.google &&
+                  external.allDay
+              ? googleAllDayReminderMinutes(
+                  external.reminderMinutesBeforeList,
+                  hour: settings.allDayReminderHour,
+                  minute: settings.allDayReminderMinute,
+                )
+              : external.reminderMinutesBeforeList,
           recurrence: recurrenceFromRrule(
             external.recurrenceRule,
             startAt: external.startAt,
