@@ -2965,6 +2965,9 @@ class _CalendarMainContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return switch (viewMode) {
       CalendarViewMode.month => _MonthPageView(
+        // Each mode keeps its own page position; a new state starts both from
+        // the month the header shows.
+        key: ValueKey(settings.monthNavigationMode),
         month: month,
         selectedDate: selectedDate,
         settings: settings,
@@ -3902,6 +3905,7 @@ class _QuickMonthPageViewState extends State<_QuickMonthPageView> {
 
 class _MonthPageView extends ConsumerStatefulWidget {
   const _MonthPageView({
+    super.key,
     required this.month,
     required this.selectedDate,
     required this.settings,
