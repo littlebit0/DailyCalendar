@@ -102,7 +102,7 @@ void main() {
         source,
         contains('Button(\n        intent: DailyToggleTodoIntent'),
       );
-      expect(source, contains('DailyTodoToggle(event: event)'));
+      expect(source, contains('DailyTodoToggle(event: event, text: entry.snapshot.text)'));
       expect(source, contains('.dailyTodoCompletion('));
       // Month labels share the palette they already resolved with the
       // completion modifier instead of solving the same contrast twice.
