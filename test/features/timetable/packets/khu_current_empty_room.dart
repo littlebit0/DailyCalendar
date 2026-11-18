@@ -178,7 +178,7 @@ void main() {
           final room = m[6]!.trim();
           var date = DateTime(2026, 9, 1);
           while (date.weekday != wd) {
-            date = date.add(const Duration(days: 1));
+            date = DateTime(date.year, date.month, date.day + 1);
           }
           while (!date.isAfter(DateTime(2026, 12, 21))) {
             final key = date.toIso8601String().substring(0, 10);
@@ -188,7 +188,7 @@ void main() {
                 )) {
               expected.add('$key/$wd/$start/$end/$room');
             }
-            date = date.add(const Duration(days: 7));
+            date = DateTime(date.year, date.month, date.day + 7);
           }
         }
         expect(

@@ -178,7 +178,7 @@
         "campusLabels": "Official source labels common / Chuncheon / Samcheok; codes for Gangneung and Wonju also preserved when published."
       },
       "timetable": {
-        "status": "implemented_catalog_verified_with_unpublished_exceptions",
+        "status": "temporarily_unsupported",
         "sourceId": "kangwon",
         "courseCount": 5761,
         "scheduledCourses": 5108,
@@ -241,7 +241,9 @@
           "completionClaim": false
         },
         "remaining": "Current packaged 5761 offerings / 5108 schedule-bearing / 7048 serialized reservations; partial, whole operating support not verified.",
-        "latestSourceProcessingPass": "work/university-research/resume-20261011/current-packaged-coverage.json"
+        "latestSourceProcessingPass": "work/university-research/resume-20261011/current-packaged-coverage.json",
+        "priorStatus": "implemented_catalog_verified_with_unpublished_exceptions",
+        "statusNote": "Listed in UniversitySupportPolicy.suspendedTimetableUniversities (#976)."
       },
       "installedAcceptance": "not_verified",
       "deferredAsImpossible": false,
@@ -409,7 +411,7 @@
         "sourceUrl": "https://www.knu.ac.kr/wbbs/wbbs/user/yearSchedule/index.action?menu_idx=43&vo.search_year=2026"
       },
       "timetable": {
-        "status": "implemented_catalog_verified_with_unpublished_exceptions",
+        "status": "temporarily_unsupported",
         "sourceId": "knu",
         "courseCount": 3847,
         "scheduledCourses": 3602,
@@ -475,7 +477,9 @@
           "appLaunched": false,
           "completionClaim": false
         },
-        "latestSourceProcessingPass": "work/university-research/resume-20261011/current-packaged-coverage.json"
+        "latestSourceProcessingPass": "work/university-research/resume-20261011/current-packaged-coverage.json",
+        "priorStatus": "implemented_catalog_verified_with_unpublished_exceptions",
+        "statusNote": "Listed in UniversitySupportPolicy.suspendedTimetableUniversities (#976)."
       },
       "installedAcceptance": "not_verified",
       "deferredAsImpossible": false,
@@ -495,7 +499,7 @@
         "sourceUrl": "https://www.gnu.ac.kr/main/ps/schdul/selectSchdulMainList.do?mi=1084"
       },
       "timetable": {
-        "status": "implemented_partial_catalog",
+        "status": "temporarily_unsupported",
         "sourceId": "gnu",
         "courses": 4842,
         "scheduled": 3005,
@@ -572,7 +576,9 @@
           "appLaunched": false,
           "completionClaim": false
         },
-        "latestSourceProcessingPass": "work/university-research/resume-20261011/current-packaged-coverage.json"
+        "latestSourceProcessingPass": "work/university-research/resume-20261011/current-packaged-coverage.json",
+        "priorStatus": "implemented_partial_catalog",
+        "statusNote": "Listed in UniversitySupportPolicy.suspendedTimetableUniversities (#976)."
       },
       "installedAcceptance": "macos_build_signature_install_verified_ui_not_run",
       "deferredAsImpossible": false,
@@ -838,11 +844,13 @@
         "institution:academyinfo:0000256"
       ],
       "academicCalendar": {
-        "status": "implemented_live_verified",
+        "status": "not_registered",
         "sourceId": "ginue",
         "sourceUrl": "https://www.ginue.ac.kr/kor/CMS/ScheduleMgr/YearList.do?mCode=MN058",
         "events2026": 44,
-        "evidence": "Official university annual list for both institution campuses; 12 months, previous/current year queries. Admission-host calendar alone is empty and is not used."
+        "evidence": "Official university annual list for both institution campuses; 12 months, previous/current year queries. Admission-host calendar alone is empty and is not used.",
+        "priorStatus": "implemented_live_verified",
+        "statusNote": "No academicSourceRegistrations entry for this institution (#976)."
       },
       "timetable": {
         "status": "temporarily_unsupported",
@@ -913,11 +921,13 @@
         "institution:academyinfo:0000251"
       ],
       "academicCalendar": {
-        "status": "implemented_live_verified",
+        "status": "not_registered",
         "sourceId": "gjue",
         "sourceUrl": "https://www.gjue.ac.kr/kor/13/schedules",
         "events2026": 48,
-        "evidence": "Published list?year normal GET, all 12 months, previous/current years. Monthly duplicate ranges deduplicated; December-to-January grades retained. Two tests passed."
+        "evidence": "Published list?year normal GET, all 12 months, previous/current years. Monthly duplicate ranges deduplicated; December-to-January grades retained. Two tests passed.",
+        "priorStatus": "implemented_live_verified",
+        "statusNote": "No academicSourceRegistrations entry for this institution (#976)."
       },
       "timetable": {
         "status": "temporarily_unsupported",
@@ -1047,9 +1057,11 @@
         "institution:academyinfo:0000381"
       ],
       "academicCalendar": {
-        "status": "implemented_live_verified",
+        "status": "not_registered",
         "sourceId": "gist",
-        "sourceUrl": "https://www.gist.ac.kr/kr/html/sub05/0501.html"
+        "sourceUrl": "https://www.gist.ac.kr/kr/html/sub05/0501.html",
+        "priorStatus": "implemented_live_verified",
+        "statusNote": "No academicSourceRegistrations entry for this institution (#976)."
       },
       "timetable": {
         "status": "temporarily_unsupported",
@@ -1114,10 +1126,12 @@
         "institution:academyinfo:0000252"
       ],
       "academicCalendar": {
-        "status": "implemented_live_verified",
+        "status": "not_registered",
         "sourceId": "gnue",
         "sourceUrl": "https://www.gnue.ac.kr/index.9is?contentUid=4a9f18ab5c48fe8c015caa01ed5507e9",
-        "events2026": 34
+        "events2026": 34,
+        "priorStatus": "implemented_live_verified",
+        "statusNote": "No academicSourceRegistrations entry for this institution (#976)."
       },
       "timetable": {
         "status": "temporarily_unsupported",
@@ -1191,7 +1205,7 @@
         "validationNote": "Published undergraduate category101; thirteen sequential monthly requests; empty January/July preserved. December periods match latest Aug3 official revision notice231116. Two focused tests passed."
       },
       "timetable": {
-        "status": "implemented_partial_catalog",
+        "status": "temporarily_unsupported",
         "sourceId": "gknu",
         "courses": 24,
         "scheduled": 14,
@@ -1240,7 +1254,9 @@
           "completionClaim": false
         },
         "remaining": "Current packaged 24 offerings / 14 schedule-bearing / 170 serialized reservations; partial, whole operating support not verified.",
-        "latestSourceProcessingPass": "work/university-research/resume-20261011/current-packaged-coverage.json"
+        "latestSourceProcessingPass": "work/university-research/resume-20261011/current-packaged-coverage.json",
+        "priorStatus": "implemented_partial_catalog",
+        "statusNote": "Listed in UniversitySupportPolicy.suspendedTimetableUniversities (#976)."
       },
       "installedAcceptance": "macos_build_signature_install_verified_ui_not_run",
       "deferredAsImpossible": false,
@@ -1260,7 +1276,7 @@
         "events2026": 36
       },
       "timetable": {
-        "status": "implemented_partial_catalog",
+        "status": "temporarily_unsupported",
         "sourceId": "kongju",
         "courses": 2675,
         "scheduled": 2004,
@@ -1321,7 +1337,9 @@
           "completionClaim": false
         },
         "remaining": "Current packaged 2675 offerings / 2004 schedule-bearing / 38175 serialized reservations; partial, whole operating support not verified.",
-        "latestSourceProcessingPass": "work/university-research/resume-20261011/current-packaged-coverage.json"
+        "latestSourceProcessingPass": "work/university-research/resume-20261011/current-packaged-coverage.json",
+        "priorStatus": "implemented_partial_catalog",
+        "statusNote": "Listed in UniversitySupportPolicy.suspendedTimetableUniversities (#976)."
       },
       "installedAcceptance": "macos_build_signature_install_verified_ui_not_run",
       "deferredAsImpossible": false,
@@ -1416,11 +1434,13 @@
         "institution:academyinfo:0000010"
       ],
       "academicCalendar": {
-        "status": "implemented_live_verified",
+        "status": "not_registered",
         "sourceId": "kumoh",
         "sourceUrl": "https://www.kumoh.ac.kr/ko/schedule_reg.do",
         "verifiedEventCount": 92,
-        "validationNote": "Public declared population498 equals498 unique article IDs; fetch articleLimit from published total instead of tied-date pagination which omitted one2026 article. Both winter periods preserved. Identifiable DailyCalendar User-Agent; no login. Two focused tests passed."
+        "validationNote": "Public declared population498 equals498 unique article IDs; fetch articleLimit from published total instead of tied-date pagination which omitted one2026 article. Both winter periods preserved. Identifiable DailyCalendar User-Agent; no login. Two focused tests passed.",
+        "priorStatus": "implemented_live_verified",
+        "statusNote": "No academicSourceRegistrations entry for this institution (#976)."
       },
       "timetable": {
         "status": "temporarily_unsupported",
@@ -1499,7 +1519,7 @@
         "campusCoverage": "Dorim and Damyang; official damyang.mokpo.ac.kr/rep/index.do calendar anchor directly links representative schedule; raw exact DOM saved in calendar-b research."
       },
       "timetable": {
-        "status": "implemented_catalog_verified_with_unpublished_exceptions",
+        "status": "temporarily_unsupported",
         "sourceId": "mokpo",
         "courseCount": 1307,
         "scheduledCourses": 791,
@@ -1555,7 +1575,9 @@
           "completionClaim": false
         },
         "remaining": "Current packaged 1307 offerings / 791 schedule-bearing / 14349 serialized reservations; partial, whole operating support not verified.",
-        "latestSourceProcessingPass": "work/university-research/resume-20261011/current-packaged-coverage.json"
+        "latestSourceProcessingPass": "work/university-research/resume-20261011/current-packaged-coverage.json",
+        "priorStatus": "implemented_catalog_verified_with_unpublished_exceptions",
+        "statusNote": "Listed in UniversitySupportPolicy.suspendedTimetableUniversities (#976)."
       },
       "installedAcceptance": "not_verified",
       "deferredAsImpossible": false,
@@ -1569,11 +1591,13 @@
         "institution:academyinfo:0000012"
       ],
       "academicCalendar": {
-        "status": "implemented_live_verified",
+        "status": "not_registered",
         "sourceId": "mmu",
         "sourceUrl": "https://www.mmu.ac.kr/main/acschedule",
         "events2026": 59,
-        "focusedTests": "test/core/academic/mmu_academic_source_test.dart"
+        "focusedTests": "test/core/academic/mmu_academic_source_test.dart",
+        "priorStatus": "implemented_live_verified",
+        "statusNote": "No academicSourceRegistrations entry for this institution (#976)."
       },
       "timetable": {
         "status": "temporarily_unsupported",
@@ -1823,7 +1847,7 @@
         "verification": "Namhae source/profile42+additionalidentityfooter guard; officiallive2026 39unique/valid and2027winter8unique/valid. Full1344pass/1skip/analyzer/Macbuild/inplaceinstall. No interactiveacceptance."
       },
       "timetable": {
-        "status": "implemented_partial_catalog",
+        "status": "temporarily_unsupported",
         "sourceId": "changwon",
         "courses": 1754,
         "scheduled": 1390,
@@ -1878,7 +1902,9 @@
           "work/university-research/checkpoint149-source-manifest.json",
           "work/university-research/checkpoint149-build-verification.json"
         ],
-        "latestSourceProcessingPass": "work/university-research/resume-20261011/current-packaged-coverage.json"
+        "latestSourceProcessingPass": "work/university-research/resume-20261011/current-packaged-coverage.json",
+        "priorStatus": "implemented_partial_catalog",
+        "statusNote": "Listed in UniversitySupportPolicy.suspendedTimetableUniversities (#976)."
       },
       "installedAcceptance": "macos_build_signature_install_verified_ui_not_run",
       "deferredAsImpossible": false,
@@ -1964,12 +1990,14 @@
         "institution:academyinfo:0000033"
       ],
       "academicCalendar": {
-        "status": "implemented_live_verified",
+        "status": "not_registered",
         "sourceId": "kmou",
         "sourceUrl": "https://www.kmou.ac.kr/onestop/cm/cntnts/cntntsView.do?mi=74&cntntsId=1755",
         "events2026": 64,
         "verification": "Anonymous live Dart fetch64valid2026events, no cookies/login. Current undergraduateHTML plus official previous-yearPDF preserve revised maritime orientation and Januarywinter. Three focused and459academic/timetable/Drive tests passed; analyze clean; Macmin14build and codesignbefore/after passed. Same Daily Test updatedinplace without launch; device/live account acceptance not performed.",
-        "testAppInstalled": "checkpoint152 plus Oct11 source-validation corrections; Mac build/identity/signature/assets/backup checked;22 recorded failures resolved. No launch/UI/liveDrive/other-platform acceptance."
+        "testAppInstalled": "checkpoint152 plus Oct11 source-validation corrections; Mac build/identity/signature/assets/backup checked;22 recorded failures resolved. No launch/UI/liveDrive/other-platform acceptance.",
+        "priorStatus": "implemented_live_verified",
+        "statusNote": "No academicSourceRegistrations entry for this institution (#976)."
       },
       "timetable": {
         "status": "temporarily_unsupported",
@@ -2119,7 +2147,7 @@
         "events2026": 62
       },
       "timetable": {
-        "status": "implemented_catalog_verified_with_unpublished_exceptions",
+        "status": "temporarily_unsupported",
         "sourceId": "kookmin",
         "courseCount": 2941,
         "scheduledCourses": 2900,
@@ -2164,7 +2192,9 @@
           "completionClaim": false
         },
         "remaining": "Current packaged 2941 offerings / 2900 schedule-bearing / 4189 serialized reservations; partial, whole operating support not verified.",
-        "latestSourceProcessingPass": "work/university-research/resume-20261011/current-packaged-coverage.json"
+        "latestSourceProcessingPass": "work/university-research/resume-20261011/current-packaged-coverage.json",
+        "priorStatus": "implemented_catalog_verified_with_unpublished_exceptions",
+        "statusNote": "Listed in UniversitySupportPolicy.suspendedTimetableUniversities (#976)."
       },
       "installedAcceptance": "not_verified",
       "deferredAsImpossible": false,
@@ -2322,11 +2352,13 @@
         "institution:academyinfo:0000382"
       ],
       "academicCalendar": {
-        "status": "implemented_live_verified",
+        "status": "not_registered",
         "sourceId": "dgist",
         "sourceUrl": "https://www.dgist.ac.kr/prog/schafsSchdul/kor/sub05_01_01/list.do",
         "events2026": 54,
-        "verification": "Normal TLS-verified Dart GET searchYear previous/current with identifiable Daily header; POST resets and is not used. Official university/graduate combined calendar retained; numeric dates not badge labels. Two focused tests passed."
+        "verification": "Normal TLS-verified Dart GET searchYear previous/current with identifiable Daily header; POST resets and is not used. Official university/graduate combined calendar retained; numeric dates not badge labels. Two focused tests passed.",
+        "priorStatus": "implemented_live_verified",
+        "statusNote": "No academicSourceRegistrations entry for this institution (#976)."
       },
       "timetable": {
         "status": "temporarily_unsupported",
@@ -2402,11 +2434,13 @@
         "institution:academyinfo:0000253"
       ],
       "academicCalendar": {
-        "status": "implemented_live_verified",
+        "status": "not_registered",
         "sourceId": "dnue",
         "sourceUrl": "https://www.dnue.ac.kr/kor/CMS/ScheduleMgr/YearList.do?mCode=MN119",
         "events2026": 51,
-        "focusedTests": "test/core/academic/cnu_dnue_academic_source_test.dart"
+        "focusedTests": "test/core/academic/cnu_dnue_academic_source_test.dart",
+        "priorStatus": "implemented_live_verified",
+        "statusNote": "No academicSourceRegistrations entry for this institution (#976)."
       },
       "timetable": {
         "status": "temporarily_unsupported",
@@ -2759,7 +2793,7 @@
         "latestSourceEvidence": "work/university-research/resume-20261011/deu/HANDOFF.md",
         "priorImplementationStatus": "investigating",
         "productionIntegrationEnabled": false,
-        "reason": "No active timetable integration; Daejeon removal was previously requested explicitly."
+        "reason": "No active timetable integration."
       },
       "installedAcceptance": "not_verified",
       "deferredAsImpossible": false,
@@ -2932,10 +2966,12 @@
         "institution:academyinfo:0000254"
       ],
       "academicCalendar": {
-        "status": "implemented_live_verified",
+        "status": "not_registered",
         "sourceId": "bnue",
         "sourceUrl": "https://www.bnue.ac.kr/calendar/life01",
-        "events2026": 48
+        "events2026": 48,
+        "priorStatus": "implemented_live_verified",
+        "statusNote": "No academicSourceRegistrations entry for this institution (#976)."
       },
       "timetable": {
         "status": "temporarily_unsupported",
@@ -3154,10 +3190,12 @@
         "institution:academyinfo:0000116"
       ],
       "academicCalendar": {
-        "status": "implemented_live_verified",
+        "status": "not_registered",
         "sourceId": "syu",
         "events2026": 80,
-        "sourceUrl": "https://www.syu.ac.kr/academic/major-schedule/"
+        "sourceUrl": "https://www.syu.ac.kr/academic/major-schedule/",
+        "priorStatus": "implemented_live_verified",
+        "statusNote": "No academicSourceRegistrations entry for this institution (#976)."
       },
       "timetable": {
         "status": "temporarily_unsupported",
@@ -3312,7 +3350,7 @@
         ]
       },
       "timetable": {
-        "status": "implemented_catalog_verified_with_unpublished_exceptions",
+        "status": "temporarily_unsupported",
         "sourceId": "seoultech",
         "courseCount": 1990,
         "scheduledCourses": 1684,
@@ -3357,7 +3395,9 @@
           "completionClaim": false
         },
         "remaining": "Current packaged 1990 offerings / 1684 schedule-bearing / 3042 serialized reservations; partial, whole operating support not verified.",
-        "latestSourceProcessingPass": "work/university-research/resume-20261011/current-packaged-coverage.json"
+        "latestSourceProcessingPass": "work/university-research/resume-20261011/current-packaged-coverage.json",
+        "priorStatus": "implemented_catalog_verified_with_unpublished_exceptions",
+        "statusNote": "Listed in UniversitySupportPolicy.suspendedTimetableUniversities (#976)."
       },
       "installedAcceptance": "not_verified",
       "deferredAsImpossible": false,
@@ -3371,11 +3411,13 @@
         "institution:academyinfo:0000255"
       ],
       "academicCalendar": {
-        "status": "implemented_live_verified",
+        "status": "not_registered",
         "sourceId": "snue",
         "sourceUrl": "https://www.snue.ac.kr/snue/sm/schdul/schdulList.do?mi=1281&schdulId=1000",
         "verifiedEventCount": 65,
-        "validationNote": "Annual public JSON, all twelve months validated; graduate-only, affiliated elementary and lifelong education excluded; shared undergraduate schedules and cross-month periods preserved. Two focused tests passed."
+        "validationNote": "Annual public JSON, all twelve months validated; graduate-only, affiliated elementary and lifelong education excluded; shared undergraduate schedules and cross-month periods preserved. Two focused tests passed.",
+        "priorStatus": "implemented_live_verified",
+        "statusNote": "No academicSourceRegistrations entry for this institution (#976)."
       },
       "timetable": {
         "status": "unsupported",
@@ -3420,7 +3462,7 @@
         "latestSourceEvidence": "work/university-research/resume-20261011/snue/HANDOFF.md",
         "priorImplementationStatus": "investigating",
         "productionIntegrationEnabled": false,
-        "reason": "No active timetable integration; Daejeon removal was previously requested explicitly."
+        "reason": "No active timetable integration."
       },
       "installedAcceptance": "not_verified",
       "deferredAsImpossible": false,
@@ -3502,7 +3544,7 @@
         "evidence": "Official anonymous GET year_code, 12 months, absolute detail dates, overlapping monthly rows deduplicated."
       },
       "timetable": {
-        "status": "implemented_catalog_verified_with_unpublished_exceptions",
+        "status": "temporarily_unsupported",
         "sourceId": "uos",
         "courseCount": 2112,
         "scheduledCourses": 1443,
@@ -3547,7 +3589,9 @@
           "completionClaim": false
         },
         "remaining": "Current packaged 2112 offerings / 1443 schedule-bearing / 1648 serialized reservations; partial, whole operating support not verified.",
-        "latestSourceProcessingPass": "work/university-research/resume-20261011/current-packaged-coverage.json"
+        "latestSourceProcessingPass": "work/university-research/resume-20261011/current-packaged-coverage.json",
+        "priorStatus": "implemented_catalog_verified_with_unpublished_exceptions",
+        "statusNote": "Listed in UniversitySupportPolicy.suspendedTimetableUniversities (#976)."
       },
       "installedAcceptance": "not_verified",
       "deferredAsImpossible": false,
@@ -3567,7 +3611,7 @@
         "events2026": 83
       },
       "timetable": {
-        "status": "implemented_partial_catalog",
+        "status": "temporarily_unsupported",
         "sourceId": "swu",
         "courses": 1511,
         "scheduled": 1281,
@@ -3612,7 +3656,9 @@
           "completionClaim": false
         },
         "remaining": "Current packaged 1511 offerings / 1281 schedule-bearing / 20406 serialized reservations; partial, whole operating support not verified.",
-        "latestSourceProcessingPass": "work/university-research/resume-20261011/current-packaged-coverage.json"
+        "latestSourceProcessingPass": "work/university-research/resume-20261011/current-packaged-coverage.json",
+        "priorStatus": "implemented_partial_catalog",
+        "statusNote": "Listed in UniversitySupportPolicy.suspendedTimetableUniversities (#976)."
       },
       "installedAcceptance": "macos_build_signature_install_verified_ui_not_run",
       "deferredAsImpossible": false,
@@ -4093,7 +4139,7 @@
         "sourceUrl": "https://ssu.ac.kr/학사/학사일정/"
       },
       "timetable": {
-        "status": "implemented_partial_catalog",
+        "status": "temporarily_unsupported",
         "sourceId": "ssu",
         "courses": 2219,
         "scheduled": 2044,
@@ -4140,7 +4186,9 @@
           "completionClaim": false
         },
         "remaining": "Current packaged 2219 offerings / 2044 schedule-bearing / 56624 serialized reservations; partial, whole operating support not verified.",
-        "latestSourceProcessingPass": "work/university-research/resume-20261011/current-packaged-coverage.json"
+        "latestSourceProcessingPass": "work/university-research/resume-20261011/current-packaged-coverage.json",
+        "priorStatus": "implemented_partial_catalog",
+        "statusNote": "Listed in UniversitySupportPolicy.suspendedTimetableUniversities (#976)."
       },
       "installedAcceptance": "macos_build_signature_install_verified_ui_not_run",
       "deferredAsImpossible": false,
@@ -4377,10 +4425,12 @@
         "institution:academyinfo:0000156"
       ],
       "academicCalendar": {
-        "status": "implemented_live_verified",
+        "status": "not_registered",
         "sourceId": "yongin",
         "sourceUrl": "https://www.yongin.ac.kr/cmn/wvtex/nibr/academic/academicMain.do",
-        "events2026": 48
+        "events2026": 48,
+        "priorStatus": "implemented_live_verified",
+        "statusNote": "No academicSourceRegistrations entry for this institution (#976)."
       },
       "timetable": {
         "status": "temporarily_unsupported",
@@ -4448,10 +4498,12 @@
         "institution:academyinfo:0000250"
       ],
       "academicCalendar": {
-        "status": "implemented_live_verified",
+        "status": "not_registered",
         "sourceId": "unist",
         "sourceUrl": "https://www.unist.ac.kr/unist/education/academic/schedule.do",
-        "events2026": 63
+        "events2026": 63,
+        "priorStatus": "implemented_live_verified",
+        "statusNote": "No academicSourceRegistrations entry for this institution (#976)."
       },
       "timetable": {
         "status": "temporarily_unsupported",
@@ -4879,11 +4931,13 @@
         "institution:academyinfo:0000258"
       ],
       "academicCalendar": {
-        "status": "implemented_live_verified",
+        "status": "not_registered",
         "sourceId": "jnue",
         "sourceUrl": "https://www.jnue.kr/",
         "events2026": 41,
-        "verification": "Latest annual notice selected dynamically; public Synap redirect/index/HTML validated, 14-month document. Forty-one dated current-year events live verified; two explicitly undated thesis-alternative entries cannot be imported and dates are never inherited. Hidden IAB visual date pairing checked. Focused tests and subsequent broader/install checks pending."
+        "verification": "Latest annual notice selected dynamically; public Synap redirect/index/HTML validated, 14-month document. Forty-one dated current-year events live verified; two explicitly undated thesis-alternative entries cannot be imported and dates are never inherited. Hidden IAB visual date pairing checked. Focused tests and subsequent broader/install checks pending.",
+        "priorStatus": "implemented_live_verified",
+        "statusNote": "No academicSourceRegistrations entry for this institution (#976)."
       },
       "timetable": {
         "status": "temporarily_unsupported",
@@ -5180,11 +5234,13 @@
         "institution:academyinfo:0000260"
       ],
       "academicCalendar": {
-        "status": "implemented_live_verified",
+        "status": "not_registered",
         "sourceId": "cue",
         "sourceUrl": "https://www.cue.ac.kr/kor/CMS/ScheduleMgr/YearList.do?mCode=MN052",
         "verifiedEventCount": 55,
-        "validationNote": "Published CMS annual year selector, previous/current years; reuse verified ScheduleMgr parser with correct CUE sourceURL; all twelve months validated and full cross-month practicum retained. Two focused tests passed."
+        "validationNote": "Published CMS annual year selector, previous/current years; reuse verified ScheduleMgr parser with correct CUE sourceURL; all twelve months validated and full cross-month practicum retained. Two focused tests passed.",
+        "priorStatus": "implemented_live_verified",
+        "statusNote": "No academicSourceRegistrations entry for this institution (#976)."
       },
       "timetable": {
         "status": "unsupported",
@@ -5230,7 +5286,7 @@
         "latestSourceEvidence": "work/university-research/resume-20261011/cue/HANDOFF.md",
         "priorImplementationStatus": "investigating",
         "productionIntegrationEnabled": false,
-        "reason": "No active timetable integration; Daejeon removal was previously requested explicitly."
+        "reason": "No active timetable integration."
       },
       "installedAcceptance": "not_verified",
       "deferredAsImpossible": false,
@@ -5243,10 +5299,12 @@
         "institution:academyinfo:0000261"
       ],
       "academicCalendar": {
-        "status": "implemented_live_verified",
+        "status": "not_registered",
         "sourceId": "cje",
         "sourceUrl": "https://www.cje.ac.kr/web/schedule/list.do",
-        "events2026": 38
+        "events2026": 38,
+        "priorStatus": "implemented_live_verified",
+        "statusNote": "No academicSourceRegistrations entry for this institution (#976)."
       },
       "timetable": {
         "status": "temporarily_unsupported",
@@ -5326,11 +5384,13 @@
         "institution:academyinfo:0000262"
       ],
       "academicCalendar": {
-        "status": "implemented_live_verified",
+        "status": "not_registered",
         "sourceId": "cnue",
         "sourceUrl": "https://www.cnue.ac.kr/cnue/info/schedule.do",
         "events2026": 49,
-        "evidence": "Official allYn Y annual board, previous/current years. Explicit cross-month notation and preceding year overlap retained. Two tests passed."
+        "evidence": "Official allYn Y annual board, previous/current years. Explicit cross-month notation and preceding year overlap retained. Two tests passed.",
+        "priorStatus": "implemented_live_verified",
+        "statusNote": "No academicSourceRegistrations entry for this institution (#976)."
       },
       "timetable": {
         "status": "unsupported",
@@ -5374,7 +5434,7 @@
         "latestSourceEvidence": "work/university-research/resume-20261011/cnue/HANDOFF.md",
         "priorImplementationStatus": "investigating",
         "productionIntegrationEnabled": false,
-        "reason": "No active timetable integration; Daejeon removal was previously requested explicitly."
+        "reason": "No active timetable integration."
       },
       "installedAcceptance": "not_verified",
       "deferredAsImpossible": false,
@@ -5548,9 +5608,11 @@
         "institution:academyinfo:0000188"
       ],
       "academicCalendar": {
-        "status": "implemented_live_verified",
+        "status": "not_registered",
         "sourceId": "postech",
-        "sourceUrl": "https://www.postech.ac.kr/kor/college-life/academic_schedule.do"
+        "sourceUrl": "https://www.postech.ac.kr/kor/college-life/academic_schedule.do",
+        "priorStatus": "implemented_live_verified",
+        "statusNote": "No academicSourceRegistrations entry for this institution (#976)."
       },
       "timetable": {
         "status": "temporarily_unsupported",
@@ -5617,11 +5679,13 @@
         "institution:academyinfo:0000037"
       ],
       "academicCalendar": {
-        "status": "implemented_live_verified",
+        "status": "not_registered",
         "sourceId": "hknu",
         "sourceUrl": "https://www.hknu.ac.kr/kor/464/subview.do",
         "events2026": 65,
-        "yearBoundary": "Previous/current official years fetched sequentially; overlapping winter periods preserved."
+        "yearBoundary": "Previous/current official years fetched sequentially; overlapping winter periods preserved.",
+        "priorStatus": "implemented_live_verified",
+        "statusNote": "No academicSourceRegistrations entry for this institution (#976)."
       },
       "timetable": {
         "status": "temporarily_unsupported",
@@ -5701,7 +5765,7 @@
         "verification": "Official academic-office homepage published monthly JSON, 13 sequential requests. January omitted by annual HTML retained; both winters exact. Two focused tests and live check passed; broad checks/install pending."
       },
       "timetable": {
-        "status": "implemented_partial_published_catalog",
+        "status": "temporarily_unsupported",
         "sourceId": "tuk",
         "courses": 1431,
         "scheduled": 1346,
@@ -5753,7 +5817,9 @@
           "completionClaim": false
         },
         "remaining": "Current packaged 1431 offerings / 1346 schedule-bearing / 20412 serialized reservations; partial, whole operating support not verified.",
-        "latestSourceProcessingPass": "work/university-research/resume-20261011/current-packaged-coverage.json"
+        "latestSourceProcessingPass": "work/university-research/resume-20261011/current-packaged-coverage.json",
+        "priorStatus": "implemented_partial_published_catalog",
+        "statusNote": "Listed in UniversitySupportPolicy.suspendedTimetableUniversities (#976)."
       },
       "installedAcceptance": "macos_build_signature_install_verified_ui_not_run",
       "deferredAsImpossible": false,
@@ -5767,10 +5833,12 @@
         "institution:academyinfo:0000374"
       ],
       "academicCalendar": {
-        "status": "implemented_live_verified",
+        "status": "not_registered",
         "sourceId": "kaist",
         "sourceUrl": "https://www.kaist.ac.kr/kr/html/edu/03110101.html",
-        "events2026": 145
+        "events2026": 145,
+        "priorStatus": "implemented_live_verified",
+        "statusNote": "No academicSourceRegistrations entry for this institution (#976)."
       },
       "timetable": {
         "status": "temporarily_unsupported",
@@ -5840,10 +5908,12 @@
         "institution:academyinfo:0000031"
       ],
       "academicCalendar": {
-        "status": "implemented_live_verified",
+        "status": "not_registered",
         "sourceId": "knue",
         "sourceUrl": "https://www.knue.ac.kr/www/selectSchdleWebList.do?key=542",
-        "events2026": 52
+        "events2026": 52,
+        "priorStatus": "implemented_live_verified",
+        "statusNote": "No academicSourceRegistrations entry for this institution (#976)."
       },
       "timetable": {
         "status": "temporarily_unsupported",
@@ -5987,7 +6057,7 @@
         "events2026": 64
       },
       "timetable": {
-        "status": "implemented_catalog_verified_with_unpublished_exceptions",
+        "status": "temporarily_unsupported",
         "sourceId": "hufs",
         "courseCount": 3372,
         "scheduledCourses": 2481,
@@ -6053,7 +6123,9 @@
         "remaining": "Current packaged 3372 offerings / 2481 schedule-bearing / 35802 serialized reservations; partial, whole operating support not verified.",
         "unrecognized": 887,
         "unscheduled": 4,
-        "latestSourceProcessingPass": "work/university-research/resume-20261011/current-packaged-coverage.json"
+        "latestSourceProcessingPass": "work/university-research/resume-20261011/current-packaged-coverage.json",
+        "priorStatus": "implemented_catalog_verified_with_unpublished_exceptions",
+        "statusNote": "Listed in UniversitySupportPolicy.suspendedTimetableUniversities (#976)."
       },
       "installedAcceptance": "not_verified",
       "deferredAsImpossible": false,
@@ -6144,7 +6216,7 @@
         "sourceNote": "Annual December rendering has wrong year after winter rollover. Official December month view supplies dates matched against all annual titles; no guessed year repairs."
       },
       "timetable": {
-        "status": "implemented_catalog_verified_with_unpublished_exceptions",
+        "status": "temporarily_unsupported",
         "sourceId": "hansung",
         "courseCount": 1489,
         "scheduledCourses": 1111,
@@ -6199,7 +6271,9 @@
           "appLaunched": false,
           "completionClaim": false
         },
-        "latestSourceProcessingPass": "work/university-research/resume-20261011/current-packaged-coverage.json"
+        "latestSourceProcessingPass": "work/university-research/resume-20261011/current-packaged-coverage.json",
+        "priorStatus": "implemented_catalog_verified_with_unpublished_exceptions",
+        "statusNote": "Listed in UniversitySupportPolicy.suspendedTimetableUniversities (#976)."
       },
       "installedAcceptance": "macos_build_signature_install_verified_ui_not_run",
       "deferredAsImpossible": false,
@@ -6460,11 +6534,13 @@
         "institution:academyinfo:0000240"
       ],
       "academicCalendar": {
-        "status": "implemented_live_verified",
+        "status": "not_registered",
         "sourceId": "wsu",
         "sourceUrl": "https://www.wsu.ac.kr/page/haksa_list.jsp",
         "events2026": 90,
-        "checkedAt": "2026-10-12"
+        "checkedAt": "2026-10-12",
+        "priorStatus": "implemented_live_verified",
+        "statusNote": "No academicSourceRegistrations entry for this institution (#976)."
       },
       "timetable": {
         "status": "temporarily_unsupported",
@@ -6492,11 +6568,13 @@
         "institution:academyinfo:0000168"
       ],
       "academicCalendar": {
-        "status": "implemented_live_verified",
+        "status": "not_registered",
         "sourceId": "iccu",
         "sourceUrl": "https://shin.iccu.ac.kr/menu_03/menu03_02.php",
         "events2026": 194,
-        "checkedAt": "2026-10-12"
+        "checkedAt": "2026-10-12",
+        "priorStatus": "implemented_live_verified",
+        "statusNote": "No academicSourceRegistrations entry for this institution (#976)."
       },
       "timetable": {
         "status": "temporarily_unsupported",
@@ -6585,11 +6663,13 @@
         "institution:academyinfo:0003139"
       ],
       "academicCalendar": {
-        "status": "implemented_live_verified",
+        "status": "not_registered",
         "sourceId": "kentech",
         "sourceUrl": "https://www.kentech.ac.kr/CalendarList.do",
         "events2026": 79,
-        "checkedAt": "2026-10-12"
+        "checkedAt": "2026-10-12",
+        "priorStatus": "implemented_live_verified",
+        "statusNote": "No academicSourceRegistrations entry for this institution (#976)."
       },
       "timetable": {
         "status": "unsupported",
@@ -6614,7 +6694,7 @@
         "academicCalendarUnaffected": true,
         "priorImplementationStatus": "not_applied_by_user_decision",
         "productionIntegrationEnabled": false,
-        "reason": "No active timetable integration; Daejeon removal was previously requested explicitly."
+        "reason": "No active timetable integration."
       },
       "sourceEvidence": "work/university-research/expansion17-20261011/"
     },
@@ -6625,11 +6705,13 @@
         "institution:academyinfo:0000201"
       ],
       "academicCalendar": {
-        "status": "implemented_live_verified",
+        "status": "not_registered",
         "sourceId": "hansei",
         "sourceUrl": "https://hansei.ac.kr/view.do?no=10302",
         "events2026": 80,
-        "checkedAt": "2026-10-12"
+        "checkedAt": "2026-10-12",
+        "priorStatus": "implemented_live_verified",
+        "statusNote": "No academicSourceRegistrations entry for this institution (#976)."
       },
       "timetable": {
         "status": "temporarily_unsupported",
@@ -6657,11 +6739,13 @@
         "institution:academyinfo:0000207"
       ],
       "academicCalendar": {
-        "status": "implemented_live_verified",
+        "status": "not_registered",
         "sourceId": "hyupsung",
         "sourceUrl": "https://www.uhs.ac.kr/uhs/121/subview.do",
         "events2026": 64,
-        "checkedAt": "2026-10-12"
+        "checkedAt": "2026-10-12",
+        "priorStatus": "implemented_live_verified",
+        "statusNote": "No academicSourceRegistrations entry for this institution (#976)."
       },
       "timetable": {
         "status": "temporarily_unsupported",
@@ -6690,11 +6774,13 @@
         "institution:academyinfo:0000131"
       ],
       "academicCalendar": {
-        "status": "implemented_live_verified",
+        "status": "not_registered",
         "sourceId": "sungkyul",
         "sourceUrl": "https://www.sungkyul.ac.kr/skukr/313/subview.do",
         "events2026": 85,
-        "checkedAt": "2026-10-12"
+        "checkedAt": "2026-10-12",
+        "priorStatus": "implemented_live_verified",
+        "statusNote": "No academicSourceRegistrations entry for this institution (#976)."
       },
       "timetable": {
         "status": "temporarily_unsupported",
@@ -6765,11 +6851,13 @@
         "institution:academyinfo:0000119"
       ],
       "academicCalendar": {
-        "status": "implemented_live_verified",
+        "status": "not_registered",
         "sourceId": "sangji",
         "sourceUrl": "https://sangji.ac.kr/prog/schafsSchdul/kor/sub06_01_01/A/scheduleList.do",
         "events2026": 80,
-        "checkedAt": "2026-10-12"
+        "checkedAt": "2026-10-12",
+        "priorStatus": "implemented_live_verified",
+        "statusNote": "No academicSourceRegistrations entry for this institution (#976)."
       },
       "timetable": {
         "status": "temporarily_unsupported",
@@ -6797,11 +6885,13 @@
         "institution:academyinfo:0000216"
       ],
       "academicCalendar": {
-        "status": "implemented_live_verified",
+        "status": "not_registered",
         "sourceId": "nambu",
         "sourceUrl": "https://www.nambu.ac.kr/custom/scheduleView.do?menuCd=KR005002002",
         "events2026": 71,
-        "checkedAt": "2026-10-12"
+        "checkedAt": "2026-10-12",
+        "priorStatus": "implemented_live_verified",
+        "statusNote": "No academicSourceRegistrations entry for this institution (#976)."
       },
       "timetable": {
         "status": "temporarily_unsupported",
@@ -6829,11 +6919,13 @@
         "institution:academyinfo:0000051"
       ],
       "academicCalendar": {
-        "status": "implemented_live_verified",
+        "status": "not_registered",
         "sourceId": "kangnam",
         "sourceUrl": "https://app.kangnam.ac.kr/knumis/sb/sbm1050Download.jsp?gubn_code=1&schl_smst=2&schl_year=2025",
         "events2026": 85,
-        "checkedAt": "2026-10-12"
+        "checkedAt": "2026-10-12",
+        "priorStatus": "implemented_live_verified",
+        "statusNote": "No academicSourceRegistrations entry for this institution (#976)."
       },
       "timetable": {
         "status": "temporarily_unsupported",
@@ -6972,7 +7064,7 @@
     }
   ],
   "installedMacTestCheckpoint": 152,
-  "currentAcademicCalendarSourcesImplemented": 85,
+  "currentAcademicCalendarSourcesImplemented": 71,
   "fullHistoricalCoverageClaim": false,
   "macUpdateOnlyReceipt": "work/university-research/resume-batch-20261010/mac-update-only-receipt.json",
   "sourceValidation22Receipt": "work/source-validation22-20261011/resolution-receipt.json",

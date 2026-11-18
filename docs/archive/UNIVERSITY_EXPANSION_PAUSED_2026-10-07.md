@@ -59,7 +59,7 @@
 ## 실행 범위/제약
 사용자 재개 요청 후 대학 학사일정/시간표 범위 내 작업과 데이터 수집 서브에이전트 병렬 허용. LMS확장/토큰실험은 보류; 코스모스대학목록별도 docs/COURSEMOS_UNIVERSITY_DISCOVERY_2026-10-07.md 보존.
 수정 후 narrow meaningful tests/analyze/affectedplatformbuild/verified in-place Testupdate. 개인화면에 창띄우지 않음, 사용자요청 없이 앱실행 안 함. 로그인/계정변경/인증우회 없이 published guest flows만. contact/token/cookie 저장 금지.
-Flutter /Users/kimhwi/Documents/Codex/2026-05-26/flutter-sdk + tool/flutter.sh --no-version-check.
+Flutter ~/Documents/Codex/2026-05-26/flutter-sdk + tool/flutter.sh --no-version-check.
 Mac xcodebuild Runner Debug platformmacOS derivedDataPath build/macos min14, codesign verify후 tar non-app backup 및기존앱rsync. run_macos.sh는launch하므로금지.
 
 ## 남은 시간표77개

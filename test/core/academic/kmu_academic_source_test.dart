@@ -125,4 +125,21 @@ void main() {
     addTearDown(source.close);
     expect(source.fetch(2026), throwsFormatException);
   });
+
+  test('KMU keeps joint rows and skips graduate-only rows', () {
+    final body = fixture(2026);
+    const graduate = '2026학년도 전기 대학원 학위수여식';
+    expect(body, contains(graduate));
+    expect(
+      KmuAcademicSource.parse(body, 2026).map((e) => e.title),
+      isNot(contains(graduate)),
+    );
+    expect(
+      KmuAcademicSource.parse(
+        body.replaceAll(graduate, '학부·대학원 수강신청'),
+        2026,
+      ).map((e) => e.title),
+      contains('학부·대학원 수강신청'),
+    );
+  });
 }

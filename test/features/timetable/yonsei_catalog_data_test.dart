@@ -158,7 +158,7 @@ void main() {
           for (
             var day = DateTime(2026, 9, 1);
             !day.isAfter(DateTime(2026, 12, 7));
-            day = day.add(const Duration(days: 1))
+            day = DateTime(day.year, day.month, day.day + 1)
           ) {
             final date = day.toIso8601String().substring(0, 10);
             if ({

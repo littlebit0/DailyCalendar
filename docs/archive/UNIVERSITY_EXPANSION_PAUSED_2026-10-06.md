@@ -42,7 +42,7 @@
 
 ## 실행 제약
 
-- Flutter root /Users/kimhwi/Documents/Codex/2026-05-26/flutter-sdk, bash tool/flutter.sh --no-pub; SDKcache/network 필요하면 sandbox escalation. narrow tests test/core/academic 및 test/features/timetable. test/core/timetable 디렉터리는 없다.
+- Flutter root ~/Documents/Codex/2026-05-26/flutter-sdk, bash tool/flutter.sh --no-pub; SDKcache/network 필요하면 sandbox escalation. narrow tests test/core/academic 및 test/features/timetable. test/core/timetable 디렉터리는 없다.
 - Mac xcodebuild Runner Debug platformmacOS, -derivedDataPath build/macos MACOSX_DEPLOYMENT_TARGET=14.0; 기존 Test앱에 tar backup 후 rsync. tool/run_macos.sh는 실행도 하므로 사용 금지.
 - Windows/Android/iOS 최신 검증은 미완료. 빌드/설치/실기기 흐름을 혼동하지 않는다.
 - 숨긴 IAB/CLI 이용, 사용자 다른 데스크탑에 창 띄우지 않는다. CUA 재개 전 rewriteDocumentation.
