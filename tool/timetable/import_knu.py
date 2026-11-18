@@ -165,9 +165,9 @@ if __name__ == '__main__':
     parser.add_argument('--asset-dir', type=Path)
     args = parser.parse_args()
     root = args.research_dir
-    courses, audit = normalize(json.loads((root/'knu-safe-meeting-candidates.json').read_text()),
-                               json.loads((root/'knu-expanded-owner-alias-audit.json').read_text()))
-    (root/'knu-normalized-candidate-audit.json').write_text(json.dumps(audit, ensure_ascii=False, indent=2)+'\n')
+    courses, audit = normalize(json.loads((root/'knu-safe-meeting-candidates.json').read_text(encoding='utf-8')),
+                               json.loads((root/'knu-expanded-owner-alias-audit.json').read_text(encoding='utf-8')))
+    (root/'knu-normalized-candidate-audit.json').write_text(json.dumps(audit, ensure_ascii=False, indent=2)+'\n', encoding='utf-8')
     for campus in CAMPUSES:
         payload = {'schemaVersion': 2, 'universityId': 'knu', 'campus': campus, 'campusName': CAMPUSES[campus],
                    'academicYear': 2026, 'semester': '2', 'completionClaim': False,
@@ -175,9 +175,9 @@ if __name__ == '__main__':
                    'sourceUrl': 'https://knuin.knu.ac.kr/public/stddm/lectPlnInqr.knu',
                    'period': {'startDate': '2026-09-01', 'endDate': '2026-12-18'},
                    'courses': [c for c in courses if c['campus'] == campus]}
-        (root/f'knu-{campus}-2026-2.normalized.json').write_text(json.dumps(payload, ensure_ascii=False, indent=2)+'\n')
+        (root/f'knu-{campus}-2026-2.normalized.json').write_text(json.dumps(payload, ensure_ascii=False, indent=2)+'\n', encoding='utf-8')
         if args.asset_dir:
             args.asset_dir.mkdir(parents=True, exist_ok=True)
             payload['courses'] = [runtime_course(c) for c in payload['courses']]
-            (args.asset_dir/f'knu-{campus}-2026-2.json').write_text(json.dumps(payload, ensure_ascii=False, indent=2)+'\n')
+            (args.asset_dir/f'knu-{campus}-2026-2.json').write_text(json.dumps(payload, ensure_ascii=False, indent=2)+'\n', encoding='utf-8')
     print(json.dumps(audit, ensure_ascii=False))

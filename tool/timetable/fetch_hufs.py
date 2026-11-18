@@ -59,7 +59,7 @@ def query(parameters):
 
 def write_json(path, value):
     temporary = path.with_suffix(path.suffix + '.tmp')
-    temporary.write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n')
+    temporary.write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     temporary.replace(path)
 
 
@@ -69,7 +69,7 @@ def collect(output, year, resume=False):
     manifest_path = output / 'manifest.json'
     write_json(manifest_path, {'complete': False, 'year': year, 'semester': '2'})
     partial_path = output / 'courses.partial.json'
-    previous = json.loads(partial_path.read_text()) if resume and partial_path.exists() else []
+    previous = json.loads(partial_path.read_text(encoding='utf-8')) if resume and partial_path.exists() else []
     cached = {}
     for record in previous:
         row = record['row']
