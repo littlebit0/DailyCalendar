@@ -49,6 +49,7 @@ IMPORT_SUITES = [
     "test_pnu_import",
     "test_sejong_import",
     "test_seoultech_import",
+    "test_sungshin_import",
     "test_timetable_import",
     "test_tuk_import",
     "test_ulsan_view",
