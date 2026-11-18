@@ -219,8 +219,22 @@ void main() {
           isFalse,
         );
       }
-      expect(defaults.periodFor(2025, '2', university: 'cau'), isNull);
-      expect(defaults.periodFor(2027, '1', university: 'cau'), isNull);
+      // 자료에 없는 연도는 자료의 앞뒤 연도로 계산해, 학사 자료를 추가해도 깨지지 않게 한다.
+      final years =
+          defaults
+              .periodsFor('cau')
+              .keys
+              .map((key) => (jsonDecode(key) as List).first as int)
+              .toList()
+            ..sort();
+      expect(
+        defaults.periodFor(years.first - 1, '2', university: 'cau'),
+        isNull,
+      );
+      expect(
+        defaults.periodFor(years.last + 1, '1', university: 'cau'),
+        isNull,
+      );
     },
   );
 }
