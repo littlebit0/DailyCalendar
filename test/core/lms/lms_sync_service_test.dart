@@ -500,6 +500,131 @@ void main() {
     },
   );
 
+  group('lecture identity switch with a changed period', () {
+    const coursePage =
+        '<html><body id="page-course-view"><main id="region-main">'
+        '<li class="activity vod" id="module-7001"><div class="activityinstance">'
+        '<a href="/mod/vod/view.php?id=7001"><span class="instancename">미학습 자료'
+        '<span class="accesshide">동영상</span></span></a></div>'
+        '<div class="contentafterlink">2026-09-28 00:00:00 ~ 2026-10-04 23:59:00, 30:00</div>'
+        '</li></main></body></html>';
+    final start = DateTime.utc(2026, 9, 27, 15).millisecondsSinceEpoch ~/ 1000;
+    // The professor extends the deadline by one day in the same sync.
+    final extended =
+        DateTime.utc(2026, 10, 5, 14, 59).millisecondsSinceEpoch ~/ 1000;
+    String learnedRow(String id, {String title = '미학습 자료', int? end}) =>
+        '<tr><td>5</td><td>$title</td><td>27:00</td><td>05:00'
+        '<button data-modname="vod" data-modid="$id" data-sterm="$start" '
+        'data-eterm="${end ?? extended}">상세보기 (1)</button></td><td>10%</td></tr>';
+
+    Future<CalendarEvent> storeRecovered() async {
+      h.pages['/report/ubcompletion/user_progress.php'] = _learning
+          .replaceFirst('</tbody>', '$_unlearned</tbody>');
+      h.pages['/course/view.php'] = coursePage;
+      await h.service.refresh(force: true);
+      final original = h.repository.events.values.singleWhere(
+        (e) => e.lms!.activityId == 'report:cm:vod:7001',
+      );
+      await h.commands.setCompleted(original, true);
+      final completed = h.repository.events[original.id]!;
+      h.repository.events[original.id] = completed.copyWith(memo: '개인 메모');
+      return h.repository.events[original.id]!;
+    }
+
+    List<CalendarEvent> lectures(String title) => h.repository.events.values
+        .where((e) => !e.isDeleted && e.title == '[수업 8001] $title')
+        .toList();
+
+    test(
+      'reuses the only same-titled event and keeps memo/completion',
+      () async {
+        final original = await storeRecovered();
+        h.pages['/report/ubcompletion/user_progress.php'] = _learning
+            .replaceFirst('</tbody>', '${learnedRow('9999')}</tbody>');
+        await h.service.refresh(force: true);
+        final kept = lectures('미학습 자료');
+        expect(kept, hasLength(1));
+        expect(kept.single.id, original.id);
+        expect(kept.single.memo, '개인 메모');
+        expect(kept.single.completed, isTrue);
+        expect(kept.single.lms!.manuallyCompleted, isTrue);
+        expect(
+          kept.single.lms!.dueAt,
+          DateTime.fromMillisecondsSinceEpoch(extended * 1000, isUtc: true),
+        );
+      },
+    );
+
+    test('two same-titled lectures in this sync stay separate', () async {
+      final original = await storeRecovered();
+      h.pages['/report/ubcompletion/user_progress.php'] = _learning.replaceFirst(
+        '</tbody>',
+        '${learnedRow('9998', end: extended + 86400)}${learnedRow('9999')}</tbody>',
+      );
+      await h.service.refresh(force: true);
+      final all = lectures('미학습 자료');
+      expect(all, hasLength(3));
+      expect(
+        h.repository.events[original.id]!.lms!.activityId,
+        'report:cm:vod:7001',
+      );
+      expect(all.where((e) => e.memo == '개인 메모').map((e) => e.id), [
+        original.id,
+      ]);
+      expect(
+        all.where((e) => e.id != original.id).every((e) => !e.completed),
+        isTrue,
+      );
+    });
+
+    test('two same-titled stored events stay separate', () async {
+      final original = await storeRecovered();
+      final twinSource = original.lms!.copyWith(
+        activityId: 'report:cm:vod:7002',
+      );
+      final twinId = LmsSyncService.eventId(twinSource);
+      h.repository.events[twinId] = original.copyWith(
+        id: twinId,
+        lms: twinSource,
+        memo: '다른 메모',
+      );
+      h.pages['/report/ubcompletion/user_progress.php'] = _learning
+          .replaceFirst('</tbody>', '${learnedRow('9999')}</tbody>');
+      await h.service.refresh(force: true);
+      final all = lectures('미학습 자료');
+      expect(all, hasLength(3));
+      expect(h.repository.events[original.id]!.memo, '개인 메모');
+      expect(h.repository.events[twinId]!.memo, '다른 메모');
+      final added = all.singleWhere(
+        (e) => e.lms!.activityId == 'report:vod:9999',
+      );
+      expect(added.memo, isNull);
+      expect(added.completed, isFalse);
+    });
+
+    test('a stored id still read in this sync is not reused', () async {
+      final original = await storeRecovered();
+      // Module 7001 is still read (renamed), while another lecture now
+      // carries the stored title.
+      h.pages['/course/view.php'] = coursePage.replaceFirst('미학습 자료', '개명 자료');
+      h.pages['/report/ubcompletion/user_progress.php'] = _learning
+          .replaceFirst(
+            '</tbody>',
+            '${_unlearned.replaceFirst('미학습 자료', '개명 자료')}'
+                '${learnedRow('9999')}</tbody>',
+          );
+      await h.service.refresh(force: true);
+      final renamed = h.repository.events[original.id]!;
+      expect(renamed.title, '[수업 8001] 개명 자료');
+      expect(renamed.memo, '개인 메모');
+      final added = lectures('미학습 자료').single;
+      expect(added.id, isNot(original.id));
+      expect(added.lms!.activityId, 'report:vod:9999');
+      expect(added.memo, isNull);
+      expect(added.completed, isFalse);
+    });
+  });
+
   test(
     'a failed learning course does not prevent other courses or required indexes',
     () async {

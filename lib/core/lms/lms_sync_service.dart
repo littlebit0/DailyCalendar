@@ -292,6 +292,34 @@ class LmsSyncService extends ChangeNotifier {
     );
   }
 
+  // A lecture row moves between `report:cm:` (course page) and `report:`
+  // (learning report) ids. Pair by title only when exactly one side is
+  // `report:cm:`, the course has exactly one lecture with that title in this
+  // sync, and the stored id was not read again, so two lectures sharing a
+  // title never exchange memos or completion marks. The caller already
+  // requires exactly one stored event with this title. A renamed lecture
+  // still cannot be paired: no stable link between both ids is available.
+  static bool _lectureIdentitySwitched(
+    CalendarEvent previous,
+    CoursemosActivity activity,
+    List<CoursemosActivity> activities,
+  ) {
+    final storedId = previous.lms!.activityId;
+    if (storedId.startsWith('report:cm:') ==
+        activity.id.startsWith('report:cm:')) {
+      return false;
+    }
+    var sameTitle = 0;
+    for (final other in activities) {
+      if (other.course.id != activity.course.id) continue;
+      if (other.id == storedId) return false;
+      if (other.type == 'lecture' && other.title == activity.title) {
+        sameTitle++;
+      }
+    }
+    return sameTitle == 1;
+  }
+
   // Report coverage is incomplete even when some lecture rows are verified.
   // Never extend this predicate to lectures: absence is not deletion evidence.
   bool _prunable(CalendarEvent event, LmsSyncSession session) {
@@ -372,8 +400,7 @@ class LmsSyncService extends ChangeNotifier {
       _notify();
       return Future.value();
     }
-    if (LmsSchool.of(session.schoolId)?.origin !=
-        session.baseUrl.origin) {
+    if (LmsSchool.of(session.schoolId)?.origin != session.baseUrl.origin) {
       _state = LmsSyncState.unsupported;
       _displaySession = null;
       _notify();
@@ -774,7 +801,8 @@ class LmsSyncService extends ChangeNotifier {
       if (due == null) continue;
       var activityId = activity.id;
       if (activity.type == 'lecture') {
-        final aliases = previous.where((event) {
+        final title = '[${activity.course.title}] ${activity.title}';
+        final sameTitle = previous.where((event) {
           final source = event.lms;
           return source != null &&
               !event.isDeleted &&
@@ -783,15 +811,25 @@ class LmsSyncService extends ChangeNotifier {
               source.lmsUserId == session.lmsUserId &&
               source.courseId == activity.course.id &&
               source.activityType == 'lecture' &&
-              event.title == '[${activity.course.title}] ${activity.title}' &&
-              source.openAt == activity.openAt &&
+              event.title == title;
+        }).toList();
+        final aliases = sameTitle.where((event) {
+          final source = event.lms!;
+          return source.openAt == activity.openAt &&
               source.dueAt == due &&
               source.requiredLearningSeconds ==
                   activity.requiredLearningSeconds &&
               (activity.id.startsWith('report:cm:') ||
                   source.activityId.startsWith('report:cm:'));
         }).toList();
-        if (aliases.length == 1) activityId = aliases.single.lms!.activityId;
+        if (aliases.length == 1) {
+          activityId = aliases.single.lms!.activityId;
+        } else if (aliases.isEmpty &&
+            sameTitle.length == 1 &&
+            _lectureIdentitySwitched(sameTitle.single, activity, activities)) {
+          // The period may change in the same sync as the identity switch.
+          activityId = sameTitle.single.lms!.activityId;
+        }
       }
       // The final post-deadline sync counts only when the school's completion
       // state was read: an unknown status or unconfirmed lecture retries.
