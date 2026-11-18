@@ -40,8 +40,9 @@ public class FlutterSecureStorage {
     private final Context context;
 
     private SharedPreferences preferences;
-    private StorageCipher storageCipher;
-    private StorageCipherFactory storageCipherFactory;
+    // Package-private for the #937 initialization tests; not part of the plugin API.
+    StorageCipher storageCipher;
+    StorageCipherFactory storageCipherFactory;
 
     public FlutterSecureStorage(Context context) {
         this.context = context.getApplicationContext();
@@ -161,8 +162,13 @@ public class FlutterSecureStorage {
             try {
                 SharedPreferences encryptedPreferences = initializeEncryptedSharedPreferencesManager(context);
 
+                // Read every ESP value before the custom cipher writes anything
+                // to this shared file: ESP getAll() cannot skip plain entries.
+                final Map<String, String> espValues = EncryptedPreferencesMigration.prefixedStrings(
+                        encryptedPreferences.getAll(), config.getSharedPreferencesKeyPrefix());
+
                 // Check if data exists in EncryptedSharedPreferences (from v9.2.4 or earlier)
-                if (hasDataInEncryptedSharedPreferences(encryptedPreferences)) {
+                if (!espValues.isEmpty()) {
                     // EncryptedSharedPreferences (Jetpack Security library, deprecated by Google)
                     Log.w(TAG, "Found data in EncryptedSharedPreferences (deprecated)");
                     Log.w(TAG, "EncryptedSharedPreferences is DEPRECATED and will be removed in a later version");
@@ -193,28 +199,34 @@ public class FlutterSecureStorage {
                     }
                     Log.i(TAG, "Migrating data from EncryptedSharedPreferences to selected custom cipher storage...");
 
-                    // Initialize custom cipher for migration target
+                    // Initialize custom cipher for migration target. Daily: the
+                    // migrated flag is written only after the ESP copy commits,
+                    // and a failure reports an initialization error instead of
+                    // reading ESP data through the custom cipher (#937).
+                    final boolean hadAlgorithmMarkers =
+                            EncryptedPreferencesMigration.hasAlgorithmMarkers(nonEncryptedPreferences);
+                    deferEncryptedPrefsMigratedFlag = true;
                     initializeStorageCipher(configSource, new SecurePreferencesCallback<>() {
                         @Override
                         public void onSuccess(Void unused) {
+                            deferEncryptedPrefsMigratedFlag = false;
                             try {
-                                migrateFromEncryptedSharedPreferences(encryptedPreferences, nonEncryptedPreferences);
+                                EncryptedPreferencesMigration.copy(espValues, encryptedPreferences,
+                                        nonEncryptedPreferences, storageCipher,
+                                        storageCipherFactory::stageDataAlgorithms);
                                 preferences = nonEncryptedPreferences;
                                 Log.i(TAG, "Migration completed successfully. Now using custom cipher storage.");
                                 setEncryptedPrefsMigrated(configSource);
                                 callback.onSuccess(null);
                             } catch (Exception e) {
-                                Log.e(TAG, "Migration failed. Falling back to EncryptedSharedPreferences.", e);
-                                preferences = encryptedPreferences;
-                                callback.onSuccess(null);
+                                failEncryptedPreferencesMigration(nonEncryptedPreferences, hadAlgorithmMarkers, e, callback);
                             }
                         }
 
                         @Override
                         public void onError(Exception e) {
-                            Log.e(TAG, "Cipher initialization failed during migration. Using EncryptedSharedPreferences.", e);
-                            preferences = encryptedPreferences;
-                            callback.onSuccess(null);
+                            deferEncryptedPrefsMigratedFlag = false;
+                            failEncryptedPreferencesMigration(nonEncryptedPreferences, hadAlgorithmMarkers, e, callback);
                         }
                     });
                     return;
@@ -258,7 +270,24 @@ public class FlutterSecureStorage {
         }
     }
 
-    private void initializeStorageCipher(NamespacedConfigSource configSource, SecurePreferencesCallback<Void> callback) {
+    /** Set while an ESP copy is pending, so an algorithm migration does not mark ESP data migrated. */
+    private boolean deferEncryptedPrefsMigratedFlag = false;
+
+    /**
+     * Daily (#937): ESP data stays where it is. Markers written by the cipher
+     * migration in this run are removed so the next run sees an ESP-only file
+     * and retries; the plugin reports the failure instead of falling back.
+     */
+    private void failEncryptedPreferencesMigration(SharedPreferences data, boolean hadAlgorithmMarkers,
+                                                   Exception error, SecurePreferencesCallback<Void> callback) {
+        Log.e(TAG, "EncryptedSharedPreferences migration failed; original data retained.", error);
+        if (!hadAlgorithmMarkers && !EncryptedPreferencesMigration.removeAlgorithmMarkers(data)) {
+            Log.e(TAG, "Could not remove algorithm markers after failed migration.");
+        }
+        callback.onError(new Exception("EncryptedSharedPreferences migration failed; original data retained", error));
+    }
+
+    /* package */ void initializeStorageCipher(NamespacedConfigSource configSource, SecurePreferencesCallback<Void> callback) {
         try {
             storageCipherFactory = new StorageCipherFactory(configSource, config.getPrefOptionKeyCipherAlgorithm(), config.getPrefOptionStorageCipherAlgorithm(), config, context.getSharedPreferences(config.getEffectiveDataPrefsName(), Context.MODE_PRIVATE));
 
@@ -881,7 +910,7 @@ public class FlutterSecureStorage {
                 @Override
                 public void onSuccess(Void unused) {
                     Log.i(TAG, "Data migration completed successfully!");
-                    setEncryptedPrefsMigrated(configSource);
+                    if (!deferEncryptedPrefsMigratedFlag) setEncryptedPrefsMigrated(configSource);
                     callback.onSuccess(null);
                 }
 
@@ -1197,7 +1226,7 @@ public class FlutterSecureStorage {
         Log.i(TAG, "Migration complete: " + migratedCount + " items migrated from EncryptedSharedPreferences to custom cipher storage");
     }
 
-    private SharedPreferences initializeEncryptedSharedPreferencesManager(Context context) throws GeneralSecurityException, IOException {
+    /* package */ SharedPreferences initializeEncryptedSharedPreferencesManager(Context context) throws GeneralSecurityException, IOException {
         MasterKey key = new MasterKey.Builder(context)
                 .setKeyGenParameterSpec(
                         new KeyGenParameterSpec

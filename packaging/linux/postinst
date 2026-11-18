@@ -10,8 +10,10 @@ if [ "$1" = configure ]; then
       :
     elif [ -z "${2:-}" ]; then
       systemctl enable --now dailycalendar-update.timer
-    else
-      systemctl try-restart dailycalendar-update.timer
+    elif [ "$state" = enabled ]; then
+      # Also starts a timer that prerm stopped before a reinstall; a plain
+      # try-restart would leave it inactive. A disabled timer stays off.
+      systemctl restart dailycalendar-update.timer
     fi
   fi
   if command -v update-desktop-database >/dev/null 2>&1; then

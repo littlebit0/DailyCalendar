@@ -392,8 +392,9 @@ void main() {
       expect((calls[2].arguments as Map)['eventId'], multi.id);
 
       calls.clear();
+      // No future time: the previous alarms are removed, none is scheduled.
       await service.scheduleEventAlarm(event(startAt: start, minutesList: [120]));
-      expect(calls, isEmpty);
+      expect(calls.map((call) => call.method), ['cancel']);
     });
   });
 }

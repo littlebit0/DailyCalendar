@@ -1,0 +1,3 @@
+"NSLocationUsageDescription" = "Use your approximate location to show the nearby KMA forecast. You can also select a region without location access.";
+"NSMicrophoneUsageDescription" = "Daily uses the microphone only when you speak a calendar command to Signal.";
+"NSSpeechRecognitionUsageDescription" = "Daily converts your Signal calendar command to text so it can carry out the requested action.";

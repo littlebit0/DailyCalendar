@@ -513,7 +513,7 @@ class EventDetailsPanel extends ConsumerWidget {
     final scope = await _showRecurringScopeDialog(
       context,
       title: context.tr('반복 일정 수정'),
-      actionLabel: context.tr('수정'),
+      message: context.tr('이 반복 일정의 어느 범위를 수정할까요?'),
     );
     if (scope == null) {
       return;
@@ -583,7 +583,7 @@ class EventDetailsPanel extends ConsumerWidget {
       final scope = await _showRecurringScopeDialog(
         context,
         title: context.tr('반복 일정 삭제'),
-        actionLabel: context.tr('삭제'),
+        message: context.tr('이 반복 일정의 어느 범위를 삭제할까요?'),
         allScopeLabel: context.tr('전체 삭제'),
       );
       if (scope == null) {
@@ -660,19 +660,14 @@ class EventDetailsPanel extends ConsumerWidget {
   Future<_RecurringChangeScope?> _showRecurringScopeDialog(
     BuildContext context, {
     required String title,
-    required String actionLabel,
+    required String message,
     String? allScopeLabel,
   }) {
     return showDialog<_RecurringChangeScope>(
       context: context,
       builder: (context) => AlertDialog(
         title: Text(title),
-        content: Text(
-          context.tr(
-            '이 반복 일정의 어느 범위에 {action}을 적용할까요?',
-            args: {'action': actionLabel},
-          ),
-        ),
+        content: Text(message),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
@@ -1245,7 +1240,7 @@ class _EventTile extends StatelessWidget {
                                 event.location!.isNotEmpty)
                               TextButton.icon(
                                 onPressed: () =>
-                                    MapLauncher().openLocation(event.location!),
+                                    _openMap(context, event.location!),
                                 icon: const Icon(Icons.map_outlined, size: 16),
                                 label: Text(context.tr('지도 바로가기')),
                                 style: TextButton.styleFrom(
@@ -1536,7 +1531,7 @@ class _EventDetailSheetState extends ConsumerState<_EventDetailSheet> {
                 value: event.location!,
                 actionIcon: Icons.map_outlined,
                 actionLabel: context.tr('지도 바로가기'),
-                onPressed: () => MapLauncher().openLocation(event.location!),
+                onPressed: () => _openMap(context, event.location!),
               ),
             if (event.weather != null && event.weather!.isNotEmpty)
               _DetailRow(
@@ -1733,6 +1728,25 @@ class _EventDetailSheetState extends ConsumerState<_EventDetailSheet> {
   bool _sameDay(DateTime a, DateTime b) {
     return a.year == b.year && a.month == b.month && a.day == b.day;
   }
+}
+
+Future<void> _openMap(BuildContext context, String location) async {
+  final opened = await MapLauncher().openLocation(location);
+  if (opened || !context.mounted) return;
+  // A dialog, not a SnackBar: the detail sheet is a modal bottom sheet without
+  // its own Scaffold, so a SnackBar would appear underneath it.
+  await showDialog<void>(
+    context: context,
+    builder: (context) => AlertDialog(
+      content: Text(context.tr('지도를 열지 못했습니다.')),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: Text(context.tr('확인')),
+        ),
+      ],
+    ),
+  );
 }
 
 class _DetailRow extends StatelessWidget {
