@@ -73,8 +73,15 @@ jobs:
       - name: Verify built app version
         shell: bash
         run: |
-          built="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' build/ios/iphoneos/Runner.app/Info.plist)"
+          app=build/ios/iphoneos/Runner.app
+          built="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "$app/Info.plist")"
           test "$built" = "${{ needs.resolve.outputs.version }}" || { echo "Built iOS version $built != ${{ needs.resolve.outputs.version }}" >&2; exit 1; }
+          # The embedded widget must carry the app's version and build number.
+          for key in CFBundleShortVersionString CFBundleVersion; do
+            host="$(/usr/libexec/PlistBuddy -c "Print :$key" "$app/Info.plist")"
+            widget="$(/usr/libexec/PlistBuddy -c "Print :$key" "$app/PlugIns/DailyWidgets.appex/Info.plist")"
+            test "$widget" = "$host" || { echo "iOS widget $key $widget != app $host" >&2; exit 1; }
+          done
       - name: Stage IPA
         shell: bash
         run: |
@@ -117,8 +124,15 @@ jobs:
       - name: Verify built app version
         shell: bash
         run: |
-          built="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' build/macos/Build/Products/Release/Daily.app/Contents/Info.plist)"
+          app=build/macos/Build/Products/Release/Daily.app
+          built="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "$app/Contents/Info.plist")"
           test "$built" = "${{ needs.resolve.outputs.version }}" || { echo "Built macOS version $built != ${{ needs.resolve.outputs.version }}" >&2; exit 1; }
+          # The embedded widget must carry the app's version and build number.
+          for key in CFBundleShortVersionString CFBundleVersion; do
+            host="$(/usr/libexec/PlistBuddy -c "Print :$key" "$app/Contents/Info.plist")"
+            widget="$(/usr/libexec/PlistBuddy -c "Print :$key" "$app/Contents/PlugIns/DailyMacWidgets.appex/Contents/Info.plist")"
+            test "$widget" = "$host" || { echo "macOS widget $key $widget != app $host" >&2; exit 1; }
+          done
       - name: Stage DMG
         shell: bash
         run: |

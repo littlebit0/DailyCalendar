@@ -132,6 +132,7 @@
 		D66000000000000000000017 /* DailyCalendar Wallpaper Setup.shortcut */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Resources/DailyCalendar Wallpaper Setup.shortcut"; sourceTree = "<group>"; };
 		D81000000000000000000011 /* DailyEventPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyEventPalette.swift; sourceTree = "<group>"; };
 		DECDF0DE9F90073879A8DC07 /* Pods-RunnerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.debug.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.debug.xcconfig"; sourceTree = "<group>"; };
+		F58CFA4419A9BE62C66DAB13 /* DailyWidgets.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = DailyWidgets.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -179,6 +180,7 @@
 				442F8F4DFCC4066F0BCB7D1E /* Info.plist */,
 				29EB6F741D6857E667F322C0 /* DailyWidgets.entitlements */,
 				2CC54DBD089C7F46E65000F0 /* DailyAlarmMetadata.swift */,
+				F58CFA4419A9BE62C66DAB13 /* DailyWidgets.xcconfig */,
 			);
 			name = DailyWidgets;
 			path = ../apple_widgets;
@@ -775,12 +777,12 @@
 		};
 		39FCA274A64EB0639D860050 /* Profile */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F58CFA4419A9BE62C66DAB13 /* DailyWidgets.xcconfig */;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				CODE_SIGN_ENTITLEMENTS = ../apple_widgets/DailyWidgets.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4.0.0;
 				DEVELOPMENT_TEAM = A6Y73X2ZLS;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = ../apple_widgets/Info.plist;
@@ -790,7 +792,6 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 4.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.littlebit0.daily.widgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -981,12 +982,12 @@
 		};
 		B6A52A519EB454744992ABB7 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F58CFA4419A9BE62C66DAB13 /* DailyWidgets.xcconfig */;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				CODE_SIGN_ENTITLEMENTS = ../apple_widgets/DailyWidgets.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4.0.0;
 				DEVELOPMENT_TEAM = A6Y73X2ZLS;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = ../apple_widgets/Info.plist;
@@ -996,7 +997,6 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 4.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.littlebit0.daily.widgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1011,12 +1011,12 @@
 		};
 		E4CA8CBF31604646C27873FB /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F58CFA4419A9BE62C66DAB13 /* DailyWidgets.xcconfig */;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				CODE_SIGN_ENTITLEMENTS = ../apple_widgets/DailyWidgets.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4.0.0;
 				DEVELOPMENT_TEAM = A6Y73X2ZLS;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = ../apple_widgets/Info.plist;
@@ -1026,7 +1026,6 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 4.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.littlebit0.daily.widgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
