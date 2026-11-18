@@ -292,6 +292,36 @@ class LmsSyncService extends ChangeNotifier {
     );
   }
 
+  // A lecture row moves between `report:cm:` (course page) and `report:`
+  // (learning report) ids. Pair by title only when exactly one side is
+  // `report:cm:`, every report row of the course resolved and exactly one
+  // row has that title, and the stored id was not read again, so two lectures
+  // sharing a title never exchange memos or completion marks. The caller
+  // already requires exactly one stored event with this title. A renamed
+  // lecture still cannot be paired: no stable link between both ids exists.
+  static bool _lectureIdentitySwitched(
+    CalendarEvent previous,
+    CoursemosActivity activity,
+    List<CoursemosActivity> activities,
+    List<(String, List<String>)>? reportRows,
+  ) {
+    final storedId = previous.lms!.activityId;
+    if (reportRows == null ||
+        storedId.startsWith('report:cm:') ==
+            activity.id.startsWith('report:cm:')) {
+      return false;
+    }
+    // Undated and nonattendance rows are not in [activities], so ambiguity
+    // and a still-read stored id are judged on the whole report table.
+    if (reportRows.where((row) => row.$1 == activity.title).length != 1 ||
+        reportRows.any((row) => row.$2.contains(storedId))) {
+      return false;
+    }
+    return !activities.any(
+      (other) => other.course.id == activity.course.id && other.id == storedId,
+    );
+  }
+
   // Report coverage is incomplete even when some lecture rows are verified.
   // Never extend this predicate to lectures: absence is not deletion evidence.
   bool _prunable(CalendarEvent event, LmsSyncSession session) {
@@ -372,8 +402,7 @@ class LmsSyncService extends ChangeNotifier {
       _notify();
       return Future.value();
     }
-    if (LmsSchool.of(session.schoolId)?.origin !=
-        session.baseUrl.origin) {
+    if (LmsSchool.of(session.schoolId)?.origin != session.baseUrl.origin) {
       _state = LmsSyncState.unsupported;
       _displaySession = null;
       _notify();
@@ -483,6 +512,10 @@ class LmsSyncService extends ChangeNotifier {
       var excludedLearningActivities = 0;
       var failedLearningCourses = 0;
       var unresolvedQuizStatuses = 0;
+      // Every report row (title, activity ids) per course whose rows all
+      // resolved, including undated and nonattendance rows. A recovered row
+      // keeps its report module id too, so both identities are listed.
+      final learningRows = <String, List<(String, List<String>)>>{};
       for (final course in courses) {
         for (final type in const ['assignment', 'quiz']) {
           final module = type == 'assignment' ? 'assign' : 'quiz';
@@ -568,6 +601,20 @@ class LmsSyncService extends ChangeNotifier {
           fetched.addAll(reported);
           confirmedLearning.addAll(reported);
           unresolvedLearningActivities += learning.unresolvedRowCount;
+          if (learning.unresolvedRowCount == 0) {
+            learningRows[course.id] = [
+              for (final row in learning.rows)
+                (
+                  row.title,
+                  [
+                    if (row.sourceIdentity != null)
+                      'report:${row.sourceIdentity}',
+                    if (row.module != null && row.moduleId != null)
+                      'report:${row.module}:${row.moduleId}',
+                  ],
+                ),
+            ];
+          }
           undatedLearning.addAll([
             for (final row in learning.undatedRows)
               LmsUndatedLearning(
@@ -599,6 +646,7 @@ class LmsSyncService extends ChangeNotifier {
         courses,
         fetched,
         confirmedLearning: confirmedLearning,
+        learningRows: learningRows,
         unresolvedLearningActivities: unresolvedLearningActivities,
         excludedLearningActivities: excludedLearningActivities,
         failedLearningCourses: failedLearningCourses,
@@ -754,6 +802,7 @@ class LmsSyncService extends ChangeNotifier {
     List<CoursemosCourse> courses,
     List<CoursemosActivity> activities, {
     required Set<CoursemosActivity> confirmedLearning,
+    required Map<String, List<(String, List<String>)>> learningRows,
     required int unresolvedLearningActivities,
     required int excludedLearningActivities,
     required int failedLearningCourses,
@@ -769,12 +818,14 @@ class LmsSyncService extends ChangeNotifier {
     final candidates = <CalendarEvent>[];
     final confirmedEventIds = <String>{};
     final now = _now();
+    final previousIds = {for (final event in previous) event.id};
     for (final activity in activities) {
       final due = activity.dueAt;
       if (due == null) continue;
       var activityId = activity.id;
       if (activity.type == 'lecture') {
-        final aliases = previous.where((event) {
+        final title = '[${activity.course.title}] ${activity.title}';
+        final sameTitle = previous.where((event) {
           final source = event.lms;
           return source != null &&
               !event.isDeleted &&
@@ -783,15 +834,32 @@ class LmsSyncService extends ChangeNotifier {
               source.lmsUserId == session.lmsUserId &&
               source.courseId == activity.course.id &&
               source.activityType == 'lecture' &&
-              event.title == '[${activity.course.title}] ${activity.title}' &&
-              source.openAt == activity.openAt &&
+              event.title == title;
+        }).toList();
+        final aliases = sameTitle.where((event) {
+          final source = event.lms!;
+          return source.openAt == activity.openAt &&
               source.dueAt == due &&
               source.requiredLearningSeconds ==
                   activity.requiredLearningSeconds &&
               (activity.id.startsWith('report:cm:') ||
                   source.activityId.startsWith('report:cm:'));
         }).toList();
-        if (aliases.length == 1) activityId = aliases.single.lms!.activityId;
+        if (aliases.length == 1) {
+          activityId = aliases.single.lms!.activityId;
+        } else if (aliases.isEmpty &&
+            sameTitle.length == 1 &&
+            // An event under the incoming id itself (even renamed) wins.
+            !previousIds.contains(_activityEventId(session, activity)) &&
+            _lectureIdentitySwitched(
+              sameTitle.single,
+              activity,
+              activities,
+              learningRows[activity.course.id],
+            )) {
+          // The period may change in the same sync as the identity switch.
+          activityId = sameTitle.single.lms!.activityId;
+        }
       }
       // The final post-deadline sync counts only when the school's completion
       // state was read: an unknown status or unconfirmed lecture retries.
