@@ -1,20 +1,10 @@
-import 'dart:io';
 import 'package:daily/core/academic/academic_profile.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_period_defaults.dart';
 import 'package:daily/features/timetable/domain/timetable.dart';
 import 'package:daily/features/timetable/domain/university_course.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-class _Files extends CachingAssetBundle {
-  @override
-  Future<String> loadString(String key, {bool cache = true}) async =>
-      File(key).readAsStringSync();
-  @override
-  Future<ByteData> load(String key) async =>
-      ByteData.sublistView(File(key).readAsBytesSync());
-}
+import '../../support/file_asset_bundle.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -22,7 +12,7 @@ void main() {
     'HUFS bundled whole scope preserves reviewed dates, categories and restore',
     () async {
       final data = await UniversityCatalog.load(
-        bundle: _Files(),
+        bundle: FileAssetBundle(),
         university: 'hufs',
       );
       expect(
@@ -150,7 +140,7 @@ void main() {
     () async {
       // 근거: 서울 수강편람 134쪽, english_help.html (교시 시작 60분 간격, 수업 50분 + 쉬는 시간 10분)
       final data = await UniversityCatalog.load(
-        bundle: _Files(),
+        bundle: FileAssetBundle(),
         university: 'hufs',
       );
       var checked = 0;
@@ -209,7 +199,7 @@ void main() {
       );
       expect(wrong.timetableSupported, isFalse);
       final term = (await TimetablePeriodDefaults.load(
-        bundle: _Files(),
+        bundle: FileAssetBundle(),
       )).periodFor(2026, '2', university: 'hufs');
       expect(term?.start, DateTime(2026, 9, 1));
       expect(term?.end, DateTime(2026, 12, 21));

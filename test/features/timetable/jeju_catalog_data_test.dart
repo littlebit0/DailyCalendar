@@ -1,17 +1,11 @@
 import 'dart:convert';
-import 'package:flutter/services.dart';
 import '../../support/source_fixture.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
 import 'package:daily/features/timetable/domain/timetable.dart';
 import 'package:daily/features/timetable/domain/university_course.dart';
-
-class _Files extends CachingAssetBundle {
-  @override
-  Future<ByteData> load(String key) async =>
-      ByteData.sublistView(File(key).readAsBytesSync());
-}
+import '../../support/file_asset_bundle.dart';
 
 // 수강편람 교시표: 50분제 50분+쉬는 시간 10분(60분 슬롯), 75분제 75분+15분(90분
 // 슬롯), 야간 45분+5분(50분 슬롯). 연속 교시는 한 구간으로 합쳐 저장한다.
@@ -31,7 +25,7 @@ void main() {
     'Jeju asset slots include breaks and merge consecutive periods',
     () async {
       final all = await UniversityCatalog.load(
-        bundle: _Files(),
+        bundle: FileAssetBundle(),
         university: 'jeju',
       );
       var segments = 0;

@@ -6,5 +6,8 @@ import Foundation
 struct DailyAlarmMetadata: AlarmMetadata {
   let title: String
   let memo: String?
+  // Absent on alarms scheduled by earlier versions (#921).
+  var snoozeMinutes: Int? = nil
+  var localeTag: String? = nil
 }
 #endif

@@ -7,17 +7,8 @@ import 'package:daily/features/timetable/data/timetable_sync_document.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/domain/timetable.dart';
 import 'package:daily/features/timetable/domain/university_course.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-class _Files extends CachingAssetBundle {
-  @override
-  Future<String> loadString(String key, {bool cache = true}) async =>
-      File(key).readAsStringSync();
-  @override
-  Future<ByteData> load(String key) async =>
-      ByteData.sublistView(File(key).readAsBytesSync());
-}
+import '../../support/file_asset_bundle.dart';
 
 // 정규학기 교시별 시간 안내, https://www.konkuk.ac.kr/konkuk/2367/subview.do
 const _seoulClock = {
@@ -58,7 +49,7 @@ void main() {
     'Konkuk profile exposes Seoul and GLOCAL published timetables',
     () async {
       final datasets = await UniversityCatalog.load(
-        bundle: _Files(),
+        bundle: FileAssetBundle(),
         university: 'konkuk',
       );
       expect(
@@ -81,7 +72,7 @@ void main() {
         expect(profile.timetableCampus, expected);
       }
       final period = (await TimetablePeriodDefaults.load(
-        bundle: _Files(),
+        bundle: FileAssetBundle(),
       )).periodFor(2026, '2', university: 'konkuk');
       expect(period?.start, DateTime(2026, 8, 31));
       expect(period?.end, DateTime(2026, 12, 18));

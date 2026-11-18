@@ -5,17 +5,23 @@ import '../../features/events/domain/calendar_event.dart';
 import 'alarm_service.dart';
 
 class NativeAlarmService implements AlarmService, ReconciliableAlarmService {
-  NativeAlarmService({MethodChannel? channel, this.onAlarmScheduled})
-    : _channel =
-          channel ??
-          MethodChannel(
-            defaultTargetPlatform == TargetPlatform.android
-                ? 'daily/android_alarms'
-                : 'daily/alarm_kit',
-          );
+  NativeAlarmService({
+    MethodChannel? channel,
+    this.onAlarmScheduled,
+    this.localeTag,
+  }) : _channel =
+           channel ??
+           MethodChannel(
+             defaultTargetPlatform == TargetPlatform.android
+                 ? 'daily/android_alarms'
+                 : 'daily/alarm_kit',
+           );
 
   final MethodChannel _channel;
   final Future<void> Function(CalendarEvent)? onAlarmScheduled;
+
+  /// The app language tag for the alarm's fixed wording (snooze, stop).
+  final String Function()? localeTag;
 
   bool get _isSupportedPlatform =>
       defaultTargetPlatform == TargetPlatform.iOS ||
@@ -91,6 +97,7 @@ class NativeAlarmService implements AlarmService, ReconciliableAlarmService {
           'memo': event.memo,
           'fireAtMillisecondsList': fireTimes,
           'snoozeMinutes': 10,
+          if (localeTag != null) 'localeTag': localeTag!(),
         });
     if (scheduled == true) await onAlarmScheduled?.call(event);
   }

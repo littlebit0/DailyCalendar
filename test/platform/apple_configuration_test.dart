@@ -116,7 +116,7 @@ void main() {
         source,
         contains('Button(\n        intent: DailyToggleTodoIntent'),
       );
-      expect(source, contains('DailyTodoToggle(event: event)'));
+      expect(source, contains('DailyTodoToggle(event: event, text: entry.snapshot.text)'));
       expect(source, contains('.dailyTodoCompletion('));
       // Month labels share the palette they already resolved with the
       // completion modifier instead of solving the same contrast twice.
@@ -321,6 +321,41 @@ void main() {
       );
     },
   );
+
+  test(
+    'Apple App Store exports keep the pubspec build number (#959)',
+    () async {
+      for (final platform in ['ios', 'macos']) {
+        final options = await _readNormalized(
+          '$platform/AppStoreExportOptions.plist',
+        );
+        expect(
+          options,
+          contains('<key>manageAppVersionAndBuildNumber</key>\n\t<false/>'),
+          reason: platform,
+        );
+      }
+    },
+  );
+
+  test('macOS strips extended attributes after embedding (#959)', () async {
+    final project = await _readNormalized(
+      'macos/Runner.xcodeproj/project.pbxproj',
+    );
+    final runnerPhases = RegExp(
+      r'33CC10EC2044A3C60003C045 /\* Runner \*/ = \{.*?buildPhases = \((.*?)\);',
+      dotAll: true,
+    ).firstMatch(project)!.group(1)!;
+    final strip = runnerPhases.indexOf('/* Strip Extended Attributes */');
+    expect(
+      strip,
+      greaterThan(runnerPhases.indexOf('/* Embed App Extensions */')),
+    );
+    expect(
+      strip,
+      greaterThan(runnerPhases.indexOf('/* [CP] Embed Pods Frameworks */')),
+    );
+  });
 
   test(
     'Siri shortcut and intent wording ships in four languages (#958)',

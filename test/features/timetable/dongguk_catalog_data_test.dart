@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
 import 'package:daily/features/timetable/domain/timetable.dart';
-import 'package:flutter/services.dart';
+import '../../support/file_asset_bundle.dart';
 
 const root = 'work/university-research/catalog-w/dongguk/';
 Map<String, dynamic> read(String name) =>
@@ -17,22 +17,13 @@ Map<String, dynamic> read(String name) =>
         )
         as Map<String, dynamic>;
 
-class _Files extends CachingAssetBundle {
-  @override
-  Future<String> loadString(String key, {bool cache = true}) async =>
-      File(key).readAsStringSync();
-  @override
-  Future<ByteData> load(String key) async =>
-      ByteData.sublistView(File(key).readAsBytesSync());
-}
-
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   test(
     'Dongguk major labels all sit under an official opening tree node',
     () async {
       final datasets = await UniversityCatalog.load(
-        bundle: _Files(),
+        bundle: FileAssetBundle(),
         university: 'dongguk',
       );
       final raw = <String>{};

@@ -10,10 +10,10 @@ import 'package:daily/features/timetable/domain/timetable.dart';
 import 'package:daily/features/timetable/domain/timetable_term.dart';
 import 'package:daily/features/timetable/presentation/timetable_schedule.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../support/file_asset_bundle.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -169,7 +169,7 @@ void main() {
   });
 
   test('official defaults cover the four verified 2026 periods only', () async {
-    final defaults = await TimetablePeriodDefaults.load(bundle: _FileBundle());
+    final defaults = await TimetablePeriodDefaults.load(bundle: FileAssetBundle());
     final expected = <String, (DateTime, DateTime)>{
       '1': (DateTime(2026, 3, 3), DateTime(2026, 6, 22)),
       '여름': (DateTime(2026, 6, 23), DateTime(2026, 7, 8)),
@@ -237,7 +237,7 @@ void main() {
     await store.save(_dailyCourse('fall'));
     await store.save(_dailyCourse('winter', semester: '겨울'));
     await store.save(_dailyCourse('unknown', year: 2027, semester: '1'));
-    final defaults = await TimetablePeriodDefaults.load(bundle: _FileBundle());
+    final defaults = await TimetablePeriodDefaults.load(bundle: FileAssetBundle());
     await store.seedTermPeriods(defaults.periods);
     await store.selectTerm(2025, '2');
     final personal = CalendarEvent(
@@ -328,17 +328,7 @@ TimetableClass _dailyCourse(
   ],
 );
 
-class _FileBundle extends CachingAssetBundle {
-  @override
-  Future<String> loadString(String key, {bool cache = true}) async =>
-      File(key).readAsStringSync();
-
-  @override
-  Future<ByteData> load(String key) async =>
-      ByteData.sublistView(File(key).readAsBytesSync());
-}
-
-class _JsonBundle extends _FileBundle {
+class _JsonBundle extends FileAssetBundle {
   _JsonBundle(this.json);
   final Map<String, dynamic> json;
 

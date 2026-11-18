@@ -1,25 +1,15 @@
-import 'dart:io';
 
 import 'package:daily/features/timetable/data/timetable_period_defaults.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-class _Files extends CachingAssetBundle {
-  @override
-  Future<String> loadString(String key, {bool cache = true}) async =>
-      File(key).readAsStringSync();
-  @override
-  Future<ByteData> load(String key) async =>
-      ByteData.sublistView(File(key).readAsBytesSync());
-}
+import '../../support/file_asset_bundle.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   test('Sunmoon keeps the restored partial public dataset', () async {
     final datasets = await UniversityCatalog.load(
-      bundle: _Files(),
+      bundle: FileAssetBundle(),
       university: 'sunmoon',
     );
     expect(
@@ -34,7 +24,7 @@ void main() {
     expect(untimed, hasLength(3));
 
     final period = (await TimetablePeriodDefaults.load(
-      bundle: _Files(),
+      bundle: FileAssetBundle(),
     )).periodFor(2026, '2', university: 'sunmoon');
     expect(period?.start, DateTime(2026, 9, 1));
     expect(period?.end, DateTime(2026, 12, 14));
@@ -44,7 +34,7 @@ void main() {
     'Sunmoon period slots include the 10 minute break and merge runs',
     () async {
       final datasets = await UniversityCatalog.load(
-        bundle: _Files(),
+        bundle: FileAssetBundle(),
         university: 'sunmoon',
       );
       final byPeriods = datasets.single.courses.where(
