@@ -817,7 +817,7 @@ class _AppLockGateState extends ConsumerState<_AppLockGate>
               ?.googleAccount;
           final account = await ref
               .read(googleDriveAuthServiceProvider)
-              .signIn(forceAccountSelection: true);
+              .verifyAccount();
           verified = account == null
               ? null
               : linked != null &&
@@ -903,7 +903,11 @@ class _AppLockGateState extends ConsumerState<_AppLockGate>
     }
     final pin = _pin;
     final generation = ++_pinVerificationGeneration;
-    setState(() => _checking = true);
+    // Like PIN verification: leaving the app locks it and voids this save.
+    setState(() {
+      _checking = true;
+      _verifyingPin = true;
+    });
     try {
       await ref
           .read(settingsRepositoryProvider)
@@ -926,7 +930,10 @@ class _AppLockGateState extends ConsumerState<_AppLockGate>
       });
     } finally {
       if (mounted && generation == _pinVerificationGeneration) {
-        setState(() => _checking = false);
+        setState(() {
+          _checking = false;
+          _verifyingPin = false;
+        });
       }
     }
   }

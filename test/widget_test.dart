@@ -5034,6 +5034,39 @@ void main() {
       await tester.pumpWidget(const SizedBox.shrink());
     });
 
+    testWidgets('leaving the app during the new PIN save keeps it locked', (
+      tester,
+    ) async {
+      final storage = _KeyLostSecureStorage();
+      await pumpLockedApp(tester, secureStorage: storage);
+      await tester.tap(deviceButton);
+      await tester.pumpAndSettle();
+      for (final digit in '2468'.split('')) {
+        await tester.tap(find.widgetWithText(TextButton, digit));
+      }
+      await tester.tap(
+        find.byKey(const ValueKey('pin-recovery-continue-button')),
+      );
+      await tester.pumpAndSettle();
+      for (final digit in '2468'.split('')) {
+        await tester.tap(find.widgetWithText(TextButton, digit));
+      }
+      storage.pendingWrite = Completer<void>();
+      await tester.tap(
+        find.byKey(const ValueKey('pin-recovery-continue-button')),
+      );
+      await tester.pump();
+
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+      await tester.pump();
+      storage.pendingWrite!.complete();
+      await tester.pump();
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+      await tester.pumpAndSettle();
+      expect(lockScreen, findsOneWidget);
+      await tester.pumpWidget(const SizedBox.shrink());
+    });
+
     testWidgets('Google check needs the linked account', (tester) async {
       GoogleDriveAccount? chosen = const GoogleDriveAccount(
         email: 'other@example.com',
@@ -11082,6 +11115,7 @@ class _KeyLostSecureStorage extends _MemorySecureStorage {
 
   var keyLost = true;
   var deleteAllCalls = 0;
+  Completer<void>? pendingWrite;
 
   void _check() {
     if (keyLost) {
@@ -11103,6 +11137,7 @@ class _KeyLostSecureStorage extends _MemorySecureStorage {
     WindowsOptions? wOptions,
   }) async {
     _check();
+    await pendingWrite?.future;
     return super.write(key: key, value: value);
   }
 

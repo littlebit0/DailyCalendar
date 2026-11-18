@@ -378,6 +378,26 @@ void main() {
       expect(auth.currentAccount?.email, 'b@example.test');
     },
   );
+
+  test(
+    'identity check for the app lock keeps the saved session (#968)',
+    () async {
+      expiredA();
+      final saved = Map<String, String>.of(storage.values);
+      final auth = service(
+        request: (request) async {
+          if (request.url.path == '/token') return _token('B');
+          return http.Response('{"email":"b@example.test"}', 200);
+        },
+      );
+
+      final account = await auth.verifyAccount();
+
+      expect(account?.email, 'b@example.test');
+      expect(storage.values, saved);
+      expect((await auth.restorePreviousSignIn())?.email, 'a@example.test');
+    },
+  );
 }
 
 http.Response _token(String account) => http.Response(

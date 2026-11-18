@@ -5,6 +5,7 @@
 - Android 플러그인: Keystore 키가 사라지면 새 키를 만들지 않고 `DailySecureStorageKeyLost` 오류를 낸다. 그 상태에서도 `delete`는 해당 값만, `deleteAll`은 데이터와 감싼 키를 함께 지운다(`third_party/flutter_secure_storage/DAILY_PATCH.md`).
 - 잠금 화면(공통 Flutter 코드): 저장된 PIN을 읽을 수 없거나(키 유실) PIN 해시가 없으면 PIN 입력 대신 "기기 잠금으로 확인"과 연결된 Google·Apple 계정 확인을 보여 준다. 확인 뒤 새 PIN을 두 번 입력해야 풀리고, 키 유실일 때만 보안 저장소를 비운다. 앱 잠금 설정을 조용히 끄지 않는다.
 - Android 백업: 기본 보안 저장소 파일 두 개를 백업 규칙에서 빼고, `DailyBackupAgent.onRestoreFinished`가 복원된 앱 잠금 설정 키를 지운다(`fullBackupOnly`라 자동 백업 내용은 그대로).
+- Google 확인: 데스크톱은 `GoogleDriveAuthService.verifyAccount`가 저장된 Drive 세션을 지우거나 바꾸지 않는다. 모바일은 Google SDK 세션이 하나뿐이라 기존 계정 선택(`signIn(forceAccountSelection: true)`)을 쓴다.
 - 미확인: Android 실기기·에뮬레이터의 실제 키 유실·백업 복원, iPhone·Mac·Windows 잠금 화면의 복구 버튼 실화면(같은 코드, 위젯 테스트만). 키 유실 오류는 Android에서만 나고, PIN 해시가 없을 때의 복구는 모든 플랫폼에 나온다.
 
 ## iPhone Duo 지원 — 2026-11-18
