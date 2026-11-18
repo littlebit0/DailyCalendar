@@ -121,14 +121,9 @@ enum DailyWallpaperStore {
       // built-in aspect for the crop width: both crops then stay inside what each
       // screen shows. External displays on iPhone mirror the main screen, so they
       // are excluded.
-      let main = UIScreen.main.nativeBounds.size
       let screens = UIScreen.screens.filter { $0.mirrored == nil }.map(\.nativeBounds.size)
-      if let inner = screens.max(by: { $0.width * $0.height < $1.width * $1.height }),
-         inner.width * inner.height > main.width * main.height {
-        let long = max(inner.width, inner.height)
-        let aspect = screens.map { min($0.width, $0.height) / max($0.width, $0.height) }.min() ?? 1
-        return DailyWallpaperCanvas(device: .pad, nativeSize: CGSize(width: long * aspect, height: long))
-      }
+      if let canvas = DailyWallpaperCanvas.multiDisplayPhone(
+        main: UIScreen.main.nativeBounds.size, screens: screens) { return canvas }
       device = .phone
     case .pad:
       // iPad's selectable photo Lock Screens were introduced in iPadOS 17.
