@@ -103,6 +103,56 @@ void main() {
     );
   }
 
+  for (final (use24HourTime, expected) in [
+    (true, ['00:00', '12:00', '15:05']),
+    (false, ['12:00\u202fAM', '12:00\u202fPM', '3:05\u202fPM']),
+  ]) {
+    testWidgets(
+      'event bar times follow the ${use24HourTime ? 24 : 12}-hour setting',
+      (tester) async {
+        final now = DateTime(2026, 5, 1);
+        CalendarEvent timed(String title, DateTime startAt) => CalendarEvent(
+          id: title,
+          title: title,
+          startAt: startAt,
+          endAt: startAt.add(const Duration(minutes: 30)),
+          allDay: false,
+          category: EventCategory.basic,
+          colorValue: EventCategory.basic.colorValue,
+          createdAt: now,
+          updatedAt: now,
+        );
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: SizedBox(
+                width: 1000,
+                height: 600,
+                child: CalendarMonthGrid(
+                  month: DateTime(2026, 5),
+                  selectedDate: DateTime(2026, 5, 4),
+                  events: [
+                    timed('M', DateTime(2026, 5, 4)),
+                    timed('N', DateTime(2026, 5, 5, 12)),
+                    timed('A', DateTime(2026, 5, 6, 15, 5)),
+                  ],
+                  weekStartsOnMonday: true,
+                  showLunarDates: false,
+                  use24HourTime: use24HourTime,
+                  onDateSelected: (_) {},
+                ),
+              ),
+            ),
+          ),
+        );
+
+        expect(find.text('M  ${expected[0]}'), findsOneWidget);
+        expect(find.text('N  ${expected[1]}'), findsOneWidget);
+        expect(find.text('A  ${expected[2]}'), findsOneWidget);
+      },
+    );
+  }
+
   testWidgets('keeps today and lunar day labels on the same row', (
     tester,
   ) async {

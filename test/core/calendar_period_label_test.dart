@@ -1,4 +1,5 @@
 import 'package:daily/core/calendar/calendar_period_label.dart';
+import 'package:daily/core/localization/traditional_chinese_date_symbols.dart';
 import 'package:daily/core/settings/app_settings.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -80,5 +81,53 @@ void main() {
     test('month view keeps the vertical navigation year-only label', () {
       expect(label(viewMode: CalendarViewMode.month, locale: 'ko'), '2026년');
     });
+  });
+
+  group('calendarTimeLabel', () {
+    setUpAll(registerTraditionalChineseDateSymbols);
+
+    final midnight = DateTime(2026, 8, 17);
+    final noon = DateTime(2026, 8, 17, 12);
+    final afternoon = DateTime(2026, 8, 17, 15, 5);
+
+    List<String> labels(String locale, {required bool use24HourTime}) => [
+      for (final value in [midnight, noon, afternoon])
+        calendarTimeLabel(value, locale: locale, use24HourTime: use24HourTime),
+    ];
+
+    test('24-hour setting keeps the locale 24-hour form', () {
+      expect(labels('ko', use24HourTime: true), ['00:00', '12:00', '15:05']);
+      expect(labels('en', use24HourTime: true), ['00:00', '12:00', '15:05']);
+      expect(labels('ja', use24HourTime: true), ['0:00', '12:00', '15:05']);
+      expect(labels('zh-Hant', use24HourTime: true), [
+        '00:00',
+        '12:00',
+        '15:05',
+      ]);
+    });
+
+    test(
+      '12-hour setting uses the locale 12-hour form at midnight and noon',
+      () {
+        expect(labels('ko', use24HourTime: false), [
+          '오전 12:00',
+          '오후 12:00',
+          '오후 3:05',
+        ]);
+        expect(labels('en', use24HourTime: false), [
+          '12:00\u202fAM',
+          '12:00\u202fPM',
+          '3:05\u202fPM',
+        ]);
+        expect(labels('zh-Hant', use24HourTime: false), [
+          '上午12:00',
+          '下午12:00',
+          '下午3:05',
+        ]);
+        // Japanese CLDR has no 12-hour `jm` pattern; the timeline already shows
+        // the same 24-hour form.
+        expect(labels('ja', use24HourTime: false), ['0:00', '12:00', '15:05']);
+      },
+    );
   });
 }

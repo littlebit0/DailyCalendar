@@ -10422,6 +10422,86 @@ void main() {
       await tester.pumpWidget(const SizedBox.shrink());
     },
   );
+
+  testWidgets('week list event times follow the 12/24-hour setting', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(1440, 900);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    SharedPreferences.setMockInitialValues({
+      'onboardingCompleted': true,
+      'defaultCalendarView': 'week',
+    });
+    final preferences = await SharedPreferences.getInstance();
+    final now = DateTime(2026, 5, 1);
+    CalendarEvent timed(String title, DateTime startAt) => CalendarEvent(
+      id: title,
+      title: title,
+      startAt: startAt,
+      endAt: startAt.add(const Duration(minutes: 30)),
+      allDay: false,
+      category: EventCategory.basic,
+      colorValue: EventCategory.basic.colorValue,
+      createdAt: now,
+      updatedAt: now,
+    );
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          universityRegionsFromAsset(),
+          settingsRepositoryProvider.overrideWithValue(
+            SettingsRepository(preferences: preferences),
+          ),
+          notificationServiceProvider.overrideWithValue(_FakeNotification()),
+          syncServiceProvider.overrideWithValue(_FakeSync()),
+          eventRepositoryProvider.overrideWithValue(
+            _StreamingEventRepository([
+              timed('자정 일정', DateTime(2026, 5, 4)),
+              timed('정오 일정', DateTime(2026, 5, 5, 12)),
+              timed('오후 일정', DateTime(2026, 5, 6, 15, 5)),
+            ]),
+          ),
+          googleDriveAuthServiceProvider.overrideWithValue(
+            _FakeGoogleDriveAuthService(),
+          ),
+        ],
+        child: const DailyApp(),
+      ),
+    );
+    await tester.pumpAndSettle();
+    final container = ProviderScope.containerOf(
+      tester.element(find.byType(DailyApp)),
+    );
+    container.read(calendarViewModeProvider.notifier).state =
+        CalendarViewMode.week;
+    container.read(selectedDateProvider.notifier).state = DateTime(2026, 5, 4);
+
+    for (final (use24HourTime, expected) in [
+      (true, ['00:00', '12:00', '15:05']),
+      (false, ['오전 12:00', '오후 12:00', '오후 3:05']),
+    ]) {
+      container.read(appSettingsProvider.notifier).state = container
+          .read(appSettingsProvider)
+          .copyWith(
+            weekDayLayoutMode: WeekDayLayoutMode.list,
+            use24HourTime: use24HourTime,
+          );
+      await tester.pumpAndSettle();
+      final week = find.byKey(const ValueKey('week-pointer-navigation'));
+      for (final (index, title) in ['자정 일정', '정오 일정', '오후 일정'].indexed) {
+        expect(
+          find.descendant(
+            of: week,
+            matching: find.text('$title  ${expected[index]}'),
+          ),
+          findsOneWidget,
+          reason: 'use24HourTime=$use24HourTime',
+        );
+      }
+    }
+  });
 }
 
 Future<(ProviderContainer, _DelayedSettingsRepository)>
