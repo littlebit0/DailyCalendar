@@ -238,6 +238,105 @@ void main() {
       expect(dates(weekly).take(3), ['2026-01-08', '2026-01-12', '2026-01-15']);
     });
 
+    test('가져온 29~31일 매월·매년 규칙은 그날이 없는 달·해를 건너뛴다 (#954)', () {
+      List<String> dates(
+        String rrule,
+        DateTime start,
+        DateTime from,
+        DateTime to,
+      ) => [
+        for (final occurrence in RecurrenceExpander().expand(
+          CalendarEvent(
+            id: 'imported',
+            title: '말일',
+            startAt: start,
+            endAt: start.add(const Duration(hours: 1)),
+            allDay: false,
+            category: EventCategory.basic,
+            colorValue: EventCategory.basic.colorValue,
+            recurrence: CalendarImportService.recurrenceFromRrule(
+              rrule,
+              startAt: start,
+            ),
+            createdAt: start,
+            updatedAt: start,
+          ),
+          from,
+          to,
+        ))
+          occurrence.startAt.toIso8601String().substring(0, 10),
+      ];
+
+      final jan31 = DateTime(2026, 1, 31, 9);
+      final monthly = CalendarImportService.recurrenceFromRrule(
+        'FREQ=MONTHLY',
+        startAt: jan31,
+      );
+      expect(monthly.byMonthDay, [31]);
+      expect(monthly.byMonth, isEmpty);
+      expect(
+        dates(
+          'FREQ=MONTHLY',
+          jan31,
+          DateTime(2026, 1, 1),
+          DateTime(2026, 7, 1),
+        ),
+        ['2026-01-31', '2026-03-31', '2026-05-31'],
+      );
+      expect(
+        dates(
+          'FREQ=MONTHLY;COUNT=3',
+          jan31,
+          DateTime(2026, 1, 1),
+          DateTime(2027, 1, 1),
+        ),
+        ['2026-01-31', '2026-03-31', '2026-05-31'],
+      );
+
+      final leap = DateTime(2024, 2, 29, 9);
+      final yearly = CalendarImportService.recurrenceFromRrule(
+        'FREQ=YEARLY',
+        startAt: leap,
+      );
+      expect(yearly.byMonthDay, [29]);
+      expect(yearly.byMonth, [2]);
+      expect(
+        dates('FREQ=YEARLY', leap, DateTime(2024, 1, 1), DateTime(2033, 1, 1)),
+        ['2024-02-29', '2028-02-29', '2032-02-29'],
+      );
+
+      // 28일 이하 시작이나 BYMONTHDAY·BYDAY가 있으면 그대로 둔다.
+      final jan28 = CalendarImportService.recurrenceFromRrule(
+        'FREQ=MONTHLY',
+        startAt: DateTime(2026, 1, 28, 9),
+      );
+      expect(jan28.byMonthDay, isEmpty);
+      expect(jan28.hasDetails, isFalse);
+      expect(
+        CalendarImportService.recurrenceFromRrule(
+          'FREQ=MONTHLY;BYDAY=-1FR',
+          startAt: jan31,
+        ).byMonthDay,
+        isEmpty,
+      );
+      expect(
+        CalendarImportService.recurrenceFromRrule(
+          'FREQ=MONTHLY;BYMONTHDAY=-1',
+          startAt: jan31,
+        ).byMonthDay,
+        [-1],
+      );
+      expect(
+        dates(
+          'FREQ=MONTHLY',
+          DateTime(2026, 1, 28, 9),
+          DateTime(2026, 1, 1),
+          DateTime(2026, 4, 1),
+        ),
+        ['2026-01-28', '2026-02-28', '2026-03-28'],
+      );
+    });
+
     test('UTC 종료 시각을 로컬 DateTime으로 변환한다', () {
       final rule = CalendarImportService.recurrenceFromRrule(
         'FREQ=DAILY;UNTIL=20260731T000000Z',
