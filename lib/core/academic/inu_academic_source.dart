@@ -110,7 +110,9 @@ class InuAcademicSource implements AcademicSource {
           end: DateTime(last.year, last.month, last.day + 1),
           url: 'https://www.inu.ac.kr/inu/651/subview.do',
         );
-        if (events.containsKey(identity)) {
+        // The same row listed twice is one event; a differing one is not.
+        if (events[identity] case final previous?
+            when previous.end != event.end) {
           throw const FormatException('Duplicate INU calendar event');
         }
         events[identity] = event;

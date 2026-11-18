@@ -1014,13 +1014,21 @@ class _AppHomeState extends ConsumerState<_AppHome>
             ...?event?.reminderMinutesBeforeList,
           }.toList(),
         );
-        await alarmService.cancelEventAlarm(change.eventId);
-        if (event != null && !event.isDeleted) {
-          await notificationService.scheduleEventReminder(
-            event,
-            allowImmediate: true,
-          );
-          await alarmService.scheduleEventAlarm(event);
+        final live = event != null && !event.isDeleted;
+        try {
+          if (live) {
+            await notificationService.scheduleEventReminder(
+              event,
+              allowImmediate: true,
+            );
+          }
+        } finally {
+          // A reminder failure must not keep an alarm the edit turned off.
+          if (live) {
+            await alarmService.scheduleEventAlarm(event);
+          } else {
+            await alarmService.cancelEventAlarm(change.eventId);
+          }
         }
       }
       await ref.read(calendarWidgetServiceProvider).refresh();
