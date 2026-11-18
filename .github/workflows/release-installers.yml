@@ -128,6 +128,8 @@ jobs:
           storeFile=upload-keystore.jks
           EOF
       - run: flutter pub get
+      - name: Check Android versionCode against pubspec version
+        run: python3 tool/check_android_version_code.py
       - name: Build Android release APK
         run: >-
           flutter build apk --release --no-pub
