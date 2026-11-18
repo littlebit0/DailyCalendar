@@ -123,7 +123,11 @@ class _ChatInputBarState extends ConsumerState<ChatInputBar> {
       }
       if (result.draft == null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(result.question ?? '일정을 해석하지 못했습니다.')),
+          SnackBar(
+            // Fixed parser notices are translation keys; ones that quote the
+            // user's own input are shown as written.
+            content: Text(context.tr(result.question ?? '일정을 해석하지 못했습니다.')),
+          ),
         );
         return;
       }
@@ -170,7 +174,9 @@ class _DraftConfirmationSheet extends StatelessWidget {
     final scheduleTime = _formatScheduleTime(context, draft);
     final reminder = draft.reminderMinutesBeforeList.isEmpty
         ? context.tr('없음')
-        : draft.reminderMinutesBeforeList.map(_minutesLabel).join(', ');
+        : draft.reminderMinutesBeforeList
+              .map((minutes) => _minutesLabel(context, minutes))
+              .join(', ');
 
     return SafeArea(
       child: Padding(
@@ -259,20 +265,20 @@ class _DraftConfirmationSheet extends StatelessWidget {
     return '${dateFormatter.format(draft.startAt)} ${timeFormatter.format(draft.startAt)} - ${dateFormatter.format(draft.endAt)} ${timeFormatter.format(draft.endAt)}';
   }
 
-  String _minutesLabel(int minutes) {
+  String _minutesLabel(BuildContext context, int minutes) {
     if (minutes == 0) {
-      return '정시';
+      return context.tr('정시');
     }
     if (minutes < 60) {
-      return '$minutes분 전';
+      return context.tr('{count}분 전', args: {'count': minutes});
     }
     if (minutes % 1440 == 0) {
-      return '${minutes ~/ 1440}일 전';
+      return context.tr('{count}일 전', args: {'count': minutes ~/ 1440});
     }
     if (minutes % 60 == 0) {
-      return '${minutes ~/ 60}시간 전';
+      return context.tr('{count}시간 전', args: {'count': minutes ~/ 60});
     }
-    return '$minutes분 전';
+    return context.tr('{count}분 전', args: {'count': minutes});
   }
 
   bool _sameDay(DateTime a, DateTime b) {

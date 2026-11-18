@@ -307,7 +307,7 @@ void main() {
                       ),
                     ) <=
                     0;
-            date = date.add(const Duration(days: 1))
+            date = DateTime(date.year, date.month, date.day + 1)
           ) {
             final ds = date.toIso8601String().substring(0, 10);
             if ((calendar['holidays'] as List).contains(ds) ||

@@ -162,7 +162,7 @@ void main() {
           for (
             var d = DateTime(2026, 9, 1);
             !d.isAfter(DateTime(2026, 12, 21));
-            d = d.add(const Duration(days: 1))
+            d = DateTime(d.year, d.month, d.day + 1)
           ) {
             final date = d.toIso8601String().substring(0, 10);
             if (holidays.contains(date)) continue;

@@ -71,7 +71,7 @@ void main() {
       'Authorization: Bearer ya29.a0secret\n'
       'GET https://x.test/a?access_token=abc&user=kim\n'
       'refresh_token=1//0secret mail kim@example.com '
-      'path /Users/kimhwi/Library C:\\Users\\kimhwi\\AppData '
+      'path /Users/alice/Library C:\\Users\\alice\\AppData '
       'event "치과 예약" id 3f2b1c4d-1111-4222-8333-123456789abc '
       'student 2026123456 phone 010-1234-5678 cookie: JSESSIONID=xyz',
     );
@@ -80,7 +80,7 @@ void main() {
       'abc',
       '1//0secret',
       'kim@example.com',
-      'kimhwi',
+      'alice',
       '치과',
       '3f2b1c4d',
       '2026123456',

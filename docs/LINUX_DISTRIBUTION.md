@@ -46,7 +46,9 @@ sudo systemctl enable --now dailycalendar-update.timer
 Upgrades preserve an explicitly disabled timer, source configuration and user
 files. Package removal does not delete calendars, settings or credentials.
 `apt remove dailycalendar` keeps the source and its public key together for
-reinstallation; `apt purge dailycalendar` removes both. Active Daily reminder
+reinstallation; `apt purge dailycalendar` removes both. Removal stops the update
+timer but keeps its enabled/disabled choice, so reinstalling after `apt remove`
+starts an enabled timer again; purge drops that choice. Active Daily reminder
 timers are disabled on removal without deleting private reminder data.
 
 Installed update configuration:
@@ -109,7 +111,8 @@ available. GitHub asset replacement is not atomic; an in-flight APT hash mismatc
 fails closed and retries later. The signed manifest is uploaded last.
 
 GitHub encrypted secrets: `LINUX_APT_SIGNING_KEY` and the existing desktop build
-configuration `GOOGLE_DESKTOP_CLIENT_SECRET`. Public archive fingerprint:
+configuration `GOOGLE_DESKTOP_CLIENT_SECRET` (not confidential once shipped; see
+`docs/GOOGLE_DRIVE_SYNC_SETUP.md`). Public archive fingerprint:
 `1C86509FAC07FB37DA9F0B6EE52E84ACEAE49AD4`.
 Keep the private key outside git and back it up securely. Do not regenerate it
 for each release; rotation requires a trust transition through the old key.

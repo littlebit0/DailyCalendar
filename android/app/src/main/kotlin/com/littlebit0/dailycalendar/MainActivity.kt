@@ -1,6 +1,7 @@
 package com.littlebit0.dailycalendar
 
 import android.Manifest
+import android.content.ActivityNotFoundException
 import android.content.pm.PackageManager
 import android.content.Intent
 import android.net.Uri
@@ -193,72 +194,17 @@ class MainActivity : FlutterFragmentActivity() {
 
     private fun loadSamsungEvents(calendarIds: Set<String>, signal: CancellationSignal): List<Map<String, Any?>> {
         if (calendarIds.isEmpty()) return emptyList()
-        val projection = arrayOf(
-            CalendarContract.Events._ID,
-            CalendarContract.Events.CALENDAR_ID,
-            CalendarContract.Events.TITLE,
-            CalendarContract.Events.DESCRIPTION,
-            CalendarContract.Events.EVENT_LOCATION,
-            CalendarContract.Events.DTSTART,
-            CalendarContract.Events.DTEND,
-            CalendarContract.Events.DURATION,
-            CalendarContract.Events.ALL_DAY,
-            CalendarContract.Events.RRULE,
-            CalendarContract.Events.CUSTOM_APP_URI,
-            CalendarContract.Events.DELETED,
-        )
         val placeholders = calendarIds.joinToString(",") { "?" }
-        val values = mutableListOf<Map<String, Any?>>()
-        val mutableEvents = mutableMapOf<String, MutableMap<String, Any?>>()
-        contentResolver.query(
+        val mutableEvents = contentResolver.query(
             CalendarContract.Events.CONTENT_URI,
-            projection,
+            CalendarImportRows.projection,
             "${CalendarContract.Events.CALENDAR_ID} IN ($placeholders) AND ${CalendarContract.Events.DELETED}=0",
             calendarIds.toTypedArray(),
             CalendarContract.Events.DTSTART + " ASC",
             signal,
-        )?.use { cursor ->
-            val idIndex = cursor.getColumnIndexOrThrow(CalendarContract.Events._ID)
-            val calendarIndex = cursor.getColumnIndexOrThrow(CalendarContract.Events.CALENDAR_ID)
-            val titleIndex = cursor.getColumnIndexOrThrow(CalendarContract.Events.TITLE)
-            val descriptionIndex = cursor.getColumnIndexOrThrow(CalendarContract.Events.DESCRIPTION)
-            val locationIndex = cursor.getColumnIndexOrThrow(CalendarContract.Events.EVENT_LOCATION)
-            val startIndex = cursor.getColumnIndexOrThrow(CalendarContract.Events.DTSTART)
-            val endIndex = cursor.getColumnIndexOrThrow(CalendarContract.Events.DTEND)
-            val durationIndex = cursor.getColumnIndexOrThrow(CalendarContract.Events.DURATION)
-            val allDayIndex = cursor.getColumnIndexOrThrow(CalendarContract.Events.ALL_DAY)
-            val ruleIndex = cursor.getColumnIndexOrThrow(CalendarContract.Events.RRULE)
-            val urlIndex = cursor.getColumnIndexOrThrow(CalendarContract.Events.CUSTOM_APP_URI)
-            while (cursor.moveToNext()) {
-                signal.throwIfCanceled()
-                val allDay = cursor.getInt(allDayIndex) == 1
-                var start = cursor.getLong(startIndex)
-                if (allDay) start = utcMidnightToLocalMidnight(start)
-                var end = if (cursor.isNull(endIndex)) {
-                    start + parseDurationMillis(cursor.getString(durationIndex), allDay)
-                } else {
-                    cursor.getLong(endIndex).let { if (allDay) utcMidnightToLocalMidnight(it) else it }
-                }
-                if (end <= start) end = start + if (allDay) DAY_MILLIS else HOUR_MILLIS
-                val sourceId = cursor.getLong(idIndex).toString()
-                val event = mutableMapOf<String, Any?>(
-                    "sourceId" to sourceId,
-                    "calendarId" to cursor.getLong(calendarIndex).toString(),
-                    "title" to cursor.getString(titleIndex).orEmpty().ifBlank { "제목 없음" },
-                    "startMilliseconds" to start,
-                    "endMilliseconds" to end,
-                    "allDay" to allDay,
-                )
-                cursor.getString(descriptionIndex)?.takeIf { it.isNotBlank() }?.let { event["memo"] = it }
-                cursor.getString(locationIndex)?.takeIf { it.isNotBlank() }?.let { event["location"] = it }
-                cursor.getString(ruleIndex)?.takeIf { it.isNotBlank() }?.let { event["recurrenceRule"] = "RRULE:$it" }
-                cursor.getString(urlIndex)?.takeIf { it.isNotBlank() }?.let { event["url"] = it }
-                values += event
-                mutableEvents[sourceId] = event
-            }
-        }
+        )?.use { cursor -> CalendarImportRows.read(cursor, signal) } ?: LinkedHashMap()
         attachReminderMinutes(mutableEvents, signal)
-        return values
+        return mutableEvents.values.toList()
     }
 
     private fun attachReminderMinutes(events: Map<String, MutableMap<String, Any?>>, signal: CancellationSignal) {
@@ -308,27 +254,6 @@ class MainActivity : FlutterFragmentActivity() {
             (normalized == CalendarContract.ACCOUNT_TYPE_LOCAL.lowercase() || normalized == "local")
     }
 
-    private fun utcMidnightToLocalMidnight(value: Long): Long {
-        val utc = java.util.Calendar.getInstance(java.util.TimeZone.getTimeZone("UTC")).apply {
-            timeInMillis = value
-        }
-        return java.util.Calendar.getInstance().apply {
-            clear()
-            set(utc.get(java.util.Calendar.YEAR), utc.get(java.util.Calendar.MONTH), utc.get(java.util.Calendar.DAY_OF_MONTH))
-        }.timeInMillis
-    }
-
-    private fun parseDurationMillis(value: String?, allDay: Boolean): Long {
-        if (value.isNullOrBlank()) return if (allDay) DAY_MILLIS else HOUR_MILLIS
-        val match = Regex("P(?:(\\d+)D)?(?:T(?:(\\d+)H)?(?:(\\d+)M)?(?:(\\d+)S)?)?").matchEntire(value)
-            ?: return if (allDay) DAY_MILLIS else HOUR_MILLIS
-        val days = match.groupValues[1].toLongOrNull() ?: 0
-        val hours = match.groupValues[2].toLongOrNull() ?: 0
-        val minutes = match.groupValues[3].toLongOrNull() ?: 0
-        val seconds = match.groupValues[4].toLongOrNull() ?: 0
-        return ((days * 24 + hours) * 60 * 60 + minutes * 60 + seconds) * 1000
-    }
-
     private fun openLocation(location: String, result: MethodChannel.Result) {
         val candidates = listOfNotNull(
             mapCandidate("카카오맵", "kakaomap://search?q=${Uri.encode(location)}"),
@@ -338,24 +263,27 @@ class MainActivity : FlutterFragmentActivity() {
             ),
         )
         when (candidates.size) {
-            0 -> {
-                startActivity(Intent(Intent.ACTION_VIEW, kakaoWebUrl(location)))
-                result.success("handled")
-            }
-            1 -> {
-                startActivity(candidates.first().intent)
-                result.success("handled")
-            }
+            0 -> result.success(startMap(Intent(Intent.ACTION_VIEW, kakaoWebUrl(location))))
+            1 -> result.success(startMap(candidates.first().intent))
             else -> AlertDialog.Builder(this)
                 .setTitle("지도에서 열기")
                 .setMessage(location)
                 .setItems(candidates.map { it.title }.toTypedArray()) { _, index ->
-                    startActivity(candidates[index].intent)
-                    result.success("handled")
+                    result.success(startMap(candidates[index].intent))
                 }
                 .setOnCancelListener { result.success("handled") }
                 .show()
         }
+    }
+
+    /** "failed" lets Dart tell the user no map could be opened. */
+    private fun startMap(intent: Intent): String = try {
+        startActivity(intent)
+        "handled"
+    } catch (error: ActivityNotFoundException) {
+        "failed"
+    } catch (error: SecurityException) {
+        "failed"
     }
 
     private fun mapCandidate(title: String, rawUrl: String): MapCandidate? {
@@ -370,7 +298,5 @@ class MainActivity : FlutterFragmentActivity() {
 
     companion object {
         private const val CALENDAR_PERMISSION_REQUEST = 7301
-        private const val HOUR_MILLIS = 60L * 60L * 1000L
-        private const val DAY_MILLIS = 24L * HOUR_MILLIS
     }
 }

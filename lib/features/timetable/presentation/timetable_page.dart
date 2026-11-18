@@ -1121,9 +1121,27 @@ class _ClassEditorState extends State<_ClassEditor> {
     if (!_form.currentState!.validate()) return;
     setState(() => _busy = true);
     final previous = widget.course;
+    final editing = previous != null && !widget.isNew;
+    // The editor copied the course when it opened. A sync merge may have
+    // changed or deleted it since, so occurrence changes are read from the
+    // store at save time and a deleted course is not written back.
+    Map<String, LectureMode>? storedOverrides() => editing
+        ? widget.store.classes
+              .where((c) => c.id == previous.id)
+              .firstOrNull
+              ?.overrides
+        : previous?.overrides ?? const {};
+    void reportDeleted() {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(context.tr('다른 기기에서 삭제된 수업이라 저장하지 않았습니다.'))),
+      );
+      setState(() => _busy = false);
+    }
+
     final ids = _meetings.map((m) => m.id).toSet();
-    final earlier = previous?.overrides ?? <String, LectureMode>{};
-    final kept = occurrenceOverridesForMeetings(_meetings, earlier);
+    final earlier = storedOverrides();
+    if (earlier == null) return reportDeleted();
+    var kept = occurrenceOverridesForMeetings(_meetings, earlier);
     // Changes of blocks that still exist but whose weekday moved can no longer
     // apply; ask before dropping them (removed blocks drop theirs as before).
     final lost = earlier.keys.where(
@@ -1156,6 +1174,10 @@ class _ClassEditorState extends State<_ClassEditor> {
         if (mounted) setState(() => _busy = false);
         return;
       }
+      // The store may have merged again while the question was open.
+      final latest = storedOverrides();
+      if (latest == null) return reportDeleted();
+      kept = occurrenceOverridesForMeetings(_meetings, latest);
     }
     final course = TimetableClass(
       id: previous?.id ?? const Uuid().v4(),

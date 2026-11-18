@@ -24,6 +24,8 @@
 		A10000000000000000000001 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000020 /* InfoPlist.strings */; };
 		C1D26ED91DD4BF1B0013AD06 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22C1165EB1AA66C92813E600 /* Pods_Runner.framework */; };
 		D51111111111111111111111 /* DailySiriIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = D52222222222222222222222 /* DailySiriIntents.swift */; };
+		D5A000000000000000000001 /* AppShortcuts.strings in Resources */ = {isa = PBXBuildFile; fileRef = D5A000000000000000000011 /* AppShortcuts.strings */; };
+		D5A000000000000000000002 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = D5A000000000000000000012 /* Localizable.xcstrings */; };
 		D66000000000000000000001 /* DailyWallpaperModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66000000000000000000011 /* DailyWallpaperModel.swift */; };
 		D66000000000000000000002 /* DailyWallpaper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66000000000000000000012 /* DailyWallpaper.swift */; };
 		D66000000000000000000003 /* DailyWallpaperText.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66000000000000000000013 /* DailyWallpaperText.swift */; };
@@ -116,6 +118,11 @@
 		C2657F8268E704B501ABF4E3 /* Pods-RunnerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.release.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.release.xcconfig"; sourceTree = "<group>"; };
 		CDA22A19F6C3621CDB7E49AA /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
 		D52222222222222222222222 /* DailySiriIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DailySiriIntents.swift; path = ../../apple_siri/DailySiriIntents.swift; sourceTree = "<group>"; };
+		D5A000000000000000000020 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/AppShortcuts.strings; sourceTree = "<group>"; };
+		D5A000000000000000000021 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/AppShortcuts.strings; sourceTree = "<group>"; };
+		D5A000000000000000000022 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/AppShortcuts.strings; sourceTree = "<group>"; };
+		D5A000000000000000000023 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/AppShortcuts.strings"; sourceTree = "<group>"; };
+		D5A000000000000000000012 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; name = Localizable.xcstrings; path = ../../apple_siri/Localizable.xcstrings; sourceTree = "<group>"; };
 		D66000000000000000000011 /* DailyWallpaperModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyWallpaperModel.swift; sourceTree = "<group>"; };
 		D66000000000000000000012 /* DailyWallpaper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyWallpaper.swift; sourceTree = "<group>"; };
 		D66000000000000000000013 /* DailyWallpaperText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyWallpaperText.swift; sourceTree = "<group>"; };
@@ -238,6 +245,8 @@
 				D66000000000000000000017 /* DailyCalendar Wallpaper Setup.shortcut */,
 				D66000000000000000000016 /* WallpaperIntents.xcstrings */,
 				D52222222222222222222222 /* DailySiriIntents.swift */,
+				D5A000000000000000000011 /* AppShortcuts.strings */,
+				D5A000000000000000000012 /* Localizable.xcstrings */,
 				A10000000000000000000020 /* InfoPlist.strings */,
 				97C146FA1CF9000F007C117D /* Main.storyboard */,
 				97C146FD1CF9000F007C117D /* Assets.xcassets */,
@@ -417,6 +426,8 @@
 				D66000000000000000000005 /* DailyCalendar Wallpaper.shortcut in Resources */,
 				D66000000000000000000007 /* DailyCalendar Wallpaper Setup.shortcut in Resources */,
 				D66000000000000000000006 /* WallpaperIntents.xcstrings in Resources */,
+				D5A000000000000000000001 /* AppShortcuts.strings in Resources */,
+				D5A000000000000000000002 /* Localizable.xcstrings in Resources */,
 				A10000000000000000000001 /* InfoPlist.strings in Resources */,
 				97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */,
 				3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */,
@@ -583,6 +594,18 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		D5A000000000000000000011 /* AppShortcuts.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D5A000000000000000000020 /* en */,
+				D5A000000000000000000021 /* ko */,
+				D5A000000000000000000022 /* ja */,
+				D5A000000000000000000023 /* zh-Hant */,
+			);
+			name = AppShortcuts.strings;
+			path = ../../apple_siri;
+			sourceTree = "<group>";
+		};
 		97C146FA1CF9000F007C117D /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (

@@ -63,6 +63,15 @@ bool FlutterWindow::OnCreate() {
   // window is shown. It is a no-op if the first frame hasn't completed yet.
   flutter_controller_->ForceRedraw();
 
+  // Sent by a second launch of the same edition (see wWinMain).
+  show_window_message_ =
+      RegisterWindowMessageW(daily::app_identity::kShowWindowMessageName);
+  if (show_window_message_ != 0) {
+    // An elevated first instance would not receive the broadcast otherwise.
+    ChangeWindowMessageFilterEx(GetHandle(), show_window_message_,
+                                MSGFLT_ALLOW, nullptr);
+  }
+
   taskbar_created_message_ = RegisterWindowMessageW(L"TaskbarCreated");
   if (taskbar_created_message_ != 0) {
     // An elevated instance is below Explorer's integrity level otherwise, and
@@ -182,6 +191,10 @@ LRESULT
 FlutterWindow::MessageHandler(HWND hwnd, UINT const message,
                               WPARAM const wparam,
                               LPARAM const lparam) noexcept {
+  if (show_window_message_ != 0 && message == show_window_message_) {
+    RestoreFromTray();
+    return 0;
+  }
   if (taskbar_created_message_ != 0 && message == taskbar_created_message_) {
     // Explorer restarted (or the DPI changed): confirm the icon is still there,
     // add it when it is not, and never create a duplicate.
@@ -213,6 +226,15 @@ FlutterWindow::MessageHandler(HWND hwnd, UINT const message,
         return 0;
       }
       break;
+    // The installer's Restart Manager (CloseApplications=yes) and sign-out
+    // ask through these; WM_CLOSE alone only hides the window to the tray.
+    case WM_QUERYENDSESSION:
+      return TRUE;
+    case WM_ENDSESSION:
+      if (wparam) {
+        ExitFromTray();
+      }
+      return 0;
     case WM_COMMAND:
       switch (LOWORD(wparam)) {
         case kTrayOpenCommand:

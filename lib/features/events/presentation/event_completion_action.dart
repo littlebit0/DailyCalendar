@@ -61,6 +61,9 @@ class _EventCompletionActionState extends State<EventCompletionAction> {
           )) {
         return;
       }
+      // A search result is the stored series, not an occurrence: completing it
+      // would mark every occurrence. There is no single occurrence to pick.
+      if (event.occurrenceId == null && source.recurrence.isRepeating) return;
       final target = event.occurrenceId != null && source.recurrence.isRepeating
           ? event
           : source;
