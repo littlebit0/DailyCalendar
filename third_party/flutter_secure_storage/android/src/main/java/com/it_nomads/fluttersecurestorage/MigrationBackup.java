@@ -322,7 +322,7 @@ public class MigrationBackup {
             if (!key.endsWith(BACKUP_SUFFIX) && key.contains(keyPrefix)) {
                 if (configSource != null && configSource.contains(key + MIGRATED_SUFFIX)) {
                     // This key was already re-encrypted on a prior (crashed) run — preserve it
-                    Log.d(TAG, "Preserving already-migrated key in dataSource: " + key);
+                    Log.d(TAG, "Preserving an already-migrated entry in dataSource");
                     preservedCount++;
                     continue;
                 }
