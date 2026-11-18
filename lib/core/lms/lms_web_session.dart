@@ -312,7 +312,19 @@ class LmsWebSession extends ChangeNotifier {
   Uri get loginUrl => baseUrl.resolve('/login.php');
   String get _ownerKey =>
       sha256.convert(utf8.encode('$ownerId\n$schoolId')).toString();
-  String get _storageKey => 'daily.lms.session.v1.$_ownerKey';
+  static const _storageKeyPrefix = 'daily.lms.session.v1.';
+  String get _storageKey => '$_storageKeyPrefix$_ownerKey';
+
+  /// Deletes the stored session of every account and school on this device,
+  /// including ones no [LmsWebSession] was created for in this run.
+  static Future<void> deleteStoredSessions({
+    FlutterSecureStorage storage = const FlutterSecureStorage(),
+  }) async {
+    for (final key in (await storage.readAll()).keys.toList()) {
+      if (key.startsWith(_storageKeyPrefix)) await storage.delete(key: key);
+    }
+  }
+
   CookieManager get _cookies =>
       CookieManager.instance(webViewEnvironment: _environment);
 

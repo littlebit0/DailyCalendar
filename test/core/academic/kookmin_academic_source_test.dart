@@ -123,4 +123,19 @@ void main() {
       throwsFormatException,
     );
   });
+
+  test('Kookmin February-to-March period stays in one calendar year', () {
+    final body = fixture(2025);
+    final changed = body.replaceFirst(
+      '02.11 (수) ~ 02.11 (수)',
+      '02.20 (금) ~ 03.05 (목)',
+    );
+    expect(changed, isNot(body));
+    final event = KookminAcademicSource.parse(
+      changed,
+      2025,
+    ).singleWhere((e) => e.title == '2025학년도 전기 학위수여식');
+    expect(event.start, DateTime(2026, 2, 20));
+    expect(event.end, DateTime(2026, 3, 6));
+  });
 }

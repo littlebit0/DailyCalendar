@@ -3,6 +3,7 @@
     <string name="event_alarm">行程鬧鐘</string>
     <string name="alarm_stop">停止</string>
     <string name="alarm_snooze">%1$d 分鐘後再提醒</string>
+    <string name="alarm_missed">錯過的鬧鐘 · %1$s</string>
     <string name="widget_month_description">DailyCalendar 月曆</string>
     <string name="widget_today_description">DailyCalendar 今日行程</string>
     <string name="widget_dday_description">DailyCalendar D-day 行程</string>

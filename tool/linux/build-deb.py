@@ -16,6 +16,21 @@ def install(source, target, mode=0o644):
     target.chmod(mode)
 
 
+# hicolor only defines square sizes up to 512; every file must be exactly its
+# directory's size. 48 px has no macOS asset, so it is kept beside the scripts.
+ICONS = {
+    **{size: f"macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_{size}.png"
+       for size in (16, 32, 64, 128, 256, 512)},
+    48: "packaging/linux/icon-48.png",
+}
+
+
+def install_icons(root):
+    for size, source in ICONS.items():
+        install(ROOT / source,
+                root / f"usr/share/icons/hicolor/{size}x{size}/apps/com.littlebit0.daily.png")
+
+
 def build(bundle, output, version, arch):
     if not re.fullmatch(r"\d+\.\d+\.\d+-[1-9]\d*", version):
         raise ValueError("Expected a Debian version such as 3.4.0-1")
@@ -50,8 +65,7 @@ def build(bundle, output, version, arch):
             "postrm": "DEBIAN/postrm",
         }.items():
             install(ROOT / "packaging/linux" / source, root / target, 0o755)
-        install(ROOT / "artwork/daily-app-icon-source.png",
-                root / "usr/share/icons/hicolor/1024x1024/apps/com.littlebit0.daily.png")
+        install_icons(root)
         notice = root / "usr/share/doc/dailycalendar/README"
         notice.parent.mkdir(parents=True, exist_ok=True)
         notice.write_text(

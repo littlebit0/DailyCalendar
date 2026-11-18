@@ -175,4 +175,47 @@ void main() {
     await expectLater(source.fetch(2026), throwsFormatException);
     source.close();
   });
+
+  test(
+    'Sunmoon February-to-March row is one event in both responses',
+    () async {
+      const title = '2026-1 휴학신청(2차)';
+      // The February table of academic year 2025 and the March table of 2026
+      // both list the same period.
+      final previous = fixture(
+        2025,
+      ).replaceAll('02-23 ~ 02-27', '02-23 ~ 03-03');
+      final page = fixture(2026);
+      final official = page.indexOf('<div id="schedule_year">');
+      final march = page.indexOf('2026년 3월 학사일정을', official);
+      final body = page.indexOf('<tbody>', march);
+      expect(body, greaterThan(official));
+      final current =
+          '${page.substring(0, body)}<tbody><tr>'
+          '<td class="ac first">02-23 ~ 03-03</td><td class="last">'
+          '<ul class="list_st3"><li>$title</li></ul></td></tr>'
+          '${page.substring(body + '<tbody>'.length)}';
+      for (final (text, year) in [(previous, 2025), (current, 2026)]) {
+        final event = SunmoonAcademicSource.parse(
+          text,
+          year,
+        ).singleWhere((e) => e.title == title);
+        expect(event.start, DateTime(2026, 2, 23));
+        expect(event.end, DateTime(2026, 3, 4));
+      }
+      final source = SunmoonAcademicSource(
+        client: MockClient((r) async {
+          final year = Uri.splitQueryString(r.body)['year'];
+          return http.Response(
+            year == '2025' ? previous : current,
+            200,
+            headers: {'content-type': 'text/html;charset=utf-8'},
+          );
+        }),
+      );
+      final events = await source.fetch(2026);
+      source.close();
+      expect(events.where((e) => e.title == title), hasLength(1));
+    },
+  );
 }
