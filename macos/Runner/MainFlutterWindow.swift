@@ -14,6 +14,8 @@ private final class DailyAppleWidgets {
     DailySharedStore.notificationName("com.littlebit0.daily.widgetTodoActionsChanged")
   )
   private static var channel: FlutterMethodChannel?
+  /// Snapshot writes wait for the shared file lock off the platform thread, in order.
+  private static let snapshotQueue = DispatchQueue(label: "com.littlebit0.daily.widgets.snapshot")
   private static var todoActionsObserver: NSObjectProtocol?
 
   static func register(with flutterViewController: FlutterViewController) {
@@ -29,18 +31,24 @@ private final class DailyAppleWidgets {
           result(FlutterError(code: "invalid_widget_snapshot", message: "위젯 데이터 형식이 올바르지 않습니다.", details: nil))
           return
         }
-        do {
-          try writeSnapshot(snapshot)
-          if #available(macOS 11.0, *) {
-            reloadTimelines()
+        snapshotQueue.async {
+          do {
+            try writeSnapshot(snapshot)
+            DispatchQueue.main.async {
+              if #available(macOS 11.0, *) {
+                reloadTimelines()
+              }
+              if #available(macOS 15.0, *) {
+                DailySiriSearchIndexer.scheduleRefresh()
+              }
+              result(nil)
+            }
+          } catch {
+            NSLog("[DailyWidgets] Snapshot update failed: \(error.localizedDescription)")
+            DispatchQueue.main.async {
+              result(FlutterError(code: "widget_snapshot_failed", message: error.localizedDescription, details: nil))
+            }
           }
-          if #available(macOS 15.0, *) {
-            DailySiriSearchIndexer.scheduleRefresh()
-          }
-          result(nil)
-        } catch {
-          NSLog("[DailyWidgets] Snapshot update failed: \(error.localizedDescription)")
-          result(FlutterError(code: "widget_snapshot_failed", message: error.localizedDescription, details: nil))
         }
       case "pendingTodoActions":
         do {
@@ -98,12 +106,17 @@ private final class DailyAppleWidgets {
     return url
   }
 
+  /// The widget rewrites this file when a to-do is toggled. Both writers hold
+  /// the action queue lock, so neither overwrites the other's snapshot (#920).
   private static func writeSnapshot(_ snapshot: [String: Any]) throws {
     let data = try JSONSerialization.data(withJSONObject: snapshot)
-    try data.write(
-      to: try containerURL().appendingPathComponent(snapshotFileName),
-      options: .atomic
-    )
+    let containerURL = try containerURL()
+    try withTodoActionsLock(in: containerURL) {
+      try data.write(
+        to: containerURL.appendingPathComponent(snapshotFileName),
+        options: .atomic
+      )
+    }
   }
 
   /// Serializes read-modify-write of the shared action queue across the app and
@@ -241,6 +254,43 @@ private final class DailySiriEventChangesBridge {
       CFNotificationName(DailySiriEventChangeSignal.notificationName as CFString),
       nil
     )
+  }
+}
+
+/// Replacement of one event's alarm requests. The previous requests are
+/// removed only after every new one is added, so a failed add keeps them (#924).
+enum DailyMacAlarmReplacement {
+  static func run(
+    additions: [String],
+    previous: Set<String>,
+    stale: Set<String>,
+    add: (String, @escaping (Error?) -> Void) -> Void,
+    remove: @escaping ([String]) -> Void,
+    completion: @escaping (Error?) -> Void
+  ) {
+    let lock = NSLock()
+    var failure: Error?
+    var added: [String] = []
+    let group = DispatchGroup()
+    for identifier in additions {
+      group.enter()
+      add(identifier) { error in
+        lock.lock()
+        if let error = error { failure = failure ?? error } else { added.append(identifier) }
+        lock.unlock()
+        group.leave()
+      }
+    }
+    group.notify(queue: .global()) {
+      if failure == nil {
+        // A new request already replaced the pending one of its identifier.
+        remove(Array(stale.subtracting(additions)))
+      } else {
+        // Keep the previous requests and drop the ones only this call added.
+        remove(added.filter { !previous.contains($0) })
+      }
+      completion(failure)
+    }
   }
 }
 
@@ -424,22 +474,22 @@ private final class DailyMacAlarms {
           )
         ))
       }
-      let stale = Set(existing.map(\.identifier) + [legacyIdentifier]).subtracting(keep)
-      center.removePendingNotificationRequests(withIdentifiers: Array(stale))
-      center.removeDeliveredNotifications(withIdentifiers: Array(stale))
-      guard !additions.isEmpty else { finish(result, value: !keep.isEmpty); return }
-      let group = DispatchGroup()
-      var failure: Error?
-      for request in additions {
-        group.enter()
-        center.add(request) { error in
-          if let error = error { failure = failure ?? error }
-          group.leave()
+      let previous = Set(existing.map(\.identifier))
+      DailyMacAlarmReplacement.run(
+        additions: additions.map(\.identifier),
+        previous: previous,
+        stale: previous.union([legacyIdentifier]).subtracting(keep),
+        add: { identifier, done in
+          center.add(additions.first { $0.identifier == identifier }!, withCompletionHandler: done)
+        },
+        remove: { identifiers in
+          center.removePendingNotificationRequests(withIdentifiers: identifiers)
+          center.removeDeliveredNotifications(withIdentifiers: identifiers)
+        },
+        completion: { failure in
+          finish(result, error: failure, value: !keep.isEmpty || !additions.isEmpty)
         }
-      }
-      group.notify(queue: .main) {
-        finish(result, error: failure, value: true)
-      }
+      )
     }
   }
 

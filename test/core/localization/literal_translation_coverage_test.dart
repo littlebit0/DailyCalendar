@@ -4,7 +4,8 @@ import 'package:daily/core/localization/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-/// Every Korean string used as the key of a `.tr(…)` call needs a translation
+/// Every Korean string used as the key of a `.tr(…)` or `.text(…)` call needs a
+/// translation
 /// in each non-Korean dictionary, or that language silently shows Korean.
 ///
 /// The first argument is scanned as a whole, so string literals chosen by a
@@ -82,7 +83,7 @@ String? declarationOf(String source, String name) {
 
 Set<String> translationKeysIn(String source) {
   final keys = <String>{};
-  for (final call in RegExp(r'\.tr\(').allMatches(source)) {
+  for (final call in RegExp(r'\.(?:tr|text)\(').allMatches(source)) {
     var argument = firstArgument(source, call.end);
     final identifier = RegExp(r'^\s*([A-Za-z_]\w*)\s*$').firstMatch(argument);
     if (identifier != null) {
@@ -157,6 +158,48 @@ void main() {
     expect(problems, isEmpty);
   });
 
+  test('notices built outside tr() are translated in en, ja and zh', () {
+    // These reach the screen through `tr(error.message)`-style calls, which
+    // the literal scan above cannot follow.
+    final keys = <String>{
+      for (final match
+          in RegExp(
+            r"(?:message:|_report\([^,]+,|TodoMigrationProgress\([^,]+,)\s*'([^']+)'",
+          ).allMatches(
+            File(
+              'lib/core/migration/todo_database_migration_service.dart',
+            ).readAsStringSync(),
+          ))
+        match.group(1)!,
+      for (final match
+          in RegExp(r"'((?:[^'\\]|\\.)*[가-힣](?:[^'\\]|\\.)*)'").allMatches(
+            File('lib/core/auth/apple_sign_in_service.dart').readAsStringSync()
+            // Adjacent literals form one message.
+            .replaceAll(RegExp(r"'\s*\n\s*'"), ''),
+          ))
+        if (!match.group(1)!.contains(r'$')) match.group(1)!,
+      '일정을 해석하지 못했습니다.',
+      '등록할 일정 내용을 입력해 주세요.',
+      'Gemini API 키가 설정되어 있지 않습니다.',
+      '제목과 날짜를 다시 알려주세요.',
+    };
+    expect(keys.length, greaterThan(15));
+    final problems = <String>[];
+    for (final locale in const [
+      Locale('en'),
+      Locale('ja'),
+      Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant'),
+    ]) {
+      final l10n = AppLocalizations(locale);
+      final missing = keys.where((key) => l10n.text(key) == key).toList()
+        ..sort();
+      if (missing.isNotEmpty) {
+        problems.add('${locale.toLanguageTag()} misses $missing');
+      }
+    }
+    expect(problems, isEmpty);
+  });
+
   test('the untimed courses section is named in every language', () {
     const title = '원격·시간 미정 강좌';
     expect(
@@ -179,6 +222,62 @@ void main() {
     final en = AppLocalizations(const Locale('en'));
     expect(en.text('대학 1개'), '1 university');
     expect(en.text('대학 {count}개', args: {'count': 12}), '12 universities');
+  });
+
+  test('English uses the singular only for a count of one', () {
+    final en = AppLocalizations(const Locale('en'));
+    String at(String key, Object count) =>
+        en.text(key, args: {'count': count});
+    expect(at('{count}일 전', 1), '1 day before');
+    expect(at('{count}시간 전', 1), '1 hour before');
+    expect(at('{count}분 전', 1), '1 minute before');
+    expect(at('일정 {count}개', 1), '1 event');
+    expect(at('수업 {count}개', '1'), '1 course');
+    expect(at('대학 {count}개', 1), '1 university');
+    expect(
+      en.text('{month} · 일정 {count}개', args: {'month': 'May', 'count': 1}),
+      'May · 1 event',
+    );
+    for (final count in [0, 2, 11, 21]) {
+      expect(at('{count}일 전', count), '$count days before');
+      expect(at('일정 {count}개', count), '$count events');
+    }
+    // Other languages have no singular form.
+    expect(
+      AppLocalizations(const Locale('ja')).text(
+        '{count}일 전',
+        args: {'count': 1},
+      ),
+      '1日前',
+    );
+    expect(
+      AppLocalizations(const Locale('ko')).text(
+        '{count}일 전',
+        args: {'count': 1},
+      ),
+      '1일 전',
+    );
+  });
+
+  test('recurring scope prompts name the action without a particle slot', () {
+    const keys = ['이 반복 일정의 어느 범위를 수정할까요?', '이 반복 일정의 어느 범위를 삭제할까요?'];
+    for (final code in ['en', 'ja']) {
+      final strings = AppLocalizations(Locale(code));
+      for (final key in keys) {
+        expect(strings.text(key), isNot(key), reason: '$code $key');
+        expect(strings.text(key), isNot(contains('{')), reason: '$code $key');
+      }
+    }
+    final zh = AppLocalizations(
+      const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant'),
+    );
+    for (final key in keys) {
+      expect(zh.text(key), isNot(key));
+    }
+    final panel = File(
+      'lib/features/events/presentation/event_details_panel.dart',
+    ).readAsStringSync();
+    expect(panel, isNot(contains('{action}을')));
   });
 
   test('terminology stays consistent within the academic-profile flow', () {

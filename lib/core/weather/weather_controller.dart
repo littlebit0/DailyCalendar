@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'kma_weather_service.dart';
 import 'weather_forecast.dart';
@@ -20,7 +21,9 @@ class WeatherController extends ChangeNotifier {
     required this.service,
     required this.location,
     DateTime Function()? clock,
-  }) : now = clock ?? DateTime.now {
+    Random? random,
+  }) : now = clock ?? DateTime.now,
+       _random = random ?? Random() {
     settings = store.load();
     store.addListener(_reset);
   }
@@ -28,6 +31,11 @@ class WeatherController extends ChangeNotifier {
   final KmaWeatherService service;
   final WeatherLocation location;
   final DateTime Function() now;
+  final Random _random;
+
+  /// Wait after the first failed request; doubles with each further failure
+  /// until it reaches [WeatherForecast.refreshInterval].
+  static const retryInterval = Duration(minutes: 5);
   late WeatherSettings settings;
   WeatherForecast? forecast;
   WeatherRegion? region;
@@ -39,6 +47,7 @@ class WeatherController extends ChangeNotifier {
   int _revision = 0;
   Future<void>? _pending;
   Timer? _timer;
+  int _failures = 0;
 
   DailyWeather? forDate(DateTime date) =>
       settings.enabled ? forecast?.forDate(date, now()) : null;
@@ -49,6 +58,7 @@ class WeatherController extends ChangeNotifier {
   void _invalidate() {
     _revision++;
     _pending = null;
+    _failures = 0;
     _timer?.cancel();
     service.cancel();
   }
@@ -188,6 +198,7 @@ class WeatherController extends ChangeNotifier {
       }
       _notify();
       if (!force && forecast?.freshAt(now()) == true) {
+        _failures = 0;
         status = WeatherStatus.ready;
         _notify();
         return;
@@ -204,6 +215,7 @@ class WeatherController extends ChangeNotifier {
         throw const FormatException('Stale KMA forecast');
       }
       forecast = result;
+      _failures = 0;
       status = WeatherStatus.ready;
       try {
         await store.cache(selected.gridKey, xml, fetchedAt);
@@ -215,6 +227,7 @@ class WeatherController extends ChangeNotifier {
     } on Object {
       if (!_current(revision)) return;
       if (forecast?.usableAt(now()) != true) forecast = null;
+      _failures++;
       status = WeatherStatus.unavailable;
       _notify();
     }
@@ -223,13 +236,26 @@ class WeatherController extends ChangeNotifier {
   void _schedule() {
     _timer?.cancel();
     if (!settings.enabled || !_foreground) return;
+    _timer = Timer(nextRefreshDelay(), () => unawaited(refresh()));
+  }
+
+  /// Time until the next automatic request.
+  @visibleForTesting
+  Duration nextRefreshDelay() {
     final kst = koreaNow(now());
     final midnight = weatherDate(kst).add(const Duration(days: 1));
     final untilMidnight = midnight.difference(kst);
-    final delay = untilMidnight < WeatherForecast.refreshInterval
+    final regular = untilMidnight < WeatherForecast.refreshInterval
         ? untilMidnight
         : WeatherForecast.refreshInterval;
-    _timer = Timer(delay, () => unawaited(refresh()));
+    if (_failures == 0) return regular;
+    // Up to 20% extra, so apps that failed together (an outage, the shared
+    // midnight refresh) do not all ask the weather server again at once.
+    final retry =
+        retryInterval *
+        (1 << min(_failures - 1, 6)) *
+        (1 + _random.nextDouble() / 5);
+    return retry < regular ? retry : regular;
   }
 
   @override

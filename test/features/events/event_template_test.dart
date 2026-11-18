@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:daily/core/sync/settings_sync_document.dart';
 import 'package:daily/features/events/data/event_template_store.dart';
@@ -34,7 +35,22 @@ EventTemplate _template({
   reminderMinutesBeforeList: const [10],
 );
 
+/// 02:00-03:00 on 2026-03-08 does not exist in DST zones such as
+/// America/New_York. The tests below assert different results with and without
+/// that gap; CI runs this file once more with TZ=America/New_York.
+final _hasSpringGap = DateTime(2026, 3, 8, 2, 30).hour != 2;
+
 void main() {
+  test(
+    'the DST run really has the 2026-03-08 gap',
+    () => expect(_hasSpringGap, isTrue),
+    // Shown as skipped elsewhere, so a run without the DST assertions is
+    // visible instead of silently passing.
+    skip: Platform.environment['TZ'] == 'America/New_York'
+        ? false
+        : 'DST-gap assertions need TZ=America/New_York',
+  );
+
   group('EventTemplate dates', () {
     test('a timed template lands on the selected day at its saved time', () {
       final draft = _template().draftOn(DateTime(2026, 10, 30, 8), _workout);
@@ -52,7 +68,8 @@ void main() {
       final draft = gapTemplate.draftOn(day, _workout);
       // Only DST zones (e.g. America/New_York) have the gap; elsewhere the
       // draft stays valid and must be returned.
-      if (draft.endAt.isAfter(draft.startAt)) {
+      expect(draft.endAt.isAfter(draft.startAt), !_hasSpringGap);
+      if (!_hasSpringGap) {
         expect(gapTemplate.validDraftOn(day, _workout), isNotNull);
       } else {
         expect(gapTemplate.validDraftOn(day, _workout), isNull);
@@ -68,7 +85,7 @@ void main() {
       expect(draft.startAt.hour * 60 + draft.startAt.minute, 2 * 60 + 30);
       expect(draft.endAt.hour, 4);
       // Outside DST zones the requested day is kept.
-      if (gapTemplate.draftOn(from, _workout).startAt.hour == 2) {
+      if (!_hasSpringGap) {
         expect(day, from);
       } else {
         expect(day, DateTime(2026, 3, 9));
@@ -307,7 +324,7 @@ void main() {
         final customAt = template.draftOn(day, _workout).alarmCustomAt!;
         expect(customAt.hour * 60 + customAt.minute, 2 * 60 + 30);
         expect(DateTime(customAt.year, customAt.month, customAt.day), day);
-        if (template.draftOn(from, _workout).alarmCustomAt!.hour == 2) {
+        if (!_hasSpringGap) {
           expect(day, from);
         } else {
           expect(day, DateTime(2026, 3, 9));

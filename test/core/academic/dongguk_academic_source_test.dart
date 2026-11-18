@@ -162,4 +162,15 @@ void main() {
       'dongguk-wise',
     );
   });
+
+  test('Dongguk keeps titles shared by undergraduates and graduates', () {
+    expect(
+      DonggukAcademicSource.isGraduateOnly('학부·대학원 수강신청 확인 및 정정', '학사지원팀/대학원실'),
+      isFalse,
+    );
+    expect(
+      DonggukAcademicSource.isGraduateOnly('일반대학원 신입생 수강신청', '학사지원팀/대학원실'),
+      isTrue,
+    );
+  });
 }

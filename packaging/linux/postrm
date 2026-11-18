@@ -1,5 +1,9 @@
 #!/bin/sh
 set -eu
+if [ "$1" = purge ]; then
+  # The unit file is already gone, so remove the enablement link directly.
+  rm -f /etc/systemd/system/timers.target.wants/dailycalendar-update.timer
+fi
 if [ -d /run/systemd/system ]; then
   systemctl daemon-reload
 fi

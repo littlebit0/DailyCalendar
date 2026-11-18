@@ -1,6 +1,7 @@
 package com.littlebit0.dailycalendar
 
 import android.Manifest
+import android.content.ActivityNotFoundException
 import android.content.pm.PackageManager
 import android.content.Intent
 import android.net.Uri
@@ -262,24 +263,27 @@ class MainActivity : FlutterFragmentActivity() {
             ),
         )
         when (candidates.size) {
-            0 -> {
-                startActivity(Intent(Intent.ACTION_VIEW, kakaoWebUrl(location)))
-                result.success("handled")
-            }
-            1 -> {
-                startActivity(candidates.first().intent)
-                result.success("handled")
-            }
+            0 -> result.success(startMap(Intent(Intent.ACTION_VIEW, kakaoWebUrl(location))))
+            1 -> result.success(startMap(candidates.first().intent))
             else -> AlertDialog.Builder(this)
                 .setTitle("지도에서 열기")
                 .setMessage(location)
                 .setItems(candidates.map { it.title }.toTypedArray()) { _, index ->
-                    startActivity(candidates[index].intent)
-                    result.success("handled")
+                    result.success(startMap(candidates[index].intent))
                 }
                 .setOnCancelListener { result.success("handled") }
                 .show()
         }
+    }
+
+    /** "failed" lets Dart tell the user no map could be opened. */
+    private fun startMap(intent: Intent): String = try {
+        startActivity(intent)
+        "handled"
+    } catch (error: ActivityNotFoundException) {
+        "failed"
+    } catch (error: SecurityException) {
+        "failed"
     }
 
     private fun mapCandidate(title: String, rawUrl: String): MapCandidate? {
