@@ -1056,6 +1056,10 @@ void main() {
           .byKey(const ValueKey('schedule-time-scroll'))
           .first;
       final scrollable = tester.widget<SingleChildScrollView>(timeScroll);
+      // The opening position follows the wall clock (#889); start from 07:00
+      // so a late-evening run still has room to scroll down.
+      scrollable.controller!.jumpTo(7 * 64);
+      await tester.pump();
       final initialOffset = scrollable.controller!.offset;
       await tester.drag(timeScroll, const Offset(0, -180));
       await tester.pumpAndSettle();
@@ -4308,6 +4312,10 @@ void main() {
     final scheduleScrollable = tester.widget<SingleChildScrollView>(
       scheduleTimeScroll,
     );
+    // The opening position follows the wall clock (#889); start from 07:00
+    // so a late-evening run still has room to scroll down.
+    scheduleScrollable.controller!.jumpTo(7 * 64);
+    await tester.pump();
     final scheduleOffsetBeforeWheel = scheduleScrollable.controller!.offset;
     await tester.sendEventToBinding(
       PointerScrollEvent(
@@ -4582,6 +4590,10 @@ void main() {
             final controller = tester
                 .widget<SingleChildScrollView>(scroll)
                 .controller!;
+            // The opening position follows the wall clock (#889); start
+            // from 07:00 so a late-evening run still has room to scroll down.
+            controller.jumpTo(7 * 64);
+            await tester.pump();
             final before = controller.offset;
             await tester.sendEventToBinding(
               PointerScrollEvent(
@@ -4687,6 +4699,10 @@ void main() {
       final scheduleScrollable = tester.widget<SingleChildScrollView>(
         scheduleTimeScroll,
       );
+      // The opening position follows the wall clock (#889); start from 07:00
+      // so a late-evening run still has room to scroll down.
+      scheduleScrollable.controller!.jumpTo(7 * 64);
+      await tester.pump();
       final scheduleOffsetBeforeWheel = scheduleScrollable.controller!.offset;
       await sendMouseWheel(scheduleTimeScroll, const Offset(0, 120));
       await tester.pumpAndSettle();

@@ -76,9 +76,15 @@ class ScheduleTimelineView extends StatefulWidget {
 
 class _ScheduleTimelineViewState extends State<ScheduleTimelineView> {
   static const _hourHeight = 64.0;
-  static const _initialHour = 7;
+  // Distance from the top or bottom edge where a held drag starts scrolling.
+  static const _dragAutoScrollEdge = 48.0;
+  // Fastest scroll step per frame, reached at the very edge.
+  static const _dragAutoScrollMaxStep = 14.0;
 
   ScrollController? _scrollController;
+  Timer? _dragAutoScrollTimer;
+  double _dragAutoScrollStep = 0;
+  VoidCallback? _refreshDragPreview;
   CalendarEvent? _draggingEvent;
   DateTime? _dragPreviewStart;
   DateTime? _acceptedDropDate;
@@ -88,15 +94,24 @@ class _ScheduleTimelineViewState extends State<ScheduleTimelineView> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _scrollController ??= Theme.of(context).platform == TargetPlatform.windows
+    if (_scrollController != null) {
+      return;
+    }
+    final initialScrollOffset = scheduleInitialScrollOffset(
+      widget.days,
+      widget.events,
+      DateTime.now(),
+    );
+    _scrollController = Theme.of(context).platform == TargetPlatform.windows
         ? SmoothMouseWheelScrollController(
-            initialScrollOffset: _initialHour * _hourHeight,
+            initialScrollOffset: initialScrollOffset,
           )
-        : ScrollController(initialScrollOffset: _initialHour * _hourHeight);
+        : ScrollController(initialScrollOffset: initialScrollOffset);
   }
 
   @override
   void dispose() {
+    _stopDragAutoScroll();
     _scrollController?.dispose();
     super.dispose();
   }
@@ -193,6 +208,8 @@ class _ScheduleTimelineViewState extends State<ScheduleTimelineView> {
                     onEventDropped: widget.onEventDropped,
                     onEventTimeDropped: widget.onEventTimeDropped,
                     onDragPreviewStartChanged: _setDragPreviewStart,
+                    onTimeDragMove: _handleTimeDragMove,
+                    onTimeDragStop: _stopDragAutoScroll,
                     onEventDropAccepted: _setEventTimeDropAccepted,
                     onEventDragStateChanged: _setDraggingEvent,
                     onEventDragInteractionStateChanged: _setDragInteraction,
@@ -237,7 +254,69 @@ class _ScheduleTimelineViewState extends State<ScheduleTimelineView> {
     return activeCalendarEventDrag.value?.event;
   }
 
+  // Scrolls the hours while a dragged event is held near the top or bottom
+  // edge, so times outside the visible range can be reached in one drag.
+  // jumpTo keeps the scroll view hit-testable; an animated scroll would ignore
+  // the pointer and make the drop target lose the drag.
+  void _handleTimeDragMove(
+    ScrollableState scrollable,
+    Offset globalPointer,
+    VoidCallback refreshPreview,
+  ) {
+    final box = scrollable.context.findRenderObject();
+    if (box is! RenderBox || !box.hasSize) {
+      return;
+    }
+    final local = box.globalToLocal(globalPointer).dy;
+    final height = box.size.height;
+    if (height <= _dragAutoScrollEdge * 2) {
+      return _stopDragAutoScroll();
+    }
+    final double step;
+    if (local < _dragAutoScrollEdge) {
+      step = -(1 - math.max(0, local) / _dragAutoScrollEdge);
+    } else if (local > height - _dragAutoScrollEdge) {
+      step = 1 - math.max(0, height - local) / _dragAutoScrollEdge;
+    } else {
+      return _stopDragAutoScroll();
+    }
+    _dragAutoScrollStep = step * _dragAutoScrollMaxStep;
+    _refreshDragPreview = refreshPreview;
+    _dragAutoScrollTimer ??= Timer.periodic(
+      const Duration(milliseconds: 16),
+      (_) => _dragAutoScrollTick(),
+    );
+  }
+
+  void _dragAutoScrollTick() {
+    final controller = _scrollController;
+    if (!mounted || controller == null || !controller.hasClients) {
+      return _stopDragAutoScroll();
+    }
+    final position = controller.position;
+    final next = (position.pixels + _dragAutoScrollStep).clamp(
+      position.minScrollExtent,
+      position.maxScrollExtent,
+    );
+    if (next == position.pixels) {
+      return;
+    }
+    controller.jumpTo(next);
+    // The pointer did not move, but the hour under it did.
+    _refreshDragPreview?.call();
+  }
+
+  void _stopDragAutoScroll() {
+    _dragAutoScrollTimer?.cancel();
+    _dragAutoScrollTimer = null;
+    _dragAutoScrollStep = 0;
+    _refreshDragPreview = null;
+  }
+
   void _setDraggingEvent(CalendarEvent? event) {
+    if (event == null) {
+      _stopDragAutoScroll();
+    }
     if (!mounted || _draggingEvent == event) return;
     final wasDragging = _draggingEvent != null;
     final isDragging = event != null;
@@ -772,6 +851,8 @@ class _ScheduleTimeGrid extends StatelessWidget {
     required this.onEventDropped,
     required this.onEventTimeDropped,
     required this.onDragPreviewStartChanged,
+    required this.onTimeDragMove,
+    required this.onTimeDragStop,
     required this.onEventDropAccepted,
     required this.onEventDragStateChanged,
     required this.onEventDragInteractionStateChanged,
@@ -794,6 +875,8 @@ class _ScheduleTimeGrid extends StatelessWidget {
   final CalendarEventDropCallback? onEventDropped;
   final CalendarEventTimeDropCallback? onEventTimeDropped;
   final ValueChanged<DateTime?> onDragPreviewStartChanged;
+  final _TimeDragMoveCallback onTimeDragMove;
+  final VoidCallback onTimeDragStop;
   final void Function(CalendarEvent event, DateTime target) onEventDropAccepted;
   final ValueChanged<CalendarEvent?> onEventDragStateChanged;
   final ValueChanged<bool> onEventDragInteractionStateChanged;
@@ -932,6 +1015,8 @@ class _ScheduleTimeGrid extends StatelessWidget {
                       day: days[dayIndex],
                       hourHeight: _hourHeight,
                       onPreviewStartChanged: onDragPreviewStartChanged,
+                      onDragMove: onTimeDragMove,
+                      onDragStop: onTimeDragStop,
                       onDropAccepted: onEventDropAccepted,
                       onEventTimeDropped: onEventTimeDropped!,
                     ),
@@ -1077,11 +1162,20 @@ class _ScheduleTimeGrid extends StatelessWidget {
   }
 }
 
+typedef _TimeDragMoveCallback =
+    void Function(
+      ScrollableState scrollable,
+      Offset globalPointer,
+      VoidCallback refreshPreview,
+    );
+
 class _ScheduleTimeDropTarget extends StatelessWidget {
   const _ScheduleTimeDropTarget({
     required this.day,
     required this.hourHeight,
     required this.onPreviewStartChanged,
+    required this.onDragMove,
+    required this.onDragStop,
     required this.onDropAccepted,
     required this.onEventTimeDropped,
   });
@@ -1091,6 +1185,8 @@ class _ScheduleTimeDropTarget extends StatelessWidget {
   final DateTime day;
   final double hourHeight;
   final ValueChanged<DateTime?> onPreviewStartChanged;
+  final _TimeDragMoveCallback onDragMove;
+  final VoidCallback onDragStop;
   final void Function(CalendarEvent event, DateTime target) onDropAccepted;
   final CalendarEventTimeDropCallback onEventTimeDropped;
 
@@ -1102,14 +1198,17 @@ class _ScheduleTimeDropTarget extends StatelessWidget {
             !calendarEventCanMove(details.data.event)) {
           return false;
         }
-        onPreviewStartChanged(_targetStart(context, details));
+        // Entering counts as a move: a drag can re-enter without moving.
+        _handleMove(context, details);
         return true;
       },
-      onMove: (details) {
-        onPreviewStartChanged(_targetStart(context, details));
+      onMove: (details) => _handleMove(context, details),
+      onLeave: (_) {
+        onDragStop();
+        onPreviewStartChanged(null);
       },
-      onLeave: (_) => onPreviewStartChanged(null),
       onAcceptWithDetails: (details) {
+        onDragStop();
         final targetStart = _targetStart(context, details);
         onPreviewStartChanged(targetStart);
         onDropAccepted(details.data.event, targetStart);
@@ -1123,6 +1222,23 @@ class _ScheduleTimeDropTarget extends StatelessWidget {
       builder: (context, candidateData, rejectedData) =>
           const SizedBox.expand(key: ValueKey('schedule-time-drop-target')),
     );
+  }
+
+  void _handleMove(
+    BuildContext context,
+    DragTargetDetails<CalendarEventDragPayload> details,
+  ) {
+    void refreshPreview() {
+      if (context.mounted) {
+        onPreviewStartChanged(_targetStart(context, details));
+      }
+    }
+
+    refreshPreview();
+    if (details.data.origin != CalendarEventDragOrigin.sidebar) {
+      // The drag anchor is the pointer itself.
+      onDragMove(Scrollable.of(context), details.offset, refreshPreview);
+    }
   }
 
   DateTime _targetStart(
@@ -1314,6 +1430,37 @@ List<_TimelineSegmentLayout> _layoutSegments(
 bool _segmentsOverlap(_TimelineSegment first, _TimelineSegment second) {
   return first.startMinute < second.drawnEndMinute &&
       first.drawnEndMinute > second.startMinute;
+}
+
+/// First scroll position of a timeline, an hour before the anchor so it has
+/// context above it: now when [days] includes today, else the earliest timed
+/// event on [days], else 07:00.
+@visibleForTesting
+double scheduleInitialScrollOffset(
+  List<DateTime> days,
+  List<CalendarEvent> events,
+  DateTime now,
+) {
+  int? anchorHour;
+  if (days.any((day) => _isSameDay(day, now))) {
+    anchorHour = now.hour;
+  } else {
+    for (final day in days) {
+      final dayStart = DateTime(day.year, day.month, day.day);
+      final dayEnd = shiftCalendarDateByDays(dayStart, 1);
+      for (final event in events) {
+        if (event.allDay || !event.overlaps(dayStart, dayEnd)) continue;
+        final start = event.startAt.isAfter(dayStart)
+            ? event.startAt
+            : dayStart;
+        if (anchorHour == null || start.hour < anchorHour) {
+          anchorHour = start.hour;
+        }
+      }
+    }
+  }
+  final hour = anchorHour == null ? 7 : math.max(0, anchorHour - 1);
+  return hour * _ScheduleTimelineViewState._hourHeight;
 }
 
 bool _isSameDay(DateTime first, DateTime second) =>
