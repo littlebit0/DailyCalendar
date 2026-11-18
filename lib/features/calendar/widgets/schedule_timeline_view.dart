@@ -1183,7 +1183,14 @@ class _TimelineSegment {
   final CalendarEvent event;
   final int startMinute;
   final int endMinute;
+
+  /// End of the drawn block: short events are drawn at least
+  /// [_minBlockMinutes] tall, so lanes must treat them as that long.
+  int get drawnEndMinute => math.max(endMinute, startMinute + _minBlockMinutes);
 }
+
+// 24px minimum block height at 64px per hour, rounded up to whole minutes.
+const _minBlockMinutes = 23;
 
 class _TimelineSegmentLayout {
   const _TimelineSegmentLayout({
@@ -1262,10 +1269,10 @@ List<_TimelineSegmentLayout> _layoutSegments(
   final layouts = <_TimelineSegmentLayout>[];
   var offset = 0;
   while (offset < segments.length) {
-    var groupEnd = segments[offset].endMinute;
+    var groupEnd = segments[offset].drawnEndMinute;
     var end = offset + 1;
     while (end < segments.length && segments[end].startMinute < groupEnd) {
-      groupEnd = math.max(groupEnd, segments[end].endMinute);
+      groupEnd = math.max(groupEnd, segments[end].drawnEndMinute);
       end++;
     }
     final group = segments.sublist(offset, end)
@@ -1300,8 +1307,8 @@ List<_TimelineSegmentLayout> _layoutSegments(
 }
 
 bool _segmentsOverlap(_TimelineSegment first, _TimelineSegment second) {
-  return first.startMinute < second.endMinute &&
-      first.endMinute > second.startMinute;
+  return first.startMinute < second.drawnEndMinute &&
+      first.drawnEndMinute > second.startMinute;
 }
 
 bool _isSameDay(DateTime first, DateTime second) =>
