@@ -5,6 +5,7 @@ import 'package:daily/features/timetable/presentation/university_course_page.dar
 
 import 'package:daily/app/daily_app.dart';
 import 'package:daily/core/alarms/alarm_service.dart';
+import 'package:daily/core/calendar/calendar_event_ordering.dart';
 import 'package:daily/core/academic/academic_profile.dart';
 import 'package:daily/core/academic/university_directory.dart';
 import 'package:daily/core/auth/apple_sign_in_service.dart';
@@ -18,6 +19,7 @@ import 'package:daily/core/lms/lms_sync_service.dart';
 import 'package:daily/core/diagnostics/startup_timing.dart';
 import 'package:daily/core/notifications/notification_service.dart';
 import 'package:daily/core/settings/app_settings.dart';
+import 'package:daily/core/security/biometric_auth_service.dart';
 import 'package:daily/core/settings/settings_repository.dart';
 import 'package:daily/core/sync/google_drive_auth_service.dart';
 import 'package:daily/core/sync/google_drive_sync_service.dart';
@@ -48,6 +50,7 @@ import 'package:flutter/semantics.dart' show OrdinalSortKey;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -196,6 +199,92 @@ void main() {
       );
     },
   );
+
+  test('device text size multiplies the app text size up to 1.3', () {
+    double scale(AppTextSize size, double system, TargetPlatform platform) =>
+        effectiveAppTextScale(
+          appScale: appTextScaleForPlatform(size, platform),
+          systemScale: system,
+          platform: platform,
+        );
+
+    // System default keeps today's scales.
+    expect(scale(AppTextSize.basic, 1.0, TargetPlatform.iOS), 0.8);
+    expect(scale(AppTextSize.large, 1.0, TargetPlatform.android), 1.0);
+    expect(scale(AppTextSize.extraLarge, 1.0, TargetPlatform.iOS), 1.15);
+    expect(scale(AppTextSize.basic, 1.0, TargetPlatform.macOS), 1.0);
+    expect(scale(AppTextSize.extraLarge, 1.0, TargetPlatform.windows), 1.3);
+    // Device size is multiplied in.
+    expect(
+      scale(AppTextSize.basic, 1.35, TargetPlatform.iOS),
+      closeTo(1.08, 1e-9),
+    );
+    // Large device sizes stop at 1.3.
+    for (final system in [1.35, 2.0, 3.1]) {
+      for (final size in AppTextSize.values) {
+        expect(
+          scale(size, system, TargetPlatform.iOS),
+          lessThanOrEqualTo(maxEffectiveAppTextScale),
+        );
+      }
+      expect(scale(AppTextSize.large, system, TargetPlatform.android), 1.3);
+      expect(scale(AppTextSize.extraLarge, system, TargetPlatform.macOS), 1.3);
+    }
+    // Small device sizes never go below the app's basic scale.
+    expect(scale(AppTextSize.basic, 0.85, TargetPlatform.android), 0.8);
+    expect(scale(AppTextSize.basic, 0.85, TargetPlatform.windows), 1.0);
+  });
+
+  for (final system in [1.0, 1.35, 2.0, 3.1]) {
+    testWidgets('phone month calendar applies device text size $system', (
+      tester,
+    ) async {
+      tester.view.physicalSize = const Size(390, 844);
+      tester.view.devicePixelRatio = 1;
+      tester.platformDispatcher.textScaleFactorTestValue = system;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+      debugDefaultTargetPlatformOverride = TargetPlatform.android;
+      addTearDown(() => debugDefaultTargetPlatformOverride = null);
+      SharedPreferences.setMockInitialValues({
+        'onboardingCompleted': true,
+        'defaultCalendarView': 'month',
+        'appTextSize': AppTextSize.large.name,
+      });
+      final preferences = await SharedPreferences.getInstance();
+      final settingsRepository = SettingsRepository(preferences: preferences);
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            universityRegionsFromAsset(),
+            settingsRepositoryProvider.overrideWithValue(settingsRepository),
+            notificationServiceProvider.overrideWithValue(_FakeNotification()),
+            syncServiceProvider.overrideWithValue(_FakeSync()),
+            eventRepositoryProvider.overrideWithValue(_FakeEventRepository()),
+            googleDriveAuthServiceProvider.overrideWithValue(
+              _FakeGoogleDriveAuthService(),
+            ),
+          ],
+          child: const DailyApp(),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final context = tester.element(
+        find.byKey(const ValueKey('android-calendar-toolbar')),
+      );
+      expect(
+        MediaQuery.textScalerOf(context).scale(10),
+        closeTo(10 * (system > 1.3 ? 1.3 : system), 1e-9),
+      );
+      expect(tester.takeException(), isNull);
+
+      debugDefaultTargetPlatformOverride = null;
+      await tester.pumpWidget(const SizedBox.shrink());
+    });
+  }
 
   test('Android and Windows expose the adjacent-month date setting', () {
     expect(supportsAdjacentMonthDateSetting(TargetPlatform.android), isTrue);
@@ -4982,6 +5071,263 @@ void main() {
     await tester.pumpWidget(const SizedBox.shrink());
   });
 
+  group('PIN recovery when the stored PIN cannot be read (#968)', () {
+    Future<SettingsRepository> pumpLockedApp(
+      WidgetTester tester, {
+      required FlutterSecureStorage secureStorage,
+      _RecoveryDeviceAuth? deviceAuth,
+      _FakeGoogleDriveAuthService? googleAuth,
+      String? linkedGoogleEmail,
+    }) async {
+      SharedPreferences.setMockInitialValues({
+        'onboardingCompleted': true,
+        'appLockEnabled': true,
+      });
+      final preferences = await SharedPreferences.getInstance();
+      final repository = SettingsRepository(
+        preferences: preferences,
+        secureStorage: secureStorage,
+      );
+      if (linkedGoogleEmail != null) {
+        await repository.saveGoogleAccount(
+          GoogleAccount(email: linkedGoogleEmail),
+        );
+      }
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            universityRegionsFromAsset(),
+            settingsRepositoryProvider.overrideWithValue(repository),
+            notificationServiceProvider.overrideWithValue(_FakeNotification()),
+            syncServiceProvider.overrideWithValue(_FakeSync()),
+            eventRepositoryProvider.overrideWithValue(_FakeEventRepository()),
+            googleDriveAuthServiceProvider.overrideWithValue(
+              googleAuth ?? _FakeGoogleDriveAuthService(account: null),
+            ),
+            biometricAuthServiceProvider.overrideWithValue(
+              BiometricAuthService(client: deviceAuth ?? _RecoveryDeviceAuth()),
+            ),
+          ],
+          child: const DailyApp(),
+        ),
+      );
+      await tester.pumpAndSettle();
+      return repository;
+    }
+
+    Future<void> enterNewPin(WidgetTester tester, String pin) async {
+      for (var round = 0; round < 2; round++) {
+        for (final digit in pin.split('')) {
+          await tester.tap(find.widgetWithText(TextButton, digit));
+          await tester.pump();
+        }
+        await tester.tap(
+          find.byKey(const ValueKey('pin-recovery-continue-button')),
+        );
+        await tester.pumpAndSettle();
+      }
+    }
+
+    final lockScreen = find.byKey(const ValueKey('app-lock-screen'));
+    final deviceButton = find.byKey(
+      const ValueKey('pin-recovery-device-button'),
+    );
+
+    testWidgets('lost key: no PIN entry, failed device check stays locked', (
+      tester,
+    ) async {
+      final storage = _KeyLostSecureStorage();
+      final deviceAuth = _RecoveryDeviceAuth()..result = false;
+      await pumpLockedApp(
+        tester,
+        secureStorage: storage,
+        deviceAuth: deviceAuth,
+      );
+
+      expect(lockScreen, findsOneWidget);
+      expect(find.text('PIN 재설정'), findsOneWidget);
+      expect(find.byKey(const ValueKey('show-pin-entry-button')), findsNothing);
+      expect(
+        find.byKey(const ValueKey('pin-recovery-google-button')),
+        findsNothing,
+      );
+
+      await tester.tap(deviceButton);
+      await tester.pumpAndSettle();
+      expect(deviceAuth.calls, 1);
+      expect(find.text('시스템 인증을 완료하지 못했습니다.'), findsOneWidget);
+      expect(lockScreen, findsOneWidget);
+      expect(
+        find.byKey(const ValueKey('pin-recovery-continue-button')),
+        findsNothing,
+      );
+      expect(storage.deleteAllCalls, 0);
+      await tester.pumpWidget(const SizedBox.shrink());
+    });
+
+    testWidgets('device check then new PIN clears the lost store and unlocks', (
+      tester,
+    ) async {
+      final storage = _KeyLostSecureStorage();
+      final repository = await pumpLockedApp(tester, secureStorage: storage);
+
+      await tester.tap(deviceButton);
+      await tester.pumpAndSettle();
+      expect(lockScreen, findsOneWidget);
+      // A short PIN and a mismatched confirmation are refused.
+      await tester.tap(find.widgetWithText(TextButton, '1'));
+      await tester.tap(
+        find.byKey(const ValueKey('pin-recovery-continue-button')),
+      );
+      await tester.pumpAndSettle();
+      expect(find.text('PIN은 4자리 이상이어야 합니다.'), findsOneWidget);
+      await tester.tap(find.byIcon(Icons.backspace_outlined));
+      await tester.pump();
+      expect(storage.deleteAllCalls, 0);
+
+      await enterNewPin(tester, '2468');
+      expect(lockScreen, findsNothing);
+      expect(storage.deleteAllCalls, 1);
+      expect(await repository.verifyAppLockPin('2468'), isTrue);
+      expect(await repository.appLockPinLength(), 4);
+      expect(await repository.geminiApiKey(), isNull);
+      await tester.pumpWidget(const SizedBox.shrink());
+    });
+
+    testWidgets('cancelling the new PIN asks for verification again', (
+      tester,
+    ) async {
+      final deviceAuth = _RecoveryDeviceAuth();
+      await pumpLockedApp(
+        tester,
+        secureStorage: _KeyLostSecureStorage(),
+        deviceAuth: deviceAuth,
+      );
+      await tester.tap(deviceButton);
+      await tester.pumpAndSettle();
+      await tester.tap(find.widgetWithText(OutlinedButton, '취소'));
+      await tester.pumpAndSettle();
+      expect(deviceButton, findsOneWidget);
+      expect(lockScreen, findsOneWidget);
+
+      // Backgrounding after verification also drops it.
+      await tester.tap(deviceButton);
+      await tester.pumpAndSettle();
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+      await tester.pump();
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+      await tester.pumpAndSettle();
+      expect(deviceButton, findsOneWidget);
+      expect(deviceAuth.calls, 2);
+      await tester.pumpWidget(const SizedBox.shrink());
+    });
+
+    testWidgets('leaving the app during the new PIN save keeps it locked', (
+      tester,
+    ) async {
+      final storage = _KeyLostSecureStorage();
+      await pumpLockedApp(tester, secureStorage: storage);
+      await tester.tap(deviceButton);
+      await tester.pumpAndSettle();
+      for (final digit in '2468'.split('')) {
+        await tester.tap(find.widgetWithText(TextButton, digit));
+      }
+      await tester.tap(
+        find.byKey(const ValueKey('pin-recovery-continue-button')),
+      );
+      await tester.pumpAndSettle();
+      for (final digit in '2468'.split('')) {
+        await tester.tap(find.widgetWithText(TextButton, digit));
+      }
+      storage.pendingWrite = Completer<void>();
+      await tester.tap(
+        find.byKey(const ValueKey('pin-recovery-continue-button')),
+      );
+      await tester.pump();
+
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+      await tester.pump();
+      storage.pendingWrite!.complete();
+      await tester.pump();
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+      await tester.pumpAndSettle();
+      expect(lockScreen, findsOneWidget);
+      await tester.pumpWidget(const SizedBox.shrink());
+    });
+
+    testWidgets('Google check needs the linked account', (tester) async {
+      GoogleDriveAccount? chosen = const GoogleDriveAccount(
+        email: 'other@example.com',
+      );
+      final googleAuth = _FakeGoogleDriveAuthService(
+        account: null,
+        signInResponse: () async => chosen,
+      );
+      final storage = _KeyLostSecureStorage();
+      final repository = await pumpLockedApp(
+        tester,
+        secureStorage: storage,
+        googleAuth: googleAuth,
+        linkedGoogleEmail: 'owner@example.com',
+      );
+      final googleButton = find.byKey(
+        const ValueKey('pin-recovery-google-button'),
+      );
+
+      await tester.tap(googleButton);
+      await tester.pumpAndSettle();
+      expect(find.text('연결된 계정으로 확인하지 못했습니다.'), findsOneWidget);
+      expect(lockScreen, findsOneWidget);
+
+      chosen = null; // cancelled
+      await tester.tap(googleButton);
+      await tester.pumpAndSettle();
+      expect(find.text('연결된 계정으로 확인하지 못했습니다.'), findsNothing);
+      expect(googleButton, findsOneWidget);
+
+      chosen = const GoogleDriveAccount(email: 'Owner@Example.com');
+      await tester.tap(googleButton);
+      await tester.pumpAndSettle();
+      await enterNewPin(tester, '97531');
+      expect(lockScreen, findsNothing);
+      expect(googleAuth.signInCalls, 3);
+      expect(await repository.verifyAppLockPin('97531'), isTrue);
+      await tester.pumpWidget(const SizedBox.shrink());
+    });
+
+    testWidgets('missing PIN hash offers recovery without clearing storage', (
+      tester,
+    ) async {
+      final storage = _MemorySecureStorage().._values['geminiApiKey'] = 'kept';
+      final repository = await pumpLockedApp(tester, secureStorage: storage);
+
+      expect(deviceButton, findsOneWidget);
+      await tester.tap(deviceButton);
+      await tester.pumpAndSettle();
+      await enterNewPin(tester, '1357');
+      expect(lockScreen, findsNothing);
+      expect(await repository.verifyAppLockPin('1357'), isTrue);
+      expect(await repository.geminiApiKey(), 'kept');
+      await tester.pumpWidget(const SizedBox.shrink());
+    });
+
+    testWidgets('a readable PIN keeps the normal lock screen', (tester) async {
+      final storage = _MemorySecureStorage();
+      await SettingsRepository(
+        preferences: await SharedPreferences.getInstance(),
+        secureStorage: storage,
+      ).saveAppLockPin('1234');
+      await pumpLockedApp(tester, secureStorage: storage);
+
+      expect(deviceButton, findsNothing);
+      expect(
+        find.byKey(const ValueKey('show-pin-entry-button')),
+        findsOneWidget,
+      );
+      await tester.pumpWidget(const SizedBox.shrink());
+    });
+  });
+
   testWidgets('app lock covers Settings immediately after backgrounding', (
     tester,
   ) async {
@@ -8558,6 +8904,109 @@ void main() {
     );
   }
 
+  testWidgets(
+    'month grid drop orders the day by the rows shown under a search (#860)',
+    (tester) async {
+      tester.view.physicalSize = const Size(393, 852);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      SharedPreferences.setMockInitialValues({
+        'onboardingCompleted': true,
+        'defaultCalendarView': 'month',
+      });
+      final preferences = await SharedPreferences.getInstance();
+      final settingsRepository = SettingsRepository(preferences: preferences);
+      final now = DateTime.now();
+      final day = DateTime(now.year, now.month, 10);
+      CalendarEvent eventOn(DateTime day, String id, String title, int hour) =>
+          CalendarEvent(
+            id: id,
+            title: title,
+            startAt: DateTime(day.year, day.month, day.day, hour),
+            endAt: DateTime(day.year, day.month, day.day, hour + 1),
+            allDay: false,
+            category: EventCategory.basic,
+            colorValue: EventCategory.basic.colorValue,
+            createdAt: now,
+            updatedAt: now,
+          );
+      final shownFirst = eventOn(day, 'search-drop-shown', '팀 회의', 9);
+      final moving = eventOn(day, 'search-drop-moving', '이동 회의', 10);
+      // Filtered out by the search, so the drop must not order it.
+      final hiddenTarget = eventOn(day, 'search-drop-hidden', '점심 약속', 8);
+      final eventRepository = _RecordingStreamingEventRepository([
+        shownFirst,
+        moving,
+        hiddenTarget,
+      ]);
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            universityRegionsFromAsset(),
+            settingsRepositoryProvider.overrideWithValue(settingsRepository),
+            notificationServiceProvider.overrideWithValue(_FakeNotification()),
+            syncServiceProvider.overrideWithValue(_FakeSync()),
+            eventRepositoryProvider.overrideWithValue(eventRepository),
+            googleDriveAuthServiceProvider.overrideWithValue(
+              _FakeGoogleDriveAuthService(),
+            ),
+          ],
+          child: const DailyApp(),
+        ),
+      );
+      await tester.pumpAndSettle();
+      final container = ProviderScope.containerOf(
+        tester.element(find.byType(DailyApp)),
+      );
+      container.read(calendarSearchQueryProvider.notifier).state = '회의';
+      await tester.pumpAndSettle();
+
+      final flag = find
+          .byWidgetPredicate(
+            (widget) =>
+                widget.key is ValueKey<String> &&
+                (widget.key! as ValueKey<String>).value.startsWith(
+                  'event-span-${moving.id}-',
+                ),
+          )
+          .hitTestable();
+      expect(flag, findsOneWidget);
+      final shownFlag = find
+          .byWidgetPredicate(
+            (widget) =>
+                widget.key is ValueKey<String> &&
+                (widget.key! as ValueKey<String>).value.startsWith(
+                  'event-span-${shownFirst.id}-',
+                ),
+          )
+          .hitTestable();
+      final shownRect = tester.getRect(shownFlag);
+      final gesture = await tester.startGesture(tester.getCenter(flag));
+      await tester.pump(const Duration(milliseconds: 360));
+      await gesture.moveTo(Offset(shownRect.center.dx, shownRect.top + 1));
+      await tester.pump(const Duration(milliseconds: 150));
+      await gesture.moveBy(const Offset(0, 1));
+      await tester.pump(const Duration(milliseconds: 150));
+      await gesture.up();
+      await tester.pumpAndSettle();
+
+      expect(eventRepository.savedEvents, isEmpty);
+      // The hidden row keeps its time slot instead of being pinned by a
+      // drop the user made without seeing it.
+      expect(
+        container
+            .read(appSettingsProvider)
+            .calendarManualEventOrders[calendarDateKey(day)]
+            ?.eventKeys,
+        [moving.id, shownFirst.id],
+      );
+
+      await tester.pumpWidget(const SizedBox.shrink());
+    },
+  );
+
   testWidgets('canceling an event drag restores the lifted event in place', (
     tester,
   ) async {
@@ -11052,6 +11501,98 @@ class _MemorySecureStorage extends FlutterSecureStorage {
     WindowsOptions? wOptions,
   }) async {
     _values.remove(key);
+  }
+}
+
+/// Android secure storage whose Keystore key is gone (#968): every call fails
+/// with the plugin's key-lost code until deleteAll clears the store.
+class _KeyLostSecureStorage extends _MemorySecureStorage {
+  _KeyLostSecureStorage() {
+    _values['appLockPinHash'] = 'sealed';
+    _values['geminiApiKey'] = 'sealed';
+  }
+
+  var keyLost = true;
+  var deleteAllCalls = 0;
+  Completer<void>? pendingWrite;
+
+  void _check() {
+    if (keyLost) {
+      throw PlatformException(
+        code: SettingsRepository.secureStorageKeyLostCode,
+      );
+    }
+  }
+
+  @override
+  Future<void> write({
+    required String key,
+    required String? value,
+    AppleOptions? iOptions,
+    AndroidOptions? aOptions,
+    LinuxOptions? lOptions,
+    WebOptions? webOptions,
+    AppleOptions? mOptions,
+    WindowsOptions? wOptions,
+  }) async {
+    _check();
+    await pendingWrite?.future;
+    return super.write(key: key, value: value);
+  }
+
+  @override
+  Future<String?> read({
+    required String key,
+    AppleOptions? iOptions,
+    AndroidOptions? aOptions,
+    LinuxOptions? lOptions,
+    WebOptions? webOptions,
+    AppleOptions? mOptions,
+    WindowsOptions? wOptions,
+  }) async {
+    _check();
+    return super.read(key: key);
+  }
+
+  @override
+  Future<void> deleteAll({
+    AppleOptions? iOptions,
+    AndroidOptions? aOptions,
+    LinuxOptions? lOptions,
+    WebOptions? webOptions,
+    AppleOptions? mOptions,
+    WindowsOptions? wOptions,
+  }) async {
+    deleteAllCalls += 1;
+    _values.clear();
+    keyLost = false;
+  }
+}
+
+class _RecoveryDeviceAuth implements DeviceAuthenticationClient {
+  bool result = true;
+  var calls = 0;
+
+  @override
+  Future<bool> get canCheckBiometrics async => true;
+
+  @override
+  Future<List<BiometricType>> getAvailableBiometrics() async => const [
+    BiometricType.fingerprint,
+  ];
+
+  @override
+  Future<bool> isDeviceSupported() async => true;
+
+  @override
+  Future<bool> authenticate({
+    required String localizedReason,
+    required bool biometricOnly,
+    required bool persistAcrossBackgrounding,
+  }) async {
+    calls += 1;
+    expect(biometricOnly, isFalse);
+    return result;
   }
 }
 

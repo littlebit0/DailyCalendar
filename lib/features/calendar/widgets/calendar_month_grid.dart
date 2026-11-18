@@ -1258,6 +1258,26 @@ class _WeekRowState extends State<_WeekRow> {
       targetEvents.insert(insertionIndex, previewEvent);
       previewManualOrder = targetEvents.map(calendarEventOrderKey).toList();
     }
+    // Build each start column's comparator (category and manual rank maps)
+    // once per layout instead of once per comparison.
+    final columnComparators = <int, Comparator<CalendarEvent>>{};
+    Comparator<CalendarEvent> comparatorForColumn(int column) =>
+        columnComparators.putIfAbsent(column, () {
+          final comparisonDate = shiftCalendarDateByDays(weekStart, column);
+          return calendarEventComparator(
+            priority: widget.eventSortPriority,
+            categoryOrder: widget.categoryOrder,
+            manualOrder:
+                previewManualOrder != null &&
+                    previewDate != null &&
+                    _sameDay(comparisonDate, previewDate)
+                ? previewManualOrder
+                : widget
+                          .manualEventOrders[calendarDateKey(comparisonDate)]
+                          ?.eventKeys ??
+                      const <String>[],
+          );
+        });
     final rawSegments =
         sourceEvents
             .where((event) => event.overlaps(weekStart, weekEnd))
@@ -1284,24 +1304,9 @@ class _WeekRowState extends State<_WeekRow> {
             if (startCompare != 0) {
               return startCompare;
             }
-            final comparisonDate = shiftCalendarDateByDays(
-              weekStart,
-              a.startCol,
-            );
-            final eventCompare = compareCalendarEvents(
+            final eventCompare = comparatorForColumn(a.startCol)(
               a.event,
               b.event,
-              priority: widget.eventSortPriority,
-              categoryOrder: widget.categoryOrder,
-              manualOrder:
-                  previewManualOrder != null &&
-                      previewDate != null &&
-                      _sameDay(comparisonDate, previewDate)
-                  ? previewManualOrder
-                  : widget
-                            .manualEventOrders[calendarDateKey(comparisonDate)]
-                            ?.eventKeys ??
-                        const <String>[],
             );
             if (eventCompare != 0) {
               return eventCompare;

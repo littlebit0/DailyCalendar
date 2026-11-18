@@ -6,15 +6,18 @@ Based on flutter_secure_storage 10.3.1 (pub.dev), original license retained. Dai
 
 - #971: Android logs and error messages no longer contain storage key names; `FlutterSecureStoragePlugin.handleException` sends the Java stack trace as `PlatformException.details` only in debug builds. Removed the uncalled `migrateESPWithBackup` and `migrateNonBiometricWithBackup` (the default path uses `migrateNonBiometric`).
 
-Daily issues: #207 (operation errors never delete stored credentials), #208 (cipher migration keeps the old key and data until the new data is committed), #397 (writes and deletes are committed and checked), #937, #970 and #971 (above).
+- #968: a missing Android Keystore key is no longer replaced silently. `KeyCipherImplementationRSA18` (and the OAEP subclass) creates its RSA key only when it wraps a new AES key; unwrapping a stored key without its Keystore key throws `KeyStoreKeyMissingException`. The plugin reports it with the error code `DailySecureStorageKeyLost`. While that error blocks initialization, an explicit `delete` removes only that entry from the data file, and an explicit `deleteAll` clears the data file and then the wrapped-key file, so the next write starts a fresh store. Other initialization errors still fail every call (#207). The keystore AES key of the biometric algorithm (`KeyCipherImplementationAES23`) is unchanged; Daily does not use it.
+
+Daily issues: #207 (operation errors never delete stored credentials), #208 (cipher migration keeps the old key and data until the new data is committed), #397 (writes and deletes are committed and checked), #937, #968, #970 and #971 (above).
 
 Files that differ from upstream (#972; update this list when re-vendoring):
 - `android/.../FlutterSecureStorageConfig.java`: `shouldDeleteOnFailure()` is always false (#207).
 - `lib/options/android_options.dart`, `test/flutter_secure_storage_test.dart`: `resetOnError` defaults to false and is documented as ignored on Android (#207).
-- `android/.../FlutterSecureStoragePlugin.java`: a `DurableEdit.PersistenceException` is reported as an error, never as a reset (#397); errors carry no key names and send the stack trace only in debug builds (#971).
+- `android/.../FlutterSecureStoragePlugin.java`: a `DurableEdit.PersistenceException` is reported as an error, never as a reset (#397); errors carry no key names and send the stack trace only in debug builds (#971); a missing Keystore key has its own error code and explicit deletes still run (#968).
 - `android/.../DurableEdit.java` (new), `android/src/test/.../DurableEditTest.java` (new): `commit()`-checked writes and deletes (#397).
 - `android/.../FlutterSecureStorage.java`: uses `DurableEdit` (#397), the preserving default migration `migrateNonBiometric` (#208), the ESP migration of #937, the fresh-install markers of #970 and log messages without key names (#971).
 - `android/.../EncryptedPreferencesMigration.java` (new), `android/src/test/.../EncryptedPreferencesMigrationTest.java` (new), `android/src/test/.../EncryptedPreferencesInitializeTest.java` (new): #937.
+- `android/.../ciphers/KeyCipherImplementationRSA18.java`, `android/.../ciphers/KeyStoreKeyMissingException.java` (new), `android/.../FlutterSecureStorage.java` (`deleteAfterKeyLoss`, `deleteAllAfterKeyLoss`), `android/src/test/.../KeyStoreKeyLossTest.java` (new): #968.
 - `android/.../MigrationBackup.java`: its log message carries no key name (#971).
 - `android/.../PreservingCipherMigration.java` (new), `android/src/test/.../PreservationTest.java` (new): publishes re-encrypted data and the `__daily_algorithm_*` markers in one commit (#208).
 - `android/.../ciphers/StorageCipherFactory.java`: reads the markers from the data file first (#208) and detects a fresh install (#970).

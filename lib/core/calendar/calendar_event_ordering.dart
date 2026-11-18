@@ -1,27 +1,6 @@
 import '../../features/events/domain/calendar_event.dart';
 import '../settings/app_settings.dart';
 
-int compareCalendarEvents(
-  CalendarEvent first,
-  CalendarEvent second, {
-  required CalendarEventSortPriority priority,
-  required List<String> categoryOrder,
-  List<String> manualOrder = const <String>[],
-}) {
-  final categoryRanks = <String, int>{
-    for (var index = 0; index < categoryOrder.length; index++)
-      categoryOrder[index]: index,
-  };
-  final manualRanks = _manualRanks(manualOrder);
-  return _compareCalendarEvents(
-    first,
-    second,
-    priority,
-    categoryRanks,
-    manualRanks,
-  );
-}
-
 Comparator<CalendarEvent> calendarEventComparator({
   required CalendarEventSortPriority priority,
   required List<String> categoryOrder,
