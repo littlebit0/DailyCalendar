@@ -90,4 +90,27 @@ void main() {
       throwsFormatException,
     );
   });
+
+  test('INU merges an identical repeated row and rejects a differing one', () {
+    String repeated(String Function(String) change) {
+      final doc = html.parse(fixture(2026));
+      final row = doc
+          .querySelectorAll('.list-box')
+          .firstWhere((e) => e.text.contains('01-12'));
+      row.parent!.append(row.clone(true)..innerHtml = change(row.innerHtml));
+      return doc.outerHtml;
+    }
+
+    expect(
+      InuAcademicSource.parse(repeated((s) => s), 2026),
+      hasLength(InuAcademicSource.parse(fixture(2026), 2026).length),
+    );
+    expect(
+      () => InuAcademicSource.parse(
+        repeated((s) => s.replaceFirst('01-12', '01-13')),
+        2026,
+      ),
+      throwsFormatException,
+    );
+  });
 }
