@@ -27,6 +27,7 @@ import '../features/settings/presentation/academic_profile_page.dart';
 import '../features/settings/presentation/settings_page.dart';
 import '../features/onboarding/presentation/update_features_gate.dart';
 import '../core/weather/weather_widgets.dart';
+import '../core/time/calendar_clock.dart';
 import '../core/sync/startup_sync_gate.dart';
 import '../core/diagnostics/startup_timing.dart';
 import '../core/sync/google_drive_auth_service.dart';
@@ -114,7 +115,9 @@ class DailyApp extends ConsumerWidget {
                   ),
                 ),
               ),
-              child: _DeviceCleanupRetry(child: content),
+              child: CalendarClockScope(
+                child: _DeviceCleanupRetry(child: content),
+              ),
             ),
           );
         },
