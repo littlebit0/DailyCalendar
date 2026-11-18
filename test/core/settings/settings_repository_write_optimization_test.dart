@@ -188,6 +188,34 @@ void main() {
     expect(restored.language, AppLanguage.system);
   });
 
+  for (final cleanupPending in [false, true]) {
+    test('reset removes LMS check times and follow-up records (#913), '
+        'cleanup pending: $cleanupPending', () async {
+      const leftovers = {
+        'eventFollowUps.v1',
+        'daily.lms.lastSuccess.v1.abc',
+        'daily.lms.learningChecked.v1.abc',
+      };
+      SharedPreferences.setMockInitialValues({
+        'onboardingCompleted': true,
+        for (final key in leftovers) key: '{}',
+        'notificationIds.v2': '{"event:reminder:10":-1}',
+      });
+      FlutterSecureStorage.setMockInitialValues({});
+      final preferences = await SharedPreferences.getInstance();
+      final repository = SettingsRepository(preferences: preferences);
+      if (cleanupPending) {
+        await repository.saveNotificationCleanupJournal('{}');
+      }
+
+      await repository.resetAll();
+
+      expect(preferences.getKeys().intersection(leftovers), isEmpty);
+      // The ids stay only while a notification cleanup still needs them.
+      expect(preferences.containsKey('notificationIds.v2'), cleanupPending);
+    });
+  }
+
   test('reset invalidates delayed settings mutations', () async {
     SharedPreferences.setMockInitialValues({'onboardingCompleted': true});
     FlutterSecureStorage.setMockInitialValues({});

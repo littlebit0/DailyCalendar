@@ -115,6 +115,18 @@ class NativeCalendarSource {
       endAt: end,
       allDay: value['allDay'] as bool? ?? false,
       recurrenceRule: value['recurrenceRule'] as String?,
+      // Android sends the starts of removed or moved occurrences; Daily's
+      // repeat rule excludes whole local days.
+      excludedDates:
+          (value['excludedMilliseconds'] as List<Object?>? ?? const [])
+              .whereType<num>()
+              .map((value) {
+                final at = DateTime.fromMillisecondsSinceEpoch(value.toInt());
+                return DateTime(at.year, at.month, at.day);
+              })
+              .toSet()
+              .toList()
+            ..sort(),
       colorValue: colorValue,
       reminderMinutesBeforeList:
           (value['reminderMinutesBeforeList'] as List<Object?>? ?? const [])

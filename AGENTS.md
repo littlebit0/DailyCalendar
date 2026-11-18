@@ -7,7 +7,7 @@ memory.
 ## 1. Follow Workspace Rules
 
 - Also follow the workspace-level `AGENTS.md` at
-  `/Users/kimhwi/Documents/Codex/AGENTS.md` (macOS). The former Windows path
+  `~/Documents/Codex/AGENTS.md` (macOS). The former Windows path
   `C:\Users\com\Documents\New project\AGENTS.md` applies only on that Windows host.
 - If rules conflict, obey system/developer instructions first, then the user's
   latest explicit instruction, then this file.

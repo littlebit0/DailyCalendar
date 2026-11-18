@@ -66,7 +66,7 @@ class KookminAcademicSource implements AcademicSource {
       if (ranges.length != 2 || title.isEmpty) {
         throw const FormatException('Invalid Kookmin event');
       }
-      DateTime date(String value) {
+      DateTime date(String value, [DateTime? start]) {
         final match = RegExp(
           r'^\s*(\d{2})\.(\d{2}) \(([월화수목금토일])\)\s*$',
         ).firstMatch(value);
@@ -75,7 +75,9 @@ class KookminAcademicSource implements AcademicSource {
         }
         final m = int.parse(match[1]!);
         final d = int.parse(match[2]!);
-        final y = academicYear + (m <= 2 ? 1 : 0);
+        final y = start == null
+            ? academicYear + (m <= 2 ? 1 : 0)
+            : academicRangeEndYear(start, m);
         final result = DateTime(y, m, d);
         // The published weekday confirms the inferred calendar year.
         if (result.year != y ||
@@ -88,7 +90,7 @@ class KookminAcademicSource implements AcademicSource {
       }
 
       final start = date(ranges.first);
-      final last = date(ranges.last);
+      final last = date(ranges.last, start);
       if (last.isBefore(start)) {
         throw const FormatException('Invalid Kookmin period');
       }

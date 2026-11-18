@@ -93,7 +93,8 @@ class SunmoonAcademicSource implements AcademicSource {
       if (month == null) {
         throw const FormatException('Missing Sunmoon month');
       }
-      months.add(int.parse(month[1]!));
+      final tableMonth = int.parse(month[1]!);
+      months.add(tableMonth);
       for (final row in table.querySelectorAll('tbody tr')) {
         final cells = row.querySelectorAll('td');
         if (cells.length != 2) {
@@ -105,9 +106,14 @@ class SunmoonAcademicSource implements AcademicSource {
         if (dates.isEmpty || dates.length > 2) {
           throw const FormatException('Invalid Sunmoon dates');
         }
-        DateTime date(RegExpMatch m) {
+        // A row repeats under every month it spans, so the table month fixes
+        // the start year and the start fixes the end year.
+        DateTime date(RegExpMatch m, [DateTime? start]) {
           final month = int.parse(m[1]!), day = int.parse(m[2]!);
-          final year = month < 3 ? academicYear + 1 : academicYear;
+          final tableYear = tableMonth < 3 ? academicYear + 1 : academicYear;
+          final year = start == null
+              ? (month > tableMonth ? tableYear - 1 : tableYear)
+              : academicRangeEndYear(start, month);
           final value = DateTime(year, month, day);
           if (value.month != month || value.day != day) {
             throw const FormatException('Invalid Sunmoon date');
@@ -116,7 +122,7 @@ class SunmoonAcademicSource implements AcademicSource {
         }
 
         final start = date(dates.first);
-        final last = date(dates.last);
+        final last = date(dates.last, start);
         if (last.isBefore(start)) {
           throw const FormatException('Invalid Sunmoon range');
         }

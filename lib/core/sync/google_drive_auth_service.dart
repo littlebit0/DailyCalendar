@@ -79,6 +79,10 @@ class GoogleDriveAuthService {
   );
   static const _defaultDesktopClientId =
       '234127810480-caigb6e78fj43lv268t78sam64c3aivb.apps.googleusercontent.com';
+  // Not a confidential value: Google treats desktop apps as public clients and
+  // the shipped binary exposes it. The Desktop client still rejects token
+  // requests without it (#870), so builds inject it; PKCE (S256) and the
+  // loopback redirect check protect the flow, not this value.
   static const _desktopClientSecret = String.fromEnvironment(
     'GOOGLE_DESKTOP_CLIENT_SECRET',
   );
@@ -1264,7 +1268,18 @@ class GoogleDriveAuthService {
     } else if (_desktopTokens!.needsRefresh) {
       try {
         await _refreshDesktopAccessToken();
-      } on Object {
+      } on Object catch (error) {
+        // Only a rejected refresh means the link is gone. A request that never
+        // reached Google is reported as transient so callers retry it.
+        if (generation == _desktopGeneration &&
+            (error is TimeoutException ||
+                error is IOException ||
+                error is http.ClientException)) {
+          throw const GoogleDriveAuthException(
+            'Google Drive 연결 응답 시간이 초과되었습니다. 네트워크 상태를 확인한 뒤 다시 시도해 주세요.',
+            timedOut: true,
+          );
+        }
         if (generation != _desktopGeneration || !promptIfNecessary) return null;
         return _interactiveDesktopHeaders();
       }
@@ -1968,8 +1983,9 @@ class GoogleDriveAuthException implements Exception {
 
   final String message;
 
-  /// An auth step did not answer in time (e.g. while the app was inactive),
-  /// as opposed to a rejected or missing authorization.
+  /// An auth step did not answer in time (e.g. while the app was inactive) or
+  /// could not reach the network, as opposed to a rejected or missing
+  /// authorization. Such a failure is worth retrying.
   final bool timedOut;
 
   @override
