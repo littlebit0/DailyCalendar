@@ -34,6 +34,11 @@ class AppleWidgetTextTest(unittest.TestCase):
             self.assertNotIn(korean, alarm, korean)
         self.assertIn('arguments["localeTag"] as? String', alarm)
         self.assertIn("snoozeMinutes: snoozeMinutes, localeTag: text.localeTag", alarm)
+        # Changing only the wording must not change the fingerprint, or reconcile
+        # would cancel a ringing or snoozed alarm (review of #921).
+        fingerprint = alarm[alarm.index("private static func sourceFingerprint"):][:500]
+        self.assertNotIn("language", fingerprint)
+        self.assertNotIn("localeTag", fingerprint)
         dart = (ROOT / "lib/core/widgets/calendar_widget_service.dart").read_text()
         self.assertIn("'localeTag': localeName", dart)
 

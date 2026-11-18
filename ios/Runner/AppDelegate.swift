@@ -789,7 +789,7 @@ private final class DailyAlarmKit {
         var seen = Set<Int64>()
         for fireAtMilliseconds in fireTimes where seen.insert(fireAtMilliseconds).inserted {
           let fireDate = Date(timeIntervalSince1970: Double(fireAtMilliseconds) / 1000)
-          let fingerprint = sourceFingerprint(fireAtMilliseconds, title, memo, snoozeMinutes, language)
+          let fingerprint = sourceFingerprint(fireAtMilliseconds, title, memo, snoozeMinutes)
           if reconcile, !legacyUsed, existing.contains(legacyID) {
             let previous = UserDefaults.standard.string(forKey: fingerprintKey(legacyID))
             if previous == fingerprint || (previous == nil && fireDate <= now) {
@@ -889,17 +889,11 @@ private final class DailyAlarmKit {
     )
   }
 
-  private static func sourceFingerprint(
-    _ fireAtMilliseconds: Int64, _ title: String, _ memo: String?, _ snoozeMinutes: Int,
-    _ language: DailySiriLanguage
-  ) -> String {
-    // Alarms scheduled before the wording was localized are Korean and have no
-    // language in their fingerprint. Korean keeps that form so they still match;
-    // any other language differs and the alarm is rescheduled with its wording.
-    var source: [Any] = [fireAtMilliseconds, title, memo ?? "", snoozeMinutes]
-    let localeTag = DailyAlarmText(language: language).localeTag
-    if language != .korean { source.append(localeTag) }
-    let data = (try? JSONSerialization.data(withJSONObject: source)) ?? Data()
+  /// The app language is deliberately not part of the fingerprint: a wording
+  /// change alone must not replace an alarm, or reconcile would cancel one that
+  /// is ringing or snoozed. New wording applies when the alarm is next scheduled.
+  private static func sourceFingerprint(_ fireAtMilliseconds: Int64, _ title: String, _ memo: String?, _ snoozeMinutes: Int) -> String {
+    let data = (try? JSONSerialization.data(withJSONObject: [fireAtMilliseconds, title, memo ?? "", snoozeMinutes])) ?? Data()
     return SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined()
   }
 
