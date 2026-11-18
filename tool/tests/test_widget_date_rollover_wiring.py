@@ -36,9 +36,9 @@ class WidgetDateRolloverWiringTest(unittest.TestCase):
         self.assertIn("view.ddays", CPP)  # D-days come from the day's own ranked list
 
     def test_apple_provider_and_midnight_refresh(self):
-        self.assertIn("DailyWidgetSnapshot.load(for: now)", SWIFT)
+        self.assertIn("DailyWidgetSnapshot.load(for: start)", SWIFT)
         self.assertIn("calendar.date(byAdding: .day, value: 1", SWIFT)
-        self.assertNotIn("startOfDay(for: now).addingTimeInterval", SWIFT)
+        self.assertNotIn("startOfDay(for: start).addingTimeInterval", SWIFT)
         # Every widget family shows the refresh state, not only the today view.
         self.assertGreaterEqual(SWIFT.count("snapshot.needsRefresh == true"), 3)
 
