@@ -62,6 +62,7 @@ IMPORT_SUITES = [
 WIDGET_SUITES = [
     "test_widget_unreadable_snapshot",
     "test_widget_timeline_plan",
+    "test_apple_widget_text",
 ]
 
 # Apple native import checks (compile Swift).
