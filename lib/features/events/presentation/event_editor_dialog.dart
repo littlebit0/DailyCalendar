@@ -1311,7 +1311,9 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
   Future<void> _toggleAlarm(bool enabled) async {
     var state = _alarmState;
     if (enabled && state == AlarmAuthorizationState.notDetermined) {
-      state = await widget.alarmService.requestAuthorization();
+      state = await widget.alarmService.requestAuthorization(
+        openSettings: true,
+      );
     }
     if (!mounted) {
       return;

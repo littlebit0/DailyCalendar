@@ -1680,8 +1680,9 @@ class _CountingAlarmService implements AlarmService {
   Future<void> cancelEventAlarm(String eventId) async => cancelCalls += 1;
 
   @override
-  Future<AlarmAuthorizationState> requestAuthorization() async =>
-      AlarmAuthorizationState.authorized;
+  Future<AlarmAuthorizationState> requestAuthorization({
+    bool openSettings = false,
+  }) async => AlarmAuthorizationState.authorized;
 
   @override
   Future<void> scheduleEventAlarm(CalendarEvent event) async =>

@@ -37,7 +37,7 @@ Future<void> createEventFromTemplate(
     final alarms = ref.read(alarmServiceProvider);
     var state = await alarms.authorizationState();
     if (state == AlarmAuthorizationState.notDetermined) {
-      state = await alarms.requestAuthorization();
+      state = await alarms.requestAuthorization(openSettings: true);
     }
     if (state != AlarmAuthorizationState.authorized) {
       throw const EventTemplateUnavailable(
