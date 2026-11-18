@@ -26,6 +26,14 @@ class MainActivity : FlutterFragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestHighestSupportedRefreshRate()
+        // A recreated activity (rotation, process restore) keeps the old intent.
+        if (savedInstanceState == null) DailyAndroidWidgetBridge.offerLaunchTarget(intent)
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        DailyAndroidWidgetBridge.offerLaunchTarget(intent)
     }
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
