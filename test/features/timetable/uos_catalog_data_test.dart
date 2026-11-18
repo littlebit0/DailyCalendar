@@ -1,19 +1,9 @@
-import 'dart:io';
 import 'package:daily/core/academic/academic_profile.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_period_defaults.dart';
 import 'package:daily/features/timetable/domain/timetable.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-class _Files extends CachingAssetBundle {
-  @override
-  Future<String> loadString(String key, {bool cache = true}) async =>
-      File(key).readAsStringSync();
-  @override
-  Future<ByteData> load(String key) async =>
-      ByteData.sublistView(File(key).readAsBytesSync());
-}
+import '../../support/file_asset_bundle.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -21,7 +11,7 @@ void main() {
     'UOS current whole catalog preserves unknown clocks and excludes nonregular source slots',
     () async {
       final data = (await UniversityCatalog.load(
-        bundle: _Files(),
+        bundle: FileAssetBundle(),
         university: 'uos',
       )).single;
       final courses = data.courses;
@@ -123,7 +113,7 @@ void main() {
       expect(profile.timetableUniversity, 'uos');
       expect(profile.timetableCampus, 'main');
       final period = (await TimetablePeriodDefaults.load(
-        bundle: _Files(),
+        bundle: FileAssetBundle(),
       )).periodFor(2026, '2', university: 'uos')!;
       expect(period.start, DateTime(2026, 9, 1));
       expect(period.end, DateTime(2026, 12, 21));

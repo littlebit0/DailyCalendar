@@ -23,20 +23,12 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-class _FileBundle extends CachingAssetBundle {
-  @override
-  Future<String> loadString(String key, {bool cache = true}) async =>
-      File(key).readAsStringSync();
-  @override
-  Future<ByteData> load(String key) async =>
-      ByteData.sublistView(File(key).readAsBytesSync());
-}
+import '../../support/file_asset_bundle.dart';
 
 void main() {
   late List<UniversityDataset> catalog;
   setUpAll(() async {
-    catalog = await UniversityCatalog.load(bundle: _FileBundle());
+    catalog = await UniversityCatalog.load(bundle: FileAssetBundle());
   });
 
   TestWidgetsFlutterBinding.ensureInitialized();

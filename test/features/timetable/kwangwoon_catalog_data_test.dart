@@ -1,20 +1,10 @@
-import 'dart:io';
 
 import 'package:daily/core/academic/academic_profile.dart';
 import 'package:daily/features/timetable/data/timetable_period_defaults.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/domain/timetable.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-class _Files extends CachingAssetBundle {
-  @override
-  Future<String> loadString(String key, {bool cache = true}) async =>
-      File(key).readAsStringSync();
-  @override
-  Future<ByteData> load(String key) async =>
-      ByteData.sublistView(File(key).readAsBytesSync());
-}
+import '../../support/file_asset_bundle.dart';
 
 // 0교시 08:00~09:00(50분+쉬는 시간 10분), 별표1 주간 1~6교시 75분+쉬는 시간
 // 15분(90분 슬롯), 야간 7~10교시 45분+5분(50분 슬롯), 11교시는 별표1 표기 그대로.
@@ -53,7 +43,7 @@ void main() {
     'registered Kwangwoon keeps whole search and dated attendance on restore',
     () async {
       final data = (await UniversityCatalog.load(
-        bundle: _Files(),
+        bundle: FileAssetBundle(),
         university: 'kwangwoon',
       )).single;
       expect(data.courses, hasLength(1261));
@@ -136,7 +126,7 @@ void main() {
   );
   test('Kwangwoon 0교시 연강 0~2교시는 08:00~12:00 한 블록으로 저장한다', () async {
     final data = (await UniversityCatalog.load(
-      bundle: _Files(),
+      bundle: FileAssetBundle(),
       university: 'kwangwoon',
     )).single;
     final zero = data.courses.where(
@@ -155,7 +145,7 @@ void main() {
     'Kwangwoon major offering labels all belong to an official college',
     () async {
       final data = await UniversityCatalog.load(
-        bundle: _Files(),
+        bundle: FileAssetBundle(),
         university: 'kwangwoon',
       );
       final raw = <String>{};
@@ -212,7 +202,7 @@ void main() {
         campusId: 'academyinfo:0000200',
       );
       expect(foreign.timetableCampus, isNull);
-      final defaults = await TimetablePeriodDefaults.load(bundle: _Files());
+      final defaults = await TimetablePeriodDefaults.load(bundle: FileAssetBundle());
       final term = defaults.periodFor(2026, '2', university: 'kwangwoon');
       expect(term?.start, DateTime(2026, 9, 1));
       expect(term?.end, DateTime(2026, 12, 21));

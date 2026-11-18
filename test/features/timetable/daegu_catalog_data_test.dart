@@ -5,17 +5,8 @@ import 'package:daily/features/timetable/data/timetable_period_defaults.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
 import 'package:daily/features/timetable/domain/timetable.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-class _Files extends CachingAssetBundle {
-  @override
-  Future<String> loadString(String key, {bool cache = true}) async =>
-      File(key).readAsStringSync();
-  @override
-  Future<ByteData> load(String key) async =>
-      ByteData.sublistView(File(key).readAsBytesSync());
-}
+import '../../support/file_asset_bundle.dart';
 
 const directory = 'work/university-research/catalog-c/daegu-current-20261008';
 Map<String, dynamic> read(String file) =>
@@ -48,7 +39,7 @@ void main() {
   };
   test('Catalog and term period load the restored Daegu dataset', () async {
     final datasets = await UniversityCatalog.load(
-      bundle: _Files(),
+      bundle: FileAssetBundle(),
       university: 'daegu',
     );
     expect(
@@ -56,7 +47,7 @@ void main() {
       {'main': 3317},
     );
     final period = (await TimetablePeriodDefaults.load(
-      bundle: _Files(),
+      bundle: FileAssetBundle(),
     )).periodFor(2026, '2', university: 'daegu');
     expect(period?.start, DateTime(2026, 9, 1));
     expect(period?.end, DateTime(2026, 12, 14));

@@ -1,20 +1,10 @@
-import 'dart:io';
 import 'package:daily/core/academic/academic_profile.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_period_defaults.dart';
 import 'package:daily/features/timetable/domain/timetable.dart';
 import 'package:daily/features/timetable/domain/university_course.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-class _Files extends CachingAssetBundle {
-  @override
-  Future<String> loadString(String key, {bool cache = true}) async =>
-      File(key).readAsStringSync();
-  @override
-  Future<ByteData> load(String key) async =>
-      ByteData.sublistView(File(key).readAsBytesSync());
-}
+import '../../support/file_asset_bundle.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -22,7 +12,7 @@ void main() {
     'PNU complete public catalog preserves restriction and campus locations',
     () async {
       final datasets = await UniversityCatalog.load(
-        bundle: _Files(),
+        bundle: FileAssetBundle(),
         university: 'pnu',
       );
       final courses = datasets.expand((d) => d.courses).toList();
@@ -72,7 +62,7 @@ void main() {
     'PNU consecutive same-room meetings under 60 minutes apart are merged',
     () async {
       final courses = (await UniversityCatalog.load(
-        bundle: _Files(),
+        bundle: FileAssetBundle(),
         university: 'pnu',
       )).expand((d) => d.courses).toList();
       final merged = courses.singleWhere(
@@ -116,12 +106,12 @@ void main() {
       );
       expect(profile.timetableUniversity, 'pnu');
       expect(profile.timetableCampus, 'busan');
-      final defaults = await TimetablePeriodDefaults.load(bundle: _Files());
+      final defaults = await TimetablePeriodDefaults.load(bundle: FileAssetBundle());
       final period = defaults.periodFor(2026, '2', university: 'pnu')!;
       expect(period.start, DateTime(2026, 9, 1));
       expect(period.end, DateTime(2026, 12, 21));
       final course =
-          (await UniversityCatalog.load(bundle: _Files(), university: 'pnu'))
+          (await UniversityCatalog.load(bundle: FileAssetBundle(), university: 'pnu'))
               .expand((d) => d.courses)
               .firstWhere((c) => c.hasSchedulableMeetings)
               .toTimetable(id: 'test', mode: LectureMode.inPerson);

@@ -5,17 +5,8 @@ import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_period_defaults.dart';
 import 'package:daily/features/timetable/domain/timetable.dart';
 import 'package:daily/features/timetable/domain/university_course.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-class _Files extends CachingAssetBundle {
-  @override
-  Future<String> loadString(String key, {bool cache = true}) async =>
-      File(key).readAsStringSync();
-  @override
-  Future<ByteData> load(String key) async =>
-      ByteData.sublistView(File(key).readAsBytesSync());
-}
+import '../../support/file_asset_bundle.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -23,7 +14,7 @@ void main() {
     'Hansung full metadata preserves verified clocks and blocks unresolved operations',
     () async {
       final data = (await UniversityCatalog.load(
-        bundle: _Files(),
+        bundle: FileAssetBundle(),
         university: 'hansung',
       )).single;
       final courses = data.courses;
@@ -245,12 +236,12 @@ void main() {
         campusId: 'academyinfo:0000036',
       );
       expect(wrongCampus.timetableCampus, isNull);
-      final defaults = await TimetablePeriodDefaults.load(bundle: _Files());
+      final defaults = await TimetablePeriodDefaults.load(bundle: FileAssetBundle());
       final term = defaults.periodFor(2026, '2', university: 'hansung');
       expect(term?.start, DateTime(2026, 8, 31));
       expect(term?.end, DateTime(2026, 12, 19));
       final data = (await UniversityCatalog.load(
-        bundle: _Files(),
+        bundle: FileAssetBundle(),
         university: 'hansung',
       )).single;
       final night = data.courses

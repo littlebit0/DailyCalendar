@@ -1,17 +1,7 @@
-import 'dart:io';
 
 import 'package:daily/features/timetable/data/university_catalog.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-class _Files extends CachingAssetBundle {
-  @override
-  Future<String> loadString(String key, {bool cache = true}) async =>
-      File(key).readAsStringSync();
-  @override
-  Future<ByteData> load(String key) async =>
-      ByteData.sublistView(File(key).readAsBytesSync());
-}
+import '../../support/file_asset_bundle.dart';
 
 // 교학과 안내: 1교시 09:00 시작, 수업 50분 + 쉬는 시간 10분(점심 없음), 1~13교시.
 // 교시 슬롯은 그 교시 시작부터 다음 교시 시작 직전까지(60분)이고 마지막 13교시도 같다.
@@ -21,7 +11,7 @@ void main() {
     'Hongik meetings are whole 60-minute period slots, merged when adjacent',
     () async {
       final campuses = await UniversityCatalog.load(
-        bundle: _Files(),
+        bundle: FileAssetBundle(),
         university: 'hongik',
       );
       expect(campuses.map((d) => d.campus).toSet(), {'seoul', 'sejong'});
