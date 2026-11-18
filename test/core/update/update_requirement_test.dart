@@ -22,7 +22,7 @@ Future<SharedPreferences> _prefs([
 void main() {
   group('UpdateRequirementController', () {
     test(
-      'stores a newer release and stops asking until it is installed',
+      'stores a newer release and keeps it across a restart',
       () async {
         final prefs = await _prefs();
         var lookups = 0;
@@ -49,10 +49,11 @@ void main() {
         );
         expect((lookups, detected), (1, 1));
 
-        // Known requirement: no more release lookups, even a day later.
+        // Still offered a day later: the restriction stays, no new detection.
         now = now.add(const Duration(days: 1));
         await controller.check();
-        expect(lookups, 1);
+        expect(controller.requiredVersion.value, '4.1.0');
+        expect((lookups, detected), (2, 1));
 
         // A restart keeps the restriction without any network call.
         final restarted = UpdateRequirementController(
@@ -65,7 +66,7 @@ void main() {
         );
         await restarted.initialize();
         expect(restarted.requiredVersion.value, '4.1.0');
-        expect(lookups, 1);
+        expect(lookups, 2);
       },
     );
 
@@ -509,6 +510,153 @@ void main() {
       await controller.check();
       expect(controller.requiredVersion.value, isNull);
       expect(prefs.getInt(UpdateRequirementController.lastCheckedKey), isNull);
+    });
+  });
+
+  group('re-checking while restricted (#851)', () {
+    Future<UpdateRequirementController> restricted({
+      required Future<String?> Function() latest,
+      UpdateSource source = UpdateSource.github,
+      String stored = '4.2.0',
+      String current = '4.1.0',
+      bool Function(String, String)? isNewer,
+      required DateTime Function() now,
+      Future<void> Function()? onDetected,
+    }) async {
+      final prefs = await _prefs({
+        UpdateRequirementController.requiredVersionKey: stored,
+        UpdateRequirementController.requiredSourceKey: source.name,
+        // Checked just now: the interval alone would skip the next lookup.
+        UpdateRequirementController.lastCheckedKey: now().millisecondsSinceEpoch,
+      });
+      final controller = UpdateRequirementController(
+        preferences: prefs,
+        source: source,
+        latestVersion: latest,
+        currentVersion: () async => current,
+        isNewer: isNewer,
+        now: now,
+        onDetected: onDetected,
+      );
+      await controller.initialize();
+      expect(controller.requiredVersion.value, stored);
+      return controller;
+    }
+
+    for (final source in UpdateSource.values) {
+      final play = source == UpdateSource.play;
+      test('lifts a withdrawn release on ${source.name}', () async {
+        final now = DateTime.utc(2026, 11, 19);
+        final controller = await restricted(
+          source: source,
+          stored: play ? '430' : '4.2.0',
+          current: play ? '420' : '4.1.0',
+          isNewer: play ? isNewerVersionCode : null,
+          latest: () async => play ? '420' : '4.1.0',
+          now: () => now,
+        );
+        await controller.check();
+        expect(controller.requiredVersion.value, isNull);
+        await controller.initialize();
+        expect(controller.requiredVersion.value, isNull);
+      });
+    }
+
+    test('lifts when the feed falls below the running build', () async {
+      final now = DateTime.utc(2026, 11, 19);
+      final controller = await restricted(
+        latest: () async => '4.0.9',
+        now: () => now,
+      );
+      await controller.check();
+      expect(controller.requiredVersion.value, isNull);
+    });
+
+    test('keeps the restriction for the same or a newer release', () async {
+      var now = DateTime.utc(2026, 11, 19);
+      var answer = '4.2.0';
+      var detected = 0;
+      final controller = await restricted(
+        latest: () async => answer,
+        now: () => now,
+        onDetected: () async => detected++,
+      );
+      await controller.check();
+      expect(controller.requiredVersion.value, '4.2.0');
+      expect(detected, 0);
+
+      now = now.add(const Duration(minutes: 5));
+      answer = '4.3.0';
+      await controller.check();
+      expect(controller.requiredVersion.value, '4.3.0');
+      expect(detected, 1);
+      await controller.initialize();
+      expect(controller.requiredVersion.value, '4.3.0');
+    });
+
+    test('a failed or unanswered lookup keeps the restriction', () async {
+      var now = DateTime.utc(2026, 11, 19);
+      var fail = false;
+      final controller = await restricted(
+        latest: () async => fail ? throw Exception('offline') : null,
+        now: () => now,
+      );
+      await controller.check();
+      expect(controller.requiredVersion.value, '4.2.0');
+      now = now.add(const Duration(minutes: 5));
+      fail = true;
+      await controller.check();
+      expect(controller.requiredVersion.value, '4.2.0');
+      await controller.initialize();
+      expect(controller.requiredVersion.value, '4.2.0');
+    });
+
+    test('resume re-checks at most once per five minutes', () async {
+      var now = DateTime.utc(2026, 11, 19);
+      var lookups = 0;
+      final controller = await restricted(
+        latest: () async {
+          lookups++;
+          return '4.2.0';
+        },
+        now: () => now,
+      );
+      await controller.check();
+      now = now.add(const Duration(minutes: 4));
+      await controller.check();
+      expect(lookups, 1);
+      now = now.add(const Duration(minutes: 1));
+      await controller.check();
+      expect(lookups, 2);
+    });
+
+    testWidgets('the open restriction screen re-checks every interval', (
+      tester,
+    ) async {
+      var now = DateTime.utc(2026, 11, 19);
+      var lookups = 0;
+      var answer = '4.2.0';
+      final controller = await restricted(
+        latest: () async {
+          lookups++;
+          return answer;
+        },
+        now: () => now,
+      );
+      controller.start();
+      await tester.pump();
+      expect(lookups, 1);
+
+      now = now.add(const Duration(hours: 5, minutes: 59));
+      await tester.pump(const Duration(hours: 5, minutes: 59));
+      expect(lookups, 1);
+
+      answer = '4.1.0';
+      now = now.add(const Duration(minutes: 1));
+      await tester.pump(const Duration(minutes: 1));
+      expect(lookups, 2);
+      expect(controller.requiredVersion.value, isNull);
+      controller.dispose();
     });
   });
 }

@@ -403,23 +403,36 @@ UpdateSource updateSourceFor(TargetPlatform platform) => switch (platform) {
 }
 
 /// The Play versionCode to require, only when Play offers an update to this
-/// installation. Sideloaded builds make the lookup throw, which means no limit.
+/// installation. When Play offers none, the installed versionCode is returned
+/// so a stored requirement (e.g. from a halted rollout) is lifted. Sideloaded
+/// builds make the lookup throw, which means no answer: nothing changes.
 Future<String?> playRequiredVersionCode({
+  required Future<String> Function() installedVersionCode,
   Future<AppUpdateInfo> Function()? checkForUpdate,
 }) async {
   try {
     final info = await (checkForUpdate ?? InAppUpdate.checkForUpdate)();
-    return playRequirement(info.updateAvailability, info.availableVersionCode);
+    return playRequirement(
+      info.updateAvailability,
+      info.availableVersionCode,
+      await installedVersionCode(),
+    );
   } on Object {
     return null;
   }
 }
 
+/// Null means Play gave no usable answer, which neither sets nor lifts a limit.
 @visibleForTesting
-String? playRequirement(UpdateAvailability availability, int? versionCode) =>
-    availability == UpdateAvailability.updateAvailable && versionCode != null
-    ? '$versionCode'
-    : null;
+String? playRequirement(
+  UpdateAvailability availability,
+  int? versionCode,
+  String installed,
+) => switch (availability) {
+  UpdateAvailability.updateAvailable when versionCode != null => '$versionCode',
+  UpdateAvailability.updateNotAvailable => installed,
+  _ => null,
+};
 
 /// Android requirements are versionCodes; an unreadable one never restricts.
 bool isNewerVersionCode(String candidate, String current) {
