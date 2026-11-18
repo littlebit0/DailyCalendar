@@ -1998,16 +1998,26 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     if (category == null) {
       return;
     }
-    final categories = [
-      ...settings.categories.where((item) => item.id != category.id),
-      category,
-    ];
-    await _save(
-      settings.copyWith(categories: _normalizeCategories(categories)),
-      changedFrom: settings,
-      backup: false,
+    await _updateLatestSettings(
+      (latest) => latest.copyWith(
+        categories: _normalizeCategories([
+          ...latest.categories.where((item) => item.id != category.id),
+          category,
+        ]),
+      ),
     );
     _queueCategoryBackup();
+  }
+
+  /// Changes the stored settings as they are now, not the snapshot this screen
+  /// was built with: a dialog may have been open while a sync merged changes.
+  Future<void> _updateLatestSettings(
+    AppSettings Function(AppSettings latest) update,
+  ) async {
+    final repository = ref.read(settingsRepositoryProvider);
+    final settingsNotifier = ref.read(appSettingsProvider.notifier);
+    await repository.updateLatest(update);
+    settingsNotifier.state = repository.load();
   }
 
   Future<void> _setCategoryVisible(
@@ -2053,8 +2063,21 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     final failureMessage = context.tr('선택을 저장하지 못했습니다. 다시 시도해 주세요.');
     _categoryReorderSaveQueue = _categoryReorderSaveQueue.then((_) async {
       try {
-        await repository.save(updated, changedFrom: settings);
+        // Reorder the list as stored now; a category merged since this screen
+        // was built keeps its place after the reordered ones.
+        final order = [for (final item in categories) item.id];
+        await repository.updateLatest((latest) {
+          final byId = {for (final item in latest.categories) item.id: item};
+          return latest.copyWith(
+            categories: [
+              for (final id in order) ?byId[id],
+              for (final item in latest.categories)
+                if (!order.contains(item.id)) item,
+            ],
+          );
+        });
         if (revision == _categoryReorderRevision) {
+          settingsState.state = repository.load();
           unawaited(syncService.syncPendingChangesNow().catchError((_) {}));
         }
       } on Object {
@@ -2085,19 +2108,28 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     if (updatedCategory == null) {
       return;
     }
-    final categories = settings.categories
-        .map((item) => item.id == category.id ? updatedCategory : item)
-        .toList();
-    final hiddenCategoryIds = settings.hiddenCategoryIds
-        .map((id) => id == category.id ? updatedCategory.id : id)
-        .toSet()
-        .toList();
-    final updatedSettings = settings.copyWith(
-      categories: _normalizeCategories(categories),
-      hiddenCategoryIds: hiddenCategoryIds,
+    // Replaces [from] with [to] in the list and hidden ids as stored now.
+    AppSettings replace(
+      AppSettings latest,
+      EventCategory from,
+      EventCategory to,
+    ) => latest.copyWith(
+      categories: _normalizeCategories([
+        for (final item in latest.categories) item.id == from.id ? to : item,
+      ]),
+      hiddenCategoryIds: latest.hiddenCategoryIds
+          .map((id) => id == from.id ? to.id : id)
+          .toSet()
+          .toList(),
     );
     if (!mounted || blockedByRequiredUpdate(context, ref)) return;
-    await _save(updatedSettings, changedFrom: settings, backup: false);
+    var found = false;
+    await _updateLatestSettings((latest) {
+      found = latest.categories.any((item) => item.id == category.id);
+      return replace(latest, category, updatedCategory);
+    });
+    // Deleted while the dialog was open: nothing to rename.
+    if (!found) return;
     try {
       await ref
           .read(eventCommandServiceProvider)
@@ -2106,7 +2138,9 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       // The event rows are updated in one transaction, so a failure leaves them
       // on the old category. Put the settings back so both stay consistent.
       try {
-        await _save(settings, changedFrom: updatedSettings, backup: false);
+        await _updateLatestSettings(
+          (latest) => replace(latest, updatedCategory, category),
+        );
       } on Object {
         /* the snackbar below still asks the user to retry */
       }
@@ -2155,18 +2189,15 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     if (confirmed != true) {
       return;
     }
-    final categories = settings.categories
-        .where((item) => item.id != category.id)
-        .toList();
-    await _save(
-      settings.copyWith(
-        categories: _normalizeCategories(categories),
-        hiddenCategoryIds: settings.hiddenCategoryIds
+    await _updateLatestSettings(
+      (latest) => latest.copyWith(
+        categories: _normalizeCategories(
+          latest.categories.where((item) => item.id != category.id).toList(),
+        ),
+        hiddenCategoryIds: latest.hiddenCategoryIds
             .where((id) => id != category.id)
             .toList(),
       ),
-      changedFrom: settings,
-      backup: false,
     );
     _queueCategoryBackup();
   }
