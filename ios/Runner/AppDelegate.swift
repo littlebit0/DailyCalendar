@@ -11,6 +11,30 @@ import CryptoKit
 import EventKit
 import AppIntents
 
+// BEGIN ALARM TEXT
+/// AlarmKit button and countdown wording in the app's four languages (#921).
+struct DailyAlarmText {
+  let language: DailySiriLanguage
+
+  private func localized(_ ko: String, _ en: String, _ ja: String, _ zh: String) -> String {
+    switch language {
+    case .korean: return ko
+    case .english: return en
+    case .japanese: return ja
+    case .traditionalChinese: return zh
+    }
+  }
+
+  /// Passed to the Live Activity so it uses the same language.
+  var localeTag: String { localized("ko", "en", "ja", "zh-Hant") }
+  var stop: String { localized("중지", "Stop", "停止", "停止") }
+  var untilSnoozeEnds: String { localized("다시 알림까지", "Until the next alert", "再通知まで", "距離再次提醒") }
+  func snoozeAfter(_ minutes: Int) -> String {
+    localized("\(minutes)분 후 다시 알림", "Snooze for \(minutes) min", "\(minutes)分後に再通知", "\(minutes) 分鐘後再次提醒")
+  }
+}
+// END ALARM TEXT
+
 private final class DailyAppleWidgets {
   static let channelName = "daily/apple_widgets"
   static let appGroup = "group.com.littlebit0.daily.widgets"
@@ -742,6 +766,10 @@ private final class DailyAlarmKit {
 
     let memo = (arguments["memo"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines)
     let visibleMemo = memo.flatMap { $0.isEmpty ? nil : String($0.prefix(80)) }
+    // The app language; without it the alarm wording follows the device language.
+    let language = DailySiriLanguage.resolve(
+      (arguments["localeTag"] as? String) ?? Locale.preferredLanguages.first
+    )
     let reconcile = call.method == "reconcile"
     Task { @MainActor in
       do {
@@ -756,7 +784,7 @@ private final class DailyAlarmKit {
         var seen = Set<Int64>()
         for fireAtMilliseconds in fireTimes where seen.insert(fireAtMilliseconds).inserted {
           let fireDate = Date(timeIntervalSince1970: Double(fireAtMilliseconds) / 1000)
-          let fingerprint = sourceFingerprint(fireAtMilliseconds, title, memo, snoozeMinutes)
+          let fingerprint = sourceFingerprint(fireAtMilliseconds, title, memo, snoozeMinutes, language)
           if reconcile, !legacyUsed, existing.contains(legacyID) {
             let previous = UserDefaults.standard.string(forKey: fingerprintKey(legacyID))
             if previous == fingerprint || (previous == nil && fireDate <= now) {
@@ -784,7 +812,7 @@ private final class DailyAlarmKit {
           try? AlarmManager.shared.cancel(id: alarm.id)
           _ = try await AlarmManager.shared.schedule(
             id: alarm.id,
-            configuration: configuration(title: title, memo: visibleMemo, snoozeMinutes: snoozeMinutes, fireDate: alarm.fireDate)
+            configuration: configuration(title: title, memo: visibleMemo, snoozeMinutes: snoozeMinutes, language: language, fireDate: alarm.fireDate)
           )
           UserDefaults.standard.set(alarm.fingerprint, forKey: fingerprintKey(alarm.id))
           scheduled.insert(alarm.id)
@@ -803,11 +831,13 @@ private final class DailyAlarmKit {
     title: String,
     memo visibleMemo: String?,
     snoozeMinutes: Int,
+    language: DailySiriLanguage,
     fireDate: Date
   ) -> AlarmManager.AlarmConfiguration<DailyAlarmMetadata> {
     let displayTitle = visibleMemo.map { "\(title)\n\($0)" } ?? title
+    let text = DailyAlarmText(language: language)
     let secondaryButton = AlarmButton(
-      text: "\(snoozeMinutes)분 후 다시 알림",
+      text: LocalizedStringResource(stringLiteral: text.snoozeAfter(snoozeMinutes)),
       textColor: .white,
       systemImageName: "clock.arrow.circlepath"
     )
@@ -820,7 +850,7 @@ private final class DailyAlarmKit {
       )
     } else {
       let stopButton = AlarmButton(
-        text: "중지",
+        text: LocalizedStringResource(stringLiteral: text.stop),
         textColor: .white,
         systemImageName: "stop.circle"
       )
@@ -832,10 +862,12 @@ private final class DailyAlarmKit {
       )
     }
     let countdown = AlarmPresentation.Countdown(
-      title: "다시 알림까지",
+      title: LocalizedStringResource(stringLiteral: text.untilSnoozeEnds),
       pauseButton: nil
     )
-    let metadata = DailyAlarmMetadata(title: title, memo: visibleMemo)
+    let metadata = DailyAlarmMetadata(
+      title: title, memo: visibleMemo, snoozeMinutes: snoozeMinutes, localeTag: text.localeTag
+    )
     let attributes = AlarmAttributes(
       presentation: AlarmPresentation(alert: alert, countdown: countdown),
       metadata: metadata,
@@ -852,8 +884,17 @@ private final class DailyAlarmKit {
     )
   }
 
-  private static func sourceFingerprint(_ fireAtMilliseconds: Int64, _ title: String, _ memo: String?, _ snoozeMinutes: Int) -> String {
-    let data = (try? JSONSerialization.data(withJSONObject: [fireAtMilliseconds, title, memo ?? "", snoozeMinutes])) ?? Data()
+  private static func sourceFingerprint(
+    _ fireAtMilliseconds: Int64, _ title: String, _ memo: String?, _ snoozeMinutes: Int,
+    _ language: DailySiriLanguage
+  ) -> String {
+    // Alarms scheduled before the wording was localized are Korean and have no
+    // language in their fingerprint. Korean keeps that form so they still match;
+    // any other language differs and the alarm is rescheduled with its wording.
+    var source: [Any] = [fireAtMilliseconds, title, memo ?? "", snoozeMinutes]
+    let localeTag = DailyAlarmText(language: language).localeTag
+    if language != .korean { source.append(localeTag) }
+    let data = (try? JSONSerialization.data(withJSONObject: source)) ?? Data()
     return SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined()
   }
 

@@ -124,6 +124,29 @@ void main() {
         },
       );
 
+      test('passes the app language tag for the alarm wording', () async {
+        MethodCall? call;
+        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+            .setMockMethodCallHandler(channel, (methodCall) async {
+              if (methodCall.method == 'authorizationState') {
+                return 'authorized';
+              }
+              call = methodCall;
+              return null;
+            });
+        final event = _event(
+          startAt: DateTime.now().add(const Duration(hours: 2)),
+          alarmEnabled: true,
+        );
+
+        await NativeAlarmService(
+          channel: channel,
+          localeTag: () => 'ja',
+        ).scheduleEventAlarm(event);
+
+        expect((call?.arguments as Map)['localeTag'], 'ja');
+      });
+
       test('does not schedule an alarm for a recurring event', () async {
         var called = false;
         TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
