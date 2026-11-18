@@ -239,6 +239,24 @@ void main() {
     },
   );
 
+  test('iOS Runner declares its UserDefaults use (#922)', () async {
+    final manifest = await _readNormalized('ios/Runner/PrivacyInfo.xcprivacy');
+    expect(
+      manifest,
+      contains('<string>NSPrivacyAccessedAPICategoryUserDefaults</string>'),
+    );
+    expect(manifest, contains('<string>CA92.1</string>'));
+    final project = await _readNormalized(
+      'ios/Runner.xcodeproj/project.pbxproj',
+    );
+    // In the Runner target's Resources phase, so it lands in Runner.app.
+    final resources = RegExp(
+      r'97C146EC1CF9000F007C117D /\* Resources \*/ = \{.*?files = \((.*?)\);',
+      dotAll: true,
+    ).firstMatch(project)!.group(1)!;
+    expect(resources, contains('PrivacyInfo.xcprivacy in Resources'));
+  });
+
   test(
     'Apple widgets take the app version from the Flutter build (#956)',
     () async {
