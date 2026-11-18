@@ -12,6 +12,7 @@ import 'app/startup_gate.dart';
 import 'core/diagnostics/startup_timing.dart';
 import 'core/analytics/privacy_analytics_service.dart';
 import 'core/di/app_providers.dart';
+import 'core/localization/traditional_chinese_date_symbols.dart';
 import 'core/settings/settings_repository.dart';
 import 'core/support/error_report_service.dart';
 import 'core/update/app_update_service.dart';
@@ -31,6 +32,7 @@ Future<Widget> _initializeApplication() async {
     initializeDateFormatting('ja'),
     initializeDateFormatting('zh_TW'),
   ]);
+  registerTraditionalChineseDateSymbols();
   final preferences = await StartupTiming.measure(
     StartupStage.settings,
     SharedPreferences.getInstance,
