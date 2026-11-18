@@ -540,13 +540,14 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                           changedFrom: settings,
                         ),
                         onCustom: () async {
-                          final value = await _showNumberDialog(
+                          final value = await showSettingsNumberDialog(
                             context: context,
                             title: context.tr('기본 알림 직접 입력'),
                             label: context.tr('몇 분 전에 알릴까요?'),
                             initialValue: settings.defaultReminderMinutes,
+                            range: customReminderMinutesRange,
                           );
-                          if (value != null && value >= 0) {
+                          if (value != null) {
                             await _save(
                               settings.copyWith(
                                 defaultReminderMinutesList:
@@ -644,11 +645,12 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                           changedFrom: settings,
                         ),
                         onCustom: () async {
-                          final value = await _showNumberDialog(
+                          final value = await showSettingsNumberDialog(
                             context: context,
                             title: context.tr('D-day 알림 직접 입력'),
                             label: context.tr('D-day 기준 일수. 예: -7, 0'),
                             initialValue: -7,
+                            range: customDdayOffsetRange,
                           );
                           if (value != null) {
                             final offsets = {
@@ -4663,16 +4665,32 @@ Future<EventCategory?> _showCategoryDialog(
   );
 }
 
-Future<int?> _showNumberDialog({
+/// Custom reminder lead time: up to four weeks before the event (#914).
+@visibleForTesting
+const customReminderMinutesRange = (min: 0, max: 40320);
+
+/// Custom D-day reminder: up to a year before or after the day (#914).
+@visibleForTesting
+const customDdayOffsetRange = (min: -365, max: 365);
+
+/// Asks for a whole number inside [range]. Anything else keeps the dialog open
+/// with an error instead of closing as if the entry had been cancelled.
+@visibleForTesting
+Future<int?> showSettingsNumberDialog({
   required BuildContext context,
   required String title,
   required String label,
   required int initialValue,
+  required ({int min, int max}) range,
 }) async {
   return showDialog<int>(
     context: context,
-    builder: (context) =>
-        _NumberDialog(title: title, label: label, initialValue: initialValue),
+    builder: (context) => _NumberDialog(
+      title: title,
+      label: label,
+      initialValue: initialValue,
+      range: range,
+    ),
   );
 }
 
@@ -4844,11 +4862,13 @@ class _NumberDialog extends StatefulWidget {
     required this.title,
     required this.label,
     required this.initialValue,
+    required this.range,
   });
 
   final String title;
   final String label;
   final int initialValue;
+  final ({int min, int max}) range;
 
   @override
   State<_NumberDialog> createState() => _NumberDialogState();
@@ -4856,11 +4876,28 @@ class _NumberDialog extends StatefulWidget {
 
 class _NumberDialogState extends State<_NumberDialog> {
   late final TextEditingController _controller;
+  String? _error;
 
   @override
   void initState() {
     super.initState();
     _controller = TextEditingController(text: '${widget.initialValue}');
+  }
+
+  void _apply() {
+    final value = int.tryParse(_controller.text.trim());
+    final range = widget.range;
+    if (value == null || value < range.min || value > range.max) {
+      setState(() {
+        _error = context.tr(
+          '{min}~{max} 사이의 숫자를 입력하세요',
+          args: {'min': range.min, 'max': range.max},
+        );
+      });
+      return;
+    }
+    FocusManager.instance.primaryFocus?.unfocus();
+    Navigator.of(context).pop(value);
   }
 
   @override
@@ -4884,9 +4921,15 @@ class _NumberDialogState extends State<_NumberDialog> {
         child: TextField(
           controller: _controller,
           autofocus: true,
-          keyboardType: TextInputType.number,
+          // The plain iOS number pad has no minus key.
+          keyboardType: TextInputType.numberWithOptions(
+            signed: widget.range.min < 0,
+          ),
+          onSubmitted: (_) => _apply(),
           decoration: InputDecoration(
             labelText: widget.label,
+            errorText: _error,
+            errorMaxLines: 2,
             prefixIcon: const Icon(Icons.pin_outlined),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
           ),
@@ -4901,11 +4944,7 @@ class _NumberDialogState extends State<_NumberDialog> {
           child: Text(context.tr('취소')),
         ),
         FilledButton(
-          onPressed: () {
-            final value = int.tryParse(_controller.text.trim());
-            FocusManager.instance.primaryFocus?.unfocus();
-            Navigator.of(context).pop(value);
-          },
+          onPressed: _apply,
           style: FilledButton.styleFrom(
             backgroundColor: DailyUi.primary,
             foregroundColor: Colors.white,
