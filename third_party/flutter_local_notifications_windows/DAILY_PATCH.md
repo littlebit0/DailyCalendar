@@ -14,3 +14,6 @@ Only Daily issue #222:
   `false` instead of throwing across the FFI boundary.
 - `zonedSchedule` and `zonedScheduleRawXml` throw a `StateError` when the native schedule
   returns `false` (invalid XML or a refused time) instead of ignoring it.
+
+Files that differ from upstream (#972; update this list when re-vendoring):
+- `src/ffi_api.h`, `src/ffi_api.cpp`, `lib/src/ffi/bindings.dart`, `lib/src/plugin/ffi.dart`: #222 (above).

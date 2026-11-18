@@ -10,3 +10,6 @@ the container and GUID as before. Upstream 2.3.0 (latest at vendoring) freed
 only the container, leaking one OS allocation per lookup; the default secure
 storage looks the path up on every read and write.
 Lint: `win32_wrappers.dart` also ignores `constant_identifier_names` for the Windows API constant names.
+
+Files that differ from upstream (#972; update this list when re-vendoring):
+- `lib/src/path_provider_windows_real.dart`, `lib/src/win32_wrappers.dart`: #210 (above).

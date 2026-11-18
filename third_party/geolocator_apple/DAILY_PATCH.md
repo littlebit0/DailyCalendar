@@ -20,3 +20,6 @@ native handler stops the shared one-time manager only when that id still owns it
 one that took over the manager. The id is local to the app run and never leaves the
 device. The native behaviour is covered by `tool/tests/geolocator_apple_handler_test.m`
 (run by `tool/tests/test_geolocator_apple_cancel.py`).
+
+Files that differ from upstream (#972; update this list when re-vendoring):
+- `darwin/.../GeolocatorPlugin.m`, `darwin/.../Handlers/GeolocationHandler.m`, `darwin/.../include/geolocator_apple/Handlers/GeolocationHandler.h`, `lib/src/geolocator_apple.dart`: #227 (above).

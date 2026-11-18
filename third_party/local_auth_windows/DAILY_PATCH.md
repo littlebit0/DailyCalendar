@@ -14,3 +14,7 @@ and passes equivalent protection. Do not edit the Pub cache to deploy this fix.
 Native tests: configure the Windows build with
 `-Dinclude_local_auth_windows_tests=ON`, build `local_auth_windows_test`, then run
 CTest in `build/windows/x64/plugins/local_auth_windows` with configuration Debug.
+
+Files that differ from upstream (#972; update this list when re-vendoring):
+- `windows/local_auth_plugin.cpp`, `windows/test/local_auth_plugin_test.cpp`: #218 (above).
+- `windows/CMakeLists.txt`: the native test dependency is configured with `CMAKE_POLICY_VERSION_MINIMUM 3.5` so it builds with CMake 4, and test discovery uses `DISCOVERY_TIMEOUT 60` (CI build fixes, no issue).
