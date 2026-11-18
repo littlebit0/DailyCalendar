@@ -326,9 +326,9 @@
 				33CC10EB2044A3C60003C045 /* Resources */,
 				33CC110E2044A8840003C045 /* Bundle Framework */,
 				3399D490228B24CF009A79C7 /* ShellScript */,
-				3A5D66A12C04D5A100A1B2C3 /* Strip Extended Attributes */,
 				69C4E48B7B388D47B779D001 /* Embed App Extensions */,
 				A585C04C11F255188F3030BA /* [CP] Embed Pods Frameworks */,
+				3A5D66A12C04D5A100A1B2C3 /* Strip Extended Attributes */,
 			);
 			buildRules = (
 			);
