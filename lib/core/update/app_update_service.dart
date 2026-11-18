@@ -388,9 +388,12 @@ bool isNewerVersionCode(String candidate, String current) {
       candidateCode > currentCode;
 }
 
+/// An unreadable version on either side never counts as newer, so a build
+/// that cannot read its own version is not restricted (#890).
 bool isNewerVersion(String candidate, String current) {
   final candidateParts = _versionParts(candidate);
   final currentParts = _versionParts(current);
+  if (candidateParts == null || currentParts == null) return false;
   for (var index = 0; index < 3; index++) {
     if (candidateParts[index] != currentParts[index]) {
       return candidateParts[index] > currentParts[index];
@@ -399,11 +402,9 @@ bool isNewerVersion(String candidate, String current) {
   return false;
 }
 
-List<int> _versionParts(String version) {
+List<int>? _versionParts(String version) {
   final match = RegExp(r'^(\d+)(?:\.(\d+))?(?:\.(\d+))?').firstMatch(version);
-  if (match == null) {
-    return const [0, 0, 0];
-  }
+  if (match == null) return null;
   return [
     int.parse(match.group(1)!),
     int.tryParse(match.group(2) ?? '') ?? 0,
