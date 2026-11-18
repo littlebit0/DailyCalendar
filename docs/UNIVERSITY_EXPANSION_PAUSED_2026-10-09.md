@@ -95,7 +95,7 @@ Pending test files:
 4. Once required checks pass, affected MacDebug build and asset/signature/identity checks. Successful data backup, then update existing `~/Applications/Daily Test.app` in place and verify installed hashes/signature. Preserve data/accounts/keychain and production app; no launch. Do not use `tool/run_macos.sh` (deletes and launches).
 5. Update installed support status only after verified install. Keep unavailable university sources explicitly pending; integration, test acceptance, build/install and device acceptance are distinct.
 
-SDK `/Users/kimhwi/Documents/Codex/2026-05-26/flutter-sdk`; wrapper `tool/flutter.sh --no-version-check`, `--no-pub`. Parent owns SDK coordination. Old helpers in `work/university-research/resume-tools-20261009-paused/` have hardcoded dates/checkpoints; inspect and derive before reuse. No Windows host, iOS/Android build or device acceptance this resume.
+SDK `~/Documents/Codex/2026-05-26/flutter-sdk`; wrapper `tool/flutter.sh --no-version-check`, `--no-pub`. Parent owns SDK coordination. Old helpers in `work/university-research/resume-tools-20261009-paused/` have hardcoded dates/checkpoints; inspect and derive before reuse. No Windows host, iOS/Android build or device acceptance this resume.
 
 ## Historical evidence
 
