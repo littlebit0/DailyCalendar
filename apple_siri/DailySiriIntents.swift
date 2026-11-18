@@ -4233,13 +4233,14 @@ struct DailySignalCommandIntent: AppIntent {
 
 @available(iOS 16.0, macOS 13.0, *)
 struct DailyAppShortcuts: AppShortcutsProvider {
+  // Development-language (English) wording only. The Korean, Japanese and
+  // Traditional Chinese phrases and titles are in AppShortcuts.xcstrings (#958).
   static var appShortcuts: [AppShortcut] {
     AppShortcut(
       intent: AddDailyEventIntent(),
       phrases: [
         "Add an event in \(.applicationName)",
-        "\(.applicationName) 앱에 일정 추가",
-        "\(.applicationName)에서 일정 만들어줘",
+        "Create an event with \(.applicationName)",
       ],
       shortTitle: "Add Event",
       systemImageName: "calendar.badge.plus"
@@ -4248,8 +4249,7 @@ struct DailyAppShortcuts: AppShortcutsProvider {
       intent: GetTodayDailyEventsIntent(),
       phrases: [
         "Show today's events in \(.applicationName)",
-        "\(.applicationName) 앱에서 오늘 일정 알려줘",
-        "\(.applicationName)에서 오늘 스케줄 확인",
+        "Check today's schedule in \(.applicationName)",
       ],
       shortTitle: "Today's Events",
       systemImageName: "calendar"
@@ -4258,8 +4258,7 @@ struct DailyAppShortcuts: AppShortcutsProvider {
       intent: GetTomorrowDailyEventsIntent(),
       phrases: [
         "Show tomorrow's events in \(.applicationName)",
-        "\(.applicationName) 앱에서 내일 일정 알려줘",
-        "\(.applicationName)에서 내일 스케줄 확인",
+        "Check tomorrow's schedule in \(.applicationName)",
       ],
       shortTitle: "Tomorrow's Events",
       systemImageName: "calendar"
@@ -4268,8 +4267,7 @@ struct DailyAppShortcuts: AppShortcutsProvider {
       intent: GetDailyEventsOnDateIntent(),
       phrases: [
         "Show events on a date in \(.applicationName)",
-        "\(.applicationName) 앱에서 지정 날짜 일정 알려줘",
-        "\(.applicationName)에서 날짜별 일정 확인",
+        "Check events by date in \(.applicationName)",
       ],
       shortTitle: "Events on Date",
       systemImageName: "calendar.badge.clock"
@@ -4278,8 +4276,7 @@ struct DailyAppShortcuts: AppShortcutsProvider {
       intent: GetNextDailyEventIntent(),
       phrases: [
         "What's next in \(.applicationName)",
-        "\(.applicationName) 앱에서 다음 일정 알려줘",
-        "\(.applicationName)에서 가장 가까운 일정 알려줘",
+        "Show my nearest event in \(.applicationName)",
       ],
       shortTitle: "Next Event",
       systemImageName: "clock"
@@ -4288,8 +4285,7 @@ struct DailyAppShortcuts: AppShortcutsProvider {
       intent: SearchDailyEventsIntent(),
       phrases: [
         "Search events in \(.applicationName)",
-        "\(.applicationName) 앱에서 일정 검색",
-        "\(.applicationName)에서 일정 찾아줘",
+        "Find an event in \(.applicationName)",
       ],
       shortTitle: "Search Events",
       systemImageName: "magnifyingglass"
@@ -4298,8 +4294,7 @@ struct DailyAppShortcuts: AppShortcutsProvider {
       intent: UpdateDailyEventIntent(),
       phrases: [
         "Update an event in \(.applicationName)",
-        "\(.applicationName) 앱에서 일정 수정",
-        "\(.applicationName)에서 일정 바꿔줘",
+        "Change an event in \(.applicationName)",
       ],
       shortTitle: "Update Event",
       systemImageName: "calendar.badge.exclamationmark"
@@ -4308,8 +4303,7 @@ struct DailyAppShortcuts: AppShortcutsProvider {
       intent: DeleteDailyEventIntent(),
       phrases: [
         "Delete an event in \(.applicationName)",
-        "\(.applicationName) 앱에서 일정 삭제",
-        "\(.applicationName)에서 일정 지워줘",
+        "Remove an event from \(.applicationName)",
       ],
       shortTitle: "Delete Event",
       systemImageName: "calendar.badge.minus"
@@ -4318,8 +4312,7 @@ struct DailyAppShortcuts: AppShortcutsProvider {
       intent: GetDailyDdayEventsIntent(),
       phrases: [
         "Show D-day events in \(.applicationName)",
-        "\(.applicationName) 앱에서 D-day 알려줘",
-        "\(.applicationName)에서 디데이 일정 확인",
+        "Check D-days in \(.applicationName)",
       ],
       shortTitle: "D-day Events",
       systemImageName: "flag"
@@ -4328,8 +4321,7 @@ struct DailyAppShortcuts: AppShortcutsProvider {
       intent: DailySignalCommandIntent(),
       phrases: [
         "Run Signal in \(.applicationName)",
-        "\(.applicationName)에서 시그널 실행",
-        "\(.applicationName) 시그널",
+        "\(.applicationName) Signal",
       ],
       shortTitle: "Signal",
       systemImageName: "waveform"
