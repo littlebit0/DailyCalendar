@@ -213,6 +213,15 @@ FlutterWindow::MessageHandler(HWND hwnd, UINT const message,
         return 0;
       }
       break;
+    // The installer's Restart Manager (CloseApplications=yes) and sign-out
+    // ask through these; WM_CLOSE alone only hides the window to the tray.
+    case WM_QUERYENDSESSION:
+      return TRUE;
+    case WM_ENDSESSION:
+      if (wparam) {
+        ExitFromTray();
+      }
+      return 0;
     case WM_COMMAND:
       switch (LOWORD(wparam)) {
         case kTrayOpenCommand:

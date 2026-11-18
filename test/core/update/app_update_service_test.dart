@@ -274,6 +274,7 @@ void main() {
         installerPath: r"C:\temp\a'b\setup.exe",
         expectedSha256: 'abc',
         readyPath: r'C:\temp\ready',
+        resultPath: r'C:\temp\daily-update-result.txt',
       );
       expect(
         script.indexOf(r'$app.WaitForExit()'),
@@ -286,6 +287,24 @@ void main() {
       expect(script, contains("a''b"));
       expect(script, contains('/NOCLOSEAPPLICATIONS'));
       expect(script, isNot(contains('Stop-Process')));
+      // #935: the exit code is recorded and the download folder removed.
+      expect(script, contains('-Wait -PassThru'));
+      expect(script, contains(r'$setup.ExitCode'));
+      expect(script, contains(r"'C:\temp\daily-update-result.txt'"));
+      // Only a createTemp('daily-update-') folder is ever deleted.
+      expect(script, isNot(contains('Remove-Item')));
+      final cleanupScript = windowsDeferredInstallScript(
+        processId: 123,
+        installerPath: r"C:\Temp\daily-update-a'b\setup.exe",
+        expectedSha256: 'abc',
+        readyPath: r'C:\Temp\daily-update-a\ready',
+        resultPath: r'C:\Temp\daily-update-result.txt',
+      );
+      final cleanup = cleanupScript.indexOf(
+        r"Remove-Item -LiteralPath 'C:\Temp\daily-update-a''b' -Recurse",
+      );
+      expect(cleanup, greaterThan(cleanupScript.indexOf('} finally {')));
+      expect(cleanup, greaterThan(cleanupScript.indexOf('Start-Process')));
     },
   );
 
