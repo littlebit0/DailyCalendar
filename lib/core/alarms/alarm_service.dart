@@ -5,8 +5,15 @@ enum AlarmAuthorizationState { unsupported, notDetermined, denied, authorized }
 abstract interface class AlarmService {
   Future<AlarmAuthorizationState> authorizationState();
 
-  Future<AlarmAuthorizationState> requestAuthorization();
+  /// [openSettings] marks a request the user made by turning an alarm on.
+  /// Android then opens the notification settings when asking cannot help.
+  Future<AlarmAuthorizationState> requestAuthorization({
+    bool openSettings = false,
+  });
 
+  /// Replaces the alarms of [event], and removes them when it should have
+  /// none. Callers do not cancel first, so a failed schedule keeps the
+  /// previous alarms.
   Future<void> scheduleEventAlarm(CalendarEvent event);
 
   Future<void> cancelEventAlarm(String eventId);
@@ -22,8 +29,9 @@ class UnsupportedAlarmService implements AlarmService {
       AlarmAuthorizationState.unsupported;
 
   @override
-  Future<AlarmAuthorizationState> requestAuthorization() async =>
-      AlarmAuthorizationState.unsupported;
+  Future<AlarmAuthorizationState> requestAuthorization({
+    bool openSettings = false,
+  }) async => AlarmAuthorizationState.unsupported;
 
   @override
   Future<void> scheduleEventAlarm(CalendarEvent event) async {}

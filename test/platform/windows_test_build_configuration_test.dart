@@ -53,7 +53,13 @@ void main() {
     expect(script, contains(r'$sourceVersion.IsDebug -ne $false'));
     expect(script, contains("Join-Path \$programsRoot 'DailyCalendar Test'"));
     expect(script, contains("'DailyCalendar Test.exe'"));
-    expect(script, contains("'C:\\Program Files\\Daily'"));
+    // installer.iss: DefaultDirName={autopf}\DailyCalendar (#936).
+    expect(script, contains(r"Join-Path $env:ProgramFiles 'DailyCalendar')"));
+    expect(script, isNot(contains(r"'C:\Program Files\Daily'")));
+    expect(
+      File('tool/windows/installer.iss').readAsStringSync(),
+      contains(r'DefaultDirName={autopf}\DailyCalendar'),
+    );
     expect(script, contains('DailyCalendar Test.lnk'));
     expect(script, contains('Refusing to target the production installation'));
     expect(script, contains(r'$productionHashBefore'));
@@ -61,5 +67,21 @@ void main() {
     expect(script, contains("'.DailyCalendar Test.staging'"));
     expect(script, contains("'.DailyCalendar Test.backup'"));
     expect(script, contains('Rollback install root'));
+    // A failed backup move must leave the previous test app in place (#936).
+    final backupMove = script.indexOf(
+      r'Move-Item -LiteralPath $installRoot -Destination $backupRoot',
+    );
+    final moved = script.indexOf(r'$previousMoved = $true');
+    final installed = script.indexOf(r'$newInstalled = $true');
+    expect(backupMove, greaterThan(0));
+    expect(moved, greaterThan(backupMove));
+    expect(installed, greaterThan(moved));
+    expect(
+      script,
+      contains(
+        r'if ($newInstalled -and (Test-Path -LiteralPath $installRoot))',
+      ),
+    );
+    expect(script, contains(r'if ($previousMoved -and'));
   });
 }

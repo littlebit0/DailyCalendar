@@ -1172,6 +1172,99 @@ void main() {
     },
   );
 
+  group('unreadable local document (#867)', () {
+    Future<void> uploadEvent(_Device device, String id) async {
+      final event = CalendarEvent(
+        id: id,
+        title: id,
+        startAt: DateTime(2026, 9, 25, 9),
+        endAt: DateTime(2026, 9, 25, 10),
+        allDay: false,
+        category: EventCategory.basic,
+        colorValue: EventCategory.basic.colorValue,
+        createdAt: DateTime.utc(2026, 9, 25),
+        updatedAt: DateTime.utc(2026, 9, 25),
+        syncStatus: 'pending',
+      );
+      await device.events.save(event);
+      await device.service.queueEventUpsert(event);
+      await device.service.syncPendingChangesNow();
+    }
+
+    for (final document in ['timetable', 'imogi']) {
+      final timetable = document == 'timetable';
+      final file = timetable ? _timetableFile : 'daily-sync-v2-imogi.json';
+      // The state a store is in after its saved value failed to load.
+      void setLoadError(_Device device, Object? error) => timetable
+          ? device.store.loadError = error
+          : device.settings.imogiStore.loadError = error;
+      Future<void> changeDocument(_Device device) async {
+        if (timetable) {
+          await device.store.save(_course('remote-course'));
+        } else {
+          await device.settings.imogiStore.add('원격 잊모기');
+        }
+        await device.service.syncPendingChangesNow();
+      }
+
+      test('resume, manual sync and backup go on without the unreadable '
+          '$document', () async {
+        final drive = _TimetableDrive();
+        final other = await _Device.create(drive);
+        final device = await _Device.create(drive);
+        await device.service.checkForRemoteChangesNow();
+        setLoadError(device, StateError('unreadable'));
+        drive.writes.clear();
+
+        await uploadEvent(other, 'resume');
+        await device.service.syncOnResume();
+        expect(await device.events.findById('resume'), isNotNull);
+        expect(device.service.statusNotifier.value.message, contains('건너뜀'));
+
+        await uploadEvent(other, 'manual');
+        await device.service.syncPendingChangesNow(restoreAfterBackup: true);
+        expect(await device.events.findById('manual'), isNotNull);
+
+        await uploadEvent(device, 'local');
+        expect(await device.events.pendingSyncEvents(), isEmpty);
+        expect(drive.writes, isNot(contains(file)));
+        // Logout still sees data that never reached Drive.
+        expect(await device.service.hasPendingChanges(), isTrue);
+      });
+
+      test('a remote $document change waits until the local one is readable '
+          'while events apply', () async {
+        final drive = _TimetableDrive();
+        final other = await _Device.create(drive);
+        final device = await _Device.create(drive);
+        await device.service.checkForRemoteChangesNow();
+        final cursor = device.settings.driveChangePageToken(device.auth.email);
+        await changeDocument(other);
+        await uploadEvent(other, 'with-document');
+        setLoadError(device, StateError('unreadable'));
+        drive.writes.clear();
+
+        await device.service.checkForRemoteChangesNow();
+        expect(await device.events.findById('with-document'), isNotNull);
+        expect(device.settings.driveChangePageToken(device.auth.email), cursor);
+        expect(drive.writes, isEmpty);
+
+        setLoadError(device, null);
+        await device.service.checkForRemoteChangesNow();
+        expect(
+          timetable
+              ? device.store.classes.map((course) => course.id)
+              : device.settings.imogiStore.items.map((item) => item.title),
+          [timetable ? 'remote-course' : '원격 잊모기'],
+        );
+        expect(
+          device.settings.driveChangePageToken(device.auth.email),
+          isNot(cursor),
+        );
+      });
+    }
+  });
+
   test('event templates sync through their own Drive document', () async {
     const file = 'daily-sync-v2-templates.json';
     final drive = _TimetableDrive();

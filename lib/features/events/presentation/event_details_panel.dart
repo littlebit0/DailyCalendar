@@ -22,9 +22,11 @@ import '../../../core/theme/calendar_date_color.dart';
 import '../../../core/theme/daily_ui.dart';
 import '../../../core/weather/weather_widgets.dart';
 import '../../calendar/widgets/calendar_event_drag_layer.dart';
+import '../application/event_command_service.dart';
 import '../domain/calendar_event.dart';
 import '../domain/event_category.dart';
 import '../domain/event_draft.dart';
+import '../data/recurrence_expander.dart';
 import 'event_editor_dialog.dart';
 import 'event_template_actions.dart';
 import 'lms_event_status.dart';
@@ -489,10 +491,19 @@ class EventDetailsPanel extends ConsumerWidget {
     }
 
     if (!event.isRecurring) {
-      await commandService.save(
-        _applyDraft(event, draft),
-        preserveCategory: !draft.categoryChanged,
-      );
+      try {
+        await commandService.save(
+          _applyDraft(event, draft),
+          preserveCategory: !draft.categoryChanged,
+          editDraft: draft,
+        );
+      } on EventEditTargetGone {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(context.tr('일정이 변경되었습니다. 다시 확인해 주세요.'))),
+          );
+        }
+      }
       return;
     }
     if (!context.mounted) {
@@ -593,7 +604,19 @@ class EventDetailsPanel extends ConsumerWidget {
         case _RecurringChangeScope.onlyThis:
           await commandService.save(_excludeOccurrence(base, event.startAt));
         case _RecurringChangeScope.future:
-          await commandService.save(_endBefore(base, event.startAt));
+          final ended = _endBefore(base, event.startAt);
+          // Nothing before this occurrence (first one, or the earlier ones
+          // were excluded): a series without occurrences must not stay behind.
+          final remaining = RecurrenceExpander().expand(
+            ended,
+            base.startAt.subtract(const Duration(microseconds: 1)),
+            event.startAt,
+          );
+          if (remaining.isEmpty) {
+            await commandService.delete(event.id);
+          } else {
+            await commandService.save(ended);
+          }
         case _RecurringChangeScope.all:
           await commandService.delete(event.id);
       }
@@ -623,11 +646,12 @@ class EventDetailsPanel extends ConsumerWidget {
   }
 
   CalendarEvent _endBefore(CalendarEvent base, DateTime occurrence) {
+    // A calendar day earlier, not 24 hours: the day before may have 23 hours.
     final until = DateTime(
       occurrence.year,
       occurrence.month,
-      occurrence.day,
-    ).subtract(const Duration(days: 1));
+      occurrence.day - 1,
+    );
     return base.copyWith(
       recurrence: base.recurrence.copyWith(until: until, clearCount: true),
     );
@@ -1815,9 +1839,7 @@ List<CalendarEvent> _eventsForDay(
   final start = DateTime(date.year, date.month, date.day);
   final end = shiftCalendarDateByDays(start, 1);
   return sortedCalendarEvents(
-    events.where(
-      (event) => calendarEventListedOnDay(event, start, end),
-    ),
+    events.where((event) => calendarEventListedOnDay(event, start, end)),
     priority: settings.calendarEventSortPriority,
     categoryOrder: settings.categories.map((category) => category.id).toList(),
     manualOrder:

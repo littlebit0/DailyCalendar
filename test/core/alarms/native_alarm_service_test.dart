@@ -124,23 +124,62 @@ void main() {
         },
       );
 
-      test('does not schedule an alarm for a recurring event', () async {
-        var called = false;
+      test(
+        'removes instead of schedules alarms of a recurring event',
+        () async {
+          final methods = <String>[];
+          TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+              .setMockMethodCallHandler(channel, (methodCall) async {
+                methods.add(methodCall.method);
+                return null;
+              });
+
+          await NativeAlarmService(channel: channel).scheduleEventAlarm(
+            _event(
+              startAt: DateTime.now().add(const Duration(hours: 2)),
+              alarmEnabled: true,
+              recurring: true,
+            ),
+          );
+
+          expect(methods, ['cancel']);
+        },
+      );
+
+      test('schedules without cancelling the previous alarms first', () async {
+        final methods = <String>[];
         TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
             .setMockMethodCallHandler(channel, (methodCall) async {
-              called = true;
+              methods.add(methodCall.method);
+              if (methodCall.method == 'authorizationState') {
+                return 'authorized';
+              }
+              if (methodCall.method == 'schedule') {
+                throw PlatformException(code: 'alarm_schedule_failed');
+              }
               return null;
             });
+        final service = NativeAlarmService(channel: channel);
 
-        await NativeAlarmService(channel: channel).scheduleEventAlarm(
+        await expectLater(
+          service.scheduleEventAlarm(
+            _event(
+              startAt: DateTime.now().add(const Duration(hours: 2)),
+              alarmEnabled: true,
+            ),
+          ),
+          throwsA(isA<PlatformException>()),
+        );
+        expect(methods, ['authorizationState', 'schedule']);
+
+        methods.clear();
+        await service.scheduleEventAlarm(
           _event(
-            startAt: DateTime.now().add(const Duration(hours: 2)),
+            startAt: DateTime.now().subtract(const Duration(hours: 2)),
             alarmEnabled: true,
-            recurring: true,
           ),
         );
-
-        expect(called, isFalse);
+        expect(methods, ['authorizationState', 'cancel']);
       });
 
       test('uses the selected alarm time for an all-day event', () async {
@@ -174,6 +213,28 @@ void main() {
       });
     });
   }
+
+  test('only Android receives the settings flag of a user request', () async {
+    final arguments = <Object?>[];
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(channel, (methodCall) async {
+          arguments.add(methodCall.arguments);
+          return 'denied';
+        });
+    final service = NativeAlarmService(channel: channel);
+
+    debugDefaultTargetPlatformOverride = TargetPlatform.android;
+    await service.requestAuthorization(openSettings: true);
+    await service.requestAuthorization();
+    debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+    await service.requestAuthorization(openSettings: true);
+
+    expect(arguments, [
+      {'openSettings': true},
+      {'openSettings': false},
+      null,
+    ]);
+  });
 
   test('uses the native alarm channel on macOS', () async {
     debugDefaultTargetPlatformOverride = TargetPlatform.macOS;

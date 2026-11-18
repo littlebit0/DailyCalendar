@@ -67,9 +67,22 @@ CalendarEvent shiftCalendarEventToDate(
         );
   return event.copyWith(
     startAt: shiftedStart,
-    endAt: shiftedStart.add(event.duration),
+    endAt: calendarEventEndForStart(event, shiftedStart),
   );
 }
+
+/// Where [event] ends once it starts at [start].
+///
+/// An all-day event keeps its length in calendar days: a day of 23 or 25
+/// hours (daylight saving) is still one day. A timed event keeps its elapsed
+/// duration.
+DateTime calendarEventEndForStart(CalendarEvent event, DateTime start) =>
+    event.allDay
+    ? shiftCalendarDateByDays(
+        event.endAt,
+        calendarDayDifference(start, event.startAt),
+      )
+    : start.add(event.duration);
 
 CalendarEvent shiftCalendarEventToStart(
   CalendarEvent event,
