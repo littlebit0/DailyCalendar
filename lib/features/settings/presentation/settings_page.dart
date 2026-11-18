@@ -1519,6 +1519,11 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text(context.tr(error.message))));
+    } on GoogleDriveAuthException catch (error) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(context.tr(error.message))));
     } finally {
       if (mounted) setState(() => _bugReportBusy = false);
     }

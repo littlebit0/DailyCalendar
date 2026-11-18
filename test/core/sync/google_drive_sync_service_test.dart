@@ -3396,6 +3396,37 @@ void main() {
     expect(service.statusNotifier.value.message, '동기화 실패');
   });
 
+  for (final timedOut in [true, false]) {
+    test('an auth failure is retried automatically only when it is '
+        'transient (#852): timedOut=$timedOut', () async {
+      SharedPreferences.setMockInitialValues({});
+      final preferences = await SharedPreferences.getInstance();
+      final authService = _FailingGoogleDriveAuthService(timedOut);
+      final service = _service(
+        authService: authService,
+        repository: _MemoryEventRepository(),
+        notificationService: _FakeNotificationService(),
+        preferences: preferences,
+        httpClient: _versionedClient(
+          (request) async => fail('no Drive request without headers'),
+        ),
+        automaticRetryDelays: const [
+          Duration(milliseconds: 1),
+          Duration(milliseconds: 1),
+        ],
+      );
+      addTearDown(service.dispose);
+
+      await expectLater(
+        service.checkForRemoteChangesNow(),
+        throwsA(isA<GoogleDriveAuthException>()),
+      );
+      await Future<void>.delayed(const Duration(milliseconds: 40));
+
+      expect(authService.calls, timedOut ? 3 : 1);
+    });
+  }
+
   test(
     'whenIdle waits for the running sync and the ones queued behind it',
     () async {
@@ -3754,6 +3785,21 @@ class _RecordingAnalytics extends NoopProductAnalytics {
 
   @override
   Future<void> record(AnalyticsRecord record) async => records.add(record);
+}
+
+class _FailingGoogleDriveAuthService extends _FakeGoogleDriveAuthService {
+  _FailingGoogleDriveAuthService(this.timedOut);
+
+  final bool timedOut;
+  var calls = 0;
+
+  @override
+  Future<Map<String, String>?> authorizationHeaders({
+    bool promptIfNecessary = false,
+  }) async {
+    calls++;
+    throw GoogleDriveAuthException('인증 실패', timedOut: timedOut);
+  }
 }
 
 class _MissingHeaderGoogleDriveAuthService extends _FakeGoogleDriveAuthService {
