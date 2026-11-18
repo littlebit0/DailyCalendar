@@ -186,6 +186,117 @@ void main() {
   // Run under a DST zone (e.g. TZ=America/New_York) to cover clock changes;
   // in zones without DST these still guard the plain calendar-date contract.
   // US DST in 2026 starts on 8 March and ends on 1 November.
+  group('RuleBasedScheduleParser everyday Korean phrases (#850)', () {
+    final parser = RuleBasedScheduleParser();
+    // Monday 11 May 2026.
+    final baseDate = DateTime(2026, 5, 11);
+    Future<dynamic> parse(String text, {DateTime? selected}) => parser.parse(
+      text,
+      baseDate: baseDate,
+      selectedDate: selected,
+      defaultReminderMinutes: 60,
+    );
+
+    test('"N시 반" is half past and leaves the title alone', () async {
+      final draft = (await parse('내일 오후 3시 반 미팅')).draft!;
+      expect(draft.startAt, DateTime(2026, 5, 12, 15, 30));
+      expect(draft.title, '미팅');
+
+      final joined = (await parse('내일 3시반에 미팅')).draft!;
+      expect(joined.startAt, DateTime(2026, 5, 12, 3, 30));
+
+      // "반" that starts a word is part of the title.
+      final word = (await parse('내일 오후 3시 반상회')).draft!;
+      expect(word.startAt, DateTime(2026, 5, 12, 15));
+      expect(word.title, '반상회');
+    });
+
+    test('"밤 12시" is the midnight that ends that day', () async {
+      final draft = (await parse('금요일 밤 12시 마감')).draft!;
+      expect(draft.startAt, DateTime(2026, 5, 16));
+      expect(draft.allDay, isFalse);
+      expect(draft.title, '마감');
+
+      expect(
+        (await parse('오늘 밤 11시 마감')).draft!.startAt,
+        DateTime(2026, 5, 11, 23),
+      );
+      expect(
+        (await parse('오늘 낮 12시 점심')).draft!.startAt,
+        DateTime(2026, 5, 11, 12),
+      );
+      final until = (await parse('오늘 오후 9시부터 밤 12시까지 작업')).draft!;
+      expect(until.startAt, DateTime(2026, 5, 11, 21));
+      expect(until.endAt, DateTime(2026, 5, 12));
+
+      // Without an end date the midnight still belongs to the typed day.
+      final sameDay = (await parse('오늘 오전 12시부터 밤 12시 반까지 작업')).draft!;
+      expect(sameDay.startAt, DateTime(2026, 5, 11));
+      expect(sameDay.endAt, DateTime(2026, 5, 12, 0, 30));
+      // A midnight start is not shifted twice.
+      final fromMidnight = (await parse('오늘 밤 12시부터 2시까지 작업')).draft!;
+      expect(fromMidnight.startAt, DateTime(2026, 5, 12));
+      expect(fromMidnight.endAt, DateTime(2026, 5, 12, 2));
+
+      // The end always lands after a start that midnight moved a day on.
+      final wrapped = (await parse('오늘 밤 12시 30분부터 오전 12시 15분까지 작업')).draft!;
+      expect(wrapped.startAt, DateTime(2026, 5, 12, 0, 30));
+      expect(wrapped.endAt, DateTime(2026, 5, 13, 0, 15));
+
+      // A duration counted from the typed day still ends after the start.
+      final lasting = (await parse('오늘 밤 12시 30분부터 1일간 작업')).draft!;
+      expect(lasting.startAt, DateTime(2026, 5, 12, 0, 30));
+      expect(lasting.endAt, DateTime(2026, 5, 13));
+
+      // An explicit end date ends at its own midnight, a full day later.
+      final dated = (await parse('5월 30일 오후 2시부터 5월 31일 밤 12시까지 작업')).draft!;
+      expect(dated.startAt, DateTime(2026, 5, 30, 14));
+      expect(dated.endAt, DateTime(2026, 6, 1));
+    });
+
+    test('"다음 주" without a weekday asks instead of using today', () async {
+      final result = await parse('다음 주 회의', selected: DateTime(2026, 5, 20));
+      expect(result.draft, isNull);
+      expect(result.question, contains('요일'));
+
+      expect(
+        (await parse('다음 주 화요일 회의')).draft!.startAt,
+        DateTime(2026, 5, 19),
+      );
+
+      // Title words that merely start with these syllables are not dates.
+      for (final text in ['오후 3시 다음 달리기 코스 검토', '오후 3시 다음 주제 정리']) {
+        final draft = (await parse(
+          text,
+          selected: DateTime(2026, 5, 20),
+        )).draft!;
+        expect(draft.startAt, DateTime(2026, 5, 20, 15), reason: text);
+      }
+      expect((await parse('다음 주에 회의')).question, contains('요일'));
+    });
+
+    test('"다음달 N일" and "이번 달 N일" resolve to that month', () async {
+      final next = (await parse('다음달 15일 회의')).draft!;
+      expect(next.startAt, DateTime(2026, 6, 15));
+      expect(next.allDay, isTrue);
+      expect(next.title, '회의');
+
+      expect(
+        (await parse('이번 달 20일 오후 2시 회의')).draft!.startAt,
+        DateTime(2026, 5, 20, 14),
+      );
+      final december = await parser.parse(
+        '다음 달 3일 송년회',
+        baseDate: DateTime(2026, 12, 10),
+        defaultReminderMinutes: 60,
+      );
+      expect(december.draft!.startAt, DateTime(2027, 1, 3));
+
+      expect((await parse('다음 달 31일 회의')).question, contains('6월 31일'));
+      expect((await parse('다음 달 회의')).question, contains('며칠'));
+    });
+  });
+
   group('RuleBasedScheduleParser calendar-date arithmetic across DST', () {
     final parser = RuleBasedScheduleParser();
 

@@ -396,7 +396,7 @@ void main() {
         for (
           var date = DateTime.parse(ownPeriod['startDate'] as String);
           !date.isAfter(DateTime.parse(ownPeriod['endDate'] as String));
-          date = date.add(const Duration(days: 1))
+          date = DateTime(date.year, date.month, date.day + 1)
         ) {
           final day = date.toIso8601String().substring(0, 10);
           final week =

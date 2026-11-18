@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
 import '../calendar/calendar_event_movement.dart';
+import '../../features/events/data/recurrence_expander.dart';
 import '../../features/events/domain/calendar_event.dart';
 import '../../features/events/domain/event_repository.dart';
 import '../settings/app_settings.dart';
@@ -248,6 +249,7 @@ class CalendarWidgetSnapshotBuilder {
       return '${DateFormat.MMMd(localeName).format(start)} - '
           '${DateFormat.MMMd(localeName).format(end)}';
     }
+
     final visibleMonthEvents = monthEvents
         .where((event) => _isVisible(event, settings))
         .toList(growable: false);
@@ -273,22 +275,57 @@ class CalendarWidgetSnapshotBuilder {
     // from that day. Each cached day carries its own list, so a widget opened
     // days later neither keeps expired entries ahead of nearer targets nor
     // misses a target that only became one of the six since.
+    final expander = RecurrenceExpander();
+    // Last occurrence of a series that already ended, by event id. It is the
+    // same for every later day, so the full expansion runs once.
+    final endedOccurrences = <String, CalendarEvent>{};
+    // The occurrence a repeating D-day counts towards on [day]: the next one,
+    // as the calendar shows it, not the first date of the series.
+    CalendarEvent ddayTarget(CalendarEvent event, DateTime day) {
+      if (!event.recurrence.isRepeating) return event;
+      // Widening windows: a daily series resolves in the first one. The last
+      // one spans eight repeats of the longest period (a 29 February yearly
+      // rule needs up to eight years per interval), so an occurrence that is
+      // merely far away is not mistaken for an ended series.
+      final interval = event.recurrence.interval < 1
+          ? 1
+          : event.recurrence.interval;
+      for (final days in [1, 31, 366, 366 * 8 * interval]) {
+        for (final occurrence in expander.expand(
+          event,
+          day,
+          shiftCalendarDateByDays(day, days),
+        )) {
+          if (!_dateOnly(occurrence.startAt).isBefore(day)) return occurrence;
+        }
+      }
+      return endedOccurrences.putIfAbsent(event.id, () {
+        final past = expander.expand(
+          event,
+          event.startAt.subtract(const Duration(microseconds: 1)),
+          day,
+        );
+        return past.isEmpty ? event : past.last;
+      });
+    }
+
     List<Map<String, Object?>> ddaysFor(DateTime day) {
-      final sorted = ddayCandidates.toList()
-        ..sort((left, right) {
-          final leftDistance = calendarDayDifference(
-            day,
-            _dateOnly(left.startAt),
-          ).abs();
-          final rightDistance = calendarDayDifference(
-            day,
-            _dateOnly(right.startAt),
-          ).abs();
-          final distanceOrder = leftDistance.compareTo(rightDistance);
-          return distanceOrder != 0
-              ? distanceOrder
-              : left.startAt.compareTo(right.startAt);
-        });
+      final sorted =
+          ddayCandidates.map((event) => ddayTarget(event, day)).toList()
+            ..sort((left, right) {
+              final leftDistance = calendarDayDifference(
+                day,
+                _dateOnly(left.startAt),
+              ).abs();
+              final rightDistance = calendarDayDifference(
+                day,
+                _dateOnly(right.startAt),
+              ).abs();
+              final distanceOrder = leftDistance.compareTo(rightDistance);
+              return distanceOrder != 0
+                  ? distanceOrder
+                  : left.startAt.compareTo(right.startAt);
+            });
       return sorted
           .take(6)
           .map((event) {

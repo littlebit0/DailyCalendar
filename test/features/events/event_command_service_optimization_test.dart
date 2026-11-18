@@ -1431,7 +1431,8 @@ void main() {
       expect(repository.event.completed, isFalse);
       expect(notifications.cancelCalls, 2);
       expect(notifications.scheduleCalls, 1);
-      expect(alarms.cancelCalls, 2);
+      // Rescheduling replaces the alarms without cancelling them first (#924).
+      expect(alarms.cancelCalls, 1);
       expect(alarms.scheduleCalls, 1);
       expect(sync.upsertedIds, ['todo', 'todo']);
       expect(widgetRefreshes, 2);
@@ -1680,8 +1681,9 @@ class _CountingAlarmService implements AlarmService {
   Future<void> cancelEventAlarm(String eventId) async => cancelCalls += 1;
 
   @override
-  Future<AlarmAuthorizationState> requestAuthorization() async =>
-      AlarmAuthorizationState.authorized;
+  Future<AlarmAuthorizationState> requestAuthorization({
+    bool openSettings = false,
+  }) async => AlarmAuthorizationState.authorized;
 
   @override
   Future<void> scheduleEventAlarm(CalendarEvent event) async =>

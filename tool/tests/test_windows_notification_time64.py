@@ -29,6 +29,13 @@ class WindowsNotificationTime64Test(unittest.TestCase):
         self.assertEqual(PLUGIN.count("_scheduleOrThrow("), 3)  # helper + two schedule methods
         self.assertNotIn("_bindings.scheduleNotification(\n      _plugin", PLUGIN)
 
+    def test_seconds_reach_windows_without_32_bit_narrowing(self):
+        conversion = "final int secondsSinceEpoch = scheduledDate.millisecondsSinceEpoch ~/ 1000;"
+        self.assertEqual(PLUGIN.count(conversion), 2)  # both schedule methods
+        self.assertIn("_bindings.scheduleNotification(plugin, id, xml, secondsSinceEpoch)", PLUGIN)
+        self.assertNotRegex(PLUGIN, r"secondsSinceEpoch\s*(&|\.toSigned|\.toUnsigned|\.toInt)")
+        self.assertIn("winrt::clock::from_time_t(static_cast<time_t>(time))", NATIVE)
+
 
 if __name__ == "__main__":
     unittest.main()

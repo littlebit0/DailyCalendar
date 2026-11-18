@@ -9,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shared_preferences_platform_interface/shared_preferences_platform_interface.dart';
 
 void main() {
   testWidgets(
@@ -46,6 +47,51 @@ void main() {
       expect(find.text('새로운 기능'), findsNothing);
       expect(find.text('calendar'), findsOneWidget);
     },
+  );
+
+  testWidgets(
+    'a failed acknowledgement write still opens the calendar and repeats next launch',
+    (tester) async {
+      await _existingUser(seen: const []);
+      final failing = _FailingStore({
+        'flutter.onboardingCompleted': true,
+        'flutter.${FeatureAnnouncementStore.key}': <String>[],
+      });
+      SharedPreferencesStorePlatform.instance = failing;
+      final prefs = await SharedPreferences.getInstance();
+      final settings = SettingsRepository(preferences: prefs);
+      Widget app() => ProviderScope(
+        overrides: [settingsRepositoryProvider.overrideWithValue(settings)],
+        child: const MaterialApp(
+          home: UpdateFeaturesGate(child: Text('calendar')),
+        ),
+      );
+      await tester.pumpWidget(app());
+      await tester.pumpAndSettle();
+      expect(find.text('새로운 기능'), findsOneWidget);
+      await tester.tap(find.text('나중에'));
+      await tester.pumpAndSettle();
+      expect(find.text('calendar'), findsOneWidget);
+
+      // Nothing was saved, so the next launch introduces the feature again.
+      await prefs.reload();
+      await tester.pumpWidget(const SizedBox.shrink());
+      await tester.pumpWidget(app());
+      await tester.pumpAndSettle();
+      expect(find.text('새로운 기능'), findsOneWidget);
+
+      // Once the write succeeds the introduction does not come back.
+      failing.fail = false;
+      await tester.tap(find.text('나중에'));
+      await tester.pumpAndSettle();
+      expect(find.text('calendar'), findsOneWidget);
+      await prefs.reload();
+      await tester.pumpWidget(const SizedBox.shrink());
+      await tester.pumpWidget(app());
+      await tester.pumpAndSettle();
+      expect(find.text('새로운 기능'), findsNothing);
+    },
+    variant: TargetPlatformVariant.only(TargetPlatform.android),
   );
 
   for (final platform in [
@@ -129,4 +175,13 @@ Future<SettingsRepository> _existingUser({
     buildSignature: '',
   );
   return SettingsRepository(preferences: await SharedPreferences.getInstance());
+}
+
+class _FailingStore extends InMemorySharedPreferencesStore {
+  _FailingStore(super.data) : super.withData();
+  bool fail = true;
+
+  @override
+  Future<bool> setValue(String valueType, String key, Object value) async =>
+      !fail && await super.setValue(valueType, key, value);
 }
