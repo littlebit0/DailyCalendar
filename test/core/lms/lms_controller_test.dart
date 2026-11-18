@@ -86,6 +86,7 @@ class _Commands implements EventCommandService {
     bool Function()? isCurrent,
     EventCategory? Function()? lmsCategory,
     bool preserveLmsSource = false,
+    Set<String> keepLatestLmsStatus = const {},
     Set<String>? skippedDeleted,
   }) async {
     final saved = <String>{};

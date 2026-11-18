@@ -139,6 +139,34 @@ public class FlutterSecureStorage {
         DurableEdit.clear(preferences);
     }
 
+    /**
+     * Daily (#968): delete one entry while initialization fails because the
+     * Keystore key is missing. Deleting needs no decryption; the wrapped key
+     * stays so the other entries are not touched.
+     */
+    void deleteAfterKeyLoss(String key) throws DurableEdit.PersistenceException {
+        DurableEdit.remove(dataPreferences(), key);
+    }
+
+    /**
+     * Daily (#968): the explicit deleteAll while the Keystore key is missing.
+     * Values encrypted under the lost key can never be read again, and the
+     * wrapped AES key left behind would fail every later initialization, so
+     * both go. Data first: if clearing the keys then fails, a retry still
+     * reports the missing key instead of reading old ciphertext with a new key.
+     */
+    void deleteAllAfterKeyLoss() throws DurableEdit.PersistenceException {
+        DurableEdit.clear(dataPreferences());
+        DurableEdit.clear(context.getSharedPreferences(
+                config.getEffectiveKeyStoragePrefsName(), Context.MODE_PRIVATE));
+        preferences = null;
+    }
+
+    private SharedPreferences dataPreferences() {
+        // EncryptedSharedPreferences data shares this file name.
+        return context.getSharedPreferences(config.getEffectiveDataPrefsName(), Context.MODE_PRIVATE);
+    }
+
     public void initialize(FlutterSecureStorageConfig config, SecurePreferencesCallback<Void> callback) {
         if (preferences != null) {
             callback.onSuccess(null);

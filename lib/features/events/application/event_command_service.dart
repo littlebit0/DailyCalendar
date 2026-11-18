@@ -747,6 +747,7 @@ class EventCommandService {
     resolveLatest,
     EventCategory? Function()? lmsCategory,
     bool preserveLmsSource = false,
+    Set<String> keepLatestLmsStatus = const {},
     bool Function()? isCurrent,
     Set<String>? skippedDeleted,
   }) async {
@@ -831,6 +832,19 @@ class EventCommandService {
                   imported = latest;
                   return latest;
                 }
+                // A source whose school status was not read keeps the status
+                // stored now, which may be newer than the fetch's snapshot.
+                final keepStatus =
+                    keepLatestLmsStatus.contains(source.id) &&
+                    latest.lms != null;
+                if (keepStatus) {
+                  source = source.copyWith(
+                    lms: source.lms?.copyWith(
+                      sourceCompleted: latest.lms!.sourceCompleted,
+                      submissionStatus: latest.lms!.submissionStatus,
+                    ),
+                  );
+                }
                 // Re-read personal fields in the same write transaction, after
                 // any editor save which completed while prepare was awaiting.
                 imported =
@@ -853,6 +867,8 @@ class EventCommandService {
                               ? latest.completed
                               : latest.lms?.manuallyCompleted == true
                               ? true
+                              : keepStatus
+                              ? latest.completed
                               : source.lms?.sourceCompleted ?? latest.completed,
                           createdAt: latest.createdAt,
                           updatedAt: _nextLmsChange(latest),

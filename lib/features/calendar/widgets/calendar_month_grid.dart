@@ -7,10 +7,12 @@ import 'package:intl/intl.dart';
 
 import '../../../core/calendar/calendar_event_movement.dart';
 import '../../../core/calendar/calendar_event_span.dart';
+import '../../../core/calendar/calendar_period_label.dart';
 import '../../../core/calendar/korean_lunar_calendar.dart';
 import '../../../core/calendar/calendar_event_ordering.dart';
 import '../../../core/localization/app_localizations.dart';
 import '../../../core/settings/app_settings.dart';
+import '../../../core/theme/calendar_date_color.dart';
 import '../../../core/theme/daily_ui.dart';
 import '../../../core/theme/event_completion_style.dart';
 import '../../../core/time/calendar_clock.dart';
@@ -32,6 +34,7 @@ class CalendarMonthGrid extends StatefulWidget {
     this.holidayBackgroundEnabled = true,
     this.holidayColorValue = 0xffef4444,
     this.centerEventTitles = false,
+    this.use24HourTime = true,
     this.eventSortPriority = CalendarEventSortPriority.time,
     this.categoryOrder = const <String>[],
     this.manualEventOrders = const <String, CalendarManualEventOrder>{},
@@ -60,6 +63,7 @@ class CalendarMonthGrid extends StatefulWidget {
   final bool holidayBackgroundEnabled;
   final int holidayColorValue;
   final bool centerEventTitles;
+  final bool use24HourTime;
   final CalendarEventSortPriority eventSortPriority;
   final List<String> categoryOrder;
   final Map<String, CalendarManualEventOrder> manualEventOrders;
@@ -352,6 +356,7 @@ class _CalendarMonthGridState extends State<CalendarMonthGrid> {
                                     showAdjacentMonthDates:
                                         widget.showAdjacentMonthDates,
                                     showEventTimes: !compact,
+                                    use24HourTime: widget.use24HourTime,
                                     compact: compact,
                                     onDateSelected: widget.onDateSelected,
                                     onEventDropped: widget.onEventDropped,
@@ -679,10 +684,10 @@ class CalendarWeekdayHeader extends StatelessWidget {
         ? (index + DateTime.monday - 1) % DateTime.daysPerWeek + 1
         : (index + DateTime.sunday - 1) % DateTime.daysPerWeek + 1;
     if (weekday == DateTime.sunday) {
-      return const Color(0xffef4444);
+      return calendarSundayAccent(colorScheme.brightness);
     }
     if (weekday == DateTime.saturday) {
-      return const Color(0xff2563eb);
+      return calendarSaturdayAccent(colorScheme.brightness);
     }
     return colorScheme.onSurfaceVariant;
   }
@@ -708,6 +713,7 @@ class _WeekRow extends StatefulWidget {
     required this.showLunarDates,
     required this.showAdjacentMonthDates,
     required this.showEventTimes,
+    required this.use24HourTime,
     required this.compact,
     required this.onDateSelected,
     required this.onEventDropped,
@@ -739,6 +745,7 @@ class _WeekRow extends StatefulWidget {
   final bool showLunarDates;
   final bool showAdjacentMonthDates;
   final bool showEventTimes;
+  final bool use24HourTime;
   final bool compact;
   final ValueChanged<DateTime> onDateSelected;
   final CalendarEventDropCallback? onEventDropped;
@@ -1019,6 +1026,7 @@ class _WeekRowState extends State<_WeekRow> {
                           segment.endCol,
                         ),
                         showTime: widget.showEventTimes,
+                        use24HourTime: widget.use24HourTime,
                         compact: widget.compact,
                         dense: metrics.denseText,
                         centerTitle: widget.centerEventTitles,
@@ -1070,6 +1078,7 @@ class _WeekRowState extends State<_WeekRow> {
                           segment.endCol,
                         ),
                         showTime: widget.showEventTimes,
+                        use24HourTime: widget.use24HourTime,
                         compact: widget.compact,
                         dense: metrics.denseText,
                         centerTitle: widget.centerEventTitles,
@@ -1262,6 +1271,26 @@ class _WeekRowState extends State<_WeekRow> {
       targetEvents.insert(insertionIndex, previewEvent);
       previewManualOrder = targetEvents.map(calendarEventOrderKey).toList();
     }
+    // Build each start column's comparator (category and manual rank maps)
+    // once per layout instead of once per comparison.
+    final columnComparators = <int, Comparator<CalendarEvent>>{};
+    Comparator<CalendarEvent> comparatorForColumn(int column) =>
+        columnComparators.putIfAbsent(column, () {
+          final comparisonDate = shiftCalendarDateByDays(weekStart, column);
+          return calendarEventComparator(
+            priority: widget.eventSortPriority,
+            categoryOrder: widget.categoryOrder,
+            manualOrder:
+                previewManualOrder != null &&
+                    previewDate != null &&
+                    _sameDay(comparisonDate, previewDate)
+                ? previewManualOrder
+                : widget
+                          .manualEventOrders[calendarDateKey(comparisonDate)]
+                          ?.eventKeys ??
+                      const <String>[],
+          );
+        });
     final rawSegments =
         sourceEvents
             .where((event) => event.overlaps(weekStart, weekEnd))
@@ -1288,24 +1317,9 @@ class _WeekRowState extends State<_WeekRow> {
             if (startCompare != 0) {
               return startCompare;
             }
-            final comparisonDate = shiftCalendarDateByDays(
-              weekStart,
-              a.startCol,
-            );
-            final eventCompare = compareCalendarEvents(
+            final eventCompare = comparatorForColumn(a.startCol)(
               a.event,
               b.event,
-              priority: widget.eventSortPriority,
-              categoryOrder: widget.categoryOrder,
-              manualOrder:
-                  previewManualOrder != null &&
-                      previewDate != null &&
-                      _sameDay(comparisonDate, previewDate)
-                  ? previewManualOrder
-                  : widget
-                            .manualEventOrders[calendarDateKey(comparisonDate)]
-                            ?.eventKeys ??
-                        const <String>[],
             );
             if (eventCompare != 0) {
               return eventCompare;
@@ -1545,9 +1559,9 @@ class _DayNumber extends StatelessWidget {
         : today
         ? Colors.white
         : holiday || day.weekday == DateTime.sunday
-        ? const Color(0xffef4444)
+        ? calendarSundayAccent(colorScheme.brightness)
         : day.weekday == DateTime.saturday
-        ? const Color(0xff2563eb)
+        ? calendarSaturdayAccent(colorScheme.brightness)
         : colorScheme.onSurface;
 
     final child = Text(
@@ -1672,6 +1686,7 @@ Widget calendarMonthDragCard(
   CalendarEvent event, {
   required bool centerTitle,
   required bool showTime,
+  required bool use24HourTime,
   required bool compact,
 }) => _EventSpanFlag(
   event: event,
@@ -1686,6 +1701,7 @@ Widget calendarMonthDragCard(
     event.startAt.day,
   ),
   showTime: showTime,
+  use24HourTime: use24HourTime,
   compact: compact,
   dense: false,
   centerTitle: centerTitle,
@@ -1701,6 +1717,7 @@ class _EventSpanFlag extends StatelessWidget {
     required this.segmentStart,
     required this.segmentEnd,
     required this.showTime,
+    required this.use24HourTime,
     required this.compact,
     required this.dense,
     required this.centerTitle,
@@ -1717,6 +1734,7 @@ class _EventSpanFlag extends StatelessWidget {
   final DateTime segmentStart;
   final DateTime segmentEnd;
   final bool showTime;
+  final bool use24HourTime;
   final bool compact;
   final bool dense;
   final bool centerTitle;
@@ -1737,7 +1755,6 @@ class _EventSpanFlag extends StatelessWidget {
       completed: event.completed,
       categoryAlpha: event.holiday ? 0.12 : 0.15,
     );
-    final formatter = DateFormat('HH:mm');
     final showStartTime =
         showTime &&
         !event.allDay &&
@@ -1747,7 +1764,9 @@ class _EventSpanFlag extends StatelessWidget {
     final prefix = event.showDday && !compact
         ? '${_formatDday(event, CalendarClock.todayOf(context))}  '
         : '';
-    final suffix = showStartTime ? '  ${formatter.format(event.startAt)}' : '';
+    final suffix = showStartTime
+        ? '  ${calendarTimeLabel(event.startAt, locale: Localizations.localeOf(context).toLanguageTag(), use24HourTime: use24HourTime)}'
+        : '';
     final title = context.l10n.eventTitle(event.title, holiday: event.holiday);
 
     final flag = DecoratedBox(

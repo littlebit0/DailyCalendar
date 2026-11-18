@@ -103,6 +103,56 @@ void main() {
     );
   }
 
+  for (final (use24HourTime, expected) in [
+    (true, ['00:00', '12:00', '15:05']),
+    (false, ['12:00\u202fAM', '12:00\u202fPM', '3:05\u202fPM']),
+  ]) {
+    testWidgets(
+      'event bar times follow the ${use24HourTime ? 24 : 12}-hour setting',
+      (tester) async {
+        final now = DateTime(2026, 5, 1);
+        CalendarEvent timed(String title, DateTime startAt) => CalendarEvent(
+          id: title,
+          title: title,
+          startAt: startAt,
+          endAt: startAt.add(const Duration(minutes: 30)),
+          allDay: false,
+          category: EventCategory.basic,
+          colorValue: EventCategory.basic.colorValue,
+          createdAt: now,
+          updatedAt: now,
+        );
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: SizedBox(
+                width: 1000,
+                height: 600,
+                child: CalendarMonthGrid(
+                  month: DateTime(2026, 5),
+                  selectedDate: DateTime(2026, 5, 4),
+                  events: [
+                    timed('M', DateTime(2026, 5, 4)),
+                    timed('N', DateTime(2026, 5, 5, 12)),
+                    timed('A', DateTime(2026, 5, 6, 15, 5)),
+                  ],
+                  weekStartsOnMonday: true,
+                  showLunarDates: false,
+                  use24HourTime: use24HourTime,
+                  onDateSelected: (_) {},
+                ),
+              ),
+            ),
+          ),
+        );
+
+        expect(find.text('M  ${expected[0]}'), findsOneWidget);
+        expect(find.text('N  ${expected[1]}'), findsOneWidget);
+        expect(find.text('A  ${expected[2]}'), findsOneWidget);
+      },
+    );
+  }
+
   testWidgets('keeps today and lunar day labels on the same row', (
     tester,
   ) async {
@@ -599,6 +649,121 @@ void main() {
       tester.getTopLeft(find.byKey(secondFlag)).dy,
       lessThan(tester.getTopLeft(find.byKey(firstFlag)).dy),
     );
+  });
+
+  testWidgets('month lanes mix manual order and category order per column', (
+    tester,
+  ) async {
+    const work = EventCategory(id: 'work', label: '업무', colorValue: 0xff2563eb);
+    const personal = EventCategory(
+      id: 'personal',
+      label: '개인',
+      colorValue: 0xff10b981,
+    );
+    CalendarEvent event(
+      String id,
+      EventCategory category,
+      DateTime start,
+      DateTime end, {
+      bool allDay = false,
+    }) => CalendarEvent(
+      id: id,
+      title: id,
+      startAt: start,
+      endAt: end,
+      allDay: allDay,
+      category: category,
+      colorValue: category.colorValue,
+      createdAt: DateTime(2026, 5, 1),
+      updatedAt: DateTime(2026, 5, 1),
+    );
+    final earlyBar = event(
+      'early-bar',
+      personal,
+      DateTime(2026, 5, 4),
+      DateTime(2026, 5, 5, 23),
+      allDay: true,
+    );
+    final manual = event(
+      'manual',
+      personal,
+      DateTime(2026, 5, 5, 18),
+      DateTime(2026, 5, 5, 19),
+    );
+    final plainWork = event(
+      'plain-work',
+      work,
+      DateTime(2026, 5, 5, 12),
+      DateTime(2026, 5, 5, 13),
+    );
+    final plainPersonal = event(
+      'plain-personal',
+      personal,
+      DateTime(2026, 5, 5, 8),
+      DateTime(2026, 5, 5, 9),
+    );
+    final orders = {
+      '2026-05-05': CalendarManualEventOrder(
+        eventKeys: const ['manual'],
+        updatedAt: DateTime(2026, 5, 1),
+        deviceId: 'test-device',
+      ),
+    };
+
+    Future<List<String>> laneOrder(
+      List<CalendarEvent> input,
+      CalendarEventSortPriority priority,
+    ) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SizedBox(
+              width: 700,
+              height: 600,
+              child: CalendarMonthGrid(
+                month: DateTime(2026, 5),
+                selectedDate: DateTime(2026, 5, 5),
+                events: input,
+                weekStartsOnMonday: true,
+                showLunarDates: false,
+                eventSortPriority: priority,
+                categoryOrder: const ['work', 'personal'],
+                manualEventOrders: orders,
+                onDateSelected: (_) {},
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      double top(String id) => tester
+          .getTopLeft(find.byKey(ValueKey('event-span-$id-2026-5-4')))
+          .dy;
+      return [for (final item in input) item.id]
+        ..sort((a, b) => top(a).compareTo(top(b)));
+    }
+
+    final inputs = [
+      [earlyBar, manual, plainWork, plainPersonal],
+      [plainPersonal, plainWork, manual, earlyBar],
+      [plainWork, earlyBar, plainPersonal, manual],
+    ];
+    for (final input in inputs) {
+      // The earlier-starting bar keeps the top lane, the manual entry comes
+      // next, and the rest follow the selected priority.
+      expect(await laneOrder(input, CalendarEventSortPriority.category), [
+        'early-bar',
+        'manual',
+        'plain-work',
+        'plain-personal',
+      ]);
+      expect(await laneOrder(input, CalendarEventSortPriority.time), [
+        'early-bar',
+        'manual',
+        'plain-personal',
+        'plain-work',
+      ]);
+    }
   });
 
   testWidgets('conflicting per-date manual orders give one stable layout', (

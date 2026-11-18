@@ -4713,7 +4713,7 @@ class _SettingsActionButton extends StatelessWidget {
             ? DailyUi.destructive
             : filled
             ? Colors.white
-            : DailyUi.primary);
+            : DailyUi.primaryForeground(context));
     final effectiveBackground =
         backgroundColor ?? (filled ? DailyUi.primary : Colors.transparent);
     final buttonIcon = busy

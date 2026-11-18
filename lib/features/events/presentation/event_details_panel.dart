@@ -133,6 +133,7 @@ class EventDetailsPanel extends ConsumerWidget {
                 settings.calendarShowHolidays &&
                 ref.read(koreanHolidayServiceProvider).isPublicHoliday(date),
             holidayColorValue: settings.holidayCategory.colorValue,
+            brightness: Theme.of(context).brightness,
           )
         : null;
     final liveEventsAsync = ref.watch(eventsInRangeProvider(_dayRange(date)));

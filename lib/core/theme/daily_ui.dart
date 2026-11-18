@@ -49,10 +49,19 @@ abstract final class DailyUi {
       );
 
   static const primary = Color(0xff0a63d8);
+  // Dark theme seed; 0a63d8 is below 4.5:1 as text on dark surfaces (#912).
+  static const primaryDarkForeground = Color(0xff78a7ff);
   static const success = Color(0xff2aa65a);
   static const warning = Color(0xffe88b00);
   static const purple = Color(0xff6558d9);
   static const destructive = Color(0xffd93f3f);
+
+  /// Accent color for text and icons. Fills keep [primary].
+  static Color primaryForeground(BuildContext context) =>
+      primaryForegroundFor(Theme.of(context).brightness);
+
+  static Color primaryForegroundFor(Brightness brightness) =>
+      brightness == Brightness.dark ? primaryDarkForeground : primary;
 
   static bool get isDesktop {
     return defaultTargetPlatform == TargetPlatform.macOS ||
@@ -534,7 +543,9 @@ class DailySecondaryButton extends StatelessWidget {
             letterSpacing: 0,
           ),
         ),
-        style: TextButton.styleFrom(foregroundColor: DailyUi.primary),
+        style: TextButton.styleFrom(
+          foregroundColor: DailyUi.primaryForeground(context),
+        ),
       ),
     );
   }
@@ -647,7 +658,13 @@ class DailyInfoCallout extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(icon, color: color, size: 19),
+            Icon(
+              icon,
+              color: color == DailyUi.primary
+                  ? DailyUi.primaryForeground(context)
+                  : color,
+              size: 19,
+            ),
             const SizedBox(width: 10),
             Expanded(
               child: Column(
@@ -739,8 +756,8 @@ class DailyOnboardingFrame extends StatelessWidget {
               const SizedBox(height: 30),
               Text(
                 kicker,
-                style: const TextStyle(
-                  color: DailyUi.primary,
+                style: TextStyle(
+                  color: DailyUi.primaryForeground(context),
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
                   letterSpacing: 0,
@@ -850,7 +867,13 @@ class DailyFeatureCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(icon, color: color, size: 28),
+            Icon(
+              icon,
+              color: color == DailyUi.primary
+                  ? DailyUi.primaryForeground(context)
+                  : color,
+              size: 28,
+            ),
             const Spacer(),
             Text(
               title,

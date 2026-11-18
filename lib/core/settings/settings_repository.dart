@@ -387,6 +387,46 @@ class SettingsRepository {
     );
   }
 
+  String _lmsResumeCursorKey(
+    String ownerId,
+    String schoolId,
+    String lmsUserId,
+  ) {
+    final identity = jsonEncode([
+      ownerId.trim().toLowerCase(),
+      schoolId,
+      lmsUserId,
+    ]);
+    return 'daily.lms.resumeCursor.v1.${sha256.convert(utf8.encode(identity))}';
+  }
+
+  /// Where the next LMS sync resumes optional reads its deadline skipped
+  /// (#892), kept on this device only.
+  String? lmsSyncResumeCursor({
+    required String ownerId,
+    required String schoolId,
+    required String lmsUserId,
+  }) {
+    final raw = _preferences.get(
+      _lmsResumeCursorKey(ownerId, schoolId, lmsUserId),
+    );
+    return raw is String ? raw : null;
+  }
+
+  Future<void> saveLmsSyncResumeCursor(
+    String? cursor, {
+    required String ownerId,
+    required String schoolId,
+    required String lmsUserId,
+  }) async {
+    final key = _lmsResumeCursorKey(ownerId, schoolId, lmsUserId);
+    if (cursor == null) {
+      await _preferences.remove(key);
+    } else {
+      await _preferences.setString(key, cursor);
+    }
+  }
+
   static const _defaultReminderKey = 'defaultReminderMinutes';
   static const _defaultReminderListKey = 'defaultReminderMinutesList';
   static const _allDayReminderHourKey = 'allDayReminderHour';
@@ -1696,6 +1736,29 @@ class SettingsRepository {
     return stored != null && stored == _hashPin(pin);
   }
 
+  /// The Android plugin error when the Keystore key under the stored values is
+  /// gone (#968): nothing in secure storage can be decrypted again.
+  static const secureStorageKeyLostCode = 'DailySecureStorageKeyLost';
+
+  static bool isSecureStorageKeyLost(Object error) =>
+      error is PlatformException && error.code == secureStorageKeyLostCode;
+
+  Future<bool> hasAppLockPin() async =>
+      await _secureStorage.read(key: _appLockPinHashKey) != null;
+
+  /// Sets a new PIN after the lock screen verified the user another way (#968).
+  /// When the stored values can no longer be decrypted they are cleared with
+  /// their wrapped key first; readable values are never cleared here.
+  Future<void> replaceUnreadableAppLockPin(String pin) async {
+    try {
+      await _secureStorage.read(key: _appLockPinHashKey);
+    } on Object catch (error) {
+      if (!isSecureStorageKeyLost(error)) rethrow;
+      await _secureStorage.deleteAll();
+    }
+    await saveAppLockPin(pin);
+  }
+
   Future<void> resetAll() {
     academicStore.invalidate();
     timetableStore.invalidate();
@@ -1762,7 +1825,7 @@ class SettingsRepository {
     await clearDriveChangePageToken();
     await _preferences.remove(_deviceIdKey);
     await _preferences.remove(_eventFollowUpKey);
-    // Per-account LMS check times (`daily.lms.lastSuccess`, `learningChecked`).
+    // Per-account LMS check times and resume cursor (`daily.lms.*`).
     for (final key in _preferences.getKeys().toList()) {
       if (key.startsWith('daily.lms.')) await _preferences.remove(key);
     }

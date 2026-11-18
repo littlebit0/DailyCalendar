@@ -164,7 +164,9 @@ class _ImogiPageState extends ConsumerState<ImogiPage> {
               tooltip: context.tr(item.important ? '중요 표시 해제' : '중요 표시'),
               icon: Icon(
                 item.important ? Icons.star_rounded : Icons.star_border_rounded,
-                color: item.important ? DailyUi.primary : secondary,
+                color: item.important
+                    ? DailyUi.primaryForeground(context)
+                    : secondary,
               ),
               onPressed: () =>
                   _run(() => store.setImportant(item.id, !item.important)),

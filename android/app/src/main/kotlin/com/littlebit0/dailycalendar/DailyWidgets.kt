@@ -383,7 +383,7 @@ private data class DailyWidgetPalette(
                     mutedText = Color.parseColor("#FFCBD5E1"),
                     accent = Color.parseColor("#FF2563EB"),
                     ddayAccent = Color.parseColor("#FFDB2777"),
-                    sundayText = Color.parseColor("#FFDC2626"),
+                    sundayText = Color.parseColor("#FFB91C1C"),
                     saturdayText = Color.parseColor("#FF2563EB"),
                 )
             }

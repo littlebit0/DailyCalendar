@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- See daily_backup_rules.xml (#968). -->
 <data-extraction-rules>
   <cloud-backup>
     <exclude domain="sharedpref" path="daily_lms_credentials.xml" />
     <exclude domain="sharedpref" path="FlutterSecureKeyStorage:daily_lms_credentials.xml" />
+    <exclude domain="sharedpref" path="FlutterSecureStorage.xml" />
+    <exclude domain="sharedpref" path="FlutterSecureKeyStorage.xml" />
   </cloud-backup>
   <device-transfer>
     <exclude domain="sharedpref" path="daily_lms_credentials.xml" />
     <exclude domain="sharedpref" path="FlutterSecureKeyStorage:daily_lms_credentials.xml" />
+    <exclude domain="sharedpref" path="FlutterSecureStorage.xml" />
+    <exclude domain="sharedpref" path="FlutterSecureKeyStorage.xml" />
   </device-transfer>
 </data-extraction-rules>

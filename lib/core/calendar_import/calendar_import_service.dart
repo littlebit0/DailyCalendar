@@ -315,14 +315,28 @@ class CalendarImportService {
     if (unsupported) {
       return RecurrenceRule(rawRule: body);
     }
+    // RFC 5545 skips months/years without the start day (31st, Feb 29th);
+    // a simple app rule would clamp to the month end instead (#97, #954).
+    final skipsMissingDay =
+        startAt != null &&
+        startAt.day >= 29 &&
+        days.isEmpty &&
+        monthDays.isEmpty &&
+        (frequency == RecurrenceFrequency.monthly ||
+            frequency == RecurrenceFrequency.yearly);
     return RecurrenceRule(
       frequency: frequency,
       interval: interval < 1 ? 1 : interval,
       until: _rruleDate(fields['UNTIL']),
       count: count != null && count > 0 ? count : null,
       byDay: days,
-      byMonthDay: monthDays,
-      byMonth: months,
+      byMonthDay: skipsMissingDay ? [startAt.day] : monthDays,
+      byMonth:
+          skipsMissingDay &&
+              frequency == RecurrenceFrequency.yearly &&
+              months.isEmpty
+          ? [startAt.month]
+          : months,
       bySetPos: positions,
       // RFC 5545 weeks start on WKST (Monday when absent), not on the start
       // weekday the app assumes for its own rules.

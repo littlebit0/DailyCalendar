@@ -465,7 +465,7 @@ void main() {
 
     expect(
       _headerColor(tester, DateTime(2026, 8, 23)),
-      const Color(0xffef4444),
+      const Color(0xffb91c1c),
     );
     expect(
       _headerColor(tester, DateTime(2026, 8, 24)),
@@ -507,7 +507,7 @@ void main() {
 
     expect(
       _headerColor(tester, DateTime(2026, 8, 23)),
-      const Color(0xffef4444),
+      const Color(0xfff87171),
     );
   });
 
@@ -540,11 +540,11 @@ void main() {
 
     expect(
       _headerColor(tester, DateTime(2026, 8, 29)),
-      const Color(0xff2563eb),
+      const Color(0xff60a5fa),
     );
     expect(
       _headerColor(tester, DateTime(2026, 8, 30)),
-      const Color(0xffef4444),
+      const Color(0xfff87171),
     );
   });
 
@@ -889,6 +889,167 @@ void main() {
     expect(acceptedPreview, findsNothing);
   });
 
+  test('timeline opens before now on today, else the first event or 07:00', () {
+    CalendarEvent event(
+      String id,
+      DateTime start,
+      DateTime end, {
+      bool allDay = false,
+    }) => CalendarEvent(
+      id: id,
+      title: id,
+      startAt: start,
+      endAt: end,
+      allDay: allDay,
+      category: EventCategory.basic,
+      colorValue: EventCategory.basic.colorValue,
+      createdAt: DateTime(2026, 8, 1),
+      updatedAt: DateTime(2026, 8, 1),
+    );
+    final today = DateTime(2026, 8, 27);
+    final now = DateTime(2026, 8, 27, 21, 40);
+    final earlyEvent = event(
+      'early',
+      DateTime(2026, 8, 25, 5, 30),
+      DateTime(2026, 8, 25, 6),
+    );
+
+    // Today: the current time wins over events.
+    expect(scheduleInitialScrollOffset([today], [earlyEvent], now), 20 * 64);
+    expect(
+      scheduleInitialScrollOffset(
+        [today],
+        const [],
+        DateTime(2026, 8, 27, 0, 10),
+      ),
+      0,
+    );
+
+    final pastWeek = [DateTime(2026, 8, 24), DateTime(2026, 8, 25)];
+    // Not today: an hour before the earliest timed event on the shown days.
+    expect(
+      scheduleInitialScrollOffset(pastWeek, [
+        event('late', DateTime(2026, 8, 24, 19), DateTime(2026, 8, 24, 20)),
+        earlyEvent,
+        event(
+          'all-day',
+          DateTime(2026, 8, 24),
+          DateTime(2026, 8, 25),
+          allDay: true,
+        ),
+        event('elsewhere', DateTime(2026, 8, 20, 1), DateTime(2026, 8, 20, 2)),
+      ], now),
+      4 * 64,
+    );
+    // An event carried over from the day before starts at midnight.
+    expect(
+      scheduleInitialScrollOffset(pastWeek, [
+        event('overnight', DateTime(2026, 8, 23, 22), DateTime(2026, 8, 24, 2)),
+      ], now),
+      0,
+    );
+    // No timed events: 07:00 as before.
+    expect(
+      scheduleInitialScrollOffset(pastWeek, [
+        event(
+          'all-day',
+          DateTime(2026, 8, 24),
+          DateTime(2026, 8, 25),
+          allDay: true,
+        ),
+      ], now),
+      7 * 64,
+    );
+  });
+
+  testWidgets('holding a dragged event at an edge scrolls the hours', (
+    tester,
+  ) async {
+    final day = DateTime(2026, 8, 27);
+    final event = CalendarEvent(
+      id: 'edge-scroll',
+      title: '가장자리 이동',
+      startAt: DateTime(2026, 8, 27, 9),
+      endAt: DateTime(2026, 8, 27, 10),
+      allDay: false,
+      category: EventCategory.basic,
+      colorValue: EventCategory.basic.colorValue,
+      createdAt: DateTime(2026, 8, 1),
+      updatedAt: DateTime(2026, 8, 1),
+    );
+    DateTime? droppedStart;
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: ScheduleTimelineView(
+            days: [day],
+            events: [event],
+            selectedDate: day,
+            use24HourTime: true,
+            showAllDayEvents: true,
+            holidayBackgroundEnabled: true,
+            holidayColorValue: EventCategory.holiday.colorValue,
+            onEventTimeDropped: (event, targetStart) async {
+              droppedStart = targetStart;
+            },
+            onShowAllDayEventsChanged: (_) {},
+            onDateSelected: (_) {},
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    final scroll = find.byKey(const ValueKey('schedule-time-scroll'));
+    final controller = tester.widget<SingleChildScrollView>(scroll).controller!;
+    final viewport = tester.getRect(scroll);
+    final block = find.byKey(
+      ValueKey('schedule-event-${event.id}-${day.toIso8601String()}'),
+    );
+    // Opens an hour before the 09:00 event.
+    expect(controller.offset, 8 * 64);
+
+    final gesture = await tester.startGesture(tester.getCenter(block));
+    await tester.pump(const Duration(milliseconds: 400));
+    await gesture.moveTo(Offset(viewport.center.dx, viewport.bottom - 10));
+    for (var i = 0; i < 60; i++) {
+      await tester.pump(const Duration(milliseconds: 50));
+    }
+    final scrolledDown = controller.offset;
+    expect(scrolledDown, greaterThan(8 * 64 + 200));
+
+    // Away from the edges the view stays where it is.
+    await gesture.moveTo(viewport.center);
+    for (var i = 0; i < 10; i++) {
+      await tester.pump(const Duration(milliseconds: 50));
+    }
+    final resting = controller.offset;
+    for (var i = 0; i < 10; i++) {
+      await tester.pump(const Duration(milliseconds: 50));
+    }
+    expect(controller.offset, resting);
+
+    await gesture.moveTo(Offset(viewport.center.dx, viewport.top + 10));
+    for (var i = 0; i < 20; i++) {
+      await tester.pump(const Duration(milliseconds: 50));
+    }
+    expect(controller.offset, lessThan(resting));
+
+    await gesture.moveTo(Offset(viewport.center.dx, viewport.bottom - 10));
+    for (var i = 0; i < 200; i++) {
+      await tester.pump(const Duration(milliseconds: 50));
+    }
+    expect(controller.offset, controller.position.maxScrollExtent);
+    await gesture.up();
+    await tester.pumpAndSettle();
+
+    // The first screen from 08:00 could not reach this late without scrolling.
+    expect(droppedStart!.hour, greaterThanOrEqualTo(22));
+    final settled = controller.offset;
+    await tester.pump(const Duration(seconds: 1));
+    expect(controller.offset, settled);
+  });
+
   group('timed schedule drop follows the grabbed point', () {
     CalendarEvent timed(String id, DateTime start, DateTime end) =>
         CalendarEvent(
@@ -980,13 +1141,14 @@ void main() {
         DateTime(2026, 8, 27, 23),
         DateTime(2026, 8, 28, 11),
       );
-      // The second-day block starts at 00:00; grab it at its 10:00 line.
+      // The second-day block starts at 00:00, where the view opens; grab it at
+      // its 04:00 line.
       final droppedStart = await dragFrom(
         tester,
         days: [firstDay, secondDay],
         event: event,
         blockDay: secondDay,
-        grabPoint: (block) => Offset(block.center.dx, block.top + 10 * 64),
+        grabPoint: (block) => Offset(block.center.dx, block.top + 4 * 64),
         moveBy: const Offset(0, 64),
       );
       expect(droppedStart, DateTime(2026, 8, 28));
@@ -1026,7 +1188,7 @@ void main() {
         ),
       );
       final gesture = await tester.startGesture(
-        Offset(block.center.dx, block.top + 10 * 64),
+        Offset(block.center.dx, block.top + 4 * 64),
       );
       await tester.pump(const Duration(milliseconds: 400));
       // 30 minutes down: the event now starts 2026-08-27 23:30.
@@ -1233,9 +1395,7 @@ void main() {
     expect(halfA.width, greaterThan(shortA.width * 1.9));
   });
 
-  testWidgets('minimum block height decides the lane boundary', (
-    tester,
-  ) async {
+  testWidgets('minimum block height decides the lane boundary', (tester) async {
     final day = DateTime(2026, 5, 5);
     CalendarEvent timed(String id, int startMinute, int endMinute) =>
         CalendarEvent(

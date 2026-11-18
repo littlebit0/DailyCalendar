@@ -133,9 +133,9 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
                   borderRadius: BorderRadius.circular(24),
                 ),
                 alignment: Alignment.center,
-                child: const Icon(
+                child: Icon(
                   Icons.calendar_month_rounded,
-                  color: DailyUi.primary,
+                  color: DailyUi.primaryForeground(context),
                   size: 49,
                 ),
               ),
