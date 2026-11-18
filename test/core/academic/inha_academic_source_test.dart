@@ -196,4 +196,32 @@ void main() {
       expect(defaults.periodFor(2027, '1', university: 'inha'), isNull);
     },
   );
+
+  test('INHA merges an identical repeated row and rejects a differing one', () {
+    String repeated(String Function(String) change) {
+      final doc = html.parse(fixture());
+      final date = doc
+          .querySelectorAll('dl > dt')
+          .firstWhere((e) => e.text.contains('01.06.(화)'));
+      final title = date.nextElementSibling!;
+      expect(title.localName, 'dd');
+      final copy = date.clone(true)..innerHtml = change(date.innerHtml);
+      date.parent!
+        ..append(copy)
+        ..append(title.clone(true));
+      return doc.outerHtml;
+    }
+
+    expect(
+      InhaAcademicSource.parse(repeated((s) => s), 2026),
+      hasLength(InhaAcademicSource.parse(fixture(), 2026).length),
+    );
+    expect(
+      () => InhaAcademicSource.parse(
+        repeated((s) => s.replaceFirst('01.06.(화)', '01.07.(수)')),
+        2026,
+      ),
+      throwsFormatException,
+    );
+  });
 }

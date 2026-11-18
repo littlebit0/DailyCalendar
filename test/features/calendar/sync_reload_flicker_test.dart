@@ -13,6 +13,7 @@ import 'package:daily/features/events/application/event_command_service.dart';
 import 'package:daily/features/events/domain/calendar_event.dart';
 import 'package:daily/features/events/domain/event_category.dart';
 import 'package:daily/features/events/domain/event_repository.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -124,10 +125,11 @@ void main() {
   Future<ProviderContainer> pumpCalendar(
     WidgetTester tester,
     StreamController<List<CalendarEvent>> reloads,
-    List<CalendarEvent> events,
-  ) async {
+    List<CalendarEvent> events, {
+    Size size = const Size(400, 860),
+  }) async {
     tester.view.devicePixelRatio = 1;
-    tester.view.physicalSize = const Size(400, 860);
+    tester.view.physicalSize = size;
     addTearDown(tester.view.resetDevicePixelRatio);
     addTearDown(tester.view.resetPhysicalSize);
     SharedPreferences.setMockInitialValues({'defaultCalendarView': 'month'});
@@ -236,4 +238,57 @@ void main() {
     expect(find.byType(CircularProgressIndicator), findsNothing);
     expect(title, findsWidgets);
   });
+
+  // #961: Windows commits a swipe when the scroll ends. A reload before that
+  // used to compare the uncommitted page with the old date and swipe back.
+  for (final (mode, days) in [
+    (CalendarViewMode.week, 7),
+    (CalendarViewMode.day, 1),
+  ]) {
+    testWidgets('Windows ${mode.name} swipe survives a reload before it ends', (
+      tester,
+    ) async {
+      debugDefaultTargetPlatformOverride = TargetPlatform.windows;
+      final reloads = StreamController<List<CalendarEvent>>.broadcast();
+      addTearDown(reloads.close);
+      final events = [_event(DateTime.now())];
+      final container = await pumpCalendar(
+        tester,
+        reloads,
+        events,
+        size: const Size(1280, 860),
+      );
+      container.read(calendarViewModeProvider.notifier).state = mode;
+      await tester.pumpAndSettle();
+      final before = container.read(selectedDateProvider);
+
+      final pages = find.byKey(ValueKey('${mode.name}-pointer-navigation'));
+      final gesture = await tester.startGesture(tester.getCenter(pages));
+      await gesture.moveBy(const Offset(-40, 0));
+      await tester.pump();
+      // Past the halfway point: the page view already shows the next page.
+      await gesture.moveBy(Offset(-tester.getSize(pages).width * 0.6, 0));
+      await tester.pump();
+      // Still dragging: nothing is committed yet.
+      expect(container.read(selectedDateProvider), before);
+
+      container.read(_reloadTick.notifier).state++;
+      await tester.pump();
+      reloads.add(events);
+      await tester.pump();
+      await tester.pump();
+
+      await gesture.up();
+      // The reloaded ranges only answer when told to, so settle by hand.
+      for (var frame = 0; frame < 20; frame++) {
+        await tester.pump(const Duration(milliseconds: 100));
+        reloads.add(events);
+      }
+      expect(
+        DateUtils.dateOnly(container.read(selectedDateProvider)),
+        DateTime(before.year, before.month, before.day + days),
+      );
+      debugDefaultTargetPlatformOverride = null;
+    });
+  }
 }
