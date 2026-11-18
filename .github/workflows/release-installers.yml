@@ -10,12 +10,20 @@ on:
 
 permissions:
   contents: read
+  # require-platform-builds.yml reads the tag commit's workflow runs.
+  actions: read
 
 env:
   RELEASE_TAG: ${{ inputs.tag }}
 
 jobs:
+  verify:
+    uses: ./.github/workflows/require-platform-builds.yml
+    with:
+      tag: ${{ inputs.tag }}
+
   linux:
+    needs: verify
     # release-linux.yml declares contents: write on its publish job; a called
     # workflow cannot hold more than its caller grants.
     permissions:
@@ -29,6 +37,7 @@ jobs:
 
   ios:
     name: iOS unsigned IPA
+    needs: verify
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
@@ -56,6 +65,7 @@ jobs:
 
   macos:
     name: macOS unsigned DMG
+    needs: verify
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
@@ -98,6 +108,7 @@ jobs:
 
   android:
     name: Android release APK
+    needs: verify
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -132,6 +143,8 @@ jobs:
           storeFile=upload-keystore.jks
           EOF
       - run: flutter pub get
+      - name: Check Android versionCode against pubspec version
+        run: python3 tool/check_android_version_code.py
       - name: Build Android release APK
         run: >-
           flutter build apk --release --no-pub
@@ -173,6 +186,7 @@ jobs:
 
   windows:
     name: Windows release ZIP and installer
+    needs: verify
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4

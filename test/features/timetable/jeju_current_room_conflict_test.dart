@@ -129,7 +129,7 @@ void main() {
               final time = ownClock(parts[1]);
               var day = DateTime(2026, 9, 1);
               while (day.weekday != weekday) {
-                day = day.add(const Duration(days: 1));
+                day = DateTime(day.year, day.month, day.day + 1);
               }
               while (!day.isAfter(DateTime(2026, 12, 7))) {
                 final date = day.toIso8601String().substring(0, 10);
@@ -145,7 +145,7 @@ void main() {
                     ].contains(date)) {
                   expected.add('$date|${time.$1}|${time.$2}|');
                 }
-                day = day.add(const Duration(days: 7));
+                day = DateTime(day.year, day.month, day.day + 7);
               }
             }
             expect(

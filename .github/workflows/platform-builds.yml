@@ -54,10 +54,15 @@ jobs:
       - name: Test Windows tray recovery wiring
         run: python3 -m unittest discover -s tool/tests -p test_windows_tray_recovery.py -v
 
+      - name: Test Windows single-instance wiring
+        run: python3 -m unittest discover -s tool/tests -p test_windows_single_instance.py -v
+
       - name: Test bug report receiver
         run: python3 -m unittest discover -s test/tool -p "*receiver_test.py" -v
       - name: Test Linux reminder delivery
         run: python3 -m unittest discover -s tool/tests -p test_linux_reminders_notify.py -v
+      - name: Test release gate on Platform Builds
+        run: python3 -m unittest discover -s tool/tests -p test_require_platform_builds.py -v
 
       - name: Cache source fixtures
         uses: actions/cache@v4
@@ -68,6 +73,27 @@ jobs:
       # Timetable tests take most of the run; timetable-test below covers them.
       - name: Test
         run: find test -name '*_test.dart' -not -path 'test/features/timetable/*' | sort | xargs flutter test --concurrency=3
+
+      # The runner's zone is UTC, where no day is 23 or 25 hours long, so the
+      # daylight-saving tests pass above without crossing a DST change.
+      - name: Test daylight-saving boundaries
+        env:
+          TZ: America/New_York
+        run: >-
+          flutter test --no-pub
+          test/core/calendar_event_movement_test.dart
+          test/core/calendar_event_span_test.dart
+          test/core/calendar_import/google_calendar_source_test.dart
+          test/features/calendar/calendar_day_range_dst_test.dart
+          test/features/calendar/schedule_timeline_view_test.dart
+          test/features/chat/chat_input_bar_test.dart
+          test/features/chat/rule_based_schedule_parser_test.dart
+          test/features/events/alarm_fire_time_test.dart
+          test/features/events/event_details_panel_test.dart
+          test/features/events/event_editor_dialog_test.dart
+          test/features/events/event_template_quick_add_test.dart
+          test/features/events/event_template_test.dart
+          test/features/events/recurrence_expander_test.dart
 
       - name: Test Windows widget date rollover helpers
         run: python3 -m unittest discover -s tool/tests -p test_widget_date_rollover_cpp.py -v
@@ -124,6 +150,12 @@ jobs:
       - name: Test LMS authentication scripts
         run: python3 -m unittest discover -s tool/tests -p test_lms_login_scripts.py -v
 
+      # Privacy/platform policy checks and timetable import checks that no
+      # step names on its own. On macOS because several compile Swift; a
+      # skipped check fails the step. The script lists what it leaves out.
+      - name: Test tool policy and import suites
+        run: python3 tool/run_tool_tests.py
+
       - name: Test geolocator_apple one-time request cancellation
         run: python3 -m unittest discover -s tool/tests -p test_geolocator_apple_cancel.py -v
 
@@ -134,6 +166,7 @@ jobs:
           python3 -m unittest discover -s tool/tests -p test_siri_command_classifier.py -v
           python3 -m unittest discover -s tool/tests -p test_widget_occurrence_action.py -v
           python3 -m unittest discover -s tool/tests -p test_siri_narration_validator.py -v
+          python3 -m unittest discover -s tool/tests -p test_ios_alarm_replacement.py -v
 
       - name: Test widget date rollover wiring and Swift logic
         run: python3 -m unittest discover -s tool/tests -p test_widget_date_rollover_wiring.py -v
@@ -187,6 +220,11 @@ jobs:
 
       - name: Install dependencies
         run: flutter pub get
+
+      - name: Check Android versionCode against pubspec version
+        run: |
+          python3 -m unittest discover -s tool/tests -p test_android_version_code.py -v
+          python3 tool/check_android_version_code.py
 
       - name: Test Android cookie expiry format
         run: python3 -m unittest discover -s tool/tests -p test_android_cookie_expires.py -v

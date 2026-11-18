@@ -58,6 +58,7 @@ class FlutterWindow : public Win32Window {
   bool tray_icon_added_ = false;
   // Broadcast by Explorer when the taskbar is (re)created; it drops our icon.
   UINT taskbar_created_message_ = 0;
+  UINT show_window_message_ = 0;
   int tray_retry_attempts_ = 0;
   bool exit_requested_ = false;
 };

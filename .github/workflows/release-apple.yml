@@ -10,6 +10,8 @@ on:
 
 permissions:
   contents: read
+  # require-platform-builds.yml reads the tag commit's workflow runs.
+  actions: read
 
 env:
   RELEASE_TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}
@@ -47,9 +49,15 @@ jobs:
           echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
           echo "version=$version" >> "$GITHUB_OUTPUT"
 
+  verify:
+    needs: resolve
+    uses: ./.github/workflows/require-platform-builds.yml
+    with:
+      tag: ${{ inputs.tag }}
+
   ios:
     name: iOS unsigned IPA
-    needs: resolve
+    needs: [resolve, verify]
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
@@ -82,7 +90,7 @@ jobs:
 
   macos:
     name: macOS unsigned DMG
-    needs: resolve
+    needs: [resolve, verify]
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
