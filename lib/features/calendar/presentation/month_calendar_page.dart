@@ -406,11 +406,19 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
                                                             )
                                                             .state =
                                                         date;
+                                                    // A direct pick, even of the shown date, replaces the remembered day.
+                                                    ref
+                                                        .read(
+                                                          _monthNavigationDayProvider
+                                                              .notifier,
+                                                        )
+                                                        .forget();
                                                     // Week/day taps can cross a month
                                                     // boundary; keep the month view on
                                                     // the selected date's month.
                                                     if (viewMode !=
-                                                        CalendarViewMode.month) {
+                                                        CalendarViewMode
+                                                            .month) {
                                                       ref
                                                           .read(
                                                             visibleMonthProvider
@@ -5814,6 +5822,7 @@ class _CalendarHeader extends ConsumerWidget {
 
   void _goToday(WidgetRef ref) {
     final now = DateTime.now();
+    ref.read(_monthNavigationDayProvider.notifier).forget();
     ref.read(visibleMonthProvider.notifier).state = DateTime(
       now.year,
       now.month,
@@ -8396,6 +8405,29 @@ class _WeekEventFlag extends StatelessWidget {
   }
 }
 
+/// The day of month the user picked, kept while month navigation clamps it to
+/// shorter months (#963): Jan 31 -> Feb 28 -> Jan 31. `shown` is the date the
+/// last month move selected; any other change of the selected date (week/day
+/// paging, a search result...) forgets the day, even if it later comes back.
+class _MonthNavigationDay extends Notifier<({int day, DateTime shown})?> {
+  @override
+  ({int day, DateTime shown})? build() {
+    ref.listen<DateTime>(selectedDateProvider, (_, next) {
+      if (state?.shown != next) state = null;
+    });
+    return null;
+  }
+
+  void remember(int day, DateTime shown) => state = (day: day, shown: shown);
+
+  void forget() => state = null;
+}
+
+final _monthNavigationDayProvider =
+    NotifierProvider<_MonthNavigationDay, ({int day, DateTime shown})?>(
+      _MonthNavigationDay.new,
+    );
+
 void _setVisibleMonth(
   WidgetRef ref,
   DateTime nextMonth,
@@ -8403,14 +8435,16 @@ void _setVisibleMonth(
 ) {
   final month = DateTime(nextMonth.year, nextMonth.month);
   final lastDay = DateUtils.getDaysInMonth(month.year, month.month);
-  final selectedDay = selectedDate.day > lastDay ? lastDay : selectedDate.day;
+  final remembered = ref.read(_monthNavigationDayProvider);
+  final pickedDay = remembered != null && remembered.shown == selectedDate
+      ? remembered.day
+      : selectedDate.day;
+  final selectedDay = pickedDay > lastDay ? lastDay : pickedDay;
+  final next = DateTime(month.year, month.month, selectedDay);
 
   ref.read(visibleMonthProvider.notifier).state = month;
-  ref.read(selectedDateProvider.notifier).state = DateTime(
-    month.year,
-    month.month,
-    selectedDay,
-  );
+  ref.read(selectedDateProvider.notifier).state = next;
+  ref.read(_monthNavigationDayProvider.notifier).remember(pickedDay, next);
 }
 
 CalendarRange _monthRangeFor(DateTime month, bool weekStartsOnMonday) {
