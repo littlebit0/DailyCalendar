@@ -24,6 +24,14 @@ def body(name):
 
 
 class WindowsTrayRecoveryTest(unittest.TestCase):
+    def test_session_end_exits_instead_of_hiding_to_the_tray(self):
+        # The installer's Restart Manager must be able to close the app (#935).
+        handler = body("FlutterWindow::MessageHandler")
+        self.assertIn("case WM_QUERYENDSESSION:\n      return TRUE;", handler)
+        session_end = handler[handler.index("case WM_ENDSESSION:"):handler.index("case WM_COMMAND:")]
+        self.assertIn("if (wparam)", session_end)
+        self.assertIn("ExitFromTray();", session_end)
+
     def test_taskbar_recreation_ensures_the_icon_without_duplicating_it(self):
         self.assertIn('RegisterWindowMessageW(L"TaskbarCreated")', SOURCE)
         handler = re.search(r"message == taskbar_created_message_\) \{(.*?)\n  \}", SOURCE, re.S).group(1)

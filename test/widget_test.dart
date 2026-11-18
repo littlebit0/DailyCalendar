@@ -597,6 +597,88 @@ void main() {
     );
   }
 
+  testWidgets('a Siri change whose reminder fails still replaces the alarm and '
+      'is not acknowledged (#924)', (tester) async {
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(1280, 900);
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+    addTearDown(() => debugDefaultTargetPlatformOverride = null);
+    const siriChannel = MethodChannel('daily/siri_event_changes');
+    final siriCalls = <String>[];
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(siriChannel, (call) async {
+          siriCalls.add(call.method);
+          return call.method == 'pendingChanges'
+              ? <Object?>[
+                  <Object?, Object?>{
+                    'token': 'token-1',
+                    'eventId': 'siri-edit',
+                  },
+                ]
+              : null;
+        });
+    addTearDown(
+      () => TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(siriChannel, null),
+    );
+    SharedPreferences.setMockInitialValues({'onboardingCompleted': true});
+    final preferences = await SharedPreferences.getInstance();
+    final start = DateTime.now().add(const Duration(days: 1));
+    // Siri turned the alarm off: scheduleEventAlarm is what removes it.
+    final edited = CalendarEvent(
+      id: 'siri-edit',
+      title: 'Siri edit',
+      startAt: start,
+      endAt: start.add(const Duration(hours: 1)),
+      allDay: false,
+      category: EventCategory.basic,
+      colorValue: 1,
+      createdAt: start,
+      updatedAt: start,
+    );
+    final alarms = _RecordingAlarms();
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          universityRegionsProvider.overrideWith(
+            (ref) async => UniversityRegions.fromJson(
+              jsonDecode(
+                    File(
+                      'assets/academic/university_regions.json',
+                    ).readAsStringSync(),
+                  )
+                  as Map<String, dynamic>,
+            ),
+          ),
+          settingsRepositoryProvider.overrideWithValue(
+            SettingsRepository(preferences: preferences),
+          ),
+          notificationServiceProvider.overrideWithValue(
+            _FakeNotification(failScheduleEventReminder: true),
+          ),
+          alarmServiceProvider.overrideWithValue(alarms),
+          syncServiceProvider.overrideWithValue(_FakeSync()),
+          eventRepositoryProvider.overrideWithValue(
+            _FindableEventRepository([edited]),
+          ),
+          googleDriveAuthServiceProvider.overrideWithValue(
+            _FakeGoogleDriveAuthService(),
+          ),
+        ],
+        child: const DailyApp(),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(siriCalls, contains('pendingChanges'));
+    expect(alarms.scheduled, contains('siri-edit'));
+    expect(siriCalls, isNot(contains('acknowledgeChanges')));
+    debugDefaultTargetPlatformOverride = null;
+    await tester.pumpWidget(const SizedBox.shrink());
+  });
+
   testWidgets('a local-only user still reports both startup milestones once', (
     tester,
   ) async {
@@ -10982,8 +11064,11 @@ class _FakeNotification implements NotificationService {
   _FakeNotification({
     this.failCancelEventReminder = false,
     this.failCancelMorningBriefing = false,
+    this.failScheduleEventReminder = false,
     this.initializeCompleter,
   });
+
+  final bool failScheduleEventReminder;
 
   final bool failCancelEventReminder;
   final bool failCancelMorningBriefing;
@@ -11022,6 +11107,9 @@ class _FakeNotification implements NotificationService {
     CalendarEvent event, {
     bool allowImmediate = false,
   }) async {
+    if (failScheduleEventReminder) {
+      throw Exception('schedule event reminder failed');
+    }
     scheduledEventIds.add(event.id);
     scheduledImmediateFlags.add(allowImmediate);
   }
@@ -11037,6 +11125,22 @@ class _FakeNotification implements NotificationService {
 
   @override
   Future<String> permissionSummary() async => '테스트 권한 · 예약 0개';
+}
+
+class _RecordingAlarms extends UnsupportedAlarmService {
+  final scheduled = <String>[];
+
+  @override
+  Future<void> scheduleEventAlarm(CalendarEvent event) async =>
+      scheduled.add(event.id);
+}
+
+class _FindableEventRepository extends _FakeEventRepository {
+  _FindableEventRepository(List<CalendarEvent> events) : super(events: events);
+
+  @override
+  Future<CalendarEvent?> findById(String id) async =>
+      _events.where((event) => event.id == id).firstOrNull;
 }
 
 class _GatedSettingsRepository extends SettingsRepository {

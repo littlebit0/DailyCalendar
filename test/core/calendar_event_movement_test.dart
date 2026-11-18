@@ -180,7 +180,12 @@ void main() {
     expect(after.last.startAt, DateTime(2026, 4, 2, 9));
     expect(
       after.map((e) => e.startAt),
-      before.map((e) => e.startAt.add(const Duration(days: 3))),
+      // Calendar days, not 72 hours: the series crosses the 2026-03-08 DST
+      // change in zones such as America/New_York.
+      before.map((e) {
+        final at = e.startAt;
+        return DateTime(at.year, at.month, at.day + 3, at.hour, at.minute);
+      }),
     );
     for (final occurrence in after) {
       expect(occurrence.memo, '메모');

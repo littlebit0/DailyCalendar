@@ -301,7 +301,19 @@ class CalendarImportService {
       byMonthDay: monthDays,
       byMonth: months,
       bySetPos: positions,
+      // RFC 5545 weeks start on WKST (Monday when absent), not on the start
+      // weekday the app assumes for its own rules.
+      weekStart: frequency == RecurrenceFrequency.weekly && interval > 1
+          ? _weekStart(fields['WKST'])
+          : null,
     );
+  }
+
+  static int _weekStart(String? wkst) {
+    final index = RecurrenceRule.weekdayCodes.indexOf(
+      wkst?.trim().toUpperCase() ?? 'MO',
+    );
+    return index < 0 ? DateTime.monday : index + 1;
   }
 
   static bool _weekStartSupported(String? wkst, DateTime? startAt) {
