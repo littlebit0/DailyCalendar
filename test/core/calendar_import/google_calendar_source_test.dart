@@ -341,6 +341,32 @@ void main() {
     expect(rdate.startAt, DateTime.utc(2026, 10, 29, 13).toLocal());
   });
 
+  test('원본 시간대에서 시작일이 다른 월간 반복은 그 날짜 기준으로 RDATE와 비교한다 (#954)', () async {
+    final events = await _load([
+      {
+        'id': 'monthly',
+        'summary': '월간 회의',
+        // 뉴욕 1월 30일 23시, 서울·UTC 기기에서는 1월 31일.
+        'start': {
+          'dateTime': '2026-01-31T04:00:00Z',
+          'timeZone': 'America/New_York',
+        },
+        'end': {
+          'dateTime': '2026-01-31T05:00:00Z',
+          'timeZone': 'America/New_York',
+        },
+        'recurrence': [
+          'RRULE:FREQ=MONTHLY',
+          'RDATE;TZID=America/New_York:20260131T230000',
+        ],
+      },
+    ]);
+    final rdates = events.where((e) => e.sourceId.contains('#rdate#'));
+    expect(rdates.map((e) => e.startAt), [
+      DateTime.utc(2026, 2, 1, 4).toLocal(),
+    ]);
+  });
+
   test('EXDATE가 DTSTART와 같은 반복 없는 원본은 가져오지 않는다', () async {
     final events = await _load([
       {
