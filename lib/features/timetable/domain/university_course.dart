@@ -476,11 +476,12 @@ class UniversityCourse {
   int queryRank(String query) {
     final normalized = query.trim().toLowerCase();
     if (normalized.isEmpty) return 0;
+    // Titles keep the published text; some end in spaces that no one types.
     if (codeAndSection.toLowerCase() == normalized ||
         [
           title,
           ...titleAliases,
-        ].any((value) => value.toLowerCase() == normalized)) {
+        ].any((value) => value.trim().toLowerCase() == normalized)) {
       return 0;
     }
     if ([
