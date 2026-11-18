@@ -9,8 +9,10 @@ import 'app_update_service.dart';
 /// Remembers on this device that a newer release exists. The flag is never part
 /// of the Drive settings document, so another device's version cannot set it.
 ///
-/// Once a newer version is known, no further network request is made: the
-/// stored version keeps the restriction until the running build catches up.
+/// While restricted, the release feed is asked again on start, on resume
+/// (at most once per five minutes) and every [interval], so a withdrawn or
+/// rolled-back release lifts the restriction (#851). A lookup that fails or
+/// gets no answer keeps the stored restriction until the build catches up.
 class UpdateRequirementController {
   UpdateRequirementController({
     required SharedPreferences preferences,
@@ -46,7 +48,8 @@ class UpdateRequirementController {
   final Duration interval;
   final bool enabled;
 
-  /// Runs once when a newer release is first found (e.g. to stage an installer).
+  /// Runs when a newer release is found or replaces the required one
+  /// (e.g. to stage an installer).
   final Future<void> Function()? onDetected;
 
   /// The newer version that must be installed, or null when up to date.
@@ -73,7 +76,8 @@ class UpdateRequirementController {
     requiredVersion.dispose();
   }
 
-  /// Re-checks on resume; the stored interval keeps this from polling.
+  /// Re-checks on resume. Unrestricted, the stored interval keeps this from
+  /// polling; restricted, the five-minute attempt limit does.
   Future<void> check() {
     if (!enabled) return Future.value();
     return _checking ??= _check().whenComplete(() {
@@ -102,10 +106,12 @@ class UpdateRequirementController {
   Future<void> _check() async {
     try {
       await _reconcile();
-      if (requiredVersion.value != null) return;
+      final required = requiredVersion.value;
       final now = _now();
       final checkedMs = _preferences.getInt(lastCheckedKey);
-      if (checkedMs != null &&
+      // A restricted device skips the interval so start and resume re-check.
+      if (required == null &&
+          checkedMs != null &&
           now.difference(DateTime.fromMillisecondsSinceEpoch(checkedMs)) <
               interval) {
         return;
@@ -118,9 +124,14 @@ class UpdateRequirementController {
       }
       _lastAttempt = now;
       final latest = await _latestVersion();
+      // No answer is not "no update": a restriction stays until the feed says so.
       if (latest == null) return;
       await _preferences.setInt(lastCheckedKey, now.millisecondsSinceEpoch);
-      if (!_isNewer(latest, await _currentVersion())) return;
+      if (!_isNewer(latest, await _currentVersion())) {
+        if (required != null) await _clear();
+        return;
+      }
+      if (latest == required) return;
       await _preferences.setString(requiredSourceKey, source.name);
       await _preferences.setString(requiredVersionKey, latest);
       requiredVersion.value = latest;
@@ -146,6 +157,10 @@ class UpdateRequirementController {
       requiredVersion.value = stored;
       return;
     }
+    await _clear();
+  }
+
+  Future<void> _clear() async {
     await _preferences.remove(requiredVersionKey);
     await _preferences.remove(requiredSourceKey);
     requiredVersion.value = null;
