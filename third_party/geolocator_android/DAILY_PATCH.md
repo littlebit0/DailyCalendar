@@ -16,3 +16,8 @@ flag, reset by `startPositionUpdates`. A settings check that is still pending wh
 request is cancelled can no longer start the updates afterwards (success listener,
 failure listener and `onActivityResult` all return when the flag is set), so a
 cancelled client is not kept alive by a restarted location request.
+
+Files that differ from upstream (#972; update this list when re-vendoring):
+- `android/.../MethodCallHandlerImpl.java`, `android/.../location/FusedLocationClient.java`: #228 (above).
+- `android/.../permission/PermissionManager.java`: an empty `grantResults` (cancelled dialog) answers the request once as denied (#395); the request and Activity references are released when it completes or the Activity detaches (#396).
+- `android/.../GeolocatorPlugin.java`: keeps a pending permission request across an Activity configuration change and reattaches it to the new Activity (#396).
