@@ -89,7 +89,7 @@ class DaeguAcademicSource implements AcademicSource {
       if (range.isEmpty || range.length > 2) {
         throw const FormatException('Invalid Daegu date range');
       }
-      DateTime date(String text) {
+      DateTime date(String text, [DateTime? start]) {
         final day = RegExp(
           r'^\s*(\d{2})-(\d{2})\s*\([월화수목금토일]\)\s*$',
         ).firstMatch(text);
@@ -98,7 +98,9 @@ class DaeguAcademicSource implements AcademicSource {
         }
         final m = int.parse(day[1]!);
         final d = int.parse(day[2]!);
-        final y = academicYear + (m <= 2 ? 1 : 0);
+        final y = start == null
+            ? academicYear + (m <= 2 ? 1 : 0)
+            : academicRangeEndYear(start, m);
         final result = DateTime(y, m, d);
         if (result.year != y || result.month != m || result.day != d) {
           throw const FormatException('Invalid Daegu date');
@@ -107,7 +109,7 @@ class DaeguAcademicSource implements AcademicSource {
       }
 
       final start = date(range.first);
-      final last = date(range.last);
+      final last = date(range.last, start);
       if (start.month != month || last.isBefore(start)) {
         throw const FormatException('Conflicting Daegu period');
       }

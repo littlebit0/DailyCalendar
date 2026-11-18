@@ -92,6 +92,8 @@ struct DailyWidgetText {
   var noEventsThisWeek: String { localized("이번 주 일정이 없습니다", "No events this week", "今週の予定はありません", "本週沒有行程") }
   var noDdays: String { localized("표시할 D-day가 없습니다", "No D-days to show", "表示するD-dayはありません", "沒有可顯示的 D-day") }
   var refresh: String { localized("앱을 열어 일정을 갱신하세요", "Open the app to refresh events", "アプリを開いて予定を更新してください", "請開啟 App 以更新行程") }
+  /// Short form for the single-line Lock Screen widget.
+  var refreshShort: String { localized("앱을 열어 갱신", "Open app to refresh", "アプリで更新", "開啟 App 更新") }
   var markDone: String { localized("완료로 변경", "Mark as done", "完了にする", "標示為完成") }
   var markNotDone: String { localized("미완료로 변경", "Mark as not done", "未完了にする", "標示為未完成") }
   func moreEvents(_ count: Int) -> String {
@@ -458,6 +460,7 @@ private struct DailyWidgetEventLabel: View {
       )
       .lineLimit(1)
       .minimumScaleFactor(0.7)
+      .privacySensitive()
       .padding(.horizontal, 2)
       .frame(maxWidth: .infinity, minHeight: height, maxHeight: height, alignment: .leading)
       .background(Color.daily(argb: colors.background))
@@ -627,7 +630,9 @@ struct DailyWidgetSnapshot: Codable {
   /// Stored snapshot re-derived for `date`; a themed placeholder when it cannot cover that date.
   static func load(for date: Date = .now) -> DailyWidgetSnapshot {
     let stored = loadStored()
-    guard let raw = storedJSON() else { return stored }
+    // No readable snapshot (never written, unreadable or not JSON) is not "no
+    // events today": the widget cannot know, so it asks for a refresh (#926).
+    guard let raw = storedJSON() else { return stored.refreshPlaceholder }
     guard let rolled = DailyWidgetDateRollover.rollForward(raw, today: DailyWidgetDateRollover.dateKey(date)),
           let data = try? JSONSerialization.data(withJSONObject: rolled),
           let snapshot = try? JSONDecoder().decode(DailyWidgetSnapshot.self, from: data) else {
@@ -644,7 +649,7 @@ struct DailyWidgetSnapshot: Codable {
       weekTitle: nil,
       weekStartsOnMonday: weekStartsOnMonday,
       monthDays: [],
-      todayTitle: text.refresh,
+      todayTitle: text.todayEvents,
       todayEvents: [],
       todayRemainingCount: 0,
       scheduleEvents: [],
@@ -755,7 +760,13 @@ struct DailyTodayWidgetView: View {
   var body: some View {
     VStack(alignment: .leading, spacing: 8) {
       DailyWidgetHeader(title: entry.snapshot.todayTitle, systemImage: "calendar")
-      if entry.snapshot.todayEvents.isEmpty {
+      if entry.snapshot.needsRefresh == true {
+        Spacer()
+        Text(entry.snapshot.text.refresh)
+          .font(.subheadline)
+          .foregroundStyle(Color.dailySecondary)
+        Spacer()
+      } else if entry.snapshot.todayEvents.isEmpty {
         Spacer()
         Text(entry.snapshot.text.noEventsToday)
           .font(.subheadline)
@@ -779,6 +790,7 @@ struct DailyTodayWidgetView: View {
                 category: event.color
               )
               .lineLimit(1)
+              .privacySensitive()
             Spacer(minLength: 0)
           }
         }
@@ -820,7 +832,9 @@ struct DailyLockScreenTodayView: View {
   var body: some View {
     switch family {
     case .accessoryInline:
-      if let next = events.first {
+      if entry.snapshot.needsRefresh == true {
+        Label(entry.snapshot.text.refreshShort, systemImage: "arrow.clockwise")
+      } else if let next = events.first {
         HStack(spacing: 4) {
           Image(systemName: "calendar")
           Text(timeLabel(for: next))
@@ -838,12 +852,18 @@ struct DailyLockScreenTodayView: View {
     case .accessoryCircular:
       ZStack {
         AccessoryWidgetBackground()
-        VStack(spacing: 0) {
-          Text("\(events.count)")
+        if entry.snapshot.needsRefresh == true {
+          Image(systemName: "arrow.clockwise")
             .font(.title2.bold())
-            .monospacedDigit()
-          Text(entry.snapshot.text.events)
-            .font(.caption2)
+            .accessibilityLabel(entry.snapshot.text.refresh)
+        } else {
+          VStack(spacing: 0) {
+            Text("\(events.count)")
+              .font(.title2.bold())
+              .monospacedDigit()
+            Text(entry.snapshot.text.events)
+              .font(.caption2)
+          }
         }
       }
 
@@ -851,7 +871,11 @@ struct DailyLockScreenTodayView: View {
       VStack(alignment: .leading, spacing: 2) {
         Label(entry.snapshot.text.todayEvents, systemImage: "calendar")
           .font(.caption.bold())
-        if events.isEmpty {
+        if entry.snapshot.needsRefresh == true {
+          Text(entry.snapshot.text.refresh)
+            .font(.caption)
+            .foregroundStyle(.secondary)
+        } else if events.isEmpty {
           Text(entry.snapshot.text.noRemainingEvents)
             .font(.caption)
             .foregroundStyle(.secondary)
@@ -1119,6 +1143,7 @@ struct DailyDdayWidgetView: View {
                   category: item.color
                 )
                 .lineLimit(1)
+                .privacySensitive()
               Text(item.dateLabel)
                 .font(.caption2)
                 .foregroundStyle(Color.dailySecondary)

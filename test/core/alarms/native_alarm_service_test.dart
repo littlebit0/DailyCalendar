@@ -198,6 +198,28 @@ void main() {
     });
   }
 
+  test('only Android receives the settings flag of a user request', () async {
+    final arguments = <Object?>[];
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(channel, (methodCall) async {
+          arguments.add(methodCall.arguments);
+          return 'denied';
+        });
+    final service = NativeAlarmService(channel: channel);
+
+    debugDefaultTargetPlatformOverride = TargetPlatform.android;
+    await service.requestAuthorization(openSettings: true);
+    await service.requestAuthorization();
+    debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+    await service.requestAuthorization(openSettings: true);
+
+    expect(arguments, [
+      {'openSettings': true},
+      {'openSettings': false},
+      null,
+    ]);
+  });
+
   test('uses the native alarm channel on macOS', () async {
     debugDefaultTargetPlatformOverride = TargetPlatform.macOS;
     final methods = <String>[];

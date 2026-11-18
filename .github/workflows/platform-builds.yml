@@ -46,6 +46,9 @@ jobs:
       - name: Test Windows tray recovery wiring
         run: python3 -m unittest discover -s tool/tests -p test_windows_tray_recovery.py -v
 
+      - name: Test Windows single-instance wiring
+        run: python3 -m unittest discover -s tool/tests -p test_windows_single_instance.py -v
+
       - name: Test bug report receiver
         run: python3 -m unittest discover -s test/tool -p "*receiver_test.py" -v
       - name: Test Linux reminder delivery

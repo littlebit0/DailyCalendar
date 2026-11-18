@@ -136,6 +136,27 @@ class GoogleDriveSyncService implements SyncService {
       _timetableStore.hasPendingSync ||
       _templateStore.hasPendingSync ||
       _imogiStore.hasPendingSync;
+
+  /// [_documentsPending] without a store whose saved value could not be read.
+  /// Such a store always reports pending, but a sync can never upload it.
+  bool get _uploadableDocumentsPending =>
+      _timetableStore.hasPendingSync && _timetableStore.loadError == null ||
+      _templateStore.hasPendingSync ||
+      _imogiStore.hasPendingSync && _imogiStore.loadError == null;
+
+  /// Stores the running sync left out because they could not be read.
+  final _skippedUnreadableDocuments = <String>{};
+  // A downloaded document was not merged, so the change cursor must stay.
+  var _remoteMergeSkipped = false;
+
+  /// An unreadable store is neither uploaded (it would overwrite Drive) nor
+  /// merged with a download. The rest of the run goes on.
+  bool _skipUnreadable(Object? loadError, String label) {
+    if (loadError == null) return false;
+    _skippedUnreadableDocuments.add(label);
+    return true;
+  }
+
   late final PacedHttpClient _httpClient;
   final Duration _changeSyncDelay;
   final List<Duration> _retryDelays;
@@ -179,6 +200,8 @@ class GoogleDriveSyncService implements SyncService {
   var _started = false;
   var _automaticRetryIndex = 0;
   var _manualRestoreDepth = 0;
+  // Unreadable Drive event files skipped by the running sync.
+  var _skippedCorruptEventFiles = 0;
 
   /// Called for every failed sync run (startup, uploads after edits, automatic
   /// retries), except sign-in problems and cancellations. Used for automatic
@@ -441,7 +464,9 @@ class GoogleDriveSyncService implements SyncService {
   }
 
   Future<bool> hasPendingChanges() async =>
-      _documentsPending ||
+      _documentsPending || await _eventsOrSettingsPending();
+
+  Future<bool> _eventsOrSettingsPending() async =>
       _settingsRepository.hasPendingSettingsSync ||
       (await _eventRepository.pendingSyncEvents()).any(_canSyncEvent) ||
       (await _maintenance?.deletionRecords(pendingOnly: true) ??
@@ -659,8 +684,10 @@ class GoogleDriveSyncService implements SyncService {
 
     _validateSyncSession = validateSession;
     final stopwatch = Stopwatch()..start();
+    _skippedUnreadableDocuments.clear();
     _syncStageDurationsMs.clear();
     _syncStage = null;
+    _skippedCorruptEventFiles = 0;
     final analyticsOperation = _analyticsOperation(request.kind);
     final analyticsTrigger = _analyticsTrigger(request);
     // Only a request created by the automatic retry timer is numbered (from 2);
@@ -737,12 +764,16 @@ class GoogleDriveSyncService implements SyncService {
               '아직 병합되지 않은 설정 변경이 남아 있습니다. 복원 후 다시 백업해 주세요.',
             );
           }
-          if (request.includeTimetable && _timetableStore.hasPendingSync) {
+          if (request.includeTimetable &&
+              _timetableStore.hasPendingSync &&
+              _timetableStore.loadError == null) {
             throw const GoogleDriveSyncException(
               '아직 동기화되지 않은 시간표 변경이 남아 있습니다. 다시 시도해 주세요.',
             );
           }
-          if (request.includeTimetable && _imogiStore.hasPendingSync) {
+          if (request.includeTimetable &&
+              _imogiStore.hasPendingSync &&
+              _imogiStore.loadError == null) {
             throw const GoogleDriveSyncException(
               '아직 동기화되지 않은 잊모기 변경이 남아 있습니다. 다시 시도해 주세요.',
             );
@@ -839,13 +870,24 @@ class GoogleDriveSyncService implements SyncService {
           includeSettings: _settingsRepository.hasPendingSettingsSync,
           includeTimetable: _documentsPending,
         );
-        if (conflicts > 0 || await hasPendingChanges()) {
+        if (conflicts > 0 ||
+            _uploadableDocumentsPending ||
+            await _eventsOrSettingsPending()) {
           throw const GoogleDriveSyncException(
             '아직 동기화되지 않은 변경이 남아 있습니다. 다시 시도해 주세요.',
           );
         }
       }
+      if (_skippedUnreadableDocuments.isNotEmpty) {
+        completionMessage =
+            '$completionMessage · 읽을 수 없는 '
+            '${_skippedUnreadableDocuments.join('·')} 동기화 건너뜀';
+      }
       _resetAutomaticRetry(request.kind);
+      if (_skippedCorruptEventFiles > 0) {
+        completionMessage =
+            '$completionMessage · 손상된 일정 파일 $_skippedCorruptEventFiles개 건너뜀';
+      }
       statusNotifier.value = statusNotifier.value.copyWith(
         syncing: false,
         lastSyncedAt: DateTime.now(),
@@ -1009,7 +1051,7 @@ class GoogleDriveSyncService implements SyncService {
       return true;
     }
     if (error is GoogleDriveAuthException) {
-      return false;
+      return error.timedOut;
     }
     final text = error.toString().toLowerCase();
     return text.contains('network') ||
@@ -1063,9 +1105,15 @@ class GoogleDriveSyncService implements SyncService {
   }
 
   Future<void> _backupDocuments(Map<String, String> headers) async {
-    if (_timetableStore.hasPendingSync) await _backupTimetable(headers);
+    if (_timetableStore.hasPendingSync &&
+        !_skipUnreadable(_timetableStore.loadError, '시간표')) {
+      await _backupTimetable(headers);
+    }
     if (_templateStore.hasPendingSync) await _backupTemplates(headers);
-    if (_imogiStore.hasPendingSync) await _backupImogi(headers);
+    if (_imogiStore.hasPendingSync &&
+        !_skipUnreadable(_imogiStore.loadError, '잊모기')) {
+      await _backupImogi(headers);
+    }
   }
 
   Future<void> _restore(Map<String, String> authHeaders) async {
@@ -1249,6 +1297,7 @@ class GoogleDriveSyncService implements SyncService {
       throw const GoogleDriveAuthException('Google Drive 계정 정보를 확인하지 못했습니다.');
     }
 
+    _remoteMergeSkipped = false;
     final savedToken = _settingsRepository.driveChangePageToken(accountEmail);
     if (savedToken == null) {
       if (!initializeIfNeeded) {
@@ -1262,7 +1311,10 @@ class GoogleDriveSyncService implements SyncService {
         accountEmail: accountEmail,
         pageToken: startToken,
       );
-      await _settingsRepository.markDriveDocumentsBootstrapped(accountEmail);
+      // Left unmarked, the next check reads the unmerged document again.
+      if (!_remoteMergeSkipped) {
+        await _settingsRepository.markDriveDocumentsBootstrapped(accountEmail);
+      }
       return true;
     }
 
@@ -1374,6 +1426,8 @@ class GoogleDriveSyncService implements SyncService {
       await _refreshWidgets();
     }
     _validateSyncSession?.call();
+    // Keeping the cursor makes the next check download that document again.
+    if (_remoteMergeSkipped) return restored;
     await _settingsRepository.saveDriveChangePageToken(
       accountEmail: accountEmail,
       pageToken: batch.newStartPageToken,
@@ -1521,7 +1575,9 @@ class GoogleDriveSyncService implements SyncService {
   Future<bool> _applyDownloadedTimetable(TimetableSyncDocument? remote) async {
     _validateSyncSession?.call();
     var changed = false;
-    if (remote != null) {
+    if (remote != null && _skipUnreadable(_timetableStore.loadError, '시간표')) {
+      _remoteMergeSkipped = true;
+    } else if (remote != null) {
       final before = _timetableStore.syncDocument();
       await _timetableStore.mergeSyncDocument(
         remote,
@@ -1637,7 +1693,9 @@ class GoogleDriveSyncService implements SyncService {
   /// Merges, never replaces: an item missing from Drive is kept locally.
   Future<void> _applyDownloadedImogi(ImogiSyncDocument? remote) async {
     _validateSyncSession?.call();
-    if (remote != null) {
+    if (remote != null && _skipUnreadable(_imogiStore.loadError, '잊모기')) {
+      _remoteMergeSkipped = true;
+    } else if (remote != null) {
       await _imogiStore.mergeSyncDocument(
         remote,
         validateSession: _validateSyncSession,
@@ -1913,19 +1971,28 @@ class GoogleDriveSyncService implements SyncService {
     List<_DriveFile> files, {
     bool useCache = true,
   }) async {
-    final downloaded = await _mapConcurrently(
+    // One unreadable file must not stop the others: it is skipped and its
+    // local event stays as it is. Network and auth errors still fail the run.
+    final downloaded = await _mapConcurrently<_DriveFile, _DownloadedEvent?>(
       files,
-      (file) => _downloadEventFile(
-        headers,
-        file.id,
-        md5Checksum: file.md5Checksum,
-        useCache: useCache,
-      ),
+      (file) async {
+        try {
+          return await _downloadEventFile(
+            headers,
+            file.id,
+            md5Checksum: file.md5Checksum,
+            useCache: useCache,
+          );
+        } on _CorruptEventFile {
+          _skippedCorruptEventFiles++;
+          return null;
+        }
+      },
       concurrency: _driveConcurrency,
       progressMessage: '복원 중',
     );
     final winners = <String, _DownloadedEvent>{};
-    for (final item in downloaded) {
+    for (final item in downloaded.nonNulls) {
       if (item.event?.lms != null && !_canSyncEvent(item.event!) ||
           item.deletion?.lmsOwnerId != null &&
               !_canSyncDeletion(item.deletion!)) {
@@ -2370,7 +2437,21 @@ class GoogleDriveSyncService implements SyncService {
     }
   }
 
+  /// Parsing does no I/O, so anything it throws means an unreadable file.
   _DownloadedEvent _decodeEventFile(
+    String body,
+    String fileId,
+    String? etag,
+    String md5Checksum,
+  ) {
+    try {
+      return _parseEventFile(body, fileId, etag, md5Checksum);
+    } on Object {
+      throw const _CorruptEventFile();
+    }
+  }
+
+  _DownloadedEvent _parseEventFile(
     String body,
     String fileId,
     String? etag,
@@ -2392,7 +2473,7 @@ class GoogleDriveSyncService implements SyncService {
     final eventJson = event is Map ? Map<String, Object?>.from(event) : decoded;
     final parsedEvent = _eventFromJson(eventJson);
     if (parsedEvent == null) {
-      throw const GoogleDriveSyncException('Google Drive 일정 백업 데이터가 손상되었습니다.');
+      throw const _CorruptEventFile();
     }
     return _DownloadedEvent(
       event: parsedEvent,
@@ -3152,6 +3233,11 @@ class _DownloadedEvent {
 
 class _ConcurrentDriveWrite implements Exception {
   const _ConcurrentDriveWrite();
+}
+
+/// A Drive event file whose JSON or fields cannot be read.
+class _CorruptEventFile extends GoogleDriveSyncException {
+  const _CorruptEventFile() : super('Google Drive 일정 백업 데이터가 손상되었습니다.');
 }
 
 /// Zone key carrying the attempt number of a request made by the retry timer.
