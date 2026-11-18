@@ -62,6 +62,9 @@ expect("내일 오전 10시부터 45분 동안 회의", at(10), at(10, 45))
 expect("내일 오후 3시부터 5시 회의", at(15), at(17))
 expect("내일 오후 3시 30분 동안 회의", at(15, 30), nil)
 expect("내일 오후 3시 회의", at(15), nil)
+// A reminder offset ("2시간 전에") is not the event's length.
+expect("내일 오후 3시 회의 2시간 전에 알림, 회의는 30분간", at(15), at(15, 30))
+expect("내일 2시간 전에 알림 오후 3시 회의 1시간", at(15), at(16))
 // A length without a clock time must not be read as 2 o'clock.
 if DailySpokenTemporalParser.parse("내일 2시간 회의 추가") != nil { fatalError("length read as a clock time") }
 print("Siri spoken duration checks passed")

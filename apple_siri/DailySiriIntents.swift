@@ -588,16 +588,34 @@ enum DailySpokenTemporalParser {
 
   /// "N시간", "N시간 M분" or "N분 동안/간" as a length, with the command text
   /// left after removing it. "3시 30분 동안" keeps 30분 as part of the clock time.
+  /// A length followed by 전/후/뒤 ("2시간 전에 알림") is an offset, not the
+  /// event's length: it is skipped, and also removed so it is not read as 2시.
   private static func spokenDuration(in value: String) -> (seconds: TimeInterval, remainder: String)? {
     let pattern = #"(\d{1,2})\s*시간(?:\s*(\d{1,2})\s*분)?(?:\s*(?:동안|간))?|(?<!시)(?<!시\s)(?<!\d)(\d{1,3})\s*분\s*(?:동안|간)"#
-    guard let match = firstMatch(pattern, in: value),
-          let range = Range(match.range, in: value) else { return nil }
-    let hours = group(1, match: match, source: value).flatMap(Int.init) ?? 0
-    let minutes = (group(2, match: match, source: value) ?? group(3, match: match, source: value))
-      .flatMap(Int.init) ?? 0
-    let seconds = TimeInterval(hours * 3600 + minutes * 60)
-    guard seconds > 0 else { return nil }
-    return (seconds, value.replacingCharacters(in: range, with: " "))
+    guard let expression = try? NSRegularExpression(pattern: pattern) else { return nil }
+    var seconds: TimeInterval?
+    var removed: [Range<String.Index>] = []
+    for match in expression.matches(in: value, range: NSRange(value.startIndex..., in: value)) {
+      guard let range = Range(match.range, in: value) else { continue }
+      let after = value[range.upperBound...].drop { $0 == " " }
+      if after.hasPrefix("전") || after.hasPrefix("후") || after.hasPrefix("뒤") {
+        removed.append(range)
+        continue
+      }
+      guard seconds == nil else { continue }
+      let hours = group(1, match: match, source: value).flatMap(Int.init) ?? 0
+      let minutes = (group(2, match: match, source: value) ?? group(3, match: match, source: value))
+        .flatMap(Int.init) ?? 0
+      guard hours * 60 + minutes > 0 else { continue }
+      seconds = TimeInterval(hours * 3600 + minutes * 60)
+      removed.append(range)
+    }
+    guard let seconds else { return nil }
+    var remainder = value
+    for range in removed.reversed() {
+      remainder.replaceSubrange(range, with: " ")
+    }
+    return (seconds, remainder)
   }
 
   private static func explicitDateRange(
