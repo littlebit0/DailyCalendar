@@ -385,6 +385,146 @@ void main() {
     expect(await eventRepository.findById(id), isNull);
     expect((await eventRepository.allEventsForSync()).single.id, isNot(id));
   });
+  group('Google 종일 일정 알림 기준 변환 (#863)', () {
+    // Google이 정한 알림 시각: 시작일 00:00에서 분을 뺀 시각.
+    DateTime googleAt(DateTime day, int minutes) => DateTime(
+      day.year,
+      day.month,
+      day.day,
+    ).subtract(Duration(minutes: minutes));
+    // Daily가 예약하는 시각: 종일 알림 시각에서 저장된 분을 뺀 시각.
+    DateTime dailyAt(DateTime day, int minutes, int hour, int minute) =>
+        DateTime(
+          day.year,
+          day.month,
+          day.day,
+          hour,
+          minute,
+        ).subtract(Duration(minutes: minutes));
+
+    test('하루 전 오전 9시(900분)는 종일 알림 09:00 기준 1440분으로 바꾼다', () {
+      expect(
+        CalendarImportService.googleAllDayReminderMinutes(
+          const [900],
+          hour: 9,
+          minute: 0,
+        ),
+        [1440],
+      );
+    });
+
+    test('당일 00:00(0분)은 종일 알림 시각만큼의 분으로 바꾼다', () {
+      // 문서상 분은 0~40320이라 00:00 이후인 "당일 오전 9시"는 표현되지 않는다.
+      expect(
+        CalendarImportService.googleAllDayReminderMinutes(
+          const [0],
+          hour: 9,
+          minute: 0,
+        ),
+        [540],
+      );
+    });
+
+    test('종일 알림 시각이 0시가 아니고 분이 있어도 같은 시각에 울린다', () {
+      for (final day in [
+        DateTime(2026, 11, 20),
+        // America/New_York DST 시작·종료 다음 날.
+        DateTime(2026, 3, 9),
+        DateTime(2026, 11, 2),
+      ]) {
+        for (final (hour, minute) in [(9, 0), (7, 30), (0, 0), (23, 45)]) {
+          for (final google in [0, 900, 1440, 40320]) {
+            final stored = CalendarImportService.googleAllDayReminderMinutes(
+              [google],
+              hour: hour,
+              minute: minute,
+            ).single;
+            expect(
+              dailyAt(day, stored, hour, minute),
+              googleAt(day, google),
+              reason: '$day $hour:$minute $google',
+            );
+          }
+        }
+      }
+    });
+
+    test('가져오기는 Google 종일 일정만 바꾸고 시간 지정 일정과 기기 캘린더는 그대로 둔다', () async {
+      SharedPreferences.setMockInitialValues({
+        'onboardingCompleted': true,
+        'allDayReminderHour': 7,
+        'allDayReminderMinute': 30,
+      });
+      final preferences = await SharedPreferences.getInstance();
+      final settingsRepository = SettingsRepository(preferences: preferences);
+      final database = AppDatabase.forTesting(NativeDatabase.memory());
+      addTearDown(database.close);
+      final eventRepository = DriftEventRepository(database);
+      ExternalCalendarEvent event(
+        String id,
+        CalendarImportProvider provider, {
+        required bool allDay,
+      }) => ExternalCalendarEvent(
+        sourceId: id,
+        calendarId: 'work-calendar',
+        provider: provider,
+        title: id,
+        startAt: allDay ? DateTime(2020, 11, 20) : DateTime(2020, 11, 20, 14),
+        endAt: allDay ? DateTime(2020, 11, 21) : DateTime(2020, 11, 20, 15),
+        allDay: allDay,
+        reminderMinutesBeforeList: const [0, 900],
+      );
+      final googleAllDay = event(
+        'google-all-day',
+        CalendarImportProvider.google,
+        allDay: true,
+      );
+      final googleTimed = event(
+        'google-timed',
+        CalendarImportProvider.google,
+        allDay: false,
+      );
+      final nativeAllDay = event(
+        'native-all-day',
+        CalendarImportProvider.samsung,
+        allDay: true,
+      );
+      final service = CalendarImportService(
+        nativeSource: _ListNativeCalendarSource([nativeAllDay]),
+        googleSource: _ListGoogleCalendarSource([googleAllDay, googleTimed]),
+        eventRepository: eventRepository,
+        eventCommandService: EventCommandService(
+          repository: eventRepository,
+          settingsRepository: settingsRepository,
+          notificationService: _SilentNotificationService(),
+          syncService: _SilentSyncService(),
+        ),
+        settingsRepository: settingsRepository,
+      );
+
+      final result = await service.importCalendars(const [
+        ImportableCalendar(
+          id: 'work-calendar',
+          title: 'Work',
+          provider: CalendarImportProvider.google,
+        ),
+        ImportableCalendar(
+          id: 'work-calendar',
+          title: 'Work',
+          provider: CalendarImportProvider.samsung,
+        ),
+      ]);
+
+      expect((result.imported, result.failed), (3, 0));
+      Future<List<int>> stored(ExternalCalendarEvent external) async =>
+          (await eventRepository.findById(
+            CalendarImportService.externalEventId(external),
+          ))!.reminderMinutesBeforeList;
+      expect(await stored(googleAllDay), [450, 1350]);
+      expect(await stored(googleTimed), [0, 900]);
+      expect(await stored(nativeAllDay), [0, 900]);
+    });
+  });
 }
 
 ExternalCalendarEvent _pastEvent(String sourceId) => ExternalCalendarEvent(
@@ -399,6 +539,16 @@ ExternalCalendarEvent _pastEvent(String sourceId) => ExternalCalendarEvent(
 
 class _ListNativeCalendarSource extends NativeCalendarSource {
   _ListNativeCalendarSource(this.events);
+  final List<ExternalCalendarEvent> events;
+  @override
+  Future<List<ExternalCalendarEvent>> loadEvents(
+    Iterable<ImportableCalendar> calendars,
+  ) async => List.of(events);
+}
+
+class _ListGoogleCalendarSource extends GoogleCalendarSource {
+  _ListGoogleCalendarSource(this.events)
+    : super(authService: GoogleDriveAuthService(useDesktopOAuth: false));
   final List<ExternalCalendarEvent> events;
   @override
   Future<List<ExternalCalendarEvent>> loadEvents(
