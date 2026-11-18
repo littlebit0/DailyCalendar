@@ -43,7 +43,8 @@ void main() {
       );
       expect(course.campus, 'yangsan');
       expect(course.sourceSchedule, contains('13:00(100)'));
-      // Existing display policy rounds the official 14:40 end to 15:00.
+      // PNU assets keep the official class end (docs/TIMETABLE.md, #949 contract);
+      // the endMinute getter rounds 14:40 to the 15:00 display boundary.
       expect(
         course.meetings.map((m) => (m.weekday, m.startMinute, m.endMinute)),
         [(5, 780, 900)],
@@ -82,7 +83,7 @@ void main() {
         merged.meetings.map((m) => (m.weekday, m.startMinute, m.endMinute)),
         [(1, 900, 1080)],
       );
-      // Loader rounds the official 17:45 end to 18:00.
+      // The endMinute getter rounds the official 17:45 end to 18:00 (#949 contract).
       // Courses whose source meetings overlap are held unmerged (#686).
       const held = {'ZF1100922-001', 'ZF1101137-104', 'AC1501344-001'};
       for (final c in courses.where((c) => !held.contains(c.codeAndSection))) {
