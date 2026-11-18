@@ -123,12 +123,26 @@ class CalendarImportService {
     _checkNotBlocked();
     // The event service stops before each write once an update is required;
     // what it already saved keeps its reminder, alarm and upload.
-    final importedIds = await _eventCommandService.importBatch(pending);
     final invalid = events.length - skipped - pending.length;
+    // A deletion that was compacted out of the event table is only visible in
+    // the write transaction; neither it nor a row saved meanwhile is replaced.
+    final recordedDeletions = <String>{};
+    var keptExisting = 0;
+    final importedIds = await _eventCommandService.importBatch(
+      pending,
+      skippedDeleted: recordedDeletions,
+      resolveLatest: (local, incoming) {
+        if (local == null) return incoming;
+        keptExisting += 1;
+        return null;
+      },
+    );
+    final skippedInWrite = recordedDeletions.length + keptExisting;
+    skipped += skippedInWrite;
     return CalendarImportResult(
       imported: importedIds.length,
       skipped: skipped,
-      failed: invalid + pending.length - importedIds.length,
+      failed: invalid + pending.length - importedIds.length - skippedInWrite,
       unsupportedRecurrence: pending
           .where(
             (event) =>
@@ -287,7 +301,19 @@ class CalendarImportService {
       byMonthDay: monthDays,
       byMonth: months,
       bySetPos: positions,
+      // RFC 5545 weeks start on WKST (Monday when absent), not on the start
+      // weekday the app assumes for its own rules.
+      weekStart: frequency == RecurrenceFrequency.weekly && interval > 1
+          ? _weekStart(fields['WKST'])
+          : null,
     );
+  }
+
+  static int _weekStart(String? wkst) {
+    final index = RecurrenceRule.weekdayCodes.indexOf(
+      wkst?.trim().toUpperCase() ?? 'MO',
+    );
+    return index < 0 ? DateTime.monday : index + 1;
   }
 
   static bool _weekStartSupported(String? wkst, DateTime? startAt) {

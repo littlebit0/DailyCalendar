@@ -177,8 +177,13 @@ private final class DailySiriLogsBridge {
           ] as [String: Any]
         })
       case "clearLogs":
-        DailySiriLogStore.clear()
-        result(nil)
+        do {
+          try DailySiriLogStore.clear()
+          result(nil)
+        } catch {
+          result(
+            FlutterError(code: "siri_log_clear_failed", message: nil, details: nil))
+        }
       default:
         result(FlutterMethodNotImplemented)
       }
@@ -669,6 +674,105 @@ private final class DailyNativeNotifications {
   }
 }
 
+/// Replacement of one event's alarms. New alarms are scheduled before the
+/// previous ones are cancelled, so a failed schedule keeps them (#924).
+struct DailyAlarmPlan {
+  struct Pending {
+    let id: UUID
+    let fireDate: Date
+    let fingerprint: String
+    /// The chosen ID still has an alarm and must be cancelled first.
+    let occupied: Bool
+  }
+
+  var keep = Set<UUID>()
+  var pending: [Pending] = []
+  /// Previous alarms, cancelled only after every pending one is scheduled.
+  var stale = Set<UUID>()
+
+  static func make(
+    eventID: String,
+    fireTimes: [Int64],
+    reconcile: Bool,
+    existing: Set<UUID>,
+    stored: Set<UUID>,
+    now: Date,
+    alarmID: (String) -> UUID,
+    fingerprint: (Int64) -> String,
+    storedFingerprint: (UUID) -> String?
+  ) -> DailyAlarmPlan {
+    var plan = DailyAlarmPlan()
+    // One AlarmKit alarm per fire time (#784). A 4.1.0 alarm keeps the
+    // event-id UUID and may satisfy one of the times on reconcile.
+    let legacyID = alarmID(eventID)
+    var legacyUsed = false
+    var seen = Set<Int64>()
+    for fireAtMilliseconds in fireTimes where seen.insert(fireAtMilliseconds).inserted {
+      let fireDate = Date(timeIntervalSince1970: Double(fireAtMilliseconds) / 1000)
+      let source = fingerprint(fireAtMilliseconds)
+      if reconcile, !legacyUsed, existing.contains(legacyID) {
+        let previous = storedFingerprint(legacyID)
+        if previous == source || (previous == nil && fireDate <= now) {
+          // Legacy countdowns have no source fingerprint. Preserve them on
+          // first reconciliation; explicit mutation still replaces them.
+          legacyUsed = true
+          plan.keep.insert(legacyID)
+          continue
+        }
+      }
+      // The second ID lets a changed alarm of the same time be scheduled
+      // while the previous one still exists.
+      let ids = [
+        alarmID("\(eventID)#\(fireAtMilliseconds)"),
+        alarmID("\(eventID)#\(fireAtMilliseconds)#\(source)"),
+      ]
+      if reconcile,
+         let kept = ids.first(where: { existing.contains($0) && storedFingerprint($0) == source }) {
+        plan.keep.insert(kept)
+        continue
+      }
+      guard fireDate > now else { continue }
+      let free = ids.first { !existing.contains($0) }
+      plan.pending.append(Pending(
+        id: free ?? ids[1], fireDate: fireDate, fingerprint: source, occupied: free == nil
+      ))
+    }
+    plan.stale = stored.union([legacyID])
+      .subtracting(plan.keep)
+      .subtracting(plan.pending.map(\.id))
+    return plan
+  }
+
+  /// Returns the IDs that remain scheduled. A thrown error leaves [stale]
+  /// scheduled and stored for the next reconciliation, and removes the alarms
+  /// this call added so no time rings twice.
+  func apply(
+    schedule: (Pending) async throws -> Void,
+    cancel: (UUID) -> Void,
+    store: (Set<UUID>) -> Void
+  ) async throws -> Set<UUID> {
+    var scheduled = keep
+    var added = Set<UUID>()
+    do {
+      for alarm in pending {
+        if alarm.occupied { cancel(alarm.id) }
+        try await schedule(alarm)
+        scheduled.insert(alarm.id)
+        // An occupied ID replaced its own previous alarm and has no other copy.
+        if !alarm.occupied { added.insert(alarm.id) }
+        store(scheduled.union(stale))
+      }
+    } catch {
+      added.forEach(cancel)
+      store(scheduled.subtracting(added).union(stale))
+      throw error
+    }
+    stale.forEach(cancel)
+    store(scheduled)
+    return scheduled
+  }
+}
+
 private final class DailyAlarmKit {
   static let channelName = "daily/alarm_kit"
 
@@ -745,52 +849,31 @@ private final class DailyAlarmKit {
     let reconcile = call.method == "reconcile"
     Task { @MainActor in
       do {
-        let existing = Set(try AlarmManager.shared.alarms.map(\.id))
-        let now = Date()
-        // One AlarmKit alarm per fire time (#784). A 4.1.0 alarm keeps the
-        // event-id UUID and may satisfy one of the times on reconcile.
-        let legacyID = alarmID(for: eventID)
-        var keep = Set<UUID>()
-        var pending: [(id: UUID, fireDate: Date, fingerprint: String)] = []
-        var legacyUsed = false
-        var seen = Set<Int64>()
-        for fireAtMilliseconds in fireTimes where seen.insert(fireAtMilliseconds).inserted {
-          let fireDate = Date(timeIntervalSince1970: Double(fireAtMilliseconds) / 1000)
-          let fingerprint = sourceFingerprint(fireAtMilliseconds, title, memo, snoozeMinutes)
-          if reconcile, !legacyUsed, existing.contains(legacyID) {
-            let previous = UserDefaults.standard.string(forKey: fingerprintKey(legacyID))
-            if previous == fingerprint || (previous == nil && fireDate <= now) {
-              // Legacy countdowns have no source fingerprint. Preserve them on
-              // first reconciliation; explicit mutation still uses cancel.
-              legacyUsed = true
-              keep.insert(legacyID)
-              continue
-            }
-          }
-          let id = alarmID(for: "\(eventID)#\(fireAtMilliseconds)")
-          if reconcile, existing.contains(id),
-             UserDefaults.standard.string(forKey: fingerprintKey(id)) == fingerprint {
-            keep.insert(id)
-            continue
-          }
-          if fireDate > now { pending.append((id, fireDate, fingerprint)) }
-        }
-        for id in storedIDs(for: eventID).union([legacyID]) where !keep.contains(id) {
-          try? AlarmManager.shared.cancel(id: id)
-          UserDefaults.standard.removeObject(forKey: fingerprintKey(id))
-        }
-        var scheduled = keep
-        for alarm in pending {
-          try? AlarmManager.shared.cancel(id: alarm.id)
-          _ = try await AlarmManager.shared.schedule(
-            id: alarm.id,
-            configuration: configuration(title: title, memo: visibleMemo, snoozeMinutes: snoozeMinutes, fireDate: alarm.fireDate)
-          )
-          UserDefaults.standard.set(alarm.fingerprint, forKey: fingerprintKey(alarm.id))
-          scheduled.insert(alarm.id)
-          setStoredIDs(scheduled, for: eventID)
-        }
-        setStoredIDs(scheduled, for: eventID)
+        let plan = DailyAlarmPlan.make(
+          eventID: eventID,
+          fireTimes: fireTimes,
+          reconcile: reconcile,
+          existing: Set(try AlarmManager.shared.alarms.map(\.id)),
+          stored: storedIDs(for: eventID),
+          now: Date(),
+          alarmID: alarmID(for:),
+          fingerprint: { sourceFingerprint($0, title, memo, snoozeMinutes) },
+          storedFingerprint: { UserDefaults.standard.string(forKey: fingerprintKey($0)) }
+        )
+        let scheduled = try await plan.apply(
+          schedule: { alarm in
+            _ = try await AlarmManager.shared.schedule(
+              id: alarm.id,
+              configuration: configuration(title: title, memo: visibleMemo, snoozeMinutes: snoozeMinutes, fireDate: alarm.fireDate)
+            )
+            UserDefaults.standard.set(alarm.fingerprint, forKey: fingerprintKey(alarm.id))
+          },
+          cancel: { id in
+            try? AlarmManager.shared.cancel(id: id)
+            UserDefaults.standard.removeObject(forKey: fingerprintKey(id))
+          },
+          store: { setStoredIDs($0, for: eventID) }
+        )
         result(!scheduled.isEmpty)
       } catch {
         result(FlutterError(code: "alarm_schedule_failed", message: error.localizedDescription, details: nil))

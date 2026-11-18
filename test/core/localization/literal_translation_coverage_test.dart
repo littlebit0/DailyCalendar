@@ -181,6 +181,62 @@ void main() {
     expect(en.text('대학 {count}개', args: {'count': 12}), '12 universities');
   });
 
+  test('English uses the singular only for a count of one', () {
+    final en = AppLocalizations(const Locale('en'));
+    String at(String key, Object count) =>
+        en.text(key, args: {'count': count});
+    expect(at('{count}일 전', 1), '1 day before');
+    expect(at('{count}시간 전', 1), '1 hour before');
+    expect(at('{count}분 전', 1), '1 minute before');
+    expect(at('일정 {count}개', 1), '1 event');
+    expect(at('수업 {count}개', '1'), '1 course');
+    expect(at('대학 {count}개', 1), '1 university');
+    expect(
+      en.text('{month} · 일정 {count}개', args: {'month': 'May', 'count': 1}),
+      'May · 1 event',
+    );
+    for (final count in [0, 2, 11, 21]) {
+      expect(at('{count}일 전', count), '$count days before');
+      expect(at('일정 {count}개', count), '$count events');
+    }
+    // Other languages have no singular form.
+    expect(
+      AppLocalizations(const Locale('ja')).text(
+        '{count}일 전',
+        args: {'count': 1},
+      ),
+      '1日前',
+    );
+    expect(
+      AppLocalizations(const Locale('ko')).text(
+        '{count}일 전',
+        args: {'count': 1},
+      ),
+      '1일 전',
+    );
+  });
+
+  test('recurring scope prompts name the action without a particle slot', () {
+    const keys = ['이 반복 일정의 어느 범위를 수정할까요?', '이 반복 일정의 어느 범위를 삭제할까요?'];
+    for (final code in ['en', 'ja']) {
+      final strings = AppLocalizations(Locale(code));
+      for (final key in keys) {
+        expect(strings.text(key), isNot(key), reason: '$code $key');
+        expect(strings.text(key), isNot(contains('{')), reason: '$code $key');
+      }
+    }
+    final zh = AppLocalizations(
+      const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant'),
+    );
+    for (final key in keys) {
+      expect(zh.text(key), isNot(key));
+    }
+    final panel = File(
+      'lib/features/events/presentation/event_details_panel.dart',
+    ).readAsStringSync();
+    expect(panel, isNot(contains('{action}을')));
+  });
+
   test('terminology stays consistent within the academic-profile flow', () {
     final ja = AppLocalizations(const Locale('ja'));
     final zh = AppLocalizations(

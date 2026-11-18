@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:ffi';
 import 'dart:io';
 
+import 'atomic_file_write.dart';
 import 'file_write_retry.dart';
 import 'preserving_store_read.dart';
 
@@ -399,10 +400,9 @@ class DpapiJsonFileMapStorage extends MapStorage {
         final encryptedText = encryptedTextBlob.ref.pbData
             .asTypedList(encryptedTextBlob.ref.cbData);
 
-        await retryTransientFileWrite(() async {
-          await (await file.create(recursive: true))
-              .writeAsBytes(encryptedText, flush: true);
-        });
+        await retryTransientFileWrite(
+          () => writeFileAtomically(file, encryptedText),
+        );
       } finally {
         if (encryptedTextBlob.ref.pbData.address != NULL) {
           final Win32Result(value: localFreeResult, error: localFreeError) =

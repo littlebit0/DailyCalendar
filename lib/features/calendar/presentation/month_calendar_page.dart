@@ -54,14 +54,7 @@ import '../../timetable/presentation/timetable_schedule.dart';
 
 enum _BottomCenterAction { quickAccess, calendar, ai, timetable, imogi }
 
-enum _BottomNavigationItem {
-  quickAccess,
-  week,
-  month,
-  day,
-  timetable,
-  imogi,
-}
+enum _BottomNavigationItem { quickAccess, week, month, day, timetable, imogi }
 
 enum _RecurringDragScope { onlyThis, future, all }
 
@@ -232,7 +225,7 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
         showEventSidebar &&
         !(viewMode == CalendarViewMode.day && !showScheduleDaySidebar);
 
-    return Scaffold(
+    final page = Scaffold(
       key: _scaffoldKey,
       body: Listener(
         key: const ValueKey('calendar-page-pointer-listener'),
@@ -527,6 +520,22 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
           ),
         ),
       ),
+    );
+    // The search and AI panels are state, not routes: without this the system
+    // back button pops the root route and leaves the app (#965).
+    return ValueListenableBuilder<bool>(
+      valueListenable: _aiOpen,
+      builder: (context, aiOpen, child) => PopScope(
+        canPop: !_searchOpen && !aiOpen,
+        onPopInvokedWithResult: (didPop, _) {
+          if (!didPop) {
+            _closeSearch();
+            _closeAiPanel();
+          }
+        },
+        child: child!,
+      ),
+      child: page,
     );
   }
 
@@ -2972,6 +2981,13 @@ class _WeekPageViewState extends State<_WeekPageView> {
     if (targetPage == _currentPage) {
       return;
     }
+    // Where the swipe commits at scroll end (Windows), a plain rebuild (e.g.
+    // an event reload) still carries the last reported date: it is not a
+    // request to pull the swipe back. A changed date is explicit navigation.
+    if (targetPage == _reportedPage &&
+        DateUtils.isSameDay(oldWidget.selectedDate, widget.selectedDate)) {
+      return;
+    }
     _animateToExternalPage(targetPage);
   }
 
@@ -3252,13 +3268,8 @@ class _CalendarWeekPage extends ConsumerWidget {
               externalEventDragInteractionActive:
                   externalEventDragInteractionActive,
               onShowAllDayEventsChanged: onShowAllDayScheduleEventsChanged,
-              onDateSelected: (date) => onDateSelected(
-                date,
-                _eventsForDay(
-                  visibleEvents,
-                  date,
-                ),
-              ),
+              onDateSelected: (date) =>
+                  onDateSelected(date, _eventsForDay(visibleEvents, date)),
             ),
           );
         }
@@ -3362,6 +3373,13 @@ class _DayPageViewState extends State<_DayPageView> {
     final targetPage =
         _initialPage + _dayDelta(_anchorDate, widget.selectedDate);
     if (targetPage == _currentPage) {
+      return;
+    }
+    // Where the swipe commits at scroll end (Windows), a plain rebuild (e.g.
+    // an event reload) still carries the last reported date: it is not a
+    // request to pull the swipe back. A changed date is explicit navigation.
+    if (targetPage == _reportedPage &&
+        DateUtils.isSameDay(oldWidget.selectedDate, widget.selectedDate)) {
       return;
     }
     _animateToExternalPage(targetPage);
@@ -4795,13 +4813,7 @@ class _CalendarMonthPage extends ConsumerWidget {
                 externalEventDragInteractionActive:
                     externalEventDragInteractionActive,
                 onDateSelected: (date) {
-                  onDateSelected(
-                    date,
-                    _eventsForDay(
-                      visibleEvents,
-                      date,
-                    ),
-                  );
+                  onDateSelected(date, _eventsForDay(visibleEvents, date));
                 },
                 onDateRangeSelected: (start, end) => _addEventForRange(
                   context,
@@ -4975,17 +4987,13 @@ class _CalendarMonthPage extends ConsumerWidget {
     final now = DateTime.now();
 
     if (sourceKey != targetKey) {
-      final sourceEvents =
-          _eventsForDay(
-                visibleEvents,
-                sourceDate,
-              )
-              .where(
-                (candidate) =>
-                    calendarEventOrderKey(candidate) != originalOrderKey &&
-                    candidate.id != originalEvent.id,
-              )
-              .toList();
+      final sourceEvents = _eventsForDay(visibleEvents, sourceDate)
+          .where(
+            (candidate) =>
+                calendarEventOrderKey(candidate) != originalOrderKey &&
+                candidate.id != originalEvent.id,
+          )
+          .toList();
       manualOrders[sourceKey] = CalendarManualEventOrder(
         eventKeys: _storedOrderKeys(sourceEvents),
         updatedAt: now,
@@ -4993,18 +5001,14 @@ class _CalendarMonthPage extends ConsumerWidget {
       );
     }
 
-    final existingTarget =
-        _eventsForDay(
-              visibleEvents,
-              targetDate,
-            )
-            .where(
-              (candidate) =>
-                  calendarEventOrderKey(candidate) != originalOrderKey &&
-                  calendarEventOrderKey(candidate) != movedOrderKey &&
-                  candidate.id != originalEvent.id,
-            )
-            .toList();
+    final existingTarget = _eventsForDay(visibleEvents, targetDate)
+        .where(
+          (candidate) =>
+              calendarEventOrderKey(candidate) != originalOrderKey &&
+              calendarEventOrderKey(candidate) != movedOrderKey &&
+              candidate.id != originalEvent.id,
+        )
+        .toList();
     final sortedTarget = sortedCalendarEvents(
       existingTarget,
       priority: settings.calendarEventSortPriority,
@@ -5359,17 +5363,13 @@ Future<void> _saveCalendarManualOrderAfterDrop(
   final now = DateTime.now();
 
   if (sourceKey != targetKey) {
-    final sourceEvents =
-        _eventsForDay(
-              visibleEvents,
-              sourceDate,
-            )
-            .where(
-              (candidate) =>
-                  calendarEventOrderKey(candidate) != originalOrderKey &&
-                  candidate.id != originalEvent.id,
-            )
-            .toList();
+    final sourceEvents = _eventsForDay(visibleEvents, sourceDate)
+        .where(
+          (candidate) =>
+              calendarEventOrderKey(candidate) != originalOrderKey &&
+              candidate.id != originalEvent.id,
+        )
+        .toList();
     manualOrders[sourceKey] = CalendarManualEventOrder(
       eventKeys: _storedOrderKeys(sourceEvents),
       updatedAt: now,
@@ -5377,18 +5377,14 @@ Future<void> _saveCalendarManualOrderAfterDrop(
     );
   }
 
-  final existingTarget =
-      _eventsForDay(
-            visibleEvents,
-            targetDate,
-          )
-          .where(
-            (candidate) =>
-                calendarEventOrderKey(candidate) != originalOrderKey &&
-                calendarEventOrderKey(candidate) != movedOrderKey &&
-                candidate.id != originalEvent.id,
-          )
-          .toList();
+  final existingTarget = _eventsForDay(visibleEvents, targetDate)
+      .where(
+        (candidate) =>
+            calendarEventOrderKey(candidate) != originalOrderKey &&
+            calendarEventOrderKey(candidate) != movedOrderKey &&
+            candidate.id != originalEvent.id,
+      )
+      .toList();
   final sortedTarget = sortedCalendarEvents(
     existingTarget,
     priority: settings.calendarEventSortPriority,
@@ -5420,19 +5416,36 @@ Future<void> _persistCalendarManualOrder(
   required AppSettings previous,
   required AppSettings updated,
 }) async {
-  ref.read(appSettingsProvider.notifier).state = updated;
+  // [previous] is the snapshot from before the drag, its dialog and the event
+  // save. Only the dates this drop changed are written, onto the orders as
+  // they are now, so another date merged meanwhile is kept.
+  final changed = {
+    for (final entry in updated.calendarManualEventOrders.entries)
+      if (!identical(
+        previous.calendarManualEventOrders[entry.key],
+        entry.value,
+      ))
+        entry.key: entry.value,
+  };
+  AppSettings apply(AppSettings latest) => latest.copyWith(
+    calendarManualEventOrders: {
+      ...latest.calendarManualEventOrders,
+      ...changed,
+    },
+  );
+  final settingsNotifier = ref.read(appSettingsProvider.notifier);
+  final before = settingsNotifier.state;
+  final shown = settingsNotifier.state = apply(before);
   try {
-    await ref
-        .read(settingsRepositoryProvider)
-        .save(updated, changedFrom: previous);
+    final repository = ref.read(settingsRepositoryProvider);
+    await repository.updateLatest(apply);
+    if (identical(settingsNotifier.state, shown)) {
+      settingsNotifier.state = repository.load();
+    }
     await ref.read(syncServiceProvider).queueSettingsBackup();
   } on Object {
-    final current = ref.read(appSettingsProvider);
-    if (identical(
-      current.calendarManualEventOrders,
-      updated.calendarManualEventOrders,
-    )) {
-      ref.read(appSettingsProvider.notifier).state = previous;
+    if (identical(settingsNotifier.state, shown)) {
+      settingsNotifier.state = before;
     }
     rethrow;
   }

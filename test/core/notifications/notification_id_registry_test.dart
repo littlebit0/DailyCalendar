@@ -461,6 +461,171 @@ void main() {
     expect(pending.values, contains('single:reminder:10'));
   });
 
+  CalendarEvent singleShot(String id, DateTime start) => CalendarEvent(
+    id: id,
+    title: id,
+    startAt: start,
+    endAt: start.add(const Duration(hours: 1)),
+    allDay: false,
+    category: EventCategory.basic,
+    colorValue: EventCategory.basic.colorValue,
+    createdAt: start,
+    updatedAt: start,
+    reminderMinutesBeforeList: [10],
+  );
+
+  test(
+    'iOS reserves a slot per repeating key when fixed reminders fill the limit',
+    () async {
+      SharedPreferences.setMockInitialValues({});
+      final settings = SettingsRepository(
+        preferences: await SharedPreferences.getInstance(),
+      );
+      final database = AppDatabase.forTesting(NativeDatabase.memory());
+      addTearDown(database.close);
+      final repository = DriftEventRepository(database);
+      final start = DateTime.now().add(const Duration(days: 1));
+      await repository.save(dailySeries('daily', start));
+      debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+      addTearDown(() => debugDefaultTargetPlatformOverride = null);
+      final service = LocalNotificationService(
+        settingsRepository: settings,
+        eventRepository: repository,
+      );
+      expect(settings.load().morningBriefingEnabled, isTrue);
+      // 14 briefing days + 49, 50 (exactly 64) and 80 single-shot reminders.
+      var saved = 0;
+      for (final count in [49, 50, 80]) {
+        for (; saved < count; saved++) {
+          await repository.save(
+            singleShot('single-$saved', start.add(Duration(days: saved + 1))),
+          );
+        }
+        final allowance = (await service.repeatingSlotAllowance(
+          settings.load(),
+        ))!;
+        expect(allowance['daily:reminder:10'], 1, reason: '$count singles');
+      }
+    },
+  );
+
+  test("another account's cached LMS events take no pending room", () async {
+    SharedPreferences.setMockInitialValues({});
+    final settings = SettingsRepository(
+      preferences: await SharedPreferences.getInstance(),
+    );
+    final database = AppDatabase.forTesting(NativeDatabase.memory());
+    addTearDown(database.close);
+    final repository = DriftEventRepository(database);
+    final start = DateTime.now().add(const Duration(days: 1));
+    await repository.save(dailySeries('daily', start));
+    // An `lms:` event without this account's metadata is not visible to it.
+    for (var i = 0; i < 60; i++) {
+      await repository.save(
+        singleShot('lms:other-$i', start.add(Duration(days: i + 1))),
+      );
+    }
+    debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+    addTearDown(() => debugDefaultTargetPlatformOverride = null);
+    final service = LocalNotificationService(
+      settingsRepository: settings,
+      eventRepository: repository,
+    );
+    final allowance = (await service.repeatingSlotAllowance(settings.load()))!;
+    expect(allowance['daily:reminder:10'], greaterThan(1));
+  });
+
+  test(
+    'far single-shot reminders give way so pending never exceeds the limit',
+    () async {
+      SharedPreferences.setMockInitialValues({});
+      final settings = SettingsRepository(
+        preferences: await SharedPreferences.getInstance(),
+      );
+      final database = AppDatabase.forTesting(NativeDatabase.memory());
+      addTearDown(database.close);
+      final repository = DriftEventRepository(database);
+      final pending = <int, String>{};
+      debugDefaultTargetPlatformOverride = TargetPlatform.macOS;
+      const channel = MethodChannel('daily/native_notifications');
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(channel, (call) async {
+            if (call.method == 'initialize') return true;
+            final args = call.arguments as Map;
+            if (call.method == 'schedule') {
+              // Like iOS, a request made while the queue is full is dropped.
+              if (pending.length >= 64 && !pending.containsKey(args['id'])) {
+                return null;
+              }
+              pending[args['id'] as int] = args['payload'] as String;
+            }
+            if (call.method == 'cancel' || call.method == 'cancelPending') {
+              pending.remove(args['id']);
+            }
+            return null;
+          });
+      addTearDown(() {
+        debugDefaultTargetPlatformOverride = null;
+        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+            .setMockMethodCallHandler(channel, null);
+      });
+      final base = settings.load();
+      await settings.save(
+        base.copyWith(morningBriefingEnabled: false),
+        changedFrom: base,
+      );
+      const limit = 64;
+      final service = LocalNotificationService(
+        settingsRepository: settings,
+        eventRepository: repository,
+        pendingRequestLimit: limit,
+      );
+      final start = DateTime.now().add(const Duration(days: 1));
+      final singles = [
+        for (var i = 0; i < 70; i++)
+          singleShot('single-$i', start.add(Duration(days: i + 1))),
+      ];
+      for (final event in singles) {
+        await repository.save(event);
+        await service.scheduleEventReminder(event);
+        expect(pending.length, lessThanOrEqualTo(limit));
+      }
+      expect(pending.length, limit);
+      expect(pending.values, contains('single-0:reminder:10'));
+      expect(pending.values, isNot(contains('single-69:reminder:10')));
+
+      // The repeating event still gets its nearest occurrence; the farthest
+      // single-shot reminder that was pending makes room for it.
+      final daily = dailySeries('daily', start);
+      await repository.save(daily);
+      await service.scheduleEventReminder(daily);
+      expect(pending.length, limit);
+      expect(
+        pending.values.where((payload) => payload == 'daily:reminder:10'),
+        hasLength(1),
+      );
+      expect(pending.values, isNot(contains('single-63:reminder:10')));
+
+      // Once nearer reminders are gone, a later reconciliation schedules the
+      // deferred ones again.
+      for (final event in singles.take(10)) {
+        await repository.save(event.copyWith(completed: true));
+        await service.cancelEventReminder(
+          event.id,
+          reminderMinutesBeforeList: event.reminderMinutesBeforeList,
+        );
+      }
+      await runNotificationReconciliation(() async {
+        for (final event in [...singles.skip(10), daily]) {
+          await service.scheduleEventReminder(event);
+        }
+      });
+      expect(pending.length, lessThanOrEqualTo(limit));
+      expect(pending.values, contains('single-69:reminder:10'));
+      expect(pending.values, contains('daily:reminder:10'));
+    },
+  );
+
   test('cancel removes a D-day offset that settings no longer list', () async {
     SharedPreferences.setMockInitialValues({});
     final settings = SettingsRepository(
