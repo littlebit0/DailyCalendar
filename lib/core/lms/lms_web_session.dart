@@ -304,7 +304,19 @@ class LmsWebSession extends ChangeNotifier {
   Uri get loginUrl => baseUrl.resolve('/login.php');
   String get _ownerKey =>
       sha256.convert(utf8.encode('$ownerId\n$schoolId')).toString();
-  String get _storageKey => 'daily.lms.session.v1.$_ownerKey';
+  static const _storageKeyPrefix = 'daily.lms.session.v1.';
+  String get _storageKey => '$_storageKeyPrefix$_ownerKey';
+
+  /// Deletes the stored session of every account and school on this device,
+  /// including ones no [LmsWebSession] was created for in this run.
+  static Future<void> deleteStoredSessions({
+    FlutterSecureStorage storage = const FlutterSecureStorage(),
+  }) async {
+    for (final key in (await storage.readAll()).keys.toList()) {
+      if (key.startsWith(_storageKeyPrefix)) await storage.delete(key: key);
+    }
+  }
+
   CookieManager get _cookies =>
       CookieManager.instance(webViewEnvironment: _environment);
 
@@ -1084,6 +1096,8 @@ class LmsWebSession extends ChangeNotifier {
         const user = mobile.querySelector('input[name="username"]'), pwd = mobile.querySelector('input[name="password"]');
         if (!user || !pwd || pwd.type !== 'password' || mobile.dataset.dailyAutoSubmitted === 'true') return {state:'blocked'};
         if ([...mobile.querySelectorAll('input')].some(e => e.getClientRects().length && /captcha|otp|motp/i.test(e.id + ' ' + e.name))) return {state:'blocked', failure:'additionalAuthentication'};
+        // Pick the school's ID/password (external) login, never its SSO.
+        if (externalLoginToggle) document.querySelector(externalLoginToggle)?.click();
         const keep = mobile.querySelector('input[name="rememberusername"]');
         if (keep) keep.checked = false;
         mobile.dataset.dailyAutoSubmitted = 'true';
@@ -1172,6 +1186,17 @@ class LmsWebSession extends ChangeNotifier {
     _expectedPrincipal = null;
     _generation++;
     _notify();
+  }
+
+  /// Script that opens the school's external (ID/password) login form, or null
+  /// when [uri] is not this school's own `/login.php` or it needs no toggle.
+  String? externalLoginClickScript(Uri? uri) {
+    final toggle = school.externalLoginToggle;
+    if (toggle == null || uri == null || !policy.isSchoolOrigin(uri)) {
+      return null;
+    }
+    if (uri.path != '/login.php') return null;
+    return 'document.querySelector(${jsonEncode(toggle)})?.click()';
   }
 
   void attachLoginController(InAppWebViewController controller) {

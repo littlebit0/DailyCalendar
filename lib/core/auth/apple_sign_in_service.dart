@@ -13,9 +13,12 @@ typedef AppleCredentialStateChecker =
     Future<CredentialState> Function(String userIdentifier);
 
 class AppleSignInException implements Exception {
-  const AppleSignInException(this.message);
+  const AppleSignInException(this.message, {this.cause});
 
   final String message;
+
+  /// The underlying failure, for error reports only; never shown to the user.
+  final Object? cause;
 
   @override
   String toString() => message;
@@ -112,8 +115,12 @@ class AppleSignInService {
       );
     } on AppleSignInException {
       rethrow;
-    } on Object catch (error) {
-      throw AppleSignInException('Apple 로그인 요청을 완료하지 못했습니다. $error');
+    } on Object catch (error, stack) {
+      // The page shows only the message; keep the cause for the error report.
+      Error.throwWithStackTrace(
+        AppleSignInException('Apple 로그인 요청을 완료하지 못했습니다.', cause: error),
+        stack,
+      );
     }
   }
 

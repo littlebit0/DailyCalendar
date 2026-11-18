@@ -407,6 +407,84 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  group('editor saves against the store, not its opening snapshot', () {
+    Future<(SettingsRepository, TimetableClass)> openEditor(
+      WidgetTester tester,
+    ) async {
+      final repo = await settings();
+      final store = repo.timetableStore;
+      final course = TimetableClass(
+        id: 'stale',
+        title: '자료구조',
+        academicYear: store.activeYear,
+        semester: store.activeSemester,
+        meetings: [
+          ClassMeeting(id: 'm', weekday: 1, startMinute: 540, endMinute: 600),
+        ],
+      );
+      await store.save(course);
+      await tester.pumpWidget(
+        app(
+          repo,
+          Builder(
+            builder: (context) => TextButton(
+              onPressed: () => showClassEditor(context, store, course: course),
+              child: const Text('수정 열기'),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('수정 열기'));
+      await tester.pumpAndSettle();
+      return (repo, course);
+    }
+
+    Future<void> renameAndSave(WidgetTester tester) async {
+      await tester.enterText(
+        find.byKey(const ValueKey('class-title')),
+        '자료구조론',
+      );
+      await tester.drag(find.byType(ListView).last, const Offset(0, -400));
+      await tester.pumpAndSettle();
+      await tester.ensureVisible(find.byKey(const ValueKey('class-save')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const ValueKey('class-save')));
+      await tester.pumpAndSettle();
+    }
+
+    testWidgets('a course deleted meanwhile is not revived', (tester) async {
+      final (repo, course) = await openEditor(tester);
+      // Same effect on the store as a merged remote deletion.
+      await repo.timetableStore.remove(course.id);
+      await renameAndSave(tester);
+      expect(repo.timetableStore.classes, isEmpty);
+      expect(find.text('다른 기기에서 삭제된 수업이라 저장하지 않았습니다.'), findsWidgets);
+      expect(find.byKey(const ValueKey('class-editor-popup')), findsOneWidget);
+    });
+
+    testWidgets('an occurrence change added meanwhile survives the save', (
+      tester,
+    ) async {
+      final (repo, course) = await openEditor(tester);
+      final monday = DateTime(2026, 9, 7);
+      await repo.timetableStore.setOverride(
+        course.id,
+        'm',
+        monday,
+        LectureMode.cancelled,
+      );
+      await renameAndSave(tester);
+      final saved = repo.timetableStore.classes.single;
+      expect(saved.title, '자료구조론');
+      expect(
+        saved.modeOn(saved.meetings.single, monday),
+        LectureMode.cancelled,
+      );
+      expect(find.byKey(const ValueKey('class-editor-popup')), findsNothing);
+    });
+  });
+
   test('a manual class without meetings is still invalid', () {
     final manual = TimetableClass(
       id: 'x',

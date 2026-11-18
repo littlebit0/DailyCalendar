@@ -328,6 +328,8 @@ const Map<String, Map<String, String>> _translations = {
     "업데이트가 필요합니다": "Update required",
     "새 버전({version})이 나왔습니다. 업데이트하기 전까지는 일정 확인만 사용할 수 있고, 학사일정·LMS·시간표와 일정 추가·수정은 사용할 수 없습니다.":
         "A new version ({version}) is available. Until you update, you can only view events; academic calendar, LMS, timetable, and adding or editing events are unavailable.",
+    "새 버전이 나왔습니다. 업데이트하기 전까지는 일정 확인만 사용할 수 있고, 학사일정·LMS·시간표와 일정 추가·수정은 사용할 수 없습니다.":
+        "A new version is available. Until you update, you can only view events; academic calendar, LMS, timetable, and adding or editing events are unavailable.",
     "업데이트 받기": "Get the update",
     "저장 중": "Saving",
     "Google 계정을 연결하면 학사 정보를 저장하고 다른 기기에서도 사용할 수 있습니다.":
@@ -448,6 +450,8 @@ const Map<String, Map<String, String>> _translations = {
     '요일을 바꾸면 이 수업의 휴강·수업 방식 변경 {count}건을 새 요일에 적용할 수 없어 삭제됩니다. 계속할까요?':
         'Changing the weekday removes {count} cancellation or lecture-mode change(s) of this class, because they cannot apply to the new weekday. Continue?',
     '삭제하고 저장': 'Delete and save',
+    '다른 기기에서 삭제된 수업이라 저장하지 않았습니다.':
+        'This class was deleted on another device, so it was not saved.',
     '수업 시간': 'Class time',
     '수업 시간 추가': 'Add meeting',
     '과목명': 'Course name',
@@ -676,6 +680,8 @@ const Map<String, Map<String, String>> _translations = {
         'Could not delete queued analytics data. Please try again.',
     '일부 이전 알림을 정리하지 못했습니다. 다음 실행에서 다시 시도합니다. 정리 전까지 새 알림 예약이 보류됩니다.':
         'Some old notifications could not be cleared. Cleanup will retry on the next launch. New reminders are paused until cleanup finishes.',
+    '저장된 학교 로그인 정보나 Siri 작업 기록을 모두 지우지 못했습니다. 다음 실행에서 다시 시도합니다.':
+        'Some saved school sign-in details or Siri activity records could not be deleted. Daily will try again on the next launch.',
     '이 기기에 전송 대기 중인 익명 분석 데이터를 삭제합니다.':
         'Delete anonymous analytics waiting to be sent from this device.',
     '이 기기에 전송 대기 중인 익명 분석 데이터를 삭제할까요? 이미 전송되어 집계된 데이터는 계정이나 기기와 연결되지 않아 특정 사용자를 식별하거나 되돌릴 수 없습니다.':
@@ -832,8 +838,7 @@ const Map<String, Map<String, String>> _translations = {
         'This alarm time stays the same even if the event time changes.',
     '지난 시각이라 알람이 울리지 않습니다.':
         'This time has passed, so the alarm will not ring.',
-    '지난 시각의 알람은 울리지 않습니다.':
-        'Alarms at times that have passed will not ring.',
+    '지난 시각의 알람은 울리지 않습니다.': 'Alarms at times that have passed will not ring.',
     'URL / 링크': 'URL / Link',
     '날씨': 'Weather',
     '예: 흐림': 'e.g. Cloudy',
@@ -1173,8 +1178,8 @@ const Map<String, Map<String, String>> _translations = {
     '개인정보 및 지원': 'Privacy & Support',
     '계정을 연결하면 기기 간 동기화를 사용할 수 있고, 계정 없이 이 기기에서만 시작할 수도 있어요.':
         'Connect an account to sync across devices, or start without an account on this device only.',
-    '권한 설정을 완료하지 못했습니다. 나중에 설정에서 다시 시도할 수 있습니다. ({error})':
-        'Could not complete permission setup. You can try again later in Settings. ({error})',
+    '권한 설정을 완료하지 못했습니다. 나중에 설정에서 다시 시도할 수 있습니다.':
+        'Could not complete permission setup. You can try again later in Settings.',
     '권한은 나중에 설정에서 다시 요청하거나 변경할 수 있습니다.':
         'You can request or change permissions later in Settings.',
     '기록부터 완료까지': 'From capture to completion',
@@ -1287,6 +1292,8 @@ const Map<String, Map<String, String>> _translations = {
     '이 기기의 저장된 로그인 정보 삭제': 'Delete saved login on this device',
     '이전 위젯 작업의 반복 회차를 확인할 수 없습니다. 새로고침된 위젯에서 다시 선택해 주세요.':
         'The repeating occurrence of that earlier widget action could not be found. Please choose it again in the refreshed widget.',
+    '일정이 변경되었습니다. 다시 확인해 주세요.':
+        'The event was changed. Please check it again.',
     '일정은 이동했습니다. 알림 또는 동기화 처리를 다시 시도해 주세요.':
         'The event was moved. Please retry the notification or sync step.',
     '일정은 저장했습니다. 알림 또는 동기화 처리를 다시 시도해 주세요.':
@@ -1469,6 +1476,8 @@ const Map<String, Map<String, String>> _translations = {
     "업데이트가 필요합니다": "アップデートが必要です",
     "새 버전({version})이 나왔습니다. 업데이트하기 전까지는 일정 확인만 사용할 수 있고, 학사일정·LMS·시간표와 일정 추가·수정은 사용할 수 없습니다.":
         "新しいバージョン({version})があります。アップデートするまでは予定の確認のみ利用でき、学事日程・LMS・時間割と予定の追加・編集は利用できません。",
+    "새 버전이 나왔습니다. 업데이트하기 전까지는 일정 확인만 사용할 수 있고, 학사일정·LMS·시간표와 일정 추가·수정은 사용할 수 없습니다.":
+        "新しいバージョンがあります。アップデートするまでは予定の確認のみ利用でき、学事日程・LMS・時間割と予定の追加・編集は利用できません。",
     "업데이트 받기": "アップデートを入手",
     "저장 중": "保存中",
     "Google 계정을 연결하면 학사 정보를 저장하고 다른 기기에서도 사용할 수 있습니다.":
@@ -1578,6 +1587,7 @@ const Map<String, Map<String, String>> _translations = {
     '요일을 바꾸면 이 수업의 휴강·수업 방식 변경 {count}건을 새 요일에 적용할 수 없어 삭제됩니다. 계속할까요?':
         '曜日を変更すると、この授業の休講・授業形式の変更{count}件を新しい曜日に適用できないため削除されます。続行しますか？',
     '삭제하고 저장': '削除して保存',
+    '다른 기기에서 삭제된 수업이라 저장하지 않았습니다.': '他の端末で削除された授業のため、保存しませんでした。',
     '수업 시간': '授業時間',
     '수업 시간 추가': '授業時間を追加',
     '과목명': '科目名',
@@ -1779,6 +1789,8 @@ const Map<String, Map<String, String>> _translations = {
         '送信待ちの分析データを削除できませんでした。もう一度お試しください。',
     '일부 이전 알림을 정리하지 못했습니다. 다음 실행에서 다시 시도합니다. 정리 전까지 새 알림 예약이 보류됩니다.':
         '一部の以前の通知を削除できませんでした。次回起動時に再試行します。削除完了まで新しい通知の予約は保留されます。',
+    '저장된 학교 로그인 정보나 Siri 작업 기록을 모두 지우지 못했습니다. 다음 실행에서 다시 시도합니다.':
+        '保存された学校のログイン情報またはSiriの操作履歴を一部削除できませんでした。次回起動時に再試行します。',
     '이 기기에 전송 대기 중인 익명 분석 데이터를 삭제합니다.': 'このデバイスで送信待ちの匿名分析データを削除します。',
     '이 기기에 전송 대기 중인 익명 분석 데이터를 삭제할까요? 이미 전송되어 집계된 데이터는 계정이나 기기와 연결되지 않아 특정 사용자를 식별하거나 되돌릴 수 없습니다.':
         'このデバイスで送信待ちの匿名分析データを削除しますか？送信済みデータはアカウントやデバイスに結び付けず集計されるため、特定ユーザーの識別や復元はできません。',
@@ -2233,8 +2245,8 @@ const Map<String, Map<String, String>> _translations = {
     '개인정보 및 지원': 'プライバシーとサポート',
     '계정을 연결하면 기기 간 동기화를 사용할 수 있고, 계정 없이 이 기기에서만 시작할 수도 있어요.':
         'アカウントを連携するとデバイス間で同期できます。アカウントなしでこのデバイスだけで始めることもできます。',
-    '권한 설정을 완료하지 못했습니다. 나중에 설정에서 다시 시도할 수 있습니다. ({error})':
-        '権限設定を完了できませんでした。後で設定から再試行できます。({error})',
+    '권한 설정을 완료하지 못했습니다. 나중에 설정에서 다시 시도할 수 있습니다.':
+        '権限設定を完了できませんでした。後で設定から再試行できます。',
     '권한은 나중에 설정에서 다시 요청하거나 변경할 수 있습니다.': '権限は後で設定から再度要求または変更できます。',
     '기록부터 완료까지': '記録から完了まで',
     '나중에': '後で',
@@ -2337,6 +2349,8 @@ const Map<String, Map<String, String>> _translations = {
     '이 기기의 저장된 로그인 정보 삭제': 'この端末に保存されたログイン情報を削除',
     '이전 위젯 작업의 반복 회차를 확인할 수 없습니다. 새로고침된 위젯에서 다시 선택해 주세요.':
         '以前のウィジェット操作の繰り返し回を確認できません。更新されたウィジェットでもう一度選択してください。',
+    '일정이 변경되었습니다. 다시 확인해 주세요.':
+        '予定が変更されました。もう一度ご確認ください。',
     '일정은 이동했습니다. 알림 또는 동기화 처리를 다시 시도해 주세요.':
         '予定を移動しました。通知または同期の処理をもう一度お試しください。',
     '일정은 저장했습니다. 알림 또는 동기화 처리를 다시 시도해 주세요.':
@@ -2509,6 +2523,8 @@ const Map<String, Map<String, String>> _translations = {
     "업데이트가 필요합니다": "需要更新",
     "새 버전({version})이 나왔습니다. 업데이트하기 전까지는 일정 확인만 사용할 수 있고, 학사일정·LMS·시간표와 일정 추가·수정은 사용할 수 없습니다.":
         "已有新版本({version})。更新之前只能查看行程，無法使用學校行事曆、LMS、課表，也無法新增或編輯行程。",
+    "새 버전이 나왔습니다. 업데이트하기 전까지는 일정 확인만 사용할 수 있고, 학사일정·LMS·시간표와 일정 추가·수정은 사용할 수 없습니다.":
+        "已有新版本。更新之前只能查看行程，無法使用學校行事曆、LMS、課表，也無法新增或編輯行程。",
     "업데이트 받기": "取得更新",
     "저장 중": "儲存中",
     "Google 계정을 연결하면 학사 정보를 저장하고 다른 기기에서도 사용할 수 있습니다.":
@@ -2614,6 +2630,7 @@ const Map<String, Map<String, String>> _translations = {
     '요일을 바꾸면 이 수업의 휴강·수업 방식 변경 {count}건을 새 요일에 적용할 수 없어 삭제됩니다. 계속할까요?':
         '變更星期後，此課程的停課／授課方式變更 {count} 筆無法套用到新的星期，將被刪除。要繼續嗎？',
     '삭제하고 저장': '刪除並儲存',
+    '다른 기기에서 삭제된 수업이라 저장하지 않았습니다.': '此課程已在其他裝置上刪除，因此未儲存。',
     '수업 시간': '上課時間',
     '수업 시간 추가': '新增上課時段',
     '과목명': '課程名稱',
@@ -2808,6 +2825,8 @@ const Map<String, Map<String, String>> _translations = {
     '전송 대기 분석 데이터를 삭제하지 못했습니다. 다시 시도해 주세요.': '無法刪除待傳送的分析資料。請再試一次。',
     '일부 이전 알림을 정리하지 못했습니다. 다음 실행에서 다시 시도합니다. 정리 전까지 새 알림 예약이 보류됩니다.':
         '部分舊通知無法清除，將於下次啟動時重試。清除完成前暫停排程新提醒。',
+    '저장된 학교 로그인 정보나 Siri 작업 기록을 모두 지우지 못했습니다. 다음 실행에서 다시 시도합니다.':
+        '部分已儲存的學校登入資訊或 Siri 操作紀錄無法刪除，將於下次啟動時重試。',
     '이 기기에 전송 대기 중인 익명 분석 데이터를 삭제합니다.': '刪除此裝置上等待傳送的匿名分析資料。',
     '이 기기에 전송 대기 중인 익명 분석 데이터를 삭제할까요? 이미 전송되어 집계된 데이터는 계정이나 기기와 연결되지 않아 특정 사용자를 식별하거나 되돌릴 수 없습니다.':
         '要刪除此裝置上等待傳送的匿名分析資料嗎？已傳送的資料不會連結帳號或裝置，且只會彙總，因此無法識別或還原特定使用者的資料。',
@@ -2891,8 +2910,7 @@ const Map<String, Map<String, String>> _translations = {
     '완료': '完成',
     '미완료': '未完成',
     '기한 없는 학습 {count}개': '無期限學習 {count} 項',
-    '학교가 학습 기간을 정하지 않아 달력 대신 여기에 표시합니다.':
-        '學校未設定學習期間，因此列於此處而非行事曆。',
+    '학교가 학습 기간을 정하지 않아 달력 대신 여기에 표시합니다.': '學校未設定學習期間，因此列於此處而非行事曆。',
     '지도 바로가기': '在地圖中開啟',
     '월간 미니 캘린더': '月份迷你行事曆',
     '오늘 일정': '今日行程',
@@ -3251,8 +3269,8 @@ const Map<String, Map<String, String>> _translations = {
     '개인정보 및 지원': '隱私與支援',
     '계정을 연결하면 기기 간 동기화를 사용할 수 있고, 계정 없이 이 기기에서만 시작할 수도 있어요.':
         '連結帳號即可在裝置間同步，也可以不使用帳號，僅在此裝置開始。',
-    '권한 설정을 완료하지 못했습니다. 나중에 설정에서 다시 시도할 수 있습니다. ({error})':
-        '無法完成權限設定。稍後可在「設定」中重試。({error})',
+    '권한 설정을 완료하지 못했습니다. 나중에 설정에서 다시 시도할 수 있습니다.':
+        '無法完成權限設定。稍後可在「設定」中重試。',
     '권한은 나중에 설정에서 다시 요청하거나 변경할 수 있습니다.': '稍後可在「設定」中再次要求或變更權限。',
     '기록부터 완료까지': '從記錄到完成',
     '나중에': '稍後',
@@ -3355,6 +3373,8 @@ const Map<String, Map<String, String>> _translations = {
     '이 기기의 저장된 로그인 정보 삭제': '刪除此裝置已儲存的登入資訊',
     '이전 위젯 작업의 반복 회차를 확인할 수 없습니다. 새로고침된 위젯에서 다시 선택해 주세요.':
         '找不到先前小工具操作的重複場次。請在重新整理後的小工具再選一次。',
+    '일정이 변경되었습니다. 다시 확인해 주세요.':
+        '行程已變更。請再確認一次。',
     '일정은 이동했습니다. 알림 또는 동기화 처리를 다시 시도해 주세요.': '行程已移動。請重試通知或同步處理。',
     '일정은 저장했습니다. 알림 또는 동기화 처리를 다시 시도해 주세요.': '行程已儲存。請重試通知或同步處理。',
     '자동 로그인을 일시 중지했습니다. 비밀번호나 추가 인증을 확인한 뒤 로그인 정보를 다시 저장해 주세요.':

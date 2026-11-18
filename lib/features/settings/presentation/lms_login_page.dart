@@ -241,9 +241,17 @@ class _LmsLoginPageState extends State<LmsLoginPage> {
                         widget.session.recordLoginNavigation(uri?.uriValue);
                         if (mounted) setState(() => _visibleHost = uri?.host);
                       },
-                      onLoadStop: (_, url) {
+                      onLoadStop: (controller, url) {
                         widget.session.pageLoadFinished();
                         final uri = url?.uriValue;
+                        final click = widget.session.externalLoginClickScript(
+                          uri,
+                        );
+                        if (click != null) {
+                          // Open the ID/password form instead of the SSO that
+                          // asks for a second factor the app cannot complete.
+                          unawaited(controller.evaluateJavascript(source: click));
+                        }
                         if (uri != null &&
                             widget.session.policy.isSchoolOrigin(uri) &&
                             !const {

@@ -23,6 +23,7 @@ function element(label, spec) {
     querySelectorAll: (selector) =>
       selector === 'input' ? Object.values(children) : [],
     requestSubmit: () => calls.push('submit:' + label),
+    click: () => calls.push('click:' + label),
   };
   for (const [selector, child] of Object.entries(spec.children || {})) {
     children[selector] = element(label + ' ' + selector, child);

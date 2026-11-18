@@ -5,7 +5,9 @@ import 'package:flutter/foundation.dart';
 import 'package:crypto/crypto.dart';
 import 'package:path/path.dart' as path;
 import 'package:http/http.dart' as http;
+import 'package:in_app_update/in_app_update.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 @visibleForTesting
 bool shouldRunWindowsAutoUpdater({
@@ -90,6 +92,40 @@ class AppUpdateService {
       return null;
     }
   }
+
+  /// The version App Store currently serves to users, or null when it cannot
+  /// be read. Store review delays this past the GitHub release, so Apple
+  /// devices are only restricted once the update can actually be installed.
+  Future<String?> appStoreVersion({
+    required bool mac,
+    SharedPreferences? preferences,
+  }) async {
+    try {
+      final uri = Uri.https('itunes.apple.com', '/lookup', {
+        'bundleId': appleBundleId,
+        'country': 'kr',
+        if (mac) 'entity': 'macSoftware',
+      });
+      final response = await _client
+          .get(uri, headers: const {'User-Agent': 'Daily-Update-Check'})
+          .timeout(releaseLookupTimeout);
+      if (response.statusCode != HttpStatus.ok) return null;
+      final release = parseAppStoreLookup(response.body);
+      if (release == null) return null;
+      final url = release.url;
+      if (preferences != null && url != null) {
+        await preferences.setString(storeUrlKey, url);
+      }
+      return release.version;
+    } on Object {
+      return null;
+    }
+  }
+
+  static const appleBundleId = 'com.littlebit0.daily';
+
+  /// Last App Store page returned by the lookup, opened by the update button.
+  static const storeUrlKey = 'update.storeUrl';
 
   Future<void> _checkAndPrepare() async {
     Directory? directory;
@@ -294,6 +330,62 @@ String windowsDeferredInstallScript({
     'Start-Process -FilePath ${literal(installerPath)} -ArgumentList "/VERYSILENT /SUPPRESSMSGBOXES /NORESTART /NOCLOSEAPPLICATIONS" -Wait',
     '',
   ].join('\n');
+}
+
+/// Where this platform learns that the installed build is outdated.
+enum UpdateSource { appStore, play, github }
+
+UpdateSource updateSourceFor(TargetPlatform platform) => switch (platform) {
+  TargetPlatform.iOS || TargetPlatform.macOS => UpdateSource.appStore,
+  TargetPlatform.android => UpdateSource.play,
+  _ => UpdateSource.github,
+};
+
+/// The version and page of the first App Store lookup result, or null.
+@visibleForTesting
+({String version, String? url})? parseAppStoreLookup(String body) {
+  final decoded = jsonDecode(body);
+  if (decoded is! Map<String, dynamic>) return null;
+  final results = decoded['results'];
+  if (results is! List || results.isEmpty) return null;
+  final first = results.first;
+  if (first is! Map<String, dynamic>) return null;
+  final version = first['version'];
+  if (version is! String || !RegExp(r'^\d+\.\d+(\.\d+)?$').hasMatch(version)) {
+    return null;
+  }
+  final url = Uri.tryParse(first['trackViewUrl'] as String? ?? '');
+  final valid =
+      url != null && url.scheme == 'https' && url.host == 'apps.apple.com';
+  return (version: version, url: valid ? url.toString() : null);
+}
+
+/// The Play versionCode to require, only when Play offers an update to this
+/// installation. Sideloaded builds make the lookup throw, which means no limit.
+Future<String?> playRequiredVersionCode({
+  Future<AppUpdateInfo> Function()? checkForUpdate,
+}) async {
+  try {
+    final info = await (checkForUpdate ?? InAppUpdate.checkForUpdate)();
+    return playRequirement(info.updateAvailability, info.availableVersionCode);
+  } on Object {
+    return null;
+  }
+}
+
+@visibleForTesting
+String? playRequirement(UpdateAvailability availability, int? versionCode) =>
+    availability == UpdateAvailability.updateAvailable && versionCode != null
+    ? '$versionCode'
+    : null;
+
+/// Android requirements are versionCodes; an unreadable one never restricts.
+bool isNewerVersionCode(String candidate, String current) {
+  final candidateCode = int.tryParse(candidate);
+  final currentCode = int.tryParse(current);
+  return candidateCode != null &&
+      currentCode != null &&
+      candidateCode > currentCode;
 }
 
 bool isNewerVersion(String candidate, String current) {

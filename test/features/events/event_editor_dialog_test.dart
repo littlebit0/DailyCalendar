@@ -931,8 +931,9 @@ class _AuthorizedAlarmService implements AlarmService {
       AlarmAuthorizationState.authorized;
 
   @override
-  Future<AlarmAuthorizationState> requestAuthorization() async =>
-      AlarmAuthorizationState.authorized;
+  Future<AlarmAuthorizationState> requestAuthorization({
+    bool openSettings = false,
+  }) async => AlarmAuthorizationState.authorized;
 
   @override
   Future<void> cancelAllEventAlarms() async {}

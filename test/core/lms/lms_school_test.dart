@@ -100,6 +100,20 @@ void main() {
     expect(LmsWebSession.automaticLoginScript, isNot(contains('smu.ac.kr')));
   });
 
+  test('only Jeonnam opens the external (ID/password) login, never its SSO', () {
+    expect(
+      LmsSchool.all.where((s) => s.externalLoginToggle != null).map((s) => s.id),
+      ['jnu'],
+    );
+    expect(LmsSchool.of('jnu')!.externalLoginToggle, 'button.btn-person');
+    expect(LmsSchool.of('jnu')!.sso, isNull);
+    expect(
+      LmsSchool.of('jnu')!.scriptArguments['externalLoginToggle'],
+      'button.btn-person',
+    );
+    expect(LmsSchool.of('smu')!.scriptArguments['externalLoginToggle'], '');
+  });
+
   test('schools outside the list are blocked at every entry point', () async {
     for (final school in ['cue', 'hansung', 'scnu', '', null]) {
       expect(LmsController.supportsSchool(school), isFalse);
@@ -228,6 +242,43 @@ void main() {
         );
         expect(desktop['calls'], accepts ? ['submit:form.loginform'] : isEmpty);
       }
+    });
+
+    test('Jeonnam clicks the external login button before submitting', () async {
+      final jnu = LmsSchool.of('jnu')!;
+      final run = await _run(jnu, {
+        'hostname': jnu.host,
+        'selectors': {
+          'input[type="password"]': {'type': 'password'},
+          'button.btn-person': {'type': 'button'},
+          'form.form-login': _localForm(jnu.host),
+        },
+      });
+      if (run == null) return markTestSkipped('Node.js is unavailable');
+      expect(run['result'], {'state': 'credentialsSubmitted'});
+      expect(run['calls'], ['click:button.btn-person', 'submit:form.form-login']);
+    });
+
+    test('manual login opens the external form only on the school login page', () {
+      final jnu = LmsWebSession(ownerId: 'student@example.com', schoolId: 'jnu');
+      final smu = LmsWebSession(ownerId: 'student@example.com', schoolId: 'smu');
+      expect(
+        jnu.externalLoginClickScript(Uri.parse('https://sel.jnu.ac.kr/login.php')),
+        contains('button.btn-person'),
+      );
+      for (final uri in [
+        'https://sel.jnu.ac.kr/',
+        'https://sso.jnu.ac.kr/login.php',
+        'https://attacker.test/login.php',
+        'http://sel.jnu.ac.kr/login.php',
+      ]) {
+        expect(jnu.externalLoginClickScript(Uri.parse(uri)), isNull, reason: uri);
+      }
+      expect(jnu.externalLoginClickScript(null), isNull);
+      expect(
+        smu.externalLoginClickScript(Uri.parse('https://ecampus.smu.ac.kr/login.php')),
+        isNull,
+      );
     });
 
     test('only Sangmyung takes the SSO entry and SSO form', () async {
