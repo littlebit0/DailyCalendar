@@ -17,8 +17,8 @@
 
 - 앱 프레임워크: Flutter
 - 로컬 데이터베이스: drift + SQLite
-- 실시간 동기화: Firebase Auth + Cloud Firestore
-- 백업/복원: 앱 로컬 파일 백업/복원, Firestore 원격 데이터 보관
+- 동기화(초기 계획은 Firebase Auth + Cloud Firestore): 현재는 Google Drive AppData v2 (`docs/GOOGLE_DRIVE_SYNC_SETUP.md`)
+- 백업/복원: 앱 로컬 파일 백업/복원
 - 알림: 로컬 알림
 - AI 일정 해석: 규칙 기반 파서 우선, 복잡한 문장만 Gemini API 선택 사용
 
@@ -97,6 +97,9 @@ v1에서 반복 일정을 지원한다.
 - 아침 브리핑에는 오늘 일정 목록을 요약해서 보여준다.
 
 ## 8. 동기화
+
+> 아래는 초기 Firebase 계획이다. Firebase/Firestore 코드는 2.0.3에서 지웠고(`docs/RELEASE_NOTES_2.0.3.md`),
+> 현재 동기화는 Google Drive AppData v2(일정별 파일, 설정 파일, 삭제 표시)다. 기준 문서는 `docs/GOOGLE_DRIVE_SYNC_SETUP.md`다.
 
 - 앱은 로컬 SQLite를 우선 원본처럼 사용한다.
 - Firebase Auth는 사용자 계정 식별을 담당한다.
