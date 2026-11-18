@@ -158,6 +158,19 @@ void main() {
     expect(await move(tester, container, -1), DateTime(2026, 1, 15));
   });
 
+  testWidgets('leaving the shown date and coming back forgets the day', (
+    tester,
+  ) async {
+    final container = await pumpCalendar(tester);
+    await select(tester, container, DateTime(2026, 1, 31));
+    expect(await move(tester, container, 1), DateTime(2026, 2, 28));
+
+    // Day/week paging writes the selected date: Feb 28 -> Mar 1 -> Feb 28.
+    await select(tester, container, DateTime(2026, 3, 1));
+    await select(tester, container, DateTime(2026, 2, 28));
+    expect(await move(tester, container, 1), DateTime(2026, 3, 28));
+  });
+
   testWidgets('Today replaces the remembered day', (tester) async {
     final container = await pumpCalendar(tester);
     await select(tester, container, DateTime(2026, 1, 31));
