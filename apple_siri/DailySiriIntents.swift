@@ -2167,22 +2167,27 @@ enum DailyKoreanHolidayService {
       }
     }
 
-    func fixed(_ month: Int, _ day: Int, _ title: String, substitute: Bool = false) {
+    // 관공서의 공휴일에 관한 규정 제3조 대체공휴일 시행일: 설·추석·어린이날 대통령령 제24828호(2013. 11. 5.), 국경일 제31930호(2021. 8. 4.), 부처님 오신 날·기독탄신일 제33448호(2023. 5. 4.).
+    let lunarAndChildrenSince = localDate(year: 2013, month: 11, day: 5)!
+    let nationalDaySince = localDate(year: 2021, month: 8, day: 4)!
+    let buddhaAndChristmasSince = localDate(year: 2023, month: 5, day: 4)!
+
+    func fixed(_ month: Int, _ day: Int, _ title: String, substituteSince: Date? = nil) {
       guard let date = localDate(year: year, month: month, day: day) else { return }
       add(date, title)
-      if substitute { singleSubstituteDates.insert(date) }
+      if let since = substituteSince, date >= since { singleSubstituteDates.insert(date) }
     }
 
     fixed(1, 1, "신정")
-    fixed(3, 1, "삼일절", substitute: true)
-    if year >= 2027 { fixed(5, 1, "노동절", substitute: true) }
-    fixed(5, 5, "어린이날", substitute: true)
+    fixed(3, 1, "삼일절", substituteSince: nationalDaySince)
+    if year >= 2027 { fixed(5, 1, "노동절", substituteSince: localDate(year: 2026, month: 5, day: 1)) }
+    fixed(5, 5, "어린이날", substituteSince: lunarAndChildrenSince)
     fixed(6, 6, "현충일")
-    if year >= 2026 { fixed(7, 17, "제헌절", substitute: true) }
-    fixed(8, 15, "광복절", substitute: true)
-    fixed(10, 3, "개천절", substitute: true)
-    fixed(10, 9, "한글날", substitute: true)
-    fixed(12, 25, "기독탄신일", substitute: true)
+    if year >= 2026 { fixed(7, 17, "제헌절", substituteSince: localDate(year: 2026, month: 5, day: 11)) }
+    fixed(8, 15, "광복절", substituteSince: nationalDaySince)
+    fixed(10, 3, "개천절", substituteSince: nationalDaySince)
+    fixed(10, 9, "한글날", substituteSince: nationalDaySince)
+    fixed(12, 25, "기독탄신일", substituteSince: buddhaAndChristmasSince)
 
     if let lunarNewYear = lunarDate(in: year, month: 1, day: 1),
        let previous = calendar.date(byAdding: .day, value: -1, to: lunarNewYear),
@@ -2195,7 +2200,7 @@ enum DailyKoreanHolidayService {
     }
     if let buddhaBirthday = lunarDate(in: year, month: 4, day: 8) {
       add(buddhaBirthday, "부처님 오신 날")
-      singleSubstituteDates.insert(buddhaBirthday)
+      if buddhaBirthday >= buddhaAndChristmasSince { singleSubstituteDates.insert(buddhaBirthday) }
     }
     if let chuseok = lunarDate(in: year, month: 8, day: 15),
        let previous = calendar.date(byAdding: .day, value: -1, to: chuseok),
@@ -2219,7 +2224,7 @@ enum DailyKoreanHolidayService {
         occupied.insert(substitute)
       }
     }
-    for group in substituteGroups {
+    for group in substituteGroups where group.first.map({ $0 >= lunarAndChildrenSince }) ?? false {
       let needsSubstitute = group.contains { date in
         calendar.component(.weekday, from: date) == 1 ||
           (byDate[calendar.startOfDay(for: date)]?.count ?? 0) > 1

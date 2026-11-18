@@ -33,7 +33,15 @@ class EwhaAcademicSource implements AcademicSource {
           .get(page(selected))
           .timeout(const Duration(seconds: 25));
       checkAcademicResponse(response);
-      pages.add(parseMonths(utf8.decode(response.bodyBytes), selected));
+      pages.add(
+        parseMonths(
+          utf8.decode(response.bodyBytes),
+          selected,
+          // January–February of [year] are on the previous year's page, so a
+          // not yet published [year] page must not discard them.
+          allowUnpublished: selected == year,
+        ),
+      );
     }
     // Both pages list the overlapping January/February months. A month the
     // [year] page publishes is authoritative, so its corrections and removals
@@ -63,7 +71,14 @@ class EwhaAcademicSource implements AcademicSource {
 
   /// The page's rows grouped by the month heading they are published under;
   /// a heading whose rows were all removed is present with no rows.
-  static Map<DateTime, List<AcademicEvent>> parseMonths(String body, int year) {
+  ///
+  /// [allowUnpublished] returns no months for a year page that shows its
+  /// "no schedule" notice (observed for 2027 on 2026-11-19).
+  static Map<DateTime, List<AcademicEvent>> parseMonths(
+    String body,
+    int year, {
+    bool allowUnpublished = false,
+  }) {
     final doc = html.parse(body);
     // Month titles carry no year, so the page's own year banner is the only proof
     // that the response is the requested year; never relabel another year's page.
@@ -74,13 +89,21 @@ class EwhaAcademicSource implements AcademicSource {
     if (shownYears.length != 1 || shownYears.single != '$year') {
       throw const FormatException('Unexpected EWHA year');
     }
+    final list = doc.querySelector('.b-cal-list-box');
+    if (allowUnpublished &&
+        list != null &&
+        list.querySelector('li') == null &&
+        list.querySelector('p.b-no-post')?.text.trim() == '등록된 일정이 없습니다.' &&
+        !doc
+            .querySelectorAll('p')
+            .any((p) => _monthHeading.hasMatch(p.text.trim()))) {
+      return const {};
+    }
     final url = page(year).toString();
     final events = <String, AcademicEvent>{};
     final months = <DateTime, List<AcademicEvent>>{};
     for (final p in doc.querySelectorAll('p')) {
-      final heading = RegExp(
-        r'^(?:(\d{4})년\s*)?(\d{1,2})월$',
-      ).firstMatch(p.text.trim());
+      final heading = _monthHeading.firstMatch(p.text.trim());
       if (heading == null) continue;
       final y = heading[1] == null ? year : int.parse(heading[1]!);
       final m = int.parse(heading[2]!);
@@ -119,6 +142,8 @@ class EwhaAcademicSource implements AcademicSource {
     }
     return months;
   }
+
+  static final _monthHeading = RegExp(r'^(?:(\d{4})년\s*)?(\d{1,2})월$');
 
   static DateTime _date(int year, int month, int day) {
     final date = DateTime(year, month, day);

@@ -38,7 +38,14 @@ class SeoultechAcademicSource implements AcademicSource {
         throw const FormatException('Seoultech calendar unavailable');
       }
       events.addAll(
-        parse(utf8.decode(response.bodyBytes), academicYear, semester).where(
+        parse(
+          utf8.decode(response.bodyBytes),
+          academicYear,
+          semester,
+          // January–February of [year] belong to the prior year's 2nd semester,
+          // so a not yet published [year] semester must not discard them.
+          allowUnpublished: academicYear == year,
+        ).where(
           (e) =>
               e.start.isBefore(DateTime(year + 1)) &&
               e.end.isAfter(DateTime(year)),
@@ -51,11 +58,14 @@ class SeoultechAcademicSource implements AcademicSource {
     return events..sort((a, b) => a.start.compareTo(b.start));
   }
 
+  /// [allowUnpublished] returns no events for a semester page that shows its
+  /// single "NO data" row (observed for 2027 1st semester on 2026-11-19).
   static List<AcademicEvent> parse(
     String body,
     int academicYear,
-    int semester,
-  ) {
+    int semester, {
+    bool allowUnpublished = false,
+  }) {
     final table = html
         .parse(body)
         .querySelector('.wrap_plugin_schedule table.schedule');
@@ -64,9 +74,19 @@ class SeoultechAcademicSource implements AcademicSource {
         (semester != 1 && semester != 2)) {
       throw const FormatException('Unexpected Seoultech semester');
     }
+    final rows = table!.querySelectorAll('tbody tr');
+    if (allowUnpublished && rows.length == 1) {
+      final cells = rows.single.querySelectorAll('td');
+      if (cells.length == 1 &&
+          cells.single.attributes['colspan'] == '2' &&
+          cells.single.text.trim() == 'NO data' &&
+          rows.single.querySelector('.date, .al') == null) {
+        return const [];
+      }
+    }
     final occurrences = <String, int>{};
     final events = <AcademicEvent>[];
-    for (final row in table!.querySelectorAll('tbody tr')) {
+    for (final row in rows) {
       final text = row.querySelector('.date')?.text.trim() ?? '';
       final content = row.querySelector('.al');
       for (final link in content?.querySelectorAll('.link') ?? []) {

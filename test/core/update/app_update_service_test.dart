@@ -496,16 +496,24 @@ void main() {
     });
 
     test('Play restricts only when it offers an update', () async {
-      expect(playRequirement(UpdateAvailability.updateAvailable, 430), '430');
       expect(
-        playRequirement(UpdateAvailability.updateNotAvailable, 430),
+        playRequirement(UpdateAvailability.updateAvailable, 430, '420'),
+        '430',
+      );
+      // No update offered: the installed code lifts a stored restriction.
+      expect(
+        playRequirement(UpdateAvailability.updateNotAvailable, 430, '420'),
+        '420',
+      );
+      expect(playRequirement(UpdateAvailability.unknown, null, '420'), isNull);
+      expect(
+        playRequirement(UpdateAvailability.updateAvailable, null, '420'),
         isNull,
       );
-      expect(playRequirement(UpdateAvailability.unknown, null), isNull);
-      expect(playRequirement(UpdateAvailability.updateAvailable, null), isNull);
-      // A sideloaded build cannot reach Play; the lookup failure is no limit.
+      // A sideloaded build cannot reach Play; the lookup failure is no answer.
       expect(
         await playRequiredVersionCode(
+          installedVersionCode: () async => '420',
           checkForUpdate: () async => throw Exception('ERROR_APP_NOT_OWNED'),
         ),
         isNull,

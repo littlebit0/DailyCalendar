@@ -8,6 +8,8 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.it_nomads.fluttersecurestorage.ciphers.KeyStoreKeyMissingException;
+
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.HashMap;
@@ -247,6 +249,25 @@ public class FlutterSecureStoragePlugin implements MethodCallHandler, FlutterPlu
 
                 @Override
                 public void onError(Exception e) {
+                    if (KeyStoreKeyMissingException.isCause(e)) {
+                        try {
+                            // Daily (#968): explicit deletes need no decryption, so
+                            // they still work and are the way out of this state.
+                            if ("delete".equals(call.method)) {
+                                secureStorage.deleteAfterKeyLoss(getKeyFromCall(secureStorage, call));
+                                result.success(null);
+                                return;
+                            }
+                            if ("deleteAll".equals(call.method)) {
+                                secureStorage.deleteAllAfterKeyLoss();
+                                result.success(null);
+                                return;
+                            }
+                        } catch (Exception deleteError) {
+                            handleException(deleteError);
+                            return;
+                        }
+                    }
                     handleException(e);
                 }
             });
@@ -259,8 +280,15 @@ public class FlutterSecureStoragePlugin implements MethodCallHandler, FlutterPlu
         private void handleException(Exception e) {
             // Send exception message as the message field so Flutter can parse it
             String errorMessage = e.getMessage() != null ? e.getMessage() : "Unknown error";
-            result.error("Exception encountered", errorMessage, errorDetails(e, BuildConfig.DEBUG));
+            result.error(errorCode(e), errorMessage, errorDetails(e, BuildConfig.DEBUG));
         }
+    }
+
+    /** Daily (#968): Dart tells a lost Keystore key apart from other storage errors by this code. */
+    static final String KEY_LOST_ERROR_CODE = "DailySecureStorageKeyLost";
+
+    static String errorCode(Exception e) {
+        return KeyStoreKeyMissingException.isCause(e) ? KEY_LOST_ERROR_CODE : "Exception encountered";
     }
 
     /** Daily (#971): the Java stack trace goes to Dart only in debug builds. */

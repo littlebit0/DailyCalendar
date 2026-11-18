@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:daily/core/academic/academic_profile.dart';
+import 'package:daily/core/academic/academic_source.dart';
 import 'package:daily/core/academic/koreatech_academic_source.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:html/parser.dart' as html;
@@ -66,6 +67,73 @@ void main() {
       }
     }
   });
+  test(
+    'Koreatech keeps prior-year January while the next year is unpublished',
+    () async {
+      // Live 2027 page recorded on 2026-11-19, before 2027 was published.
+      final unpublished = File(
+        'test/fixtures/academic/koreatech-2027-unpublished.html',
+      ).readAsStringSync();
+      expect(
+        KoreatechAcademicSource.parse(
+          unpublished,
+          2027,
+          allowUnpublished: true,
+        ),
+        isEmpty,
+      );
+      expect(
+        () => KoreatechAcademicSource.parse(unpublished, 2027),
+        throwsFormatException,
+      );
+      // One published month among empty ones is not an unpublished page.
+      expect(
+        () => KoreatechAcademicSource.parse(
+          unpublished.replaceFirst(
+            '<td colspan="2">일정이 없습니다.</td>',
+            '<td>03.02(화)</td><td>개강</td>',
+          ),
+          2027,
+          allowUnpublished: true,
+        ),
+        throwsFormatException,
+      );
+      Future<List<AcademicEvent>> fetch(Map<int, String> pages, int year) {
+        final source = KoreatechAcademicSource(
+          client: MockClient((request) async {
+            final y = int.parse(
+              request.url.queryParameters['sel_date']!.substring(0, 4),
+            );
+            return http.Response(
+              pages[y]!,
+              200,
+              headers: {'content-type': 'text/html;charset=utf-8'},
+            );
+          }),
+        );
+        addTearDown(source.close);
+        return source.fetch(year);
+      }
+
+      final events = await fetch({
+        2026: fixture(2026),
+        2027: unpublished,
+      }, 2027);
+      expect(events, isNotEmpty);
+      expect(events.every((e) => e.start.isBefore(DateTime(2027, 3))), isTrue);
+      expect(
+        events.any(
+          (e) => e.title == '전부(과) 선발자 공고' && e.start == DateTime(2027, 1, 4),
+        ),
+        isTrue,
+      );
+      // An unpublished prior academic year is still a failure.
+      await expectLater(
+        fetch({2027: unpublished}, 2028),
+        throwsFormatException,
+      );
+    },
+  );
   test('Koreatech profile resolves to its registered calendar', () {
     for (final id in [
       'institution:academyinfo:0000189',

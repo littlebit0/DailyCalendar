@@ -1736,6 +1736,29 @@ class SettingsRepository {
     return stored != null && stored == _hashPin(pin);
   }
 
+  /// The Android plugin error when the Keystore key under the stored values is
+  /// gone (#968): nothing in secure storage can be decrypted again.
+  static const secureStorageKeyLostCode = 'DailySecureStorageKeyLost';
+
+  static bool isSecureStorageKeyLost(Object error) =>
+      error is PlatformException && error.code == secureStorageKeyLostCode;
+
+  Future<bool> hasAppLockPin() async =>
+      await _secureStorage.read(key: _appLockPinHashKey) != null;
+
+  /// Sets a new PIN after the lock screen verified the user another way (#968).
+  /// When the stored values can no longer be decrypted they are cleared with
+  /// their wrapped key first; readable values are never cleared here.
+  Future<void> replaceUnreadableAppLockPin(String pin) async {
+    try {
+      await _secureStorage.read(key: _appLockPinHashKey);
+    } on Object catch (error) {
+      if (!isSecureStorageKeyLost(error)) rethrow;
+      await _secureStorage.deleteAll();
+    }
+    await saveAppLockPin(pin);
+  }
+
   Future<void> resetAll() {
     academicStore.invalidate();
     timetableStore.invalidate();

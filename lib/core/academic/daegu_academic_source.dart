@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:html/dom.dart';
 import 'package:html/parser.dart' as html;
 import 'package:http/http.dart' as http;
 
@@ -33,7 +34,13 @@ class DaeguAcademicSource implements AcademicSource {
           .timeout(const Duration(seconds: 20));
       checkAcademicResponse(response);
       events.addAll(
-        parse(utf8.decode(response.bodyBytes), academicYear).where(
+        parse(
+          utf8.decode(response.bodyBytes),
+          academicYear,
+          // January–February of [year] belong to the prior academic year, so
+          // a not yet published [year] page must not discard them.
+          allowUnpublished: academicYear == year,
+        ).where(
           (e) =>
               e.start.isBefore(DateTime(year + 1)) &&
               e.end.isAfter(DateTime(year)),
@@ -46,7 +53,13 @@ class DaeguAcademicSource implements AcademicSource {
     return events..sort((a, b) => a.start.compareTo(b.start));
   }
 
-  static List<AcademicEvent> parse(String body, int academicYear) {
+  /// [allowUnpublished] returns no events for a year page that shows its
+  /// "no results" row (observed for 2027 on 2026-11-19).
+  static List<AcademicEvent> parse(
+    String body,
+    int academicYear, {
+    bool allowUnpublished = false,
+  }) {
     final document = html.parse(body);
     if (document.querySelector('h3.sub_title')?.text.trim() !=
             '$academicYear년도 대학 일정' ||
@@ -58,21 +71,35 @@ class DaeguAcademicSource implements AcademicSource {
             '1') {
       throw const FormatException('Unexpected Daegu calendar year or school');
     }
+    bool headingRow(Element row) {
+      final header = row.querySelector('th');
+      return row.querySelectorAll('td').isEmpty &&
+          header != null &&
+          header.classes.contains('top_line') &&
+          header.text.trim().isEmpty;
+    }
+
+    final rows = document.querySelectorAll('table.tbl_cal tr');
+    if (allowUnpublished && rows.length == 2 && headingRow(rows.first)) {
+      final notice = rows.last;
+      final headers = notice.querySelectorAll('th');
+      if (notice.querySelectorAll('td').isEmpty &&
+          headers.length == 1 &&
+          headers.single.attributes['colspan'] == '3' &&
+          headers.single.text.trim() == '검색된 결과가 없습니다.') {
+        return const [];
+      }
+    }
     final events = <AcademicEvent>[];
     final months = <int>{};
     final occurrences = <String, int>{};
     final published = <String>{};
-    for (final row in document.querySelectorAll('table.tbl_cal tr')) {
+    for (final row in rows) {
       final header = row.querySelector('th');
       final cells = row.querySelectorAll('td');
       // Only the known heading row is skipped; any other row without its own
       // month heading means the layout changed and the calendar is refused.
-      if (cells.isEmpty &&
-          header != null &&
-          header.classes.contains('top_line') &&
-          header.text.trim().isEmpty) {
-        continue;
-      }
+      if (headingRow(row)) continue;
       if (header == null) {
         throw const FormatException('Daegu row without its month');
       }

@@ -79,6 +79,53 @@ void main() {
     );
     expect(events.map((e) => e.sourceId).toSet(), hasLength(events.length));
   });
+  test(
+    'Kunsan keeps prior-year January while the next year is unpublished',
+    () async {
+      // Live 2027 and 2028 pages recorded on 2026-11-19, before 2028 was
+      // published.
+      final unpublished = File(
+        'test/fixtures/academic/kunsan-2028-unpublished.html',
+      ).readAsStringSync();
+      expect(
+        KunsanAcademicSource.parse(unpublished, 2028, allowUnpublished: true),
+        isEmpty,
+      );
+      expect(
+        () => KunsanAcademicSource.parse(unpublished, 2028),
+        throwsFormatException,
+      );
+      // The notice never stands in for another year's page.
+      expect(
+        () => KunsanAcademicSource.parse(
+          unpublished,
+          2027,
+          allowUnpublished: true,
+        ),
+        throwsFormatException,
+      );
+      final years = <int>[];
+      final kunsan = source({2027: fixture(2027), 2028: unpublished}, years);
+      addTearDown(kunsan.close);
+      final events = await kunsan.fetch(2028);
+      expect(years, [2027, 2028]);
+      expect(events, isNotEmpty);
+      expect(events.every((e) => e.url.contains('sYear=2027')), isTrue);
+      expect(events.every((e) => e.start.isBefore(DateTime(2028, 3))), isTrue);
+      expect(
+        events.any(
+          (e) =>
+              e.title == '2028학년도 정시모집 원서접수 기간' &&
+              e.start == DateTime(2028, 1, 3),
+        ),
+        isTrue,
+      );
+      // An unpublished prior academic year is still a failure.
+      final failing = source({2028: unpublished}, []);
+      addTearDown(failing.close);
+      await expectLater(failing.fetch(2029), throwsFormatException);
+    },
+  );
   test('every published Kunsan 2026 row is imported', () {
     final body = fixture(2026);
     final rows = html

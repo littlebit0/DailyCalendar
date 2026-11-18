@@ -44,6 +44,8 @@ Future<Widget> _initializeApplication() async {
     ..installGlobalHandlers();
 
   final updates = AppUpdateService();
+  Future<String> buildNumber() async =>
+      (await PackageInfo.fromPlatform()).buildNumber;
   // Store platforms wait for the reviewed store release; others follow GitHub.
   final source = updateSourceFor(defaultTargetPlatform);
   final requirement = UpdateRequirementController(
@@ -54,12 +56,11 @@ Future<Widget> _initializeApplication() async {
         mac: defaultTargetPlatform == TargetPlatform.macOS,
         preferences: preferences,
       ),
-      UpdateSource.play => playRequiredVersionCode,
+      UpdateSource.play => () =>
+          playRequiredVersionCode(installedVersionCode: buildNumber),
       UpdateSource.github => updates.latestReleaseVersion,
     },
-    currentVersion: source == UpdateSource.play
-        ? () async => (await PackageInfo.fromPlatform()).buildNumber
-        : null,
+    currentVersion: source == UpdateSource.play ? buildNumber : null,
     isNewer: source == UpdateSource.play ? isNewerVersionCode : null,
     // Release builds only: a debug or test build is routinely older than the feed.
     enabled: !kDebugMode,
