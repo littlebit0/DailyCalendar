@@ -248,6 +248,11 @@ class AppUpdateService {
       installerPath: installer.path,
       expectedSha256: digest,
       readyPath: ready.path,
+      // Beside the download folder, which the helper deletes when it ends.
+      resultPath: path.join(
+        installer.parent.parent.path,
+        'daily-update-result.txt',
+      ),
     );
     final bytes = script.codeUnits
         .expand((unit) => [unit & 255, unit >> 8])
@@ -331,17 +336,40 @@ String windowsDeferredInstallScript({
   required String installerPath,
   required String expectedSha256,
   required String readyPath,
+  required String resultPath,
 }) {
   String literal(String value) => "'${value.replaceAll("'", "''")}'";
+  // The helper only runs on Windows, so parse the path as a Windows path.
+  final downloadDirectory = path.windows.dirname(installerPath);
+  // Delete only the folder made by createTemp('daily-update-'), never a
+  // parent or working directory.
+  final removable = path.windows
+      .basename(downloadDirectory)
+      .startsWith('daily-update-');
   // Never let the installer terminate another instance opened after the wait.
+  // The outcome (installer exit code, declined UAC, digest mismatch) is
+  // written to [resultPath], and the download folder is always removed (#935).
   return <String>[
     r"$ErrorActionPreference = 'Stop'",
     '\$app = Get-Process -Id $processId -ErrorAction Stop',
     r'$null = $app.Handle',
     '[System.IO.File]::WriteAllText(${literal(readyPath)}, "ready")',
     r'$app.WaitForExit()',
-    'if ((Get-FileHash -LiteralPath ${literal(installerPath)} -Algorithm SHA256).Hash -ne ${literal(expectedSha256)}) { exit 1 }',
-    'Start-Process -FilePath ${literal(installerPath)} -ArgumentList "/VERYSILENT /SUPPRESSMSGBOXES /NORESTART /NOCLOSEAPPLICATIONS" -Wait',
+    r"$result = 'not started'",
+    'try {',
+    '  if ((Get-FileHash -LiteralPath ${literal(installerPath)} -Algorithm SHA256).Hash -ne ${literal(expectedSha256)}) {',
+    r"    $result = 'digest mismatch'",
+    '  } else {',
+    '    \$setup = Start-Process -FilePath ${literal(installerPath)} -ArgumentList "/VERYSILENT /SUPPRESSMSGBOXES /NORESTART /NOCLOSEAPPLICATIONS" -Wait -PassThru',
+    r'    $result = "exit code $($setup.ExitCode)"',
+    '  }',
+    '} catch {',
+    r'  $result = "failed: $($_.Exception.Message)"',
+    '} finally {',
+    '  try { [System.IO.File]::WriteAllText(${literal(resultPath)}, "\$((Get-Date).ToString(\'o\')) \$result") } catch { }',
+    if (removable)
+      '  Remove-Item -LiteralPath ${literal(downloadDirectory)} -Recurse -Force -ErrorAction SilentlyContinue',
+    '}',
     '',
   ].join('\n');
 }
