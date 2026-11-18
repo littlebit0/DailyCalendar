@@ -1386,6 +1386,16 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
     // An open day sheet or search keeps its own date and would cover it.
     _closeSearch();
     _dismissDaySheet();
+    // So would a page or sheet opened over the calendar (settings, details).
+    // Like a back press, but a route that refuses to pop stays open.
+    final calendarRoute = ModalRoute.of(context);
+    if (calendarRoute != null && !calendarRoute.isCurrent) {
+      Navigator.of(context).popUntil(
+        (route) =>
+            route == calendarRoute ||
+            route.popDisposition == RoutePopDisposition.doNotPop,
+      );
+    }
     if (date != null) {
       ref.read(visibleMonthProvider.notifier).state = DateTime(
         date.year,

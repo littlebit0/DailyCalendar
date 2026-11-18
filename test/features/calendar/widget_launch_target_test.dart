@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:daily/app/daily_theme.dart';
 import 'package:daily/core/di/app_providers.dart';
 import 'package:daily/core/localization/app_localizations.dart';
@@ -186,6 +188,55 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(EventDetailsPanel), findsNothing);
     expect(container.read(selectedDateProvider), DateTime(2026, 12, 24));
+  });
+
+  testWidgets('a date tap closes pages opened over the calendar', (
+    tester,
+  ) async {
+    final container = await pumpPage(tester);
+    final navigator = tester.state<NavigatorState>(
+      find.byType(Navigator).first,
+    );
+    unawaited(
+      navigator.push(
+        MaterialPageRoute<void>(
+          builder: (_) => const Scaffold(body: Text('settings page')),
+        ),
+      ),
+    );
+    unawaited(
+      navigator.push(
+        MaterialPageRoute<void>(
+          builder: (_) => const PopScope(
+            canPop: false,
+            child: Scaffold(body: Text('busy page')),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    targets.add({'date': '2026-12-24'});
+    Future<void> tap() async {
+      await container
+          .read(calendarWidgetServiceProvider)
+          .handleNativeMethodCall(
+            const MethodCall(
+              CalendarWidgetChannelContract.launchTargetOpenedCallback,
+            ),
+          );
+      await tester.pumpAndSettle();
+    }
+
+    await tap();
+    // A page that refuses to pop is kept, with everything under it.
+    expect(find.text('busy page'), findsOneWidget);
+    navigator.pop();
+    await tester.pumpAndSettle();
+    targets.add({'date': '2026-12-25'});
+    await tap();
+    expect(find.text('settings page'), findsNothing);
+    expect(find.byType(MonthCalendarPage), findsOneWidget);
+    expect(container.read(selectedDateProvider), DateTime(2026, 12, 25));
   });
 
   testWidgets('a date tap leaves the Imogi tab for the calendar', (
