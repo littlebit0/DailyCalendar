@@ -2030,10 +2030,10 @@ class GoogleDriveSyncService implements SyncService {
           await _notificationService.scheduleEventReminder(current);
         }
         _validateSyncSession?.call();
-        await _alarmService.cancelEventAlarm(current.id);
-        _validateSyncSession?.call();
         if (current.deletedAt == null) {
           await _alarmService.scheduleEventAlarm(current);
+        } else {
+          await _alarmService.cancelEventAlarm(current.id);
         }
       } on Object {
         // Restored calendar data remains authoritative. Notification and alarm
