@@ -43,6 +43,14 @@ const windowsTestNotificationIdentity = WindowsNotificationIdentity(
   guid: '0734c50a-0934-4e91-ad45-58f8d2ea41d5',
 );
 
+/// [hour]:[minute] on the calendar day [days] after [day].
+///
+/// Adding `Duration(days:)` instead would land an hour off once the span
+/// crosses a daylight-saving change.
+@visibleForTesting
+DateTime wallClockOnDay(DateTime day, int days, int hour, int minute) =>
+    DateTime(day.year, day.month, day.day + days, hour, minute);
+
 @visibleForTesting
 WindowsNotificationIdentity windowsNotificationIdentityForBuild({
   required bool isTestEdition,
@@ -342,13 +350,12 @@ class LocalNotificationService implements NotificationService {
     CalendarEvent event,
     AppSettings settings,
     int offset,
-  ) => DateTime(
-    event.startAt.year,
-    event.startAt.month,
-    event.startAt.day,
+  ) => wallClockOnDay(
+    event.startAt,
+    offset,
     settings.allDayReminderHour,
     settings.allDayReminderMinute,
-  ).add(Duration(days: offset));
+  );
 
   /// Saving or editing one event can use up room the other events were
   /// holding. Re-share the app-wide limit by cancelling their repeating slots
@@ -717,11 +724,11 @@ class LocalNotificationService implements NotificationService {
     final now = DateTime.now();
     var scheduled = DateTime(now.year, now.month, now.day, hour, minute);
     if (!scheduled.isAfter(now)) {
-      scheduled = scheduled.add(const Duration(days: 1));
+      scheduled = wallClockOnDay(now, 1, hour, minute);
     }
 
     for (var dayOffset = 0; dayOffset < _briefingScheduleDays; dayOffset++) {
-      final briefingAt = scheduled.add(Duration(days: dayOffset));
+      final briefingAt = wallClockOnDay(scheduled, dayOffset, hour, minute);
       await _scheduleNotification(
         id: await _settingsRepository.notificationId('briefing:$dayOffset'),
         title: l10n.text('오늘의 일정'),
@@ -769,7 +776,7 @@ class LocalNotificationService implements NotificationService {
       briefingDate.month,
       briefingDate.day,
     );
-    final tomorrow = today.add(const Duration(days: 1));
+    final tomorrow = wallClockOnDay(today, 1, 0, 0);
     final settings = _settingsRepository.load();
     final l10n = _localizations(settings);
     final events =

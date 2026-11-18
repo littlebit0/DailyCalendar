@@ -2981,6 +2981,13 @@ class _WeekPageViewState extends State<_WeekPageView> {
     if (targetPage == _currentPage) {
       return;
     }
+    // Where the swipe commits at scroll end (Windows), a plain rebuild (e.g.
+    // an event reload) still carries the last reported date: it is not a
+    // request to pull the swipe back. A changed date is explicit navigation.
+    if (targetPage == _reportedPage &&
+        DateUtils.isSameDay(oldWidget.selectedDate, widget.selectedDate)) {
+      return;
+    }
     _animateToExternalPage(targetPage);
   }
 
@@ -3366,6 +3373,13 @@ class _DayPageViewState extends State<_DayPageView> {
     final targetPage =
         _initialPage + _dayDelta(_anchorDate, widget.selectedDate);
     if (targetPage == _currentPage) {
+      return;
+    }
+    // Where the swipe commits at scroll end (Windows), a plain rebuild (e.g.
+    // an event reload) still carries the last reported date: it is not a
+    // request to pull the swipe back. A changed date is explicit navigation.
+    if (targetPage == _reportedPage &&
+        DateUtils.isSameDay(oldWidget.selectedDate, widget.selectedDate)) {
       return;
     }
     _animateToExternalPage(targetPage);

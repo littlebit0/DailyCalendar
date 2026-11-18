@@ -69,8 +69,10 @@ class DeuAcademicSource implements AcademicSource {
         }
         final m = int.parse(range[1]!);
         final lastMonth = int.tryParse(range[3] ?? '') ?? m;
-        DateTime date(int month, int day) {
-          final year = academicYear + (month <= 2 ? 1 : 0);
+        DateTime date(int month, int day, [DateTime? start]) {
+          final year = start == null
+              ? academicYear + (month <= 2 ? 1 : 0)
+              : academicRangeEndYear(start, month);
           final result = DateTime(year, month, day);
           if (result.year != year ||
               result.month != month ||
@@ -81,7 +83,11 @@ class DeuAcademicSource implements AcademicSource {
         }
 
         final start = date(m, int.parse(range[2]!));
-        final last = date(lastMonth, int.tryParse(range[4] ?? '') ?? start.day);
+        final last = date(
+          lastMonth,
+          int.tryParse(range[4] ?? '') ?? start.day,
+          start,
+        );
         if (last.isBefore(start)) {
           throw const FormatException('Invalid DEU period');
         }

@@ -120,6 +120,54 @@ if mode == "append" {
             self.assertEqual(len(acknowledged) + len(remaining), 160)
             self.assertEqual(len(set(acknowledged) | set(remaining)), 160)
 
+    def test_widget_rewrites_the_snapshot_inside_the_queue_lock(self):
+        # #920: a toggle's snapshot read-modify-write must not interleave with the app's write.
+        widget = (ROOT / 'apple_widgets/DailyWidgets.swift').read_text()
+        append = widget.split('  static func append(eventId: String', 1)[1].split('  private static func withTodoActionsLock', 1)[0]
+        locked = append.split('    try withTodoActionsLock(in: containerURL) {\n', 1)[1].split('\n    }\n', 1)[0]
+        self.assertIn('try updateSnapshot(', locked)
+        self.assertNotIn('updateSnapshot(', append.replace(locked, ''))
+
+    @unittest.skipUnless(shutil.which('swiftc'), 'Swift compiler required')
+    def test_app_snapshot_write_waits_for_the_queue_lock(self):
+        # #920: while the widget holds the lock, the app must not replace the snapshot.
+        import fcntl
+        import time
+        harness = '''import Foundation
+let testDirectory = URL(fileURLWithPath: CommandLine.arguments[1])
+let snapshotFileName = "snapshot.json"
+enum App {
+  static func containerURL() throws -> URL { testDirectory }
+%s
+}
+'''
+        for name in ('ios/Runner/AppDelegate.swift', 'macos/Runner/MainFlutterWindow.swift'):
+            text = (ROOT / name).read_text()
+            body = text.split('  /// The widget rewrites this file', 1)[1].split('\n\n  private static func loadTodoActions', 1)[0]
+            # The channel handler must not wait for that lock on the platform thread.
+            self.assertIn('snapshotQueue.async {\n          do {\n            try writeSnapshot(snapshot)', text, name)
+            with tempfile.TemporaryDirectory() as d:
+                path = Path(d)
+                (path / 'main.swift').write_text(
+                    harness % ('  /// The widget rewrites this file' + body.replace('private static func writeSnapshot', 'static func writeSnapshot'))
+                    + 'try App.writeSnapshot(["revision": 2])\n')
+                compiled = subprocess.run(['swiftc', str(path / 'main.swift'), '-o', str(path / 'test')], capture_output=True, text=True)
+                self.assertEqual(compiled.returncode, 0, compiled.stderr)
+                work = path / 'container'
+                work.mkdir()
+                snapshot = work / 'snapshot.json'
+                snapshot.write_text('{"revision": 1}')
+                with open(work / 'daily-widget-todo-actions.lock', 'w') as lock:
+                    fcntl.flock(lock, fcntl.LOCK_EX)
+                    app = subprocess.Popen([str(path / 'test'), str(work)], stderr=subprocess.PIPE, text=True)
+                    time.sleep(1)
+                    self.assertIsNone(app.poll(), name)
+                    self.assertEqual(snapshot.read_text(), '{"revision": 1}', name)
+                    fcntl.flock(lock, fcntl.LOCK_UN)
+                _, error = app.communicate(timeout=60)
+                self.assertEqual(app.returncode, 0, error)
+                self.assertEqual(snapshot.read_text(), '{"revision":2}', name)
+
     @unittest.skipUnless(shutil.which('swiftc'), 'Swift compiler required')
     def test_unreadable_queue_is_set_aside_not_erased(self):
         widget = (ROOT / 'apple_widgets/DailyWidgets.swift').read_text()

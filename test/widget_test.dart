@@ -16,6 +16,7 @@ import 'package:daily/core/auth/google_account.dart';
 import 'package:daily/core/analytics/product_analytics.dart';
 import 'package:daily/core/di/app_providers.dart';
 import 'package:daily/core/lms/lms_controller.dart';
+import 'package:daily/core/lms/lms_credentials_store.dart';
 import 'package:daily/core/lms/lms_sync_service.dart';
 import 'package:daily/core/diagnostics/startup_timing.dart';
 import 'package:daily/core/notifications/notification_service.dart';
@@ -596,6 +597,88 @@ void main() {
       },
     );
   }
+
+  testWidgets('a Siri change whose reminder fails still replaces the alarm and '
+      'is not acknowledged (#924)', (tester) async {
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(1280, 900);
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+    addTearDown(() => debugDefaultTargetPlatformOverride = null);
+    const siriChannel = MethodChannel('daily/siri_event_changes');
+    final siriCalls = <String>[];
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(siriChannel, (call) async {
+          siriCalls.add(call.method);
+          return call.method == 'pendingChanges'
+              ? <Object?>[
+                  <Object?, Object?>{
+                    'token': 'token-1',
+                    'eventId': 'siri-edit',
+                  },
+                ]
+              : null;
+        });
+    addTearDown(
+      () => TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(siriChannel, null),
+    );
+    SharedPreferences.setMockInitialValues({'onboardingCompleted': true});
+    final preferences = await SharedPreferences.getInstance();
+    final start = DateTime.now().add(const Duration(days: 1));
+    // Siri turned the alarm off: scheduleEventAlarm is what removes it.
+    final edited = CalendarEvent(
+      id: 'siri-edit',
+      title: 'Siri edit',
+      startAt: start,
+      endAt: start.add(const Duration(hours: 1)),
+      allDay: false,
+      category: EventCategory.basic,
+      colorValue: 1,
+      createdAt: start,
+      updatedAt: start,
+    );
+    final alarms = _RecordingAlarms();
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          universityRegionsProvider.overrideWith(
+            (ref) async => UniversityRegions.fromJson(
+              jsonDecode(
+                    File(
+                      'assets/academic/university_regions.json',
+                    ).readAsStringSync(),
+                  )
+                  as Map<String, dynamic>,
+            ),
+          ),
+          settingsRepositoryProvider.overrideWithValue(
+            SettingsRepository(preferences: preferences),
+          ),
+          notificationServiceProvider.overrideWithValue(
+            _FakeNotification(failScheduleEventReminder: true),
+          ),
+          alarmServiceProvider.overrideWithValue(alarms),
+          syncServiceProvider.overrideWithValue(_FakeSync()),
+          eventRepositoryProvider.overrideWithValue(
+            _FindableEventRepository([edited]),
+          ),
+          googleDriveAuthServiceProvider.overrideWithValue(
+            _FakeGoogleDriveAuthService(),
+          ),
+        ],
+        child: const DailyApp(),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(siriCalls, contains('pendingChanges'));
+    expect(alarms.scheduled, contains('siri-edit'));
+    expect(siriCalls, isNot(contains('acknowledgeChanges')));
+    debugDefaultTargetPlatformOverride = null;
+    await tester.pumpWidget(const SizedBox.shrink());
+  });
 
   testWidgets('a local-only user still reports both startup milestones once', (
     tester,
@@ -9355,67 +9438,155 @@ void main() {
     await tester.pumpWidget(const SizedBox.shrink());
   });
 
-  testWidgets('local data reset does not require Google account deletion', (
-    tester,
-  ) async {
-    SharedPreferences.setMockInitialValues({'onboardingCompleted': true});
-    FlutterSecureStorage.setMockInitialValues({});
+  for (final cleanupFails in [false, true]) {
+    testWidgets('local data reset does not require Google account deletion, '
+        'LMS secret cleanup fails: $cleanupFails', (tester) async {
+      // The Siri log exists on Apple platforms; it must be deleted even when
+      // the LMS logins cannot be.
+      final siriLogCalls = <String>[];
+      if (cleanupFails) {
+        debugDefaultTargetPlatformOverride = TargetPlatform.macOS;
+        addTearDown(() => debugDefaultTargetPlatformOverride = null);
+        const siriLogs = MethodChannel('daily/siri_logs');
+        tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+          siriLogs,
+          (call) async {
+            siriLogCalls.add(call.method);
+            return null;
+          },
+        );
+        addTearDown(
+          () => tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+            siriLogs,
+            null,
+          ),
+        );
+      }
+      SharedPreferences.setMockInitialValues({'onboardingCompleted': true});
+      // #913: the reset also removes saved school logins and sessions.
+      FlutterSecureStorage.setMockInitialValues({
+        'daily.lms.credentials.v1.any-account': '{}',
+        'daily.lms.session.v1.any-account': '{}',
+      });
+      final preferences = await SharedPreferences.getInstance();
+      final settingsRepository = SettingsRepository(preferences: preferences);
+      final authService = _FakeGoogleDriveAuthService(account: null);
+      final notificationService = _FakeNotification();
+      final eventRepository = _FakeEventRepository();
+      final driveSyncService = _FakeGoogleDriveSyncService(
+        authService: authService,
+        eventRepository: eventRepository,
+        notificationService: notificationService,
+        settingsRepository: settingsRepository,
+      );
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            universityRegionsProvider.overrideWith(
+              (ref) async => UniversityRegions.fromJson(
+                jsonDecode(
+                      File(
+                        'assets/academic/university_regions.json',
+                      ).readAsStringSync(),
+                    )
+                    as Map<String, dynamic>,
+              ),
+            ),
+            settingsRepositoryProvider.overrideWithValue(settingsRepository),
+            notificationServiceProvider.overrideWithValue(notificationService),
+            eventRepositoryProvider.overrideWithValue(eventRepository),
+            googleDriveAuthServiceProvider.overrideWithValue(authService),
+            googleDriveSyncServiceProvider.overrideWithValue(driveSyncService),
+            syncServiceProvider.overrideWithValue(_FakeSync()),
+            if (cleanupFails)
+              alarmServiceProvider.overrideWithValue(
+                const UnsupportedAlarmService(),
+              ),
+            if (cleanupFails)
+              lmsControllerProvider.overrideWith(
+                (ref) => LmsController(
+                  settings: settingsRepository,
+                  repository: eventRepository,
+                  commands: ref.watch(eventCommandServiceProvider),
+                  credentialsStore: _UndeletableLmsCredentials(),
+                ),
+              ),
+          ],
+          child: const DailyApp(),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.byTooltip('설정'));
+      await tester.pumpAndSettle();
+      await _openAccountSettings(tester);
+      await tester.drag(find.byType(ListView), const Offset(0, -2200));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('로컬 데이터 초기화'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('초기화'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+
+      expect(find.text('오늘을 더\n가볍게 정리하세요.'), findsOneWidget);
+      expect(driveSyncService.deleteCloudBackupCalls, 0);
+      // #913 review: a failed cleanup neither stops the reset nor is forgotten.
+      expect(settingsRepository.deviceSecretCleanupPending, cleanupFails);
+      // Shown on the welcome screen, after the settings screen is gone.
+      expect(
+        find.textContaining('다음 실행에서 다시 시도합니다'),
+        cleanupFails ? findsOneWidget : findsNothing,
+      );
+      expect(siriLogCalls, cleanupFails ? ['clearLogs'] : isEmpty);
+      // The stored session goes even when the saved logins cannot be deleted.
+      expect(
+        (await const FlutterSecureStorage().readAll()).keys,
+        cleanupFails ? ['daily.lms.credentials.v1.any-account'] : isEmpty,
+      );
+      expect(authService.signOutCalls, 0);
+      expect(eventRepository.clearAllCalls, 1);
+      expect(notificationService.cancelMorningBriefingCalls, 1);
+      expect(settingsRepository.load().onboardingCompleted, isFalse);
+
+      debugDefaultTargetPlatformOverride = null;
+      await tester.pumpWidget(const SizedBox.shrink());
+    });
+  }
+
+  testWidgets('the start after a reset whose secret cleanup failed finishes '
+      'it on the welcome screen (#913)', (tester) async {
+    // A reset leaves onboarding incomplete and no account.
+    SharedPreferences.setMockInitialValues({
+      'deviceSecretCleanupPending.v1': true,
+    });
+    FlutterSecureStorage.setMockInitialValues({
+      'daily.lms.credentials.v1.any-account': '{}',
+      'daily.lms.session.v1.any-account': '{}',
+    });
     final preferences = await SharedPreferences.getInstance();
     final settingsRepository = SettingsRepository(preferences: preferences);
-    final authService = _FakeGoogleDriveAuthService(account: null);
-    final notificationService = _FakeNotification();
-    final eventRepository = _FakeEventRepository();
-    final driveSyncService = _FakeGoogleDriveSyncService(
-      authService: authService,
-      eventRepository: eventRepository,
-      notificationService: notificationService,
-      settingsRepository: settingsRepository,
-    );
 
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          universityRegionsProvider.overrideWith(
-            (ref) async => UniversityRegions.fromJson(
-              jsonDecode(
-                    File(
-                      'assets/academic/university_regions.json',
-                    ).readAsStringSync(),
-                  )
-                  as Map<String, dynamic>,
-            ),
-          ),
           settingsRepositoryProvider.overrideWithValue(settingsRepository),
-          notificationServiceProvider.overrideWithValue(notificationService),
-          eventRepositoryProvider.overrideWithValue(eventRepository),
-          googleDriveAuthServiceProvider.overrideWithValue(authService),
-          googleDriveSyncServiceProvider.overrideWithValue(driveSyncService),
+          notificationServiceProvider.overrideWithValue(_FakeNotification()),
+          eventRepositoryProvider.overrideWithValue(_FakeEventRepository()),
+          googleDriveAuthServiceProvider.overrideWithValue(
+            _FakeGoogleDriveAuthService(account: null),
+          ),
           syncServiceProvider.overrideWithValue(_FakeSync()),
         ],
         child: const DailyApp(),
       ),
     );
-    await tester.pumpAndSettle();
-
-    await tester.tap(find.byTooltip('설정'));
-    await tester.pumpAndSettle();
-    await _openAccountSettings(tester);
-    await tester.drag(find.byType(ListView), const Offset(0, -2200));
-    await tester.pumpAndSettle();
-
-    await tester.tap(find.text('로컬 데이터 초기화'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('초기화'));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 400));
 
     expect(find.text('오늘을 더\n가볍게 정리하세요.'), findsOneWidget);
-    expect(driveSyncService.deleteCloudBackupCalls, 0);
-    expect(authService.signOutCalls, 0);
-    expect(eventRepository.clearAllCalls, 1);
-    expect(notificationService.cancelMorningBriefingCalls, 1);
-    expect(settingsRepository.load().onboardingCompleted, isFalse);
-
+    expect(settingsRepository.deviceSecretCleanupPending, isFalse);
+    expect(await const FlutterSecureStorage().readAll(), isEmpty);
     await tester.pumpWidget(const SizedBox.shrink());
   });
 
@@ -10364,12 +10535,34 @@ void main() {
   testWidgets('logout clears local accounts and keeps Drive cloud backup', (
     tester,
   ) async {
+    // #913: the Siri activity log exists on iOS and macOS only.
+    debugDefaultTargetPlatformOverride = TargetPlatform.macOS;
+    addTearDown(() => debugDefaultTargetPlatformOverride = null);
+    const siriLogs = MethodChannel('daily/siri_logs');
+    final siriLogCalls = <String>[];
+    tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(siriLogs, (
+      call,
+    ) async {
+      siriLogCalls.add(call.method);
+      return null;
+    });
+    addTearDown(
+      () => tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+        siriLogs,
+        null,
+      ),
+    );
     SharedPreferences.setMockInitialValues({
       'onboardingCompleted': true,
       'appleUserIdentifier': 'apple-user',
       'appleEmail': 'hwi@example.com',
     });
-    FlutterSecureStorage.setMockInitialValues({});
+    // #913: saved without an LMS session being created in this run.
+    FlutterSecureStorage.setMockInitialValues({
+      'daily.lms.credentials.v1.other-account': '{}',
+      'daily.lms.session.v1.other-account': '{}',
+      'unrelated.secret': 'kept',
+    });
     final preferences = await SharedPreferences.getInstance();
     final settingsRepository = SettingsRepository(preferences: preferences);
     final authService = _FakeGoogleDriveAuthService();
@@ -10397,6 +10590,10 @@ void main() {
           ),
           settingsRepositoryProvider.overrideWithValue(settingsRepository),
           notificationServiceProvider.overrideWithValue(notificationService),
+          // The native alarm bridge has no handler in tests.
+          alarmServiceProvider.overrideWithValue(
+            const UnsupportedAlarmService(),
+          ),
           eventRepositoryProvider.overrideWithValue(eventRepository),
           googleDriveAuthServiceProvider.overrideWithValue(authService),
           googleDriveSyncServiceProvider.overrideWithValue(driveSyncService),
@@ -10416,7 +10613,10 @@ void main() {
     await tester.tap(find.text('로그아웃'));
     await tester.pumpAndSettle();
     await tester.tap(find.widgetWithText(FilledButton, '로그아웃'));
-    await tester.pumpAndSettle();
+    // This welcome screen never settles, so pump a fixed time instead.
+    for (var i = 0; i < 10; i++) {
+      await tester.pump(const Duration(milliseconds: 200));
+    }
 
     expect(authService.signOutCalls, 1);
     expect(driveSyncService.syncNowCalls, 0);
@@ -10425,7 +10625,12 @@ void main() {
     expect(settingsRepository.load().onboardingCompleted, isFalse);
     expect(settingsRepository.appleAccount(), isNull);
     expect(find.text('오늘을 더\n가볍게 정리하세요.'), findsOneWidget);
+    expect((await const FlutterSecureStorage().readAll()).keys, [
+      'unrelated.secret',
+    ]);
+    expect(siriLogCalls, ['clearLogs']);
 
+    debugDefaultTargetPlatformOverride = null;
     await tester.pumpWidget(const SizedBox.shrink());
   });
 
@@ -11048,8 +11253,11 @@ class _FakeNotification implements NotificationService {
   _FakeNotification({
     this.failCancelEventReminder = false,
     this.failCancelMorningBriefing = false,
+    this.failScheduleEventReminder = false,
     this.initializeCompleter,
   });
+
+  final bool failScheduleEventReminder;
 
   final bool failCancelEventReminder;
   final bool failCancelMorningBriefing;
@@ -11088,6 +11296,9 @@ class _FakeNotification implements NotificationService {
     CalendarEvent event, {
     bool allowImmediate = false,
   }) async {
+    if (failScheduleEventReminder) {
+      throw Exception('schedule event reminder failed');
+    }
     scheduledEventIds.add(event.id);
     scheduledImmediateFlags.add(allowImmediate);
   }
@@ -11103,6 +11314,22 @@ class _FakeNotification implements NotificationService {
 
   @override
   Future<String> permissionSummary() async => '테스트 권한 · 예약 0개';
+}
+
+class _RecordingAlarms extends UnsupportedAlarmService {
+  final scheduled = <String>[];
+
+  @override
+  Future<void> scheduleEventAlarm(CalendarEvent event) async =>
+      scheduled.add(event.id);
+}
+
+class _FindableEventRepository extends _FakeEventRepository {
+  _FindableEventRepository(List<CalendarEvent> events) : super(events: events);
+
+  @override
+  Future<CalendarEvent?> findById(String id) async =>
+      _events.where((event) => event.id == id).firstOrNull;
 }
 
 class _GatedSettingsRepository extends SettingsRepository {
@@ -11818,4 +12045,9 @@ Future<ProviderContainer> _pumpDaySheetSwipeApp(
   );
   await tester.pumpAndSettle();
   return ProviderScope.containerOf(tester.element(find.byType(DailyApp)));
+}
+
+class _UndeletableLmsCredentials extends LmsCredentialsStore {
+  @override
+  Future<void> deleteAll() async => throw StateError('keystore unavailable');
 }

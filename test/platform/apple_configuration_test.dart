@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:daily/core/update/update_requirement.dart';
@@ -5,6 +6,19 @@ import 'package:flutter_test/flutter_test.dart';
 
 Future<String> _readNormalized(String path) async {
   return (await File(path).readAsString()).replaceAll('\r\n', '\n');
+}
+
+Future<Map<String, String>> _readAppShortcutStrings(String language) async {
+  final source = await _readNormalized(
+    'apple_siri/$language.lproj/AppShortcuts.strings',
+  );
+  return {
+    for (final match in RegExp(
+      r'^"(.+)" = "(.+)";$',
+      multiLine: true,
+    ).allMatches(source))
+      match.group(1)!: match.group(2)!,
+  };
 }
 
 void main() {
@@ -213,8 +227,15 @@ void main() {
       final source = await _readNormalized('apple_siri/DailySiriIntents.swift');
 
       expect(source, contains('intent: DailySignalCommandIntent()'));
-      expect(source, contains('"\\(.applicationName)에서 시그널 실행"'));
+      expect(source, contains('"Run Signal in \\(.applicationName)"'));
       expect(source, contains('shortTitle: "Signal"'));
+      // The Korean phrase people already use ships as the ko translation.
+      final korean = await _readAppShortcutStrings('ko');
+      expect(
+        korean[r'Run Signal in ${applicationName}'],
+        r'${applicationName}에서 시그널 실행',
+      );
+      expect(korean[r'${applicationName} Signal'], r'${applicationName} 시그널');
     },
   );
 
@@ -282,4 +303,175 @@ void main() {
       );
     },
   );
+
+  test(
+    'Siri shortcut and intent wording ships in four languages (#958)',
+    () async {
+      const languages = ['en', 'ko', 'ja', 'zh-Hant'];
+      final source = await _readNormalized('apple_siri/DailySiriIntents.swift');
+      Future<Map<String, Map<String, String>>> load(String name) async {
+        final catalog =
+            jsonDecode(await _readNormalized('apple_siri/$name'))
+                as Map<String, Object?>;
+        expect(catalog['sourceLanguage'], 'en');
+        return {
+          for (final entry
+              in (catalog['strings'] as Map<String, Object?>).entries)
+            entry.key: {
+              for (final language
+                  in ((entry.value as Map)['localizations'] as Map).entries)
+                language.key as String:
+                    (language.value as Map)['stringUnit']['value'] as String,
+            },
+        };
+      }
+
+      // AppShortcuts.xcstrings needs iOS 17; the app supports iOS 15, so the
+      // phrases ship as per-language AppShortcuts.strings.
+      final shortcuts = <String, Map<String, String>>{};
+      for (final language in languages) {
+        for (final entry in (await _readAppShortcutStrings(language)).entries) {
+          (shortcuts[entry.key] ??= {})[language] = entry.value;
+        }
+      }
+      final general = await load('Localizable.xcstrings');
+      for (final catalog in [shortcuts, general]) {
+        for (final entry in catalog.entries) {
+          expect(
+            entry.value.keys.toSet(),
+            languages.toSet(),
+            reason: entry.key,
+          );
+          expect(entry.value['en'], entry.key);
+          expect(entry.value.values, everyElement(isNotEmpty));
+        }
+      }
+
+      // Every phrase and short title in the provider has a catalog entry, and
+      // every translated phrase still names the app, or the system drops it.
+      final provider = source.substring(
+        source.indexOf('struct DailyAppShortcuts: AppShortcutsProvider {'),
+        source.indexOf('private struct DailySiriSnippetView'),
+      );
+      final phrases = RegExp(r'^        "(.+)",$', multiLine: true)
+          .allMatches(provider)
+          .map(
+            (m) => m
+                .group(1)!
+                .replaceAll(r'\(.applicationName)', r'${applicationName}'),
+          )
+          .toList();
+      final shortTitles = RegExp(
+        r'shortTitle: "(.+)"',
+      ).allMatches(provider).map((m) => m.group(1)!).toList();
+      expect(phrases, hasLength(20));
+      expect(shortTitles, hasLength(10));
+      // Phrases are looked up in AppShortcuts.strings; shortTitle is a plain
+      // LocalizedStringResource, so it resolves from the default Localizable table.
+      expect(shortcuts.keys.toSet(), phrases.toSet());
+      expect(general.keys.toSet().containsAll(shortTitles), isTrue);
+      for (final title in shortTitles) {
+        expect(general[title]!.values.toSet().length, greaterThanOrEqualTo(2));
+      }
+      for (final phrase in phrases) {
+        for (final language in languages) {
+          expect(
+            shortcuts[phrase]![language],
+            contains(r'${applicationName}'),
+            reason: '$phrase ($language)',
+          );
+        }
+        // A language must not fall back to another language's phrase.
+        expect(
+          shortcuts[phrase]!.values.toSet().length,
+          greaterThanOrEqualTo(2),
+        );
+      }
+      for (final language in languages) {
+        final inLanguage = phrases.map((p) => shortcuts[p]![language]).toList();
+        expect(inLanguage.toSet(), hasLength(phrases.length), reason: language);
+      }
+
+      // Intent names, descriptions and parameter names.
+      final titles = [
+        ...RegExp(
+          r'static var title: LocalizedStringResource = "(.+)"',
+        ).allMatches(source).map((m) => m.group(1)!),
+        ...RegExp(
+          r'IntentDescription\("(.+)"\)',
+        ).allMatches(source).map((m) => m.group(1)!),
+        ...RegExp(
+          r'@Parameter\(\s*title: "([^"]+)"',
+        ).allMatches(source).map((m) => m.group(1)!),
+      ];
+      expect(titles.length, greaterThan(60));
+      expect(
+        general.keys.toSet().containsAll(titles),
+        isTrue,
+        reason: '${titles.toSet().difference(general.keys.toSet())}',
+      );
+
+      for (final project in [
+        'ios/Runner.xcodeproj/project.pbxproj',
+        'macos/Runner.xcodeproj/project.pbxproj',
+      ]) {
+        final pbxproj = await _readNormalized(project);
+        expect(pbxproj, contains('AppShortcuts.strings in Resources */,'));
+        expect(pbxproj, contains('Localizable.xcstrings in Resources */,'));
+      }
+    },
+  );
+
+  test('macOS permission prompts are localized like the app (#957)', () async {
+    const languages = ['en', 'ko', 'ja', 'zh-Hant'];
+    final plist = await _readNormalized('macos/Runner/Info.plist');
+    final project = await _readNormalized(
+      'macos/Runner.xcodeproj/project.pbxproj',
+    );
+    final usageKeys = RegExp(
+      r'<key>(NS\w+UsageDescription)</key>',
+    ).allMatches(plist).map((match) => match.group(1)!).toSet();
+    expect(usageKeys, {
+      'NSLocationUsageDescription',
+      'NSMicrophoneUsageDescription',
+      'NSSpeechRecognitionUsageDescription',
+    });
+    expect(project, contains('InfoPlist.strings in Resources'));
+
+    final entry = RegExp(r'^"(\w+)" = "(.+)";$', multiLine: true);
+    final texts = <String, Map<String, String>>{};
+    for (final language in languages) {
+      expect(plist, contains('<string>$language</string>'));
+      expect(project, contains('$language.lproj/InfoPlist.strings'));
+      final strings = await _readNormalized(
+        'macos/Runner/$language.lproj/InfoPlist.strings',
+      );
+      texts[language] = {
+        for (final match in entry.allMatches(strings))
+          match.group(1)!: match.group(2)!,
+      };
+      // Every prompt the app can raise has wording in every language.
+      expect(texts[language]!.keys.toSet(), usageKeys, reason: language);
+    }
+    for (final key in usageKeys) {
+      expect(
+        {for (final language in languages) texts[language]![key]},
+        hasLength(languages.length),
+        reason: '$key must not reuse one language for another',
+      );
+    }
+
+    // The wording matches the iOS prompts for the same permission.
+    for (final language in languages) {
+      final ios = await _readNormalized(
+        'ios/Runner/$language.lproj/InfoPlist.strings',
+      );
+      for (final key in [
+        'NSMicrophoneUsageDescription',
+        'NSSpeechRecognitionUsageDescription',
+      ]) {
+        expect(ios, contains('"$key" = "${texts[language]![key]}";'));
+      }
+    }
+  });
 }
