@@ -506,6 +506,15 @@ void main() {
       configure = (s) {
         s.stored = false;
         s.automaticWait = wait;
+        // 가져올 과제·퀴즈가 있어야 "가져오지 않음"이 보호 동작의 결과가 된다.
+        s.answer = (url) async => LmsHtmlPage(
+          url: url,
+          html: url.path == '/'
+              ? _dashboard
+              : File(
+                  'test/fixtures/coursemos/${url.path.contains('/assign/') ? 'assignments' : 'quizzes'}.html',
+                ).readAsStringSync(),
+        );
       };
       final attempt = controller.saveAutomaticLogin(
         'test-user',
@@ -518,6 +527,7 @@ void main() {
       controller.settingsChanged();
       wait.complete();
       await attempt;
+      expect(sessions.first.reads, 0);
       expect(repository.events, isEmpty);
       expect(
         await LmsCredentialsStore().read('other@example.com', 'smu'),
