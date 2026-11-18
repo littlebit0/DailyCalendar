@@ -8,10 +8,12 @@ void main() {
     'CBNU places every major offering label under an official unit',
     () async {
       final catalog = await UniversityCatalog.load(university: 'cbnu');
+      var checked = 0;
       final raw = <String>{};
       final orphans = <String>{};
       for (final dataset in catalog.where((d) => d.universityId == 'cbnu')) {
         for (final course in dataset.courses) {
+          checked++;
           for (final label in course.departments) {
             if (course.isMajorForSourceDepartment(label) &&
                 !course.offeringOrganizations.any(
@@ -30,6 +32,7 @@ void main() {
           }
         }
       }
+      expect(checked, greaterThan(0));
       expect(raw, isEmpty);
       expect(orphans, isEmpty);
     },

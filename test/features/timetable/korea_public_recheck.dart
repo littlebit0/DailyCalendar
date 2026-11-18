@@ -20,8 +20,6 @@ final Map<String, List<Map<String, dynamic>>> _changes = () {
   return byId;
 }();
 
-Set<String> get koreaRecheckChangedIds => _changes.keys.toSet();
-
 // 쉬는 시간 포함 슬롯(#564). 서울 1~6교시 75분+15분, 7~10교시 50분+10분, 세종 50분+10분.
 // 근거 문서 미확인: 현재 자료의 연속 교시 시작 간격으로 만든다.
 const koreaSlotStarts = {

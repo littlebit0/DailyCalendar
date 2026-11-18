@@ -35,6 +35,14 @@ void main() {
   final calendar = read('current-own-sejong-calendar-education.json') as Map;
   final sourceRows = <String, Map>{};
   final sourceVariants = <String, List<Map>>{};
+  // 테스트를 하나만 실행해도 강좌별 검사가 돌도록 여기서 채운다.
+  for (final scope in scopes) {
+    for (final raw in (read(scope['file'] as String) as Map)['rows'] as List) {
+      final id = '${raw['COUR_CD']}-${raw['COUR_CLS']}';
+      sourceVariants.putIfAbsent(id, () => []).add(raw as Map);
+      sourceRows.putIfAbsent(id, () => raw);
+    }
+  }
 
   test(
     'Own Sejong current regular UI table and calendar preserve campus scope and exam reservation distinction',
@@ -108,6 +116,7 @@ void main() {
   test(
     'Every current native header, identity and educational field independently preserved, no dictionary overwrite or private fields',
     () {
+      final seen = <String>{};
       for (final scope in scopes) {
         final source = read(scope['file'] as String) as Map;
         expect(
@@ -127,14 +136,12 @@ void main() {
         expect(source['displayedTotal'], scope['whole']);
         for (final raw in source['rows'] as List) {
           final id = '${raw['COUR_CD']}-${raw['COUR_CLS']}';
-          sourceVariants.putIfAbsent(id, () => []).add(raw as Map);
-          final prior = sourceRows[id];
-          sourceRows.putIfAbsent(id, () => raw);
+          final repeated = !seen.add(id);
           expect(raw['CAMPUS'], '세종');
           expect(raw['YEAR'], '2026');
           expect(raw['TERM'], '2R');
           final c = byId['korea/sejong/2026-2/$id'];
-          if (prior != null) {
+          if (repeated) {
             expect(c['sourceEducationalVariants'], contains(raw));
             expect(c['sourceQueryProvenance'], isNotEmpty);
             continue;
@@ -214,6 +221,7 @@ void main() {
           '${row['nativeCode']}-${row['nativeSection']}',
       };
       expect(closed, hasLength(53));
+      expect(sourceRows, hasLength(1705));
       for (final entry in sourceRows.entries) {
         final raw = entry.value;
         final id = entry.key;

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:daily/core/notifications/notification_service.dart';
 import 'package:daily/core/notifications/recoverable_notification_service.dart';
 import 'package:daily/core/settings/settings_repository.dart';
@@ -32,7 +33,7 @@ void main() {
       expect(await service.prepareForReset([event('a'), event('b')]), isFalse);
       expect(native.calls, containsAll(['cancel:a', 'cancel:b', 'briefing']));
       final journal = settings.notificationCleanupJournal!;
-      expect(journal, contains('a'));
+      expect((jsonDecode(journal)['events'] as Map).keys, ['a']);
       expect(journal, isNot(contains('private title')));
       final restarted = RecoverableNotificationService(
         _Notifications(),
