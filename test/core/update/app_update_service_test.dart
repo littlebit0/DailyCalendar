@@ -72,6 +72,77 @@ void main() {
       }
     });
   }
+  group('stalled update requests end (#855)', () {
+    const assetUrl =
+        'https://github.com/littlebit0/DailyCalendar/releases/download/v4.0.1/daily-windows-4.0.1-setup.exe';
+    final release = jsonEncode({
+      'tag_name': 'v4.0.1',
+      'assets': [
+        {
+          'name': 'daily-windows-4.0.1-setup.exe',
+          'browser_download_url': assetUrl,
+          'digest': 'sha256:${sha256.convert([0x4d, 0x5a])}',
+        },
+      ],
+    });
+
+    test('an unanswered release lookup lets a later check ask again', () async {
+      var lookups = 0;
+      final service = AppUpdateService(
+        enabled: true,
+        currentVersion: () async => '4.0.0',
+        installationEligible: () async => true,
+        releaseLookupTimeout: const Duration(milliseconds: 20),
+        client: MockClient((request) {
+          lookups++;
+          return Completer<http.Response>().future;
+        }),
+      );
+      await service.checkAndInstallIfAvailable();
+      await service.checkAndInstallIfAvailable();
+      expect(lookups, 2);
+      expect(service.installationPrepared, isFalse);
+    });
+
+    for (final stall in ['before the response', 'between chunks']) {
+      test('a download stalled $stall ends and leaves no files', () async {
+        final root = await Directory.systemTemp.createTemp('daily-stall-test-');
+        final body = StreamController<List<int>>();
+        addTearDown(() async {
+          // close() only completes once listened; the first case never listens.
+          unawaited(body.close());
+          if (await root.exists()) await root.delete(recursive: true);
+        });
+        final download = Directory('${root.path}/download');
+        var prepared = 0;
+        final service = AppUpdateService(
+          enabled: true,
+          currentVersion: () async => '4.0.0',
+          installationEligible: () async => true,
+          temporaryDirectory: () => download.create(),
+          downloadIdleTimeout: const Duration(milliseconds: 20),
+          prepareAfterExit: (file, hash) async => prepared++,
+          client: MockClient.streaming((request, _) {
+            if (request.url.host == 'api.github.com') {
+              return Future.value(
+                http.StreamedResponse(Stream.value(utf8.encode(release)), 200),
+              );
+            }
+            if (stall == 'before the response') {
+              return Completer<http.StreamedResponse>().future;
+            }
+            body.add([0x4d, 0x5a]);
+            return Future.value(http.StreamedResponse(body.stream, 200));
+          }),
+        );
+        await service.checkAndInstallIfAvailable();
+        expect(service.installationPrepared, isFalse);
+        expect(prepared, 0);
+        expect(await download.exists(), isFalse);
+      });
+    }
+  });
+
   group('downloadVerifiedInstaller', () {
     final uri = Uri.parse(
       'https://github.com/littlebit0/DailyCalendar/releases/download/v4.0.1/daily-windows-4.0.1-setup.exe',

@@ -26,6 +26,7 @@ class AppUpdateService {
     Future<Directory> Function()? temporaryDirectory,
     bool? enabled,
     this.releaseLookupTimeout = const Duration(seconds: 30),
+    this.downloadIdleTimeout = const Duration(seconds: 60),
   }) : _client = client ?? http.Client(),
        _currentVersion =
            currentVersion ??
@@ -57,6 +58,10 @@ class AppUpdateService {
   bool _prepared = false;
 
   final Duration releaseLookupTimeout;
+
+  /// Longest wait for the installer response or for its next chunk. The whole
+  /// download has no limit, because the file is large.
+  final Duration downloadIdleTimeout;
 
   bool get installationPrepared => _prepared;
 
@@ -133,13 +138,16 @@ class AppUpdateService {
       // ZIP and Test editions must not silently turn into an installed release.
       if (!await _installationEligible()) return;
       final currentVersion = await _currentVersion();
-      final response = await _client.get(
-        _latestReleaseUri,
-        headers: const {
-          'Accept': 'application/vnd.github+json',
-          'User-Agent': 'Daily-Windows-Updater',
-        },
-      );
+      // A stalled request must end, so the next start can try again (#855).
+      final response = await _client
+          .get(
+            _latestReleaseUri,
+            headers: const {
+              'Accept': 'application/vnd.github+json',
+              'User-Agent': 'Daily-Windows-Updater',
+            },
+          )
+          .timeout(releaseLookupTimeout);
       if (response.statusCode != HttpStatus.ok) {
         return;
       }
@@ -185,6 +193,7 @@ class AppUpdateService {
         uri: uri,
         destination: installer,
         expectedSha256: digest.substring(7).toLowerCase(),
+        idleTimeout: downloadIdleTimeout,
       )) {
         return;
       }
@@ -263,15 +272,19 @@ class AppUpdateService {
 /// never held in memory as a whole. Returns true only when the status, the
 /// `MZ` header, the length and the SHA-256 all match and the file is flushed.
 /// A false result or a thrown error may leave a partial file; the caller
-/// deletes the download directory in that case.
+/// deletes the download directory in that case. A response or a next chunk
+/// that takes longer than [idleTimeout] throws a [TimeoutException].
 @visibleForTesting
 Future<bool> downloadVerifiedInstaller({
   required http.Client client,
   required Uri uri,
   required File destination,
   required String expectedSha256,
+  Duration idleTimeout = const Duration(seconds: 60),
 }) async {
-  final response = await client.send(http.Request('GET', uri));
+  final response = await client
+      .send(http.Request('GET', uri))
+      .timeout(idleTimeout);
   if (response.statusCode != HttpStatus.ok) {
     await response.stream.drain<void>();
     return false;
@@ -288,7 +301,8 @@ Future<bool> downloadVerifiedInstaller({
   // errors here instead of as an unhandled IOSink.done error.
   final file = await destination.open(mode: FileMode.write);
   try {
-    await for (final chunk in response.stream) {
+    // Waiting on a disk write pauses the stream and its idle timer with it.
+    await for (final chunk in response.stream.timeout(idleTimeout)) {
       if (header.length < 2) {
         header.addAll(chunk.take(2 - header.length));
         if (header.length == 2 && (header[0] != 0x4d || header[1] != 0x5a)) {
