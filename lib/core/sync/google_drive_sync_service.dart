@@ -179,6 +179,8 @@ class GoogleDriveSyncService implements SyncService {
   var _started = false;
   var _automaticRetryIndex = 0;
   var _manualRestoreDepth = 0;
+  // Unreadable Drive event files skipped by the running sync.
+  var _skippedCorruptEventFiles = 0;
 
   /// Called for every failed sync run (startup, uploads after edits, automatic
   /// retries), except sign-in problems and cancellations. Used for automatic
@@ -661,6 +663,7 @@ class GoogleDriveSyncService implements SyncService {
     final stopwatch = Stopwatch()..start();
     _syncStageDurationsMs.clear();
     _syncStage = null;
+    _skippedCorruptEventFiles = 0;
     final analyticsOperation = _analyticsOperation(request.kind);
     final analyticsTrigger = _analyticsTrigger(request);
     // Only a request created by the automatic retry timer is numbered (from 2);
@@ -846,6 +849,10 @@ class GoogleDriveSyncService implements SyncService {
         }
       }
       _resetAutomaticRetry(request.kind);
+      if (_skippedCorruptEventFiles > 0) {
+        completionMessage =
+            '$completionMessage · 손상된 일정 파일 $_skippedCorruptEventFiles개 건너뜀';
+      }
       statusNotifier.value = statusNotifier.value.copyWith(
         syncing: false,
         lastSyncedAt: DateTime.now(),
@@ -1913,19 +1920,28 @@ class GoogleDriveSyncService implements SyncService {
     List<_DriveFile> files, {
     bool useCache = true,
   }) async {
-    final downloaded = await _mapConcurrently(
+    // One unreadable file must not stop the others: it is skipped and its
+    // local event stays as it is. Network and auth errors still fail the run.
+    final downloaded = await _mapConcurrently<_DriveFile, _DownloadedEvent?>(
       files,
-      (file) => _downloadEventFile(
-        headers,
-        file.id,
-        md5Checksum: file.md5Checksum,
-        useCache: useCache,
-      ),
+      (file) async {
+        try {
+          return await _downloadEventFile(
+            headers,
+            file.id,
+            md5Checksum: file.md5Checksum,
+            useCache: useCache,
+          );
+        } on _CorruptEventFile {
+          _skippedCorruptEventFiles++;
+          return null;
+        }
+      },
       concurrency: _driveConcurrency,
       progressMessage: '복원 중',
     );
     final winners = <String, _DownloadedEvent>{};
-    for (final item in downloaded) {
+    for (final item in downloaded.nonNulls) {
       if (item.event?.lms != null && !_canSyncEvent(item.event!) ||
           item.deletion?.lmsOwnerId != null &&
               !_canSyncDeletion(item.deletion!)) {
@@ -2370,7 +2386,21 @@ class GoogleDriveSyncService implements SyncService {
     }
   }
 
+  /// Parsing does no I/O, so anything it throws means an unreadable file.
   _DownloadedEvent _decodeEventFile(
+    String body,
+    String fileId,
+    String? etag,
+    String md5Checksum,
+  ) {
+    try {
+      return _parseEventFile(body, fileId, etag, md5Checksum);
+    } on Object {
+      throw const _CorruptEventFile();
+    }
+  }
+
+  _DownloadedEvent _parseEventFile(
     String body,
     String fileId,
     String? etag,
@@ -2392,7 +2422,7 @@ class GoogleDriveSyncService implements SyncService {
     final eventJson = event is Map ? Map<String, Object?>.from(event) : decoded;
     final parsedEvent = _eventFromJson(eventJson);
     if (parsedEvent == null) {
-      throw const GoogleDriveSyncException('Google Drive 일정 백업 데이터가 손상되었습니다.');
+      throw const _CorruptEventFile();
     }
     return _DownloadedEvent(
       event: parsedEvent,
@@ -3152,6 +3182,11 @@ class _DownloadedEvent {
 
 class _ConcurrentDriveWrite implements Exception {
   const _ConcurrentDriveWrite();
+}
+
+/// A Drive event file whose JSON or fields cannot be read.
+class _CorruptEventFile extends GoogleDriveSyncException {
+  const _CorruptEventFile() : super('Google Drive 일정 백업 데이터가 손상되었습니다.');
 }
 
 /// Zone key carrying the attempt number of a request made by the retry timer.
