@@ -147,23 +147,62 @@ void main() {
         expect((call?.arguments as Map)['localeTag'], 'ja');
       });
 
-      test('does not schedule an alarm for a recurring event', () async {
-        var called = false;
+      test(
+        'removes instead of schedules alarms of a recurring event',
+        () async {
+          final methods = <String>[];
+          TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+              .setMockMethodCallHandler(channel, (methodCall) async {
+                methods.add(methodCall.method);
+                return null;
+              });
+
+          await NativeAlarmService(channel: channel).scheduleEventAlarm(
+            _event(
+              startAt: DateTime.now().add(const Duration(hours: 2)),
+              alarmEnabled: true,
+              recurring: true,
+            ),
+          );
+
+          expect(methods, ['cancel']);
+        },
+      );
+
+      test('schedules without cancelling the previous alarms first', () async {
+        final methods = <String>[];
         TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
             .setMockMethodCallHandler(channel, (methodCall) async {
-              called = true;
+              methods.add(methodCall.method);
+              if (methodCall.method == 'authorizationState') {
+                return 'authorized';
+              }
+              if (methodCall.method == 'schedule') {
+                throw PlatformException(code: 'alarm_schedule_failed');
+              }
               return null;
             });
+        final service = NativeAlarmService(channel: channel);
 
-        await NativeAlarmService(channel: channel).scheduleEventAlarm(
+        await expectLater(
+          service.scheduleEventAlarm(
+            _event(
+              startAt: DateTime.now().add(const Duration(hours: 2)),
+              alarmEnabled: true,
+            ),
+          ),
+          throwsA(isA<PlatformException>()),
+        );
+        expect(methods, ['authorizationState', 'schedule']);
+
+        methods.clear();
+        await service.scheduleEventAlarm(
           _event(
-            startAt: DateTime.now().add(const Duration(hours: 2)),
+            startAt: DateTime.now().subtract(const Duration(hours: 2)),
             alarmEnabled: true,
-            recurring: true,
           ),
         );
-
-        expect(called, isFalse);
+        expect(methods, ['authorizationState', 'cancel']);
       });
 
       test('uses the selected alarm time for an all-day event', () async {
