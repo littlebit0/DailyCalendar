@@ -1,6 +1,8 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:daily/core/academic/academic_profile.dart';
+import 'package:daily/core/academic/academic_source.dart';
 import 'package:daily/core/academic/ajou_academic_source.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:html/parser.dart' as html;
@@ -115,6 +117,47 @@ void main() {
     );
     expect(
       () => AjouAcademicSource.parse(body.replaceFirst('3월', '13월'), 2026),
+      throwsFormatException,
+    );
+  });
+
+  test('Ajou keeps prior-year January while the next year is unpublished', () async {
+    // Live 2027 page recorded on 2026-11-19, before 2027 was published.
+    final unpublished = File(
+      'test/fixtures/academic/ajou-2027-unpublished.html',
+    ).readAsStringSync();
+    expect(
+      AjouAcademicSource.parse(unpublished, 2027, allowUnpublished: true),
+      isEmpty,
+    );
+    expect(
+      () => AjouAcademicSource.parse(unpublished, 2027),
+      throwsFormatException,
+    );
+    // The notice never stands in for another year's page.
+    expect(
+      () => AjouAcademicSource.parse(unpublished, 2026, allowUnpublished: true),
+      throwsFormatException,
+    );
+    Future<List<AcademicEvent>> fetch(Map<int, String> pages, int year) {
+      final source = AjouAcademicSource(
+        client: MockClient((request) async {
+          final y = int.parse(request.url.queryParameters['year']!);
+          return http.Response.bytes(utf8.encode(pages[y]!), 200);
+        }),
+      );
+      addTearDown(source.close);
+      return source.fetch(year);
+    }
+
+    final events = await fetch({2026: fixture(2026), 2027: unpublished}, 2027);
+    expect(events, isNotEmpty);
+    expect(events.every((e) => e.sourceId.startsWith('2026:')), isTrue);
+    expect(events.any((e) => e.title == '신정' && e.start == DateTime(2027, 1, 1)),
+        isTrue);
+    // An unpublished prior academic year is still a failure.
+    await expectLater(
+      fetch({2027: unpublished}, 2028),
       throwsFormatException,
     );
   });

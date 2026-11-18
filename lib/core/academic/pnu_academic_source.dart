@@ -120,10 +120,12 @@ class PnuAcademicSource implements AcademicSource {
     authorization = menu.single['AUTH_STR'];
     final events = <String, AcademicEvent>{};
     // Next year's first term opens its leave-return windows in this autumn.
+    // January–February of [year] belong to the prior academic year, so not
+    // yet published [year] terms must not discard them.
     for (final selection in [
       (year - 1, '0020', false),
-      (year, '0010', false),
-      (year, '0020', false),
+      (year, '0010', true),
+      (year, '0020', true),
       (year + 1, '0010', true),
     ]) {
       await Future<void>.delayed(const Duration(milliseconds: 250));
@@ -180,7 +182,8 @@ class PnuAcademicSource implements AcademicSource {
   static bool _isGraduateOnly(String title) =>
       _graduateTarget.hasMatch(title) || _graduateTerm.hasMatch(title);
 
-  /// [allowEmpty] accepts a term whose schedule is not yet published.
+  /// [allowEmpty] accepts a term whose schedule is not yet published (observed
+  /// for 2027 '0020' on 2026-11-19).
   static List<AcademicEvent> parse(
     String body,
     int year,

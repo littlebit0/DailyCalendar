@@ -246,6 +246,67 @@ void main() {
     },
   );
 
+  test(
+    'EWHA keeps prior-year January while the next year is unpublished',
+    () async {
+      // Live 2027 page recorded on 2026-11-19, before 2027 was published.
+      final unpublished = File(
+        'test/fixtures/academic/ewha-2027-unpublished.html',
+      ).readAsStringSync();
+      expect(
+        EwhaAcademicSource.parseMonths(
+          unpublished,
+          2027,
+          allowUnpublished: true,
+        ),
+        isEmpty,
+      );
+      expect(
+        () => EwhaAcademicSource.parseMonths(unpublished, 2027),
+        throwsFormatException,
+      );
+      // The notice never stands in for another year's page.
+      expect(
+        () => EwhaAcademicSource.parseMonths(
+          unpublished,
+          2026,
+          allowUnpublished: true,
+        ),
+        throwsFormatException,
+      );
+      Future<List<AcademicEvent>> fetch(Map<String, String> pages, int year) {
+        final source = EwhaAcademicSource(
+          client: MockClient((r) async {
+            return http.Response.bytes(
+              utf8.encode(pages[r.url.queryParameters['year']]!),
+              200,
+            );
+          }),
+        );
+        addTearDown(source.close);
+        return source.fetch(year);
+      }
+
+      final events = await fetch({
+        '2026': fixture(2026),
+        '2027': unpublished,
+      }, 2027);
+      expect(events, isNotEmpty);
+      expect(events.every((e) => e.start.isBefore(DateTime(2027, 3))), isTrue);
+      expect(
+        events.any(
+          (e) => e.title == '2027학년도 입학식' && e.start == DateTime(2027, 2, 26),
+        ),
+        isTrue,
+      );
+      // An unpublished prior academic year is still a failure.
+      await expectLater(
+        fetch({'2027': unpublished}, 2028),
+        throwsFormatException,
+      );
+    },
+  );
+
   test('EWHA profile resolves to its registered calendar', () {
     for (final id in [
       'institution:academyinfo:0000163',

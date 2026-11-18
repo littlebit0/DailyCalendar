@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:daily/core/academic/academic_profile.dart';
+import 'package:daily/core/academic/academic_source.dart';
 import 'package:daily/core/academic/kookmin_academic_source.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:html/parser.dart' as html;
@@ -66,6 +67,68 @@ void main() {
       expect(events.map((e) => e.sourceId).toSet(), hasLength(rows));
     }
   });
+
+  test(
+    'Kookmin keeps prior-year January while the next year is unpublished',
+    () async {
+      // Live 2027 and 2028 pages recorded on 2026-11-19, before 2028 was
+      // published.
+      final unpublished = File(
+        'test/fixtures/academic/kookmin-2028-unpublished.html',
+      ).readAsStringSync();
+      expect(
+        KookminAcademicSource.parse(unpublished, 2028, allowUnpublished: true),
+        isEmpty,
+      );
+      expect(
+        () => KookminAcademicSource.parse(unpublished, 2028),
+        throwsFormatException,
+      );
+      // The notice never stands in for another year's page.
+      expect(
+        () => KookminAcademicSource.parse(
+          unpublished,
+          2027,
+          allowUnpublished: true,
+        ),
+        throwsFormatException,
+      );
+      Future<List<AcademicEvent>> fetch(Map<int, String> pages, int year) {
+        final source = KookminAcademicSource(
+          client: MockClient((request) async {
+            final y = int.parse(request.url.queryParameters['yyyy']!);
+            return http.Response(
+              pages[y]!,
+              200,
+              headers: {'content-type': 'text/html; charset=utf-8'},
+            );
+          }),
+        );
+        addTearDown(source.close);
+        return source.fetch(year);
+      }
+
+      final events = await fetch({
+        2027: fixture(2027),
+        2028: unpublished,
+      }, 2028);
+      expect(events, isNotEmpty);
+      expect(events.every((e) => e.sourceId.startsWith('2027:')), isTrue);
+      expect(
+        events.any(
+          (e) =>
+              e.title == '2028학년도 1학기 휴학, 복학 신청 기간' &&
+              e.start == DateTime(2028, 1, 3),
+        ),
+        isTrue,
+      );
+      // An unpublished prior academic year is still a failure.
+      await expectLater(
+        fetch({2028: unpublished}, 2029),
+        throwsFormatException,
+      );
+    },
+  );
 
   test('Kookmin profile resolves to its registered calendar', () {
     for (final id in [

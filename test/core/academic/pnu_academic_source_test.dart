@@ -18,7 +18,10 @@ String signInPage(BigInt modulus) =>
     'scwin.token = "f24f34bd-d92a-424c-9a47-d898045158c9";';
 
 /// Fetches [year] through a mock of the public sign-in page and popup.
-Future<(List<AcademicEvent>, List<String>)> fetchFixtures(int year) async {
+Future<(List<AcademicEvent>, List<String>)> fetchFixtures(
+  int year, [
+  Map<String, String> pages = const {},
+]) async {
   // Fixed 2048-bit odd modulus; the mock server never decrypts requests.
   final modulus = (BigInt.one << 2047) + BigInt.from(12345);
   final terms = [
@@ -48,7 +51,8 @@ Future<(List<AcademicEvent>, List<String>)> fetchFixtures(int year) async {
       expect(r.url.path, '/core/main/selectScheduleListPop.do');
       final (y, term) = terms[requested.length];
       requested.add('$y-$term');
-      return http.Response.bytes(utf8.encode(fixture(y, term)), 200);
+      final body = pages['$y-$term'] ?? fixture(y, term);
+      return http.Response.bytes(utf8.encode(body), 200);
     }),
   );
   final events = await source.fetch(year);
@@ -197,6 +201,59 @@ void main() {
       isEmpty,
     );
   });
+
+  test(
+    'PNU keeps prior-year January while the next year is unpublished',
+    () async {
+      // 2027 second term recorded empty on 2026-11-19 (same shape as the live
+      // body then); the 2028 first term is derived from it, never recorded.
+      final empty = fixture(2027, '0020');
+      final next = empty
+          .replaceFirst(
+            '\$("#SCH_SYEAR").val("2027")',
+            '\$("#SCH_SYEAR").val("2028")',
+          )
+          .replaceFirst(
+            '\$("#SCH_TERM_GCD").val("0020")',
+            '\$("#SCH_TERM_GCD").val("0010")',
+          );
+      expect(
+        PnuAcademicSource.parse(next, 2028, '0010', allowEmpty: true),
+        isEmpty,
+      );
+      final (events, requested) = await fetchFixtures(2027, {
+        '2028-0010': next,
+      });
+      expect(requested, ['2026-0020', '2027-0010', '2027-0020', '2028-0010']);
+      expect(
+        events.any(
+          (e) =>
+              e.title == '겨울계절수업 강의시작종료일' &&
+              e.start == DateTime(2026, 12, 24) &&
+              e.end == DateTime(2027, 1, 22),
+        ),
+        isTrue,
+      );
+      // Both 2027 terms unpublished still keeps the prior year's January.
+      final (onlyPrior, _) = await fetchFixtures(2027, {
+        '2027-0010': empty.replaceFirst(
+          '\$("#SCH_TERM_GCD").val("0020")',
+          '\$("#SCH_TERM_GCD").val("0010")',
+        ),
+        '2028-0010': next,
+      });
+      expect(onlyPrior, isNotEmpty);
+      expect(
+        onlyPrior.every((e) => e.start.isBefore(DateTime(2027, 3))),
+        isTrue,
+      );
+      // An unpublished prior academic year is still a failure.
+      await expectLater(
+        fetchFixtures(2028, {'2028-0010': next}),
+        throwsFormatException,
+      );
+    },
+  );
 
   test('PNU rejects mismatched selected year or term and incomplete table', () {
     final body = fixture(2026, '0020');

@@ -34,7 +34,13 @@ class KookminAcademicSource implements AcademicSource {
           .timeout(const Duration(seconds: 20));
       checkAcademicResponse(response);
       events.addAll(
-        parse(utf8.decode(response.bodyBytes), academicYear).where(
+        parse(
+          utf8.decode(response.bodyBytes),
+          academicYear,
+          // January–February of [year] belong to the prior academic year, so
+          // a not yet published [year] page must not discard them.
+          allowUnpublished: academicYear == year,
+        ).where(
           (e) =>
               e.start.isBefore(DateTime(year + 1)) &&
               e.end.isAfter(DateTime(year)),
@@ -47,11 +53,28 @@ class KookminAcademicSource implements AcademicSource {
     return events..sort((a, b) => a.start.compareTo(b.start));
   }
 
-  static List<AcademicEvent> parse(String body, int academicYear) {
+  /// [allowUnpublished] returns no events for a year page that shows its
+  /// "no data" notice (observed for 2028 on 2026-11-19).
+  static List<AcademicEvent> parse(
+    String body,
+    int academicYear, {
+    bool allowUnpublished = false,
+  }) {
     final document = html.parse(body);
     if (document.querySelector('input[name=yyyy]')?.attributes['value'] !=
         '$academicYear') {
       throw const FormatException('Unexpected Kookmin academic year');
+    }
+    // Published pages also carry `li.no_result` in their week list, so only
+    // the annual list's notice counts.
+    if (allowUnpublished &&
+        document.querySelectorAll('#monthTable tr').isEmpty &&
+        document
+                .querySelector('.list_type .table_wrap .no_result p')
+                ?.text
+                .trim() ==
+            '등록된 데이터가 없습니다.') {
+      return const [];
     }
     final months = <int>{};
     final occurrences = <String, int>{};

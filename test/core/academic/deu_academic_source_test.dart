@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:daily/core/academic/academic_profile.dart';
+import 'package:daily/core/academic/academic_source.dart';
 import 'package:daily/core/academic/deu_academic_source.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:html/parser.dart' as html;
@@ -75,6 +76,61 @@ void main() {
       expect(events.every((e) => !e.title.contains('\n')), isTrue);
     }
   });
+  test(
+    'DEU keeps prior-year January while the next year is unpublished',
+    () async {
+      // Live 2028 page recorded on 2026-11-19, before 2028 was published.
+      final unpublished = File(
+        'test/fixtures/academic/deu-2028-unpublished.html',
+      ).readAsStringSync();
+      expect(
+        DeuAcademicSource.parse(unpublished, 2028, allowUnpublished: true),
+        isEmpty,
+      );
+      expect(
+        () => DeuAcademicSource.parse(unpublished, 2028),
+        throwsFormatException,
+      );
+      // The notice never stands in for another year's page.
+      expect(
+        () =>
+            DeuAcademicSource.parse(unpublished, 2027, allowUnpublished: true),
+        throwsFormatException,
+      );
+      Future<List<AcademicEvent>> fetch(Map<int, String> pages, int year) {
+        final source = DeuAcademicSource(
+          client: MockClient((request) async {
+            final y = int.parse(request.url.queryParameters['schYear']!);
+            return http.Response(
+              pages[y]!,
+              200,
+              headers: {'content-type': 'text/html; charset=utf-8'},
+            );
+          }),
+        );
+        addTearDown(source.close);
+        return source.fetch(year);
+      }
+
+      final events = await fetch({
+        2027: fixture(2027),
+        2028: unpublished,
+      }, 2028);
+      expect(events, isNotEmpty);
+      expect(events.every((e) => e.sourceId.startsWith('2027:')), isTrue);
+      expect(
+        events.every((e) => e.start.month <= 2 || e.start.year < 2028),
+        isTrue,
+      );
+      expect(events.any((e) => e.start.year == 2028), isTrue);
+      // An unpublished prior academic year is still a failure.
+      await expectLater(
+        fetch({2028: unpublished}, 2029),
+        throwsFormatException,
+      );
+    },
+  );
+
   test('DEU profile resolves to its registered calendar', () {
     for (final id in [
       'institution:academyinfo:0000107',

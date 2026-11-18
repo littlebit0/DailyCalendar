@@ -49,6 +49,9 @@ class KunsanAcademicSource implements AcademicSource {
         utf8.decode(response.bodyBytes),
         selectedYear,
         requestedYear: year,
+        // January–February of [year] belong to the prior academic year, so
+        // a not yet published [year] page must not discard them.
+        allowUnpublished: selectedYear == year,
       )) {
         if (!event.start.isBefore(DateTime(year + 1)) ||
             !event.end.isAfter(DateTime(year))) {
@@ -68,10 +71,13 @@ class KunsanAcademicSource implements AcademicSource {
     return events.values.toList()..sort((a, b) => a.start.compareTo(b.start));
   }
 
+  /// [allowUnpublished] returns no events for a year page whose table shows
+  /// only "검색된 학사 일정이 없습니다." (observed for 2028 on 2026-11-19).
   static List<AcademicEvent> parse(
     String body,
     int academicYear, {
     int? requestedYear,
+    bool allowUnpublished = false,
   }) {
     final document = html.parse(body);
     final tables = document
@@ -85,10 +91,20 @@ class KunsanAcademicSource implements AcademicSource {
     if (tables.length != 1) {
       throw const FormatException('Unexpected annual table selection');
     }
+    final rows = tables.single.querySelectorAll('tbody > tr');
+    final marker = rows.length == 1 && rows.single.querySelector('th') == null
+        ? rows.single.querySelectorAll('td')
+        : null;
+    if (allowUnpublished &&
+        marker?.length == 1 &&
+        marker!.single.attributes['colspan'] == '4' &&
+        marker.single.text.trim() == '검색된 학사 일정이 없습니다.') {
+      return const [];
+    }
     final months = <int>{};
     final events = <String, AcademicEvent>{};
     int? month;
-    for (final row in tables.single.querySelectorAll('tbody > tr')) {
+    for (final row in rows) {
       for (final heading in row.querySelectorAll('th')) {
         final text = heading.text.replaceAll(RegExp(r'\s+'), '');
         if (RegExp(r'^[12]학기$').hasMatch(text)) {
