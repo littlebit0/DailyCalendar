@@ -28,8 +28,8 @@
     "reason": "#92 상명대 공식 마이크로전공·융합전공 목록 기준 2개 배정, 공식 시간표의 '전체학과' 등록; 공백만 제거(내용 동일): 파싱 비용과 앱 용량 절감"
   },
   "assets/timetable/organizations/gachon.json": {
-    "sha256": "c6071c20671ad86dfa49e1e79e084a85e38bdbb152e27c15d785b0eb87099503",
-    "reason": "#412 가천대 원자료 분류 48개(학년·줄임말 개설 라벨)를 공식 시간표 학과 트리와 단과대 소개 기준 소속(경영·사회과학·바이오나노·공과·IT융합·예술·체육·한의과·의과대학)으로 배정; 공백만 제거(내용 동일): 파싱 비용과 앱 용량 절감"
+    "sha256": "9c7eea967f0b5abcaff692db1fd20a7cc9758d6cff5a1f523c8192ed7e8e52ee",
+    "reason": "#412 가천대 원자료 분류 48개(학년·줄임말 개설 라벨)를 공식 시간표 학과 트리와 단과대 소개 기준 소속(경영·사회과학·바이오나노·공과·IT융합·예술·체육·한의과·의과대학)으로 배정; 공백만 제거(내용 동일): 파싱 비용과 앱 용량 절감; #973 근거 필드의 개발 기기 절대 경로를 저장소 기준 상대 경로(work/...)로 변경"
   },
   "assets/timetable/gachon-global-2026-2.json": {
     "sha256": "785391ebfe8d5cea642e749c99a757f2adc82bd85f2e0ff1e99400833da3256f",
@@ -116,8 +116,8 @@
     "reason": "#661 2026-10-24 공개 수강편람 재조회에서 바뀐 서울 10351 수문학 강의실(재성토목관 201 → 103) 반영"
   },
   "assets/timetable/organizations/hansung.json": {
-    "sha256": "00eceeca0319c38cb7ad4df8f9ce8c62e2a1d316c3ab054cf980a3e16d28d3ab",
-    "reason": "#659 한성대 공식 대학·트랙 안내(미래플러스·디자인·창의융합·글로벌인재대학)와 2026 Micro Degree 운영 과정 기준 학과 11개 소속 배정, 라벨 9개 추가(Micro Degree 6·트랙 2·C&C School 독립 개설 단위); 공백만 제거(내용 동일): 파싱 비용과 앱 용량 절감"
+    "sha256": "1b0be1b5b959170e474416fe07c5854635125bbb11ca5eb9da38dbc32a4dc203",
+    "reason": "#659 한성대 공식 대학·트랙 안내(미래플러스·디자인·창의융합·글로벌인재대학)와 2026 Micro Degree 운영 과정 기준 학과 11개 소속 배정, 라벨 9개 추가(Micro Degree 6·트랙 2·C&C School 독립 개설 단위); 공백만 제거(내용 동일): 파싱 비용과 앱 용량 절감; #973 근거 필드의 개발 기기 절대 경로를 저장소 기준 상대 경로(work/...)로 변경"
   },
   "assets/timetable/hansung-main-2026-2.json": {
     "sha256": "0690840c8a67dec2193e1bf5a5975e2c586cd204a3eb4b3e8f053d07c0ca0e23",
@@ -512,8 +512,8 @@
     "reason": "#581 창원대 원자료 분류 7개(야간 학과 4개, 글로벌비즈니스학부 트랙 2개, RISE사업단)를 공식 단과대학 목록·학부소개·학칙 개정 공고 기준으로 배정; 공백만 제거(내용 동일): 파싱 비용과 앱 용량 절감"
   },
   "assets/timetable/organizations/hanbat.json": {
-    "sha256": "952fe8431c219a876b4319f7aea1973acbc4bf4af5d39480c8c8220dbf0aba9f",
-    "reason": "#586 한밭대 국제학부 빅데이터융합전공을 공식 학부소개·대학 메뉴 기준 노마드 칼리지 소속으로 배정; 공백만 제거(내용 동일): 파싱 비용과 앱 용량 절감"
+    "sha256": "fe5479e501c61230739833e4d57f46431f7074dddaac79371fe48d6310329481",
+    "reason": "#586 한밭대 국제학부 빅데이터융합전공을 공식 학부소개·대학 메뉴 기준 노마드 칼리지 소속으로 배정; 공백만 제거(내용 동일): 파싱 비용과 앱 용량 절감; #973 근거 필드의 개발 기기 절대 경로를 저장소 기준 상대 경로(work/...)로 변경"
   },
   "assets/timetable/hanbat-daejeon-2026-2.json": {
     "sha256": "c228e992dc7c26968f9135fe11af779cd6ace74e4cff6c0d0488e8b48b0e0dce",
@@ -628,8 +628,8 @@
     "reason": "공백만 제거(내용 동일): 파싱 비용과 앱 용량 절감"
   },
   "assets/timetable/cnu-unknown-2026-2.json": {
-    "sha256": "6882a0b14e4be9691f5a83e3ba2b0febc0ffbb5a5b84bf51e51ff3cc46d5c898",
-    "reason": "공백만 제거(내용 동일): 파싱 비용과 앱 용량 절감"
+    "sha256": "719f3e5b2303cb423fce09cf2a1adf381b5d350786f74db3c44c8942bd8758ab",
+    "reason": "공백만 제거(내용 동일): 파싱 비용과 앱 용량 절감; #973 근거 필드의 개발 기기 절대 경로를 저장소 기준 상대 경로(work/...)로 변경"
   },
   "assets/timetable/dku-cheonan-2026-2.json": {
     "sha256": "1a4c052fecf7f02eb19576877d53fb68bb32fd4e1ab3a4e20fbd03fd06a89995",
@@ -708,12 +708,12 @@
     "reason": "공백만 제거(내용 동일): 파싱 비용과 앱 용량 절감"
   },
   "assets/timetable/khu-global-2026-2.json": {
-    "sha256": "bcc888d4aff7766d5be80d19f7ddfc406853ce0ab9762a4f50a65c7f86a9d4c4",
-    "reason": "공백만 제거(내용 동일): 파싱 비용과 앱 용량 절감"
+    "sha256": "82d2eb4c1cd4d13fe215d44d8d0f811b44c375e469a777b28056ff0c8dbcc975",
+    "reason": "공백만 제거(내용 동일): 파싱 비용과 앱 용량 절감; #973 근거 필드의 개발 기기 절대 경로를 저장소 기준 상대 경로(work/...)로 변경"
   },
   "assets/timetable/khu-seoul-2026-2.json": {
-    "sha256": "bef979bbd3e6cf653bdcbd0b97bb93dfc6d56720f6e8450bd5ba61aa60fd8adb",
-    "reason": "공백만 제거(내용 동일): 파싱 비용과 앱 용량 절감"
+    "sha256": "e193aba9ff3ccf8bb0ee5b39b76a9a94ffa6e677436c6737edc1b348c2b73bd9",
+    "reason": "공백만 제거(내용 동일): 파싱 비용과 앱 용량 절감; #973 근거 필드의 개발 기기 절대 경로를 저장소 기준 상대 경로(work/...)로 변경"
   },
   "assets/timetable/kmu-daemyeong-2026-2.json": {
     "sha256": "42dded84af9bfd5b6d19300d743156e89170d9c287f194e0449d25334166f9cd",
@@ -788,8 +788,8 @@
     "reason": "공백만 제거(내용 동일): 파싱 비용과 앱 용량 절감"
   },
   "assets/timetable/organizations/cbnu.json": {
-    "sha256": "7b0d88f57de9dde8ebc44b152fbd9866e1a2650c917aefa5526eb6ffd4f93730",
-    "reason": "공백만 제거(내용 동일): 파싱 비용과 앱 용량 절감"
+    "sha256": "d58a2a1426f0097aa4e30f374da0026d16be68e9ca10e78f4e87103181876225",
+    "reason": "공백만 제거(내용 동일): 파싱 비용과 앱 용량 절감; #973 근거 필드의 개발 기기 절대 경로를 저장소 기준 상대 경로(work/...)로 변경"
   },
   "assets/timetable/organizations/ewha.json": {
     "sha256": "660cd8b0b13772a8aad577f6119e5e77a2c25f726fcef09d210e94acac501e8c",

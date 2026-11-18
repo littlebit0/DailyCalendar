@@ -123,6 +123,37 @@ void main() {
       },
     );
 
+    test('an unreadable running version never restricts (#890)', () async {
+      for (final current in ['', 'abc']) {
+        final prefs = await _prefs();
+        final controller = UpdateRequirementController(
+          preferences: prefs,
+          latestVersion: () async => '4.1.1',
+          currentVersion: () async => current,
+          now: () => DateTime.utc(2026, 11, 18),
+        );
+        await controller.initialize();
+        await controller.check();
+        expect(controller.requiredVersion.value, isNull);
+        expect(
+          prefs.getString(UpdateRequirementController.requiredVersionKey),
+          isNull,
+        );
+
+        // A requirement stored earlier is not kept either.
+        final stored = await _prefs({
+          UpdateRequirementController.requiredVersionKey: '4.1.1',
+        });
+        final restarted = UpdateRequirementController(
+          preferences: stored,
+          latestVersion: () async => null,
+          currentVersion: () async => current,
+        );
+        await restarted.initialize();
+        expect(restarted.requiredVersion.value, isNull);
+      }
+    });
+
     test('does nothing when disabled', () async {
       final prefs = await _prefs({
         UpdateRequirementController.requiredVersionKey: '9.0.0',
@@ -278,33 +309,36 @@ void main() {
     });
   });
 
-  test('an unanswered release lookup ends and lets the next check run', () async {
-    final prefs = await _prefs();
-    var requests = 0;
-    final service = AppUpdateService(
-      enabled: false,
-      releaseLookupTimeout: const Duration(milliseconds: 10),
-      client: MockClient((_) {
-        requests++;
-        return Completer<http.Response>().future;
-      }),
-    );
-    expect(await service.latestReleaseVersion(), isNull);
+  test(
+    'an unanswered release lookup ends and lets the next check run',
+    () async {
+      final prefs = await _prefs();
+      var requests = 0;
+      final service = AppUpdateService(
+        enabled: false,
+        releaseLookupTimeout: const Duration(milliseconds: 10),
+        client: MockClient((_) {
+          requests++;
+          return Completer<http.Response>().future;
+        }),
+      );
+      expect(await service.latestReleaseVersion(), isNull);
 
-    var now = DateTime.utc(2026, 10, 27);
-    final controller = UpdateRequirementController(
-      preferences: prefs,
-      latestVersion: service.latestReleaseVersion,
-      currentVersion: () async => '4.0.0',
-      now: () => now,
-    );
-    await controller.check();
-    now = now.add(const Duration(minutes: 5));
-    await controller.check();
-    expect(requests, 3);
-    expect(prefs.getInt(UpdateRequirementController.lastCheckedKey), isNull);
-    controller.dispose();
-  });
+      var now = DateTime.utc(2026, 10, 27);
+      final controller = UpdateRequirementController(
+        preferences: prefs,
+        latestVersion: service.latestReleaseVersion,
+        currentVersion: () async => '4.0.0',
+        now: () => now,
+      );
+      await controller.check();
+      now = now.add(const Duration(minutes: 5));
+      await controller.check();
+      expect(requests, 3);
+      expect(prefs.getInt(UpdateRequirementController.lastCheckedKey), isNull);
+      controller.dispose();
+    },
+  );
 
   test('latestReleaseVersion reads only a plain release tag', () async {
     AppUpdateService service(http.Response Function() respond) =>

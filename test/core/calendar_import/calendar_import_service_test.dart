@@ -10,6 +10,9 @@ import 'package:daily/core/sync/sync_service.dart';
 import 'package:daily/features/events/application/event_command_service.dart';
 import 'package:daily/features/events/data/app_database.dart';
 import 'package:daily/features/events/data/drift_event_repository.dart';
+import 'package:daily/features/events/data/recurrence_expander.dart';
+import 'package:daily/features/events/domain/calendar_event.dart';
+import 'package:daily/features/events/domain/event_category.dart';
 import 'package:daily/features/events/domain/event_repository.dart';
 import 'package:daily/features/events/domain/recurrence_rule.dart';
 import 'package:drift/native.dart';
@@ -168,6 +171,71 @@ void main() {
       );
       expect(rule.byDay, ['TH', 'MO']);
       expect(rule.rawRule, isNull);
+    });
+
+    test('격주 규칙은 주 시작(WKST, 기본 월요일)을 저장해 같은 주로 확장한다 (#843)', () {
+      final thursday = DateTime(2026, 1, 8, 9);
+      List<String> dates(RecurrenceRule rule) => [
+        for (final occurrence in RecurrenceExpander().expand(
+          CalendarEvent(
+            id: 'imported',
+            title: '격주',
+            startAt: thursday,
+            endAt: thursday.add(const Duration(hours: 1)),
+            allDay: false,
+            category: EventCategory.basic,
+            colorValue: EventCategory.basic.colorValue,
+            recurrence: rule,
+            createdAt: thursday,
+            updatedAt: thursday,
+          ),
+          DateTime(2026, 1, 1),
+          DateTime(2026, 2, 6),
+        ))
+          occurrence.startAt.toIso8601String().substring(0, 10),
+      ];
+
+      final imported = CalendarImportService.recurrenceFromRrule(
+        'FREQ=WEEKLY;INTERVAL=2;BYDAY=MO,TH',
+        startAt: thursday,
+      );
+      expect(imported.weekStart, DateTime.monday);
+      expect(dates(imported), [
+        '2026-01-08',
+        '2026-01-19',
+        '2026-01-22',
+        '2026-02-02',
+        '2026-02-05',
+      ]);
+
+      final explicit = CalendarImportService.recurrenceFromRrule(
+        'FREQ=WEEKLY;INTERVAL=2;WKST=TH;BYDAY=MO,TH',
+        startAt: thursday,
+      );
+      expect(explicit.weekStart, DateTime.thursday);
+
+      // 앱에서 만든 격주 규칙은 시작 요일을 주 시작으로 본다.
+      const inApp = RecurrenceRule(
+        frequency: RecurrenceFrequency.weekly,
+        interval: 2,
+        byDay: ['MO', 'TH'],
+      );
+      expect(dates(explicit), dates(inApp));
+      expect(dates(inApp), [
+        '2026-01-08',
+        '2026-01-12',
+        '2026-01-22',
+        '2026-01-26',
+        '2026-02-05',
+      ]);
+
+      // 매주 규칙은 주 시작과 무관하므로 저장하지 않는다.
+      final weekly = CalendarImportService.recurrenceFromRrule(
+        'FREQ=WEEKLY;BYDAY=MO,TH',
+        startAt: thursday,
+      );
+      expect(weekly.weekStart, isNull);
+      expect(dates(weekly).take(3), ['2026-01-08', '2026-01-12', '2026-01-15']);
     });
 
     test('UTC 종료 시각을 로컬 DateTime으로 변환한다', () {
