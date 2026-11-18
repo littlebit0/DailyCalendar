@@ -389,4 +389,92 @@ void main() {
       expect(find.byType(AlertDialog), findsOneWidget);
     });
   });
+  group('store-based requirements', () {
+    test('drops a GitHub requirement stored by an older build', () async {
+      final now = DateTime.utc(2026, 11, 17);
+      final prefs = await _prefs({
+        UpdateRequirementController.requiredVersionKey: '4.2.0',
+        UpdateRequirementController.lastCheckedKey: now.millisecondsSinceEpoch,
+      });
+      var lookups = 0;
+      final controller = UpdateRequirementController(
+        preferences: prefs,
+        source: UpdateSource.appStore,
+        latestVersion: () async {
+          lookups++;
+          return '4.1.1';
+        },
+        currentVersion: () async => '4.1.1',
+        now: () => now,
+      );
+      await controller.initialize();
+      expect(controller.requiredVersion.value, isNull);
+      expect(
+        prefs.getString(UpdateRequirementController.requiredVersionKey),
+        isNull,
+      );
+
+      // The App Store is asked right away, not after the stored interval.
+      await controller.check();
+      expect(lookups, 1);
+      expect(controller.requiredVersion.value, isNull);
+    });
+
+    test('keeps a GitHub requirement on Windows and Linux builds', () async {
+      final prefs = await _prefs({
+        UpdateRequirementController.requiredVersionKey: '4.2.0',
+      });
+      final controller = UpdateRequirementController(
+        preferences: prefs,
+        latestVersion: () async => null,
+        currentVersion: () async => '4.1.1',
+      );
+      await controller.initialize();
+      expect(controller.requiredVersion.value, '4.2.0');
+    });
+
+    test(
+      'restricts Android by versionCode and lifts it after update',
+      () async {
+        final prefs = await _prefs();
+        var installed = '420';
+        final controller = UpdateRequirementController(
+          preferences: prefs,
+          source: UpdateSource.play,
+          latestVersion: () async => '430',
+          currentVersion: () async => installed,
+          isNewer: isNewerVersionCode,
+          now: () => DateTime.utc(2026, 11, 17),
+        );
+        await controller.check();
+        expect(controller.requiredVersion.value, '430');
+        expect(
+          prefs.getString(UpdateRequirementController.requiredSourceKey),
+          'play',
+        );
+
+        installed = '430';
+        await controller.initialize();
+        expect(controller.requiredVersion.value, isNull);
+        expect(
+          prefs.getString(UpdateRequirementController.requiredSourceKey),
+          isNull,
+        );
+      },
+    );
+
+    test('a store that cannot be reached never restricts', () async {
+      final prefs = await _prefs();
+      final controller = UpdateRequirementController(
+        preferences: prefs,
+        source: UpdateSource.play,
+        latestVersion: () async => null,
+        currentVersion: () async => '420',
+        isNewer: isNewerVersionCode,
+      );
+      await controller.check();
+      expect(controller.requiredVersion.value, isNull);
+      expect(prefs.getInt(UpdateRequirementController.lastCheckedKey), isNull);
+    });
+  });
 }

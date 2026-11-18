@@ -63,6 +63,7 @@ dependencies:
   local_auth: ^3.0.2
   pdf_document: 5.1.1
   pdf_graphics: 5.1.1
+  in_app_update: ^5.0.0
 
 dev_dependencies:
   shared_preferences_platform_interface: ^2.4.2

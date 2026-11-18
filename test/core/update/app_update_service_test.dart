@@ -7,6 +7,8 @@ import 'package:http/testing.dart';
 import 'package:daily/core/update/app_update_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:in_app_update/in_app_update.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   for (final failure in ['none', 'digest', 'launch', 'portable']) {
@@ -321,5 +323,103 @@ void main() {
       ),
       isFalse,
     );
+  });
+  group('store update sources', () {
+    test('chooses the store feed per platform', () {
+      expect(updateSourceFor(TargetPlatform.iOS), UpdateSource.appStore);
+      expect(updateSourceFor(TargetPlatform.macOS), UpdateSource.appStore);
+      expect(updateSourceFor(TargetPlatform.android), UpdateSource.play);
+      expect(updateSourceFor(TargetPlatform.windows), UpdateSource.github);
+      expect(updateSourceFor(TargetPlatform.linux), UpdateSource.github);
+    });
+
+    test('parses the App Store lookup and rejects odd answers', () {
+      final body = jsonEncode({
+        'resultCount': 1,
+        'results': [
+          {
+            'version': '4.1.1',
+            'trackViewUrl':
+                'https://apps.apple.com/kr/app/dailycalendar/id6784087335?uo=4',
+          },
+        ],
+      });
+      final release = parseAppStoreLookup(body);
+      expect(release?.version, '4.1.1');
+      expect(release?.url, contains('apps.apple.com'));
+      expect(parseAppStoreLookup('{"resultCount":0,"results":[]}'), isNull);
+      expect(parseAppStoreLookup('{"results":[{"version":"beta"}]}'), isNull);
+      expect(
+        parseAppStoreLookup(
+          '{"results":[{"version":"4.2.0","trackViewUrl":"https://evil.test"}]}',
+        )?.url,
+        isNull,
+      );
+    });
+
+    test('reads the App Store version and remembers its page', () async {
+      SharedPreferences.setMockInitialValues({});
+      final prefs = await SharedPreferences.getInstance();
+      Uri? requested;
+      final service = AppUpdateService(
+        enabled: false,
+        client: MockClient((request) async {
+          requested = request.url;
+          return http.Response(
+            '{"results":[{"version":"4.2.0","trackViewUrl":"https://apps.apple.com/kr/app/id1"}]}',
+            200,
+          );
+        }),
+      );
+      expect(
+        await service.appStoreVersion(mac: true, preferences: prefs),
+        '4.2.0',
+      );
+      expect(requested?.queryParameters['bundleId'], 'com.littlebit0.daily');
+      expect(requested?.queryParameters['entity'], 'macSoftware');
+      expect(
+        prefs.getString(AppUpdateService.storeUrlKey),
+        'https://apps.apple.com/kr/app/id1',
+      );
+      await service.appStoreVersion(mac: false);
+      expect(requested?.queryParameters.containsKey('entity'), isFalse);
+    });
+
+    test('an unreachable App Store never yields a version', () async {
+      final failing = AppUpdateService(
+        enabled: false,
+        client: MockClient((_) async => http.Response('', 503)),
+      );
+      expect(await failing.appStoreVersion(mac: false), isNull);
+      final throwing = AppUpdateService(
+        enabled: false,
+        client: MockClient((_) async => throw const SocketException('offline')),
+      );
+      expect(await throwing.appStoreVersion(mac: false), isNull);
+    });
+
+    test('Play restricts only when it offers an update', () async {
+      expect(playRequirement(UpdateAvailability.updateAvailable, 430), '430');
+      expect(
+        playRequirement(UpdateAvailability.updateNotAvailable, 430),
+        isNull,
+      );
+      expect(playRequirement(UpdateAvailability.unknown, null), isNull);
+      expect(playRequirement(UpdateAvailability.updateAvailable, null), isNull);
+      // A sideloaded build cannot reach Play; the lookup failure is no limit.
+      expect(
+        await playRequiredVersionCode(
+          checkForUpdate: () async => throw Exception('ERROR_APP_NOT_OWNED'),
+        ),
+        isNull,
+      );
+    });
+
+    test('compares Android versionCodes numerically', () {
+      expect(isNewerVersionCode('430', '420'), isTrue);
+      expect(isNewerVersionCode('420', '420'), isFalse);
+      expect(isNewerVersionCode('1000', '999'), isTrue);
+      expect(isNewerVersionCode('4.2.1', '420'), isFalse);
+    });
   });
 }

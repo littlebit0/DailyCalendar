@@ -1,5 +1,28 @@
 # Daily Agent Memory — current handoff
 
+## #986 업데이트 제한을 스토어 배포 기준으로 — 2026-11-17
+
+- Changes the #698 trigger only; blocked scope, 6 h interval, local storage,
+  debug exemption and "lookup failure never restricts" are unchanged.
+- Source per platform (`updateSourceFor`): iOS/macOS read App Store
+  `itunes.apple.com/lookup?bundleId=com.littlebit0.daily&country=kr` (macOS adds
+  `entity=macSoftware`; same bundle id in `macos/Runner/Configs/AppInfo.xcconfig`)
+  and store `trackViewUrl` in `update.storeUrl` for the update button. Android
+  uses Play In-App Updates (`in_app_update`, Android-only plugin): restricts only
+  on `updateAvailable`, stores `availableVersionCode` and compares it with
+  `PackageInfo.buildNumber`; a sideloaded build throws, so no restriction. The
+  Android notice names no version. Windows/Linux keep GitHub and the installer.
+- `update.requiredSource` records the feed. A stored value without it is a GitHub
+  value from an older build: store platforms drop it, clear
+  `update.lastCheckedAtMs` and ask the store right away.
+- Siri (`DailySiriUpdateRequirement`) still compares `flutter.update.requiredVersion`
+  with the app version; App Store values are semver, so it stays correct.
+- Verified on macOS: analyze clean, full suite 3118 passed, Mac Debug and iOS
+  simulator builds (Xcode 27.2 overrides; Mac xcodebuild needs absolute
+  OBJROOT/SYMROOT), test apps updated in place. NOT verified: Play path on a real
+  Play-installed Android device, Android build, App Store button on a release
+  build (debug builds skip the check), Windows/Linux.
+
 ## #838 LMS 학교 설정 목록과 6개 대학 추가 — 2026-11-12
 
 - LMS support is one list: `LmsSchool.all` (`lib/core/lms/lms_school.dart`).

@@ -328,6 +328,8 @@ const Map<String, Map<String, String>> _translations = {
     "업데이트가 필요합니다": "Update required",
     "새 버전({version})이 나왔습니다. 업데이트하기 전까지는 일정 확인만 사용할 수 있고, 학사일정·LMS·시간표와 일정 추가·수정은 사용할 수 없습니다.":
         "A new version ({version}) is available. Until you update, you can only view events; academic calendar, LMS, timetable, and adding or editing events are unavailable.",
+    "새 버전이 나왔습니다. 업데이트하기 전까지는 일정 확인만 사용할 수 있고, 학사일정·LMS·시간표와 일정 추가·수정은 사용할 수 없습니다.":
+        "A new version is available. Until you update, you can only view events; academic calendar, LMS, timetable, and adding or editing events are unavailable.",
     "업데이트 받기": "Get the update",
     "저장 중": "Saving",
     "Google 계정을 연결하면 학사 정보를 저장하고 다른 기기에서도 사용할 수 있습니다.":
@@ -1469,6 +1471,8 @@ const Map<String, Map<String, String>> _translations = {
     "업데이트가 필요합니다": "アップデートが必要です",
     "새 버전({version})이 나왔습니다. 업데이트하기 전까지는 일정 확인만 사용할 수 있고, 학사일정·LMS·시간표와 일정 추가·수정은 사용할 수 없습니다.":
         "新しいバージョン({version})があります。アップデートするまでは予定の確認のみ利用でき、学事日程・LMS・時間割と予定の追加・編集は利用できません。",
+    "새 버전이 나왔습니다. 업데이트하기 전까지는 일정 확인만 사용할 수 있고, 학사일정·LMS·시간표와 일정 추가·수정은 사용할 수 없습니다.":
+        "新しいバージョンがあります。アップデートするまでは予定の確認のみ利用でき、学事日程・LMS・時間割と予定の追加・編集は利用できません。",
     "업데이트 받기": "アップデートを入手",
     "저장 중": "保存中",
     "Google 계정을 연결하면 학사 정보를 저장하고 다른 기기에서도 사용할 수 있습니다.":
@@ -2509,6 +2513,8 @@ const Map<String, Map<String, String>> _translations = {
     "업데이트가 필요합니다": "需要更新",
     "새 버전({version})이 나왔습니다. 업데이트하기 전까지는 일정 확인만 사용할 수 있고, 학사일정·LMS·시간표와 일정 추가·수정은 사용할 수 없습니다.":
         "已有新版本({version})。更新之前只能查看行程，無法使用學校行事曆、LMS、課表，也無法新增或編輯行程。",
+    "새 버전이 나왔습니다. 업데이트하기 전까지는 일정 확인만 사용할 수 있고, 학사일정·LMS·시간표와 일정 추가·수정은 사용할 수 없습니다.":
+        "已有新版本。更新之前只能查看行程，無法使用學校行事曆、LMS、課表，也無法新增或編輯行程。",
     "업데이트 받기": "取得更新",
     "저장 중": "儲存中",
     "Google 계정을 연결하면 학사 정보를 저장하고 다른 기기에서도 사용할 수 있습니다.":
