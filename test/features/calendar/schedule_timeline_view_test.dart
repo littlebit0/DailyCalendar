@@ -1233,6 +1233,64 @@ void main() {
     expect(halfA.width, greaterThan(shortA.width * 1.9));
   });
 
+  testWidgets('minimum block height decides the lane boundary', (
+    tester,
+  ) async {
+    final day = DateTime(2026, 5, 5);
+    CalendarEvent timed(String id, int startMinute, int endMinute) =>
+        CalendarEvent(
+          id: id,
+          title: id,
+          startAt: day.add(Duration(minutes: startMinute)),
+          endAt: day.add(Duration(minutes: endMinute)),
+          allDay: false,
+          category: EventCategory.basic,
+          colorValue: EventCategory.basic.colorValue,
+          createdAt: day,
+          updatedAt: day,
+        );
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: ScheduleTimelineView(
+            days: [day],
+            events: [
+              // 22 minutes apart: the 24px block still reaches the next one.
+              timed('near-a', 9 * 60, 9 * 60 + 10),
+              timed('near-b', 9 * 60 + 22, 9 * 60 + 32),
+              // 23 minutes apart: the drawn blocks no longer meet.
+              timed('far-a', 11 * 60, 11 * 60 + 10),
+              timed('far-b', 11 * 60 + 23, 11 * 60 + 33),
+            ],
+            selectedDate: day,
+            use24HourTime: true,
+            showAllDayEvents: true,
+            holidayBackgroundEnabled: true,
+            holidayColorValue: EventCategory.holiday.colorValue,
+            onShowAllDayEventsChanged: (_) {},
+            onDateSelected: (_) {},
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    Rect block(String id) => tester.getRect(
+      find.byKey(ValueKey('schedule-event-$id-${day.toIso8601String()}')),
+    );
+    final nearA = block('near-a');
+    final nearB = block('near-b');
+    expect(nearA.overlaps(nearB), isFalse);
+    expect(nearB.left, greaterThan(nearA.left));
+
+    final farA = block('far-a');
+    final farB = block('far-b');
+    expect(farA.overlaps(farB), isFalse);
+    expect(farA.left, farB.left);
+    expect(farA.width, farB.width);
+    expect(farA.width, greaterThan(nearA.width * 1.9));
+  });
+
   testWidgets('overlapping schedule lanes follow category order', (
     tester,
   ) async {
