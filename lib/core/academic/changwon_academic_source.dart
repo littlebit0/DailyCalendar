@@ -102,7 +102,8 @@ class ChangwonAcademicSource implements AcademicSource {
       if (!start.isBefore(DateTime(year + 1)) || !end.isAfter(DateTime(year))) {
         continue;
       }
-      if (title.contains('대학원')) continue;
+      // Rows that also name undergraduates ("학부·대학원 …") are shared.
+      if (title.contains('대학원') && !title.contains('학부')) continue;
       if (events.containsKey('$seq')) {
         throw const FormatException('Duplicate Changwon record');
       }

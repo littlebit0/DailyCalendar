@@ -86,7 +86,8 @@ class SunchonAcademicSource implements AcademicSource {
           row['alldayAt'] != 'Y') {
         throw const FormatException('Invalid Sunchon academic period');
       }
-      if (title.contains('대학원')) continue;
+      // Rows that also name undergraduates ("학부·대학원 …") are shared.
+      if (title.contains('대학원') && !title.contains('학부')) continue;
       final seq = row['schdulSeq'];
       final holiday = seq == 'holiday';
       if (!holiday && (seq is! int || row['sysId'] != 'SCNU')) {
