@@ -602,6 +602,28 @@ void main() {
       expect(added.completed, isFalse);
     });
 
+    test('an unresolved same-titled report row blocks reuse', () async {
+      final original = await storeRecovered();
+      // The stored lecture's row stays unresolved (no course-page match), so
+      // the other same-titled lecture must not take over its memo/completion.
+      h.pages['/course/view.php'] =
+          '<html><body id="page-course-view"><main id="region-main">'
+          '</main></body></html>';
+      h.pages['/report/ubcompletion/user_progress.php'] = _learning
+          .replaceFirst('</tbody>', '$_unlearned${learnedRow('9999')}</tbody>');
+      final result = await h.service.refresh(force: true);
+      expect(result!.unresolvedLearningActivities, 1);
+      final kept = h.repository.events[original.id]!;
+      expect(kept.lms!.activityId, 'report:cm:vod:7001');
+      expect(kept.memo, '개인 메모');
+      final added = lectures(
+        '미학습 자료',
+      ).singleWhere((e) => e.lms!.activityId == 'report:vod:9999');
+      expect(added.id, isNot(original.id));
+      expect(added.memo, isNull);
+      expect(added.completed, isFalse);
+    });
+
     test('a stored id still read in this sync is not reused', () async {
       final original = await storeRecovered();
       // Module 7001 is still read (renamed), while another lecture now
