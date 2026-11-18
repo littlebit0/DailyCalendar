@@ -1,4 +1,4 @@
-/* App Shortcut phrases and short titles (#958). Keys are the English source in DailySiriIntents.swift. */
+/* App Shortcut invocation phrases (#958). Keys are the English source in DailySiriIntents.swift; short titles are in Localizable.xcstrings. */
 "Add an event in ${applicationName}" = "${applicationName} 앱에 일정 추가";
 "Create an event with ${applicationName}" = "${applicationName}에서 일정 만들어줘";
 "Show today's events in ${applicationName}" = "${applicationName} 앱에서 오늘 일정 알려줘";
@@ -19,13 +19,3 @@
 "Check D-days in ${applicationName}" = "${applicationName}에서 디데이 일정 확인";
 "Run Signal in ${applicationName}" = "${applicationName}에서 시그널 실행";
 "${applicationName} Signal" = "${applicationName} 시그널";
-"Add Event" = "일정 추가";
-"Today's Events" = "오늘 일정";
-"Tomorrow's Events" = "내일 일정";
-"Events on Date" = "지정 날짜 일정";
-"Next Event" = "다음 일정";
-"Search Events" = "일정 검색";
-"Update Event" = "일정 수정";
-"Delete Event" = "일정 삭제";
-"D-day Events" = "D-day 일정";
-"Signal" = "시그널";

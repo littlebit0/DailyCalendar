@@ -1,4 +1,4 @@
-/* App Shortcut phrases and short titles (#958). Keys are the English source in DailySiriIntents.swift. */
+/* App Shortcut invocation phrases (#958). Keys are the English source in DailySiriIntents.swift; short titles are in Localizable.xcstrings. */
 "Add an event in ${applicationName}" = "Add an event in ${applicationName}";
 "Create an event with ${applicationName}" = "Create an event with ${applicationName}";
 "Show today's events in ${applicationName}" = "Show today's events in ${applicationName}";
@@ -19,13 +19,3 @@
 "Check D-days in ${applicationName}" = "Check D-days in ${applicationName}";
 "Run Signal in ${applicationName}" = "Run Signal in ${applicationName}";
 "${applicationName} Signal" = "${applicationName} Signal";
-"Add Event" = "Add Event";
-"Today's Events" = "Today's Events";
-"Tomorrow's Events" = "Tomorrow's Events";
-"Events on Date" = "Events on Date";
-"Next Event" = "Next Event";
-"Search Events" = "Search Events";
-"Update Event" = "Update Event";
-"Delete Event" = "Delete Event";
-"D-day Events" = "D-day Events";
-"Signal" = "Signal";

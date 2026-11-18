@@ -301,7 +301,13 @@ void main() {
       ).allMatches(provider).map((m) => m.group(1)!).toList();
       expect(phrases, hasLength(20));
       expect(shortTitles, hasLength(10));
-      expect(shortcuts.keys.toSet(), {...phrases, ...shortTitles});
+      // Phrases are looked up in AppShortcuts.strings; shortTitle is a plain
+      // LocalizedStringResource, so it resolves from the default Localizable table.
+      expect(shortcuts.keys.toSet(), phrases.toSet());
+      expect(general.keys.toSet().containsAll(shortTitles), isTrue);
+      for (final title in shortTitles) {
+        expect(general[title]!.values.toSet().length, greaterThanOrEqualTo(2));
+      }
       for (final phrase in phrases) {
         for (final language in languages) {
           expect(
