@@ -103,6 +103,40 @@ struct WallpaperModelTests {
       CGSize(width: 1668, height: 2388), CGSize(width: 1668, height: 2420),
       CGSize(width: 2048, height: 2732), CGSize(width: 2064, height: 2752),
       CGSize(width: 1536, height: 2048), CGSize(width: 1730, height: 2470)]
+    // iPhone Duo: outer 1398x2034, inner 2007x2853 (portrait aspect 0.687 vs 0.704).
+    let outer = CGSize(width: 1398, height: 2034)
+    let inner = CGSize(width: 2007, height: 2853)
+    let duo = DailyWallpaperCanvas.multiDisplayPhone(main: outer, screens: [outer, inner])!
+    check(duo.device == .pad, "Duo uses the two-orientation canvas")
+    check(duo.size == CGSize(width: 2853, height: 2853), "Duo canvas uses the inner screen's long edge")
+    let outerAspect = 1398.0 / 2034.0
+    check(abs(Double(duo.nativeWidth) / 2853.0 - outerAspect) < 1e-9, "Crop width follows the narrowest screen")
+    check(duo == DailyWallpaperCanvas.multiDisplayPhone(main: outer, screens: [inner, outer])!,
+          "Screen order does not change the Duo canvas")
+    check(duo == DailyWallpaperCanvas.multiDisplayPhone(
+      main: outer, screens: [CGSize(width: 2034, height: 1398), CGSize(width: 2853, height: 2007)])!,
+          "Reversed screen dimensions give the same Duo canvas")
+    check(DailyWallpaperCanvas.multiDisplayPhone(main: outer, screens: [outer]) == nil,
+          "A single-screen iPhone keeps the phone canvas")
+    check(DailyWallpaperCanvas.multiDisplayPhone(main: outer, screens: []) == nil,
+          "No built-in screens keeps the phone canvas")
+    // A visible region of each real screen: full width/height of its own aspect.
+    let outerPortraitW = Double(duo.size.height) * outerAspect
+    let innerPortraitW = Double(duo.size.height) * (2007.0 / 2853.0)
+    for position in [0.34, 0.43, 0.52] {
+      for weeks in 4...6 {
+        let rect = DailyWallpaperGeometry.layout(canvas: duo, topFraction: position, rows: weeks).content
+        let center = Double(duo.size.width) / 2
+        for visibleWidth in [outerPortraitW, innerPortraitW] {
+          check(Double(rect.minX) >= center - visibleWidth / 2 - 0.001
+                && Double(rect.maxX) <= center + visibleWidth / 2 + 0.001,
+                "Duo calendar columns stay inside both displays' portrait width")
+        }
+        check(duo.portraitCrop.contains(rect) && duo.landscapeCrop.contains(rect),
+              "Duo calendar survives both orientation crops")
+      }
+    }
+
     for size in tabletSizes {
       let canvas = DailyWallpaperCanvas(device: .pad, nativeSize: size)
       let rotated = DailyWallpaperCanvas(device: .pad,

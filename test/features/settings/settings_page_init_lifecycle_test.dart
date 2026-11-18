@@ -102,6 +102,36 @@ void main() {
     expect(repository.dailyAccount()?.googleAccount?.email, 'kept@example.com');
   });
 
+  for (final (width, twoColumns) in [(900.0, true), (400.0, false)]) {
+    testWidgets('settings sections use two columns only when wide ($width)', (
+      tester,
+    ) async {
+      final (repository, authService) = await pumpLauncher(tester);
+      tester.view.physicalSize = Size(width, 1400);
+      repository.keyGate.complete(null);
+      authService.restoreGate.complete();
+      await tester.tap(find.text('open settings'));
+      await tester.pumpAndSettle();
+
+      final account = tester.getTopLeft(
+        find.byKey(const ValueKey('account-settings-navigation')),
+      );
+      final appearance = tester.getTopLeft(
+        find.byKey(
+          const ValueKey('appearance-settings-navigation'),
+          skipOffstage: false,
+        ),
+      );
+      if (twoColumns) {
+        expect(appearance.dx, greaterThan(account.dx + 300));
+        expect(appearance.dy, lessThan(account.dy + 100));
+      } else {
+        expect(appearance.dx, account.dx);
+        expect(appearance.dy, greaterThan(account.dy));
+      }
+    });
+  }
+
   testWidgets('settings initialization still shows the restored account', (
     tester,
   ) async {

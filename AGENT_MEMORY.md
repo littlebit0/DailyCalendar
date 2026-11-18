@@ -1,5 +1,11 @@
 # Daily Agent Memory — current handoff
 
+## iPhone Duo 지원 — 2026-11-18
+
+- 배경화면: iPhone에 더 큰 내장 화면이 하나 더 있으면(Duo 안쪽 화면) iPad와 같은 세로·가로 겸용 정사각 캔버스를 안쪽 화면 해상도로 만들고, 바깥 화면이 더 좁아(세로 비율 0.687 대 0.704) 가장 좁은 내장 화면 비율로 크롭 폭을 정한다. `UIScreen.main`은 Duo에서 바깥(세로) 화면만 돌려주고, 안쪽 화면 잠금화면은 가로로 뜬다(시뮬레이터 확인). `ios/Runner/DailyWallpaper.swift` `DailyWallpaperStore.canvas`.
+- 설정: 최상위 설정 메뉴만 내용 폭 720 이상에서 2열. 하위 설정 화면은 행 안 컨트롤 폭 때문에 1열 유지. 설정 본문에 좌우 안전 영역 여백 추가(Duo 카메라 줄 겹침 수정). 모든 플랫폼 공통 Flutter 코드라 Mac·Windows 넓은 창에서도 2열.
+- 확인: iOS 27.2 Duo 시뮬레이터(`iOS-27-2-iPhone19-4` 런타임)에서 닫힘·펼침·반쯤 열림 확인. 실기기·배포 빌드, 실제 잠금화면에 적용된 Duo 배경 배치는 미확인. 좁은 화면 비율 보정(리뷰 반영)은 빌드만 확인하고 시뮬레이터 재확인은 못 했다.
+
 ## #986 업데이트 제한을 스토어 배포 기준으로 — 2026-11-17
 
 - Changes the #698 trigger only; blocked scope, 6 h interval, local storage,

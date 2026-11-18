@@ -143,6 +143,22 @@ struct DailyWallpaperCanvas: Codable, Equatable {
     CGSize(width: device == .pad ? nativeHeight : nativeWidth, height: nativeHeight)
   }
 
+  /// iPhone with a second, larger built-in screen (iPhone Duo). `main` is the
+  /// system's main screen and `screens` every non-mirrored built-in screen, all in
+  /// native pixels. Returns the two-orientation canvas at the largest screen's
+  /// resolution, with the crop width taken from the narrowest screen aspect so both
+  /// crops stay inside what each screen shows. Returns nil for a single screen.
+  static func multiDisplayPhone(main: CGSize, screens: [CGSize]) -> DailyWallpaperCanvas? {
+    func area(_ size: CGSize) -> Double { Double(size.width * size.height) }
+    func aspect(_ size: CGSize) -> Double {
+      Double(min(size.width, size.height) / max(size.width, size.height))
+    }
+    guard let largest = screens.max(by: { area($0) < area($1) }), area(largest) > area(main),
+          let narrowest = screens.map(aspect).min() else { return nil }
+    let long = Double(max(largest.width, largest.height))
+    return DailyWallpaperCanvas(device: .pad, nativeSize: CGSize(width: long * narrowest, height: long))
+  }
+
   // These are centered, unzoomed crops of the PNG, not a readback of iPadOS's
   // wallpaper placement. System/user zoom and repositioning may differ.
   var portraitCrop: CGRect {
