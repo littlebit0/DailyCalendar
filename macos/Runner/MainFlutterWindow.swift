@@ -1157,6 +1157,9 @@ private final class DailyPasswordInputBridge {
 // callable only by Daily, never exposed as a JavaScript message handler.
 private final class DailyLmsCookieStore {
   private static var stores: [String: WKWebsiteDataStore] = [:]
+  // A bind answered after Daily gave up on it (a newer bind or a clear came
+  // first) must not replace the current store.
+  private static var bindGeneration = 0
   // BEGIN LMS COOKIE READ POLICY
   private static let hosts: Set<String> = [
     "ecampus.smu.ac.kr", "sel.jnu.ac.kr", "ecampus.changwon.ac.kr", "lms.jnue.kr",
@@ -1195,6 +1198,8 @@ private final class DailyLmsCookieStore {
         guard !candidates.isEmpty else {
           result(FlutterError(code: "school_view_missing", message: nil, details: nil)); return
         }
+        bindGeneration += 1
+        let generation = bindGeneration
         let group = DispatchGroup()
         var matches: [WKWebsiteDataStore] = []
         var scriptFailures = 0
@@ -1215,11 +1220,15 @@ private final class DailyLmsCookieStore {
               : scriptFailures > 0 ? "school_script_unavailable" : "school_marker_missing"
             result(FlutterError(code: code, message: nil, details: nil)); return
           }
+          guard generation == bindGeneration else {
+            result(FlutterError(code: "school_bind_superseded", message: nil, details: nil)); return
+          }
           stores[host] = store
           result(true)
         }
         return
       }
+      if call.method == "clear" { bindGeneration += 1 }
       guard let store = stores[host], !store.isPersistent else {
         if call.method == "clear" { result(true) }
         else { result(FlutterError(code: "school_view_missing", message: nil, details: nil)) }

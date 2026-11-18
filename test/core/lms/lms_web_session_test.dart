@@ -1323,12 +1323,16 @@ void main() {
     'unanswered native cookie binding ends verification as a network failure',
     () async {
       FlutterSecureStorage.setMockInitialValues({});
+      final calls = <String>[];
       TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
           .setMockMethodCallHandler(
             const MethodChannel('daily/lms_cookie_store'),
-            (call) => call.method == 'bind'
-                ? Completer<Object?>().future
-                : Future<Object?>.value(true),
+            (call) {
+              calls.add(call.method);
+              return call.method == 'bind'
+                  ? Completer<Object?>().future
+                  : Future<Object?>.value(true);
+            },
           );
       final session = LmsWebSession(
         ownerId: 'student@example.com',
@@ -1349,6 +1353,8 @@ void main() {
           ),
         );
         await session.close().timeout(const Duration(seconds: 5));
+        // This clear makes the native side drop the unanswered bind.
+        expect(calls, ['bind', 'clear']);
       } finally {
         await session.retire();
         session.dispose();
