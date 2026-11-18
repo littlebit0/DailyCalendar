@@ -223,7 +223,12 @@ void main() {
           count++;
           final start = s['startMinute'] as int;
           final end = s['endMinute'] as int;
-          if (start == 480) continue; // 서울 교직 0교시는 보류(그대로 둠)
+          // 480은 서울 일반 0교시(08:00~08:50)로, 체육교육과 주말 4개 강좌(SAEK232·SAEK242
+          // `토(0-1)`, SAEK334·SAEK434 `일(0-1)`)만 쓴다. 근거는 수강신청 교시표 사본
+          // (source-current-ui-regular-campus-clock-education.json의 0교시 행)이다.
+          // 다른 0교시 강좌 15개(교직 0교시 08:40~, 끝 시각 없음인 교직 13개 포함)는 시간 없이
+          // 보류되어 여기 오지 않는다.
+          if (start == 480) continue;
           expect(
             starts.contains(start) && periodEnds.contains(end),
             isFalse,

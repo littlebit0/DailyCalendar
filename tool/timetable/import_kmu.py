@@ -96,7 +96,7 @@ if __name__ == '__main__':
     parser.add_argument('--input', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
     args = parser.parse_args()
-    source = json.loads(args.input.read_text())
+    source = json.loads(args.input.read_text(encoding='utf-8'))
     courses, unresolved = convert(source['records'])
     args.output.write_text(json.dumps({
         'schemaVersion': 1, 'academicYear': 2026, 'semester': '2',
@@ -105,5 +105,5 @@ if __name__ == '__main__':
         'courses': courses, 'unresolvedActualPeriod': unresolved,
         'remaining': ['active-status semantic and current closure audit',
                       'general semester and actual operating dates'],
-    }, ensure_ascii=False, indent=2) + '\n')
+    }, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     print('Prepared current KMU courses', len(courses), 'unresolved actual period', len(unresolved))

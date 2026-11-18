@@ -1,0 +1,6 @@
+// The widget ships inside the macOS app, so it carries the app's version and
+// build number from the same Flutter build values (#956). The app reads its
+// build number through MACOS_BUILD_NUMBER, which is FLUTTER_BUILD_NUMBER.
+#include? "../macos/Flutter/ephemeral/Flutter-Generated.xcconfig"
+MARKETING_VERSION = $(FLUTTER_BUILD_NAME)
+CURRENT_PROJECT_VERSION = $(FLUTTER_BUILD_NUMBER)

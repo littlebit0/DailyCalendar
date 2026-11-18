@@ -103,7 +103,7 @@ def fetch(directory, year, semester):
     if not queries or len({(kind, code) for (kind, code, *_) in queries}) != len(queries):
         raise ValueError('Invalid INHA published filters')
     manifest = {'year': year, 'semester': semester, 'sourceUrl': URL, 'queries': [{'kind': kind, 'code': code, 'label': label} for (kind, code, *_) in queries]}
-    (directory / 'manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n')
+    (directory / 'manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     for (kind, code, label, button, field) in queries:
         if not re.fullmatch('[0-9]+', code):
             raise ValueError('Invalid public filter code')
@@ -112,10 +112,10 @@ def fetch(directory, year, semester):
         fields.update({button: '조회', field: code, '__EVENTTARGET': '', '__EVENTARGUMENT': '', 'mb_search': ''})
         page = read(fields)
         out = {'term': page.term, 'kind': kind, 'code': code, 'label': label, 'rows': page.rows, 'timeOptions': page.options['ddlTime1']}
-        (directory / (kind + '-' + code + '.json')).write_text(json.dumps(out, ensure_ascii=False) + '\n')
+        (directory / (kind + '-' + code + '.json')).write_text(json.dumps(out, ensure_ascii=False) + '\n', encoding='utf-8')
         print(kind, code, len(page.rows), flush=True)
     manifest['complete'] = True
-    (directory / 'manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n')
+    (directory / 'manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
 if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser()

@@ -117,7 +117,7 @@ void main() {
       ]) {
         expect(
           () => SangmyungAcademicSource.parse(body, 2026),
-          throwsA(anything),
+          throwsFormatException,
         );
       }
     },

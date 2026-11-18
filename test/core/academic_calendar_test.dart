@@ -206,9 +206,11 @@ class Sync implements SyncService {
   final uploaded = <String>[];
   final deleted = <String>[];
   int settingsBackups = 0;
+  Object? settingsBackupError;
   @override
   Future<void> queueSettingsBackup() async {
     settingsBackups++;
+    if (settingsBackupError != null) throw settingsBackupError!;
   }
 
   @override
@@ -303,6 +305,20 @@ void main() {
     );
     expect(repository.events, isEmpty);
     expect(local.unavailable, isFalse);
+  });
+
+  test('a failed import is stored as failed', () async {
+    sync.settingsBackupError = StateError('backup queue unavailable');
+    final preview = await service.preview(source, 2026);
+    await expectLater(
+      service.importSelection(
+        preview,
+        preview.events.map((e) => e.sourceId).toSet(),
+      ),
+      throwsStateError,
+    );
+    expect(service.subscriptions['smu']!.failed, isTrue);
+    expect(settings.academicStore.load()['smu']!.failed, isTrue);
   });
 
   test('rows saved before a required update keep their baselines', () async {

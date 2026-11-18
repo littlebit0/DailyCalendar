@@ -35,6 +35,7 @@ void main() {
               as List;
       expect(status['completionClaim'], isFalse);
       expect(status['lmsExpansion'], isFalse);
+      var checked = 0;
       for (final row in rows) {
         final registered =
             row['academicCalendar']['status'] == 'implemented_live_verified';
@@ -65,6 +66,7 @@ void main() {
             reason: '${row['name']} / $campus academic calendar status',
           );
           if (!registered) continue;
+          checked++;
           final timetable = row['timetable'] as Map;
           final catalogId =
               timetable['universityId'] ??
@@ -96,6 +98,7 @@ void main() {
           }
         }
       }
+      expect(checked, greaterThan(0));
     },
   );
 }

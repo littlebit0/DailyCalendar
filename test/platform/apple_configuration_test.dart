@@ -239,6 +239,89 @@ void main() {
     },
   );
 
+  test('iOS Runner declares its UserDefaults use (#922)', () async {
+    final manifest = await _readNormalized('ios/Runner/PrivacyInfo.xcprivacy');
+    expect(
+      manifest,
+      contains('<string>NSPrivacyAccessedAPICategoryUserDefaults</string>'),
+    );
+    expect(manifest, contains('<string>CA92.1</string>'));
+    final project = await _readNormalized(
+      'ios/Runner.xcodeproj/project.pbxproj',
+    );
+    // In the Runner target's Resources phase, so it lands in Runner.app.
+    final resources = RegExp(
+      r'97C146EC1CF9000F007C117D /\* Resources \*/ = \{.*?files = \((.*?)\);',
+      dotAll: true,
+    ).firstMatch(project)!.group(1)!;
+    expect(resources, contains('PrivacyInfo.xcprivacy in Resources'));
+  });
+
+  test(
+    'Apple widgets take the app version from the Flutter build (#956)',
+    () async {
+      final configs = {
+        'ios': 'apple_widgets/DailyWidgets.xcconfig',
+        'macos': 'apple_widgets/DailyMacWidgets.xcconfig',
+      };
+      for (final MapEntry(key: platform, value: xcconfig) in configs.entries) {
+        final config = await _readNormalized(xcconfig);
+        expect(config, contains(r'MARKETING_VERSION = $(FLUTTER_BUILD_NAME)'));
+        expect(
+          config,
+          contains(r'CURRENT_PROJECT_VERSION = $(FLUTTER_BUILD_NUMBER)'),
+        );
+        final project = await _readNormalized(
+          '$platform/Runner.xcodeproj/project.pbxproj',
+        );
+        final name = xcconfig.split('/').last;
+        final widgetConfigs =
+            RegExp(
+                  r'isa = XCBuildConfiguration;\n(\t+baseConfigurationReference = \w+ /\* ([^*]+) \*/;\n)?\t+buildSettings = \{\n(.*?)\n\t+\};',
+                  dotAll: true,
+                )
+                .allMatches(project)
+                .where(
+                  (match) => match
+                      .group(3)!
+                      .contains(
+                        'INFOPLIST_FILE = ../apple_widgets/Info.plist;',
+                      ),
+                );
+        expect(widgetConfigs, hasLength(3), reason: platform);
+        for (final match in widgetConfigs) {
+          expect(match.group(2), name, reason: platform);
+          // A target value would override the xcconfig and pin the version again.
+          expect(match.group(3), isNot(contains('MARKETING_VERSION')));
+          expect(match.group(3), isNot(contains('CURRENT_PROJECT_VERSION')));
+        }
+      }
+      final macProject = await _readNormalized(
+        'macos/Runner.xcodeproj/project.pbxproj',
+      );
+      expect(
+        macProject,
+        contains(
+          'PRODUCT_BUNDLE_IDENTIFIER = com.littlebit0.daily.test.widgets;',
+        ),
+      );
+      final script = await _readNormalized('tool/configure_apple_widgets.rb');
+      expect(
+        script,
+        contains("'Debug' => 'com.littlebit0.daily.test.widgets'"),
+      );
+      expect(script, isNot(contains('APP_VERSION')));
+      final release = await _readNormalized(
+        '.github/workflows/release-apple.yml',
+      );
+      expect(release, contains('PlugIns/DailyWidgets.appex/Info.plist'));
+      expect(
+        release,
+        contains('PlugIns/DailyMacWidgets.appex/Contents/Info.plist'),
+      );
+    },
+  );
+
   test(
     'Siri shortcut and intent wording ships in four languages (#958)',
     () async {

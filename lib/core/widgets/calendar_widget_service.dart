@@ -21,6 +21,8 @@ abstract final class CalendarWidgetChannelContract {
   static const pendingTodoActionsMethod = 'pendingTodoActions';
   static const acknowledgeTodoActionsMethod = 'acknowledgeTodoActions';
   static const todoActionsChangedCallback = 'todoActionsChanged';
+  static const takeLaunchTargetMethod = 'takeLaunchTarget';
+  static const launchTargetOpenedCallback = 'launchTargetOpened';
 
   static String? channelNameFor(TargetPlatform platform) {
     return switch (platform) {
@@ -65,6 +67,7 @@ class CalendarWidgetService {
   late final MethodChannel? _channel;
   final Duration _themeRefreshDelay;
   final _todoActionChanges = StreamController<void>.broadcast(sync: true);
+  final _launchTargetChanges = StreamController<void>.broadcast(sync: true);
   Future<void>? _refreshInFlight;
   bool _refreshRequested = false;
   DateTime? _requestedNow;
@@ -77,12 +80,21 @@ class CalendarWidgetService {
 
   Stream<void> get todoActionChanges => _todoActionChanges.stream;
 
+  /// Fires when an Android widget tap opened the running app; the target
+  /// itself stays native-side until [takeLaunchTarget] reads it.
+  Stream<void> get launchTargetChanges => _launchTargetChanges.stream;
+
   @visibleForTesting
   Future<Object?> handleNativeMethodCall(MethodCall call) async {
     if (call.method ==
             CalendarWidgetChannelContract.todoActionsChangedCallback &&
         !_todoActionChanges.isClosed) {
       _todoActionChanges.add(null);
+    }
+    if (call.method ==
+            CalendarWidgetChannelContract.launchTargetOpenedCallback &&
+        !_launchTargetChanges.isClosed) {
+      _launchTargetChanges.add(null);
     }
     return null;
   }
@@ -94,6 +106,23 @@ class CalendarWidgetService {
       _channel?.setMethodCallHandler(null);
     }
     unawaited(_todoActionChanges.close());
+    unawaited(_launchTargetChanges.close());
+  }
+
+  /// The date or event of the Android widget tap that opened the app, read
+  /// once (#874). Other platforms have no widget launch target.
+  Future<CalendarWidgetLaunchTarget?> takeLaunchTarget() async {
+    if (!isSupported || _targetPlatform != TargetPlatform.android) return null;
+    try {
+      final raw = await _channel!.invokeMapMethod<Object?, Object?>(
+        CalendarWidgetChannelContract.takeLaunchTargetMethod,
+      );
+      return raw == null ? null : CalendarWidgetLaunchTarget.fromMap(raw);
+    } on MissingPluginException {
+      return null;
+    } on PlatformException {
+      return null;
+    }
   }
 
   Future<List<CalendarWidgetTodoAction>> pendingTodoActions() async {
@@ -498,6 +527,33 @@ class CalendarWidgetSnapshotBuilder {
   }
 
   static String _two(int value) => value.toString().padLeft(2, '0');
+}
+
+class CalendarWidgetLaunchTarget {
+  const CalendarWidgetLaunchTarget({this.eventId, this.date});
+
+  final String? eventId;
+
+  /// Local calendar day of the tapped cell or occurrence.
+  final DateTime? date;
+
+  static CalendarWidgetLaunchTarget? fromMap(Map<Object?, Object?> map) {
+    final rawId = map['eventId'];
+    final eventId = rawId is String && rawId.isNotEmpty ? rawId : null;
+    final rawDate = map['date'];
+    final match = rawDate is String
+        ? RegExp(r'^(\d{4})-(\d{2})-(\d{2})$').firstMatch(rawDate)
+        : null;
+    final date = match == null
+        ? null
+        : DateTime(
+            int.parse(match.group(1)!),
+            int.parse(match.group(2)!),
+            int.parse(match.group(3)!),
+          );
+    if (eventId == null && date == null) return null;
+    return CalendarWidgetLaunchTarget(eventId: eventId, date: date);
+  }
 }
 
 class CalendarWidgetTodoAction {
