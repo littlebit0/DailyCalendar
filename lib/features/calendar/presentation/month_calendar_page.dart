@@ -1383,6 +1383,9 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
         : _widgetOccurrence(stored, date);
     // The widget shows the calendar, not the timetable or Imogi tab.
     _selectBottomAction(_BottomCenterAction.calendar);
+    // An open day sheet or search keeps its own date and would cover it.
+    _closeSearch();
+    _dismissDaySheet();
     if (date != null) {
       ref.read(visibleMonthProvider.notifier).state = DateTime(
         date.year,

@@ -1,6 +1,7 @@
 import 'package:daily/app/daily_theme.dart';
 import 'package:daily/core/di/app_providers.dart';
 import 'package:daily/core/localization/app_localizations.dart';
+import 'package:daily/core/settings/app_settings.dart';
 import 'package:daily/core/settings/settings_repository.dart';
 import 'package:daily/core/sync/google_drive_auth_service.dart';
 import 'package:daily/core/widgets/calendar_widget_service.dart';
@@ -160,6 +161,31 @@ void main() {
     expect(panel.initialEvent!.startAt, DateTime(2026, 9, 15, 9));
     expect(panel.initialEvent!.occurrenceId, isNotNull);
     expect(find.text('Weekly review'), findsWidgets);
+  });
+
+  testWidgets('a date tap closes an open day sheet', (tester) async {
+    final container = await pumpPage(tester);
+    container.read(calendarViewModeProvider.notifier).state =
+        CalendarViewMode.month;
+    await tester.pumpAndSettle();
+    final today = DateTime.now();
+    final day = today.day == 15 ? 16 : 15;
+    await tester.tap(
+      find.byKey(ValueKey('day-cell-${today.year}-${today.month}-$day')),
+    );
+    await tester.pumpAndSettle();
+    expect(find.byType(EventDetailsPanel), findsOneWidget);
+    targets.add({'date': '2026-12-24'});
+    await container
+        .read(calendarWidgetServiceProvider)
+        .handleNativeMethodCall(
+          const MethodCall(
+            CalendarWidgetChannelContract.launchTargetOpenedCallback,
+          ),
+        );
+    await tester.pumpAndSettle();
+    expect(find.byType(EventDetailsPanel), findsNothing);
+    expect(container.read(selectedDateProvider), DateTime(2026, 12, 24));
   });
 
   testWidgets('a date tap leaves the Imogi tab for the calendar', (
