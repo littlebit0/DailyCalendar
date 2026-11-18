@@ -132,7 +132,7 @@ void main() {
         for (
           var d = DateTime(2026, 9, 11);
           !d.isAfter(DateTime(2026, 10, 2));
-          d = d.add(const Duration(days: 1))
+          d = DateTime(d.year, d.month, d.day + 1)
         ) {
           final date = d.toIso8601String().substring(0, 10);
           if ((audit['excludedDates'] as Map).containsKey(date)) {

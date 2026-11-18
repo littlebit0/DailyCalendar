@@ -216,7 +216,7 @@ void main() {
         for (
           var date = DateTime(2026, 9, 1);
           !date.isAfter(DateTime(2026, 12, 21));
-          date = date.add(const Duration(days: 1))
+          date = DateTime(date.year, date.month, date.day + 1)
         ) {
           final key = timetableDateKey(date);
           if (excluded.contains(key)) {
