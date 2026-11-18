@@ -373,4 +373,29 @@ void main() {
     expect(resolve('academyinfo:0000052'), 'konkuk');
     expect(resolve('academyinfo:0000053'), 'konkuk-glocal');
   });
+
+  test('GLOCAL notice id is read as a number or a numeric string', () {
+    List<AcademicEvent> parse(Object? Function(Object?) id) {
+      final data = jsonDecode(fixture('konkuk-glocal-winter-notices.json'));
+      for (final r in data['data']['list'] as List) {
+        r['BBS_SEQ'] = id(r['BBS_SEQ']);
+      }
+      return KonkukAcademicSource.parseSupplement(
+        jsonEncode(data),
+        2025,
+        winter: true,
+        host: 'formativeart.kku.ac.kr',
+        menu: '160',
+        site: '38',
+        board: '3',
+      );
+    }
+
+    final numeric = parse((id) => id).single;
+    final text = parse((id) => '$id').single;
+    expect(text.url, numeric.url);
+    expect(text.start, numeric.start);
+    expect(() => parse((id) => 'x$id'), throwsFormatException);
+    expect(() => parse((_) => null), throwsFormatException);
+  });
 }

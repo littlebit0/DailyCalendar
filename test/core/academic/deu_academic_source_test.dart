@@ -105,4 +105,16 @@ void main() {
       throwsFormatException,
     );
   });
+
+  test('DEU February-to-March period stays in one calendar year', () {
+    final body = fixture(2025);
+    final changed = body.replaceFirst('2월 19 ~ 24일', '2월 19 ~ 3월 5일');
+    expect(changed, isNot(body));
+    final event = DeuAcademicSource.parse(
+      changed,
+      2025,
+    ).singleWhere((e) => e.title == '현금등록, 수강신청');
+    expect(event.start, DateTime(2026, 2, 19));
+    expect(event.end, DateTime(2026, 3, 6));
+  });
 }

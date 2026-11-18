@@ -27,7 +27,7 @@ class RecurrenceExpander {
         if (!next.isAfter(current)) break;
         current = next;
       }
-      final untilEnd = last.add(event.duration);
+      final untilEnd = calendarEventEndForStart(event, last);
       if (end == null || untilEnd.isBefore(end)) end = untilEnd;
     }
     return end ?? event.endAt;
@@ -37,7 +37,10 @@ class RecurrenceExpander {
     final steps = (event.recurrence.count ?? 1) - 1;
     if (steps <= 0) return event.endAt;
     if (event.recurrence.hasDetails) return _detailedLastEnd(event);
-    return _at(event.startAt, event.recurrence, steps).add(event.duration);
+    return calendarEventEndForStart(
+      event,
+      _at(event.startAt, event.recurrence, steps),
+    );
   }
 
   List<CalendarEvent> expand(
@@ -78,7 +81,7 @@ class RecurrenceExpander {
         break;
       }
 
-      final occurrenceEnd = current.add(duration);
+      final occurrenceEnd = calendarEventEndForStart(event, current);
       if (!event.recurrence.excludes(current) &&
           current.isBefore(rangeEnd) &&
           occurrenceEnd.isAfter(rangeStart)) {
@@ -246,7 +249,7 @@ extension _DetailedRecurrence on RecurrenceExpander {
       if (rule.count != null && generated > rule.count!) break;
       if (rule.until != null && _isAfterDate(start, rule.until!)) break;
       if (!start.isBefore(rangeEnd)) break;
-      final end = start.add(duration);
+      final end = calendarEventEndForStart(event, start);
       if (!rule.excludes(start) && end.isAfter(rangeStart)) {
         occurrences.add(
           event.copyWith(
@@ -276,7 +279,7 @@ extension _DetailedRecurrence on RecurrenceExpander {
       last = start;
       if (rule.count == null && rule.until == null) break;
     }
-    return (last ?? event.startAt).add(event.duration);
+    return calendarEventEndForStart(event, last ?? event.startAt);
   }
 
   bool _isAfterDate(DateTime value, DateTime boundary) => DateTime(

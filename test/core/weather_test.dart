@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
 import 'package:daily/core/weather/kma_weather_service.dart';
 import 'package:daily/core/weather/weather_controller.dart';
 import 'package:daily/core/weather/weather_forecast.dart';
@@ -51,6 +52,19 @@ class TestWeatherService extends KmaWeatherService {
     requests++;
     return answer?.call(region) ?? Future.value(weatherXml(region: region));
   }
+}
+
+class _ShortRetryController extends WeatherController {
+  _ShortRetryController({
+    required super.store,
+    required super.service,
+    required super.location,
+    super.clock,
+  });
+  @override
+  Duration nextRefreshDelay() => status == WeatherStatus.unavailable
+      ? const Duration(milliseconds: 10)
+      : super.nextRefreshDelay();
 }
 
 class TestWeatherLocation implements WeatherLocation {
@@ -508,6 +522,67 @@ void main() {
       expect(controller.forDate(DateTime(2026, 9, 12)), isNull);
     },
   );
+
+  test('a failed request is retried sooner, backing off up to the regular '
+      'interval, and success restores it', () async {
+    final service = TestWeatherService()
+      ..answer = (_) async => throw StateError('offline');
+    final controller = WeatherController(
+      store: await weatherStore(
+        const WeatherSettings(enabled: true, regionId: '1100000000'),
+      ),
+      service: service,
+      location: TestWeatherLocation(),
+      // 21:00 KST: midnight is exactly one regular interval away.
+      clock: () => weatherClock,
+      random: Random(1),
+    );
+    addTearDown(controller.dispose);
+    expect(controller.nextRefreshDelay(), WeatherForecast.refreshInterval);
+
+    var base = WeatherController.retryInterval;
+    for (var failure = 1; failure <= 5; failure++) {
+      await controller.refresh(force: true);
+      expect(controller.status, WeatherStatus.unavailable);
+      final delay = controller.nextRefreshDelay();
+      expect(delay, greaterThanOrEqualTo(base), reason: 'failure $failure');
+      expect(delay, lessThanOrEqualTo(base * 1.2), reason: 'failure $failure');
+      base *= 2;
+    }
+    for (var failure = 6; failure <= 12; failure++) {
+      await controller.refresh(force: true);
+      expect(
+        controller.nextRefreshDelay(),
+        lessThanOrEqualTo(WeatherForecast.refreshInterval),
+      );
+    }
+    expect(controller.nextRefreshDelay(), WeatherForecast.refreshInterval);
+
+    service.answer = null;
+    await controller.refresh(force: true);
+    expect(controller.status, WeatherStatus.ready);
+    expect(controller.nextRefreshDelay(), WeatherForecast.refreshInterval);
+  });
+
+  test('the retry timer asks the server again without user action', () async {
+    final service = TestWeatherService()
+      ..answer = (_) async => throw StateError('offline');
+    final controller = _ShortRetryController(
+      store: await weatherStore(
+        const WeatherSettings(enabled: true, regionId: '1100000000'),
+      ),
+      service: service,
+      location: TestWeatherLocation(),
+      clock: () => weatherClock,
+    );
+    addTearDown(controller.dispose);
+    await controller.refresh();
+    expect(service.requests, 1);
+    service.answer = null;
+    await Future<void>.delayed(const Duration(milliseconds: 60));
+    expect(service.requests, 2);
+    expect(controller.status, WeatherStatus.ready);
+  });
 
   test(
     'local reset cancels forecast state and removes region and cached weather',

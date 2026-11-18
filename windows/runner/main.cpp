@@ -8,6 +8,30 @@
 
 int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
                       _In_ wchar_t *command_line, _In_ int show_command) {
+  // One process per edition and user session. A window closed to the tray
+  // keeps its process, so a second launch asks that process to show its window
+  // instead of opening the same database and widget queue again. The mutex
+  // handle is released when this process exits.
+  HANDLE instance_mutex = ::CreateMutexW(
+      nullptr, FALSE, daily::app_identity::kSingleInstanceMutexName);
+  const DWORD mutex_error = ::GetLastError();
+  // An elevated first instance owns a mutex this process may not open: the
+  // call then fails with access denied instead of returning the handle. Any
+  // other failure starts the app unguarded rather than not at all.
+  if (mutex_error == ERROR_ALREADY_EXISTS ||
+      (instance_mutex == nullptr && mutex_error == ERROR_ACCESS_DENIED)) {
+    // Lets the first process bring its window in front of this launch.
+    ::AllowSetForegroundWindow(ASFW_ANY);
+    ::PostMessageW(HWND_BROADCAST,
+                   ::RegisterWindowMessageW(
+                       daily::app_identity::kShowWindowMessageName),
+                   0, 0);
+    if (instance_mutex != nullptr) {
+      ::CloseHandle(instance_mutex);
+    }
+    return EXIT_SUCCESS;
+  }
+
   // Attach to console when present (e.g., 'flutter run') or create a
   // new console when running with a debugger.
   if (!::AttachConsole(ATTACH_PARENT_PROCESS) && ::IsDebuggerPresent()) {

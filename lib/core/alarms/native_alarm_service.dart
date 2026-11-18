@@ -32,11 +32,18 @@ class NativeAlarmService implements AlarmService, ReconciliableAlarmService {
   }
 
   @override
-  Future<AlarmAuthorizationState> requestAuthorization() async {
+  Future<AlarmAuthorizationState> requestAuthorization({
+    bool openSettings = false,
+  }) async {
     if (!_isSupportedPlatform) {
       return AlarmAuthorizationState.unsupported;
     }
-    final value = await _channel.invokeMethod<String>('requestAuthorization');
+    final value = await _channel.invokeMethod<String>(
+      'requestAuthorization',
+      defaultTargetPlatform == TargetPlatform.android
+          ? {'openSettings': openSettings}
+          : null,
+    );
     return _stateFromName(value);
   }
 

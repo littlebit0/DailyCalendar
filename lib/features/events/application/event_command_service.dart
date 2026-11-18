@@ -34,6 +34,11 @@ class EventWritesBlocked implements Exception {
 }
 
 /// A delete whose caller went stale before its tombstone was written.
+/// The edited event was deleted or removed while its editor was open.
+class EventEditTargetGone implements Exception {
+  const EventEditTargetGone();
+}
+
 class _DeleteCancelled implements Exception {
   const _DeleteCancelled();
 }
@@ -107,9 +112,14 @@ class EventCommandService {
     return event;
   }
 
+  /// [editDraft] marks an editor save of an existing event: the draft is
+  /// applied to the latest stored row inside the write transaction, so changes
+  /// made while the editor was open (completion, deletion) are not undone.
+  /// Throws [EventEditTargetGone] when that row was deleted meanwhile.
   Future<void> save(
     CalendarEvent event, {
     bool preserveCategory = false,
+    EventDraft? editDraft,
   }) async {
     final stopwatch = Stopwatch()..start();
     var updated = event
@@ -165,6 +175,31 @@ class EventCommandService {
               updatedAt: _nextLmsChange(latest),
               syncStatus: 'pending',
             );
+          },
+        );
+        if (mutations.isEmpty) return;
+        existing = mutations.single.previous;
+        updated = mutations.single.current;
+      } else if (editDraft != null) {
+        if (!_isCurrentOwner(updated)) return;
+        _requireWritable();
+        final changedAt = updated.updatedAt;
+        final mutations = await _repository.mergeRestoredEventsAtomically(
+          [updated],
+          resolve: (latest, _) {
+            _requireWritable();
+            if (latest == null || latest.isDeleted) {
+              throw const EventEditTargetGone();
+            }
+            if (!_isCurrentOwner(latest)) return latest;
+            var merged = editDraft.applyTo(latest);
+            if (preserveCategory) {
+              merged = merged.copyWith(
+                category: _resolveStoredCategory(latest.category),
+                colorValue: latest.colorValue,
+              );
+            }
+            return merged.copyWith(updatedAt: changedAt, syncStatus: 'pending');
           },
         );
         if (mutations.isEmpty) return;
