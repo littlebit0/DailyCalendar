@@ -424,6 +424,10 @@ class LmsController extends ChangeNotifier {
       _reportAutomaticSkip(key, AnalyticsLmsSkipReason.attemptLimit);
       return false;
     }
+    // A login saved while this attempt runs replaces the record read here;
+    // the attempt's outcome must then leave the stored record alone.
+    final revision = _credentialRevision;
+    bool replaced() => revision != _credentialRevision;
     LmsLocalCredentials? credentials;
     try {
       credentials = await _credentials.read(current.ownerId, current.schoolId);
@@ -514,6 +518,7 @@ class LmsController extends ChangeNotifier {
         AnalyticsLmsResult.failed,
         cause: lastLoginFailure,
       );
+      if (replaced()) return false;
       await _credentials.save(
         current.ownerId,
         current.schoolId,
@@ -532,7 +537,7 @@ class LmsController extends ChangeNotifier {
     _stored = current.isAuthenticated;
     _restoredPrincipal = current.principalId;
     _reportAutomatic(AnalyticsLmsStage.session, AnalyticsLmsResult.succeeded);
-    if (credentials.paused) {
+    if (credentials.paused && !replaced()) {
       // The school accepted this login: only now is the pause lifted.
       try {
         await _credentials.save(current.ownerId, current.schoolId, submitted);
