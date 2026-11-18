@@ -166,11 +166,12 @@ class DonggukAcademicSource implements AcademicSource {
   }
 
   /// Graduate-only entries: the title names the graduate school, or a graduate
-  /// office is the sole organiser. Joint offices (`학사지원팀/대학원실`) stay.
+  /// office is the sole organiser. Joint offices (`학사지원팀/대학원실`) and
+  /// titles that also name undergraduates (`학부·대학원 수강신청`) stay.
   /// The combined bachelor-master application (`학·석사연계과정 신청`) is run by
   /// the graduate office alone, so it is left out by the same rule.
   static bool isGraduateOnly(String title, String department) =>
-      title.contains('대학원') ||
+      (title.contains('대학원') && !title.contains('학부')) ||
       (department.contains('대학원') && !department.contains('/'));
 
   @override

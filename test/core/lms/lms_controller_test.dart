@@ -1583,4 +1583,68 @@ void main() {
       },
     );
   });
+
+  group(
+    'a login saved during an automatic attempt is not overwritten (#891)',
+    () {
+      Future<LmsLocalCredentials?> stored() =>
+          LmsCredentialsStore().read('student@example.com', 'smu');
+
+      /// Starts [attempt] against a stored [record] and saves a new login while
+      /// the school is still answering the old one.
+      Future<void> saveDuring(
+        LmsLocalCredentials record,
+        List<Object> outcomes,
+        Future<void> Function() attempt,
+      ) async {
+        final wait = Completer<void>();
+        configure = (s) {
+          s.stored = false;
+          s.automaticWait = wait;
+          s.automaticOutcomes.addAll(outcomes);
+        };
+        await LmsCredentialsStore().save('student@example.com', 'smu', record);
+        final running = attempt();
+        while (sessions.isEmpty || sessions.single.automaticLogins == 0) {
+          await Future<void>.delayed(Duration.zero);
+        }
+        final saving = controller.saveAutomaticLogin(
+          'new-user',
+          'new-password',
+        );
+        while ((await stored())!.username != 'new-user') {
+          await Future<void>.delayed(Duration.zero);
+        }
+        wait.complete();
+        await running;
+        await saving;
+      }
+
+      test('when the running attempt is rejected', () async {
+        await saveDuring(
+          const LmsLocalCredentials('old-user', 'old-password'),
+          [false, true],
+          () => controller.refresh(force: true),
+        );
+        final record = (await stored())!;
+        expect(record.username, 'new-user');
+        expect(record.password, 'new-password');
+        expect(record.paused, isFalse);
+        expect(controller.automaticLoginPaused, isFalse);
+      });
+
+      test('when the running attempt lifts a pause', () async {
+        await saveDuring(
+          const LmsLocalCredentials('old-user', 'old-password', paused: true),
+          [true],
+          controller.retryAutomaticLogin,
+        );
+        final record = (await stored())!;
+        expect(record.username, 'new-user');
+        expect(record.password, 'new-password');
+        expect(record.paused, isFalse);
+        expect(controller.automaticLoginPaused, isFalse);
+      });
+    },
+  );
 }

@@ -553,10 +553,10 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
                               if (value != null) {
                                 _clearValidation();
                                 setState(() {
+                                  // The switch and the save already ignore
+                                  // the alarm while repeating; keep the choice
+                                  // so switching back restores it.
                                   _frequency = value;
-                                  if (value != RecurrenceFrequency.none) {
-                                    _alarmEnabled = false;
-                                  }
                                 });
                               }
                             },
@@ -1311,7 +1311,9 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
   Future<void> _toggleAlarm(bool enabled) async {
     var state = _alarmState;
     if (enabled && state == AlarmAuthorizationState.notDetermined) {
-      state = await widget.alarmService.requestAuthorization();
+      state = await widget.alarmService.requestAuthorization(
+        openSettings: true,
+      );
     }
     if (!mounted) {
       return;

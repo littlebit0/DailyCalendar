@@ -68,9 +68,14 @@ class _UpdateFeaturesGateState extends ConsumerState<UpdateFeaturesGate> {
         }
       }
       if (!mounted) return;
-      await ref.read(settingsRepositoryProvider).announcements.acknowledge([
-        item.id,
-      ]);
+      try {
+        await ref.read(settingsRepositoryProvider).announcements.acknowledge([
+          item.id,
+        ]);
+      } catch (_) {
+        // An optional introduction must never prevent calendar access: skip it
+        // for this run. An unsaved acknowledgement shows it again next launch.
+      }
       if (mounted) {
         setState(() {
           _pending!.removeAt(0);

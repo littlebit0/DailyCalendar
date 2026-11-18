@@ -81,4 +81,13 @@ class LmsCredentialsStore {
 
   Future<void> delete(String owner, String school) =>
       _storage.delete(key: _key(owner, school));
+
+  /// Deletes the saved login of every account and school on this device.
+  Future<void> deleteAll() async {
+    for (final key in (await _storage.readAll()).keys.toList()) {
+      if (key.startsWith('daily.lms.credentials.v1.')) {
+        await _storage.delete(key: key);
+      }
+    }
+  }
 }

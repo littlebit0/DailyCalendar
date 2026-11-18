@@ -7,9 +7,9 @@
 `AGENT_MEMORY.md`, 코드, 제출 문서 및 Git 이력과 대조했다. 날짜는 KST 기준이다.
 실제 원격 스토어·공개 릴리스 상태를 다시 검증하는 작업은 아니다.
 
-- 이전 작업 ID: `019e647a-8abf-7af0-bbf5-8fa410c29b2a`.
-- 후속 작업 ID: `01a0d049-6217-7163-9fb5-a435b30871a0`.
-- 전체 이전 기록: `~/.codex/sessions/2026/05/26/rollout-2026-05-26T22-30-13-019e647a-8abf-7af0-bbf5-8fa410c29b2a.jsonl`.
+- 이전 작업 ID: `<세션 ID>`.
+- 후속 작업 ID: `<세션 ID>`.
+- 전체 이전 기록: `~/.codex/sessions/2026/05/26/rollout-2026-05-26T22-30-13-<세션 ID>.jsonl`.
 - 기존 Codex 요약의 `updated_at`은 9월 7일이고, `rollout_path`가 가리킨
   9월 24일 재개 파일에는 실패한 재개 요청만 있었다. 위 원본에서 후속 이력을 복구했다.
 - 아래 F00~F82는 원본에서 날짜 범위에 해당하는 `assistant/final_answer`를
