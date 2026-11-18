@@ -1371,10 +1371,18 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
         .takeLaunchTarget();
     if (target == null || !mounted) return;
     final eventId = target.eventId;
-    final stored = eventId == null
+    final found = eventId == null
         ? null
         : await ref.read(visibleEventRepositoryProvider).findById(eventId);
     if (!mounted) return;
+    // findById also returns tombstones; an event deleted or hidden since the
+    // widget was drawn opens only its date, like the calendar would show it.
+    final stored =
+        found == null ||
+            found.isDeleted ||
+            !ref.read(lmsControllerProvider).isEventVisible(found)
+        ? null
+        : found;
     final date = target.date ?? stored?.startAt;
     // Details edit and delete the event they are given, so a repeating event
     // must open as the tapped occurrence, never as its first one.

@@ -53,6 +53,8 @@ final _event = CalendarEvent(
   updatedAt: DateTime(2026, 9, 1),
 );
 
+final _deleted = _event.copyWith(deletedAt: DateTime(2026, 9, 10));
+
 // #874: a home-screen widget tap opens its day or event in the app.
 void main() {
   const channel = MethodChannel(CalendarWidgetChannelContract.androidChannel);
@@ -85,7 +87,10 @@ void main() {
     expect(CalendarWidgetLaunchTarget.fromMap({'eventId': ''}), isNull);
   });
 
-  Future<ProviderContainer> pumpPage(WidgetTester tester) async {
+  Future<ProviderContainer> pumpPage(
+    WidgetTester tester, {
+    CalendarEvent? event,
+  }) async {
     tester.view.devicePixelRatio = 1;
     tester.view.physicalSize = const Size(400, 860);
     addTearDown(tester.view.resetDevicePixelRatio);
@@ -110,7 +115,9 @@ void main() {
           eventsInRangeProvider.overrideWith(
             (_, _) => Stream.value(const <CalendarEvent>[]),
           ),
-          visibleEventRepositoryProvider.overrideWithValue(_Repository(_event)),
+          visibleEventRepositoryProvider.overrideWithValue(
+            _Repository(event ?? _event),
+          ),
           googleDriveAuthServiceProvider.overrideWithValue(_SilentAuth()),
         ],
         child: MaterialApp(
@@ -188,6 +195,21 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(EventDetailsPanel), findsNothing);
     expect(container.read(selectedDateProvider), DateTime(2026, 12, 24));
+  });
+
+  testWidgets('a deleted event opens only its date', (tester) async {
+    final container = await pumpPage(tester, event: _deleted);
+    targets.add({'eventId': 'weekly', 'date': '2026-09-15'});
+    await container
+        .read(calendarWidgetServiceProvider)
+        .handleNativeMethodCall(
+          const MethodCall(
+            CalendarWidgetChannelContract.launchTargetOpenedCallback,
+          ),
+        );
+    await tester.pumpAndSettle();
+    expect(container.read(selectedDateProvider), DateTime(2026, 9, 15));
+    expect(find.byType(EventDetailsPanel), findsNothing);
   });
 
   testWidgets('a date tap closes pages opened over the calendar', (
