@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import '../../../core/calendar/calendar_event_movement.dart';
 import '../../../core/calendar/calendar_event_ordering.dart';
 import '../../../core/calendar/calendar_event_span.dart';
+import '../../../core/calendar/calendar_period_label.dart';
 import '../../../core/localization/app_localizations.dart';
 import '../../../core/settings/app_settings.dart';
 import '../../../core/theme/daily_ui.dart';
@@ -700,9 +701,11 @@ Widget calendarScheduleDragCard(
   );
   final locale = Localizations.localeOf(context).toLanguageTag();
   final start = event.startAt;
-  final time = use24HourTime
-      ? DateFormat.Hm(locale).format(start)
-      : DateFormat.jm(locale).format(start);
+  final time = calendarTimeLabel(
+    start,
+    locale: locale,
+    use24HourTime: use24HourTime,
+  );
 
   return Material(
     color: backgroundColor,
@@ -1066,9 +1069,11 @@ class _ScheduleTimeGrid extends StatelessWidget {
   String _hourLabel(BuildContext context, int hour) {
     final locale = Localizations.localeOf(context).toLanguageTag();
     final value = DateTime(2020, 1, 1, hour);
-    return use24HourTime
-        ? DateFormat.Hm(locale).format(value)
-        : DateFormat.jm(locale).format(value);
+    return calendarTimeLabel(
+      value,
+      locale: locale,
+      use24HourTime: use24HourTime,
+    );
   }
 }
 

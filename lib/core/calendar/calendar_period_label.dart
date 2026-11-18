@@ -60,3 +60,13 @@ String _localizedWeekLabel(
     _ => '$yearMonth · Week $week',
   };
 }
+
+/// Event start-time label shared by the month grid, week list and timeline so
+/// every calendar view follows the 12/24-hour setting the same way.
+String calendarTimeLabel(
+  DateTime value, {
+  required String locale,
+  required bool use24HourTime,
+}) => use24HourTime
+    ? DateFormat.Hm(locale).format(value)
+    : DateFormat.jm(locale).format(value);

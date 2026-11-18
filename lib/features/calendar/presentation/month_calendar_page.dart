@@ -766,6 +766,7 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
                           settings.calendarEventTitleAlignment ==
                           CalendarEventTitleAlignment.center,
                       showTime: !compactMonth,
+                      use24HourTime: settings.use24HourTime,
                       compact: compactMonth,
                     ),
             );
@@ -789,6 +790,7 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
                         centerTitle:
                             settings.calendarEventTitleAlignment ==
                             CalendarEventTitleAlignment.center,
+                        use24HourTime: settings.use24HourTime,
                       ),
               );
             }
@@ -3375,6 +3377,7 @@ class _CalendarWeekPage extends ConsumerWidget {
             centerEventTitles:
                 settings.calendarEventTitleAlignment ==
                 CalendarEventTitleAlignment.center,
+            use24HourTime: settings.use24HourTime,
             eventSortPriority: settings.calendarEventSortPriority,
             categoryOrder: settings.categories
                 .map((category) => category.id)
@@ -4884,6 +4887,7 @@ class _CalendarMonthPage extends ConsumerWidget {
                 centerEventTitles:
                     settings.calendarEventTitleAlignment ==
                     CalendarEventTitleAlignment.center,
+                use24HourTime: settings.use24HourTime,
                 eventSortPriority: settings.calendarEventSortPriority,
                 categoryOrder: settings.categories
                     .map((category) => category.id)
@@ -4940,6 +4944,7 @@ class _CalendarMonthPage extends ConsumerWidget {
             centerEventTitles:
                 settings.calendarEventTitleAlignment ==
                 CalendarEventTitleAlignment.center,
+            use24HourTime: settings.use24HourTime,
             eventSortPriority: settings.calendarEventSortPriority,
             categoryOrder: settings.categories
                 .map((category) => category.id)
@@ -7983,6 +7988,7 @@ class _CalendarWeekView extends StatefulWidget {
     required this.weekStartsOnMonday,
     required this.showLunarDates,
     required this.centerEventTitles,
+    required this.use24HourTime,
     required this.eventSortPriority,
     required this.categoryOrder,
     required this.manualEventOrders,
@@ -7998,6 +8004,7 @@ class _CalendarWeekView extends StatefulWidget {
   final bool weekStartsOnMonday;
   final bool showLunarDates;
   final bool centerEventTitles;
+  final bool use24HourTime;
   final CalendarEventSortPriority eventSortPriority;
   final List<String> categoryOrder;
   final Map<String, CalendarManualEventOrder> manualEventOrders;
@@ -8072,6 +8079,7 @@ class _CalendarWeekViewState extends State<_CalendarWeekView> {
             selected: _sameDay(day, widget.selectedDate),
             events: dayEvents,
             centerEventTitles: widget.centerEventTitles,
+            use24HourTime: widget.use24HourTime,
             compact: true,
             draggingEvent: draggingEvent,
             hoverDate: _hoverDate,
@@ -8117,6 +8125,7 @@ class _CalendarWeekViewState extends State<_CalendarWeekView> {
                       selected: _sameDay(day, widget.selectedDate),
                       events: dayEvents,
                       centerEventTitles: widget.centerEventTitles,
+                      use24HourTime: widget.use24HourTime,
                       compact: false,
                       draggingEvent: draggingEvent,
                       hoverDate: _hoverDate,
@@ -8254,6 +8263,7 @@ class _WeekDayPanel extends ConsumerWidget {
     required this.selected,
     required this.events,
     required this.centerEventTitles,
+    required this.use24HourTime,
     required this.compact,
     required this.draggingEvent,
     required this.hoverDate,
@@ -8274,6 +8284,7 @@ class _WeekDayPanel extends ConsumerWidget {
   final bool selected;
   final List<CalendarEvent> events;
   final bool centerEventTitles;
+  final bool use24HourTime;
   final bool compact;
   final CalendarEvent? draggingEvent;
   final DateTime? hoverDate;
@@ -8453,6 +8464,7 @@ class _WeekDayPanel extends ConsumerWidget {
                         child: _WeekEventFlag(
                           event: draggingEvent!,
                           centerTitle: centerEventTitles,
+                          use24HourTime: use24HourTime,
                         ),
                       ),
                     ),
@@ -8482,6 +8494,7 @@ class _WeekDayPanel extends ConsumerWidget {
                 child: _WeekEventFlag(
                   event: event,
                   centerTitle: centerEventTitles,
+                  use24HourTime: use24HourTime,
                 ),
               ),
             ),
@@ -8532,6 +8545,7 @@ class _WeekDayPanel extends ConsumerWidget {
                     child: _WeekEventFlag(
                       event: draggingEvent!,
                       centerTitle: centerEventTitles,
+                      use24HourTime: use24HourTime,
                     ),
                   ),
                 ),
@@ -8678,10 +8692,15 @@ class _WeekEventInsertionGap extends StatelessWidget {
 }
 
 class _WeekEventFlag extends StatelessWidget {
-  const _WeekEventFlag({required this.event, required this.centerTitle});
+  const _WeekEventFlag({
+    required this.event,
+    required this.centerTitle,
+    required this.use24HourTime,
+  });
 
   final CalendarEvent event;
   final bool centerTitle;
+  final bool use24HourTime;
 
   @override
   Widget build(BuildContext context) {
@@ -8710,7 +8729,7 @@ class _WeekEventFlag extends StatelessWidget {
             child: Text(
               event.allDay
                   ? title
-                  : '$title  ${DateFormat('HH:mm').format(event.startAt)}',
+                  : '$title  ${calendarTimeLabel(event.startAt, locale: Localizations.localeOf(context).toLanguageTag(), use24HourTime: use24HourTime)}',
               maxLines: 2,
               textAlign: centerTitle ? TextAlign.center : TextAlign.start,
               overflow: TextOverflow.ellipsis,

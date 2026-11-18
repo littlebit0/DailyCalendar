@@ -57,6 +57,7 @@ void main() {
             event,
             centerTitle: true,
             showTime: false,
+            use24HourTime: true,
             compact: false,
           ),
         );

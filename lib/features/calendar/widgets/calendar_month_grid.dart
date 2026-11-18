@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 
 import '../../../core/calendar/calendar_event_movement.dart';
 import '../../../core/calendar/calendar_event_span.dart';
+import '../../../core/calendar/calendar_period_label.dart';
 import '../../../core/calendar/korean_lunar_calendar.dart';
 import '../../../core/calendar/calendar_event_ordering.dart';
 import '../../../core/localization/app_localizations.dart';
@@ -31,6 +32,7 @@ class CalendarMonthGrid extends StatefulWidget {
     this.holidayBackgroundEnabled = true,
     this.holidayColorValue = 0xffef4444,
     this.centerEventTitles = false,
+    this.use24HourTime = true,
     this.eventSortPriority = CalendarEventSortPriority.time,
     this.categoryOrder = const <String>[],
     this.manualEventOrders = const <String, CalendarManualEventOrder>{},
@@ -59,6 +61,7 @@ class CalendarMonthGrid extends StatefulWidget {
   final bool holidayBackgroundEnabled;
   final int holidayColorValue;
   final bool centerEventTitles;
+  final bool use24HourTime;
   final CalendarEventSortPriority eventSortPriority;
   final List<String> categoryOrder;
   final Map<String, CalendarManualEventOrder> manualEventOrders;
@@ -351,6 +354,7 @@ class _CalendarMonthGridState extends State<CalendarMonthGrid> {
                                     showAdjacentMonthDates:
                                         widget.showAdjacentMonthDates,
                                     showEventTimes: !compact,
+                                    use24HourTime: widget.use24HourTime,
                                     compact: compact,
                                     onDateSelected: widget.onDateSelected,
                                     onEventDropped: widget.onEventDropped,
@@ -707,6 +711,7 @@ class _WeekRow extends StatefulWidget {
     required this.showLunarDates,
     required this.showAdjacentMonthDates,
     required this.showEventTimes,
+    required this.use24HourTime,
     required this.compact,
     required this.onDateSelected,
     required this.onEventDropped,
@@ -738,6 +743,7 @@ class _WeekRow extends StatefulWidget {
   final bool showLunarDates;
   final bool showAdjacentMonthDates;
   final bool showEventTimes;
+  final bool use24HourTime;
   final bool compact;
   final ValueChanged<DateTime> onDateSelected;
   final CalendarEventDropCallback? onEventDropped;
@@ -1015,6 +1021,7 @@ class _WeekRowState extends State<_WeekRow> {
                           segment.endCol,
                         ),
                         showTime: widget.showEventTimes,
+                        use24HourTime: widget.use24HourTime,
                         compact: widget.compact,
                         dense: metrics.denseText,
                         centerTitle: widget.centerEventTitles,
@@ -1066,6 +1073,7 @@ class _WeekRowState extends State<_WeekRow> {
                           segment.endCol,
                         ),
                         showTime: widget.showEventTimes,
+                        use24HourTime: widget.use24HourTime,
                         compact: widget.compact,
                         dense: metrics.denseText,
                         centerTitle: widget.centerEventTitles,
@@ -1668,6 +1676,7 @@ Widget calendarMonthDragCard(
   CalendarEvent event, {
   required bool centerTitle,
   required bool showTime,
+  required bool use24HourTime,
   required bool compact,
 }) => _EventSpanFlag(
   event: event,
@@ -1682,6 +1691,7 @@ Widget calendarMonthDragCard(
     event.startAt.day,
   ),
   showTime: showTime,
+  use24HourTime: use24HourTime,
   compact: compact,
   dense: false,
   centerTitle: centerTitle,
@@ -1697,6 +1707,7 @@ class _EventSpanFlag extends StatelessWidget {
     required this.segmentStart,
     required this.segmentEnd,
     required this.showTime,
+    required this.use24HourTime,
     required this.compact,
     required this.dense,
     required this.centerTitle,
@@ -1713,6 +1724,7 @@ class _EventSpanFlag extends StatelessWidget {
   final DateTime segmentStart;
   final DateTime segmentEnd;
   final bool showTime;
+  final bool use24HourTime;
   final bool compact;
   final bool dense;
   final bool centerTitle;
@@ -1733,7 +1745,6 @@ class _EventSpanFlag extends StatelessWidget {
       completed: event.completed,
       categoryAlpha: event.holiday ? 0.12 : 0.15,
     );
-    final formatter = DateFormat('HH:mm');
     final showStartTime =
         showTime &&
         !event.allDay &&
@@ -1741,7 +1752,9 @@ class _EventSpanFlag extends StatelessWidget {
         event.startAt.month == segmentStart.month &&
         event.startAt.day == segmentStart.day;
     final prefix = event.showDday && !compact ? '${_formatDday(event)}  ' : '';
-    final suffix = showStartTime ? '  ${formatter.format(event.startAt)}' : '';
+    final suffix = showStartTime
+        ? '  ${calendarTimeLabel(event.startAt, locale: Localizations.localeOf(context).toLanguageTag(), use24HourTime: use24HourTime)}'
+        : '';
     final title = context.l10n.eventTitle(event.title, holiday: event.holiday);
 
     final flag = DecoratedBox(
