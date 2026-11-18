@@ -124,6 +124,22 @@ class AppleSignInService {
     }
   }
 
+  /// Asks Apple to authenticate again and reports whether it is the linked
+  /// account; null when the user cancelled. Nothing is saved (#968).
+  Future<bool?> verifyCurrentAccount() async {
+    final linked = currentAccount;
+    if (linked == null || !await isAvailable()) return false;
+    try {
+      final credential = await _credentialRequester(scopes: const []);
+      return credential.userIdentifier?.trim() == linked.userIdentifier;
+    } on SignInWithAppleAuthorizationException catch (error) {
+      if (error.code == AuthorizationErrorCode.canceled) return null;
+      return false;
+    } on Object {
+      return false;
+    }
+  }
+
   Future<AppleAccount?> refreshCurrentAccount() async {
     final account = currentAccount;
     if (account == null || !isSupportedPlatform) {

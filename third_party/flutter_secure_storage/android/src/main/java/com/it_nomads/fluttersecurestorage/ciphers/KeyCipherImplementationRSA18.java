@@ -34,7 +34,8 @@ class KeyCipherImplementationRSA18 implements KeyCipher {
         this.context = context;
         this.config = config;
         keyAlias = createKeyAlias();
-        createRSAKeysIfNeeded(context);
+        // Daily (#968): keys are created only when a new AES key is wrapped.
+        // Creating one here would hide a lost key behind an unwrap failure.
     }
 
     protected String createKeyAlias() {
@@ -50,6 +51,7 @@ class KeyCipherImplementationRSA18 implements KeyCipher {
 
     @Override
     public byte[] wrap(Key key) throws Exception {
+        createRSAKeysIfNeeded(context);
         PublicKey publicKey = getPublicKey();
         Cipher cipher = getRSACipher();
         cipher.init(Cipher.WRAP_MODE, publicKey, getAlgorithmParameterSpec());
@@ -77,7 +79,8 @@ class KeyCipherImplementationRSA18 implements KeyCipher {
 
         Key key = ks.getKey(keyAlias, null);
         if (key == null) {
-            throw new Exception("No key found under alias: " + keyAlias);
+            // Only unwrap reads the private key: a stored wrapped key exists.
+            throw new KeyStoreKeyMissingException("Keystore key for the stored wrapped key is missing");
         }
 
         if (!(key instanceof PrivateKey)) {
