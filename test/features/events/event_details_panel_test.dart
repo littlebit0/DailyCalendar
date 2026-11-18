@@ -659,6 +659,24 @@ void main() {
       expect(find.text('업데이트가 필요합니다'), findsOneWidget);
     });
 
+    testWidgets('an edit of an event deleted meanwhile only shows a notice', (
+      tester,
+    ) async {
+      final event = _event();
+      final repository = await _pumpPanel(tester, event: event);
+      await tester.tap(find.byKey(ValueKey('event-edit-${event.id}')));
+      await tester.pumpAndSettle();
+
+      final deleted = event.copyWith(deletedAt: DateTime.utc(2026, 11, 17));
+      repository.event = deleted;
+      await tester.enterText(find.byType(TextField).first, '바꾼 제목');
+      await tester.tap(find.text('저장').last);
+      await tester.pumpAndSettle();
+
+      expect(repository.event, same(deleted));
+      expect(find.text('일정이 변경되었습니다. 다시 확인해 주세요.'), findsOneWidget);
+    });
+
     final repeating = _event().copyWith(
       recurrence: const RecurrenceRule(frequency: RecurrenceFrequency.daily),
     );
@@ -1484,11 +1502,22 @@ class _SingleEventRepository implements EventRepository {
   }) async {
     writes++;
     beforeResolve?.call();
+    final mutations = <EventRestoreMutation>[];
     for (final incoming in remoteEvents) {
-      resolve(incoming.id == event.id ? event : null, incoming);
+      final previous = incoming.id == event.id ? event : null;
+      final current = resolve(previous, incoming);
       resolved++;
+      // A plain editor save now resolves against the stored row.
+      if (previous != null &&
+          !identical(previous, current) &&
+          !previous.recurrence.isRepeating) {
+        event = current;
+        mutations.add(
+          EventRestoreMutation(previous: previous, current: current),
+        );
+      }
     }
-    return const [];
+    return mutations;
   }
 
   @override

@@ -22,6 +22,7 @@ import '../../../core/theme/calendar_date_color.dart';
 import '../../../core/theme/daily_ui.dart';
 import '../../../core/weather/weather_widgets.dart';
 import '../../calendar/widgets/calendar_event_drag_layer.dart';
+import '../application/event_command_service.dart';
 import '../domain/calendar_event.dart';
 import '../domain/event_category.dart';
 import '../domain/event_draft.dart';
@@ -489,10 +490,19 @@ class EventDetailsPanel extends ConsumerWidget {
     }
 
     if (!event.isRecurring) {
-      await commandService.save(
-        _applyDraft(event, draft),
-        preserveCategory: !draft.categoryChanged,
-      );
+      try {
+        await commandService.save(
+          _applyDraft(event, draft),
+          preserveCategory: !draft.categoryChanged,
+          editDraft: draft,
+        );
+      } on EventEditTargetGone {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(context.tr('일정이 변경되었습니다. 다시 확인해 주세요.'))),
+          );
+        }
+      }
       return;
     }
     if (!context.mounted) {
@@ -1815,9 +1825,7 @@ List<CalendarEvent> _eventsForDay(
   final start = DateTime(date.year, date.month, date.day);
   final end = shiftCalendarDateByDays(start, 1);
   return sortedCalendarEvents(
-    events.where(
-      (event) => calendarEventListedOnDay(event, start, end),
-    ),
+    events.where((event) => calendarEventListedOnDay(event, start, end)),
     priority: settings.calendarEventSortPriority,
     categoryOrder: settings.categories.map((category) => category.id).toList(),
     manualOrder:
