@@ -376,7 +376,7 @@ class FlutterSecureStorage {
             var modifiedParams = params
             modifiedParams.isSynchronizable = synchronizable // Modify the synchronizable parameter for the query.
             modifiedParams.shouldReturnData = false              // Ensuring no data is returned.
-            let query = baseQuery(from: modifiedParams)
+            let query = PreservingKeychainWrite.matchQuery(baseQuery(from: modifiedParams))
             return SecItemCopyMatching(query as CFDictionary, nil)
         }
 
@@ -401,7 +401,7 @@ class FlutterSecureStorage {
 
     /// Reads all items from the keychain matching the query parameters.
     internal func readAll(params: KeychainQueryParameters) -> FlutterSecureStorageResponse {
-        var query = baseQuery(from: params)
+        var query = PreservingKeychainWrite.matchQuery(baseQuery(from: params))
         query[kSecMatchLimit] = kSecMatchLimitAll
         query[kSecReturnAttributes] = true
         query[kSecReturnData] = true
@@ -459,7 +459,7 @@ class FlutterSecureStorage {
     internal func read(params: KeychainQueryParameters) -> FlutterSecureStorageResponse {
         // If Secure Enclave flow is not requested, do the standard lookup
         if !(params.useSecureEnclave ?? false) {
-            let query = baseQuery(from: params)
+            let query = PreservingKeychainWrite.matchQuery(baseQuery(from: params))
             var ref: AnyObject?
             let status = SecItemCopyMatching(query as CFDictionary, &ref)
 
@@ -557,7 +557,11 @@ class FlutterSecureStorage {
             let query = baseQuery(from: params)
             let valueData = value.data(using: .utf8) as Any
             let status = PreservingKeychainWrite.perform(
-                update: { SecItemUpdate(PreservingKeychainWrite.updateSearchQuery(query) as CFDictionary, [kSecValueData: valueData] as CFDictionary) },
+                update: {
+                    SecItemUpdate(
+                        PreservingKeychainWrite.updateSearchQuery(query) as CFDictionary,
+                        PreservingKeychainWrite.updateAttributes(value: valueData, query: query) as CFDictionary)
+                },
                 add: {
                     var item = query
                     item[kSecValueData] = valueData
