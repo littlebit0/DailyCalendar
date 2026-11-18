@@ -55,7 +55,12 @@ IMPORT_SUITES = [
     "test_uos_import",
 ]
 
-SUITES = POLICY_SUITES + IMPORT_SUITES + ["test_run_tool_tests"]
+# Apple widget behaviour checks (compile Swift).
+WIDGET_SUITES = [
+    "test_widget_unreadable_snapshot",
+]
+
+SUITES = POLICY_SUITES + IMPORT_SUITES + WIDGET_SUITES + ["test_run_tool_tests"]
 
 # Suites that cannot run from a clean checkout, with the reason. Remove an
 # entry (and add the suite above) once its input is available in CI.
