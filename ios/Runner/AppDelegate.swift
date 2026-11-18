@@ -979,7 +979,9 @@ private final class DailyMapLauncher {
       return
     }
     guard candidates.count > 1, let presenter = topViewController() else {
-      UIApplication.shared.open(webFallback(for: location), options: [:]) { _ in result("handled") }
+      UIApplication.shared.open(webFallback(for: location), options: [:]) { success in
+        result(success ? "handled" : "failed")
+      }
       return
     }
 
@@ -1004,8 +1006,8 @@ private final class DailyMapLauncher {
         result("handled")
         return
       }
-      UIApplication.shared.open(webFallback(for: fallbackLocation), options: [:]) { _ in
-        result("handled")
+      UIApplication.shared.open(webFallback(for: fallbackLocation), options: [:]) { opened in
+        result(opened ? "handled" : "failed")
       }
     }
   }

@@ -792,6 +792,7 @@ const Map<String, Map<String, String>> _translations = {
     '학교가 학습 기간을 정하지 않아 달력 대신 여기에 표시합니다.':
         'The school set no learning period, so these are listed here instead of on the calendar.',
     '지도 바로가기': 'Open in Maps',
+    '지도를 열지 못했습니다.': 'Could not open the map.',
     '월간 미니 캘린더': 'Mini Month Calendar',
     '오늘 일정': "Today's Events",
     '일정 없음': 'No events',
@@ -1880,6 +1881,7 @@ const Map<String, Map<String, String>> _translations = {
     '학교가 학습 기간을 정하지 않아 달력 대신 여기에 표시합니다.':
         '学校が学習期間を設定していないため、カレンダーではなくここに表示します。',
     '지도 바로가기': '地図で開く',
+    '지도를 열지 못했습니다.': '地図を開けませんでした。',
     '월간 미니 캘린더': '月間ミニカレンダー',
     '오늘 일정': '今日の予定',
     '일정 없음': '予定なし',
@@ -2912,6 +2914,7 @@ const Map<String, Map<String, String>> _translations = {
     '기한 없는 학습 {count}개': '無期限學習 {count} 項',
     '학교가 학습 기간을 정하지 않아 달력 대신 여기에 표시합니다.': '學校未設定學習期間，因此列於此處而非行事曆。',
     '지도 바로가기': '在地圖中開啟',
+    '지도를 열지 못했습니다.': '無法開啟地圖。',
     '월간 미니 캘린더': '月份迷你行事曆',
     '오늘 일정': '今日行程',
     '일정 없음': '沒有行程',

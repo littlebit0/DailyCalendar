@@ -1245,7 +1245,7 @@ class _EventTile extends StatelessWidget {
                                 event.location!.isNotEmpty)
                               TextButton.icon(
                                 onPressed: () =>
-                                    MapLauncher().openLocation(event.location!),
+                                    _openMap(context, event.location!),
                                 icon: const Icon(Icons.map_outlined, size: 16),
                                 label: Text(context.tr('지도 바로가기')),
                                 style: TextButton.styleFrom(
@@ -1536,7 +1536,7 @@ class _EventDetailSheetState extends ConsumerState<_EventDetailSheet> {
                 value: event.location!,
                 actionIcon: Icons.map_outlined,
                 actionLabel: context.tr('지도 바로가기'),
-                onPressed: () => MapLauncher().openLocation(event.location!),
+                onPressed: () => _openMap(context, event.location!),
               ),
             if (event.weather != null && event.weather!.isNotEmpty)
               _DetailRow(
@@ -1733,6 +1733,14 @@ class _EventDetailSheetState extends ConsumerState<_EventDetailSheet> {
   bool _sameDay(DateTime a, DateTime b) {
     return a.year == b.year && a.month == b.month && a.day == b.day;
   }
+}
+
+Future<void> _openMap(BuildContext context, String location) async {
+  final opened = await MapLauncher().openLocation(location);
+  if (opened || !context.mounted) return;
+  ScaffoldMessenger.maybeOf(
+    context,
+  )?.showSnackBar(SnackBar(content: Text(context.tr('지도를 열지 못했습니다.'))));
 }
 
 class _DetailRow extends StatelessWidget {
