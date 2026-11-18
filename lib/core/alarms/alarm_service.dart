@@ -11,6 +11,9 @@ abstract interface class AlarmService {
     bool openSettings = false,
   });
 
+  /// Replaces the alarms of [event], and removes them when it should have
+  /// none. Callers do not cancel first, so a failed schedule keeps the
+  /// previous alarms.
   Future<void> scheduleEventAlarm(CalendarEvent event);
 
   Future<void> cancelEventAlarm(String eventId);
