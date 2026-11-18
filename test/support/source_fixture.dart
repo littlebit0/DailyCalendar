@@ -22,7 +22,12 @@ void _prepare() {
   try {
     lock.lockSync(FileLock.blockingExclusive);
     final ready = File('${_cache.path}/.ready');
-    if (!ready.existsSync() || ready.readAsStringSync() != _fingerprint) {
+    // 표식만 믿지 않고, 정리 도구가 지운 파일이 있으면 다시 만든다.
+    if (!ready.existsSync() ||
+        ready.readAsStringSync() != _fingerprint ||
+        (_manifest['files'] as Map).keys.any(
+          (path) => !File('${_cache.path}/$path').existsSync(),
+        )) {
       final result = Process.runSync(
         Platform.isWindows ? 'python' : 'python3',
         ['tool/prepare_test_fixtures.py', '--output', _cache.path],
@@ -37,18 +42,12 @@ void _prepare() {
   }
 }
 
+// Frozen packets name some inputs by the collecting machine's absolute path.
+final _recordedRoot = RegExp(r'^/Users/[^/]+/Documents/Codex/[^/]+/(?=work/)');
+
 // Logical work/ paths are provenance labels only. Never fall back to local work.
 File fixtureFile(String path) {
-  path = (_manifest['pathAliases'] as Map?)?[path] as String? ?? path;
-  for (final recordedRoot in [
-    '/Users/kimhwi/Documents/Codex/DailyCalendar/',
-    '/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/',
-  ]) {
-    if (path.startsWith('${recordedRoot}work/')) {
-      path = path.substring(recordedRoot.length);
-      break;
-    }
-  }
+  path = path.replaceFirst(_recordedRoot, '');
   if (!path.startsWith('work/')) return File(path);
   _prepare();
   return File('${_cache.path}/$path');

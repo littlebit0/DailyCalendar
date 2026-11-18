@@ -40,6 +40,94 @@ private func dailySharedStoreNotificationName(_ base: String) -> String {
   dailySharedStoreNamespace.isEmpty ? base : "\(base).\(dailySharedStoreNamespace)"
 }
 // END DAILY SHARED STORE NAMESPACE
+// BEGIN WIDGET TEXT
+/// Fixed widget wording in the app's four languages (#921). The language is
+/// the one the app wrote the snapshot in (`localeTag`), so it matches the
+/// titles and time labels Flutter already localized; without a tag it is the
+/// device language.
+struct DailyWidgetText {
+  enum Language { case korean, english, japanese, traditionalChinese }
+
+  let language: Language
+
+  init(localeTag: String?) {
+    language = DailyWidgetText.resolve(localeTag ?? Locale.preferredLanguages.first)
+  }
+
+  static var system: DailyWidgetText { DailyWidgetText(localeTag: nil) }
+
+  static func resolve(_ identifier: String?) -> Language {
+    guard let identifier else { return .english }
+    let normalized = identifier.replacingOccurrences(of: "_", with: "-").lowercased()
+    if normalized.hasPrefix("ko") { return .korean }
+    if normalized.hasPrefix("ja") { return .japanese }
+    if normalized.hasPrefix("zh") { return .traditionalChinese }  // the app has no Simplified Chinese
+    return .english
+  }
+
+  private func localized(_ ko: String, _ en: String, _ ja: String, _ zh: String) -> String {
+    switch language {
+    case .korean: return ko
+    case .english: return en
+    case .japanese: return ja
+    case .traditionalChinese: return zh
+    }
+  }
+
+  /// Sunday-first one-letter weekday names from the system's own calendar data.
+  var weekdayNames: [String] {
+    var calendar = Calendar(identifier: .gregorian)
+    calendar.locale = Locale(identifier: localized("ko", "en", "ja", "zh-Hant"))
+    return calendar.veryShortStandaloneWeekdaySymbols
+  }
+
+  var todayEvents: String { localized("오늘 일정", "Today's Events", "今日の予定", "今日行程") }
+  var noEventsToday: String { localized("오늘 일정이 없습니다", "No events today", "今日の予定はありません", "今天沒有行程") }
+  var noEventsTodayShort: String { localized("오늘 일정 없음", "No events today", "今日の予定なし", "今天沒有行程") }
+  var noRemainingEvents: String { localized("남은 일정이 없습니다", "No more events today", "残りの予定はありません", "沒有剩餘行程") }
+  var events: String { localized("일정", "events", "予定", "行程") }
+  var allDay: String { localized("종일", "All-day", "終日", "全天") }
+  var inProgress: String { localized("진행 중", "Now", "進行中", "進行中") }
+  var thisWeek: String { localized("이번 주 일정", "This Week", "今週の予定", "本週行程") }
+  var noEventsThisWeek: String { localized("이번 주 일정이 없습니다", "No events this week", "今週の予定はありません", "本週沒有行程") }
+  var noDdays: String { localized("표시할 D-day가 없습니다", "No D-days to show", "表示するD-dayはありません", "沒有可顯示的 D-day") }
+  var refresh: String { localized("앱을 열어 일정을 갱신하세요", "Open the app to refresh events", "アプリを開いて予定を更新してください", "請開啟 App 以更新行程") }
+  /// Short form for the single-line Lock Screen widget.
+  var refreshShort: String { localized("앱을 열어 갱신", "Open app to refresh", "アプリで更新", "開啟 App 更新") }
+  var markDone: String { localized("완료로 변경", "Mark as done", "完了にする", "標示為完成") }
+  var markNotDone: String { localized("미완료로 변경", "Mark as not done", "未完了にする", "標示為未完成") }
+  func moreEvents(_ count: Int) -> String {
+    localized("외 \(count)개 일정", "+\(count) more events", "他\(count)件の予定", "另有 \(count) 個行程")
+  }
+  func more(_ count: Int) -> String {
+    localized("외 \(count)개", "+\(count) more", "他\(count)件", "另有 \(count) 個")
+  }
+
+  var todayWidgetDescription: String { localized(
+    "오늘의 일정을 시간순으로 확인합니다.", "See today's events in time order.",
+    "今日の予定を時間順に確認します。", "依時間順序查看今天的行程。"
+  ) }
+  var calendarWidgetName: String { localized("주간 및 월간 캘린더", "Week and Month Calendar", "週間・月間カレンダー", "週曆與月曆") }
+  var calendarWidgetDescription: String { localized(
+    "중형에서는 이번 주 일정을, 대형에서는 월간 일정을 확인합니다.",
+    "Medium shows this week's events; large shows the month.",
+    "中サイズは今週の予定、大サイズは月間の予定を表示します。", "中型顯示本週行程，大型顯示整月行程。"
+  ) }
+  var ddayWidgetDescription: String { localized(
+    "가까운 D-day 일정을 확인합니다.", "See your upcoming D-days.",
+    "近づいているD-dayを確認します。", "查看即將到來的 D-day。"
+  ) }
+
+  var eventAlarm: String { localized("일정 알람", "Event Alarm", "予定のアラーム", "行程鬧鐘") }
+  func snoozeAfter(_ minutes: Int) -> String {
+    localized("\(minutes)분 후 다시 알림", "Snooze for \(minutes) min", "\(minutes)分後に再通知", "\(minutes) 分鐘後再次提醒")
+  }
+  func minutes(_ minutes: Int) -> String {
+    localized("\(minutes)분", "\(minutes) min", "\(minutes)分", "\(minutes) 分鐘")
+  }
+}
+// END WIDGET TEXT
+
 private enum DailyWidgetKind {
   static let today = "DailyTodayWidget"
   static let calendar = "DailyMonthWidget"
@@ -108,13 +196,15 @@ private enum DailyWidgetTodoActionStore {
       ])
       let data = try JSONSerialization.data(withJSONObject: actions)
       try data.write(to: actionsURL, options: .atomic)
+      // Still under the lock the app takes for its own snapshot write, so this
+      // read-modify-write can never put back a snapshot the app replaced (#920).
+      try updateSnapshot(
+        at: containerURL.appendingPathComponent(snapshotFileName),
+        eventId: eventId,
+        completed: completed,
+        occurrenceId: occurrenceId
+      )
     }
-    try updateSnapshot(
-      at: containerURL.appendingPathComponent(snapshotFileName),
-      eventId: eventId,
-      completed: completed,
-      occurrenceId: occurrenceId
-    )
     notifyApp()
   }
 
@@ -382,6 +472,7 @@ private struct DailyWidgetEventLabel: View {
 
 private struct DailyTodoToggle: View {
   let event: DailyWidgetEvent
+  let text: DailyWidgetText
 
   @ViewBuilder
   var body: some View {
@@ -398,7 +489,7 @@ private struct DailyTodoToggle: View {
           .foregroundStyle(event.completed == true ? Color.blue : Color.dailySecondary)
       }
       .buttonStyle(.plain)
-      .accessibilityLabel(event.completed == true ? "미완료로 변경" : "완료로 변경")
+      .accessibilityLabel(event.completed == true ? text.markNotDone : text.markDone)
     } else {
       Image(systemName: event.completed == true ? "checkmark.circle.fill" : "circle")
         .font(.system(size: 16, weight: .medium))
@@ -484,8 +575,9 @@ func dailyWeekdayOfColumn(_ column: Int, weekStartsOnMonday: Bool) -> Int {
   weekStartsOnMonday ? (column + 1) % 7 : column
 }
 
-func dailyWeekdayLabels(weekStartsOnMonday: Bool) -> [String] {
-  let names = ["일", "월", "화", "수", "목", "금", "토"]
+func dailyWeekdayLabels(weekStartsOnMonday: Bool,
+  names: [String] = ["일", "월", "화", "수", "목", "금", "토"]
+) -> [String] {
   return (0..<7).map { names[dailyWeekdayOfColumn($0, weekStartsOnMonday: weekStartsOnMonday)] }
 }
 // END WIDGET WEEKDAY COLUMNS
@@ -515,6 +607,10 @@ struct DailyWidgetSnapshot: Codable {
   var snapshotDate: String? = nil
   /// Set on the placeholder shown when the cached data cannot cover today.
   var needsRefresh: Bool? = nil
+  /// The app language the snapshot was written in; absent on older snapshots.
+  var localeTag: String? = nil
+
+  var text: DailyWidgetText { DailyWidgetText(localeTag: localeTag) }
 
   func events(on date: Date) -> [DailyWidgetEvent] {
     guard let scheduleEvents else { return todayEvents }
@@ -547,10 +643,6 @@ struct DailyWidgetSnapshot: Codable {
     return snapshot
   }
 
-  static let refreshMessage = "앱을 열어 일정을 갱신하세요"
-  /// Short form for the single-line Lock Screen widget.
-  static let refreshShortMessage = "앱을 열어 갱신"
-
   private var refreshPlaceholder: DailyWidgetSnapshot {
     DailyWidgetSnapshot(
       generatedAt: 0,
@@ -559,12 +651,13 @@ struct DailyWidgetSnapshot: Codable {
       weekTitle: nil,
       weekStartsOnMonday: weekStartsOnMonday,
       monthDays: [],
-      todayTitle: DailyWidgetSnapshot.empty.todayTitle,
+      todayTitle: text.todayEvents,
       todayEvents: [],
       todayRemainingCount: 0,
       scheduleEvents: [],
       ddays: [],
-      needsRefresh: true
+      needsRefresh: true,
+      localeTag: localeTag
     )
   }
 
@@ -599,7 +692,7 @@ struct DailyWidgetSnapshot: Codable {
     weekTitle: nil,
     weekStartsOnMonday: false,
     monthDays: [],
-    todayTitle: "오늘 일정",
+    todayTitle: DailyWidgetText.system.todayEvents,
     todayEvents: [],
     todayRemainingCount: 0,
     scheduleEvents: [],
@@ -622,20 +715,66 @@ struct DailyWidgetProvider: TimelineProvider {
   }
 
   func getTimeline(in context: Context, completion: @escaping (Timeline<DailyWidgetEntry>) -> Void) {
-    let now = Date.now
-    let snapshot = DailyWidgetSnapshot.load(for: now)
-    let entry = DailyWidgetEntry(date: now, snapshot: snapshot)
-    let calendar = Calendar.current
-    // Calendar arithmetic keeps the refresh on local midnight across DST changes.
-    let midnight = calendar.date(byAdding: .day, value: 1, to: calendar.startOfDay(for: now))
-      ?? now.addingTimeInterval(24 * 60 * 60)
-    let eventBoundaries = (snapshot.scheduleEvents ?? []).flatMap { event in
-      [event.startDate, event.endDate].compactMap { $0 }.filter { $0 > now }
-    }
-    let nextRefresh = ([midnight] + eventBoundaries).min() ?? now.addingTimeInterval(3600)
-    completion(Timeline(entries: [entry], policy: .after(nextRefresh)))
+    let plan = dailyWidgetTimelinePlan(now: .now)
+    completion(Timeline(
+      entries: plan.entries.map { DailyWidgetEntry(date: $0.date, snapshot: $0.snapshot) },
+      policy: .after(plan.reload)
+    ))
   }
 }
+
+// BEGIN WIDGET TIMELINE PLAN
+/// Entry dates between `start` and `end`: `start` itself, then every later
+/// event start/end before `end`. Boundaries closer than `minimumGap` to the
+/// first one of their group become one entry at the group's last boundary, so
+/// back-to-back events do not produce entries seconds apart.
+func dailyWidgetTimelineDates(
+  from start: Date,
+  until end: Date,
+  boundaries: [Date],
+  minimumGap: TimeInterval = 5 * 60
+) -> [Date] {
+  var dates = [start]
+  var groupStart: Date?
+  for boundary in boundaries.filter({ $0 > start && $0 < end }).sorted() {
+    if let first = groupStart, boundary.timeIntervalSince(first) < minimumGap {
+      dates[dates.count - 1] = boundary
+    } else {
+      groupStart = boundary
+      dates.append(boundary)
+    }
+  }
+  return dates
+}
+
+/// The timeline is built ahead instead of relying on WidgetKit calling back at
+/// midnight: it already holds the entry for each event boundary of today, the
+/// next midnight (rolled to that day's cached values, or the refresh
+/// placeholder when the cache cannot cover it) and the day after it (#919).
+/// The reload is asked for once, at the next midnight.
+func dailyWidgetTimelinePlan(
+  now: Date,
+  calendar: Calendar = .current
+) -> (entries: [(date: Date, snapshot: DailyWidgetSnapshot)], reload: Date) {
+  var entries: [(date: Date, snapshot: DailyWidgetSnapshot)] = []
+  var start = now
+  var reload = now
+  // shortcut: two days ahead only, extend if widgets are seen stale after a missed reload.
+  for day in 0..<2 {
+    let snapshot = DailyWidgetSnapshot.load(for: start)
+    // Calendar arithmetic keeps the entry on local midnight across DST changes.
+    let midnight = calendar.date(byAdding: .day, value: 1, to: calendar.startOfDay(for: start))
+      ?? start.addingTimeInterval(24 * 60 * 60)
+    let boundaries = snapshot.events(on: start).flatMap { [$0.startDate, $0.endDate].compactMap { $0 } }
+    for date in dailyWidgetTimelineDates(from: start, until: midnight, boundaries: boundaries) {
+      entries.append((date: date, snapshot: snapshot))
+    }
+    if day == 0 { reload = midnight }
+    start = midnight
+  }
+  return (entries, reload)
+}
+// END WIDGET TIMELINE PLAN
 
 private struct DailyWidgetHeader: View {
   let title: String
@@ -671,20 +810,20 @@ struct DailyTodayWidgetView: View {
       DailyWidgetHeader(title: entry.snapshot.todayTitle, systemImage: "calendar")
       if entry.snapshot.needsRefresh == true {
         Spacer()
-        Text(DailyWidgetSnapshot.refreshMessage)
+        Text(entry.snapshot.text.refresh)
           .font(.subheadline)
           .foregroundStyle(Color.dailySecondary)
         Spacer()
       } else if entry.snapshot.todayEvents.isEmpty {
         Spacer()
-        Text("오늘 일정이 없습니다")
+        Text(entry.snapshot.text.noEventsToday)
           .font(.subheadline)
           .foregroundStyle(Color.dailySecondary)
         Spacer()
       } else {
         ForEach(entry.snapshot.todayEvents.prefix(visibleCount)) { event in
           HStack(spacing: 7) {
-            DailyTodoToggle(event: event)
+            DailyTodoToggle(event: event, text: entry.snapshot.text)
             Capsule()
               .fill(Color.daily(argb: event.color))
               .frame(width: 3, height: 20)
@@ -708,7 +847,7 @@ struct DailyTodayWidgetView: View {
           entry.snapshot.todayEvents.count - visibleCount + entry.snapshot.todayRemainingCount
         )
         if hiddenCount > 0 {
-          Text("외 \(hiddenCount)개 일정")
+          Text(entry.snapshot.text.moreEvents(hiddenCount))
             .font(.caption)
             .foregroundStyle(Color.dailySecondary)
         }
@@ -729,10 +868,10 @@ struct DailyLockScreenTodayView: View {
   }
 
   private func timeLabel(for event: DailyWidgetEvent) -> String {
-    if event.allDay == true { return "종일" }
+    if event.allDay == true { return entry.snapshot.text.allDay }
     if let start = event.startDate, let end = event.endDate,
        start <= entry.date, entry.date < end {
-      return "진행 중"
+      return entry.snapshot.text.inProgress
     }
     return event.timeLabel
   }
@@ -742,7 +881,7 @@ struct DailyLockScreenTodayView: View {
     switch family {
     case .accessoryInline:
       if entry.snapshot.needsRefresh == true {
-        Label(DailyWidgetSnapshot.refreshShortMessage, systemImage: "arrow.clockwise")
+        Label(entry.snapshot.text.refreshShort, systemImage: "arrow.clockwise")
       } else if let next = events.first {
         HStack(spacing: 4) {
           Image(systemName: "calendar")
@@ -755,7 +894,7 @@ struct DailyLockScreenTodayView: View {
             .privacySensitive()
         }
       } else {
-        Label("오늘 일정 없음", systemImage: "calendar")
+        Label(entry.snapshot.text.noEventsTodayShort, systemImage: "calendar")
       }
 
     case .accessoryCircular:
@@ -764,13 +903,13 @@ struct DailyLockScreenTodayView: View {
         if entry.snapshot.needsRefresh == true {
           Image(systemName: "arrow.clockwise")
             .font(.title2.bold())
-            .accessibilityLabel(DailyWidgetSnapshot.refreshMessage)
+            .accessibilityLabel(entry.snapshot.text.refresh)
         } else {
           VStack(spacing: 0) {
             Text("\(events.count)")
               .font(.title2.bold())
               .monospacedDigit()
-            Text("일정")
+            Text(entry.snapshot.text.events)
               .font(.caption2)
           }
         }
@@ -778,20 +917,20 @@ struct DailyLockScreenTodayView: View {
 
     case .accessoryRectangular:
       VStack(alignment: .leading, spacing: 2) {
-        Label("오늘 일정", systemImage: "calendar")
+        Label(entry.snapshot.text.todayEvents, systemImage: "calendar")
           .font(.caption.bold())
         if entry.snapshot.needsRefresh == true {
-          Text(DailyWidgetSnapshot.refreshMessage)
+          Text(entry.snapshot.text.refresh)
             .font(.caption)
             .foregroundStyle(.secondary)
         } else if events.isEmpty {
-          Text("남은 일정이 없습니다")
+          Text(entry.snapshot.text.noRemainingEvents)
             .font(.caption)
             .foregroundStyle(.secondary)
         } else {
           ForEach(events.prefix(2)) { event in
             HStack(spacing: 4) {
-              DailyTodoToggle(event: event)
+              DailyTodoToggle(event: event, text: entry.snapshot.text)
               Text(timeLabel(for: event))
                 .font(.caption2)
                 .frame(width: 36, alignment: .leading)
@@ -806,7 +945,7 @@ struct DailyLockScreenTodayView: View {
             }
           }
           if events.count > 2 {
-            Text("외 \(events.count - 2)개")
+            Text(entry.snapshot.text.more(events.count - 2))
               .font(.caption2)
               .foregroundStyle(.secondary)
           }
@@ -844,7 +983,8 @@ struct DailyMonthWidgetView: View {
   let entry: DailyWidgetEntry
 
   private var weekdayLabels: [String] {
-    dailyWeekdayLabels(weekStartsOnMonday: entry.snapshot.weekStartsOnMonday)
+    dailyWeekdayLabels(weekStartsOnMonday: entry.snapshot.weekStartsOnMonday,
+      names: entry.snapshot.text.weekdayNames)
   }
 
   var body: some View {
@@ -864,7 +1004,7 @@ struct DailyMonthWidgetView: View {
 
       if entry.snapshot.needsRefresh == true {
         Spacer()
-        Text(DailyWidgetSnapshot.refreshMessage)
+        Text(entry.snapshot.text.refresh)
           .font(.subheadline)
           .foregroundStyle(Color.dailySecondary)
           .multilineTextAlignment(.center)
@@ -911,7 +1051,8 @@ struct DailyWeekWidgetView: View {
   }
 
   private var weekdayLabels: [String] {
-    dailyWeekdayLabels(weekStartsOnMonday: entry.snapshot.weekStartsOnMonday)
+    dailyWeekdayLabels(weekStartsOnMonday: entry.snapshot.weekStartsOnMonday,
+      names: entry.snapshot.text.weekdayNames)
   }
 
   private var spans: [DailyWidgetEventSpan] { eventSpans(in: weekDays) }
@@ -920,19 +1061,19 @@ struct DailyWeekWidgetView: View {
   var body: some View {
     VStack(alignment: .leading, spacing: 7) {
       DailyWidgetHeader(
-        title: entry.snapshot.weekTitle ?? "이번 주 일정",
+        title: entry.snapshot.weekTitle ?? entry.snapshot.text.thisWeek,
         systemImage: "calendar.badge.clock"
       )
 
       if entry.snapshot.needsRefresh == true {
         Spacer()
-        Text(DailyWidgetSnapshot.refreshMessage)
+        Text(entry.snapshot.text.refresh)
           .font(.subheadline)
           .foregroundStyle(Color.dailySecondary)
         Spacer()
       } else if weekDays.isEmpty {
         Spacer()
-        Text("이번 주 일정이 없습니다")
+        Text(entry.snapshot.text.noEventsThisWeek)
           .font(.subheadline)
           .foregroundStyle(Color.dailySecondary)
         Spacer()
@@ -1028,13 +1169,13 @@ struct DailyDdayWidgetView: View {
       DailyWidgetHeader(title: "D-day", systemImage: "flag")
       if entry.snapshot.needsRefresh == true {
         Spacer()
-        Text(DailyWidgetSnapshot.refreshMessage)
+        Text(entry.snapshot.text.refresh)
           .font(.subheadline)
           .foregroundStyle(Color.dailySecondary)
         Spacer()
       } else if entry.snapshot.ddays.isEmpty {
         Spacer()
-        Text("표시할 D-day가 없습니다")
+        Text(entry.snapshot.text.noDdays)
           .font(.subheadline)
           .foregroundStyle(Color.dailySecondary)
         Spacer()
@@ -1184,8 +1325,8 @@ struct DailyTodayWidget: Widget {
     StaticConfiguration(kind: kind, provider: DailyWidgetProvider()) { entry in
       DailyTodayWidgetRootView(entry: entry)
     }
-    .configurationDisplayName("오늘 일정")
-    .description("오늘의 일정을 시간순으로 확인합니다.")
+    .configurationDisplayName(DailyWidgetText.system.todayEvents)
+    .description(DailyWidgetText.system.todayWidgetDescription)
     .supportedFamilies(supportedFamilies)
   }
 }
@@ -1197,8 +1338,8 @@ struct DailyMonthWidget: Widget {
     StaticConfiguration(kind: kind, provider: DailyWidgetProvider()) { entry in
       DailyCalendarWidgetView(entry: entry)
     }
-    .configurationDisplayName("주간 및 월간 캘린더")
-    .description("중형에서는 이번 주 일정을, 대형에서는 월간 일정을 확인합니다.")
+    .configurationDisplayName(DailyWidgetText.system.calendarWidgetName)
+    .description(DailyWidgetText.system.calendarWidgetDescription)
     .supportedFamilies([.systemMedium, .systemLarge])
   }
 }
@@ -1211,7 +1352,7 @@ struct DailyDdayWidget: Widget {
       DailyDdayWidgetView(entry: entry)
     }
     .configurationDisplayName("D-day")
-    .description("가까운 D-day 일정을 확인합니다.")
+    .description(DailyWidgetText.system.ddayWidgetDescription)
     .supportedFamilies([.systemSmall])
   }
 }
@@ -1221,6 +1362,7 @@ struct DailyDdayWidget: Widget {
 private struct DailyAlarmActivityContent: View {
   let title: String
   let memo: String?
+  let snoozeLabel: String
   let compact: Bool
 
   var body: some View {
@@ -1242,7 +1384,7 @@ private struct DailyAlarmActivityContent: View {
               .foregroundStyle(.secondary)
               .lineLimit(2)
           } else {
-            Text("10분 후 다시 알림")
+            Text(snoozeLabel)
               .font(.caption)
               .foregroundStyle(.secondary)
           }
@@ -1256,16 +1398,21 @@ private struct DailyAlarmActivityContent: View {
 struct DailyAlarmLiveActivity: Widget {
   var body: some WidgetConfiguration {
     ActivityConfiguration(for: AlarmAttributes<DailyAlarmMetadata>.self) { context in
+      let text = DailyWidgetText(localeTag: context.attributes.metadata?.localeTag)
       DailyAlarmActivityContent(
-        title: context.attributes.metadata?.title ?? "일정 알람",
+        title: context.attributes.metadata?.title ?? text.eventAlarm,
         memo: context.attributes.metadata?.memo,
+        snoozeLabel: text.snoozeAfter(context.attributes.metadata?.snoozeMinutes ?? 10),
         compact: false
       )
       .padding()
       .activityBackgroundTint(Color(red: 0.96, green: 0.98, blue: 1.0))
       .activitySystemActionForegroundColor(.blue)
     } dynamicIsland: { context in
-      let title = context.attributes.metadata?.title ?? "일정 알람"
+      let text = DailyWidgetText(localeTag: context.attributes.metadata?.localeTag)
+      let title = context.attributes.metadata?.title ?? text.eventAlarm
+      // Alarms scheduled before the metadata carried it used ten minutes.
+      let snoozeMinutes = context.attributes.metadata?.snoozeMinutes ?? 10
       return DynamicIsland {
         DynamicIslandExpandedRegion(.leading) {
           Image(systemName: "alarm.fill")
@@ -1275,6 +1422,7 @@ struct DailyAlarmLiveActivity: Widget {
           DailyAlarmActivityContent(
             title: title,
             memo: context.attributes.metadata?.memo,
+            snoozeLabel: text.snoozeAfter(snoozeMinutes),
             compact: false
           )
         }
@@ -1282,7 +1430,7 @@ struct DailyAlarmLiveActivity: Widget {
         Image(systemName: "alarm.fill")
           .foregroundStyle(.blue)
       } compactTrailing: {
-        Text("10분")
+        Text(text.minutes(snoozeMinutes))
           .font(.caption2.bold())
       } minimal: {
         Image(systemName: "alarm.fill")

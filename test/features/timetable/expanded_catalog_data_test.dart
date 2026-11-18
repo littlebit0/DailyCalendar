@@ -4,17 +4,8 @@ import 'dart:io';
 import 'package:daily/core/academic/academic_profile.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_period_defaults.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-class _Files extends CachingAssetBundle {
-  @override
-  Future<String> loadString(String key, {bool cache = true}) async =>
-      File(key).readAsStringSync();
-  @override
-  Future<ByteData> load(String key) async =>
-      ByteData.sublistView(File(key).readAsBytesSync());
-}
+import '../../support/file_asset_bundle.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -26,7 +17,7 @@ void main() {
       '$university loads its verified catalog and bounded semester',
       () async {
         final datasets = await UniversityCatalog.load(
-          bundle: _Files(),
+          bundle: FileAssetBundle(),
           university: university,
         );
         expect(datasets.length, 1);
@@ -64,7 +55,7 @@ void main() {
         );
         expect(profile.timetableUniversity, university);
         expect(profile.timetableCampus, 'main');
-        final defaults = await TimetablePeriodDefaults.load(bundle: _Files());
+        final defaults = await TimetablePeriodDefaults.load(bundle: FileAssetBundle());
         final period = defaults.periodFor(2026, '2', university: university)!;
         expect(period.start, DateTime(2026, 9, 1));
         expect(period.end, lastDay);

@@ -154,12 +154,14 @@ void main() {
     SharedPreferences.setMockInitialValues({});
     final preferences = await SharedPreferences.getInstance();
     Map<String, Object?>? payload;
+    final sent = <Map<String, Object?>>[];
     final service = PrivacyAnalyticsService(
       preferences: preferences,
       endpoint: Uri.parse('http://localhost/v1/events'),
       environmentLoader: () async => environment,
       httpClient: MockClient((request) async {
         payload = Map<String, Object?>.from(jsonDecode(request.body) as Map);
+        sent.add(payload!);
         return http.Response('', 202);
       }),
     );
@@ -173,11 +175,29 @@ void main() {
         trigger: AnalyticsTrigger.manual,
       ),
     );
+    // 자유 문자열을 받는 두 입력에 금지 문자열을 넣어, 아래 검사가 실제로 실패할 수 있게 한다.
+    const leaked =
+        'Event Title memo text student@example.com access_token deviceId';
+    await service.record(
+      AnalyticsRecord.lmsLogin(
+        method: AnalyticsLmsMethod.values.first,
+        stage: AnalyticsLmsStage.authentication,
+        result: AnalyticsLmsResult.failed,
+        cause: leaked,
+      ),
+    );
+    expect(
+      () => AnalyticsRecord.slowInteraction(interaction: leaked, durationMs: 1),
+      throwsArgumentError,
+    );
+    // 첫 기록이 띄운 전송이 끝난 뒤 남은 기록까지 보낸다.
+    await service.flush();
     await service.flush();
 
-    expect(payload, isNotNull);
-    expect(isSafeAnalyticsBatch(payload), isTrue);
-    final encoded = jsonEncode(payload).toLowerCase();
+    expect(sent, isNotEmpty);
+    expect(sent.every(isSafeAnalyticsBatch), isTrue);
+    expect(jsonEncode(sent), contains('"cause":"unknown"'));
+    final encoded = jsonEncode(sent).toLowerCase();
     for (final forbidden in [
       'event title',
       'memo text',

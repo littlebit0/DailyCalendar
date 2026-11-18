@@ -146,5 +146,5 @@ if __name__ == '__main__':
                     rows=extract_table_rows(page,table)
                     tables.append({'page':number,'table':index,'rows':rows})
     result=extract_records(tables,pages)
-    args.output.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
+    args.output.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n', encoding='utf-8')
     print('Yongin source records:',len(result['records']),len(result['remote']))

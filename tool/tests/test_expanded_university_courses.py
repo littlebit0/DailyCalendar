@@ -64,6 +64,14 @@ class ExpandedUniversityCoursesTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             cau.parse_rows([dict(row, flx='Term5')], 2026, '2')
 
+    def test_cau_empty_or_joined_period_tokens_are_not_read_as_period_a(self):
+        cau = load('cau')
+        for text in ('월1,2, / 강의실', '월AB / 강의실', '월,1 / 강의실'):
+            self.assertEqual(cau.meetings(text, '1'), ([], 'unparsed'), text)
+        lettered, status = cau.meetings('월A,B / 강의실', '1')
+        self.assertEqual(status, 'scheduled')
+        self.assertEqual([(m['startMinute'], m['endMinute']) for m in lettered], [(540, 720)])
+
     def test_snu_official_rows_keep_second_meeting_and_restrictions(self):
         snu = load('snu')
         body = (ROOT / 'test/fixtures/academic/snu-courses-2026-2-page1.html').read_text()

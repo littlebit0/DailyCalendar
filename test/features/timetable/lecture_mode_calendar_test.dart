@@ -26,7 +26,8 @@ class _SilentAuth extends GoogleDriveAuthService {
   Future<GoogleDriveAccount?> restorePreviousSignIn() async => null;
 }
 
-final _today = DateUtils.dateOnly(DateTime.now());
+// 실행 날짜와 무관하게 같은 학기·요일로 돌도록 고정한다.
+final _today = DateTime(2026, 10, 14);
 
 Future<SettingsRepository> _settings() async {
   SharedPreferences.setMockInitialValues({});
@@ -37,28 +38,30 @@ Future<SettingsRepository> _settings() async {
 Future<TimetableStore> _seed(
   SettingsRepository settings, {
   LectureMode defaultMode = LectureMode.inPerson,
+  DateTime? day,
 }) async {
+  final date = day ?? _today;
   final store = settings.timetableStore;
-  await store.selectTerm(_today.year, '2');
+  await store.selectTerm(date.year, '2');
   await store.setTermPeriod(
-    _today.year,
+    date.year,
     '2',
     TimetablePeriod(
-      start: _today.subtract(const Duration(days: 60)),
-      end: _today.add(const Duration(days: 60)),
+      start: date.subtract(const Duration(days: 60)),
+      end: date.add(const Duration(days: 60)),
     ),
   );
   await store.save(
     TimetableClass(
       id: 'class',
       title: '자료구조',
-      academicYear: _today.year,
+      academicYear: date.year,
       semester: '2',
       defaultMode: defaultMode,
       meetings: [
         ClassMeeting(
           id: 'm',
-          weekday: _today.weekday,
+          weekday: date.weekday,
           startMinute: 540,
           endMinute: 615,
         ),
@@ -276,8 +279,10 @@ void main() {
         buildSignature: '',
       );
       final settings = await _settings();
-      final store = await _seed(settings);
-      await store.setOverride('class', 'm', _today, LectureMode.video);
+      // 월간·주간 화면은 제품 코드가 실제 오늘을 기준으로 그려 실제 날짜가 필요하다.
+      final today = DateUtils.dateOnly(DateTime.now());
+      final store = await _seed(settings, day: today);
+      await store.setOverride('class', 'm', today, LectureMode.video);
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
@@ -332,7 +337,7 @@ void main() {
         );
       }
 
-      await store.setOverride('class', 'm', _today, null);
+      await store.setOverride('class', 'm', today, null);
       await tester.pumpAndSettle();
       expect(find.text(title), findsNothing);
       await show(CalendarViewMode.month, WeekDayLayoutMode.list);

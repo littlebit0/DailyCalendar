@@ -1,3 +1,4 @@
+import '../localization/app_localizations.dart';
 import '../notifications/recoverable_notification_service.dart';
 import 'provider_retention.dart';
 import 'dart:async';
@@ -163,6 +164,10 @@ final notificationServiceProvider = Provider<NotificationService>((ref) {
 
 final alarmServiceProvider = Provider<AlarmService>((ref) {
   return NativeAlarmService(
+    localeTag: () => resolvedLocaleForLanguage(
+      ref.read(settingsRepositoryProvider).load().language,
+      PlatformDispatcher.instance.locale,
+    ).toLanguageTag(),
     onAlarmScheduled: (event) async {
       final service = ref.read(notificationServiceProvider);
       if (service is RecoverableNotificationService) {

@@ -7,16 +7,7 @@ import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/domain/timetable.dart';
 import 'package:daily/features/timetable/domain/university_course.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter/services.dart';
-
-class _Files extends CachingAssetBundle {
-  @override
-  Future<String> loadString(String key, {bool cache = true}) async =>
-      File(key).readAsStringSync();
-  @override
-  Future<ByteData> load(String key) async =>
-      ByteData.sublistView(File(key).readAsBytesSync());
-}
+import '../../support/file_asset_bundle.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -24,7 +15,7 @@ void main() {
     'Sogang profile loads its own catalog and published outer bounds',
     () async {
       final datasets = await UniversityCatalog.load(
-        bundle: _Files(),
+        bundle: FileAssetBundle(),
         university: 'sogang',
       );
       expect(datasets.single.courses, hasLength(1541));
@@ -49,7 +40,7 @@ void main() {
           isFalse,
         );
       }
-      final defaults = await TimetablePeriodDefaults.load(bundle: _Files());
+      final defaults = await TimetablePeriodDefaults.load(bundle: FileAssetBundle());
       final period = defaults.periodFor(2026, '2', university: 'sogang');
       expect(period?.start, DateTime(2026, 9, 1));
       expect(period?.end, DateTime(2026, 12, 21));

@@ -1,20 +1,10 @@
-import 'dart:io';
 import 'package:daily/core/academic/academic_profile.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_period_defaults.dart';
 import 'package:daily/features/timetable/domain/timetable.dart';
 import 'package:daily/features/timetable/domain/university_course.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-class _Files extends CachingAssetBundle {
-  @override
-  Future<String> loadString(String key, {bool cache = true}) async =>
-      File(key).readAsStringSync();
-  @override
-  Future<ByteData> load(String key) async =>
-      ByteData.sublistView(File(key).readAsBytesSync());
-}
+import '../../support/file_asset_bundle.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -22,7 +12,7 @@ void main() {
     'a single trailing classroom applies to every meeting of the course',
     () async {
       final data = await UniversityCatalog.load(
-        bundle: _Files(),
+        bundle: FileAssetBundle(),
         university: 'kangwon',
       );
       var checked = 0;
@@ -50,7 +40,7 @@ void main() {
     'Kangwon registered whole catalog retains five campus filters and safe source meetings',
     () async {
       final data = await UniversityCatalog.load(
-        bundle: _Files(),
+        bundle: FileAssetBundle(),
         university: 'kangwon',
       );
       expect(
@@ -103,7 +93,7 @@ void main() {
     'Kangwon period meetings fill the whole slot including the break',
     () async {
       final data = await UniversityCatalog.load(
-        bundle: _Files(),
+        bundle: FileAssetBundle(),
         university: 'kangwon',
       );
       var checked = 0;
@@ -147,7 +137,7 @@ void main() {
     'Kangwon major offering labels all belong to an official college',
     () async {
       final data = await UniversityCatalog.load(
-        bundle: _Files(),
+        bundle: FileAssetBundle(),
         university: 'kangwon',
       );
       final raw = <String>{};
@@ -201,7 +191,7 @@ void main() {
       );
       expect(wrongCampus.timetableCampus, isNull);
       final period = (await TimetablePeriodDefaults.load(
-        bundle: _Files(),
+        bundle: FileAssetBundle(),
       )).periodFor(2026, '2', university: 'kangwon')!;
       expect(period.start, DateTime(2026, 9, 1));
       expect(period.end, DateTime(2026, 12, 14));

@@ -1,12 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
-import 'package:daily/core/academic/university_regions.dart';
 import 'package:daily/features/timetable/domain/timetable.dart';
 import 'package:daily/features/timetable/presentation/university_course_page.dart';
 
 import 'package:daily/app/daily_app.dart';
-import 'package:daily/app/daily_theme.dart';
 import 'package:daily/core/alarms/alarm_service.dart';
 import 'package:daily/core/academic/academic_profile.dart';
 import 'package:daily/core/academic/university_directory.dart';
@@ -53,6 +50,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'support/university_regions_override.dart';
 
 Future<void> _openWelcomeStartPage(WidgetTester tester) async {
   for (var step = 0; step < 8; step += 1) {
@@ -228,16 +226,7 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
-            universityRegionsProvider.overrideWith(
-              (ref) async => UniversityRegions.fromJson(
-                jsonDecode(
-                      File(
-                        'assets/academic/university_regions.json',
-                      ).readAsStringSync(),
-                    )
-                    as Map<String, dynamic>,
-              ),
-            ),
+            universityRegionsFromAsset(),
             settingsRepositoryProvider.overrideWithValue(settingsRepository),
             notificationServiceProvider.overrideWithValue(_FakeNotification()),
             syncServiceProvider.overrideWithValue(_FakeSync()),
@@ -298,16 +287,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          universityRegionsProvider.overrideWith(
-            (ref) async => UniversityRegions.fromJson(
-              jsonDecode(
-                    File(
-                      'assets/academic/university_regions.json',
-                    ).readAsStringSync(),
-                  )
-                  as Map<String, dynamic>,
-            ),
-          ),
+          universityRegionsFromAsset(),
           settingsRepositoryProvider.overrideWithValue(settingsRepository),
           notificationServiceProvider.overrideWithValue(_FakeNotification()),
           syncServiceProvider.overrideWithValue(_FakeSync()),
@@ -351,16 +331,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          universityRegionsProvider.overrideWith(
-            (ref) async => UniversityRegions.fromJson(
-              jsonDecode(
-                    File(
-                      'assets/academic/university_regions.json',
-                    ).readAsStringSync(),
-                  )
-                  as Map<String, dynamic>,
-            ),
-          ),
+          universityRegionsFromAsset(),
           settingsRepositoryProvider.overrideWithValue(
             SettingsRepository(preferences: preferences),
           ),
@@ -475,16 +446,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          universityRegionsProvider.overrideWith(
-            (ref) async => UniversityRegions.fromJson(
-              jsonDecode(
-                    File(
-                      'assets/academic/university_regions.json',
-                    ).readAsStringSync(),
-                  )
-                  as Map<String, dynamic>,
-            ),
-          ),
+          universityRegionsFromAsset(),
           settingsRepositoryProvider.overrideWithValue(settingsRepository),
           notificationServiceProvider.overrideWithValue(_FakeNotification()),
           syncServiceProvider.overrideWithValue(_FakeSync()),
@@ -553,16 +515,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              universityRegionsProvider.overrideWith(
-                (ref) async => UniversityRegions.fromJson(
-                  jsonDecode(
-                        File(
-                          'assets/academic/university_regions.json',
-                        ).readAsStringSync(),
-                      )
-                      as Map<String, dynamic>,
-                ),
-              ),
+              universityRegionsFromAsset(),
               settingsRepositoryProvider.overrideWithValue(
                 SettingsRepository(preferences: preferences),
               ),
@@ -643,16 +596,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          universityRegionsProvider.overrideWith(
-            (ref) async => UniversityRegions.fromJson(
-              jsonDecode(
-                    File(
-                      'assets/academic/university_regions.json',
-                    ).readAsStringSync(),
-                  )
-                  as Map<String, dynamic>,
-            ),
-          ),
+          universityRegionsFromAsset(),
           settingsRepositoryProvider.overrideWithValue(
             SettingsRepository(preferences: preferences),
           ),
@@ -697,16 +641,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          universityRegionsProvider.overrideWith(
-            (ref) async => UniversityRegions.fromJson(
-              jsonDecode(
-                    File(
-                      'assets/academic/university_regions.json',
-                    ).readAsStringSync(),
-                  )
-                  as Map<String, dynamic>,
-            ),
-          ),
+          universityRegionsFromAsset(),
           settingsRepositoryProvider.overrideWithValue(
             SettingsRepository(preferences: preferences),
           ),
@@ -758,16 +693,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              universityRegionsProvider.overrideWith(
-                (ref) async => UniversityRegions.fromJson(
-                  jsonDecode(
-                        File(
-                          'assets/academic/university_regions.json',
-                        ).readAsStringSync(),
-                      )
-                      as Map<String, dynamic>,
-                ),
-              ),
+              universityRegionsFromAsset(),
               settingsRepositoryProvider.overrideWithValue(settingsRepository),
               notificationServiceProvider.overrideWithValue(
                 _FakeNotification(),
@@ -908,16 +834,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          universityRegionsProvider.overrideWith(
-            (ref) async => UniversityRegions.fromJson(
-              jsonDecode(
-                    File(
-                      'assets/academic/university_regions.json',
-                    ).readAsStringSync(),
-                  )
-                  as Map<String, dynamic>,
-            ),
-          ),
+          universityRegionsFromAsset(),
           settingsRepositoryProvider.overrideWithValue(settingsRepository),
           notificationServiceProvider.overrideWithValue(_FakeNotification()),
           syncServiceProvider.overrideWithValue(_FakeSync()),
@@ -968,16 +885,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          universityRegionsProvider.overrideWith(
-            (ref) async => UniversityRegions.fromJson(
-              jsonDecode(
-                    File(
-                      'assets/academic/university_regions.json',
-                    ).readAsStringSync(),
-                  )
-                  as Map<String, dynamic>,
-            ),
-          ),
+          universityRegionsFromAsset(),
           settingsRepositoryProvider.overrideWithValue(settingsRepository),
           notificationServiceProvider.overrideWithValue(_FakeNotification()),
           syncServiceProvider.overrideWithValue(_FakeSync()),
@@ -1011,65 +919,6 @@ void main() {
     await tester.pumpWidget(const SizedBox.shrink());
   });
 
-  test('theme mode remains selected after settings reload', () async {
-    SharedPreferences.setMockInitialValues({});
-    final preferences = await SharedPreferences.getInstance();
-    final repository = SettingsRepository(preferences: preferences);
-
-    await repository.save(
-      repository.load().copyWith(themeMode: AppThemeMode.dark),
-    );
-
-    expect(repository.load().themeMode, AppThemeMode.dark);
-    expect(DailyTheme.dark().brightness, Brightness.dark);
-    expect(DailyTheme.light().brightness, Brightness.light);
-    final darkTheme = DailyTheme.dark();
-    expect(darkTheme.scaffoldBackgroundColor, const Color(0xff000000));
-    expect(
-      darkTheme.colorScheme.surfaceContainerLowest,
-      const Color(0xff000000),
-    );
-    expect(darkTheme.colorScheme.surface, const Color(0xff0a0b0d));
-    expect(darkTheme.colorScheme.surfaceContainerHigh, const Color(0xff11141a));
-  });
-
-  test(
-    'month navigation mode remains selected after settings reload',
-    () async {
-      SharedPreferences.setMockInitialValues({});
-      final preferences = await SharedPreferences.getInstance();
-      final repository = SettingsRepository(preferences: preferences);
-
-      await repository.save(
-        repository.load().copyWith(
-          monthNavigationMode: MonthNavigationMode.vertical,
-        ),
-      );
-
-      expect(
-        repository.load().monthNavigationMode,
-        MonthNavigationMode.vertical,
-      );
-    },
-  );
-
-  test(
-    'week and day layout mode remains selected after settings reload',
-    () async {
-      SharedPreferences.setMockInitialValues({});
-      final preferences = await SharedPreferences.getInstance();
-      final repository = SettingsRepository(preferences: preferences);
-
-      await repository.save(
-        repository.load().copyWith(
-          weekDayLayoutMode: WeekDayLayoutMode.schedule,
-        ),
-      );
-
-      expect(repository.load().weekDayLayoutMode, WeekDayLayoutMode.schedule);
-    },
-  );
-
   testWidgets(
     'schedule view scrolls time vertically and changes week horizontally',
     (tester) async {
@@ -1090,16 +939,7 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
-            universityRegionsProvider.overrideWith(
-              (ref) async => UniversityRegions.fromJson(
-                jsonDecode(
-                      File(
-                        'assets/academic/university_regions.json',
-                      ).readAsStringSync(),
-                    )
-                    as Map<String, dynamic>,
-              ),
-            ),
+            universityRegionsFromAsset(),
             settingsRepositoryProvider.overrideWithValue(settingsRepository),
             notificationServiceProvider.overrideWithValue(_FakeNotification()),
             syncServiceProvider.overrideWithValue(_FakeSync()),
@@ -1190,16 +1030,7 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
-            universityRegionsProvider.overrideWith(
-              (ref) async => UniversityRegions.fromJson(
-                jsonDecode(
-                      File(
-                        'assets/academic/university_regions.json',
-                      ).readAsStringSync(),
-                    )
-                    as Map<String, dynamic>,
-              ),
-            ),
+            universityRegionsFromAsset(),
             settingsRepositoryProvider.overrideWithValue(settingsRepository),
             notificationServiceProvider.overrideWithValue(_FakeNotification()),
             syncServiceProvider.overrideWithValue(_FakeSync()),
@@ -1307,16 +1138,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          universityRegionsProvider.overrideWith(
-            (ref) async => UniversityRegions.fromJson(
-              jsonDecode(
-                    File(
-                      'assets/academic/university_regions.json',
-                    ).readAsStringSync(),
-                  )
-                  as Map<String, dynamic>,
-            ),
-          ),
+          universityRegionsFromAsset(),
           settingsRepositoryProvider.overrideWithValue(settingsRepository),
           notificationServiceProvider.overrideWithValue(_FakeNotification()),
           syncServiceProvider.overrideWithValue(_FakeSync()),
@@ -1424,16 +1246,7 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
-            universityRegionsProvider.overrideWith(
-              (ref) async => UniversityRegions.fromJson(
-                jsonDecode(
-                      File(
-                        'assets/academic/university_regions.json',
-                      ).readAsStringSync(),
-                    )
-                    as Map<String, dynamic>,
-              ),
-            ),
+            universityRegionsFromAsset(),
             settingsRepositoryProvider.overrideWithValue(settingsRepository),
             notificationServiceProvider.overrideWithValue(_FakeNotification()),
             syncServiceProvider.overrideWithValue(_FakeSync()),
@@ -1493,16 +1306,7 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
-            universityRegionsProvider.overrideWith(
-              (ref) async => UniversityRegions.fromJson(
-                jsonDecode(
-                      File(
-                        'assets/academic/university_regions.json',
-                      ).readAsStringSync(),
-                    )
-                    as Map<String, dynamic>,
-              ),
-            ),
+            universityRegionsFromAsset(),
             settingsRepositoryProvider.overrideWithValue(settingsRepository),
             notificationServiceProvider.overrideWithValue(_FakeNotification()),
             syncServiceProvider.overrideWithValue(_FakeSync()),
@@ -1586,16 +1390,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          universityRegionsProvider.overrideWith(
-            (ref) async => UniversityRegions.fromJson(
-              jsonDecode(
-                    File(
-                      'assets/academic/university_regions.json',
-                    ).readAsStringSync(),
-                  )
-                  as Map<String, dynamic>,
-            ),
-          ),
+          universityRegionsFromAsset(),
           settingsRepositoryProvider.overrideWithValue(settingsRepository),
           notificationServiceProvider.overrideWithValue(_FakeNotification()),
           syncServiceProvider.overrideWithValue(_FakeSync()),
@@ -1638,69 +1433,6 @@ void main() {
       ),
       isFalse,
     );
-  });
-
-  test('app text size remains selected after settings reload', () async {
-    SharedPreferences.setMockInitialValues({});
-    final preferences = await SharedPreferences.getInstance();
-    final settingsRepository = SettingsRepository(preferences: preferences);
-
-    await settingsRepository.save(
-      settingsRepository.load().copyWith(appTextSize: AppTextSize.extraLarge),
-    );
-
-    expect(settingsRepository.load().appTextSize, AppTextSize.extraLarge);
-  });
-
-  test(
-    'adjacent-month date visibility remains selected after reload',
-    () async {
-      SharedPreferences.setMockInitialValues({});
-      final preferences = await SharedPreferences.getInstance();
-      final settingsRepository = SettingsRepository(preferences: preferences);
-
-      await settingsRepository.save(
-        settingsRepository.load().copyWith(showAdjacentMonthDates: false),
-      );
-
-      expect(settingsRepository.load().showAdjacentMonthDates, isFalse);
-    },
-  );
-
-  test('legacy default reminder migrates into the reminder list', () async {
-    SharedPreferences.setMockInitialValues({'defaultReminderMinutes': 10});
-    final preferences = await SharedPreferences.getInstance();
-    final settingsRepository = SettingsRepository(preferences: preferences);
-
-    expect(settingsRepository.load().defaultReminderMinutesList, [10]);
-  });
-
-  test('multiple default reminders remain selected after reload', () async {
-    SharedPreferences.setMockInitialValues({});
-    final preferences = await SharedPreferences.getInstance();
-    final settingsRepository = SettingsRepository(preferences: preferences);
-
-    await settingsRepository.save(
-      settingsRepository.load().copyWith(
-        defaultReminderMinutesList: const [60, 10, 30, 10],
-      ),
-    );
-
-    expect(settingsRepository.load().defaultReminderMinutesList, [10, 30, 60]);
-  });
-
-  test('empty default reminder list remains disabled after reload', () async {
-    SharedPreferences.setMockInitialValues({});
-    final preferences = await SharedPreferences.getInstance();
-    final settingsRepository = SettingsRepository(preferences: preferences);
-
-    await settingsRepository.save(
-      settingsRepository.load().copyWith(
-        defaultReminderMinutesList: const <int>[],
-      ),
-    );
-
-    expect(settingsRepository.load().defaultReminderMinutesList, isEmpty);
   });
 
   test(
@@ -1813,32 +1545,6 @@ void main() {
     },
   );
 
-  test('legacy biometric app lock migrates to the system method', () async {
-    SharedPreferences.setMockInitialValues({
-      'appLockEnabled': true,
-      'appLockBiometricsEnabled': true,
-    });
-    final preferences = await SharedPreferences.getInstance();
-    final settings = SettingsRepository(preferences: preferences).load();
-
-    expect(settings.appLockMethod, AppLockMethod.system);
-  });
-
-  test('selected app lock method remains stored locally', () async {
-    SharedPreferences.setMockInitialValues({});
-    final preferences = await SharedPreferences.getInstance();
-    final repository = SettingsRepository(preferences: preferences);
-
-    await repository.save(
-      repository.load().copyWith(
-        appLockEnabled: true,
-        appLockMethod: AppLockMethod.noPin,
-      ),
-    );
-
-    expect(repository.load().appLockMethod, AppLockMethod.noPin);
-  });
-
   test(
     'Apple account refresh keeps saved app login marker if revoked',
     () async {
@@ -1890,49 +1596,6 @@ void main() {
     );
   });
 
-  test('Daily account keeps Apple and Google identities together', () async {
-    SharedPreferences.setMockInitialValues({});
-    final preferences = await SharedPreferences.getInstance();
-    final settingsRepository = SettingsRepository(preferences: preferences);
-
-    await settingsRepository.saveAppleAccount(
-      const AppleAccount(
-        userIdentifier: 'apple-user',
-        email: 'apple@example.com',
-      ),
-    );
-    final accountAfterApple = settingsRepository.dailyAccount();
-    await settingsRepository.saveGoogleAccount(
-      const GoogleAccount(email: 'google@example.com', displayName: 'Daily'),
-    );
-    final mergedAccount = settingsRepository.dailyAccount();
-
-    expect(mergedAccount?.id, accountAfterApple?.id);
-    expect(mergedAccount?.appleAccount?.userIdentifier, 'apple-user');
-    expect(mergedAccount?.googleAccount?.email, 'google@example.com');
-  });
-
-  test(
-    'Daily account reset removes merged Apple and Google identities',
-    () async {
-      SharedPreferences.setMockInitialValues({});
-      FlutterSecureStorage.setMockInitialValues({});
-      final preferences = await SharedPreferences.getInstance();
-      final settingsRepository = SettingsRepository(preferences: preferences);
-      await settingsRepository.saveAppleAccount(
-        const AppleAccount(userIdentifier: 'apple-user'),
-      );
-      await settingsRepository.saveGoogleAccount(
-        const GoogleAccount(email: 'google@example.com'),
-      );
-
-      await settingsRepository.resetAll();
-
-      expect(settingsRepository.dailyAccount(), isNull);
-      expect(settingsRepository.appleAccount(), isNull);
-    },
-  );
-
   testWidgets('Apple sign-in restores an already linked Google session', (
     tester,
   ) async {
@@ -1982,16 +1645,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          universityRegionsProvider.overrideWith(
-            (ref) async => UniversityRegions.fromJson(
-              jsonDecode(
-                    File(
-                      'assets/academic/university_regions.json',
-                    ).readAsStringSync(),
-                  )
-                  as Map<String, dynamic>,
-            ),
-          ),
+          universityRegionsFromAsset(),
           settingsRepositoryProvider.overrideWithValue(settingsRepository),
           universityDirectoryProvider.overrideWith(
             (_) async => universityDirectory,
@@ -2049,16 +1703,7 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
-            universityRegionsProvider.overrideWith(
-              (ref) async => UniversityRegions.fromJson(
-                jsonDecode(
-                      File(
-                        'assets/academic/university_regions.json',
-                      ).readAsStringSync(),
-                    )
-                    as Map<String, dynamic>,
-              ),
-            ),
+            universityRegionsFromAsset(),
             settingsRepositoryProvider.overrideWithValue(settingsRepository),
             notificationServiceProvider.overrideWithValue(notificationService),
             alarmServiceProvider.overrideWithValue(
@@ -2156,16 +1801,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              universityRegionsProvider.overrideWith(
-                (ref) async => UniversityRegions.fromJson(
-                  jsonDecode(
-                        File(
-                          'assets/academic/university_regions.json',
-                        ).readAsStringSync(),
-                      )
-                      as Map<String, dynamic>,
-                ),
-              ),
+              universityRegionsFromAsset(),
               settingsRepositoryProvider.overrideWithValue(settingsRepository),
               productAnalyticsProvider.overrideWithValue(analytics),
               notificationServiceProvider.overrideWithValue(
@@ -2238,16 +1874,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          universityRegionsProvider.overrideWith(
-            (ref) async => UniversityRegions.fromJson(
-              jsonDecode(
-                    File(
-                      'assets/academic/university_regions.json',
-                    ).readAsStringSync(),
-                  )
-                  as Map<String, dynamic>,
-            ),
-          ),
+          universityRegionsFromAsset(),
           settingsRepositoryProvider.overrideWithValue(settingsRepository),
           productAnalyticsProvider.overrideWithValue(analytics),
           notificationServiceProvider.overrideWithValue(_FakeNotification()),
@@ -2312,16 +1939,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          universityRegionsProvider.overrideWith(
-            (ref) async => UniversityRegions.fromJson(
-              jsonDecode(
-                    File(
-                      'assets/academic/university_regions.json',
-                    ).readAsStringSync(),
-                  )
-                  as Map<String, dynamic>,
-            ),
-          ),
+          universityRegionsFromAsset(),
           settingsRepositoryProvider.overrideWithValue(settingsRepository),
           notificationServiceProvider.overrideWithValue(notificationService),
           syncServiceProvider.overrideWithValue(_FakeSync()),
@@ -2391,16 +2009,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              universityRegionsProvider.overrideWith(
-                (ref) async => UniversityRegions.fromJson(
-                  jsonDecode(
-                        File(
-                          'assets/academic/university_regions.json',
-                        ).readAsStringSync(),
-                      )
-                      as Map<String, dynamic>,
-                ),
-              ),
+              universityRegionsFromAsset(),
               universityDirectoryProvider.overrideWith(
                 (_) async => universityDirectory,
               ),
@@ -2516,16 +2125,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              universityRegionsProvider.overrideWith(
-                (ref) async => UniversityRegions.fromJson(
-                  jsonDecode(
-                        File(
-                          'assets/academic/university_regions.json',
-                        ).readAsStringSync(),
-                      )
-                      as Map<String, dynamic>,
-                ),
-              ),
+              universityRegionsFromAsset(),
               settingsRepositoryProvider.overrideWithValue(settings),
               universityDirectoryProvider.overrideWith(
                 (_) async => universityDirectory,
@@ -2603,16 +2203,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          universityRegionsProvider.overrideWith(
-            (ref) async => UniversityRegions.fromJson(
-              jsonDecode(
-                    File(
-                      'assets/academic/university_regions.json',
-                    ).readAsStringSync(),
-                  )
-                  as Map<String, dynamic>,
-            ),
-          ),
+          universityRegionsFromAsset(),
           universityDirectoryProvider.overrideWith(
             (_) async => universityDirectory,
           ),
@@ -2685,16 +2276,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              universityRegionsProvider.overrideWith(
-                (ref) async => UniversityRegions.fromJson(
-                  jsonDecode(
-                        File(
-                          'assets/academic/university_regions.json',
-                        ).readAsStringSync(),
-                      )
-                      as Map<String, dynamic>,
-                ),
-              ),
+              universityRegionsFromAsset(),
               settingsRepositoryProvider.overrideWithValue(settings),
               universityDirectoryProvider.overrideWith(
                 (_) async => universityDirectory,
@@ -2754,16 +2336,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              universityRegionsProvider.overrideWith(
-                (ref) async => UniversityRegions.fromJson(
-                  jsonDecode(
-                        File(
-                          'assets/academic/university_regions.json',
-                        ).readAsStringSync(),
-                      )
-                      as Map<String, dynamic>,
-                ),
-              ),
+              universityRegionsFromAsset(),
               settingsRepositoryProvider.overrideWithValue(reloaded),
               notificationServiceProvider.overrideWithValue(notifications),
               eventRepositoryProvider.overrideWithValue(events),
@@ -2801,16 +2374,7 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
-            universityRegionsProvider.overrideWith(
-              (ref) async => UniversityRegions.fromJson(
-                jsonDecode(
-                      File(
-                        'assets/academic/university_regions.json',
-                      ).readAsStringSync(),
-                    )
-                    as Map<String, dynamic>,
-              ),
-            ),
+            universityRegionsFromAsset(),
             settingsRepositoryProvider.overrideWithValue(settingsRepository),
             notificationServiceProvider.overrideWithValue(_FakeNotification()),
             syncServiceProvider.overrideWithValue(_FakeSync()),
@@ -2892,16 +2456,7 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
-            universityRegionsProvider.overrideWith(
-              (ref) async => UniversityRegions.fromJson(
-                jsonDecode(
-                      File(
-                        'assets/academic/university_regions.json',
-                      ).readAsStringSync(),
-                    )
-                    as Map<String, dynamic>,
-              ),
-            ),
+            universityRegionsFromAsset(),
             settingsRepositoryProvider.overrideWithValue(settingsRepository),
             notificationServiceProvider.overrideWithValue(notificationService),
             syncServiceProvider.overrideWithValue(_FakeSync()),
@@ -2956,16 +2511,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          universityRegionsProvider.overrideWith(
-            (ref) async => UniversityRegions.fromJson(
-              jsonDecode(
-                    File(
-                      'assets/academic/university_regions.json',
-                    ).readAsStringSync(),
-                  )
-                  as Map<String, dynamic>,
-            ),
-          ),
+          universityRegionsFromAsset(),
           settingsRepositoryProvider.overrideWithValue(settingsRepository),
           notificationServiceProvider.overrideWithValue(_FakeNotification()),
           syncServiceProvider.overrideWithValue(_FakeSync()),
@@ -3145,16 +2691,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          universityRegionsProvider.overrideWith(
-            (ref) async => UniversityRegions.fromJson(
-              jsonDecode(
-                    File(
-                      'assets/academic/university_regions.json',
-                    ).readAsStringSync(),
-                  )
-                  as Map<String, dynamic>,
-            ),
-          ),
+          universityRegionsFromAsset(),
           settingsRepositoryProvider.overrideWithValue(settingsRepository),
           notificationServiceProvider.overrideWithValue(_FakeNotification()),
           syncServiceProvider.overrideWithValue(_FakeSync()),
@@ -3282,16 +2819,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          universityRegionsProvider.overrideWith(
-            (ref) async => UniversityRegions.fromJson(
-              jsonDecode(
-                    File(
-                      'assets/academic/university_regions.json',
-                    ).readAsStringSync(),
-                  )
-                  as Map<String, dynamic>,
-            ),
-          ),
+          universityRegionsFromAsset(),
           settingsRepositoryProvider.overrideWithValue(settingsRepository),
           notificationServiceProvider.overrideWithValue(_FakeNotification()),
           syncServiceProvider.overrideWithValue(_FakeSync()),
@@ -3342,16 +2870,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              universityRegionsProvider.overrideWith(
-                (ref) async => UniversityRegions.fromJson(
-                  jsonDecode(
-                        File(
-                          'assets/academic/university_regions.json',
-                        ).readAsStringSync(),
-                      )
-                      as Map<String, dynamic>,
-                ),
-              ),
+              universityRegionsFromAsset(),
               settingsRepositoryProvider.overrideWithValue(repository),
               notificationServiceProvider.overrideWithValue(
                 _FakeNotification(),
@@ -3544,16 +3063,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              universityRegionsProvider.overrideWith(
-                (ref) async => UniversityRegions.fromJson(
-                  jsonDecode(
-                        File(
-                          'assets/academic/university_regions.json',
-                        ).readAsStringSync(),
-                      )
-                      as Map<String, dynamic>,
-                ),
-              ),
+              universityRegionsFromAsset(),
               settingsRepositoryProvider.overrideWithValue(repository),
               notificationServiceProvider.overrideWithValue(
                 _FakeNotification(),
@@ -3740,16 +3250,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              universityRegionsProvider.overrideWith(
-                (ref) async => UniversityRegions.fromJson(
-                  jsonDecode(
-                        File(
-                          'assets/academic/university_regions.json',
-                        ).readAsStringSync(),
-                      )
-                      as Map<String, dynamic>,
-                ),
-              ),
+              universityRegionsFromAsset(),
               settingsRepositoryProvider.overrideWithValue(settings),
               notificationServiceProvider.overrideWithValue(
                 _FakeNotification(),
@@ -3970,16 +3471,7 @@ void main() {
       addTearDown(() => unawaited(repository.close()));
       final container = ProviderContainer(
         overrides: [
-          universityRegionsProvider.overrideWith(
-            (ref) async => UniversityRegions.fromJson(
-              jsonDecode(
-                    File(
-                      'assets/academic/university_regions.json',
-                    ).readAsStringSync(),
-                  )
-                  as Map<String, dynamic>,
-            ),
-          ),
+          universityRegionsFromAsset(),
           eventRepositoryProvider.overrideWithValue(repository),
           eventCommandServiceProvider.overrideWithValue(
             EventCommandService(
@@ -4088,16 +3580,7 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
-            universityRegionsProvider.overrideWith(
-              (ref) async => UniversityRegions.fromJson(
-                jsonDecode(
-                      File(
-                        'assets/academic/university_regions.json',
-                      ).readAsStringSync(),
-                    )
-                    as Map<String, dynamic>,
-              ),
-            ),
+            universityRegionsFromAsset(),
             eventRepositoryProvider.overrideWithValue(repository),
             eventCommandServiceProvider.overrideWithValue(
               EventCommandService(
@@ -4161,16 +3644,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          universityRegionsProvider.overrideWith(
-            (ref) async => UniversityRegions.fromJson(
-              jsonDecode(
-                    File(
-                      'assets/academic/university_regions.json',
-                    ).readAsStringSync(),
-                  )
-                  as Map<String, dynamic>,
-            ),
-          ),
+          universityRegionsFromAsset(),
           settingsRepositoryProvider.overrideWithValue(settingsRepository),
           notificationServiceProvider.overrideWithValue(_FakeNotification()),
           syncServiceProvider.overrideWithValue(_FakeSync()),
@@ -4279,16 +3753,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          universityRegionsProvider.overrideWith(
-            (ref) async => UniversityRegions.fromJson(
-              jsonDecode(
-                    File(
-                      'assets/academic/university_regions.json',
-                    ).readAsStringSync(),
-                  )
-                  as Map<String, dynamic>,
-            ),
-          ),
+          universityRegionsFromAsset(),
           settingsRepositoryProvider.overrideWithValue(settingsRepository),
           notificationServiceProvider.overrideWithValue(_FakeNotification()),
           syncServiceProvider.overrideWithValue(_FakeSync()),
@@ -4376,16 +3841,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          universityRegionsProvider.overrideWith(
-            (ref) async => UniversityRegions.fromJson(
-              jsonDecode(
-                    File(
-                      'assets/academic/university_regions.json',
-                    ).readAsStringSync(),
-                  )
-                  as Map<String, dynamic>,
-            ),
-          ),
+          universityRegionsFromAsset(),
           settingsRepositoryProvider.overrideWithValue(settingsRepository),
           notificationServiceProvider.overrideWithValue(_FakeNotification()),
           syncServiceProvider.overrideWithValue(_FakeSync()),
@@ -4501,16 +3957,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          universityRegionsProvider.overrideWith(
-            (ref) async => UniversityRegions.fromJson(
-              jsonDecode(
-                    File(
-                      'assets/academic/university_regions.json',
-                    ).readAsStringSync(),
-                  )
-                  as Map<String, dynamic>,
-            ),
-          ),
+          universityRegionsFromAsset(),
           settingsRepositoryProvider.overrideWithValue(settingsRepository),
           notificationServiceProvider.overrideWithValue(_FakeNotification()),
           syncServiceProvider.overrideWithValue(_FakeSync()),
@@ -4949,16 +4396,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              universityRegionsProvider.overrideWith(
-                (ref) async => UniversityRegions.fromJson(
-                  jsonDecode(
-                        File(
-                          'assets/academic/university_regions.json',
-                        ).readAsStringSync(),
-                      )
-                      as Map<String, dynamic>,
-                ),
-              ),
+              universityRegionsFromAsset(),
               settingsRepositoryProvider.overrideWithValue(repository),
               notificationServiceProvider.overrideWithValue(
                 _FakeNotification(),
@@ -5089,16 +4527,7 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
-            universityRegionsProvider.overrideWith(
-              (ref) async => UniversityRegions.fromJson(
-                jsonDecode(
-                      File(
-                        'assets/academic/university_regions.json',
-                      ).readAsStringSync(),
-                    )
-                    as Map<String, dynamic>,
-              ),
-            ),
+            universityRegionsFromAsset(),
             settingsRepositoryProvider.overrideWithValue(settingsRepository),
             notificationServiceProvider.overrideWithValue(_FakeNotification()),
             syncServiceProvider.overrideWithValue(_FakeSync()),
@@ -5266,16 +4695,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          universityRegionsProvider.overrideWith(
-            (ref) async => UniversityRegions.fromJson(
-              jsonDecode(
-                    File(
-                      'assets/academic/university_regions.json',
-                    ).readAsStringSync(),
-                  )
-                  as Map<String, dynamic>,
-            ),
-          ),
+          universityRegionsFromAsset(),
           settingsRepositoryProvider.overrideWithValue(settingsRepository),
           notificationServiceProvider.overrideWithValue(_FakeNotification()),
           syncServiceProvider.overrideWithValue(_FakeSync()),
@@ -5329,16 +4749,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          universityRegionsProvider.overrideWith(
-            (ref) async => UniversityRegions.fromJson(
-              jsonDecode(
-                    File(
-                      'assets/academic/university_regions.json',
-                    ).readAsStringSync(),
-                  )
-                  as Map<String, dynamic>,
-            ),
-          ),
+          universityRegionsFromAsset(),
           settingsRepositoryProvider.overrideWithValue(settingsRepository),
           notificationServiceProvider.overrideWithValue(_FakeNotification()),
           syncServiceProvider.overrideWithValue(_FakeSync()),
@@ -5388,16 +4799,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          universityRegionsProvider.overrideWith(
-            (ref) async => UniversityRegions.fromJson(
-              jsonDecode(
-                    File(
-                      'assets/academic/university_regions.json',
-                    ).readAsStringSync(),
-                  )
-                  as Map<String, dynamic>,
-            ),
-          ),
+          universityRegionsFromAsset(),
           settingsRepositoryProvider.overrideWithValue(settingsRepository),
           notificationServiceProvider.overrideWithValue(_FakeNotification()),
           syncServiceProvider.overrideWithValue(_FakeSync()),
@@ -5444,16 +4846,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          universityRegionsProvider.overrideWith(
-            (ref) async => UniversityRegions.fromJson(
-              jsonDecode(
-                    File(
-                      'assets/academic/university_regions.json',
-                    ).readAsStringSync(),
-                  )
-                  as Map<String, dynamic>,
-            ),
-          ),
+          universityRegionsFromAsset(),
           settingsRepositoryProvider.overrideWithValue(settingsRepository),
           notificationServiceProvider.overrideWithValue(_FakeNotification()),
           syncServiceProvider.overrideWithValue(_FakeSync()),
@@ -5506,16 +4899,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          universityRegionsProvider.overrideWith(
-            (ref) async => UniversityRegions.fromJson(
-              jsonDecode(
-                    File(
-                      'assets/academic/university_regions.json',
-                    ).readAsStringSync(),
-                  )
-                  as Map<String, dynamic>,
-            ),
-          ),
+          universityRegionsFromAsset(),
           settingsRepositoryProvider.overrideWithValue(settingsRepository),
           notificationServiceProvider.overrideWithValue(_FakeNotification()),
           syncServiceProvider.overrideWithValue(_FakeSync()),
@@ -5577,16 +4961,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          universityRegionsProvider.overrideWith(
-            (ref) async => UniversityRegions.fromJson(
-              jsonDecode(
-                    File(
-                      'assets/academic/university_regions.json',
-                    ).readAsStringSync(),
-                  )
-                  as Map<String, dynamic>,
-            ),
-          ),
+          universityRegionsFromAsset(),
           settingsRepositoryProvider.overrideWithValue(settingsRepository),
           notificationServiceProvider.overrideWithValue(_FakeNotification()),
           syncServiceProvider.overrideWithValue(_FakeSync()),
@@ -5637,16 +5012,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          universityRegionsProvider.overrideWith(
-            (ref) async => UniversityRegions.fromJson(
-              jsonDecode(
-                    File(
-                      'assets/academic/university_regions.json',
-                    ).readAsStringSync(),
-                  )
-                  as Map<String, dynamic>,
-            ),
-          ),
+          universityRegionsFromAsset(),
           settingsRepositoryProvider.overrideWithValue(settingsRepository),
           notificationServiceProvider.overrideWithValue(_FakeNotification()),
           syncServiceProvider.overrideWithValue(_FakeSync()),
@@ -5727,16 +5093,7 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
-            universityRegionsProvider.overrideWith(
-              (ref) async => UniversityRegions.fromJson(
-                jsonDecode(
-                      File(
-                        'assets/academic/university_regions.json',
-                      ).readAsStringSync(),
-                    )
-                    as Map<String, dynamic>,
-              ),
-            ),
+            universityRegionsFromAsset(),
             settingsRepositoryProvider.overrideWithValue(settingsRepository),
             notificationServiceProvider.overrideWithValue(_FakeNotification()),
             syncServiceProvider.overrideWithValue(_FakeSync()),
@@ -5784,16 +5141,7 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
-            universityRegionsProvider.overrideWith(
-              (ref) async => UniversityRegions.fromJson(
-                jsonDecode(
-                      File(
-                        'assets/academic/university_regions.json',
-                      ).readAsStringSync(),
-                    )
-                    as Map<String, dynamic>,
-              ),
-            ),
+            universityRegionsFromAsset(),
             settingsRepositoryProvider.overrideWithValue(settingsRepository),
             notificationServiceProvider.overrideWithValue(_FakeNotification()),
             syncServiceProvider.overrideWithValue(syncService),
@@ -5835,16 +5183,7 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
-            universityRegionsProvider.overrideWith(
-              (ref) async => UniversityRegions.fromJson(
-                jsonDecode(
-                      File(
-                        'assets/academic/university_regions.json',
-                      ).readAsStringSync(),
-                    )
-                    as Map<String, dynamic>,
-              ),
-            ),
+            universityRegionsFromAsset(),
             settingsRepositoryProvider.overrideWithValue(settingsRepository),
             notificationServiceProvider.overrideWithValue(_FakeNotification()),
             syncServiceProvider.overrideWithValue(syncService),
@@ -5872,6 +5211,56 @@ void main() {
   );
 
   testWidgets(
+    'resume during a pending sync restore retry reschedules the retries',
+    (tester) async {
+      SharedPreferences.setMockInitialValues({'onboardingCompleted': true});
+      final settingsRepository = SettingsRepository(
+        preferences: await SharedPreferences.getInstance(),
+      );
+      await settingsRepository.saveGoogleAccount(
+        const GoogleAccount(email: 'restored@example.com'),
+      );
+      final authService = _TimedOutRestoreAuthService();
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            universityRegionsFromAsset(),
+            settingsRepositoryProvider.overrideWithValue(settingsRepository),
+            notificationServiceProvider.overrideWithValue(_FakeNotification()),
+            syncServiceProvider.overrideWithValue(_FakeSync()),
+            eventRepositoryProvider.overrideWithValue(_FakeEventRepository()),
+            googleDriveAuthServiceProvider.overrideWithValue(authService),
+          ],
+          child: const DailyApp(),
+        ),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+      expect(authService.restorePreviousSignInCalls, 1);
+
+      // The 1s retry is pending; background and return before it fires.
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+      expect(authService.restorePreviousSignInCalls, 2);
+
+      // The resume attempt failed too, so 1s/3s/8s retries run again.
+      await tester.pump(const Duration(seconds: 1));
+      expect(authService.restorePreviousSignInCalls, 3);
+      await tester.pump(const Duration(seconds: 3));
+      expect(authService.restorePreviousSignInCalls, 4);
+      await tester.pump(const Duration(seconds: 8));
+      expect(authService.restorePreviousSignInCalls, 5);
+      await tester.pump(const Duration(seconds: 30));
+      expect(authService.restorePreviousSignInCalls, 5);
+
+      await tester.pumpWidget(const SizedBox.shrink());
+    },
+  );
+
+  testWidgets(
     'local-first startup keeps calendar visible and resume does not duplicate sync',
     (tester) async {
       SharedPreferences.setMockInitialValues({'onboardingCompleted': true});
@@ -5888,16 +5277,7 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
-            universityRegionsProvider.overrideWith(
-              (ref) async => UniversityRegions.fromJson(
-                jsonDecode(
-                      File(
-                        'assets/academic/university_regions.json',
-                      ).readAsStringSync(),
-                    )
-                    as Map<String, dynamic>,
-              ),
-            ),
+            universityRegionsFromAsset(),
             settingsRepositoryProvider.overrideWithValue(settings),
             notificationServiceProvider.overrideWithValue(_FakeNotification()),
             syncServiceProvider.overrideWithValue(sync),
@@ -5956,16 +5336,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              universityRegionsProvider.overrideWith(
-                (ref) async => UniversityRegions.fromJson(
-                  jsonDecode(
-                        File(
-                          'assets/academic/university_regions.json',
-                        ).readAsStringSync(),
-                      )
-                      as Map<String, dynamic>,
-                ),
-              ),
+              universityRegionsFromAsset(),
               settingsRepositoryProvider.overrideWithValue(settings),
               notificationServiceProvider.overrideWithValue(
                 _FakeNotification(),
@@ -6029,16 +5400,7 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
-            universityRegionsProvider.overrideWith(
-              (ref) async => UniversityRegions.fromJson(
-                jsonDecode(
-                      File(
-                        'assets/academic/university_regions.json',
-                      ).readAsStringSync(),
-                    )
-                    as Map<String, dynamic>,
-              ),
-            ),
+            universityRegionsFromAsset(),
             settingsRepositoryProvider.overrideWithValue(settings),
             notificationServiceProvider.overrideWithValue(_FakeNotification()),
             syncServiceProvider.overrideWithValue(sync),
@@ -6080,16 +5442,7 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
-            universityRegionsProvider.overrideWith(
-              (ref) async => UniversityRegions.fromJson(
-                jsonDecode(
-                      File(
-                        'assets/academic/university_regions.json',
-                      ).readAsStringSync(),
-                    )
-                    as Map<String, dynamic>,
-              ),
-            ),
+            universityRegionsFromAsset(),
             settingsRepositoryProvider.overrideWithValue(settings),
             notificationServiceProvider.overrideWithValue(_FakeNotification()),
             syncServiceProvider.overrideWithValue(sync),
@@ -6135,16 +5488,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          universityRegionsProvider.overrideWith(
-            (ref) async => UniversityRegions.fromJson(
-              jsonDecode(
-                    File(
-                      'assets/academic/university_regions.json',
-                    ).readAsStringSync(),
-                  )
-                  as Map<String, dynamic>,
-            ),
-          ),
+          universityRegionsFromAsset(),
           settingsRepositoryProvider.overrideWithValue(settingsRepository),
           notificationServiceProvider.overrideWithValue(notificationService),
           syncServiceProvider.overrideWithValue(_FakeSync()),
@@ -6207,16 +5551,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              universityRegionsProvider.overrideWith(
-                (ref) async => UniversityRegions.fromJson(
-                  jsonDecode(
-                        File(
-                          'assets/academic/university_regions.json',
-                        ).readAsStringSync(),
-                      )
-                      as Map<String, dynamic>,
-                ),
-              ),
+              universityRegionsFromAsset(),
               settingsRepositoryProvider.overrideWithValue(settingsRepository),
               notificationServiceProvider.overrideWithValue(
                 notificationService,
@@ -6304,16 +5639,7 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
-            universityRegionsProvider.overrideWith(
-              (ref) async => UniversityRegions.fromJson(
-                jsonDecode(
-                      File(
-                        'assets/academic/university_regions.json',
-                      ).readAsStringSync(),
-                    )
-                    as Map<String, dynamic>,
-              ),
-            ),
+            universityRegionsFromAsset(),
             settingsRepositoryProvider.overrideWithValue(settingsRepository),
             notificationServiceProvider.overrideWithValue(notificationService),
             syncServiceProvider.overrideWithValue(_FakeSync()),
@@ -6639,11 +5965,16 @@ void main() {
 
       settingsRepository.releasePendingSave();
       await tester.pump();
-      expect(saveError, isA<StateError>());
+      // The failed save is reported on screen (#916), not thrown out of the control.
+      expect(saveError, isNull);
       await tester.pumpAndSettle();
+      expect(find.text('선택을 저장하지 못했습니다. 다시 시도해 주세요.'), findsOneWidget);
       expect(container.read(appSettingsProvider).weekStartsOnMonday, isFalse);
       expect(settingsRepository.load().weekStartsOnMonday, isFalse);
       expect(tester.widget<SwitchListTile>(lunarToggle).value, isFalse);
+      // 실패 뒤 다시 읽은 provider 값도 화면 스위치와 같아야 한다.
+      expect(settingsRepository.load().showLunarDates, isFalse);
+      expect(container.read(appSettingsProvider).showLunarDates, isFalse);
       final disposeGesture = await tester.startGesture(
         tester.getCenter(lunarToggle),
         kind: PointerDeviceKind.mouse,
@@ -6689,6 +6020,41 @@ void main() {
       expect(container.read(appSettingsProvider).showLunarDates, isTrue);
       expect(tester.widget<SwitchListTile>(lunarToggle).value, isTrue);
 
+      await tester.pumpWidget(const SizedBox.shrink());
+      debugDefaultTargetPlatformOverride = null;
+    },
+  );
+
+  testWidgets(
+    'Windows older save failure keeps a newer pending choice on screen (#916)',
+    (tester) async {
+      final (_, settingsRepository) = await _pumpWindowsAppearanceSettings(
+        tester,
+      );
+      final adjacentToggle = find.byKey(
+        const ValueKey('show-adjacent-month-dates-toggle'),
+      );
+      final lunarToggle = find.byKey(const ValueKey('show-lunar-dates-toggle'));
+      expect(tester.widget<SwitchListTile>(lunarToggle).value, isTrue);
+
+      settingsRepository.failNextSave();
+      await tester.tap(adjacentToggle);
+      await tester.pump(const Duration(milliseconds: 240));
+      expect(settingsRepository.saveCalls, 1);
+      await tester.tap(lunarToggle);
+      await tester.pump();
+      expect(tester.widget<SwitchListTile>(lunarToggle).value, isFalse);
+
+      settingsRepository.releasePendingSave();
+      await tester.pump();
+      await tester.pump();
+      expect(find.text('선택을 저장하지 못했습니다. 다시 시도해 주세요.'), findsOneWidget);
+      // The newer lunar choice is still saving and must not flip back.
+      expect(tester.widget<SwitchListTile>(lunarToggle).value, isFalse);
+
+      await tester.pumpAndSettle();
+      expect(settingsRepository.load().showLunarDates, isFalse);
+      expect(tester.widget<SwitchListTile>(lunarToggle).value, isFalse);
       await tester.pumpWidget(const SizedBox.shrink());
       debugDefaultTargetPlatformOverride = null;
     },
@@ -6763,16 +6129,7 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
-            universityRegionsProvider.overrideWith(
-              (ref) async => UniversityRegions.fromJson(
-                jsonDecode(
-                      File(
-                        'assets/academic/university_regions.json',
-                      ).readAsStringSync(),
-                    )
-                    as Map<String, dynamic>,
-              ),
-            ),
+            universityRegionsFromAsset(),
             settingsRepositoryProvider.overrideWithValue(repository),
             notificationServiceProvider.overrideWithValue(notifications),
             syncServiceProvider.overrideWithValue(_FakeSync()),
@@ -6847,16 +6204,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          universityRegionsProvider.overrideWith(
-            (ref) async => UniversityRegions.fromJson(
-              jsonDecode(
-                    File(
-                      'assets/academic/university_regions.json',
-                    ).readAsStringSync(),
-                  )
-                  as Map<String, dynamic>,
-            ),
-          ),
+          universityRegionsFromAsset(),
           settingsRepositoryProvider.overrideWithValue(settingsRepository),
           notificationServiceProvider.overrideWithValue(notificationService),
           syncServiceProvider.overrideWithValue(_FakeSync()),
@@ -6967,16 +6315,7 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
-            universityRegionsProvider.overrideWith(
-              (ref) async => UniversityRegions.fromJson(
-                jsonDecode(
-                      File(
-                        'assets/academic/university_regions.json',
-                      ).readAsStringSync(),
-                    )
-                    as Map<String, dynamic>,
-              ),
-            ),
+            universityRegionsFromAsset(),
             settingsRepositoryProvider.overrideWithValue(settingsRepository),
             notificationServiceProvider.overrideWithValue(notificationService),
             syncServiceProvider.overrideWithValue(_FakeSync()),
@@ -7048,16 +6387,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          universityRegionsProvider.overrideWith(
-            (ref) async => UniversityRegions.fromJson(
-              jsonDecode(
-                    File(
-                      'assets/academic/university_regions.json',
-                    ).readAsStringSync(),
-                  )
-                  as Map<String, dynamic>,
-            ),
-          ),
+          universityRegionsFromAsset(),
           settingsRepositoryProvider.overrideWithValue(settingsRepository),
           notificationServiceProvider.overrideWithValue(notificationService),
           syncServiceProvider.overrideWithValue(_FakeSync()),
@@ -7118,16 +6448,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          universityRegionsProvider.overrideWith(
-            (ref) async => UniversityRegions.fromJson(
-              jsonDecode(
-                    File(
-                      'assets/academic/university_regions.json',
-                    ).readAsStringSync(),
-                  )
-                  as Map<String, dynamic>,
-            ),
-          ),
+          universityRegionsFromAsset(),
           settingsRepositoryProvider.overrideWithValue(settingsRepository),
           notificationServiceProvider.overrideWithValue(notificationService),
           syncServiceProvider.overrideWithValue(_FakeSync()),
@@ -7264,16 +6585,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          universityRegionsProvider.overrideWith(
-            (ref) async => UniversityRegions.fromJson(
-              jsonDecode(
-                    File(
-                      'assets/academic/university_regions.json',
-                    ).readAsStringSync(),
-                  )
-                  as Map<String, dynamic>,
-            ),
-          ),
+          universityRegionsFromAsset(),
           settingsRepositoryProvider.overrideWithValue(settingsRepository),
           productAnalyticsProvider.overrideWithValue(analytics),
           notificationServiceProvider.overrideWithValue(notificationService),
@@ -7335,16 +6647,7 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
-            universityRegionsProvider.overrideWith(
-              (ref) async => UniversityRegions.fromJson(
-                jsonDecode(
-                      File(
-                        'assets/academic/university_regions.json',
-                      ).readAsStringSync(),
-                    )
-                    as Map<String, dynamic>,
-              ),
-            ),
+            universityRegionsFromAsset(),
             settingsRepositoryProvider.overrideWithValue(settingsRepository),
             notificationServiceProvider.overrideWithValue(notificationService),
             syncServiceProvider.overrideWithValue(_FakeSync()),
@@ -7417,16 +6720,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          universityRegionsProvider.overrideWith(
-            (ref) async => UniversityRegions.fromJson(
-              jsonDecode(
-                    File(
-                      'assets/academic/university_regions.json',
-                    ).readAsStringSync(),
-                  )
-                  as Map<String, dynamic>,
-            ),
-          ),
+          universityRegionsFromAsset(),
           settingsRepositoryProvider.overrideWithValue(settingsRepository),
           notificationServiceProvider.overrideWithValue(notificationService),
           syncServiceProvider.overrideWithValue(_FakeSync()),
@@ -7495,16 +6789,7 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
-            universityRegionsProvider.overrideWith(
-              (ref) async => UniversityRegions.fromJson(
-                jsonDecode(
-                      File(
-                        'assets/academic/university_regions.json',
-                      ).readAsStringSync(),
-                    )
-                    as Map<String, dynamic>,
-              ),
-            ),
+            universityRegionsFromAsset(),
             settingsRepositoryProvider.overrideWithValue(settingsRepository),
             notificationServiceProvider.overrideWithValue(notificationService),
             syncServiceProvider.overrideWithValue(_FakeSync()),
@@ -7582,16 +6867,7 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
-            universityRegionsProvider.overrideWith(
-              (ref) async => UniversityRegions.fromJson(
-                jsonDecode(
-                      File(
-                        'assets/academic/university_regions.json',
-                      ).readAsStringSync(),
-                    )
-                    as Map<String, dynamic>,
-              ),
-            ),
+            universityRegionsFromAsset(),
             settingsRepositoryProvider.overrideWithValue(settingsRepository),
             notificationServiceProvider.overrideWithValue(notificationService),
             syncServiceProvider.overrideWithValue(_FakeSync()),
@@ -7660,16 +6936,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          universityRegionsProvider.overrideWith(
-            (ref) async => UniversityRegions.fromJson(
-              jsonDecode(
-                    File(
-                      'assets/academic/university_regions.json',
-                    ).readAsStringSync(),
-                  )
-                  as Map<String, dynamic>,
-            ),
-          ),
+          universityRegionsFromAsset(),
           settingsRepositoryProvider.overrideWithValue(settingsRepository),
           notificationServiceProvider.overrideWithValue(notificationService),
           syncServiceProvider.overrideWithValue(_FakeSync()),
@@ -7740,16 +7007,7 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
-            universityRegionsProvider.overrideWith(
-              (ref) async => UniversityRegions.fromJson(
-                jsonDecode(
-                      File(
-                        'assets/academic/university_regions.json',
-                      ).readAsStringSync(),
-                    )
-                    as Map<String, dynamic>,
-              ),
-            ),
+            universityRegionsFromAsset(),
             settingsRepositoryProvider.overrideWithValue(settingsRepository),
             notificationServiceProvider.overrideWithValue(notificationService),
             syncServiceProvider.overrideWithValue(_FakeSync()),
@@ -7872,16 +7130,7 @@ void main() {
       settingsRepository: settingsRepository,
     );
     final overrides = [
-      universityRegionsProvider.overrideWith(
-        (ref) async => UniversityRegions.fromJson(
-          jsonDecode(
-                File(
-                  'assets/academic/university_regions.json',
-                ).readAsStringSync(),
-              )
-              as Map<String, dynamic>,
-        ),
-      ),
+      universityRegionsFromAsset(),
       settingsRepositoryProvider.overrideWithValue(settingsRepository),
       notificationServiceProvider.overrideWithValue(notificationService),
       syncServiceProvider.overrideWithValue(_FakeSync()),
@@ -7944,16 +7193,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          universityRegionsProvider.overrideWith(
-            (ref) async => UniversityRegions.fromJson(
-              jsonDecode(
-                    File(
-                      'assets/academic/university_regions.json',
-                    ).readAsStringSync(),
-                  )
-                  as Map<String, dynamic>,
-            ),
-          ),
+          universityRegionsFromAsset(),
           settingsRepositoryProvider.overrideWithValue(settingsRepository),
           notificationServiceProvider.overrideWithValue(notificationService),
           syncServiceProvider.overrideWithValue(_FakeSync()),
@@ -8060,16 +7300,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          universityRegionsProvider.overrideWith(
-            (ref) async => UniversityRegions.fromJson(
-              jsonDecode(
-                    File(
-                      'assets/academic/university_regions.json',
-                    ).readAsStringSync(),
-                  )
-                  as Map<String, dynamic>,
-            ),
-          ),
+          universityRegionsFromAsset(),
           settingsRepositoryProvider.overrideWithValue(settingsRepository),
           notificationServiceProvider.overrideWithValue(notificationService),
           syncServiceProvider.overrideWithValue(_FakeSync()),
@@ -8123,16 +7354,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          universityRegionsProvider.overrideWith(
-            (ref) async => UniversityRegions.fromJson(
-              jsonDecode(
-                    File(
-                      'assets/academic/university_regions.json',
-                    ).readAsStringSync(),
-                  )
-                  as Map<String, dynamic>,
-            ),
-          ),
+          universityRegionsFromAsset(),
           settingsRepositoryProvider.overrideWithValue(settingsRepository),
           notificationServiceProvider.overrideWithValue(notificationService),
           syncServiceProvider.overrideWithValue(_FakeSync()),
@@ -8189,16 +7411,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          universityRegionsProvider.overrideWith(
-            (ref) async => UniversityRegions.fromJson(
-              jsonDecode(
-                    File(
-                      'assets/academic/university_regions.json',
-                    ).readAsStringSync(),
-                  )
-                  as Map<String, dynamic>,
-            ),
-          ),
+          universityRegionsFromAsset(),
           settingsRepositoryProvider.overrideWithValue(settingsRepository),
           notificationServiceProvider.overrideWithValue(notificationService),
           syncServiceProvider.overrideWithValue(_FakeSync()),
@@ -8286,16 +7499,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          universityRegionsProvider.overrideWith(
-            (ref) async => UniversityRegions.fromJson(
-              jsonDecode(
-                    File(
-                      'assets/academic/university_regions.json',
-                    ).readAsStringSync(),
-                  )
-                  as Map<String, dynamic>,
-            ),
-          ),
+          universityRegionsFromAsset(),
           settingsRepositoryProvider.overrideWithValue(settingsRepository),
           notificationServiceProvider.overrideWithValue(notificationService),
           eventRepositoryProvider.overrideWithValue(eventRepository),
@@ -8374,16 +7578,7 @@ void main() {
           await tester.pumpWidget(
             ProviderScope(
               overrides: [
-                universityRegionsProvider.overrideWith(
-                  (ref) async => UniversityRegions.fromJson(
-                    jsonDecode(
-                          File(
-                            'assets/academic/university_regions.json',
-                          ).readAsStringSync(),
-                        )
-                        as Map<String, dynamic>,
-                  ),
-                ),
+                universityRegionsFromAsset(),
                 settingsRepositoryProvider.overrideWithValue(
                   settingsRepository,
                 ),
@@ -8492,16 +7687,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          universityRegionsProvider.overrideWith(
-            (ref) async => UniversityRegions.fromJson(
-              jsonDecode(
-                    File(
-                      'assets/academic/university_regions.json',
-                    ).readAsStringSync(),
-                  )
-                  as Map<String, dynamic>,
-            ),
-          ),
+          universityRegionsFromAsset(),
           settingsRepositoryProvider.overrideWithValue(settingsRepository),
           notificationServiceProvider.overrideWithValue(_FakeNotification()),
           syncServiceProvider.overrideWithValue(_FakeSync()),
@@ -8555,16 +7741,7 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
-            universityRegionsProvider.overrideWith(
-              (ref) async => UniversityRegions.fromJson(
-                jsonDecode(
-                      File(
-                        'assets/academic/university_regions.json',
-                      ).readAsStringSync(),
-                    )
-                    as Map<String, dynamic>,
-              ),
-            ),
+            universityRegionsFromAsset(),
             settingsRepositoryProvider.overrideWithValue(settingsRepository),
             notificationServiceProvider.overrideWithValue(_FakeNotification()),
             syncServiceProvider.overrideWithValue(_FakeSync()),
@@ -8664,16 +7841,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          universityRegionsProvider.overrideWith(
-            (ref) async => UniversityRegions.fromJson(
-              jsonDecode(
-                    File(
-                      'assets/academic/university_regions.json',
-                    ).readAsStringSync(),
-                  )
-                  as Map<String, dynamic>,
-            ),
-          ),
+          universityRegionsFromAsset(),
           settingsRepositoryProvider.overrideWithValue(settingsRepository),
           notificationServiceProvider.overrideWithValue(_FakeNotification()),
           syncServiceProvider.overrideWithValue(_FakeSync()),
@@ -8744,16 +7912,7 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
-            universityRegionsProvider.overrideWith(
-              (ref) async => UniversityRegions.fromJson(
-                jsonDecode(
-                      File(
-                        'assets/academic/university_regions.json',
-                      ).readAsStringSync(),
-                    )
-                    as Map<String, dynamic>,
-              ),
-            ),
+            universityRegionsFromAsset(),
             settingsRepositoryProvider.overrideWithValue(settingsRepository),
             notificationServiceProvider.overrideWithValue(_FakeNotification()),
             syncServiceProvider.overrideWithValue(_FakeSync()),
@@ -8851,16 +8010,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              universityRegionsProvider.overrideWith(
-                (ref) async => UniversityRegions.fromJson(
-                  jsonDecode(
-                        File(
-                          'assets/academic/university_regions.json',
-                        ).readAsStringSync(),
-                      )
-                      as Map<String, dynamic>,
-                ),
-              ),
+              universityRegionsFromAsset(),
               settingsRepositoryProvider.overrideWithValue(settingsRepository),
               notificationServiceProvider.overrideWithValue(
                 _FakeNotification(),
@@ -9048,16 +8198,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              universityRegionsProvider.overrideWith(
-                (ref) async => UniversityRegions.fromJson(
-                  jsonDecode(
-                        File(
-                          'assets/academic/university_regions.json',
-                        ).readAsStringSync(),
-                      )
-                      as Map<String, dynamic>,
-                ),
-              ),
+              universityRegionsFromAsset(),
               settingsRepositoryProvider.overrideWithValue(settingsRepository),
               notificationServiceProvider.overrideWithValue(
                 _FakeNotification(),
@@ -9406,16 +8547,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          universityRegionsProvider.overrideWith(
-            (ref) async => UniversityRegions.fromJson(
-              jsonDecode(
-                    File(
-                      'assets/academic/university_regions.json',
-                    ).readAsStringSync(),
-                  )
-                  as Map<String, dynamic>,
-            ),
-          ),
+          universityRegionsFromAsset(),
           settingsRepositoryProvider.overrideWithValue(settingsRepository),
           notificationServiceProvider.overrideWithValue(notificationService),
           syncServiceProvider.overrideWithValue(_FakeSync()),
@@ -9483,16 +8615,7 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
-            universityRegionsProvider.overrideWith(
-              (ref) async => UniversityRegions.fromJson(
-                jsonDecode(
-                      File(
-                        'assets/academic/university_regions.json',
-                      ).readAsStringSync(),
-                    )
-                    as Map<String, dynamic>,
-              ),
-            ),
+            universityRegionsFromAsset(),
             settingsRepositoryProvider.overrideWithValue(settingsRepository),
             notificationServiceProvider.overrideWithValue(notificationService),
             eventRepositoryProvider.overrideWithValue(eventRepository),
@@ -9613,16 +8736,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              universityRegionsProvider.overrideWith(
-                (ref) async => UniversityRegions.fromJson(
-                  jsonDecode(
-                        File(
-                          'assets/academic/university_regions.json',
-                        ).readAsStringSync(),
-                      )
-                      as Map<String, dynamic>,
-                ),
-              ),
+              universityRegionsFromAsset(),
               settingsRepositoryProvider.overrideWithValue(settingsRepository),
               notificationServiceProvider.overrideWithValue(
                 notificationService,
@@ -9706,16 +8820,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          universityRegionsProvider.overrideWith(
-            (ref) async => UniversityRegions.fromJson(
-              jsonDecode(
-                    File(
-                      'assets/academic/university_regions.json',
-                    ).readAsStringSync(),
-                  )
-                  as Map<String, dynamic>,
-            ),
-          ),
+          universityRegionsFromAsset(),
           settingsRepositoryProvider.overrideWithValue(settingsRepository),
           notificationServiceProvider.overrideWithValue(notificationService),
           eventRepositoryProvider.overrideWithValue(eventRepository),
@@ -10020,16 +9125,7 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
-            universityRegionsProvider.overrideWith(
-              (ref) async => UniversityRegions.fromJson(
-                jsonDecode(
-                      File(
-                        'assets/academic/university_regions.json',
-                      ).readAsStringSync(),
-                    )
-                    as Map<String, dynamic>,
-              ),
-            ),
+            universityRegionsFromAsset(),
             settingsRepositoryProvider.overrideWithValue(settings),
             notificationServiceProvider.overrideWithValue(notifications),
             syncServiceProvider.overrideWithValue(_FakeSync()),
@@ -10324,16 +9420,7 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
-            universityRegionsProvider.overrideWith(
-              (ref) async => UniversityRegions.fromJson(
-                jsonDecode(
-                      File(
-                        'assets/academic/university_regions.json',
-                      ).readAsStringSync(),
-                    )
-                    as Map<String, dynamic>,
-              ),
-            ),
+            universityRegionsFromAsset(),
             settingsRepositoryProvider.overrideWithValue(settingsRepository),
             productAnalyticsProvider.overrideWithValue(
               _RecordingAnalytics(records),
@@ -10463,16 +9550,7 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
-            universityRegionsProvider.overrideWith(
-              (ref) async => UniversityRegions.fromJson(
-                jsonDecode(
-                      File(
-                        'assets/academic/university_regions.json',
-                      ).readAsStringSync(),
-                    )
-                    as Map<String, dynamic>,
-              ),
-            ),
+            universityRegionsFromAsset(),
             settingsRepositoryProvider.overrideWithValue(settingsRepository),
             notificationServiceProvider.overrideWithValue(notificationService),
             eventRepositoryProvider.overrideWithValue(eventRepository),
@@ -10578,16 +9656,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          universityRegionsProvider.overrideWith(
-            (ref) async => UniversityRegions.fromJson(
-              jsonDecode(
-                    File(
-                      'assets/academic/university_regions.json',
-                    ).readAsStringSync(),
-                  )
-                  as Map<String, dynamic>,
-            ),
-          ),
+          universityRegionsFromAsset(),
           settingsRepositoryProvider.overrideWithValue(settingsRepository),
           notificationServiceProvider.overrideWithValue(notificationService),
           // The native alarm bridge has no handler in tests.
@@ -10681,16 +9750,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              universityRegionsProvider.overrideWith(
-                (ref) async => UniversityRegions.fromJson(
-                  jsonDecode(
-                        File(
-                          'assets/academic/university_regions.json',
-                        ).readAsStringSync(),
-                      )
-                      as Map<String, dynamic>,
-                ),
-              ),
+              universityRegionsFromAsset(),
               settingsRepositoryProvider.overrideWithValue(settingsRepository),
               notificationServiceProvider.overrideWithValue(
                 _FakeNotification(),
@@ -10815,16 +9875,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          universityRegionsProvider.overrideWith(
-            (ref) async => UniversityRegions.fromJson(
-              jsonDecode(
-                    File(
-                      'assets/academic/university_regions.json',
-                    ).readAsStringSync(),
-                  )
-                  as Map<String, dynamic>,
-            ),
-          ),
+          universityRegionsFromAsset(),
           settingsRepositoryProvider.overrideWithValue(settingsRepository),
           notificationServiceProvider.overrideWithValue(_FakeNotification()),
           syncServiceProvider.overrideWithValue(_FakeSync()),
@@ -10884,16 +9935,7 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
-            universityRegionsProvider.overrideWith(
-              (ref) async => UniversityRegions.fromJson(
-                jsonDecode(
-                      File(
-                        'assets/academic/university_regions.json',
-                      ).readAsStringSync(),
-                    )
-                    as Map<String, dynamic>,
-              ),
-            ),
+            universityRegionsFromAsset(),
             settingsRepositoryProvider.overrideWithValue(settingsRepository),
             notificationServiceProvider.overrideWithValue(_FakeNotification()),
             syncServiceProvider.overrideWithValue(_FakeSync()),
@@ -10960,16 +10002,7 @@ _pumpWindowsAppearanceSettings(WidgetTester tester) async {
   await tester.pumpWidget(
     ProviderScope(
       overrides: [
-        universityRegionsProvider.overrideWith(
-          (ref) async => UniversityRegions.fromJson(
-            jsonDecode(
-                  File(
-                    'assets/academic/university_regions.json',
-                  ).readAsStringSync(),
-                )
-                as Map<String, dynamic>,
-          ),
-        ),
+        universityRegionsFromAsset(),
         settingsRepositoryProvider.overrideWithValue(settingsRepository),
         notificationServiceProvider.overrideWithValue(notificationService),
         syncServiceProvider.overrideWithValue(_FakeSync()),
@@ -11076,6 +10109,16 @@ class _FakeGoogleDriveAuthService extends GoogleDriveAuthService {
       return null;
     }
     return const {'Authorization': 'Bearer test-token'};
+  }
+}
+
+class _TimedOutRestoreAuthService extends _FakeGoogleDriveAuthService {
+  _TimedOutRestoreAuthService() : super(account: null);
+
+  @override
+  Future<GoogleDriveAccount?> restorePreviousSignIn() async {
+    restorePreviousSignInCalls += 1;
+    throw TimeoutException('offline');
   }
 }
 
@@ -12017,16 +11060,7 @@ Future<ProviderContainer> _pumpDaySheetSwipeApp(
   await tester.pumpWidget(
     ProviderScope(
       overrides: [
-        universityRegionsProvider.overrideWith(
-          (ref) async => UniversityRegions.fromJson(
-            jsonDecode(
-                  File(
-                    'assets/academic/university_regions.json',
-                  ).readAsStringSync(),
-                )
-                as Map<String, dynamic>,
-          ),
-        ),
+        universityRegionsFromAsset(),
         settingsRepositoryProvider.overrideWithValue(settingsRepository),
         notificationServiceProvider.overrideWithValue(_FakeNotification()),
         syncServiceProvider.overrideWithValue(_FakeSync()),

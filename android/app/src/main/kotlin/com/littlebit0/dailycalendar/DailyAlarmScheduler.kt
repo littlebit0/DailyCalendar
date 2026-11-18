@@ -74,15 +74,30 @@ internal object DailyAlarmScheduler {
     // permission: it then rings as a plain alarm notification (#840).
     private fun armable(context: Context) = exactAllowed(context) && notificationsAllowed(context)
 
-    @Synchronized
-    fun read(context: Context, id: String): DailyAlarm? = store(context).getString(id, null)?.let {
-        runCatching { DailyAlarm.parse(id, it) }.getOrNull()
+    // Parsed entries by store key and raw JSON: startup reconciles every event,
+    // and re-parsing the whole store per event was O(events x alarms) (#873).
+    private val parsed = HashMap<String, Pair<String, DailyAlarm?>>()
+    internal var parseCount = 0
+        private set
+
+    private fun parse(id: String, raw: String): DailyAlarm? {
+        parsed[id]?.takeIf { it.first == raw }?.let { return it.second }
+        parseCount++
+        val alarm = runCatching { DailyAlarm.parse(id, raw) }.getOrNull()
+        parsed[id] = raw to alarm
+        return alarm
     }
+
+    @Synchronized
+    fun read(context: Context, id: String): DailyAlarm? = store(context).getString(id, null)?.let { parse(id, it) }
 
     /** Every stored alarm of [eventId], including a pre-4.1.1 event-id entry. */
     @Synchronized
-    fun alarms(context: Context, eventId: String): List<DailyAlarm> =
-        store(context).all.keys.mapNotNull { read(context, it) }.filter { it.eventId == eventId }
+    fun alarms(context: Context, eventId: String): List<DailyAlarm> {
+        val stored = store(context).all
+        parsed.keys.retainAll(stored.keys)
+        return stored.mapNotNull { (id, raw) -> (raw as? String)?.let { parse(id, it) } }.filter { it.eventId == eventId }
+    }
 
     @Synchronized
     fun schedule(context: Context, alarm: DailyAlarm) {
@@ -90,11 +105,14 @@ internal object DailyAlarmScheduler {
         require(alarm.fireAt > System.currentTimeMillis())
         check(armable(context)) { "System alarm permissions are required" }
         val previous = store(context).getString(alarm.id, null)
-        check(store(context).edit().putString(alarm.id, alarm.json()).commit())
+        val json = alarm.json()
+        // Rearming an unchanged alarm needs no disk write (#873).
+        val changed = previous != json
+        if (changed) check(store(context).edit().putString(alarm.id, json).commit())
         try {
             manager(context).setAlarmClock(AlarmManager.AlarmClockInfo(alarm.fireAt, showIntent(context, alarm.id)), fireIntent(context, alarm))
         } catch (error: Exception) {
-            store(context).edit().putString(alarm.id, previous).commit()
+            if (changed) store(context).edit().putString(alarm.id, previous).commit()
             throw error
         }
     }
@@ -120,6 +138,8 @@ internal object DailyAlarmScheduler {
         val now = System.currentTimeMillis()
         val remaining = fireTimes.distinct().toMutableList()
         var active = false
+        val stale = mutableListOf<String>()
+        val kept = mutableListOf<DailyAlarm>()
         for (existing in alarms(context, eventId)) {
             val sameText = existing.title == title && existing.memo == memo && existing.snoozeMinutes == snoozeMinutes
             val matched = when {
@@ -130,15 +150,18 @@ internal object DailyAlarmScheduler {
                 else -> null
             }
             if (matched == null) {
-                cancelAlarm(context, existing.id)
+                stale += existing.id
                 continue
             }
             remaining.remove(matched)
             active = true
-            // Rearm a future native request (including snooze) after OS restart,
-            // but never stop a currently ringing service just to open the app.
-            if (existing.fireAt > now) schedule(context, existing)
+            kept += existing
         }
+        // Before scheduling: a replaced alarm can share its id with a new one.
+        cancelAlarms(context, stale)
+        // Rearm a future native request (including snooze) after OS restart,
+        // but never stop a currently ringing service just to open the app.
+        kept.filter { it.fireAt > now }.forEach { schedule(context, it) }
         for (fireAt in remaining) {
             if (fireAt <= now) continue
             schedule(context, DailyAlarm(eventId, title, memo, fireAt, snoozeMinutes))
@@ -149,14 +172,19 @@ internal object DailyAlarmScheduler {
 
     /** Cancels every alarm of [eventId]. */
     @Synchronized
-    fun cancel(context: Context, eventId: String) = alarms(context, eventId).forEach { cancelAlarm(context, it.id) }
+    fun cancel(context: Context, eventId: String) = cancelAlarms(context, alarms(context, eventId).map { it.id })
 
     /** Cancels the single alarm stored under [id]. */
     @Synchronized
-    fun cancelAlarm(context: Context, id: String) {
-        read(context, id)?.let { manager(context).cancel(fireIntent(context, it)) }
-        check(store(context).edit().remove(id).commit())
-        DailyAlarmService.stopEvent(context, id)
+    fun cancelAlarm(context: Context, id: String) = cancelAlarms(context, listOf(id))
+
+    /** Cancels the alarms stored under [ids] with one disk write. */
+    @Synchronized
+    private fun cancelAlarms(context: Context, ids: List<String>) {
+        if (ids.isEmpty()) return
+        ids.forEach { id -> read(context, id)?.let { manager(context).cancel(fireIntent(context, it)) } }
+        check(store(context).edit().apply { ids.forEach { remove(it) } }.commit())
+        ids.forEach { DailyAlarmService.stopEvent(context, it) }
     }
 
     fun cancelAll(context: Context) {
@@ -173,6 +201,7 @@ internal object DailyAlarmScheduler {
     fun restore(context: Context) {
         if (!notificationsAllowed(context)) return
         val now = System.currentTimeMillis()
+        val passed = mutableListOf<DailyAlarm>()
         store(context).all.keys.toList().forEach { id ->
             val alarm = read(context, id) ?: return@forEach
             when {
@@ -180,12 +209,11 @@ internal object DailyAlarmScheduler {
                 // rearm an alarm that is ringing right now (#844).
                 DailyAlarmService.ringing(id) -> Unit
                 alarm.fireAt > now -> if (exactAllowed(context)) schedule(context, alarm)
-                else -> {
-                    cancelAlarm(context, id)
-                    if (now - alarm.fireAt <= MISSED_WINDOW) notifyMissed(context, alarm)
-                }
+                else -> passed += alarm
             }
         }
+        cancelAlarms(context, passed.map { it.id })
+        passed.filter { now - it.fireAt <= MISSED_WINDOW }.forEach { notifyMissed(context, it) }
     }
 
     private fun notifyMissed(context: Context, alarm: DailyAlarm) {

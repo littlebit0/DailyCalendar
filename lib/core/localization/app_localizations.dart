@@ -29,7 +29,10 @@ class AppLocalizations {
   }
 
   String text(String korean, {Map<String, Object>? args}) {
-    var translated = _translations[languageCode]?[korean] ?? korean;
+    final singular = languageCode == 'en' && '${args?['count']}' == '1'
+        ? _englishSingular[korean]
+        : null;
+    var translated = singular ?? _translations[languageCode]?[korean] ?? korean;
     for (final entry in (args ?? const <String, Object>{}).entries) {
       translated = translated.replaceAll('{${entry.key}}', '${entry.value}');
     }
@@ -151,6 +154,36 @@ class _AppLocalizationsDelegate
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
 }
+
+/// English wording for a count of exactly one; every other count uses the
+/// plural entry in [_translations].
+const Map<String, String> _englishSingular = {
+  '{count}분 전': '{count} minute before',
+  '{count}시간 전': '{count} hour before',
+  '{count}일 전': '{count} day before',
+  '일정 {count}개': '{count} event',
+  '{month} · 일정 {count}개': '{month} · {count} event',
+  'D-day {count}개': '{count} D-day event',
+  '공휴일 {count}개': '{count} holiday',
+  '수업 {count}개': '{count} course',
+  '{count}개 캠퍼스': '{count} campus',
+  '{count}개 캘린더 가져오기': 'Import {count} calendar',
+  '{count}회': '{count} time',
+  '종일 · {count}일': 'All day · {count} day',
+  '{count}일간': '{count} day',
+  '기한 없는 학습 {count}개': '{count} learning item without a period',
+  '퀴즈 {count}개의 응시 상태를 확인하지 못했습니다. 기존 완료 상태는 유지됩니다.':
+      'Attempt status could not be verified for {count} quiz. Existing completion states are kept.',
+  '학습 정보가 충분하지 않은 항목 {count}개는 추가하지 않았습니다.':
+      '{count} item was not added because its learning information is incomplete.',
+  '강좌 {count}개의 학습 정보를 확인하지 못했습니다. 기존 학습 일정은 유지됩니다.':
+      'Learning information could not be verified for {count} course. Existing learning events are kept.',
+  '마감일이 없는 항목 {count}개는 달력에 표시하지 않습니다.':
+      '{count} item without a deadline is not shown on the calendar.',
+  '{count}개 일정은 지원하지 않는 반복 조건이 있어 한 번만 가져왔고 원래 규칙은 보존했습니다.':
+      '{count} event has a repeat rule that is not supported, so it was imported once and the original rule was kept.',
+  '대학 {count}개': '{count} university',
+};
 
 const Map<String, Map<String, String>> _translations = {
   'en': {
@@ -792,6 +825,7 @@ const Map<String, Map<String, String>> _translations = {
     '학교가 학습 기간을 정하지 않아 달력 대신 여기에 표시합니다.':
         'The school set no learning period, so these are listed here instead of on the calendar.',
     '지도 바로가기': 'Open in Maps',
+    '지도를 열지 못했습니다.': 'Could not open the map.',
     '월간 미니 캘린더': 'Mini Month Calendar',
     '오늘 일정': "Today's Events",
     '일정 없음': 'No events',
@@ -950,7 +984,7 @@ const Map<String, Map<String, String>> _translations = {
     '한 자리 지우기': 'Delete one digit',
     '앱 정보': 'App Information',
     '일정이 시작됩니다.': 'The event is starting.',
-    '일정 시작 {time}입니다.': 'The event starts {time}.',
+    '일정 시작 {time}입니다.': 'It is {time} the event starts.',
     'D-day 일정 알림입니다.': 'This is a D-day event reminder.',
     '오늘의 일정': "Today's Events",
     '오늘 등록된 일정이 없습니다.': 'There are no events today.',
@@ -979,6 +1013,7 @@ const Map<String, Map<String, String>> _translations = {
     '브리핑을 받을 시간': 'Time to receive the briefing',
     'D-day 알림 직접 입력': 'Custom D-day reminder',
     'D-day 기준 일수. 예: -7, 0': 'Days relative to D-day, e.g. -7, 0',
+    '{min}~{max} 사이의 숫자를 입력하세요': 'Enter a number from {min} to {max}',
     '앱 잠금 PIN 설정': 'Set App Lock PIN',
     '잠금 방식': 'Lock method',
     '버전 {version} · 더블 클릭하여 Github 확인하기':
@@ -994,6 +1029,11 @@ const Map<String, Map<String, String>> _translations = {
     '횟수만큼': 'After occurrences',
     '반복 간격': 'Repeat interval',
     '몇 {unit}마다 반복할까요?': 'Repeat every how many {unit}?',
+    '반복 간격 단위: 일': 'days',
+    '반복 간격 단위: 주': 'weeks',
+    '반복 간격 단위: 개월': 'months',
+    '반복 간격 단위: 년': 'years',
+    '반복 간격 단위: 번': 'times',
     '반복 횟수': 'Number of repeats',
     '몇 회 반복할까요?': 'How many times should it repeat?',
     '제목을 입력해야 일정을 저장할 수 있습니다.': 'Enter a title before saving the event.',
@@ -1018,15 +1058,17 @@ const Map<String, Map<String, String>> _translations = {
     '반복 일정 삭제': 'Delete Repeating Event',
     '일정 삭제': 'Delete Event',
     '"{title}" 일정을 삭제할까요?': 'Delete “{title}”?',
-    '이 반복 일정의 어느 범위에 {action}을 적용할까요?':
-        'Which occurrences should this {action} apply to?',
+    '이 반복 일정의 어느 범위를 수정할까요?':
+        'Which occurrences of this repeating event should be edited?',
+    '이 반복 일정의 어느 범위를 삭제할까요?':
+        'Which occurrences of this repeating event should be deleted?',
     '이 일정만': 'Only This Event',
     '이후 일정': 'This and Future Events',
     '전체 반복': 'All Events',
     '전체 삭제': 'Delete All',
     '일정을 옮기는 중': 'Importing events',
     '{count}개 캘린더 가져오기': 'Import {count} calendars',
-    '가져올 수 있는 {provider}가 없습니다.': 'No {provider} calendars are available.',
+    '가져올 수 있는 {provider}가 없습니다.': 'No calendars are available from {provider}.',
     '가져오기 완료: {imported}개 추가, {skipped}개 중복 제외, {failed}개 실패':
         'Import complete: {imported} added, {skipped} duplicates skipped, {failed} failed',
     '{count}개 일정은 지원하지 않는 반복 조건이 있어 한 번만 가져왔고 원래 규칙은 보존했습니다.':
@@ -1102,8 +1144,52 @@ const Map<String, Map<String, String>> _translations = {
         'Replaces the start-time notification with a system alarm.',
     'Google Drive 연결이 완료되었습니다.': 'Google Drive connected.',
     'Google Drive 복원 완료': 'Google Drive restore completed',
+    'Google Drive 동기화 중 · 저장된 일정을 사용할 수 있습니다.':
+        'Syncing with Google Drive · Saved events are available.',
+    'Google Drive 복원 정보를 확인하지 못했습니다. 연결을 확인한 뒤 다시 시도해 주세요.':
+        'Could not verify the Google Drive restore information. Check the connection and try again.',
+    '데이터 업데이트 중 문제가 발생했습니다. 기존 데이터는 변경하지 않았습니다.':
+        'A problem occurred while updating your data. Existing data was not changed.',
+    '중단된 데이터 업데이트의 복구 확인이 필요합니다. 기존 파일은 보존했습니다.':
+        'An interrupted data update needs a recovery check. Existing files were kept.',
+    '업데이트를 완료하지 못했습니다.':
+        'The update could not be completed.',
+    '일정 변경은 저장됐습니다. 알림·동기화 등 일부 후속 처리를 완료하지 못했습니다.':
+        'Your event change was saved. Some follow-up steps, such as notifications or sync, could not be completed.',
+    '일정을 해석하지 못했습니다.':
+        'Could not understand the event.',
+    '등록할 일정 내용을 입력해 주세요.':
+        'Enter the event you want to add.',
+    'Gemini API 키가 설정되어 있지 않습니다.':
+        'The Gemini API key is not set.',
+    '제목과 날짜를 다시 알려주세요.':
+        'Please tell me the title and date again.',
+    'Apple 로그인은 iPhone, iPad, macOS에서 사용할 수 있습니다.':
+        'Apple sign-in is available on iPhone, iPad, and macOS.',
+    '이 기기에서 Apple 로그인을 사용할 수 없습니다. Apple ID 설정과 앱 권한을 확인해 주세요.':
+        'Apple sign-in is not available on this device. Check your Apple ID settings and app permissions.',
+    'Apple 인증 응답에 사용자 식별자가 없습니다. 다시 시도해 주세요.':
+        'The Apple authentication response had no user identifier. Try again.',
+    '이 기기에서 Apple 로그인을 사용할 수 없습니다. OS 버전과 Apple ID 설정을 확인해 주세요.':
+        'Apple sign-in is not available on this device. Check the OS version and your Apple ID settings.',
+    'Apple 로그인에 실패했습니다. Apple ID 상태와 네트워크를 확인해 주세요.':
+        'Apple sign-in failed. Check your Apple ID status and network.',
+    'Apple 로그인 응답이 올바르지 않습니다. 다시 시도해 주세요.':
+        'The Apple sign-in response was invalid. Try again.',
+    'Apple 로그인 요청을 처리하지 못했습니다. 앱의 Sign in with Apple 권한을 확인해 주세요.':
+        'The Apple sign-in request could not be handled. Check the Sign in with Apple entitlement of the app.',
+    '현재 상태에서는 Apple 로그인 창을 열 수 없습니다. 앱을 다시 열고 시도해 주세요.':
+        'Apple sign-in cannot be opened right now. Reopen the app and try again.',
+    'Apple 자격 증명 처리 중 오류가 발생했습니다. 다시 시도해 주세요.':
+        'An error occurred while handling the Apple credential. Try again.',
+    'Apple 로그인을 완료하지 못했습니다. SideStore 등으로 재서명한 IPA에서는 Sign in with Apple 권한이 제거될 수 있습니다. 이 경우 Google로 계속을 사용하거나 TestFlight/App Store 빌드에서 Apple 로그인을 사용해 주세요.':
+        'Apple sign-in could not be completed. An IPA re-signed with SideStore or similar tools can lose the Sign in with Apple entitlement. In that case, use Continue with Google, or use Apple sign-in in a TestFlight or App Store build.',
+    'Apple 로그인 요청을 완료하지 못했습니다.':
+        'The Apple sign-in request could not be completed.',
     '요청을 완료하지 못했습니다. 잠시 후 다시 시도해 주세요.':
         'The request could not be completed. Try again shortly.',
+    '아침 브리핑 알림 예약을 바꾸지 못했습니다. 알림 권한을 확인한 뒤 다시 시도해 주세요.':
+        'Could not update the morning briefing notification. Check notification permission and try again.',
     '네트워크 연결을 확인한 뒤 다시 시도해 주세요.':
         'Check your network connection and try again.',
     'Google Drive 연결이 만료되었습니다. 다시 연결해 주세요.':
@@ -1408,7 +1494,7 @@ const Map<String, Map<String, String>> _translations = {
     "연결을 해제하면 이 기기에 저장된 로그인 정보와 학교 세션이 삭제되고 새 항목을 가져오지 않습니다. 이미 가져온 일정은 삭제되지 않으며, 학교 사용자 번호는 다시 연결할 때까지 설정에 남습니다. Drive에 저장된 데이터는 Google 계정의 앱 데이터 관리에서 삭제할 수 있습니다.":
         "接続を解除すると、この端末に保存されたログイン情報と学校セッションが削除され、新しい項目の取り込みが停止します。すでに取り込んだ予定は削除されず、学校ユーザー番号は再接続するまで設定に残ります。Driveに保存されたデータはGoogleアカウントのアプリデータ管理から削除できます。",
     "제목·마감·제출 상태는 학교에서 갱신됩니다. 직접 완료한 일정은 학교의 미완료 상태로 변경되지 않습니다. 메모·분류·알림은 별도로 유지됩니다.":
-        "タイトル・締切・提出状態は学校から更新されます。手動で完了した予定は学校の未完了状態で変更されません。メモ・分類・通知は別途保持されます。",
+        "タイトル・締切・提出状態は学校から更新されます。手動で完了にした予定は、学校側で未完了でも未完了に戻りません。メモ・分類・通知は別途保持されます。",
     "과제": "課題",
     "일정": "予定",
     "아이디·비밀번호는 이 기기의 보안 저장소에만 저장되며 다른 기기로 동기화되지 않습니다. 자동 로그인은 해당 기기에만 적용됩니다. LMS에서 가져온 일정만 Google 계정으로 동기화됩니다. 자동 로그인 시 다른 기기나 브라우저의 LMS 세션이 종료되어 로그아웃될 수 있습니다.":
@@ -1544,9 +1630,9 @@ const Map<String, Map<String, String>> _translations = {
     '강의 목록을 불러오지 못했습니다.': '授業一覧を読み込めません。',
     '해당 대학의 학교 시간표는 현재 미지원입니다.': 'この大学の授業時間割には現在対応していません。',
     '학교 · 캠퍼스': '大学・キャンパス',
-    '학과 · 전공': '学部・専攻',
+    '학과 · 전공': '学科・専攻',
     '과목명 · 학수번호 · 교수 검색': '科目名・科目番号・教員を検索',
-    '자료 기준일': '資料更新日',
+    '자료 기준일': '資料基準日',
     '선택한 학기의 학교 데이터가 없습니다. 직접 수업을 추가할 수 있습니다.':
         'この学期の大学データはありません。手動で授業を追加できます。',
     '분반': 'クラス',
@@ -1579,7 +1665,7 @@ const Map<String, Map<String, String>> _translations = {
     '학기': '学期',
     '이전 주': '前の週',
     '다음 주': '次の週',
-    '시간표 전체 초기화': '時間割をリセット',
+    '시간표 전체 초기화': '時間割をすべてリセット',
     '수업 추가': '授業を追加',
     '수업 수정': '授業を編集',
     '수업 삭제': '授業を削除',
@@ -1719,7 +1805,7 @@ const Map<String, Map<String, String>> _translations = {
     '달력 열기': 'カレンダーを開く',
     'Siri 작업': 'Siri操作',
     '지금 듣는 중...': '聞き取り中...',
-    '시그널 처리 중...': 'シグナルを処理中...',
+    '시그널 처리 중...': 'Signalを処理中...',
     '다시 말씀해 주세요': 'もう一度お話しください',
     '필요한 정보를 이어서 말씀해 주세요.': '不足している情報を続けてお話しください。',
     '음성 명령을 처리하지 못했습니다.': '音声コマンドを処理できませんでした。',
@@ -1880,6 +1966,7 @@ const Map<String, Map<String, String>> _translations = {
     '학교가 학습 기간을 정하지 않아 달력 대신 여기에 표시합니다.':
         '学校が学習期間を設定していないため、カレンダーではなくここに表示します。',
     '지도 바로가기': '地図で開く',
+    '지도를 열지 못했습니다.': '地図を開けませんでした。',
     '월간 미니 캘린더': '月間ミニカレンダー',
     '오늘 일정': '今日の予定',
     '일정 없음': '予定なし',
@@ -1968,7 +2055,7 @@ const Map<String, Map<String, String>> _translations = {
     '복원 완료': '復元完了',
     '동기화 완료': '同期完了',
     '최신 상태': '最新の状態',
-    '일부 백업 보류 · 먼저 복원 필요': '一部保留中・先に復元が必要',
+    '일부 백업 보류 · 먼저 복원 필요': '一部のバックアップを保留・先に復元が必要',
     '다른 기기 변경 확인 준비 중': 'ほかのデバイスの変更確認を準備中',
     '동기화 완료 · 다른 기기 변경 복원': '同期完了・ほかのデバイスの変更を復元',
     'PIN 확인': 'PIN確認',
@@ -2045,6 +2132,7 @@ const Map<String, Map<String, String>> _translations = {
     '브리핑을 받을 시간': 'ブリーフィングを受け取る時刻',
     'D-day 알림 직접 입력': 'D-day通知を直接入力',
     'D-day 기준 일수. 예: -7, 0': 'D-day基準の日数。例：-7、0',
+    '{min}~{max} 사이의 숫자를 입력하세요': '{min}〜{max}の数値を入力してください',
     '앱 잠금 PIN 설정': 'アプリロックPINを設定',
     '잠금 방식': 'ロック方式',
     '버전 {version} · 더블 클릭하여 Github 확인하기': 'バージョン{version}・ダブルクリックでGitHubを表示',
@@ -2059,6 +2147,11 @@ const Map<String, Map<String, String>> _translations = {
     '횟수만큼': '回数を指定',
     '반복 간격': '繰り返し間隔',
     '몇 {unit}마다 반복할까요?': '何{unit}ごとに繰り返しますか？',
+    '반복 간격 단위: 일': '日',
+    '반복 간격 단위: 주': '週',
+    '반복 간격 단위: 개월': 'か月',
+    '반복 간격 단위: 년': '年',
+    '반복 간격 단위: 번': '回',
     '반복 횟수': '繰り返し回数',
     '몇 회 반복할까요?': '何回繰り返しますか？',
     '제목을 입력해야 일정을 저장할 수 있습니다.': '予定を保存するにはタイトルを入力してください。',
@@ -2075,14 +2168,15 @@ const Map<String, Map<String, String>> _translations = {
     '반복 일정 삭제': '繰り返し予定を削除',
     '일정 삭제': '予定を削除',
     '"{title}" 일정을 삭제할까요?': '「{title}」を削除しますか？',
-    '이 반복 일정의 어느 범위에 {action}을 적용할까요?': 'この繰り返し予定のどの範囲に{action}を適用しますか？',
+    '이 반복 일정의 어느 범위를 수정할까요?': 'この繰り返し予定のどの範囲を編集しますか？',
+    '이 반복 일정의 어느 범위를 삭제할까요?': 'この繰り返し予定のどの範囲を削除しますか？',
     '이 일정만': 'この予定のみ',
     '이후 일정': 'これ以降の予定',
     '전체 반복': 'すべての予定',
     '전체 삭제': 'すべて削除',
     '일정을 옮기는 중': '予定を読み込み中',
     '{count}개 캘린더 가져오기': '{count}個のカレンダーを読み込む',
-    '가져올 수 있는 {provider}가 없습니다.': '読み込める{provider}カレンダーがありません。',
+    '가져올 수 있는 {provider}가 없습니다.': '読み込める{provider}がありません。',
     '가져오기 완료: {imported}개 추가, {skipped}개 중복 제외, {failed}개 실패':
         '読み込み完了：{imported}件追加、{skipped}件の重複を除外、{failed}件失敗',
     '{count}개 일정은 지원하지 않는 반복 조건이 있어 한 번만 가져왔고 원래 규칙은 보존했습니다.':
@@ -2173,7 +2267,50 @@ const Map<String, Map<String, String>> _translations = {
     '시작 시각의 정시 알림을 시스템 알람으로 대체합니다.': '開始時刻の通知をシステムアラームに置き換えます。',
     'Google Drive 연결이 완료되었습니다.': 'Google Driveに接続しました。',
     'Google Drive 복원 완료': 'Google Driveからの復元が完了しました',
+    'Google Drive 동기화 중 · 저장된 일정을 사용할 수 있습니다.':
+        'Google Driveと同期中・保存済みの予定は利用できます。',
+    'Google Drive 복원 정보를 확인하지 못했습니다. 연결을 확인한 뒤 다시 시도해 주세요.':
+        'Google Driveの復元情報を確認できませんでした。接続を確認して再試行してください。',
+    '데이터 업데이트 중 문제가 발생했습니다. 기존 데이터는 변경하지 않았습니다.':
+        'データの更新中に問題が発生しました。既存のデータは変更していません。',
+    '중단된 데이터 업데이트의 복구 확인이 필요합니다. 기존 파일은 보존했습니다.':
+        '中断されたデータ更新の復旧確認が必要です。既存のファイルは保持しました。',
+    '업데이트를 완료하지 못했습니다.':
+        '更新を完了できませんでした。',
+    '일정 변경은 저장됐습니다. 알림·동기화 등 일부 후속 처리를 완료하지 못했습니다.':
+        '予定の変更は保存されました。通知や同期など一部の後続処理を完了できませんでした。',
+    '일정을 해석하지 못했습니다.':
+        '予定を解釈できませんでした。',
+    '등록할 일정 내용을 입력해 주세요.':
+        '登録する予定の内容を入力してください。',
+    'Gemini API 키가 설정되어 있지 않습니다.':
+        'Gemini APIキーが設定されていません。',
+    '제목과 날짜를 다시 알려주세요.':
+        'タイトルと日付をもう一度教えてください。',
+    'Apple 로그인은 iPhone, iPad, macOS에서 사용할 수 있습니다.':
+        'AppleサインインはiPhone、iPad、macOSで利用できます。',
+    '이 기기에서 Apple 로그인을 사용할 수 없습니다. Apple ID 설정과 앱 권한을 확인해 주세요.':
+        'このデバイスではAppleサインインを利用できません。Apple IDの設定とアプリの権限を確認してください。',
+    'Apple 인증 응답에 사용자 식별자가 없습니다. 다시 시도해 주세요.':
+        'Appleの認証応答にユーザー識別子がありません。再試行してください。',
+    '이 기기에서 Apple 로그인을 사용할 수 없습니다. OS 버전과 Apple ID 설정을 확인해 주세요.':
+        'このデバイスではAppleサインインを利用できません。OSのバージョンとApple IDの設定を確認してください。',
+    'Apple 로그인에 실패했습니다. Apple ID 상태와 네트워크를 확인해 주세요.':
+        'Appleサインインに失敗しました。Apple IDの状態とネットワークを確認してください。',
+    'Apple 로그인 응답이 올바르지 않습니다. 다시 시도해 주세요.':
+        'Appleサインインの応答が正しくありません。再試行してください。',
+    'Apple 로그인 요청을 처리하지 못했습니다. 앱의 Sign in with Apple 권한을 확인해 주세요.':
+        'Appleサインインのリクエストを処理できませんでした。アプリのSign in with Apple権限を確認してください。',
+    '현재 상태에서는 Apple 로그인 창을 열 수 없습니다. 앱을 다시 열고 시도해 주세요.':
+        '現在の状態ではAppleサインインを開けません。アプリを開き直して再試行してください。',
+    'Apple 자격 증명 처리 중 오류가 발생했습니다. 다시 시도해 주세요.':
+        'Appleの認証情報の処理中にエラーが発生しました。再試行してください。',
+    'Apple 로그인을 완료하지 못했습니다. SideStore 등으로 재서명한 IPA에서는 Sign in with Apple 권한이 제거될 수 있습니다. 이 경우 Google로 계속을 사용하거나 TestFlight/App Store 빌드에서 Apple 로그인을 사용해 주세요.':
+        'Appleサインインを完了できませんでした。SideStoreなどで再署名したIPAでは、Sign in with Apple権限が削除されることがあります。その場合は「Googleで続ける」を使うか、TestFlight/App StoreのビルドでAppleサインインをご利用ください。',
+    'Apple 로그인 요청을 완료하지 못했습니다.':
+        'Appleサインインのリクエストを完了できませんでした。',
     '요청을 완료하지 못했습니다. 잠시 후 다시 시도해 주세요.': 'リクエストを完了できませんでした。しばらくしてから再試行してください。',
+    '아침 브리핑 알림 예약을 바꾸지 못했습니다. 알림 권한을 확인한 뒤 다시 시도해 주세요.': '朝のブリーフィング通知を更新できませんでした。通知の許可を確認してから再試行してください。',
     '네트워크 연결을 확인한 뒤 다시 시도해 주세요.': 'ネットワーク接続を確認して再試行してください。',
     'Google Drive 연결이 만료되었습니다. 다시 연결해 주세요.':
         'Google Drive接続の有効期限が切れました。再接続してください。',
@@ -2471,7 +2608,7 @@ const Map<String, Map<String, String>> _translations = {
     "전남대학교": "全南大學",
     "사이버대학": "網路大學",
     "대학교를 선택하세요. 학사 정보는 Google Drive로 동기화됩니다.":
-        "請選擇大學。學校資訊將透過 Google Drive 同步。",
+        "請選擇大學。學籍資訊將透過 Google Drive 同步。",
     "죽전캠퍼스": "竹田校區",
     "광주캠퍼스": "光州校區",
     "여수캠퍼스": "麗水校區",
@@ -2589,7 +2726,7 @@ const Map<String, Map<String, String>> _translations = {
     '강의 목록을 불러오지 못했습니다.': '無法載入課程目錄。',
     '해당 대학의 학교 시간표는 현재 미지원입니다.': '目前尚未支援此大學的課程表。',
     '학교 · 캠퍼스': '學校 · 校區',
-    '학과 · 전공': '學系 · 專業',
+    '학과 · 전공': '學系 · 主修',
     '과목명 · 학수번호 · 교수 검색': '搜尋課程、課號或教師',
     '자료 기준일': '資料日期',
     '선택한 학기의 학교 데이터가 없습니다. 직접 수업을 추가할 수 있습니다.': '此學期沒有學校資料。您可以手動新增課程。',
@@ -2796,8 +2933,8 @@ const Map<String, Map<String, String>> _translations = {
     '주간·일간 표시 방식': '週／日顯示方式',
     '목록': '清單',
     '스케줄': '時間表',
-    '종일 일정 표시': '顯示全日行程',
-    '종일 일정 숨기기': '隱藏全日行程',
+    '종일 일정 표시': '顯示全天行程',
+    '종일 일정 숨기기': '隱藏全天行程',
     '주간': '週',
     '월간': '月',
     '일간': '日',
@@ -2912,6 +3049,7 @@ const Map<String, Map<String, String>> _translations = {
     '기한 없는 학습 {count}개': '無期限學習 {count} 項',
     '학교가 학습 기간을 정하지 않아 달력 대신 여기에 표시합니다.': '學校未設定學習期間，因此列於此處而非行事曆。',
     '지도 바로가기': '在地圖中開啟',
+    '지도를 열지 못했습니다.': '無法開啟地圖。',
     '월간 미니 캘린더': '月份迷你行事曆',
     '오늘 일정': '今日行程',
     '일정 없음': '沒有行程',
@@ -3056,7 +3194,7 @@ const Map<String, Map<String, String>> _translations = {
     '한 자리 지우기': '刪除一位數',
     '앱 정보': 'App 資訊',
     '일정이 시작됩니다.': '行程即將開始。',
-    '일정 시작 {time}입니다.': '行程將於{time}開始。',
+    '일정 시작 {time}입니다.': '現在是行程開始{time}。',
     'D-day 일정 알림입니다.': '這是 D-day 行程提醒。',
     '오늘의 일정': '今日行程',
     '오늘 등록된 일정이 없습니다.': '今天沒有行程。',
@@ -3075,6 +3213,7 @@ const Map<String, Map<String, String>> _translations = {
     '브리핑을 받을 시간': '接收摘要的時間',
     'D-day 알림 직접 입력': '自訂 D-day 提醒',
     'D-day 기준 일수. 예: -7, 0': '相對 D-day 的天數，例如 -7、0',
+    '{min}~{max} 사이의 숫자를 입력하세요': '請輸入 {min} 到 {max} 之間的數字',
     '앱 잠금 PIN 설정': '設定 App 鎖定 PIN',
     '잠금 방식': '鎖定方式',
     '버전 {version} · 더블 클릭하여 Github 확인하기': '版本 {version}・按兩下查看 GitHub',
@@ -3089,6 +3228,11 @@ const Map<String, Map<String, String>> _translations = {
     '횟수만큼': '指定次數',
     '반복 간격': '重複間隔',
     '몇 {unit}마다 반복할까요?': '每幾{unit}重複一次？',
+    '반복 간격 단위: 일': '天',
+    '반복 간격 단위: 주': '週',
+    '반복 간격 단위: 개월': '個月',
+    '반복 간격 단위: 년': '年',
+    '반복 간격 단위: 번': '次',
     '반복 횟수': '重複次數',
     '몇 회 반복할까요?': '要重複幾次？',
     '제목을 입력해야 일정을 저장할 수 있습니다.': '請輸入標題後再儲存行程。',
@@ -3105,14 +3249,15 @@ const Map<String, Map<String, String>> _translations = {
     '반복 일정 삭제': '刪除重複行程',
     '일정 삭제': '刪除行程',
     '"{title}" 일정을 삭제할까요?': '要刪除「{title}」嗎？',
-    '이 반복 일정의 어느 범위에 {action}을 적용할까요?': '要將{action}套用到此重複行程的哪個範圍？',
+    '이 반복 일정의 어느 범위를 수정할까요?': '要編輯此重複行程的哪個範圍？',
+    '이 반복 일정의 어느 범위를 삭제할까요?': '要刪除此重複行程的哪個範圍？',
     '이 일정만': '僅此行程',
     '이후 일정': '此行程及之後',
     '전체 반복': '所有行程',
     '전체 삭제': '全部刪除',
     '일정을 옮기는 중': '正在匯入行程',
     '{count}개 캘린더 가져오기': '匯入 {count} 個行事曆',
-    '가져올 수 있는 {provider}가 없습니다.': '沒有可匯入的 {provider} 行事曆。',
+    '가져올 수 있는 {provider}가 없습니다.': '沒有可匯入的{provider}。',
     '가져오기 완료: {imported}개 추가, {skipped}개 중복 제외, {failed}개 실패':
         '匯入完成：新增 {imported} 個、略過 {skipped} 個重複項目、{failed} 個失敗',
     '{count}개 일정은 지원하지 않는 반복 조건이 있어 한 번만 가져왔고 원래 규칙은 보존했습니다.':
@@ -3200,7 +3345,50 @@ const Map<String, Map<String, String>> _translations = {
     '시작 시각의 정시 알림을 시스템 알람으로 대체합니다.': '以系統鬧鐘取代開始時間通知。',
     'Google Drive 연결이 완료되었습니다.': 'Google Drive 連線完成。',
     'Google Drive 복원 완료': 'Google Drive 還原完成',
+    'Google Drive 동기화 중 · 저장된 일정을 사용할 수 있습니다.':
+        '正在與 Google Drive 同步 · 可使用已儲存的行程。',
+    'Google Drive 복원 정보를 확인하지 못했습니다. 연결을 확인한 뒤 다시 시도해 주세요.':
+        '無法確認 Google Drive 的還原資訊。請檢查連線後再試。',
+    '데이터 업데이트 중 문제가 발생했습니다. 기존 데이터는 변경하지 않았습니다.':
+        '更新資料時發生問題。現有資料未變更。',
+    '중단된 데이터 업데이트의 복구 확인이 필요합니다. 기존 파일은 보존했습니다.':
+        '需要確認已中斷的資料更新是否復原。現有檔案已保留。',
+    '업데이트를 완료하지 못했습니다.':
+        '無法完成更新。',
+    '일정 변경은 저장됐습니다. 알림·동기화 등 일부 후속 처리를 완료하지 못했습니다.':
+        '行程變更已儲存。通知、同步等部分後續處理未能完成。',
+    '일정을 해석하지 못했습니다.':
+        '無法解讀行程。',
+    '등록할 일정 내용을 입력해 주세요.':
+        '請輸入要新增的行程內容。',
+    'Gemini API 키가 설정되어 있지 않습니다.':
+        '尚未設定 Gemini API 金鑰。',
+    '제목과 날짜를 다시 알려주세요.':
+        '請再告訴我一次標題和日期。',
+    'Apple 로그인은 iPhone, iPad, macOS에서 사용할 수 있습니다.':
+        'Apple 登入可在 iPhone、iPad 和 macOS 上使用。',
+    '이 기기에서 Apple 로그인을 사용할 수 없습니다. Apple ID 설정과 앱 권한을 확인해 주세요.':
+        '此裝置無法使用 Apple 登入。請檢查 Apple ID 設定和 App 權限。',
+    'Apple 인증 응답에 사용자 식별자가 없습니다. 다시 시도해 주세요.':
+        'Apple 驗證回應中沒有使用者識別碼。請再試一次。',
+    '이 기기에서 Apple 로그인을 사용할 수 없습니다. OS 버전과 Apple ID 설정을 확인해 주세요.':
+        '此裝置無法使用 Apple 登入。請檢查系統版本和 Apple ID 設定。',
+    'Apple 로그인에 실패했습니다. Apple ID 상태와 네트워크를 확인해 주세요.':
+        'Apple 登入失敗。請檢查 Apple ID 狀態和網路。',
+    'Apple 로그인 응답이 올바르지 않습니다. 다시 시도해 주세요.':
+        'Apple 登入回應不正確。請再試一次。',
+    'Apple 로그인 요청을 처리하지 못했습니다. 앱의 Sign in with Apple 권한을 확인해 주세요.':
+        '無法處理 Apple 登入要求。請檢查 App 的 Sign in with Apple 權限。',
+    '현재 상태에서는 Apple 로그인 창을 열 수 없습니다. 앱을 다시 열고 시도해 주세요.':
+        '目前無法開啟 Apple 登入。請重新開啟 App 後再試。',
+    'Apple 자격 증명 처리 중 오류가 발생했습니다. 다시 시도해 주세요.':
+        '處理 Apple 憑證時發生錯誤。請再試一次。',
+    'Apple 로그인을 완료하지 못했습니다. SideStore 등으로 재서명한 IPA에서는 Sign in with Apple 권한이 제거될 수 있습니다. 이 경우 Google로 계속을 사용하거나 TestFlight/App Store 빌드에서 Apple 로그인을 사용해 주세요.':
+        '無法完成 Apple 登入。使用 SideStore 等工具重新簽署的 IPA 可能會移除 Sign in with Apple 權限。此時請使用「使用 Google 繼續」，或在 TestFlight／App Store 版本中使用 Apple 登入。',
+    'Apple 로그인 요청을 완료하지 못했습니다.':
+        '無法完成 Apple 登入要求。',
     '요청을 완료하지 못했습니다. 잠시 후 다시 시도해 주세요.': '無法完成要求，請稍後再試。',
+    '아침 브리핑 알림 예약을 바꾸지 못했습니다. 알림 권한을 확인한 뒤 다시 시도해 주세요.': '無法更新晨間摘要通知，請確認通知權限後再試。',
     '네트워크 연결을 확인한 뒤 다시 시도해 주세요.': '請檢查網路連線後再試。',
     'Google Drive 연결이 만료되었습니다. 다시 연결해 주세요.': 'Google Drive 連線已過期，請重新連線。',
     'Google Drive 권한이 부족합니다. 다시 연결해 권한을 승인해 주세요.':

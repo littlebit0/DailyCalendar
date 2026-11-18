@@ -5,17 +5,8 @@ import 'package:daily/core/academic/academic_profile.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_period_defaults.dart';
 import 'package:daily/features/timetable/domain/timetable.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-class _Files extends CachingAssetBundle {
-  @override
-  Future<String> loadString(String key, {bool cache = true}) async =>
-      File(key).readAsStringSync();
-  @override
-  Future<ByteData> load(String key) async =>
-      ByteData.sublistView(File(key).readAsBytesSync());
-}
+import '../../support/file_asset_bundle.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -23,7 +14,7 @@ void main() {
     'INHA catalog has complete identities, real half-hour times and remarks',
     () async {
       final datasets = await UniversityCatalog.load(
-        bundle: _Files(),
+        bundle: FileAssetBundle(),
         university: 'inha',
       );
       final courses = datasets.single.courses;
@@ -39,6 +30,9 @@ void main() {
       final course = courses.singleWhere(
         (c) => c.codeAndSection == 'BPE4206-001',
       );
+      // 원문은 `목21,…,32`다. 공개 교시 목록은 24교시(21:00 종료)까지라, 21:00 이후
+      // 시각은 tool/timetable/import_inha.py가 30분 간격을 이어 붙인 추정값이다.
+      // 실제로 다음 날 01:00까지 수업하는지는 원문 미확인이다(#950).
       expect(
         course.meetings.map((m) => (m.weekday, m.startMinute, m.endMinute)),
         [(4, 1140, 1440), (5, 0, 60)],
@@ -61,7 +55,7 @@ void main() {
     );
     expect(profile.timetableUniversity, 'inha');
     expect(profile.timetableCampus, 'main');
-    final defaults = await TimetablePeriodDefaults.load(bundle: _Files());
+    final defaults = await TimetablePeriodDefaults.load(bundle: FileAssetBundle());
     final period = defaults.periodFor(2026, '2', university: 'inha')!;
     expect(period.start, DateTime(2026, 8, 31));
     expect(period.end, DateTime(2026, 12, 18));

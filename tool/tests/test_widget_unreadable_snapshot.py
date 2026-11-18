@@ -26,6 +26,7 @@ def snapshot_model():
         "let testDirectory = URL(fileURLWithPath: CommandLine.arguments[1])",
         'let snapshotFileName = "snapshot.json"',
         store.replace(lookup, "Optional<String>.none"),
+        between("// BEGIN WIDGET TEXT", "// END WIDGET TEXT"),
         between("struct DailyWidgetEvent: Codable, Identifiable {", "private enum DailyWidgetTodoActionStore {"),
         between("struct DailyWidgetDay: Codable, Identifiable {", "private struct DailyWidgetEventSpan"),
         between("struct DailyWidgetDday: Codable, Identifiable {", "// BEGIN WIDGET WEEKDAY COLUMNS"),
@@ -36,12 +37,12 @@ def snapshot_model():
 class WidgetUnreadableSnapshotTest(unittest.TestCase):
     def test_today_and_lock_screen_views_show_the_refresh_state(self):
         today = between("struct DailyTodayWidgetView: View {", "#if os(iOS)\nstruct DailyLockScreenTodayView")
-        self.assertLess(today.index("needsRefresh == true"), today.index('"오늘 일정이 없습니다"'))
+        self.assertLess(today.index("needsRefresh == true"), today.index("text.noEventsToday"))
         lock = between("struct DailyLockScreenTodayView: View {", "struct DailyTodayWidgetRootView")
         # inline, circular and rectangular each branch before their empty text.
         self.assertEqual(lock.count("entry.snapshot.needsRefresh == true"), 3)
-        self.assertLess(lock.index("needsRefresh == true"), lock.index('"오늘 일정 없음"'))
-        self.assertLess(lock.rindex("needsRefresh == true"), lock.index('"남은 일정이 없습니다"'))
+        self.assertLess(lock.index("needsRefresh == true"), lock.index("text.noEventsTodayShort"))
+        self.assertLess(lock.rindex("needsRefresh == true"), lock.index("text.noRemainingEvents"))
 
     def test_home_screen_titles_are_privacy_sensitive(self):
         for start, end in (

@@ -6,24 +6,15 @@ import 'package:daily/features/timetable/data/timetable_period_defaults.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/domain/timetable.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-class _Files extends CachingAssetBundle {
-  @override
-  Future<String> loadString(String key, {bool cache = true}) async =>
-      File(key).readAsStringSync();
-  @override
-  Future<ByteData> load(String key) async =>
-      ByteData.sublistView(File(key).readAsBytesSync());
-}
+import '../../support/file_asset_bundle.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   test('Ulsan profile exposes the full public 2026-2 listing', () async {
     final datasets = await UniversityCatalog.load(
-      bundle: _Files(),
+      bundle: FileAssetBundle(),
       university: 'ulsan',
     );
     expect(
@@ -40,7 +31,7 @@ void main() {
     expect(profile.timetableUniversity, 'ulsan');
     expect(profile.timetableCampus, 'main');
     final period = (await TimetablePeriodDefaults.load(
-      bundle: _Files(),
+      bundle: FileAssetBundle(),
     )).periodFor(2026, '2', university: 'ulsan');
     expect(period?.start, DateTime(2026, 9, 1));
     expect(period?.end, DateTime(2026, 12, 21));
@@ -75,6 +66,8 @@ void main() {
 
     final approved = courses.where((c) => c.hasSchedulableMeetings).toList();
     expect(approved, hasLength(23));
+    // 출처: tool/timetable/ulsan_honors_clock.json의 source(아너스칼리지 자율전공학부
+    // 학년별 시간표). 공개 강의시간 조회는 요일·교시만 있어 나머지는 unrecognized다.
     // The honors 학년별 시간표 prints 1~9교시 as 09:00~17:50 (50분 수업 + 10분
     // 쉬는 시간 = 60분 슬롯). Each period owns its break, so every meeting
     // starts and ends on the 60-minute grid from 09:00, and a same-room run of

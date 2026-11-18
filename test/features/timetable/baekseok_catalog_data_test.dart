@@ -1,27 +1,17 @@
 import 'dart:convert';
-import 'dart:io' as io;
 import '../../support/source_fixture.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
 import 'package:daily/features/timetable/domain/timetable.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:daily/core/academic/academic_profile.dart';
-import 'package:flutter/services.dart';
-
-class _Files extends CachingAssetBundle {
-  @override
-  Future<String> loadString(String key, {bool cache = true}) async =>
-      io.File(key).readAsStringSync();
-  @override
-  Future<ByteData> load(String key) async =>
-      ByteData.sublistView(io.File(key).readAsBytesSync());
-}
+import '../../support/file_asset_bundle.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   test('BU major labels open as its official top-level faculties', () async {
     final data = (await UniversityCatalog.load(
-      bundle: _Files(),
+      bundle: FileAssetBundle(),
       university: 'baekseok',
     )).single;
     expect(data.courses, hasLength(2571));

@@ -56,8 +56,8 @@ for i,row in enumerate(all_rows):
  current={k:row.get(k) for k in keep}
  current['restriction']=restriction[0]['MSG']
  courses.append(current)
- (args.output/'courses.partial.json').write_text(json.dumps(courses,ensure_ascii=False))
+ (args.output/'courses.partial.json').write_text(json.dumps(courses,ensure_ascii=False), encoding='utf-8')
  if (i+1)%50==0:print('Restrictions',i+1,'/',len(all_rows),flush=True)
-(args.output/'courses.json').write_text(json.dumps(courses,ensure_ascii=False))
-(args.output/'manifest.json').write_text(json.dumps({'complete':True,'year':2026,'semester':'2','sourceUrl':base+'/page?menuCD=000000000000335','categoryCounts':counts,'total':len(courses)},ensure_ascii=False,indent=2)+'\n')
+(args.output/'courses.json').write_text(json.dumps(courses,ensure_ascii=False), encoding='utf-8')
+(args.output/'manifest.json').write_text(json.dumps({'complete':True,'year':2026,'semester':'2','sourceUrl':base+'/page?menuCD=000000000000335','categoryCounts':counts,'total':len(courses)},ensure_ascii=False,indent=2)+'\n', encoding='utf-8')
 print('Complete',len(courses),flush=True)

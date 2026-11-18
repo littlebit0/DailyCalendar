@@ -11,6 +11,30 @@ import CryptoKit
 import EventKit
 import AppIntents
 
+// BEGIN ALARM TEXT
+/// AlarmKit button and countdown wording in the app's four languages (#921).
+struct DailyAlarmText {
+  let language: DailySiriLanguage
+
+  private func localized(_ ko: String, _ en: String, _ ja: String, _ zh: String) -> String {
+    switch language {
+    case .korean: return ko
+    case .english: return en
+    case .japanese: return ja
+    case .traditionalChinese: return zh
+    }
+  }
+
+  /// Passed to the Live Activity so it uses the same language.
+  var localeTag: String { localized("ko", "en", "ja", "zh-Hant") }
+  var stop: String { localized("중지", "Stop", "停止", "停止") }
+  var untilSnoozeEnds: String { localized("다시 알림까지", "Until the next alert", "再通知まで", "距離再次提醒") }
+  func snoozeAfter(_ minutes: Int) -> String {
+    localized("\(minutes)분 후 다시 알림", "Snooze for \(minutes) min", "\(minutes)分後に再通知", "\(minutes) 分鐘後再次提醒")
+  }
+}
+// END ALARM TEXT
+
 private final class DailyAppleWidgets {
   static let channelName = "daily/apple_widgets"
   static let appGroup = "group.com.littlebit0.daily.widgets"
@@ -18,6 +42,8 @@ private final class DailyAppleWidgets {
   static let todoActionsFileName = "daily-widget-todo-actions.json"
   static let todoActionsChangedNotification = "com.littlebit0.daily.widgetTodoActionsChanged"
   private static var channel: FlutterMethodChannel?
+  /// Snapshot writes wait for the shared file lock off the platform thread, in order.
+  private static let snapshotQueue = DispatchQueue(label: "com.littlebit0.daily.widgets.snapshot")
   private static var observesTodoActions = false
   private static let todoActionsCallback: CFNotificationCallback = {
     _, _, _, _, _ in
@@ -36,15 +62,21 @@ private final class DailyAppleWidgets {
           result(FlutterError(code: "invalid_widget_snapshot", message: "위젯 데이터 형식이 올바르지 않습니다.", details: nil))
           return
         }
-        do {
-          try writeSnapshot(snapshot)
-          reloadTimelines()
-          if #available(iOS 18.0, *) {
-            DailySiriSearchIndexer.scheduleRefresh()
+        snapshotQueue.async {
+          do {
+            try writeSnapshot(snapshot)
+            DispatchQueue.main.async {
+              reloadTimelines()
+              if #available(iOS 18.0, *) {
+                DailySiriSearchIndexer.scheduleRefresh()
+              }
+              result(nil)
+            }
+          } catch {
+            DispatchQueue.main.async {
+              result(FlutterError(code: "widget_snapshot_failed", message: error.localizedDescription, details: nil))
+            }
           }
-          result(nil)
-        } catch {
-          result(FlutterError(code: "widget_snapshot_failed", message: error.localizedDescription, details: nil))
         }
       case "pendingTodoActions":
         do {
@@ -103,12 +135,17 @@ private final class DailyAppleWidgets {
     return url
   }
 
+  /// The widget rewrites this file when a to-do is toggled. Both writers hold
+  /// the action queue lock, so neither overwrites the other's snapshot (#920).
   private static func writeSnapshot(_ snapshot: [String: Any]) throws {
     let data = try JSONSerialization.data(withJSONObject: snapshot)
-    try data.write(
-      to: try containerURL().appendingPathComponent(snapshotFileName),
-      options: .atomic
-    )
+    let containerURL = try containerURL()
+    try withTodoActionsLock(in: containerURL) {
+      try data.write(
+        to: containerURL.appendingPathComponent(snapshotFileName),
+        options: .atomic
+      )
+    }
   }
 
   /// Serializes read-modify-write of the shared action queue across the app and
@@ -352,11 +389,9 @@ private final class DailyCalendarImport {
       calendarIds.contains($0.calendarIdentifier) && !isGoogleSource($0.source)
     }
     guard !selected.isEmpty else { return [] }
-    var seen = Set<String>()
     var values: [[String: Any]] = []
     for event in eventsInChunks(calendars: selected) {
       let sourceId = event.calendarItemIdentifier
-      guard !sourceId.isEmpty, seen.insert(sourceId).inserted else { continue }
       var value: [String: Any] = [
         "sourceId": sourceId,
         "calendarId": event.calendar.calendarIdentifier,
@@ -391,19 +426,48 @@ private final class DailyCalendarImport {
 
   /// EventKit truncates a predicate longer than four years to its first four, so
   /// the full 1970-2100 range is read in three-year windows, oldest first.
+  /// EventKit returns every occurrence of a repeating event; only the first one
+  /// of each calendar item is used, so each window is reduced to its new items
+  /// before the next is read instead of holding every occurrence up to 2100 (#923).
   private static func eventsInChunks(calendars: [EKCalendar]) -> [EKEvent] {
     let gregorian = Calendar(identifier: .gregorian)
     let rangeEnd = gregorian.date(from: DateComponents(year: 2101, month: 1, day: 1))!
     var windowStart = gregorian.date(from: DateComponents(year: 1970, month: 1, day: 1))!
+    var seen = Set<String>()
     var collected: [EKEvent] = []
     while windowStart < rangeEnd {
       let windowEnd = min(gregorian.date(byAdding: .year, value: 3, to: windowStart)!, rangeEnd)
       let predicate = store.predicateForEvents(withStart: windowStart, end: windowEnd, calendars: calendars)
-      collected += store.events(matching: predicate).sorted { $0.startDate < $1.startDate }
+      autoreleasepool {
+        appendFirstOccurrences(
+          of: store.events(matching: predicate),
+          into: &collected,
+          seen: &seen,
+          id: { $0.calendarItemIdentifier },
+          start: { $0.startDate }
+        )
+      }
       windowStart = windowEnd
     }
     return collected
   }
+
+  // BEGIN FIRST OCCURRENCES
+  /// Appends, oldest first, the items of one window whose id has not been seen.
+  static func appendFirstOccurrences<Item>(
+    of window: [Item],
+    into collected: inout [Item],
+    seen: inout Set<String>,
+    id: (Item) -> String,
+    start: (Item) -> Date
+  ) {
+    for item in window.sorted(by: { start($0) < start($1) }) {
+      let key = id(item)
+      guard !key.isEmpty, seen.insert(key).inserted else { continue }
+      collected.append(item)
+    }
+  }
+  // END FIRST OCCURRENCES
 
   private static func recurrenceValue(_ rule: EKRecurrenceRule) -> String? {
     let frequency: String
@@ -846,6 +910,10 @@ private final class DailyAlarmKit {
 
     let memo = (arguments["memo"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines)
     let visibleMemo = memo.flatMap { $0.isEmpty ? nil : String($0.prefix(80)) }
+    // The app language; without it the alarm wording follows the device language.
+    let language = DailySiriLanguage.resolve(
+      (arguments["localeTag"] as? String) ?? Locale.preferredLanguages.first
+    )
     let reconcile = call.method == "reconcile"
     Task { @MainActor in
       do {
@@ -864,7 +932,7 @@ private final class DailyAlarmKit {
           schedule: { alarm in
             _ = try await AlarmManager.shared.schedule(
               id: alarm.id,
-              configuration: configuration(title: title, memo: visibleMemo, snoozeMinutes: snoozeMinutes, fireDate: alarm.fireDate)
+              configuration: configuration(title: title, memo: visibleMemo, snoozeMinutes: snoozeMinutes, language: language, fireDate: alarm.fireDate)
             )
             UserDefaults.standard.set(alarm.fingerprint, forKey: fingerprintKey(alarm.id))
           },
@@ -886,11 +954,13 @@ private final class DailyAlarmKit {
     title: String,
     memo visibleMemo: String?,
     snoozeMinutes: Int,
+    language: DailySiriLanguage,
     fireDate: Date
   ) -> AlarmManager.AlarmConfiguration<DailyAlarmMetadata> {
     let displayTitle = visibleMemo.map { "\(title)\n\($0)" } ?? title
+    let text = DailyAlarmText(language: language)
     let secondaryButton = AlarmButton(
-      text: "\(snoozeMinutes)분 후 다시 알림",
+      text: LocalizedStringResource(stringLiteral: text.snoozeAfter(snoozeMinutes)),
       textColor: .white,
       systemImageName: "clock.arrow.circlepath"
     )
@@ -903,7 +973,7 @@ private final class DailyAlarmKit {
       )
     } else {
       let stopButton = AlarmButton(
-        text: "중지",
+        text: LocalizedStringResource(stringLiteral: text.stop),
         textColor: .white,
         systemImageName: "stop.circle"
       )
@@ -915,10 +985,12 @@ private final class DailyAlarmKit {
       )
     }
     let countdown = AlarmPresentation.Countdown(
-      title: "다시 알림까지",
+      title: LocalizedStringResource(stringLiteral: text.untilSnoozeEnds),
       pauseButton: nil
     )
-    let metadata = DailyAlarmMetadata(title: title, memo: visibleMemo)
+    let metadata = DailyAlarmMetadata(
+      title: title, memo: visibleMemo, snoozeMinutes: snoozeMinutes, localeTag: text.localeTag
+    )
     let attributes = AlarmAttributes(
       presentation: AlarmPresentation(alert: alert, countdown: countdown),
       metadata: metadata,
@@ -935,6 +1007,9 @@ private final class DailyAlarmKit {
     )
   }
 
+  /// The app language is deliberately not part of the fingerprint: a wording
+  /// change alone must not replace an alarm, or reconcile would cancel one that
+  /// is ringing or snoozed. New wording applies when the alarm is next scheduled.
   private static func sourceFingerprint(_ fireAtMilliseconds: Int64, _ title: String, _ memo: String?, _ snoozeMinutes: Int) -> String {
     let data = (try? JSONSerialization.data(withJSONObject: [fireAtMilliseconds, title, memo ?? "", snoozeMinutes])) ?? Data()
     return SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined()
@@ -1057,7 +1132,9 @@ private final class DailyMapLauncher {
       return
     }
     guard candidates.count > 1, let presenter = topViewController() else {
-      UIApplication.shared.open(webFallback(for: location), options: [:]) { _ in result("handled") }
+      UIApplication.shared.open(webFallback(for: location), options: [:]) { success in
+        result(success ? "handled" : "failed")
+      }
       return
     }
 
@@ -1082,8 +1159,8 @@ private final class DailyMapLauncher {
         result("handled")
         return
       }
-      UIApplication.shared.open(webFallback(for: fallbackLocation), options: [:]) { _ in
-        result("handled")
+      UIApplication.shared.open(webFallback(for: fallbackLocation), options: [:]) { opened in
+        result(opened ? "handled" : "failed")
       }
     }
   }
@@ -1214,10 +1291,32 @@ private final class DailyMapLauncher {
   }
 }
 
+// BEGIN LMS COOKIE BIND REGISTRY
+// A bind answered after Daily gave up on it (a newer bind or a clear came
+// first) must not replace the current store.
+struct DailyLmsBindRegistry<Store> {
+  private var generation = 0
+  private var stores: [String: Store] = [:]
+  mutating func begin() -> Int {
+    generation += 1
+    return generation
+  }
+  /// Registers the store only for the latest bind.
+  mutating func finish(_ bind: Int, store: Store, host: String) -> Bool {
+    guard bind == generation else { return false }
+    stores[host] = store
+    return true
+  }
+  mutating func supersedeBinds() { generation += 1 }
+  func store(host: String) -> Store? { stores[host] }
+  mutating func remove(host: String) { stores.removeValue(forKey: host) }
+}
+// END LMS COOKIE BIND REGISTRY
+
 // The school browser uses a nonpersistent WKWebsiteDataStore. This channel is
 // callable only by Daily, never exposed as a JavaScript message handler.
 private final class DailyLmsCookieStore {
-  private static var stores: [String: WKWebsiteDataStore] = [:]
+  private static var registry = DailyLmsBindRegistry<WKWebsiteDataStore>()
   // BEGIN LMS COOKIE READ POLICY
   private static let hosts: Set<String> = [
     "ecampus.smu.ac.kr", "sel.jnu.ac.kr", "ecampus.changwon.ac.kr", "lms.jnue.kr",
@@ -1260,6 +1359,7 @@ private final class DailyLmsCookieStore {
         guard !candidates.isEmpty else {
           result(FlutterError(code: "school_view_missing", message: nil, details: nil)); return
         }
+        let bind = registry.begin()
         let group = DispatchGroup()
         var matches: [WKWebsiteDataStore] = []
         var scriptFailures = 0
@@ -1280,12 +1380,15 @@ private final class DailyLmsCookieStore {
               : scriptFailures > 0 ? "school_script_unavailable" : "school_marker_missing"
             result(FlutterError(code: code, message: nil, details: nil)); return
           }
-          stores[host] = store
+          guard registry.finish(bind, store: store, host: host) else {
+            result(FlutterError(code: "school_bind_superseded", message: nil, details: nil)); return
+          }
           result(true)
         }
         return
       }
-      guard let store = stores[host], !store.isPersistent else {
+      if call.method == "clear" { registry.supersedeBinds() }
+      guard let store = registry.store(host: host), !store.isPersistent else {
         if call.method == "clear" { result(true) }
         else { result(FlutterError(code: "school_view_missing", message: nil, details: nil)) }
         return
@@ -1334,7 +1437,7 @@ private final class DailyLmsCookieStore {
         }
         group.notify(queue: .main) { result(true) }
       case "clear":
-        stores.removeValue(forKey: host)
+        registry.remove(host: host)
         // This store belongs exclusively to the bound private school WebView.
         store.removeData(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes(),
                          modifiedSince: .distantPast) { result(true) }

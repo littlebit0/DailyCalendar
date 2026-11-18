@@ -1274,6 +1274,144 @@ void main() {
     },
     skip: !Platform.isMacOS && !Platform.isIOS,
   );
+
+  for (final (name, controller) in [
+    ('address read', () => _DelayedWebController()),
+    ('script call', () => _HangingScriptController()),
+  ]) {
+    test(
+      'unanswered $name ends verification so close and login proceed',
+      () async {
+        _seedStoredSession();
+        final calls = <String>[];
+        _mockCookieBridge(calls);
+        final session = LmsWebSession(
+          ownerId: 'student@example.com',
+          schoolId: 'smu',
+          verificationCallTimeout: const Duration(milliseconds: 50),
+        );
+        try {
+          await session.beginLogin();
+          final web = controller();
+          session.attachLoginController(web);
+          await expectLater(
+            session.verifyAuthentication(),
+            throwsA(
+              isA<LmsWebSessionException>().having(
+                (error) => error.code,
+                'code',
+                LmsWebSessionError.network,
+              ),
+            ),
+          );
+          expect(await session.hasStoredSession(), isTrue);
+          await session.close().timeout(const Duration(seconds: 5));
+          expect((web as dynamic).stopCount, 1);
+          await session.beginLogin().timeout(const Duration(seconds: 5));
+          expect(await session.hasStoredSession(), isTrue);
+        } finally {
+          await session.retire();
+          session.dispose();
+          _clearMockCookieBridge();
+        }
+      },
+      skip: !Platform.isMacOS && !Platform.isIOS,
+    );
+  }
+
+  test(
+    'unanswered native cookie binding ends verification as a network failure',
+    () async {
+      FlutterSecureStorage.setMockInitialValues({});
+      final calls = <String>[];
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(
+            const MethodChannel('daily/lms_cookie_store'),
+            (call) {
+              calls.add(call.method);
+              return call.method == 'bind'
+                  ? Completer<Object?>().future
+                  : Future<Object?>.value(true);
+            },
+          );
+      final session = LmsWebSession(
+        ownerId: 'student@example.com',
+        schoolId: 'smu',
+        verificationCallTimeout: const Duration(milliseconds: 50),
+      );
+      try {
+        await session.beginLogin();
+        session.attachLoginController(_AuthenticatedWebController());
+        await expectLater(
+          session.verifyAuthentication(),
+          throwsA(
+            isA<LmsWebSessionException>().having(
+              (error) => error.code,
+              'code',
+              LmsWebSessionError.network,
+            ),
+          ),
+        );
+        await session.close().timeout(const Duration(seconds: 5));
+        // This clear makes the native side drop the unanswered bind.
+        expect(calls, ['bind', 'clear']);
+      } finally {
+        await session.retire();
+        session.dispose();
+        _clearMockCookieBridge();
+      }
+    },
+    skip: !Platform.isMacOS && !Platform.isIOS,
+  );
+
+  test(
+    'an older bind finishing late keeps a newer pending bind cancellable',
+    () async {
+      FlutterSecureStorage.setMockInitialValues({});
+      final calls = <String>[];
+      final binds = <Completer<Object?>>[];
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(
+            const MethodChannel('daily/lms_cookie_store'),
+            (call) {
+              calls.add(call.method);
+              if (call.method != 'bind') return Future<Object?>.value(true);
+              final bind = Completer<Object?>();
+              binds.add(bind);
+              return bind.future;
+            },
+          );
+      final session = LmsWebSession(
+        ownerId: 'student@example.com',
+        schoolId: 'smu',
+        verificationCallTimeout: const Duration(milliseconds: 50),
+      );
+      final network = throwsA(
+        isA<LmsWebSessionException>().having(
+          (error) => error.code,
+          'code',
+          LmsWebSessionError.network,
+        ),
+      );
+      try {
+        await session.beginLogin();
+        session.attachLoginController(_AuthenticatedWebController());
+        await expectLater(session.verifyAuthentication(), network);
+        await expectLater(session.verifyAuthentication(), network);
+        expect(binds, hasLength(2));
+        // The first bind is answered late and unbound; the second still waits.
+        binds.first.complete(false);
+        await Future<void>.delayed(Duration.zero);
+        await session.close().timeout(const Duration(seconds: 5));
+        expect(calls, ['bind', 'bind', 'clear']);
+      } finally {
+        await session.retire();
+        session.dispose();
+        _clearMockCookieBridge();
+      }
+    },
+    skip: !Platform.isMacOS && !Platform.isIOS,
+  );
 }
 
 final _authError = isA<LmsWebSessionException>().having(
@@ -1527,6 +1665,26 @@ class _DelayedStorage extends FlutterSecureStorage {
     AppleOptions? mOptions,
     WindowsOptions? wOptions,
   }) => readResult.future;
+}
+
+class _HangingScriptController implements InAppWebViewController {
+  int stopCount = 0;
+
+  @override
+  Future<WebUri?> getUrl() async => WebUri('https://ecampus.smu.ac.kr/');
+
+  @override
+  Future<void> stopLoading() async => stopCount++;
+
+  @override
+  Future<CallAsyncJavaScriptResult?> callAsyncJavaScript({
+    required String functionBody,
+    Map<String, dynamic> arguments = const {},
+    ContentWorld? contentWorld,
+  }) => Completer<CallAsyncJavaScriptResult?>().future;
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }
 
 class _DelayedWebController implements InAppWebViewController {

@@ -1,5 +1,6 @@
 package com.littlebit0.dailycalendar
 
+import android.app.AlarmManager
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
@@ -26,6 +27,7 @@ import java.text.DateFormatSymbols
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import java.util.TimeZone
 import kotlin.math.absoluteValue
 
 enum class DailyWidgetKind {
@@ -48,6 +50,12 @@ abstract class DailyBaseWidgetProvider : AppWidgetProvider() {
             appWidgetIds,
             widgetKind,
         )
+        // Also the path after a reboot, which drops the pending alarm.
+        DailyWidgetUpdater.scheduleMidnightRefresh(context)
+    }
+
+    override fun onDisabled(context: Context) {
+        DailyWidgetUpdater.scheduleMidnightRefresh(context)
     }
 
     override fun onAppWidgetOptionsChanged(
@@ -73,6 +81,7 @@ abstract class DailyBaseWidgetProvider : AppWidgetProvider() {
 
     private companion object {
         val DATE_CHANGE_ACTIONS = setOf(
+            DailyWidgetUpdater.ACTION_MIDNIGHT_REFRESH,
             Intent.ACTION_DATE_CHANGED,
             Intent.ACTION_TIME_CHANGED,
             Intent.ACTION_TIMEZONE_CHANGED,
@@ -107,6 +116,42 @@ object DailyWidgetUpdater {
             val ids = manager.getAppWidgetIds(ComponentName(applicationContext, providerClass))
             updateWidgets(applicationContext, manager, ids, kind)
         }
+        scheduleMidnightRefresh(applicationContext)
+    }
+
+    internal const val ACTION_MIDNIGHT_REFRESH =
+        "com.littlebit0.dailycalendar.action.WIDGET_MIDNIGHT_REFRESH"
+
+    /** The next local 00:00 after [now]; a day skipped or repeated by DST still ends at its own midnight. */
+    internal fun nextLocalMidnight(now: Long, zone: TimeZone = TimeZone.getDefault()): Long =
+        Calendar.getInstance(zone).apply {
+            timeInMillis = now
+            add(Calendar.DAY_OF_YEAR, 1)
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+        }.timeInMillis
+
+    /**
+     * DATE_CHANGED is not delivered to manifest receivers (API 26+), so one
+     * alarm refreshes every widget at the next local midnight (#875). It is
+     * inexact and does not wake the device: a sleeping screen shows no widget.
+     */
+    internal fun scheduleMidnightRefresh(
+        context: Context,
+        hasWidgets: Boolean = AppWidgetManager.getInstance(context).let { manager ->
+            providers.any { manager.getAppWidgetIds(ComponentName(context, it.second)).isNotEmpty() }
+        },
+    ) {
+        val alarms = context.getSystemService(AlarmManager::class.java) ?: return
+        val refresh = PendingIntent.getBroadcast(
+            context, 0,
+            Intent(context, DailyMonthWidgetProvider::class.java).setAction(ACTION_MIDNIGHT_REFRESH),
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+        )
+        if (hasWidgets) alarms.set(AlarmManager.RTC, nextLocalMidnight(System.currentTimeMillis()), refresh)
+        else alarms.cancel(refresh)
     }
 
     internal fun updateWidgets(
@@ -502,7 +547,13 @@ private class DailyEventWidgetFactory(
         )
         views.setOnClickFillInIntent(
             R.id.widget_item_root,
-            DailyWidgetActionReceiver.openFillInIntent(eventId = eventId),
+            DailyWidgetActionReceiver.openFillInIntent(
+                // The occurrence's day, so a repeating event opens on the tapped date.
+                date = event.optLong("startAt", 0L).takeIf { it > 0L }?.let {
+                    java.text.SimpleDateFormat("yyyy-MM-dd", Locale.US).format(Date(it))
+                },
+                eventId = eventId,
+            ),
         )
         return views
     }
@@ -567,6 +618,8 @@ class DailyWidgetActionReceiver : BroadcastReceiver() {
         source.getStringExtra(EXTRA_DATE)?.let {
             intent.putExtra(EXTRA_DATE, it)
         }
+        // Read by MainActivity and handed to Dart (#874).
+        intent.putExtra(DailyAndroidWidgetBridge.EXTRA_WIDGET_OPEN, true)
         context.startActivity(intent)
     }
 

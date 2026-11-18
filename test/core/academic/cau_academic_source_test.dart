@@ -4,19 +4,13 @@ import 'package:daily/core/academic/academic_profile.dart';
 import 'package:daily/core/academic/academic_source.dart';
 import 'package:daily/core/academic/cau_academic_source.dart';
 import 'package:daily/features/timetable/data/timetable_period_defaults.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
+import '../../support/file_asset_bundle.dart';
 
 String fixture([int year = 2026]) =>
     File('test/fixtures/academic/cau-$year.json').readAsStringSync();
-
-class _FileBundle extends CachingAssetBundle {
-  @override
-  Future<ByteData> load(String key) async =>
-      ByteData.sublistView(await File(key).readAsBytes());
-}
 
 void main() {
   test('CAU requests the published undergraduate year list', () async {
@@ -172,7 +166,7 @@ void main() {
     'CAU term defaults are bounded by their named official calendar rows',
     () async {
       final defaults = await TimetablePeriodDefaults.load(
-        bundle: _FileBundle(),
+        bundle: FileAssetBundle(),
       );
       final raw =
           jsonDecode(
@@ -219,8 +213,22 @@ void main() {
           isFalse,
         );
       }
-      expect(defaults.periodFor(2025, '2', university: 'cau'), isNull);
-      expect(defaults.periodFor(2027, '1', university: 'cau'), isNull);
+      // 자료에 없는 연도는 자료의 앞뒤 연도로 계산해, 학사 자료를 추가해도 깨지지 않게 한다.
+      final years =
+          defaults
+              .periodsFor('cau')
+              .keys
+              .map((key) => (jsonDecode(key) as List).first as int)
+              .toList()
+            ..sort();
+      expect(
+        defaults.periodFor(years.first - 1, '2', university: 'cau'),
+        isNull,
+      );
+      expect(
+        defaults.periodFor(years.last + 1, '1', university: 'cau'),
+        isNull,
+      );
     },
   );
 }

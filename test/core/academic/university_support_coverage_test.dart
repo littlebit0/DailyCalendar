@@ -35,10 +35,10 @@ void main() {
               as List;
       expect(status['completionClaim'], isFalse);
       expect(status['lmsExpansion'], isFalse);
+      var checked = 0;
       for (final row in rows) {
-        if (row['academicCalendar']['status'] != 'implemented_live_verified') {
-          continue;
-        }
+        final registered =
+            row['academicCalendar']['status'] == 'implemented_live_verified';
         final matched = targets.where((t) => t['name'] == row['name']);
         final target = matched.isNotEmpty
             ? matched.single as Map
@@ -59,21 +59,34 @@ void main() {
             schoolKind: 'fourYear',
             campusId: campus as String,
           );
+          // The status file must match the registered academic sources (#976).
+          expect(
+            profile.academicSourceId != null,
+            registered,
+            reason: '${row['name']} / $campus academic calendar status',
+          );
+          if (!registered) continue;
+          checked++;
           final timetable = row['timetable'] as Map;
+          final catalogId =
+              timetable['universityId'] ??
+              timetable['sourceId'] ??
+              row['academicCalendar']['sourceId'];
           if (timetable['status'] == 'temporarily_unsupported') {
             expect(profile.timetableSupported, isFalse);
-            expect(profile.timetableUniversity, timetable['universityId']);
+            expect(profile.timetableUniversity, catalogId);
           } else if ((timetable['status'] as String).startsWith(
             'implemented_',
           )) {
-            final catalogId =
-                timetable['universityId'] ??
-                timetable['sourceId'] ??
-                row['academicCalendar']['sourceId'];
             expect(
               profile.timetableUniversity,
               catalogId,
               reason: '${row['name']} / $campus must use its own catalog',
+            );
+            expect(
+              profile.timetableSupported,
+              isTrue,
+              reason: '${row['name']} / $campus timetable is suspended',
             );
           } else {
             expect(
@@ -85,6 +98,7 @@ void main() {
           }
         }
       }
+      expect(checked, greaterThan(0));
     },
   );
 }

@@ -91,7 +91,8 @@ void main() {
           if (src.contains('야')) {
             expect(start, 1080, reason: src);
             // 야1~3 = 18:00~20:25(3교시 뒤 10분 휴식 포함), 야1~2 = 18:00~19:30.
-            expect(end, src.endsWith('3') ? 1225 : 1170, reason: src);
+            final last = RegExp(r'야1~(\d)$').firstMatch(src)?[1];
+            expect(end, {'2': 1170, '3': 1225}[last], reason: src);
           } else {
             expect(start % 60, 0, reason: src);
             expect(end % 60, 0, reason: src);

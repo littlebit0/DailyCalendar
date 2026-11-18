@@ -498,8 +498,12 @@ enum DailySpokenTemporalParser {
     return false
   }
 
-  static func parse(_ value: String?) -> DailySpokenTemporalValues? {
-    guard let value else { return nil }
+  static func parse(_ spoken: String?) -> DailySpokenTemporalValues? {
+    guard let spoken else { return nil }
+    // A length ("2시간", "30분 동안") is not a clock time: take it out before
+    // reading clock times, so "3시부터 2시간" cannot end at 2 o'clock.
+    let duration = spokenDuration(in: spoken)
+    let value = duration?.remainder ?? spoken
     let calendar = Calendar.current
     let explicitRange: (start: Date, end: Date?)?
     switch explicitDateRange(in: value, calendar: calendar) {
@@ -567,7 +571,11 @@ enum DailySpokenTemporalParser {
             minute: group(3, match: match, source: value),
             calendar: calendar
           ) {
-      return DailySpokenTemporalValues(startAt: start, endAt: nil, allDay: false)
+      return DailySpokenTemporalValues(
+        startAt: start,
+        endAt: duration.map { start.addingTimeInterval($0.seconds) },
+        allDay: false
+      )
     }
 
     guard value.contains("종일") || explicitRange?.end != nil else { return nil }
@@ -576,6 +584,38 @@ enum DailySpokenTemporalParser {
       endAt: explicitRange?.end ?? calendar.date(byAdding: .day, value: 1, to: baseDate),
       allDay: true
     )
+  }
+
+  /// "N시간", "N시간 M분" or "N분 동안/간" as a length, with the command text
+  /// left after removing it. "3시 30분 동안" keeps 30분 as part of the clock time.
+  /// A length followed by 전/후/뒤 ("2시간 전에 알림") is an offset, not the
+  /// event's length: it is skipped, and also removed so it is not read as 2시.
+  private static func spokenDuration(in value: String) -> (seconds: TimeInterval, remainder: String)? {
+    let pattern = #"(\d{1,2})\s*시간(?:\s*(\d{1,2})\s*분)?(?:\s*(?:동안|간))?|(?<!시)(?<!시\s)(?<!\d)(\d{1,3})\s*분\s*(?:동안|간)"#
+    guard let expression = try? NSRegularExpression(pattern: pattern) else { return nil }
+    var seconds: TimeInterval?
+    var removed: [Range<String.Index>] = []
+    for match in expression.matches(in: value, range: NSRange(value.startIndex..., in: value)) {
+      guard let range = Range(match.range, in: value) else { continue }
+      let after = value[range.upperBound...].drop { $0 == " " }
+      if after.hasPrefix("전") || after.hasPrefix("후") || after.hasPrefix("뒤") {
+        removed.append(range)
+        continue
+      }
+      guard seconds == nil else { continue }
+      let hours = group(1, match: match, source: value).flatMap(Int.init) ?? 0
+      let minutes = (group(2, match: match, source: value) ?? group(3, match: match, source: value))
+        .flatMap(Int.init) ?? 0
+      guard hours * 60 + minutes > 0 else { continue }
+      seconds = TimeInterval(hours * 3600 + minutes * 60)
+      removed.append(range)
+    }
+    guard let seconds else { return nil }
+    var remainder = value
+    for range in removed.reversed() {
+      remainder.replaceSubrange(range, with: " ")
+    }
+    return (seconds, remainder)
   }
 
   private static func explicitDateRange(
@@ -1785,6 +1825,8 @@ enum DailySiriNarrationValidator {
       if factualBlank { continue }
       guard numbers(in: candidateLine) == numbers(in: factualLine),
             weekdays(in: candidateLine) == weekdays(in: factualLine),
+            months(in: candidateLine) == months(in: factualLine),
+            keepsDayPeriods(candidateLine, factual: factualLine),
             mentionedTitles(in: candidateLine, titles) == mentionedTitles(in: factualLine, titles),
             negates(candidateLine) == negates(factualLine),
             statesAllDay(candidateLine) == statesAllDay(factualLine),
@@ -1813,6 +1855,49 @@ enum DailySiriNarrationValidator {
   private static func weekdays(in value: String) -> [String] {
     let lowered = value.lowercased()
     return weekdayNames.filter { lowered.contains($0) }.sorted()
+  }
+
+  private static func matches(_ pattern: String, in value: String) -> [(text: String, range: Range<String.Index>)] {
+    guard let expression = try? NSRegularExpression(pattern: pattern) else { return [] }
+    return expression.matches(in: value, range: NSRange(value.startIndex..., in: value)).compactMap { match in
+      Range(match.range, in: value).map { (String(value[$0]), $0) }
+    }
+  }
+
+  /// English month names; other languages write the month as a number.
+  private static func months(in value: String) -> [String] {
+    matches(
+      #"\b(?:jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|june?|july?|aug(?:ust)?|sep(?:t(?:ember)?)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)\b"#,
+      in: value.lowercased()
+    ).map { String($0.text.prefix(3)) }.sorted()
+  }
+
+  /// AM/PM markers in reading order, each with the clock hour it belongs to
+  /// (after the marker, or before it for the English "9:00 AM" form).
+  private static func dayPeriods(in value: String) -> [(afternoon: Bool, hour: Int?)] {
+    let lowered = value.lowercased()
+    let times = matches(#"\d{1,2}:\d{2}"#, in: lowered)
+    func hour(_ time: String) -> Int? { Int(time.prefix { $0 != ":" }) }
+    return matches(#"오전|오후|午前|午後|上午|下午|(?<=\d)\s*(?:a\.?m|p\.?m)\b"#, in: lowered).map { marker in
+      let text = marker.text.trimmingCharacters(in: .whitespaces)
+      let english = text.hasPrefix("a") || text.hasPrefix("p")
+      let time = english
+        ? times.last { $0.range.upperBound <= marker.range.upperBound }
+        : times.first { $0.range.lowerBound >= marker.range.upperBound }
+      return (["오후", "午後", "下午"].contains(text) || text.hasPrefix("p"), time.flatMap { hour($0.text) })
+    }
+  }
+
+  /// A 12-hour line keeps its AM/PM markers. A 24-hour line may gain one only
+  /// when it agrees with the hour it is attached to ("오전 09:00").
+  private static func keepsDayPeriods(_ candidate: String, factual: String) -> Bool {
+    let expected = dayPeriods(in: factual)
+    let actual = dayPeriods(in: candidate)
+    if !expected.isEmpty { return actual.map(\.afternoon) == expected.map(\.afternoon) }
+    return actual.allSatisfy { period in
+      guard let hour = period.hour else { return false }
+      return period.afternoon == (hour >= 12)
+    }
   }
 
   /// Titles named in the line, ignoring a short title that only occurs inside a longer one.
@@ -3623,19 +3708,29 @@ enum DailySiriCommandClassifier {
 
     // Mutating actions take precedence so a phrase such as "내일 일정 삭제" can
     // never be downgraded to a read-only tomorrow query.
-    if containsAny(command, ["삭제", "지워", "지우기", "없애", "취소", "delete", "remove"]) {
+    // A refused verb ("삭제하지 마", "don't delete") or one that only describes
+    // an event ("취소된 수업", "등록금") is not a request to change anything.
+    var refused = false
+    func requests(_ verbs: [String]) -> Bool {
+      let found = requestedVerb(in: command, verbs)
+      refused = refused || found.refused
+      return found.requested
+    }
+    if requests(["삭제", "지워", "지우기", "없애", "취소", "delete", "remove"]) {
       return .delete
     }
     // "reschedule" changes an existing event; it must not match the verb "schedule".
-    if containsAny(command, ["수정", "변경", "바꿔", "고쳐", "update", "edit", "change", "reschedule"]) {
+    if requests(["수정", "변경", "바꿔", "고쳐", "update", "edit", "change", "reschedule"]) {
       return .update
     }
-    if containsAny(command, ["추가", "등록", "만들", "생성", "잡아", "add", "create"]) || schedulesSomething(command) {
+    if requests(["추가", "등록", "만들", "생성", "잡아", "add", "create"]) || schedulesSomething(command) {
       return .add
     }
     if containsAny(command, ["검색", "찾아", "찾기", "search", "find"]) {
       return .search
     }
+    // "내일 일정 삭제하지 마" must not turn into reading tomorrow's events.
+    if refused { return nil }
     if containsAny(command, ["d-day", "d day", "dday", "디데이"]) {
       return .dday
     }
@@ -3676,6 +3771,36 @@ enum DailySiriCommandClassifier {
 
   private static func containsAny(_ value: String, _ candidates: [String]) -> Bool {
     candidates.contains { value.contains($0) }
+  }
+
+  private static let refusalAfterVerb = #"^[은는을를]?\s*(?:(?:하지는?|하진)\s*(?:마|말|않)|말고|말아)"#
+  private static let refusalBeforeVerb = #"(?:don't|dont|do not|never)\s+$"#
+  private static let descriptionAfterVerb = #"^(?:된|됐|되었|되어|돼)"#
+
+  /// Whether one of the verbs is asked for, and whether one was refused.
+  private static func requestedVerb(in command: String, _ verbs: [String]) -> (requested: Bool, refused: Bool) {
+    // Typographic apostrophes (don’t) must match the ASCII form.
+    let command = command.replacingOccurrences(of: "\u{2019}", with: "'")
+    var refused = false
+    for verb in verbs {
+      var searchRange = command.startIndex..<command.endIndex
+      while let found = command.range(of: verb, range: searchRange) {
+        searchRange = found.upperBound..<command.endIndex
+        let after = String(command[found.upperBound...])
+        let before = String(command[..<found.lowerBound])
+        if after.range(of: descriptionAfterVerb, options: .regularExpression) != nil ||
+            (verb == "등록" && after.hasPrefix("금")) {
+          continue
+        }
+        if after.range(of: refusalAfterVerb, options: .regularExpression) != nil ||
+            before.range(of: refusalBeforeVerb, options: .regularExpression) != nil {
+          refused = true
+          continue
+        }
+        return (true, refused)
+      }
+    }
+    return (false, refused)
   }
 }
 // END SIRI COMMAND CLASSIFIER
@@ -4364,13 +4489,14 @@ struct DailySignalCommandIntent: AppIntent {
 
 @available(iOS 16.0, macOS 13.0, *)
 struct DailyAppShortcuts: AppShortcutsProvider {
+  // Development-language (English) wording only. The Korean, Japanese and
+  // Traditional Chinese phrases and titles are in AppShortcuts.xcstrings (#958).
   static var appShortcuts: [AppShortcut] {
     AppShortcut(
       intent: AddDailyEventIntent(),
       phrases: [
         "Add an event in \(.applicationName)",
-        "\(.applicationName) 앱에 일정 추가",
-        "\(.applicationName)에서 일정 만들어줘",
+        "Create an event with \(.applicationName)",
       ],
       shortTitle: "Add Event",
       systemImageName: "calendar.badge.plus"
@@ -4379,8 +4505,7 @@ struct DailyAppShortcuts: AppShortcutsProvider {
       intent: GetTodayDailyEventsIntent(),
       phrases: [
         "Show today's events in \(.applicationName)",
-        "\(.applicationName) 앱에서 오늘 일정 알려줘",
-        "\(.applicationName)에서 오늘 스케줄 확인",
+        "Check today's schedule in \(.applicationName)",
       ],
       shortTitle: "Today's Events",
       systemImageName: "calendar"
@@ -4389,8 +4514,7 @@ struct DailyAppShortcuts: AppShortcutsProvider {
       intent: GetTomorrowDailyEventsIntent(),
       phrases: [
         "Show tomorrow's events in \(.applicationName)",
-        "\(.applicationName) 앱에서 내일 일정 알려줘",
-        "\(.applicationName)에서 내일 스케줄 확인",
+        "Check tomorrow's schedule in \(.applicationName)",
       ],
       shortTitle: "Tomorrow's Events",
       systemImageName: "calendar"
@@ -4399,8 +4523,7 @@ struct DailyAppShortcuts: AppShortcutsProvider {
       intent: GetDailyEventsOnDateIntent(),
       phrases: [
         "Show events on a date in \(.applicationName)",
-        "\(.applicationName) 앱에서 지정 날짜 일정 알려줘",
-        "\(.applicationName)에서 날짜별 일정 확인",
+        "Check events by date in \(.applicationName)",
       ],
       shortTitle: "Events on Date",
       systemImageName: "calendar.badge.clock"
@@ -4409,8 +4532,7 @@ struct DailyAppShortcuts: AppShortcutsProvider {
       intent: GetNextDailyEventIntent(),
       phrases: [
         "What's next in \(.applicationName)",
-        "\(.applicationName) 앱에서 다음 일정 알려줘",
-        "\(.applicationName)에서 가장 가까운 일정 알려줘",
+        "Show my nearest event in \(.applicationName)",
       ],
       shortTitle: "Next Event",
       systemImageName: "clock"
@@ -4419,8 +4541,7 @@ struct DailyAppShortcuts: AppShortcutsProvider {
       intent: SearchDailyEventsIntent(),
       phrases: [
         "Search events in \(.applicationName)",
-        "\(.applicationName) 앱에서 일정 검색",
-        "\(.applicationName)에서 일정 찾아줘",
+        "Find an event in \(.applicationName)",
       ],
       shortTitle: "Search Events",
       systemImageName: "magnifyingglass"
@@ -4429,8 +4550,7 @@ struct DailyAppShortcuts: AppShortcutsProvider {
       intent: UpdateDailyEventIntent(),
       phrases: [
         "Update an event in \(.applicationName)",
-        "\(.applicationName) 앱에서 일정 수정",
-        "\(.applicationName)에서 일정 바꿔줘",
+        "Change an event in \(.applicationName)",
       ],
       shortTitle: "Update Event",
       systemImageName: "calendar.badge.exclamationmark"
@@ -4439,8 +4559,7 @@ struct DailyAppShortcuts: AppShortcutsProvider {
       intent: DeleteDailyEventIntent(),
       phrases: [
         "Delete an event in \(.applicationName)",
-        "\(.applicationName) 앱에서 일정 삭제",
-        "\(.applicationName)에서 일정 지워줘",
+        "Remove an event from \(.applicationName)",
       ],
       shortTitle: "Delete Event",
       systemImageName: "calendar.badge.minus"
@@ -4449,8 +4568,7 @@ struct DailyAppShortcuts: AppShortcutsProvider {
       intent: GetDailyDdayEventsIntent(),
       phrases: [
         "Show D-day events in \(.applicationName)",
-        "\(.applicationName) 앱에서 D-day 알려줘",
-        "\(.applicationName)에서 디데이 일정 확인",
+        "Check D-days in \(.applicationName)",
       ],
       shortTitle: "D-day Events",
       systemImageName: "flag"
@@ -4459,8 +4577,7 @@ struct DailyAppShortcuts: AppShortcutsProvider {
       intent: DailySignalCommandIntent(),
       phrases: [
         "Run Signal in \(.applicationName)",
-        "\(.applicationName)에서 시그널 실행",
-        "\(.applicationName) 시그널",
+        "\(.applicationName) Signal",
       ],
       shortTitle: "Signal",
       systemImageName: "waveform"

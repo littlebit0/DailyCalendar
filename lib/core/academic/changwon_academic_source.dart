@@ -104,7 +104,8 @@ class ChangwonAcademicSource implements AcademicSource {
       if (row['alldayAt'] != 'Y') {
         throw const FormatException('Invalid Changwon academic period');
       }
-      if (title.contains('대학원')) continue;
+      // Rows that also name undergraduates ("학부·대학원 …") are shared.
+      if (title.contains('대학원') && !title.contains('학부')) continue;
       if (events.containsKey('$seq')) {
         throw const FormatException('Duplicate Changwon record');
       }

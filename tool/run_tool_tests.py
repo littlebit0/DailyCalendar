@@ -34,6 +34,7 @@ POLICY_SUITES = [
 # University timetable import and fetch checks.
 IMPORT_SUITES = [
     "test_dankook_import",
+    "test_expanded_university_courses",
     "test_fetch_konkuk",
     "test_gachon_fetch",
     "test_hansung_import",
@@ -44,24 +45,36 @@ IMPORT_SUITES = [
     "test_import_daegu_missing_rows",
     "test_import_konkuk",
     "test_import_pcu",
+    "test_jnu_import",
     "test_kmu_import",
     "test_kookmin_import",
     "test_pnu_import",
     "test_sejong_import",
     "test_seoultech_import",
+    "test_sungshin_import",
     "test_timetable_import",
     "test_tuk_import",
     "test_ulsan_view",
     "test_uos_import",
 ]
 
-SUITES = POLICY_SUITES + IMPORT_SUITES + ["test_run_tool_tests"]
+# Apple widget behaviour checks (compile Swift).
+WIDGET_SUITES = [
+    "test_widget_unreadable_snapshot",
+    "test_widget_timeline_plan",
+    "test_apple_widget_text",
+]
+
+# Apple native import checks (compile Swift).
+APPLE_IMPORT_SUITES = [
+    "test_ios_import_first_occurrences",
+]
+
+SUITES = POLICY_SUITES + IMPORT_SUITES + WIDGET_SUITES + APPLE_IMPORT_SUITES + ["test_run_tool_tests"]
 
 # Suites that cannot run from a clean checkout, with the reason. Remove an
 # entry (and add the suite above) once its input is available in CI.
 EXCLUDED = {
-    "test_expanded_university_courses": "reads test/fixtures/academic HTML that is not in the repository (#939)",
-    "test_jnu_import": "reads test/fixtures/academic HTML that is not in the repository (#939)",
     "test_kangwon_research_import": "reads work/university-research, which is not in the repository (#939)",
     "test_knu_import": "reads work/university-research, which is not in the repository (#939)",
     "test_yongin_import": "needs the pdfplumber package, which CI does not install",
