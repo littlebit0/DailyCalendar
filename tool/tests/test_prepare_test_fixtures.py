@@ -54,6 +54,54 @@ class FixturePreparationTest(unittest.TestCase):
         self.prepare()
         self.assertEqual((self.output / 'work/public-source.json').read_bytes(), self.body)
 
+    def test_reextraction_never_truncates_a_file_in_use(self):
+        bodies = {'work/kept.json': b'{"kept":true}', 'work/lost.json': b'{"lost":true}'}
+        digests = {k: hashlib.sha256(v).hexdigest() for k, v in bodies.items()}
+        part = self.fixture / 'sources-00.tar.xz.part'
+        with tarfile.open(part, 'w:xz') as archive:
+            for logical, body in bodies.items():
+                info = tarfile.TarInfo(digests[logical])
+                info.size = len(body)
+                archive.addfile(info, io.BytesIO(body))
+        (self.fixture / 'manifest.json').write_text(json.dumps({
+            'archiveSHA256': hashlib.sha256(part.read_bytes()).hexdigest(),
+            'archiveParts': [part.name], 'files': digests,
+        }))
+        self.prepare()
+        kept = self.output / 'work/kept.json'
+        # Losing a file and its blob forces re-extraction. Another isolate may
+        # read kept.json at any moment of it, so record what it would see.
+        (self.output / 'work/lost.json').unlink()
+        (self.output / 'blobs' / digests['work/lost.json']).unlink()
+        seen = []
+        original = tarfile.TarFile.extractfile
+
+        def observed(packet, member):
+            stream = original(packet, member)
+            read = stream.read
+
+            def read_and_observe(*args):
+                seen.append(kept.read_bytes())
+                return read(*args)
+
+            stream.read = read_and_observe
+            return stream
+
+        with patch.object(tarfile.TarFile, 'extractfile', observed):
+            self.prepare()
+        self.assertTrue(seen)
+        self.assertTrue(all(body == bodies['work/kept.json'] for body in seen))
+        for logical, body in bodies.items():
+            self.assertEqual((self.output / logical).read_bytes(), body)
+
+    def test_missing_link_is_restored_from_its_blob_without_extraction(self):
+        self.packet()
+        self.prepare()
+        (self.output / 'work/public-source.json').unlink()
+        with patch.object(preparer.tarfile, 'open', side_effect=AssertionError('extracted')):
+            self.prepare()
+        self.assertEqual((self.output / 'work/public-source.json').read_bytes(), self.body)
+
     def test_archive_tampering_is_rejected(self):
         self.packet()
         with (self.fixture / 'sources-00.tar.xz.part').open('ab') as f:
