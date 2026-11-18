@@ -2585,8 +2585,8 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     });
     try {
       final events = await ref.read(eventRepositoryProvider).allEventsForSync();
-      await _tryCancelNotificationsBeforeReset(events);
-      await ref.read(alarmServiceProvider).cancelAllEventAlarms();
+      // The remote step can fail (offline). It runs first so a failure leaves
+      // the kept events with their reminders and alarms.
       if (hasGoogleAccount) {
         await ref
             .read(googleDriveSyncServiceProvider)
@@ -2595,6 +2595,8 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                   defaultTargetPlatform != TargetPlatform.android,
             );
       }
+      await _tryCancelNotificationsBeforeReset(events);
+      await ref.read(alarmServiceProvider).cancelAllEventAlarms();
       await ref.read(eventRepositoryProvider).clearAll();
       await ref.read(settingsRepositoryProvider).resetAll();
       if (hasGoogleAccount) {
