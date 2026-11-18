@@ -130,11 +130,12 @@ class JbnuAcademicSource implements AcademicSource {
         }
         // Some rows combine an undergraduate opening and graduate exam.
         // Retain the undergraduate portion instead of dropping the whole row.
+        // A part that also names undergraduates ("학부·대학원 …") is shared.
         final title = dd.text
             .trim()
             .split(',')
             .map((s) => s.trim())
-            .where((s) => !s.contains('대학원'))
+            .where((s) => !s.contains('대학원') || s.contains('학부'))
             .join(', ');
         if (title.isEmpty) continue;
         events.add(

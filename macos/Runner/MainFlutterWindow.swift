@@ -14,6 +14,8 @@ private final class DailyAppleWidgets {
     DailySharedStore.notificationName("com.littlebit0.daily.widgetTodoActionsChanged")
   )
   private static var channel: FlutterMethodChannel?
+  /// Snapshot writes wait for the shared file lock off the platform thread, in order.
+  private static let snapshotQueue = DispatchQueue(label: "com.littlebit0.daily.widgets.snapshot")
   private static var todoActionsObserver: NSObjectProtocol?
 
   static func register(with flutterViewController: FlutterViewController) {
@@ -29,18 +31,24 @@ private final class DailyAppleWidgets {
           result(FlutterError(code: "invalid_widget_snapshot", message: "위젯 데이터 형식이 올바르지 않습니다.", details: nil))
           return
         }
-        do {
-          try writeSnapshot(snapshot)
-          if #available(macOS 11.0, *) {
-            reloadTimelines()
+        snapshotQueue.async {
+          do {
+            try writeSnapshot(snapshot)
+            DispatchQueue.main.async {
+              if #available(macOS 11.0, *) {
+                reloadTimelines()
+              }
+              if #available(macOS 15.0, *) {
+                DailySiriSearchIndexer.scheduleRefresh()
+              }
+              result(nil)
+            }
+          } catch {
+            NSLog("[DailyWidgets] Snapshot update failed: \(error.localizedDescription)")
+            DispatchQueue.main.async {
+              result(FlutterError(code: "widget_snapshot_failed", message: error.localizedDescription, details: nil))
+            }
           }
-          if #available(macOS 15.0, *) {
-            DailySiriSearchIndexer.scheduleRefresh()
-          }
-          result(nil)
-        } catch {
-          NSLog("[DailyWidgets] Snapshot update failed: \(error.localizedDescription)")
-          result(FlutterError(code: "widget_snapshot_failed", message: error.localizedDescription, details: nil))
         }
       case "pendingTodoActions":
         do {
@@ -98,12 +106,17 @@ private final class DailyAppleWidgets {
     return url
   }
 
+  /// The widget rewrites this file when a to-do is toggled. Both writers hold
+  /// the action queue lock, so neither overwrites the other's snapshot (#920).
   private static func writeSnapshot(_ snapshot: [String: Any]) throws {
     let data = try JSONSerialization.data(withJSONObject: snapshot)
-    try data.write(
-      to: try containerURL().appendingPathComponent(snapshotFileName),
-      options: .atomic
-    )
+    let containerURL = try containerURL()
+    try withTodoActionsLock(in: containerURL) {
+      try data.write(
+        to: containerURL.appendingPathComponent(snapshotFileName),
+        options: .atomic
+      )
+    }
   }
 
   /// Serializes read-modify-write of the shared action queue across the app and

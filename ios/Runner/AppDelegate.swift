@@ -18,6 +18,8 @@ private final class DailyAppleWidgets {
   static let todoActionsFileName = "daily-widget-todo-actions.json"
   static let todoActionsChangedNotification = "com.littlebit0.daily.widgetTodoActionsChanged"
   private static var channel: FlutterMethodChannel?
+  /// Snapshot writes wait for the shared file lock off the platform thread, in order.
+  private static let snapshotQueue = DispatchQueue(label: "com.littlebit0.daily.widgets.snapshot")
   private static var observesTodoActions = false
   private static let todoActionsCallback: CFNotificationCallback = {
     _, _, _, _, _ in
@@ -36,15 +38,21 @@ private final class DailyAppleWidgets {
           result(FlutterError(code: "invalid_widget_snapshot", message: "위젯 데이터 형식이 올바르지 않습니다.", details: nil))
           return
         }
-        do {
-          try writeSnapshot(snapshot)
-          reloadTimelines()
-          if #available(iOS 18.0, *) {
-            DailySiriSearchIndexer.scheduleRefresh()
+        snapshotQueue.async {
+          do {
+            try writeSnapshot(snapshot)
+            DispatchQueue.main.async {
+              reloadTimelines()
+              if #available(iOS 18.0, *) {
+                DailySiriSearchIndexer.scheduleRefresh()
+              }
+              result(nil)
+            }
+          } catch {
+            DispatchQueue.main.async {
+              result(FlutterError(code: "widget_snapshot_failed", message: error.localizedDescription, details: nil))
+            }
           }
-          result(nil)
-        } catch {
-          result(FlutterError(code: "widget_snapshot_failed", message: error.localizedDescription, details: nil))
         }
       case "pendingTodoActions":
         do {
@@ -103,12 +111,17 @@ private final class DailyAppleWidgets {
     return url
   }
 
+  /// The widget rewrites this file when a to-do is toggled. Both writers hold
+  /// the action queue lock, so neither overwrites the other's snapshot (#920).
   private static func writeSnapshot(_ snapshot: [String: Any]) throws {
     let data = try JSONSerialization.data(withJSONObject: snapshot)
-    try data.write(
-      to: try containerURL().appendingPathComponent(snapshotFileName),
-      options: .atomic
-    )
+    let containerURL = try containerURL()
+    try withTodoActionsLock(in: containerURL) {
+      try data.write(
+        to: containerURL.appendingPathComponent(snapshotFileName),
+        options: .atomic
+      )
+    }
   }
 
   /// Serializes read-modify-write of the shared action queue across the app and
@@ -1057,7 +1070,9 @@ private final class DailyMapLauncher {
       return
     }
     guard candidates.count > 1, let presenter = topViewController() else {
-      UIApplication.shared.open(webFallback(for: location), options: [:]) { _ in result("handled") }
+      UIApplication.shared.open(webFallback(for: location), options: [:]) { success in
+        result(success ? "handled" : "failed")
+      }
       return
     }
 
@@ -1082,8 +1097,8 @@ private final class DailyMapLauncher {
         result("handled")
         return
       }
-      UIApplication.shared.open(webFallback(for: fallbackLocation), options: [:]) { _ in
-        result("handled")
+      UIApplication.shared.open(webFallback(for: fallbackLocation), options: [:]) { opened in
+        result(opened ? "handled" : "failed")
       }
     }
   }
