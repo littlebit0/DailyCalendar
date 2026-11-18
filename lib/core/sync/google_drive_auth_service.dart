@@ -485,6 +485,35 @@ class GoogleDriveAuthService {
     });
   }
 
+  /// Asks the user to sign in again only to prove who they are (#968): the
+  /// app lock compares the result with the linked account. On desktop the
+  /// saved Drive session is neither cleared nor replaced, so cancelling or
+  /// choosing another account keeps the existing connection. Mobile Google
+  /// sign-in has one SDK session, so it uses the normal account selection.
+  Future<GoogleDriveAccount?> verifyAccount() async {
+    await initialize();
+    if (!_usesDesktopOAuth) return signIn(forceAccountSelection: true);
+    if (_configuredOAuthClientId.isEmpty) {
+      throw UnsupportedError(
+        'Google Drive 연결 설정이 아직 완료되지 않았습니다. 앱 업데이트 후 다시 시도해 주세요.',
+      );
+    }
+    try {
+      final codeResponse = await _requestDesktopAuthorizationCode(const [
+        'openid',
+        'email',
+      ], forceAccountSelection: true);
+      final tokens = await _exchangeAuthorizationCode(codeResponse);
+      return await _fetchDesktopAccount(tokens.accessToken);
+    } on PlatformException catch (error) {
+      throw GoogleDriveAuthException(_platformAuthMessage(error));
+    } on TimeoutException {
+      throw const GoogleDriveAuthException(
+        'Google 계정 확인 응답 시간이 초과되었습니다. 다시 시도해 주세요.',
+      );
+    }
+  }
+
   /// Connects a chosen account only after its Drive consent has succeeded.
   /// On Android, cancellation returns null without replacing the prior account.
   Future<GoogleDriveAccount?> connectToDrive() async {
