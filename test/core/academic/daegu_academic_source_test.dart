@@ -121,4 +121,19 @@ void main() {
       );
     }
   });
+
+  test('Daegu February-to-March period stays in one calendar year', () {
+    final body = fixture(2025);
+    final changed = body.replaceFirst(
+      '02-02 (월) ~ 02-27 (금)',
+      '02-20 (금) ~ 03-05 (목)',
+    );
+    expect(changed, isNot(body));
+    final event = DaeguAcademicSource.parse(
+      changed,
+      2025,
+    ).singleWhere((e) => e.end == DateTime(2026, 3, 6));
+    expect(event.title, '2026학년도 제1학기 복학 신청기간');
+    expect(event.start, DateTime(2026, 2, 20));
+  });
 }

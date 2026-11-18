@@ -284,16 +284,17 @@ class KonkukAcademicSource implements AcademicSource {
     if (data is! Map || data['data'] is! Map || data['data']['list'] is! List) {
       throw const FormatException('Invalid GLOCAL notice search');
     }
-    final notices =
-        (data['data']['list'] as List)
-            .whereType<Map>()
-            .where(
-              (r) => _isNotice(r['SUBJECT']?.toString() ?? '', year, winter),
-            )
-            .toList()
-          ..sort(
-            (a, b) => (b['BBS_SEQ'] as int).compareTo(a['BBS_SEQ'] as int),
-          );
+    // The id may arrive as a number or a numeric string; one notice or many
+    // are read the same way.
+    int seq(Map row) =>
+        int.tryParse('${row['BBS_SEQ']}') ??
+        (throw const FormatException('Invalid GLOCAL notice id'));
+    final notices = (data['data']['list'] as List)
+        .whereType<Map>()
+        .where((r) => _isNotice(r['SUBJECT']?.toString() ?? '', year, winter))
+        .toList();
+    notices.forEach(seq);
+    notices.sort((a, b) => seq(b).compareTo(seq(a)));
     if (notices.isEmpty) {
       throw const FormatException('Missing published GLOCAL seasonal notice');
     }

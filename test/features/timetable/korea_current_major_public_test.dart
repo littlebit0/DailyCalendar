@@ -204,7 +204,7 @@ void main() {
           var date = DateTime.parse(startText as String);
           !date.isAfter(DateTime.parse(endText as String)) &&
               !date.isAfter(DateTime(2026, 12, 13));
-          date = date.add(const Duration(days: 1))
+          date = DateTime(date.year, date.month, date.day + 1)
         ) {
           final day = date.toIso8601String().substring(0, 10);
           if (holidays.contains(day) ||
@@ -537,7 +537,7 @@ void main() {
                 }
               }
             }
-            date = date.add(const Duration(days: 1));
+            date = DateTime(date.year, date.month, date.day + 1);
           }
         }
         final actual = c['schedules'] as List;
