@@ -56,7 +56,7 @@ def meetings(text, campus):
             times = []
             clock = False
             for period in match[6].split(','):
-                if period in 'ABCDEFGH':
+                if re.fullmatch(r'[A-H]', period):
                     start = base + 'ABCDEFGH'.index(period)*90
                     end = start + 90
                 elif re.fullmatch(r'\d{1,2}', period) and 0 <= int(period) <= 14:
@@ -143,21 +143,21 @@ def main():
     args = parser.parse_args()
     # Verify every published college/department response has its course query.
     for campus in ['1', '2']:
-        colleges = json.loads((args.raw/f'campus-{campus}.json').read_text())['selectColg']
+        colleges = json.loads((args.raw/f'campus-{campus}.json').read_text(encoding='utf-8'))['selectColg']
         codes = {r['deptcd'] for r in colleges} | {'LNK', 'FSN'}
         for code in codes:
-            depts = json.loads((args.raw/f'departments-{campus}-{code}.json').read_text())['selectSust']
+            depts = json.loads((args.raw/f'departments-{campus}-{code}.json').read_text(encoding='utf-8'))['selectSust']
             for dept in depts:
                 if not (args.raw/f"courses-{campus}-{code}-{dept['deptcd']}.json").is_file():
                     raise ValueError('Incomplete published CAU filter coverage')
     files = sorted(args.raw.glob('courses-*.json'))
-    rows = [r for path in files for r in json.loads(path.read_text())['selectSust']]
+    rows = [r for path in files for r in json.loads(path.read_text(encoding='utf-8'))['selectSust']]
     courses = parse_rows(rows, 2026, '2')
     for campus in ['seoul','davinci']:
         selected = [r for r in courses if r['campus']==campus]
         target = Path(f'assets/timetable/cau-{campus}-2026-2.json')
         target.write_text(json.dumps({'schemaVersion':1,'publishedDate':'2026-10-06','universityId':'cau','campus':campus,'academicYear':2026,'semester':'2',
-            'sourceUrl':'https://mportal.cau.ac.kr/std/usk/sUskSif001/search.do','courses':selected},ensure_ascii=False,indent=2)+'\n')
+            'sourceUrl':'https://mportal.cau.ac.kr/std/usk/sUskSif001/search.do','courses':selected},ensure_ascii=False,indent=2)+'\n', encoding='utf-8')
         print(campus,len(selected),{status:sum(c['scheduleStatus']==status for c in selected) for status in ['scheduled','unscheduled','unparsed']})
 
 

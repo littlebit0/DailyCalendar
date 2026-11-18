@@ -62,7 +62,7 @@ class PublicSearch:
     def request(self, key, markup=None, changes=None, event=None):
         target = self.cache / (key + '.html')
         if target.exists():
-            return target.read_text()
+            return target.read_text(encoding='utf-8')
         if not self.fetch:
             raise FileNotFoundError(target)
         body = None
@@ -84,7 +84,7 @@ class PublicSearch:
                     result = response_body.decode('utf-8')
                 if 'ContentPlaceHolder_ContentPlaceHolderSub_ddlYear' not in result:
                     raise ValueError('Unexpected response from public timetable')
-                target.write_text(result)
+                target.write_text(result, encoding='utf-8')
                 return result
             except Exception:
                 if attempt == 2:
@@ -272,7 +272,7 @@ def build(records, groups, year, semester, output, checked):
         source_rows = sum(1 for cells, _ in records if cells[0] == {'gwangju':'광주','yeosu':'여수'}[campus])
         data={'schemaVersion':1,'universityId':'jnu','university':'jnu','campus':campus,'academicYear':year,'semester':semester,'publishedDate':checked,'sourceUrl':URL,'timeModuleSourceUrl':MODULE_SOURCE,'saturdayModuleSourceUrl':SATURDAY_MODULE_SOURCE,'retrievedAt':checked,'sourceRowCount':source_rows,'sourceQueryCount':len(groups),'counts':dict(Counter(c['scheduleStatus'] for c in subset)),'courses':subset}
         path=output/f'jnu-{campus}-{year}-{semester}.json'
-        path.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n')
+        path.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n', encoding='utf-8')
         print(path,len(subset),data['counts'],flush=True)
     return {'groups':groups,'rowCount':len(records),'courseCount':len(courses),'statuses':dict(Counter(c['scheduleStatus'] for c in courses.values())),'unrecognized':[{k:c[k] for k in ('sourceId','courseName','sourceSchedule')} for c in courses.values() if c['scheduleStatus']=='unrecognized']}
 
@@ -283,20 +283,20 @@ def main():
     parser.add_argument('--output',type=Path,default=Path('assets/timetable'))
     parser.add_argument('--year',type=int,default=2026)
     parser.add_argument('--semester',default='2')
-    parser.add_argument('--checked-at',default=date.today().isoformat())
+    parser.add_argument('--checked-at',required=True)
     args=parser.parse_args()
     args.output.mkdir(parents=True, exist_ok=True)
     search=PublicSearch(args.cache,args.fetch)
     raw=args.cache/'records.json'
     if raw.exists():
-        saved=json.loads(raw.read_text())
+        saved=json.loads(raw.read_text(encoding='utf-8'))
         if saved.get('academicYear') != args.year or saved.get('semester') != args.semester:
             raise ValueError('Cached records belong to a different or unspecified year/semester; use a separate cache')
         records,groups=saved['records'],saved['groups']
     else:
         records,groups=collect(search,args.year,args.semester)
-        raw.write_text(json.dumps({'academicYear':args.year,'semester':args.semester,'records':records,'groups':groups},ensure_ascii=False))
+        raw.write_text(json.dumps({'academicYear':args.year,'semester':args.semester,'records':records,'groups':groups},ensure_ascii=False), encoding='utf-8')
     report=build(records,groups,args.year,args.semester,args.output,args.checked_at)
-    (args.cache/'report.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
+    (args.cache/'report.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n', encoding='utf-8')
 
 if __name__=='__main__':main()

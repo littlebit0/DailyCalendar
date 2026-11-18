@@ -93,9 +93,9 @@ if __name__=='__main__':
     parser.add_argument('--published-date',required=True)
     parser.add_argument('--source-url',required=True)
     args=parser.parse_args()
-    courses,audit=parse_records(json.loads(args.records.read_text()),json.loads(args.closures.read_text()),args.year,args.semester,args.expected_core)
+    courses,audit=parse_records(json.loads(args.records.read_text(encoding='utf-8')),json.loads(args.closures.read_text(encoding='utf-8')),args.year,args.semester,args.expected_core)
     result={'schemaVersion':1,'universityId':'yongin','campus':'main','academicYear':args.year,'semester':args.semester,
             'publishedDate':args.published_date,'sourceUrl':args.source_url,'completionClaim':False,'audit':audit,
             'remainingVerification':['unpublished intensive and mixed-mode actual teaching dates','campus building mapping','all current notice changes reflected'], 'courses':courses}
-    args.output.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
+    args.output.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n', encoding='utf-8')
     print(len(courses),audit)

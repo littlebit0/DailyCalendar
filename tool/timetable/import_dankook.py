@@ -300,6 +300,6 @@ if __name__ == '__main__':
     if args.download:
         fetch_sources(args.source_dir, args.campus, args.year, args.semester)
     result = extract(args.source_dir, args.campus, args.year, args.semester, args.fetched_date)
-    Path(args.output).write_text(json.dumps(result, ensure_ascii=False, separators=(',', ':')) + '\n')
+    Path(args.output).write_text(json.dumps(result, ensure_ascii=False, separators=(',', ':')) + '\n', encoding='utf-8')
     print(args.campus, result['sourceGroupCounts'], 'sections', len(result['courses']),
           result['courseScheduleStatusCounts'])
