@@ -175,8 +175,13 @@ private final class DailySiriLogsBridge {
           ] as [String: Any]
         })
       case "clearLogs":
-        DailySiriLogStore.clear()
-        result(nil)
+        do {
+          try DailySiriLogStore.clear()
+          result(nil)
+        } catch {
+          result(
+            FlutterError(code: "siri_log_clear_failed", message: nil, details: nil))
+        }
       default:
         result(FlutterMethodNotImplemented)
       }

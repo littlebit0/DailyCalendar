@@ -91,7 +91,8 @@ $backupRoot = Get-NormalizedPath (
   Join-Path $programsRoot '.DailyCalendar Test.backup'
 )
 $targetExe = Join-Path $installRoot 'DailyCalendar Test.exe'
-$productionRoot = Get-NormalizedPath 'C:\Program Files\Daily'
+# installer.iss installs the production app to {autopf}\DailyCalendar.
+$productionRoot = Get-NormalizedPath (Join-Path $env:ProgramFiles 'DailyCalendar')
 $productionExe = Join-Path $productionRoot 'DailyCalendar.exe'
 $shortcutPath = Get-NormalizedPath (
   Join-Path $env:APPDATA (
@@ -196,11 +197,15 @@ if (-not (Test-Path -LiteralPath $stagedSourceExe -PathType Leaf)) {
 Move-Item -LiteralPath $stagedSourceExe -Destination $stagedTargetExe
 
 $hadPreviousInstall = Test-Path -LiteralPath $installRoot
+$previousMoved = $false
+$newInstalled = $false
 try {
   if ($hadPreviousInstall) {
     Move-Item -LiteralPath $installRoot -Destination $backupRoot
+    $previousMoved = $true
   }
   Move-Item -LiteralPath $stagingRoot -Destination $installRoot
+  $newInstalled = $true
 
   if (-not (Test-Path -LiteralPath $targetExe -PathType Leaf)) {
     throw "Installed test executable not found: $targetExe"
@@ -220,12 +225,15 @@ try {
     Remove-Item -LiteralPath $backupRoot -Recurse -Force
   }
 } catch {
-  if (Test-Path -LiteralPath $installRoot) {
+  # Remove only what this run installed. When the backup move itself failed,
+  # $installRoot is still the previous test app and must stay as it is.
+  if ($newInstalled -and (Test-Path -LiteralPath $installRoot)) {
     Assert-ExactPath $installRoot `
       (Join-Path $programsRoot 'DailyCalendar Test') 'Rollback install root'
     Remove-Item -LiteralPath $installRoot -Recurse -Force
   }
-  if (Test-Path -LiteralPath $backupRoot) {
+  if ($previousMoved -and (Test-Path -LiteralPath $backupRoot) -and
+      -not (Test-Path -LiteralPath $installRoot)) {
     Move-Item -LiteralPath $backupRoot -Destination $installRoot
   }
   throw

@@ -92,15 +92,17 @@ class ChangwonAcademicSource implements AcademicSource {
       final start = date(row['bgnde']);
       final last = date(row['endde']);
       final title = row['schdulTitle'];
-      if (last.isBefore(start) ||
-          title is! String ||
-          title.trim().isEmpty ||
-          row['alldayAt'] != 'Y') {
+      if (last.isBefore(start) || title is! String || title.trim().isEmpty) {
         throw const FormatException('Invalid Changwon academic period');
       }
       final end = DateTime(last.year, last.month, last.day + 1);
       if (!start.isBefore(DateTime(year + 1)) || !end.isAfter(DateTime(year))) {
         continue;
+      }
+      // Checked after the year filter so a timed row of another year does not
+      // fail the requested one.
+      if (row['alldayAt'] != 'Y') {
+        throw const FormatException('Invalid Changwon academic period');
       }
       // Rows that also name undergraduates ("학부·대학원 …") are shared.
       if (title.contains('대학원') && !title.contains('학부')) continue;
