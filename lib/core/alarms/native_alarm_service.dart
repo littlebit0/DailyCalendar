@@ -55,17 +55,24 @@ class NativeAlarmService implements AlarmService, ReconciliableAlarmService {
       _schedule(event, reconcile: true);
 
   Future<void> _schedule(CalendarEvent event, {bool reconcile = false}) async {
-    if (!_isSupportedPlatform ||
-        !event.alarmEnabled ||
+    if (!_isSupportedPlatform) return;
+    // Callers no longer cancel before scheduling (#924): the native side
+    // replaces the previous alarms only after the new ones are scheduled, so
+    // every path that does not reach it removes them here instead.
+    Future<void> clear() async {
+      if (!reconcile) await cancelEventAlarm(event.id);
+    }
+
+    if (!event.alarmEnabled ||
         event.completed ||
         event.isRecurring ||
         event.isDeleted ||
         event.systemEvent ||
         event.readOnly) {
-      return;
+      return clear();
     }
     if (await authorizationState() != AlarmAuthorizationState.authorized) {
-      return;
+      return clear();
     }
     // One native alarm per fire time. Passed times are not scheduled; on
     // reconcile they are still sent so a ringing or snoozed alarm is kept.
@@ -75,7 +82,7 @@ class NativeAlarmService implements AlarmService, ReconciliableAlarmService {
         if (reconcile || fireAt.isAfter(now)) fireAt.millisecondsSinceEpoch,
     ];
     if (fireTimes.isEmpty) {
-      return;
+      return clear();
     }
     final scheduled = await _channel
         .invokeMethod<bool>(reconcile ? 'reconcile' : 'schedule', {
