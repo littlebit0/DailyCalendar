@@ -15,7 +15,8 @@ def prepare(output: Path) -> None:
     manifest = json.loads(manifest_bytes)
     fingerprint = hashlib.sha256(manifest_bytes).hexdigest()
     ready = output / '.ready'
-    if ready.exists() and ready.read_text() == fingerprint:
+    if (ready.exists() and ready.read_text() == fingerprint
+            and all((output / logical).is_file() for logical in manifest['files'])):
         return
     output.mkdir(parents=True, exist_ok=True)
     blobs = output / 'blobs'

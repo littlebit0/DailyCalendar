@@ -22,7 +22,12 @@ void _prepare() {
   try {
     lock.lockSync(FileLock.blockingExclusive);
     final ready = File('${_cache.path}/.ready');
-    if (!ready.existsSync() || ready.readAsStringSync() != _fingerprint) {
+    // 표식만 믿지 않고, 정리 도구가 지운 파일이 있으면 다시 만든다.
+    if (!ready.existsSync() ||
+        ready.readAsStringSync() != _fingerprint ||
+        (_manifest['files'] as Map).keys.any(
+          (path) => !File('${_cache.path}/$path').existsSync(),
+        )) {
       final result = Process.runSync(
         Platform.isWindows ? 'python' : 'python3',
         ['tool/prepare_test_fixtures.py', '--output', _cache.path],

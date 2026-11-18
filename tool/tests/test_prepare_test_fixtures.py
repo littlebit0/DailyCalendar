@@ -47,6 +47,13 @@ class FixturePreparationTest(unittest.TestCase):
         self.assertEqual((self.output / 'work/public-source.json').read_bytes(), self.body)
         self.assertTrue((self.output / '.ready').exists())
 
+    def test_missing_file_is_recreated_even_when_ready_marker_matches(self):
+        self.packet()
+        self.prepare()
+        (self.output / 'work/public-source.json').unlink()
+        self.prepare()
+        self.assertEqual((self.output / 'work/public-source.json').read_bytes(), self.body)
+
     def test_archive_tampering_is_rejected(self):
         self.packet()
         with (self.fixture / 'sources-00.tar.xz.part').open('ab') as f:
