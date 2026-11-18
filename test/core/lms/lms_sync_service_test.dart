@@ -1687,6 +1687,15 @@ void main() {
       h.intercept = (url) {
         if (url.path == '/mod/quiz/view.php' &&
             url.queryParameters['id'] == '9002') {
+          // A newer status arrives (for example from Drive) during the sync.
+          final restored = quiz('8002', '9102');
+          h.repository.events[restored.id] = restored.copyWith(
+            completed: false,
+            lms: restored.lms!.copyWith(
+              sourceCompleted: false,
+              submissionStatus: '응시 가능',
+            ),
+          );
           return hung.future;
         }
         return Future.value(page(url));
@@ -1701,11 +1710,11 @@ void main() {
       expect(h.service.lastSuccess, success);
       expect(savedSuccess(), success);
       // Skipped quizzes keep the status last read, and are not finalized.
-      for (final event in [
-        quiz('8001', '9002'),
-        quiz('8002', '9101'),
-        quiz('8002', '9102'),
-      ]) {
+      final newer = quiz('8002', '9102');
+      expect(newer.completed, isFalse);
+      expect(newer.lms!.sourceCompleted, isFalse);
+      expect(newer.lms!.submissionStatus, '응시 가능');
+      for (final event in [quiz('8001', '9002'), quiz('8002', '9101')]) {
         expect(event.isDeleted, isFalse);
         expect(event.completed, isTrue);
         expect(event.lms!.sourceCompleted, isNotNull);

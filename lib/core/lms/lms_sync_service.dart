@@ -384,8 +384,7 @@ class LmsSyncService extends ChangeNotifier {
       _notify();
       return Future.value();
     }
-    if (LmsSchool.of(session.schoolId)?.origin !=
-        session.baseUrl.origin) {
+    if (LmsSchool.of(session.schoolId)?.origin != session.baseUrl.origin) {
       _state = LmsSyncState.unsupported;
       _displaySession = null;
       _notify();
@@ -486,13 +485,6 @@ class LmsSyncService extends ChangeNotifier {
               event.lms!.activityType == 'quiz' &&
               isFinalizedPast(event.lms!, _now()))
             event.id,
-      };
-      final previousQuizzes = <String, LmsEventMetadata>{
-        for (final event in previousEvents)
-          if (!event.isDeleted &&
-              _prunable(event, session) &&
-              event.lms!.activityType == 'quiz')
-            event.id: event.lms!,
       };
       _check(session, epoch);
       // Required reads first: every course's complete indexes. Without them
@@ -637,7 +629,7 @@ class LmsSyncService extends ChangeNotifier {
         commit();
       }
       final fetched = <CoursemosActivity>[];
-      // Quizzes whose status was carried over from the last read, not read now.
+      // Quizzes the deadline skipped: they keep the stored status (#892).
       final carriedQuizStatuses = Set<CoursemosActivity>.identity();
       // Activities whose learning values the school confirmed in this sync.
       final confirmedLearning = Set<CoursemosActivity>.identity();
@@ -657,10 +649,6 @@ class LmsSyncService extends ChangeNotifier {
           final read = quizStatuses.containsKey(activity);
           final status = quizStatuses[activity];
           if (status == null) unresolvedQuizStatuses++;
-          // A quiz the deadline skipped keeps its last read status (#892).
-          final previous = read
-              ? null
-              : previousQuizzes[_activityEventId(session, activity)];
           final updated = CoursemosActivity(
             id: activity.id,
             title: activity.title,
@@ -669,10 +657,8 @@ class LmsSyncService extends ChangeNotifier {
             url: activity.url,
             openAt: activity.openAt,
             dueAt: activity.dueAt,
-            sourceCompleted: read
-                ? status?.completed
-                : previous?.sourceCompleted,
-            submissionStatus: read ? status?.label : previous?.submissionStatus,
+            sourceCompleted: status?.completed,
+            submissionStatus: status?.label,
           );
           if (!read) carriedQuizStatuses.add(updated);
           fetched.add(updated);
@@ -920,6 +906,7 @@ class LmsSyncService extends ChangeNotifier {
     final category = _configuredCategory() ?? EventCategory.basic;
     final candidates = <CalendarEvent>[];
     final confirmedEventIds = <String>{};
+    final keepStatusIds = <String>{};
     final now = _now();
     for (final activity in activities) {
       final due = activity.dueAt;
@@ -949,7 +936,6 @@ class LmsSyncService extends ChangeNotifier {
       // state was read: an unknown status or unconfirmed lecture retries.
       final resolved =
           activity.sourceCompleted != null &&
-          !carriedQuizStatuses.contains(activity) &&
           (activity.type != 'lecture' || confirmedLearning.contains(activity));
       final metadata = LmsEventMetadata(
         schoolId: session.schoolId,
@@ -972,6 +958,9 @@ class LmsSyncService extends ChangeNotifier {
       );
       if (confirmedLearning.contains(activity)) {
         confirmedEventIds.add(eventId(metadata));
+      }
+      if (carriedQuizStatuses.contains(activity)) {
+        keepStatusIds.add(eventId(metadata));
       }
       candidates.add(
         CalendarEvent(
@@ -997,15 +986,26 @@ class LmsSyncService extends ChangeNotifier {
     final saved = await _commands.importBatch(
       candidates,
       lmsCategory: _configuredCategory,
+      keepLatestLmsStatus: keepStatusIds,
       isCurrent: () => _currentIgnoringBlock(session, epoch),
-      prepare: (incoming) async {
+      prepare: (candidate) async {
         _check(session, epoch);
-        final local = await _repository.findById(incoming.id);
+        final local = await _repository.findById(candidate.id);
         _check(session, epoch);
         if (local == null) {
-          added.add(incoming.id);
-          return incoming;
+          added.add(candidate.id);
+          return candidate;
         }
+        // Compared with the stored status; the write re-reads it (#892).
+        final incoming =
+            keepStatusIds.contains(candidate.id) && local.lms != null
+            ? candidate.copyWith(
+                lms: candidate.lms!.copyWith(
+                  sourceCompleted: local.lms!.sourceCompleted,
+                  submissionStatus: local.lms!.submissionStatus,
+                ),
+              )
+            : candidate;
         // A deadline moved back to today or later is active again and merges
         // normally (its count returns to 0); a still-past finalized item stays.
         if (local.lms != null &&
