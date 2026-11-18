@@ -29,6 +29,7 @@ import '../analytics/product_analytics.dart';
 import '../support/bug_report_service.dart';
 import '../support/error_report_service.dart';
 import '../auth/apple_sign_in_service.dart';
+import '../security/biometric_auth_service.dart';
 import '../alarms/alarm_service.dart';
 import '../alarms/native_alarm_service.dart';
 import '../calendar/korean_holiday_service.dart';
@@ -193,6 +194,10 @@ final appleSignInServiceProvider = Provider<AppleSignInService>((ref) {
     settingsRepository: ref.watch(settingsRepositoryProvider),
   );
 });
+
+final biometricAuthServiceProvider = Provider<BiometricAuthService>(
+  (ref) => BiometricAuthService(),
+);
 
 final googleDriveSyncServiceProvider = Provider<GoogleDriveSyncService>((ref) {
   final service = GoogleDriveSyncService(

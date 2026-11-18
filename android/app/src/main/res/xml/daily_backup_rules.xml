@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Secure storage values are encrypted with Android Keystore keys, which are
+     never backed up; a restored copy can never be decrypted (#968). App lock
+     settings share FlutterSharedPreferences and are removed after a restore by
+     DailyBackupAgent. Keep daily_data_extraction_rules.xml in step. -->
 <full-backup-content>
     <exclude domain="sharedpref" path="daily_lms_credentials.xml" />
     <exclude domain="sharedpref" path="FlutterSecureKeyStorage:daily_lms_credentials.xml" />
+    <exclude domain="sharedpref" path="FlutterSecureStorage.xml" />
+    <exclude domain="sharedpref" path="FlutterSecureKeyStorage.xml" />
 </full-backup-content>

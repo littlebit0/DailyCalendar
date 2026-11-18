@@ -18,6 +18,7 @@ import '../core/security/app_lock_privacy_service.dart';
 import '../core/notifications/local_notification_service.dart';
 import '../core/notifications/notification_settings_change.dart';
 import '../core/settings/app_settings.dart';
+import '../core/settings/settings_repository.dart';
 import '../core/localization/app_localizations.dart';
 import '../core/platform/windows_build_identity.dart';
 import '../features/calendar/presentation/month_calendar_page.dart';
@@ -213,7 +214,8 @@ class _AppLockGateState extends ConsumerState<_AppLockGate>
     with WidgetsBindingObserver {
   static const _legacyPinCheckDelay = Duration(milliseconds: 700);
 
-  final _biometricAuth = BiometricAuthService();
+  BiometricAuthService get _biometricAuth =>
+      ref.read(biometricAuthServiceProvider);
   final _pinKeyboardFocusNode = FocusNode();
   Timer? _legacyPinTimer;
   int _pinVerificationGeneration = 0;
@@ -226,6 +228,10 @@ class _AppLockGateState extends ConsumerState<_AppLockGate>
   var _pinEntryVisible = false;
   var _pinBiometricAttemptedForCurrentLock = false;
   var _systemAuthenticationAttemptedForCurrentLock = false;
+  // #968: the stored PIN cannot be read or is missing, so no PIN can unlock.
+  var _pinRecoveryRequired = false;
+  var _pinRecoveryVerified = false;
+  String? _recoveryFirstPin;
 
   @override
   void initState() {
@@ -344,6 +350,8 @@ class _AppLockGateState extends ConsumerState<_AppLockGate>
                             AppLockMethod.noPin => context.tr(
                               '잠금 상태에서는 화면을 볼 수 없습니다.',
                             ),
+                            AppLockMethod.appPin when _pinRecoveryRequired =>
+                              context.tr('PIN 재설정'),
                             AppLockMethod.appPin when !_pinEntryVisible =>
                               context.tr('잠금 상태입니다.'),
                             AppLockMethod.appPin => context.tr('PIN 입력'),
@@ -353,7 +361,10 @@ class _AppLockGateState extends ConsumerState<_AppLockGate>
                           style: Theme.of(context).textTheme.titleLarge,
                         ),
                         const SizedBox(height: 26),
-                        if (lockMethod == AppLockMethod.appPin) ...[
+                        if (lockMethod == AppLockMethod.appPin &&
+                            _pinRecoveryRequired)
+                          ..._pinRecoveryChildren(context)
+                        else if (lockMethod == AppLockMethod.appPin) ...[
                           if (!_pinEntryVisible) ...[
                             FilledButton.icon(
                               key: const ValueKey('show-pin-entry-button'),
@@ -459,15 +470,25 @@ class _AppLockGateState extends ConsumerState<_AppLockGate>
   }
 
   Future<void> _loadPinLength() async {
+    final repository = ref.read(settingsRepositoryProvider);
     try {
-      final pinLength = await ref
-          .read(settingsRepositoryProvider)
-          .appLockPinLength();
+      final pinLength = await repository.appLockPinLength();
+      // Without a stored hash no PIN can ever match.
+      final missing = pinLength == null && !await repository.hasAppLockPin();
       if (!mounted) return;
-      setState(() => _pinLength = pinLength);
-    } on Object {
+      setState(() {
+        _pinLength = pinLength;
+        _pinRecoveryRequired = missing;
+      });
+    } on Object catch (error) {
       if (!mounted) return;
-      setState(() => _error = context.tr('보안 저장소를 확인하지 못했습니다. 다시 입력해 주세요.'));
+      setState(() {
+        if (SettingsRepository.isSecureStorageKeyLost(error)) {
+          _pinRecoveryRequired = true;
+        } else {
+          _error = context.tr('보안 저장소를 확인하지 못했습니다. 다시 입력해 주세요.');
+        }
+      });
     }
   }
 
@@ -483,8 +504,12 @@ class _AppLockGateState extends ConsumerState<_AppLockGate>
         _pinEntryVisible = false;
         _pinBiometricAttemptedForCurrentLock = false;
         _systemAuthenticationAttemptedForCurrentLock = false;
+        _pinRecoveryVerified = false;
+        _recoveryFirstPin = null;
         _unlocked = false;
       });
+      // A PIN set since (in Settings) ends the recovery state.
+      if (_pinRecoveryRequired) unawaited(_loadPinLength());
     }
   }
 
@@ -525,16 +550,17 @@ class _AppLockGateState extends ConsumerState<_AppLockGate>
 
   void _handlePinKeyEvent(KeyEvent event) {
     if (!_usesDesktopAppExperience(defaultTargetPlatform) ||
-        !_pinEntryVisible ||
+        !(_pinEntryVisible || _pinRecoveryVerified) ||
         event is! KeyDownEvent) {
       return;
     }
     final digit = event.character ?? event.logicalKey.keyLabel;
+    final recovering = _pinRecoveryRequired && _pinRecoveryVerified;
     if (RegExp(r'^\d$').hasMatch(digit)) {
-      _appendDigit(digit);
+      recovering ? _appendRecoveryDigit(digit) : _appendDigit(digit);
     } else if (event.logicalKey == LogicalKeyboardKey.backspace ||
         event.logicalKey == LogicalKeyboardKey.delete) {
-      _removeDigit();
+      recovering ? _removeRecoveryDigit() : _removeDigit();
     }
   }
 
@@ -585,10 +611,16 @@ class _AppLockGateState extends ConsumerState<_AppLockGate>
           if (!keepInputOnFailure) _pin = '';
         });
       }
-    } on Object {
+    } on Object catch (error) {
       if (!isCurrent()) return;
       setState(() {
         _pin = '';
+        if (!updatingMetadata &&
+            SettingsRepository.isSecureStorageKeyLost(error)) {
+          _pinRecoveryRequired = true;
+          _error = '';
+          return;
+        }
         _error = updatingMetadata
             ? context.tr('PIN 설정을 저장하지 못했습니다. 다시 입력해 주세요.')
             : context.tr('보안 저장소를 확인하지 못했습니다. 다시 입력해 주세요.');
@@ -671,7 +703,236 @@ class _AppLockGateState extends ConsumerState<_AppLockGate>
       });
     }
   }
+
+  List<Widget> _pinRecoveryChildren(BuildContext context) {
+    final errorText = Text(
+      _error,
+      textAlign: TextAlign.center,
+      style: TextStyle(color: Theme.of(context).colorScheme.error),
+    );
+    if (_pinRecoveryVerified) {
+      final confirming = _recoveryFirstPin != null;
+      return [
+        Text(
+          context.tr(
+            confirming ? 'PIN을 한 번 더 입력하세요.' : '4자리 이상의 새 PIN을 입력하세요.',
+          ),
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: 14),
+        _PinDots(filledCount: _pin.length),
+        const SizedBox(height: 14),
+        SizedBox(height: 24, child: errorText),
+        _PinKeypad(
+          enabled: !_checking,
+          onDigit: _appendRecoveryDigit,
+          onBackspace: _removeRecoveryDigit,
+        ),
+        const SizedBox(height: 8),
+        Row(
+          children: [
+            Expanded(
+              child: OutlinedButton(
+                onPressed: _checking ? null : _cancelPinRecovery,
+                child: Text(context.tr('취소')),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: FilledButton(
+                key: const ValueKey('pin-recovery-continue-button'),
+                onPressed: _checking ? null : _continuePinRecovery,
+                child: Text(context.tr(confirming ? '설정' : '다음')),
+              ),
+            ),
+          ],
+        ),
+      ];
+    }
+    final account = ref.read(settingsRepositoryProvider).dailyAccount();
+    final appleSupported = ref
+        .read(appleSignInServiceProvider)
+        .isSupportedPlatform;
+    return [
+      Text(
+        context.tr('저장된 PIN을 읽을 수 없습니다. 본인 확인 후 새 PIN을 설정하세요.'),
+        textAlign: TextAlign.center,
+        style: Theme.of(context).textTheme.bodyMedium,
+      ),
+      const SizedBox(height: 18),
+      FilledButton.icon(
+        key: const ValueKey('pin-recovery-device-button'),
+        onPressed: _checking
+            ? null
+            : () => _verifyPinRecovery(_PinRecoveryMethod.device),
+        icon: const Icon(Icons.phonelink_lock_outlined),
+        label: Text(context.tr('기기 잠금으로 확인')),
+      ),
+      if (account?.googleAccount != null) ...[
+        const SizedBox(height: 10),
+        OutlinedButton.icon(
+          key: const ValueKey('pin-recovery-google-button'),
+          onPressed: _checking
+              ? null
+              : () => _verifyPinRecovery(_PinRecoveryMethod.google),
+          icon: const Icon(Icons.account_circle_outlined),
+          label: Text(context.tr('Google 계정으로 확인')),
+        ),
+      ],
+      if (account?.appleAccount != null && appleSupported) ...[
+        const SizedBox(height: 10),
+        OutlinedButton.icon(
+          key: const ValueKey('pin-recovery-apple-button'),
+          onPressed: _checking
+              ? null
+              : () => _verifyPinRecovery(_PinRecoveryMethod.apple),
+          icon: const Icon(Icons.apple),
+          label: Text(context.tr('Apple 계정으로 확인')),
+        ),
+      ],
+      if (_error.isNotEmpty) ...[const SizedBox(height: 12), errorText],
+    ];
+  }
+
+  /// Unlocks nothing: a verified identity only opens the new-PIN entry.
+  Future<void> _verifyPinRecovery(_PinRecoveryMethod method) async {
+    if (_checking || _unlocked) return;
+    final deviceReason = context.tr('Daily PIN을 다시 설정하려면 인증이 필요합니다.');
+    setState(() {
+      _checking = true;
+      _error = '';
+    });
+    bool? verified;
+    try {
+      switch (method) {
+        case _PinRecoveryMethod.device:
+          verified = await _biometricAuth.authenticate(
+            localizedReason: deviceReason,
+            allowDeviceCredentials: true,
+          );
+        case _PinRecoveryMethod.google:
+          final linked = ref
+              .read(settingsRepositoryProvider)
+              .dailyAccount()
+              ?.googleAccount;
+          final account = await ref
+              .read(googleDriveAuthServiceProvider)
+              .signIn(forceAccountSelection: true);
+          verified = account == null
+              ? null
+              : linked != null &&
+                    account.email.trim().toLowerCase() ==
+                        linked.email.trim().toLowerCase();
+        case _PinRecoveryMethod.apple:
+          verified = await ref
+              .read(appleSignInServiceProvider)
+              .verifyCurrentAccount();
+      }
+    } on Object {
+      verified = false;
+    }
+    if (!mounted) return;
+    setState(() {
+      _checking = false;
+      if (_unlocked) return;
+      if (verified == true) {
+        _pinRecoveryVerified = true;
+        _recoveryFirstPin = null;
+        _pin = '';
+      } else if (verified == false) {
+        _error = context.tr(
+          method == _PinRecoveryMethod.device
+              ? '시스템 인증을 완료하지 못했습니다.'
+              : '연결된 계정으로 확인하지 못했습니다.',
+        );
+      }
+    });
+    if (verified == true) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _pinKeyboardFocusNode.requestFocus();
+      });
+    }
+  }
+
+  void _appendRecoveryDigit(String digit) {
+    if (_checking) return;
+    setState(() {
+      _pin += digit;
+      _error = '';
+    });
+  }
+
+  void _removeRecoveryDigit() {
+    if (_checking || _pin.isEmpty) return;
+    setState(() {
+      _pin = _pin.substring(0, _pin.length - 1);
+      _error = '';
+    });
+  }
+
+  void _cancelPinRecovery() {
+    setState(() {
+      _pinRecoveryVerified = false;
+      _recoveryFirstPin = null;
+      _pin = '';
+      _error = '';
+    });
+  }
+
+  Future<void> _continuePinRecovery() async {
+    if (_checking) return;
+    final firstPin = _recoveryFirstPin;
+    if (firstPin == null) {
+      setState(() {
+        if (_pin.length < 4) {
+          _error = context.tr('PIN은 4자리 이상이어야 합니다.');
+        } else {
+          _recoveryFirstPin = _pin;
+          _pin = '';
+          _error = '';
+        }
+      });
+      return;
+    }
+    if (_pin != firstPin) {
+      setState(() {
+        _pin = '';
+        _error = context.tr('PIN이 일치하지 않습니다. 다시 입력하세요.');
+      });
+      return;
+    }
+    final pin = _pin;
+    final generation = ++_pinVerificationGeneration;
+    setState(() => _checking = true);
+    try {
+      await ref
+          .read(settingsRepositoryProvider)
+          .replaceUnreadableAppLockPin(pin);
+      if (!mounted || generation != _pinVerificationGeneration) return;
+      setState(() {
+        _pinLength = pin.length;
+        _pinRecoveryRequired = false;
+        _pinRecoveryVerified = false;
+        _recoveryFirstPin = null;
+        _pin = '';
+        _error = '';
+        _unlocked = true;
+      });
+    } on Object {
+      if (!mounted || generation != _pinVerificationGeneration) return;
+      setState(() {
+        _pin = '';
+        _error = context.tr('PIN 설정을 저장하지 못했습니다. 다시 입력해 주세요.');
+      });
+    } finally {
+      if (mounted && generation == _pinVerificationGeneration) {
+        setState(() => _checking = false);
+      }
+    }
+  }
 }
+
+enum _PinRecoveryMethod { device, google, apple }
 
 class _PinDots extends StatelessWidget {
   const _PinDots({required this.filledCount});
