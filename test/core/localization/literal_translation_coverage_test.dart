@@ -4,7 +4,8 @@ import 'package:daily/core/localization/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-/// Every Korean string used as the key of a `.tr(…)` call needs a translation
+/// Every Korean string used as the key of a `.tr(…)` or `.text(…)` call needs a
+/// translation
 /// in each non-Korean dictionary, or that language silently shows Korean.
 ///
 /// The first argument is scanned as a whole, so string literals chosen by a
@@ -82,7 +83,7 @@ String? declarationOf(String source, String name) {
 
 Set<String> translationKeysIn(String source) {
   final keys = <String>{};
-  for (final call in RegExp(r'\.tr\(').allMatches(source)) {
+  for (final call in RegExp(r'\.(?:tr|text)\(').allMatches(source)) {
     var argument = firstArgument(source, call.end);
     final identifier = RegExp(r'^\s*([A-Za-z_]\w*)\s*$').firstMatch(argument);
     if (identifier != null) {
@@ -141,6 +142,48 @@ void main() {
       keys.addAll(translationKeysIn(file.readAsStringSync()));
     }
     expect(keys, isNotEmpty);
+    final problems = <String>[];
+    for (final locale in const [
+      Locale('en'),
+      Locale('ja'),
+      Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant'),
+    ]) {
+      final l10n = AppLocalizations(locale);
+      final missing = keys.where((key) => l10n.text(key) == key).toList()
+        ..sort();
+      if (missing.isNotEmpty) {
+        problems.add('${locale.toLanguageTag()} misses $missing');
+      }
+    }
+    expect(problems, isEmpty);
+  });
+
+  test('notices built outside tr() are translated in en, ja and zh', () {
+    // These reach the screen through `tr(error.message)`-style calls, which
+    // the literal scan above cannot follow.
+    final keys = <String>{
+      for (final match
+          in RegExp(
+            r"(?:message:|_report\([^,]+,|TodoMigrationProgress\([^,]+,)\s*'([^']+)'",
+          ).allMatches(
+            File(
+              'lib/core/migration/todo_database_migration_service.dart',
+            ).readAsStringSync(),
+          ))
+        match.group(1)!,
+      for (final match
+          in RegExp(r"'((?:[^'\\]|\\.)*[가-힣](?:[^'\\]|\\.)*)'").allMatches(
+            File('lib/core/auth/apple_sign_in_service.dart').readAsStringSync()
+            // Adjacent literals form one message.
+            .replaceAll(RegExp(r"'\s*\n\s*'"), ''),
+          ))
+        if (!match.group(1)!.contains(r'$')) match.group(1)!,
+      '일정을 해석하지 못했습니다.',
+      '등록할 일정 내용을 입력해 주세요.',
+      'Gemini API 키가 설정되어 있지 않습니다.',
+      '제목과 날짜를 다시 알려주세요.',
+    };
+    expect(keys.length, greaterThan(15));
     final problems = <String>[];
     for (final locale in const [
       Locale('en'),

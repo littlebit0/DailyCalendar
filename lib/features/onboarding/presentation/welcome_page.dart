@@ -238,7 +238,7 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
             if (_message.isNotEmpty) ...[
               const SizedBox(height: 12),
               Text(
-                _message,
+                context.tr(_message),
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   color: DailyUi.destructive,
@@ -303,7 +303,7 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
             if (_message.isNotEmpty) ...[
               const SizedBox(height: 12),
               Text(
-                _message,
+                context.tr(_message),
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   color: DailyUi.destructive,
@@ -382,7 +382,7 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
             if (_message.isNotEmpty) ...[
               const SizedBox(height: 12),
               Text(
-                _message,
+                context.tr(_message),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: DailyUi.secondaryText(context),
