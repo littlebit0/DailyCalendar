@@ -148,7 +148,7 @@ void main() {
         for (
           var d = startDate;
           !d.isAfter(endDate);
-          d = d.add(const Duration(days: 1))
+          d = DateTime(d.year, d.month, d.day + 1)
         ) {
           if (d.weekday == weekday) {
             literal.add(d.toIso8601String().substring(0, 10));

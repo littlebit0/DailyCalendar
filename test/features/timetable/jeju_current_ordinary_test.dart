@@ -238,7 +238,7 @@ void main() {
             for (
               var day = DateTime(2026, 9, 1);
               !day.isAfter(DateTime(2026, 12, 7));
-              day = day.add(const Duration(days: 1))
+              day = DateTime(day.year, day.month, day.day + 1)
             ) {
               final key =
                   '${day.year}-${day.month.toString().padLeft(2, '0')}-${day.day.toString().padLeft(2, '0')}';

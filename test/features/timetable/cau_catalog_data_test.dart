@@ -109,7 +109,7 @@ void main() {
       for (
         var date = DateTime(2026, 9, 1);
         !date.isAfter(DateTime(2026, 12, 31));
-        date = date.add(const Duration(days: 1))
+        date = DateTime(date.year, date.month, date.day + 1)
       )
         if (date.weekday == day) date,
     ];
