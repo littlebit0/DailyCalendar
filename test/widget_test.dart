@@ -198,6 +198,92 @@ void main() {
     },
   );
 
+  test('device text size multiplies the app text size up to 1.3', () {
+    double scale(AppTextSize size, double system, TargetPlatform platform) =>
+        effectiveAppTextScale(
+          appScale: appTextScaleForPlatform(size, platform),
+          systemScale: system,
+          platform: platform,
+        );
+
+    // System default keeps today's scales.
+    expect(scale(AppTextSize.basic, 1.0, TargetPlatform.iOS), 0.8);
+    expect(scale(AppTextSize.large, 1.0, TargetPlatform.android), 1.0);
+    expect(scale(AppTextSize.extraLarge, 1.0, TargetPlatform.iOS), 1.15);
+    expect(scale(AppTextSize.basic, 1.0, TargetPlatform.macOS), 1.0);
+    expect(scale(AppTextSize.extraLarge, 1.0, TargetPlatform.windows), 1.3);
+    // Device size is multiplied in.
+    expect(
+      scale(AppTextSize.basic, 1.35, TargetPlatform.iOS),
+      closeTo(1.08, 1e-9),
+    );
+    // Large device sizes stop at 1.3.
+    for (final system in [1.35, 2.0, 3.1]) {
+      for (final size in AppTextSize.values) {
+        expect(
+          scale(size, system, TargetPlatform.iOS),
+          lessThanOrEqualTo(maxEffectiveAppTextScale),
+        );
+      }
+      expect(scale(AppTextSize.large, system, TargetPlatform.android), 1.3);
+      expect(scale(AppTextSize.extraLarge, system, TargetPlatform.macOS), 1.3);
+    }
+    // Small device sizes never go below the app's basic scale.
+    expect(scale(AppTextSize.basic, 0.85, TargetPlatform.android), 0.8);
+    expect(scale(AppTextSize.basic, 0.85, TargetPlatform.windows), 1.0);
+  });
+
+  for (final system in [1.0, 1.35, 2.0, 3.1]) {
+    testWidgets('phone month calendar applies device text size $system', (
+      tester,
+    ) async {
+      tester.view.physicalSize = const Size(390, 844);
+      tester.view.devicePixelRatio = 1;
+      tester.platformDispatcher.textScaleFactorTestValue = system;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+      debugDefaultTargetPlatformOverride = TargetPlatform.android;
+      addTearDown(() => debugDefaultTargetPlatformOverride = null);
+      SharedPreferences.setMockInitialValues({
+        'onboardingCompleted': true,
+        'defaultCalendarView': 'month',
+        'appTextSize': AppTextSize.large.name,
+      });
+      final preferences = await SharedPreferences.getInstance();
+      final settingsRepository = SettingsRepository(preferences: preferences);
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            universityRegionsFromAsset(),
+            settingsRepositoryProvider.overrideWithValue(settingsRepository),
+            notificationServiceProvider.overrideWithValue(_FakeNotification()),
+            syncServiceProvider.overrideWithValue(_FakeSync()),
+            eventRepositoryProvider.overrideWithValue(_FakeEventRepository()),
+            googleDriveAuthServiceProvider.overrideWithValue(
+              _FakeGoogleDriveAuthService(),
+            ),
+          ],
+          child: const DailyApp(),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final context = tester.element(
+        find.byKey(const ValueKey('android-calendar-toolbar')),
+      );
+      expect(
+        MediaQuery.textScalerOf(context).scale(10),
+        closeTo(10 * (system > 1.3 ? 1.3 : system), 1e-9),
+      );
+      expect(tester.takeException(), isNull);
+
+      debugDefaultTargetPlatformOverride = null;
+      await tester.pumpWidget(const SizedBox.shrink());
+    });
+  }
+
   test('Android and Windows expose the adjacent-month date setting', () {
     expect(supportsAdjacentMonthDateSetting(TargetPlatform.android), isTrue);
     expect(supportsAdjacentMonthDateSetting(TargetPlatform.windows), isTrue);

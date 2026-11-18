@@ -184,6 +184,34 @@ void main() {
     },
   );
 
+  for (final compact in [false, true]) {
+    testWidgets(
+      'phone grid fits the 1.3 maximum text scale (compact: $compact)',
+      (tester) async {
+        await tester.binding.setSurfaceSize(const Size(390, 700));
+        addTearDown(() => tester.binding.setSurfaceSize(null));
+        await tester.pumpWidget(
+          app(
+            courses: [
+              occurrence('a', 540, 600),
+              occurrence('b', 570, 630),
+              occurrence('c', 600, 630, weekday: 5),
+            ],
+            textScale: 1.3,
+            showDates: true,
+            compact: compact,
+          ),
+        );
+        await tester.pumpAndSettle();
+        expect(
+          tester.getRect(find.byKey(const ValueKey('timetable-day-5'))).right,
+          lessThanOrEqualTo(390),
+        );
+        expect(tester.takeException(), isNull);
+      },
+    );
+  }
+
   testWidgets('weekdays follow the selected locale', (tester) async {
     await tester.pumpWidget(app(locale: const Locale('en')));
     await tester.pumpAndSettle();

@@ -109,9 +109,14 @@ class DailyApp extends ConsumerWidget {
             child: MediaQuery(
               data: MediaQuery.of(context).copyWith(
                 textScaler: TextScaler.linear(
-                  appTextScaleForPlatform(
-                    settings.appTextSize,
-                    defaultTargetPlatform,
+                  effectiveAppTextScale(
+                    appScale: appTextScaleForPlatform(
+                      settings.appTextSize,
+                      defaultTargetPlatform,
+                    ),
+                    systemScale:
+                        MediaQuery.textScalerOf(context).scale(14) / 14,
+                    platform: defaultTargetPlatform,
                   ),
                 ),
               ),
@@ -127,6 +132,21 @@ class DailyApp extends ConsumerWidget {
       ),
     );
   }
+}
+
+/// Largest final text scale; matches desktop "더 크게", the range the
+/// calendar and timetable layouts are verified for.
+const double maxEffectiveAppTextScale = 1.3;
+
+/// App text size multiplied by the device text size, kept between the
+/// platform's basic app scale and [maxEffectiveAppTextScale].
+double effectiveAppTextScale({
+  required double appScale,
+  required double systemScale,
+  required TargetPlatform platform,
+}) {
+  final minScale = appTextScaleForPlatform(AppTextSize.basic, platform);
+  return (appScale * systemScale).clamp(minScale, maxEffectiveAppTextScale);
 }
 
 double appTextScaleForPlatform(AppTextSize size, TargetPlatform platform) {
