@@ -181,7 +181,7 @@ def main():
         ('seoul', '서울캠퍼스', seoul_courses),
         ('glocal', 'GLOCAL(글로컬)캠퍼스', glocal_courses),
     ):
-        raw = json.loads((args.raw / f'{campus}.json').read_text())
+        raw = json.loads((args.raw / f'{campus}.json').read_text(encoding='utf-8'))
         courses = build(raw)
         document = {
             'schemaVersion': 1, 'universityId': 'konkuk', 'campus': campus,
@@ -190,7 +190,7 @@ def main():
             'courses': courses,
         }
         path = args.output / f'konkuk-{campus}-2026-2.json'
-        path.write_text(json.dumps(document, ensure_ascii=False, indent=2) + '\n')
+        path.write_text(json.dumps(document, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
         counts = {}
         for c in courses:
             counts[c['scheduleStatus']] = counts.get(c['scheduleStatus'], 0) + 1

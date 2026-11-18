@@ -1577,16 +1577,8 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
     ).format(date);
   }
 
-  String _frequencyUnitLabel() {
-    return switch (_frequency) {
-      RecurrenceFrequency.daily =>
-        context.l10n.languageCode == 'ko' ? '일' : context.tr('일 보기'),
-      RecurrenceFrequency.weekly => context.tr('주'),
-      RecurrenceFrequency.monthly => context.tr('개월'),
-      RecurrenceFrequency.yearly => context.tr('년'),
-      RecurrenceFrequency.none => context.tr('번'),
-    };
-  }
+  String _frequencyUnitLabel() =>
+      frequencyUnitLabel(context.l10n, _frequency);
 
   String _frequencyLabel(RecurrenceFrequency frequency) {
     return switch (frequency) {
@@ -1815,4 +1807,21 @@ class _QuickAddTemplates extends StatelessWidget {
       ],
     );
   }
+}
+
+/// Unit word for "repeat every how many {unit}?".
+@visibleForTesting
+String frequencyUnitLabel(
+  AppLocalizations l10n,
+  RecurrenceFrequency frequency,
+) {
+  final unit = switch (frequency) {
+    RecurrenceFrequency.daily => '일',
+    RecurrenceFrequency.weekly => '주',
+    RecurrenceFrequency.monthly => '개월',
+    RecurrenceFrequency.yearly => '년',
+    RecurrenceFrequency.none => '번',
+  };
+  // Dedicated keys: '일' alone is the Sunday label and '일 보기' the day view.
+  return l10n.languageCode == 'ko' ? unit : l10n.text('반복 간격 단위: $unit');
 }

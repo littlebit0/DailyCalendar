@@ -139,7 +139,7 @@ def main():
                 subprocess.run(['curl', '-fsS', '--max-time', '150', '-b', cookies, '-e', BASE + '/public.html',
                     '-H', 'Content-Type: application/json', BASE + '/nt/cvt.do', '--data', body, '-o', str(path)], check=True)
                 time.sleep(1)
-            response = json.loads(path.read_text())
+            response = json.loads(path.read_text(encoding='utf-8'))
             if response.get('VariableList', {}).get('ErrorCode') != '0' or not isinstance(response.get('DatasetList', {}).get('DS_COUR120'), list):
                 raise ValueError('Ajou source query failed')
             group_rows = response['DatasetList']['DS_COUR120']
@@ -148,7 +148,7 @@ def main():
     courses = parse_rows(rows, args.year, args.semester)
     result = {'schemaVersion': 1, 'universityId': 'ajou', 'campus': 'main', 'academicYear': args.year,
         'semester': args.semester, 'publishedDate': args.fetched_date, 'sourceUrl': BASE + '/public.html#!/e020101', 'courses': courses}
-    args.output.write_text(json.dumps(result, ensure_ascii=False, separators=(',', ':')) + '\n')
+    args.output.write_text(json.dumps(result, ensure_ascii=False, separators=(',', ':')) + '\n', encoding='utf-8')
     print('Complete:', len(courses), 'unique Ajou undergraduate courses')
 
 

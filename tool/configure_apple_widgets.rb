@@ -4,8 +4,6 @@ require 'xcodeproj'
 
 ROOT = File.expand_path('..', __dir__)
 TEAM_ID = 'A6Y73X2ZLS'
-APP_VERSION = File.read(File.join(ROOT, 'pubspec.yaml'))[/^version:\s*([^+\s]+)/, 1]
-raise 'Missing app version' unless APP_VERSION
 
 def file_reference(group, name)
   group.files.find { |file| file.path == name } || group.new_file(name)
@@ -28,9 +26,9 @@ def embed_extension(host, extension, platform:)
   thin_binary_index = host.build_phases.index do |build_phase|
     build_phase.respond_to?(:name) && build_phase.name == 'Thin Binary'
   end
-  if thin_binary_index
-    thin_binary_phase = host.build_phases[thin_binary_index]
-    thin_binary_phase.input_paths = [] if platform == :ios
+  # The extension must be embedded before Thin Binary runs. Leave the phase
+  # where it is when it already is, so a rerun does not reorder the project.
+  if thin_binary_index && host.build_phases.index(phase) > thin_binary_index
     host.build_phases.delete(phase)
     host.build_phases.insert(thin_binary_index, phase)
   end
@@ -41,8 +39,9 @@ def configure_project(
   target_name:,
   platform:,
   deployment_target:,
-  bundle_identifier:,
-  entitlements:
+  bundle_identifiers:,
+  entitlements:,
+  version_config:
 )
   project = Xcodeproj::Project.open(project_path)
   host = project.targets.find { |target| target.name == 'Runner' }
@@ -57,6 +56,7 @@ def configure_project(
     : nil
   file_reference(widget_group, 'Info.plist')
   file_reference(widget_group, File.basename(entitlements))
+  version_config_file = file_reference(widget_group, version_config)
 
   widget = project.targets.find { |target| target.name == target_name }
   widget ||= project.new_target(
@@ -95,11 +95,15 @@ def configure_project(
   end
 
   widget.build_configurations.each do |configuration|
+    # The widget ships inside the app, so its version and build number come from
+    # the same Flutter build values as the app's, through this xcconfig (#956).
+    configuration.base_configuration_reference = version_config_file
     settings = configuration.build_settings
+    settings.delete('CURRENT_PROJECT_VERSION')
+    settings.delete('MARKETING_VERSION')
     settings['APPLICATION_EXTENSION_API_ONLY'] = 'YES'
     settings['CODE_SIGN_ENTITLEMENTS'] = "../apple_widgets/#{File.basename(entitlements)}"
     settings['CODE_SIGN_STYLE'] = 'Automatic'
-    settings['CURRENT_PROJECT_VERSION'] = APP_VERSION
     settings['DEVELOPMENT_TEAM'] = TEAM_ID
     settings['GENERATE_INFOPLIST_FILE'] = 'NO'
     settings['INFOPLIST_FILE'] = '../apple_widgets/Info.plist'
@@ -108,8 +112,8 @@ def configure_project(
       '@executable_path/Frameworks',
       '@executable_path/../../Frameworks'
     ]
-    settings['MARKETING_VERSION'] = APP_VERSION
-    settings['PRODUCT_BUNDLE_IDENTIFIER'] = bundle_identifier
+    settings['PRODUCT_BUNDLE_IDENTIFIER'] =
+      bundle_identifiers.fetch(configuration.name) { bundle_identifiers.fetch(:default) }
     settings['PRODUCT_NAME'] = '$(TARGET_NAME)'
     settings['PROVISIONING_PROFILE_SPECIFIER'] = ''
     settings['SKIP_INSTALL'] = 'YES'
@@ -119,11 +123,7 @@ def configure_project(
       settings['TARGETED_DEVICE_FAMILY'] = '1,2'
     else
       settings['MACOSX_DEPLOYMENT_TARGET'] = deployment_target
-      if configuration.name != 'Release'
-        settings['CODE_SIGN_IDENTITY'] = 'Apple Development'
-      else
-        settings.delete('CODE_SIGN_IDENTITY')
-      end
+      settings['CODE_SIGN_IDENTITY'] = 'Apple Development'
     end
   end
 
@@ -136,8 +136,9 @@ configure_project(
   target_name: 'DailyWidgets',
   platform: :ios,
   deployment_target: '17.0',
-  bundle_identifier: 'com.littlebit0.daily.widgets',
-  entitlements: 'DailyWidgets.entitlements'
+  bundle_identifiers: { default: 'com.littlebit0.daily.widgets' },
+  entitlements: 'DailyWidgets.entitlements',
+  version_config: 'DailyWidgets.xcconfig'
 )
 
 configure_project(
@@ -145,6 +146,11 @@ configure_project(
   target_name: 'DailyMacWidgets',
   platform: :osx,
   deployment_target: '14.0',
-  bundle_identifier: 'com.littlebit0.daily.widgets',
-  entitlements: 'DailyMacWidgets.entitlements'
+  # The macOS Debug app is com.littlebit0.daily.test; its widget must share that prefix.
+  bundle_identifiers: {
+    'Debug' => 'com.littlebit0.daily.test.widgets',
+    default: 'com.littlebit0.daily.widgets'
+  },
+  entitlements: 'DailyMacWidgets.entitlements',
+  version_config: 'DailyMacWidgets.xcconfig'
 )

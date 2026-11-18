@@ -252,6 +252,7 @@ void main() {
     'All current standard source rows independently preserve exact clock breaks room/day partials and actual operational holds',
     () {
       const table = {
+        // 서울 일반 0교시 08:00~08:50: 수강신청 교시표 사본의 0교시 행(위 nativeTables).
         0: [480, 530],
         1: [540, 615],
         2: [630, 705],

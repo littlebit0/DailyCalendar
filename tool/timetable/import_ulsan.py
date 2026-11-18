@@ -164,12 +164,12 @@ if __name__ == '__main__':
     ap.add_argument('--output', type=Path, required=True)
     ap.add_argument('--published', required=True)
     a = ap.parse_args()
-    spec = json.loads(a.clock.read_text())
-    tree = json.loads(a.tree.read_text())
+    spec = json.loads(a.clock.read_text(encoding='utf-8'))
+    tree = json.loads(a.tree.read_text(encoding='utf-8'))
     owners = {code: name for t in tree for code, name in t['sosog']}
     owners.update({code: name for t in tree for code, name in [t['daehag']]})
     owners['10000'] = '대학(공통)'
-    courses = convert(json.loads(a.major.read_text()), json.loads(a.area.read_text()),
+    courses = convert(json.loads(a.major.read_text(encoding='utf-8')), json.loads(a.area.read_text(encoding='utf-8')),
                       owners, spec['clock'], set(spec['scope']))
     a.output.write_text(json.dumps({
         'schemaVersion': 2, 'universityId': 'ulsan', 'campus': 'main',
@@ -179,6 +179,6 @@ if __name__ == '__main__':
         'researchOnly': False, 'productionIntegrationEnabled': True,
         'completionClaim': False, 'wholeOperatingVerified': False,
         'courses': courses,
-    }, ensure_ascii=False, indent=1) + '\n')
+    }, ensure_ascii=False, indent=1) + '\n', encoding='utf-8')
     from collections import Counter
     print(len(courses), Counter(c['scheduleStatus'] for c in courses))

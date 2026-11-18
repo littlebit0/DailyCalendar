@@ -43,6 +43,7 @@ import '../../events/presentation/day_sheet_drag_release.dart';
 import '../../events/presentation/event_editor_dialog.dart';
 import '../../events/presentation/event_template_actions.dart';
 import '../../settings/presentation/settings_page.dart';
+import '../../events/data/recurrence_expander.dart';
 import '../widgets/calendar_event_drag_layer.dart';
 import '../widgets/calendar_month_grid.dart';
 import '../widgets/schedule_timeline_view.dart';
@@ -125,6 +126,7 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
   final _aiOpen = ValueNotifier(false);
   final _bottomBarUiState = ValueNotifier(const _BottomBarUiState());
   Timer? _searchDebounce;
+  StreamSubscription<void>? _widgetLaunchSubscription;
   Timer? _eventDragEdgeTimer;
   // null once resolved means the lookup failed (an empty list is a real answer).
   Future<List<CalendarEvent>?>? _searchResults;
@@ -148,6 +150,15 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
     _quickAccessSelected =
         ref.read(appSettingsProvider).appStartView == AppStartView.quickView;
     recordFirstCalendarFrame(context, ref);
+    // A widget tap opens its day or event (#874). Behind the app lock the
+    // page is offstage, so the result shows once the app is unlocked.
+    _widgetLaunchSubscription = ref
+        .read(calendarWidgetServiceProvider)
+        .launchTargetChanges
+        .listen((_) => unawaited(_openWidgetLaunchTarget()));
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => unawaited(_openWidgetLaunchTarget()),
+    );
     Future.microtask(() {
       if (!mounted) return;
       _recordAnalytics(AnalyticsRecord.screenView(AnalyticsScreen.calendar));
@@ -162,6 +173,7 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
 
   @override
   void dispose() {
+    unawaited(_widgetLaunchSubscription?.cancel());
     _searchDebounce?.cancel();
     _eventDragEdgeTimer?.cancel();
     _searchController.dispose();
@@ -1350,6 +1362,81 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
 
   int _quickTodoColumnCount(double width) {
     return quickTodoColumnCountForPlatform(defaultTargetPlatform, width);
+  }
+
+  Future<void> _openWidgetLaunchTarget() async {
+    if (!mounted) return;
+    final target = await ref
+        .read(calendarWidgetServiceProvider)
+        .takeLaunchTarget();
+    if (target == null || !mounted) return;
+    final eventId = target.eventId;
+    final found = eventId == null
+        ? null
+        : await ref.read(visibleEventRepositoryProvider).findById(eventId);
+    if (!mounted) return;
+    // findById also returns tombstones; an event deleted or hidden since the
+    // widget was drawn opens only its date, like the calendar would show it.
+    final stored =
+        found == null ||
+            found.isDeleted ||
+            !ref.read(lmsControllerProvider).isEventVisible(found)
+        ? null
+        : found;
+    final date = target.date ?? stored?.startAt;
+    // Details edit and delete the event they are given, so a repeating event
+    // must open as the tapped occurrence, never as its first one.
+    final event = stored == null || date == null
+        ? stored
+        : _widgetOccurrence(stored, date);
+    // The widget shows the calendar, not the timetable or Imogi tab.
+    _selectBottomAction(_BottomCenterAction.calendar);
+    // An open day sheet or search keeps its own date and would cover it.
+    _closeSearch();
+    _dismissDaySheet();
+    // So would a page or sheet opened over the calendar (settings, details).
+    // Like a back press, but a route that refuses to pop stays open.
+    final calendarRoute = ModalRoute.of(context);
+    if (calendarRoute != null && !calendarRoute.isCurrent) {
+      Navigator.of(context).popUntil(
+        (route) =>
+            route == calendarRoute ||
+            route.popDisposition == RoutePopDisposition.doNotPop,
+      );
+    }
+    if (date != null) {
+      ref.read(visibleMonthProvider.notifier).state = DateTime(
+        date.year,
+        date.month,
+      );
+      ref.read(selectedDateProvider.notifier).state = DateTime(
+        date.year,
+        date.month,
+        date.day,
+      );
+    }
+    if (event != null && context.mounted) {
+      await _showQuickEventDetails(context, event);
+    }
+  }
+
+  /// The occurrence of [event] starting on [date], or null when the series
+  /// has none there (deleted or moved since the widget was drawn).
+  CalendarEvent? _widgetOccurrence(CalendarEvent event, DateTime date) {
+    if (!event.recurrence.isRepeating) return event;
+    final day = DateTime(date.year, date.month, date.day);
+    final occurrences = RecurrenceExpander().expand(
+      event,
+      day,
+      DateTime(day.year, day.month, day.day + 1),
+    );
+    for (final occurrence in occurrences) {
+      final start = occurrence.startAt;
+      if (DateTime(start.year, start.month, start.day) == day) {
+        return occurrence;
+      }
+    }
+    return null;
   }
 
   Future<void> _showQuickEventDetails(

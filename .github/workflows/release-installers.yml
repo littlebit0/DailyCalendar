@@ -9,7 +9,7 @@ on:
         type: string
 
 permissions:
-  contents: write
+  contents: read
   # require-platform-builds.yml reads the tag commit's workflow runs.
   actions: read
 
@@ -24,6 +24,10 @@ jobs:
 
   linux:
     needs: verify
+    # release-linux.yml declares contents: write on its publish job; a called
+    # workflow cannot hold more than its caller grants.
+    permissions:
+      contents: write
     uses: ./.github/workflows/release-linux.yml
     with:
       tag: ${{ inputs.tag }}
@@ -39,7 +43,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ inputs.tag }}
-      - uses: subosito/flutter-action@v2
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
         with:
           channel: stable
           flutter-version: "3.44.0"
@@ -67,7 +71,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ inputs.tag }}
-      - uses: subosito/flutter-action@v2
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
         with:
           channel: stable
           flutter-version: "3.44.0"
@@ -114,7 +118,7 @@ jobs:
         with:
           distribution: temurin
           java-version: "17"
-      - uses: subosito/flutter-action@v2
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
         with:
           channel: stable
           flutter-version: "3.44.0"
@@ -188,7 +192,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ inputs.tag }}
-      - uses: subosito/flutter-action@v2
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
         with:
           channel: stable
           flutter-version: "3.44.0"
@@ -202,7 +206,7 @@ jobs:
         run: flutter build windows --release --no-pub --dart-define=GOOGLE_DESKTOP_CLIENT_SECRET="$env:GOOGLE_DESKTOP_CLIENT_SECRET"
       - name: Install Inno Setup
         shell: pwsh
-        run: choco install innosetup --no-progress -y
+        run: choco install innosetup --version 6.7.1 --no-progress -y
       - name: Build Windows installer
         shell: pwsh
         run: |
@@ -229,6 +233,8 @@ jobs:
     name: Stage complete GitHub release
     needs: [ios, macos, android, windows, linux]
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
         with:
@@ -252,7 +258,7 @@ jobs:
             test -s "dist/$name"
           done
           (cd dist && sha256sum *.ipa *.dmg *.apk *.exe *.zip *.deb > SHA256SUMS)
-      - uses: softprops/action-gh-release@v2
+      - uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2.6.2
         with:
           tag_name: ${{ inputs.tag }}
           name: DailyCalendar ${{ inputs.tag }}
