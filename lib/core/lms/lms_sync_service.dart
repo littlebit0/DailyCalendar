@@ -303,7 +303,7 @@ class LmsSyncService extends ChangeNotifier {
     CalendarEvent previous,
     CoursemosActivity activity,
     List<CoursemosActivity> activities,
-    List<(String, String?)>? reportRows,
+    List<(String, List<String>)>? reportRows,
   ) {
     final storedId = previous.lms!.activityId;
     if (reportRows == null ||
@@ -314,7 +314,7 @@ class LmsSyncService extends ChangeNotifier {
     // Undated and nonattendance rows are not in [activities], so ambiguity
     // and a still-read stored id are judged on the whole report table.
     if (reportRows.where((row) => row.$1 == activity.title).length != 1 ||
-        reportRows.any((row) => row.$2 == storedId)) {
+        reportRows.any((row) => row.$2.contains(storedId))) {
       return false;
     }
     return !activities.any(
@@ -512,9 +512,10 @@ class LmsSyncService extends ChangeNotifier {
       var excludedLearningActivities = 0;
       var failedLearningCourses = 0;
       var unresolvedQuizStatuses = 0;
-      // Every report row (title, activity id) per course whose rows all
-      // resolved, including undated and nonattendance rows.
-      final learningRows = <String, List<(String, String?)>>{};
+      // Every report row (title, activity ids) per course whose rows all
+      // resolved, including undated and nonattendance rows. A recovered row
+      // keeps its report module id too, so both identities are listed.
+      final learningRows = <String, List<(String, List<String>)>>{};
       for (final course in courses) {
         for (final type in const ['assignment', 'quiz']) {
           final module = type == 'assignment' ? 'assign' : 'quiz';
@@ -605,9 +606,12 @@ class LmsSyncService extends ChangeNotifier {
               for (final row in learning.rows)
                 (
                   row.title,
-                  row.sourceIdentity == null
-                      ? null
-                      : 'report:${row.sourceIdentity}',
+                  [
+                    if (row.sourceIdentity != null)
+                      'report:${row.sourceIdentity}',
+                    if (row.module != null && row.moduleId != null)
+                      'report:${row.module}:${row.moduleId}',
+                  ],
                 ),
             ];
           }
@@ -798,7 +802,7 @@ class LmsSyncService extends ChangeNotifier {
     List<CoursemosCourse> courses,
     List<CoursemosActivity> activities, {
     required Set<CoursemosActivity> confirmedLearning,
-    required Map<String, List<(String, String?)>> learningRows,
+    required Map<String, List<(String, List<String>)>> learningRows,
     required int unresolvedLearningActivities,
     required int excludedLearningActivities,
     required int failedLearningCourses,

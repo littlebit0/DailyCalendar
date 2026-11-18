@@ -661,6 +661,53 @@ void main() {
       expect(added.memo, isNull);
     });
 
+    test('a stored id hidden by course-page recovery is not reused', () async {
+      h.pages['/report/ubcompletion/user_progress.php'] = _learning
+          .replaceFirst(
+            '</tbody>',
+            '${learnedRow('9002', title: '옛 자료')}</tbody>',
+          );
+      await h.service.refresh(force: true);
+      final stored = h.repository.events.values.singleWhere(
+        (e) => e.lms!.activityId == 'report:vod:9002',
+      );
+      h.repository.events[stored.id] = stored.copyWith(memo: '개인 메모');
+      // 9002 is renamed and loses its learning time, so recovery reads it as
+      // course module 7002; another module 7001 now carries the old title.
+      final module7002 = coursePage
+          .substring(
+            coursePage.indexOf('<li'),
+            coursePage.indexOf('</li>') + '</li>'.length,
+          )
+          .replaceAll('7001', '7002')
+          .replaceFirst('미학습 자료', '자료 안내')
+          .replaceFirst('2026-10-04', '2026-10-05');
+      h.pages['/course/view.php'] = coursePage
+          .replaceFirst('미학습 자료', '옛 자료')
+          .replaceFirst('</main>', '$module7002</main>');
+      h.pages['/report/ubcompletion/user_progress.php'] = _learning.replaceFirst(
+        '</tbody>',
+        '${_unlearned.replaceFirst('미학습 자료', '옛 자료')}'
+            '${learnedRow('9002', title: '자료 안내').replaceFirst('05:00', '')}'
+            '</tbody>',
+      );
+      final result = await h.service.refresh(force: true);
+      expect(result!.unresolvedLearningActivities, 0);
+      expect(
+        h.repository.events.values.any(
+          (e) => e.lms!.activityId == 'report:cm:vod:7002',
+        ),
+        isTrue,
+      );
+      final kept = h.repository.events[stored.id]!;
+      expect(kept.lms!.activityId, 'report:vod:9002');
+      expect(kept.memo, '개인 메모');
+      final added = lectures(
+        '옛 자료',
+      ).singleWhere((e) => e.lms!.activityId == 'report:cm:vod:7001');
+      expect(added.memo, isNull);
+    });
+
     test('an event already stored under the incoming id is updated', () async {
       final original = await storeRecovered();
       h.pages['/report/ubcompletion/user_progress.php'] = _learning
