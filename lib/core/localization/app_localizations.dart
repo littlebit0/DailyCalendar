@@ -1177,8 +1177,8 @@ const Map<String, Map<String, String>> _translations = {
     '개인정보 및 지원': 'Privacy & Support',
     '계정을 연결하면 기기 간 동기화를 사용할 수 있고, 계정 없이 이 기기에서만 시작할 수도 있어요.':
         'Connect an account to sync across devices, or start without an account on this device only.',
-    '권한 설정을 완료하지 못했습니다. 나중에 설정에서 다시 시도할 수 있습니다. ({error})':
-        'Could not complete permission setup. You can try again later in Settings. ({error})',
+    '권한 설정을 완료하지 못했습니다. 나중에 설정에서 다시 시도할 수 있습니다.':
+        'Could not complete permission setup. You can try again later in Settings.',
     '권한은 나중에 설정에서 다시 요청하거나 변경할 수 있습니다.':
         'You can request or change permissions later in Settings.',
     '기록부터 완료까지': 'From capture to completion',
@@ -2242,8 +2242,8 @@ const Map<String, Map<String, String>> _translations = {
     '개인정보 및 지원': 'プライバシーとサポート',
     '계정을 연결하면 기기 간 동기화를 사용할 수 있고, 계정 없이 이 기기에서만 시작할 수도 있어요.':
         'アカウントを連携するとデバイス間で同期できます。アカウントなしでこのデバイスだけで始めることもできます。',
-    '권한 설정을 완료하지 못했습니다. 나중에 설정에서 다시 시도할 수 있습니다. ({error})':
-        '権限設定を完了できませんでした。後で設定から再試行できます。({error})',
+    '권한 설정을 완료하지 못했습니다. 나중에 설정에서 다시 시도할 수 있습니다.':
+        '権限設定を完了できませんでした。後で設定から再試行できます。',
     '권한은 나중에 설정에서 다시 요청하거나 변경할 수 있습니다.': '権限は後で設定から再度要求または変更できます。',
     '기록부터 완료까지': '記録から完了まで',
     '나중에': '後で',
@@ -3265,8 +3265,8 @@ const Map<String, Map<String, String>> _translations = {
     '개인정보 및 지원': '隱私與支援',
     '계정을 연결하면 기기 간 동기화를 사용할 수 있고, 계정 없이 이 기기에서만 시작할 수도 있어요.':
         '連結帳號即可在裝置間同步，也可以不使用帳號，僅在此裝置開始。',
-    '권한 설정을 완료하지 못했습니다. 나중에 설정에서 다시 시도할 수 있습니다. ({error})':
-        '無法完成權限設定。稍後可在「設定」中重試。({error})',
+    '권한 설정을 완료하지 못했습니다. 나중에 설정에서 다시 시도할 수 있습니다.':
+        '無法完成權限設定。稍後可在「設定」中重試。',
     '권한은 나중에 설정에서 다시 요청하거나 변경할 수 있습니다.': '稍後可在「設定」中再次要求或變更權限。',
     '기록부터 완료까지': '從記錄到完成',
     '나중에': '稍後',
