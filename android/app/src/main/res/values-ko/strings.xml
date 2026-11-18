@@ -3,6 +3,7 @@
     <string name="event_alarm">일정 알람</string>
     <string name="alarm_stop">중지</string>
     <string name="alarm_snooze">%1$d분 후 다시 알림</string>
+    <string name="alarm_missed">놓친 알람 · %1$s</string>
     <string name="widget_month_description">DailyCalendar 월간 달력</string>
     <string name="widget_today_description">DailyCalendar 오늘 일정</string>
     <string name="widget_dday_description">DailyCalendar D-day 일정</string>

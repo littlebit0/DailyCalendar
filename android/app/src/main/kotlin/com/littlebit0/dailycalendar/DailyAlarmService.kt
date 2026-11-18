@@ -60,7 +60,8 @@ class DailyAlarmService : Service() {
         .setOngoing(true)
         .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
         .setContentIntent(DailyAlarmScheduler.showIntent(this, alarm.id))
-        .setFullScreenIntent(DailyAlarmScheduler.showIntent(this, alarm.id), true)
+        // Without the full-screen permission (Android 14+) it stays a plain alarm notification (#840).
+        .apply { if (DailyAlarmScheduler.fullScreenAllowed(this@DailyAlarmService)) setFullScreenIntent(DailyAlarmScheduler.showIntent(this@DailyAlarmService, alarm.id), true) }
         .addAction(0, getString(R.string.alarm_stop), actionIntent(alarm.id, DailyAlarmScheduler.STOP))
         .addAction(0, getString(R.string.alarm_snooze, alarm.snoozeMinutes), actionIntent(alarm.id, DailyAlarmScheduler.SNOOZE))
         .build()
@@ -135,6 +136,7 @@ class DailyAlarmService : Service() {
     companion object {
         private const val NOTIFICATION_ID = 0xDA11
         private var active: DailyAlarmService? = null
+        internal fun ringing(id: String) = active?.alarms?.containsKey(id) == true
         internal fun stopEvent(context: android.content.Context, id: String) {
             active?.remove(id, false)
             context.sendBroadcast(Intent(DailyAlarmScheduler.CLOSED).setPackage(context.packageName).putExtra(DailyAlarmScheduler.EVENT_ID, id))
