@@ -108,13 +108,15 @@ private enum DailyWidgetTodoActionStore {
       ])
       let data = try JSONSerialization.data(withJSONObject: actions)
       try data.write(to: actionsURL, options: .atomic)
+      // Still under the lock the app takes for its own snapshot write, so this
+      // read-modify-write can never put back a snapshot the app replaced (#920).
+      try updateSnapshot(
+        at: containerURL.appendingPathComponent(snapshotFileName),
+        eventId: eventId,
+        completed: completed,
+        occurrenceId: occurrenceId
+      )
     }
-    try updateSnapshot(
-      at: containerURL.appendingPathComponent(snapshotFileName),
-      eventId: eventId,
-      completed: completed,
-      occurrenceId: occurrenceId
-    )
     notifyApp()
   }
 
