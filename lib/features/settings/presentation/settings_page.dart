@@ -331,6 +331,15 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     final appleAccount = account?.appleAccount ?? _appleAccount;
     final hasAccountConnection = account?.hasProviders ?? false;
     final accountBusy = _appleBusy || _syncBusy;
+    final horizontalPadding = DailyUi.isDesktop || androidTablet ? 24 : 16;
+    // Content width inside the 900 max width, after the list padding.
+    final twoColumns =
+        (windowSize.width - MediaQuery.paddingOf(context).horizontal).clamp(
+              0.0,
+              900.0,
+            ) -
+            horizontalPadding * 2 >=
+        720;
 
     final pageTitle = switch (widget._destination) {
       _SettingsDestination.notifications => context.tr('알림 설정'),
@@ -347,7 +356,13 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       appBar: DailyNavigationBar(title: pageTitle),
       body: ColoredBox(
         color: DailyUi.pageBackground(context),
-        child: Center(
+        // Keep rows clear of side insets such as the iPhone Duo camera strip.
+        child: Container(
+          alignment: Alignment.center,
+          padding: EdgeInsets.only(
+            left: MediaQuery.paddingOf(context).left,
+            right: MediaQuery.paddingOf(context).right,
+          ),
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 900),
             child: ListView(
@@ -357,7 +372,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                 DailyUi.isDesktop || androidTablet ? 24 : 16,
                 28,
               ),
-              children: [
+              children: _settingsColumns(twoColumns && widget._destination == null, [
                 if (widget._destination == null) ...[
                   _SettingsSection(
                     title: 'Daily',
@@ -1357,7 +1372,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                       ),
                     ],
                   ),
-              ],
+              ]),
             ),
           ),
         ),
@@ -3497,6 +3512,30 @@ class _ThreeWayCapsuleState<T> extends State<_ThreeWayCapsule<T>> {
     final x = -1 + (2 * index / (widget.values.length - 1));
     return Alignment(x, 0);
   }
+}
+
+/// Wide windows (iPhone Duo inner screen, tablets, desktop) show the root
+/// settings menu in two columns; the first half stays on the left in reading
+/// order. Detail pages keep one column for their full-width inline controls.
+List<Widget> _settingsColumns(bool wide, List<Widget> sections) {
+  if (!wide || sections.length < 2) return sections;
+  final split = sections.length ~/ 2;
+  Widget column(List<Widget> children) => Expanded(
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: children,
+    ),
+  );
+  return [
+    Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        column(sections.sublist(0, split)),
+        const SizedBox(width: 16),
+        column(sections.sublist(split)),
+      ],
+    ),
+  ];
 }
 
 class _SettingsSection extends StatelessWidget {

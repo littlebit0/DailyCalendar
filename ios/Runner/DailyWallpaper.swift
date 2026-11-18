@@ -113,7 +113,18 @@ enum DailyWallpaperStore {
   static var canvas: DailyWallpaperCanvas? {
     let device: DailyWallpaperCanvas.Device
     switch UIDevice.current.userInterfaceIdiom {
-    case .phone: device = .phone
+    case .phone:
+      // iPhone Duo: UIScreen.main is the outer portrait screen, but the larger
+      // inner screen shows the Lock Screen in landscape. Use the two-orientation
+      // canvas at the inner screen's resolution so one image fits both screens.
+      // External displays on iPhone mirror the main screen, so they are excluded.
+      let main = UIScreen.main.nativeBounds.size
+      let inner = UIScreen.screens.lazy
+        .filter { $0.mirrored == nil }
+        .map(\.nativeBounds.size)
+        .first { $0.width * $0.height > main.width * main.height }
+      if let inner { return DailyWallpaperCanvas(device: .pad, nativeSize: inner) }
+      device = .phone
     case .pad:
       // iPad's selectable photo Lock Screens were introduced in iPadOS 17.
       guard #available(iOS 17.0, *) else { return nil }
