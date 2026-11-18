@@ -79,6 +79,10 @@ class GoogleDriveAuthService {
   );
   static const _defaultDesktopClientId =
       '234127810480-caigb6e78fj43lv268t78sam64c3aivb.apps.googleusercontent.com';
+  // Not a confidential value: Google treats desktop apps as public clients and
+  // the shipped binary exposes it. The Desktop client still rejects token
+  // requests without it (#870), so builds inject it; PKCE (S256) and the
+  // loopback redirect check protect the flow, not this value.
   static const _desktopClientSecret = String.fromEnvironment(
     'GOOGLE_DESKTOP_CLIENT_SECRET',
   );

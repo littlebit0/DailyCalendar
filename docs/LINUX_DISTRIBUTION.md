@@ -109,7 +109,8 @@ available. GitHub asset replacement is not atomic; an in-flight APT hash mismatc
 fails closed and retries later. The signed manifest is uploaded last.
 
 GitHub encrypted secrets: `LINUX_APT_SIGNING_KEY` and the existing desktop build
-configuration `GOOGLE_DESKTOP_CLIENT_SECRET`. Public archive fingerprint:
+configuration `GOOGLE_DESKTOP_CLIENT_SECRET` (not confidential once shipped; see
+`docs/GOOGLE_DRIVE_SYNC_SETUP.md`). Public archive fingerprint:
 `1C86509FAC07FB37DA9F0B6EE52E84ACEAE49AD4`.
 Keep the private key outside git and back it up securely. Do not regenerate it
 for each release; rotation requires a trust transition through the old key.
