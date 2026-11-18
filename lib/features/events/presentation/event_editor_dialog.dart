@@ -1669,7 +1669,11 @@ class _LabeledPickerButton extends StatelessWidget {
           width: double.infinity,
           child: FilledButton.tonalIcon(
             onPressed: onPressed,
-            icon: Icon(icon, size: 18, color: DailyUi.primary),
+            icon: Icon(
+              icon,
+              size: 18,
+              color: DailyUi.primaryForeground(context),
+            ),
             label: Text(value, maxLines: 1, overflow: TextOverflow.ellipsis),
             style: FilledButton.styleFrom(
               backgroundColor: DailyUi.elevatedSurface(context),

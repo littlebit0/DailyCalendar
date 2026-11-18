@@ -12,6 +12,7 @@ import '../../../core/calendar/korean_lunar_calendar.dart';
 import '../../../core/calendar/calendar_event_ordering.dart';
 import '../../../core/localization/app_localizations.dart';
 import '../../../core/settings/app_settings.dart';
+import '../../../core/theme/calendar_date_color.dart';
 import '../../../core/theme/daily_ui.dart';
 import '../../../core/theme/event_completion_style.dart';
 import '../../../core/weather/weather_widgets.dart';
@@ -682,10 +683,10 @@ class CalendarWeekdayHeader extends StatelessWidget {
         ? (index + DateTime.monday - 1) % DateTime.daysPerWeek + 1
         : (index + DateTime.sunday - 1) % DateTime.daysPerWeek + 1;
     if (weekday == DateTime.sunday) {
-      return const Color(0xffef4444);
+      return calendarSundayAccent(colorScheme.brightness);
     }
     if (weekday == DateTime.saturday) {
-      return const Color(0xff2563eb);
+      return calendarSaturdayAccent(colorScheme.brightness);
     }
     return colorScheme.onSurfaceVariant;
   }
@@ -1554,9 +1555,9 @@ class _DayNumber extends StatelessWidget {
         : today
         ? Colors.white
         : holiday || day.weekday == DateTime.sunday
-        ? const Color(0xffef4444)
+        ? calendarSundayAccent(colorScheme.brightness)
         : day.weekday == DateTime.saturday
-        ? const Color(0xff2563eb)
+        ? calendarSaturdayAccent(colorScheme.brightness)
         : colorScheme.onSurface;
 
     final child = Text(

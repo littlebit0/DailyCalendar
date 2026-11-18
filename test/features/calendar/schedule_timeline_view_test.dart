@@ -465,7 +465,7 @@ void main() {
 
     expect(
       _headerColor(tester, DateTime(2026, 8, 23)),
-      const Color(0xffef4444),
+      const Color(0xffb91c1c),
     );
     expect(
       _headerColor(tester, DateTime(2026, 8, 24)),
@@ -507,7 +507,7 @@ void main() {
 
     expect(
       _headerColor(tester, DateTime(2026, 8, 23)),
-      const Color(0xffef4444),
+      const Color(0xfff87171),
     );
   });
 
@@ -540,11 +540,11 @@ void main() {
 
     expect(
       _headerColor(tester, DateTime(2026, 8, 29)),
-      const Color(0xff2563eb),
+      const Color(0xff60a5fa),
     );
     expect(
       _headerColor(tester, DateTime(2026, 8, 30)),
-      const Color(0xffef4444),
+      const Color(0xfff87171),
     );
   });
 

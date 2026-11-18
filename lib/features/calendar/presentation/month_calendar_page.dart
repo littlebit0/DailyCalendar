@@ -2566,7 +2566,9 @@ class _SignalVoicePanelState extends ConsumerState<_SignalVoicePanel>
                                   _response,
                                   style: Theme.of(context).textTheme.bodyMedium
                                       ?.copyWith(
-                                        color: DailyUi.primary,
+                                        color: DailyUi.primaryForeground(
+                                          context,
+                                        ),
                                         height: 1.35,
                                       ),
                                 ),
@@ -5394,6 +5396,7 @@ class _CalendarHeader extends ConsumerWidget {
                     .read(koreanHolidayServiceProvider)
                     .isPublicHoliday(selectedDate),
             holidayColorValue: settings.holidayCategory.colorValue,
+            brightness: colorScheme.brightness,
           )
         : null;
     final weekday = DateFormat.EEEE(locale).format(selectedDate);
@@ -6056,7 +6059,9 @@ class _CalendarHeader extends ConsumerWidget {
                                         ? 0.28
                                         : 0.13,
                                   ),
-                                  checkmarkColor: DailyUi.primary,
+                                  checkmarkColor: DailyUi.primaryForeground(
+                                    context,
+                                  ),
                                   shape: const StadiumBorder(),
                                   onSelected: (selected) async {
                                     selected
@@ -7950,6 +7955,7 @@ class _WeekDayPanel extends ConsumerWidget {
               settings.calendarShowHolidays &&
               ref.read(koreanHolidayServiceProvider).isPublicHoliday(day),
           holidayColorValue: settings.holidayCategory.colorValue,
+          brightness: colorScheme.brightness,
         ) ??
         colorScheme.onSurface;
     final visibleEvents = compact ? events.take(4).toList() : events;

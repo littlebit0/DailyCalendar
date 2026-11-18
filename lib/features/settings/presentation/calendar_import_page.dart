@@ -347,7 +347,10 @@ class _ImportSourceSection extends StatelessWidget {
                   dimension: 20,
                   child: CircularProgressIndicator(strokeWidth: 2),
                 )
-              : Icon(Icons.refresh_rounded, color: DailyUi.primary),
+              : Icon(
+                  Icons.refresh_rounded,
+                  color: DailyUi.primaryForeground(context),
+                ),
           onTap: busy ? null : onLoad,
         ),
         for (final calendar in calendars)
