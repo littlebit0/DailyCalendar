@@ -4,10 +4,8 @@ import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
 import 'package:daily/features/timetable/domain/timetable.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'chosun_catalog_data_test.dart' as original;
 
 void main() {
-  original.main();
   test(
     'Current nursing native cells, exact hour boundaries, closures and all modes survive full Drive JSON',
     () {

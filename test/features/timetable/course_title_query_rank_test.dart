@@ -1,20 +1,13 @@
-import 'dart:io';
-
 import 'package:daily/features/timetable/data/university_catalog.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class _FileBundle extends CachingAssetBundle {
-  @override
-  Future<ByteData> load(String key) async =>
-      ByteData.sublistView(await File(key).readAsBytes());
-}
+import '../../support/file_asset_bundle.dart';
 
 void main() {
   test('published names with a trailing space rank as exact matches', () async {
     final courses = [
       for (final dataset in await UniversityCatalog.load(
-        bundle: _FileBundle(),
+        bundle: FileAssetBundle(),
         university: 'cau',
       ))
         ...dataset.courses,

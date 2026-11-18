@@ -4,19 +4,13 @@ import 'package:daily/core/academic/academic_profile.dart';
 import 'package:daily/core/academic/academic_source.dart';
 import 'package:daily/core/academic/cau_academic_source.dart';
 import 'package:daily/features/timetable/data/timetable_period_defaults.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
+import '../../support/file_asset_bundle.dart';
 
 String fixture([int year = 2026]) =>
     File('test/fixtures/academic/cau-$year.json').readAsStringSync();
-
-class _FileBundle extends CachingAssetBundle {
-  @override
-  Future<ByteData> load(String key) async =>
-      ByteData.sublistView(await File(key).readAsBytes());
-}
 
 void main() {
   test('CAU requests the published undergraduate year list', () async {
@@ -172,7 +166,7 @@ void main() {
     'CAU term defaults are bounded by their named official calendar rows',
     () async {
       final defaults = await TimetablePeriodDefaults.load(
-        bundle: _FileBundle(),
+        bundle: FileAssetBundle(),
       );
       final raw =
           jsonDecode(

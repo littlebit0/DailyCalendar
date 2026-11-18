@@ -4,17 +4,8 @@ import 'package:crypto/crypto.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
 import 'package:daily/features/timetable/domain/timetable.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-class _Files extends CachingAssetBundle {
-  @override
-  Future<String> loadString(String key, {bool cache = true}) async =>
-      File(key).readAsStringSync();
-  @override
-  Future<ByteData> load(String key) async =>
-      ByteData.sublistView(File(key).readAsBytesSync());
-}
+import '../../support/file_asset_bundle.dart';
 
 const directory = 'work/university-research/catalog-c/jbnu-current-20261008';
 Map<String, dynamic> read(String file) {
@@ -287,7 +278,7 @@ void main() {
     'JBNU restored catalog keeps 3571 courses and 277 held clocks',
     () async {
       final datasets = await UniversityCatalog.load(
-        bundle: _Files(),
+        bundle: FileAssetBundle(),
         university: 'jbnu',
       );
       expect(
@@ -316,7 +307,7 @@ void main() {
     'JBNU major labels all reach an official college in the course page',
     () async {
       final datasets = await UniversityCatalog.load(
-        bundle: _Files(),
+        bundle: FileAssetBundle(),
         university: 'jbnu',
       );
       final raw = <String>{};

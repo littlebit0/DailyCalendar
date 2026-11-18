@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:daily/core/academic/academic_profile.dart';
 import 'package:daily/core/di/app_providers.dart';
@@ -9,27 +8,18 @@ import 'package:daily/features/timetable/data/timetable_store.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
 import 'package:daily/features/timetable/domain/timetable.dart';
 import 'package:daily/features/timetable/domain/timetable_term.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 // ignore: depend_on_referenced_packages
 import 'package:shared_preferences_platform_interface/shared_preferences_platform_interface.dart';
+import '../../support/file_asset_bundle.dart';
 
 final _now = DateTime.utc(2026, 9, 25);
 final _fall = TimetablePeriod(
   start: DateTime(2026, 9, 1),
   end: DateTime(2026, 12, 21),
 );
-
-class _FileBundle extends CachingAssetBundle {
-  @override
-  Future<String> loadString(String key, {bool cache = true}) async =>
-      File(key).readAsStringSync();
-  @override
-  Future<ByteData> load(String key) async =>
-      ByteData.sublistView(File(key).readAsBytesSync());
-}
 
 class _PausingPreferences extends InMemorySharedPreferencesStore {
   _PausingPreferences() : super.empty();
@@ -67,7 +57,7 @@ Future<SettingsRepository> _settings() async {
 }
 
 Future<TimetablePeriodDefaults> _defaults() =>
-    TimetablePeriodDefaults.load(bundle: _FileBundle());
+    TimetablePeriodDefaults.load(bundle: FileAssetBundle());
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
