@@ -20,6 +20,11 @@ class KoreanHolidayService {
 
   final KoreanLunarCalendar _lunarCalendar;
 
+  // 관공서의 공휴일에 관한 규정 제3조 대체공휴일 시행일: 설·추석·어린이날 대통령령 제24828호(2013. 11. 5.), 국경일 제31930호(2021. 8. 4.), 부처님 오신 날·기독탄신일 제33448호(2023. 5. 4.).
+  static final _lunarAndChildrenSubstituteSince = DateTime(2013, 11, 5);
+  static final _nationalDaySubstituteSince = DateTime(2021, 8, 4);
+  static final _buddhaAndChristmasSubstituteSince = DateTime(2023, 5, 4);
+
   List<KoreanHoliday> holidaysInRange(DateTime start, DateTime end) {
     final startYear = start.year - 1;
     final endYear = end.year + 1;
@@ -80,28 +85,38 @@ class KoreanHolidayService {
       byDate.putIfAbsent(day, () => <String>[]).add(title);
     }
 
-    void addFixed(int month, int day, String title, {bool substitute = false}) {
+    void addFixed(
+      int month,
+      int day,
+      String title, {
+      DateTime? substituteSince,
+    }) {
       final date = DateTime(year, month, day);
       add(date, title);
-      if (substitute) {
+      if (substituteSince != null && !date.isBefore(substituteSince)) {
         singleSubstituteDates.add(date);
       }
     }
 
     addFixed(1, 1, '신정');
-    addFixed(3, 1, '삼일절', substitute: true);
+    addFixed(3, 1, '삼일절', substituteSince: _nationalDaySubstituteSince);
     if (year >= 2027) {
-      addFixed(5, 1, '노동절', substitute: true);
+      addFixed(5, 1, '노동절', substituteSince: DateTime(2026, 5, 1));
     }
-    addFixed(5, 5, '어린이날', substitute: true);
+    addFixed(5, 5, '어린이날', substituteSince: _lunarAndChildrenSubstituteSince);
     addFixed(6, 6, '현충일');
     if (year >= 2026) {
-      addFixed(7, 17, '제헌절', substitute: true);
+      addFixed(7, 17, '제헌절', substituteSince: DateTime(2026, 5, 11));
     }
-    addFixed(8, 15, '광복절', substitute: true);
-    addFixed(10, 3, '개천절', substitute: true);
-    addFixed(10, 9, '한글날', substitute: true);
-    addFixed(12, 25, '기독탄신일', substitute: true);
+    addFixed(8, 15, '광복절', substituteSince: _nationalDaySubstituteSince);
+    addFixed(10, 3, '개천절', substituteSince: _nationalDaySubstituteSince);
+    addFixed(10, 9, '한글날', substituteSince: _nationalDaySubstituteSince);
+    addFixed(
+      12,
+      25,
+      '기독탄신일',
+      substituteSince: _buddhaAndChristmasSubstituteSince,
+    );
 
     final lunarNewYear = _lunarCalendar.toSolar(year: year, month: 1, day: 1);
     if (lunarNewYear != null) {
@@ -119,7 +134,9 @@ class KoreanHolidayService {
     final buddhaBirthday = _lunarCalendar.toSolar(year: year, month: 4, day: 8);
     if (buddhaBirthday != null) {
       add(buddhaBirthday, '부처님 오신 날');
-      singleSubstituteDates.add(buddhaBirthday);
+      if (!buddhaBirthday.isBefore(_buddhaAndChristmasSubstituteSince)) {
+        singleSubstituteDates.add(buddhaBirthday);
+      }
     }
 
     final chuseok = _lunarCalendar.toSolar(year: year, month: 8, day: 15);
@@ -150,6 +167,9 @@ class KoreanHolidayService {
     }
 
     for (final group in substituteGroups) {
+      if (group.first.isBefore(_lunarAndChildrenSubstituteSince)) {
+        continue;
+      }
       final needsSubstitute =
           group.any((date) => date.weekday == DateTime.sunday) ||
           group.any((date) => (byDate[_dayStart(date)]?.length ?? 0) > 1);
