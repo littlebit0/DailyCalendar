@@ -989,6 +989,63 @@ void main() {
     });
   });
 
+  group('repeating "future" delete (#882)', () {
+    final base = _event().copyWith(
+      recurrence: const RecurrenceRule(frequency: RecurrenceFrequency.daily),
+    );
+    CalendarEvent occurrence(CalendarEvent source, int day) => source.copyWith(
+      occurrenceId: '${source.id}@$day',
+      startAt: DateTime(2026, 7, day, 10),
+      endAt: DateTime(2026, 7, day, 11),
+    );
+
+    Future<_SingleEventRepository> deleteFuture(
+      WidgetTester tester,
+      CalendarEvent source,
+      CalendarEvent shown,
+    ) async {
+      final repository = await _pumpPanel(tester, event: source, shown: shown);
+      await tester.tap(find.byKey(ValueKey('event-delete-${source.id}')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.widgetWithText(FilledButton, '삭제'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('이후 일정'));
+      await tester.pumpAndSettle();
+      return repository;
+    }
+
+    testWidgets('on the first occurrence deletes the series', (tester) async {
+      final repository = await deleteFuture(tester, base, occurrence(base, 17));
+      expect(repository.deletes, 1);
+      expect(repository.event, same(base));
+    });
+
+    testWidgets('deletes the series when every earlier one was excluded', (
+      tester,
+    ) async {
+      final source = base.copyWith(
+        recurrence: base.recurrence.copyWith(
+          excludedDates: [DateTime(2026, 7, 17), DateTime(2026, 7, 18)],
+        ),
+      );
+      final repository = await deleteFuture(
+        tester,
+        source,
+        occurrence(source, 19),
+      );
+      expect(repository.deletes, 1);
+      expect(repository.event, same(source));
+    });
+
+    testWidgets('on a later occurrence only ends the series before it', (
+      tester,
+    ) async {
+      final repository = await deleteFuture(tester, base, occurrence(base, 19));
+      expect(repository.deletes, 0);
+      expect(repository.event.recurrence.until, DateTime(2026, 7, 18));
+    });
+  });
+
   testWidgets('repeating delete uses the delete-specific all scope label', (
     tester,
   ) async {
@@ -1339,11 +1396,12 @@ Future<_SingleEventRepository> _pumpPanel(
   Brightness brightness = Brightness.light,
   ValueListenable<String?>? requiredUpdate,
   Widget? body,
+  CalendarEvent? shown,
 }) async {
   SharedPreferences.setMockInitialValues({});
   final preferences = await SharedPreferences.getInstance();
   final settingsRepository = SettingsRepository(preferences: preferences);
-  final repository = _SingleEventRepository(event);
+  final repository = _SingleEventRepository(event)..shown = shown;
   final commandService = EventCommandService(
     repository: repository,
     settingsRepository: settingsRepository,
@@ -1366,8 +1424,8 @@ Future<_SingleEventRepository> _pumpPanel(
           body:
               body ??
               EventDetailsPanel(
-                date: event.startAt,
-                events: [event],
+                date: (shown ?? event).startAt,
+                events: [shown ?? event],
                 onEventDropped: onEventDropped,
                 onEventDragStateChanged: onEventDragStateChanged,
               ),
@@ -1451,6 +1509,12 @@ class _SingleEventRepository implements EventRepository {
   /// Writes the panel or a drop handler actually asked for.
   int writes = 0;
 
+  /// How many of those writes were deletions.
+  int deletes = 0;
+
+  /// The expanded occurrence the day queries return instead of the stored row.
+  CalendarEvent? shown;
+
   /// Holds [findById] open to simulate a slow lookup.
   Completer<void>? lookupGate;
 
@@ -1475,13 +1539,14 @@ class _SingleEventRepository implements EventRepository {
     beforeResolve?.call();
     beforeWrite?.call();
     writes++;
+    deletes++;
   }
 
   @override
   Future<List<CalendarEvent>> eventsInRange(
     DateTime rangeStart,
     DateTime rangeEnd,
-  ) async => [event];
+  ) async => [shown ?? event];
 
   @override
   Future<CalendarEvent?> findById(String id) async {
@@ -1559,7 +1624,7 @@ class _SingleEventRepository implements EventRepository {
   Stream<List<CalendarEvent>> watchEventsInRange(
     DateTime rangeStart,
     DateTime rangeEnd,
-  ) => Stream.value([event]);
+  ) => Stream.value([shown ?? event]);
 }
 
 class _MultipleEventRepository extends _SingleEventRepository {
