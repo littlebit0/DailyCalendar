@@ -1,0 +1,5 @@
+// The widget ships inside the iOS app, so it carries the app's version and
+// build number from the same Flutter build values (#956).
+#include? "../ios/Flutter/Generated.xcconfig"
+MARKETING_VERSION = $(FLUTTER_BUILD_NAME)
+CURRENT_PROJECT_VERSION = $(FLUTTER_BUILD_NUMBER)
