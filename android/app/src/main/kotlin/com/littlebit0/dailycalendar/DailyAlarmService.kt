@@ -39,7 +39,17 @@ class DailyAlarmService : Service() {
             else -> {
                 val alarm = DailyAlarmScheduler.read(this, id)
                 if (alarm == null) {
-                    if (alarms.isEmpty()) stopSelf()
+                    if (alarms.isEmpty()) {
+                        // The receiver used startForegroundService(); the system kills the
+                        // app unless startForeground() answers it, even for an alarm that
+                        // was cancelled in between (#877).
+                        startForeground(NOTIFICATION_ID, NotificationCompat.Builder(this, DailyAlarmScheduler.CHANNEL)
+                            .setSmallIcon(R.drawable.ic_alarm_notification)
+                            .setContentTitle(getString(R.string.event_alarm))
+                            .build())
+                        stopForeground(STOP_FOREGROUND_REMOVE)
+                        stopSelf()
+                    }
                     return START_NOT_STICKY
                 }
                 alarms[id] = alarm
@@ -74,7 +84,8 @@ class DailyAlarmService : Service() {
     )
 
     private fun startSound() {
-        wakeLock = getSystemService(PowerManager::class.java)
+        // A retry after failed playback must not orphan the held lock (#877).
+        if (wakeLock?.isHeld != true) wakeLock = getSystemService(PowerManager::class.java)
             .newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "$packageName:EventAlarm")
             .apply { acquire(10 * 60 * 1000L) }
         val attributes = AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_ALARM)
