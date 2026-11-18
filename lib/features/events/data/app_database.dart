@@ -253,6 +253,26 @@ LazyDatabase _openConnection() {
 QueryExecutor openAppDatabaseFile(File file) {
   return NativeDatabase.createInBackground(
     file,
-    setup: (database) => database.execute('PRAGMA busy_timeout = 5000'),
+    setup: (database) => database.busyHandler = appDatabaseBusyHandler(),
   );
+}
+
+const appDatabaseBusyWait = Duration(milliseconds: 5000);
+
+/// PRAGMA busy_timeout 대신 직접 기다린다. package:sqlite3의 Linux용 빌드는
+/// busy_timeout을 설정해도 기다리지 않고 바로 SQLITE_BUSY를 돌려준다.
+bool Function(int) appDatabaseBusyHandler({
+  Duration wait = appDatabaseBusyWait,
+}) {
+  final waited = Stopwatch();
+  return (count) {
+    if (count == 0) {
+      waited
+        ..reset()
+        ..start();
+    }
+    if (waited.elapsed >= wait) return false;
+    sleep(const Duration(milliseconds: 20));
+    return true;
+  };
 }

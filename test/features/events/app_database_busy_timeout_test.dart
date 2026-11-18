@@ -36,17 +36,31 @@ void main() {
     await directory.delete(recursive: true);
   });
 
-  test('앱 DB 연결에 busy_timeout 5000ms가 설정된다', () async {
-    final row = await database.customSelect('PRAGMA busy_timeout').getSingle();
-    expect(row.data.values.single, 5000);
+  test('잠금 대기는 정한 시간이 지나면 포기한다', () {
+    final handler = appDatabaseBusyHandler(
+      wait: const Duration(milliseconds: 100),
+    );
+    final clock = Stopwatch()..start();
+    var count = 0;
+    while (handler(count)) {
+      count++;
+    }
+    expect(clock.elapsedMilliseconds, greaterThanOrEqualTo(100));
+    expect(clock.elapsedMilliseconds, lessThan(2000));
   });
 
   test('다른 프로세스가 BEGIN IMMEDIATE를 잡은 동안 앱 쓰기가 기다린 뒤 성공한다', () async {
     final Process writer;
     try {
-      writer = await Process.start('python3', ['-c', _holdWriteLock, file.path]);
+      writer = await Process.start('python3', [
+        '-c',
+        _holdWriteLock,
+        file.path,
+      ]);
     } on ProcessException {
-      markTestSkipped('python3 is required to hold a lock from another process');
+      markTestSkipped(
+        'python3 is required to hold a lock from another process',
+      );
       return;
     }
     final lines = writer.stdout
