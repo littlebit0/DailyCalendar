@@ -874,6 +874,120 @@ void main() {
       expect(keys, [a, c, b].map(calendarEventOrderKey).toList());
     });
 
+    /// A host whose view [show] can remove while the scope stays alive.
+    Future<(BuildContext, WidgetRef, SettingsRepository)> pumpRemovableHost(
+      WidgetTester tester,
+      _SingleEventRepository repository,
+      ValueNotifier<bool> show,
+      SyncService sync,
+    ) async {
+      SharedPreferences.setMockInitialValues({});
+      final settings = SettingsRepository(
+        preferences: await SharedPreferences.getInstance(),
+      );
+      late BuildContext hostContext;
+      late WidgetRef hostRef;
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            settingsRepositoryProvider.overrideWithValue(settings),
+            eventRepositoryProvider.overrideWithValue(repository),
+            syncServiceProvider.overrideWithValue(sync),
+            eventCommandServiceProvider.overrideWithValue(
+              EventCommandService(
+                repository: repository,
+                settingsRepository: settings,
+                notificationService: _NoopNotificationService(),
+                syncService: _NoopSyncService(),
+              ),
+            ),
+          ],
+          child: MaterialApp(
+            home: Scaffold(
+              body: ValueListenableBuilder<bool>(
+                valueListenable: show,
+                builder: (_, shown, _) => shown
+                    ? Consumer(
+                        builder: (context, ref, _) {
+                          hostContext = context;
+                          hostRef = ref;
+                          return const SizedBox();
+                        },
+                      )
+                    : const SizedBox.shrink(),
+              ),
+            ),
+          ),
+        ),
+      );
+      return (hostContext, hostRef, settings);
+    }
+
+    testWidgets('a drop saves its order after its view is removed (#966)', (
+      tester,
+    ) async {
+      final event = _event();
+      final repository = _SingleEventRepository(event);
+      final show = ValueNotifier(true);
+      final sync = _CountingSettingsSync();
+      final (context, ref, settings) = await pumpRemovableHost(
+        tester,
+        repository,
+        show,
+        sync,
+      );
+      final day = DateUtils.dateOnly(event.startAt);
+      final next = DateTime(day.year, day.month, day.day + 1);
+      final gate = Completer<void>();
+      repository.lookupGate = gate;
+      final drop = debugDropCalendarEventOnDate(context, ref, event, next);
+      await tester.pump();
+      // The view goes away while the event save is still running.
+      show.value = false;
+      await tester.pump();
+      gate.complete();
+      await tester.pumpAndSettle();
+      await drop;
+      expect(repository.writes, 1);
+      expect(
+        settings
+            .load()
+            .calendarManualEventOrders[calendarDateKey(next)]
+            ?.eventKeys,
+        [calendarEventOrderKey(repository.event)],
+      );
+      expect(sync.settingsBackups, 1);
+    });
+
+    testWidgets('a range editor saves after its page is removed (#966)', (
+      tester,
+    ) async {
+      final repository = _SingleEventRepository(_event());
+      final show = ValueNotifier(true);
+      final (context, ref, _) = await pumpRemovableHost(
+        tester,
+        repository,
+        show,
+        _NoopSyncService(),
+      );
+      final day = DateTime(2026, 7, 21);
+      unawaited(
+        debugOpenRangeEventEditor(context, ref, day, day, [
+          EventCategory.basic,
+        ]),
+      );
+      await tester.pumpAndSettle();
+      expect(find.byType(EventEditorDialog), findsOneWidget);
+      show.value = false;
+      await tester.pumpAndSettle();
+
+      await tester.enterText(find.byType(TextField).first, '제거 뒤 추가');
+      await tester.tap(find.text('저장').last);
+      await tester.pumpAndSettle();
+      expect(tester.takeException(), isNull);
+      expect(repository.saved.map((e) => e.title), contains('제거 뒤 추가'));
+    });
+
     testWidgets('lets a repeating time drop through while up to date', (
       tester,
     ) async {
@@ -1712,6 +1826,13 @@ class _RecordingSync extends _NoopSyncService {
   @override
   Future<void> queueEventUpsert(CalendarEvent event) async =>
       upserts.add(event.id);
+}
+
+class _CountingSettingsSync extends _NoopSyncService {
+  int settingsBackups = 0;
+
+  @override
+  Future<void> queueSettingsBackup() async => settingsBackups++;
 }
 
 class _NoopSyncService implements SyncService {

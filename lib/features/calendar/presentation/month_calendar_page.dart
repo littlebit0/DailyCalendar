@@ -14,6 +14,7 @@ import 'package:intl/intl.dart';
 
 import '../../../core/weather/weather_widgets.dart';
 import '../../../core/di/app_providers.dart';
+import '../../../core/lms/lms_controller.dart';
 import '../../../core/lms/lms_sync_service.dart';
 import '../../../core/sync/google_drive_auth_service.dart';
 import '../../../core/sync/google_drive_sync_service.dart';
@@ -236,6 +237,12 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
         !_quickAccessSelected &&
         showEventSidebar &&
         !(viewMode == CalendarViewMode.day && !showScheduleDaySidebar);
+    if (showStableEventSidebar && _daySheetController != null) {
+      // A day sheet opened while narrow would repeat the sidebar's day list.
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _dismissDaySheet();
+      });
+    }
 
     final page = Scaffold(
       key: _scaffoldKey,
@@ -5005,6 +5012,8 @@ class _CalendarMonthPage extends ConsumerWidget {
       return;
     }
     if (blockedByRequiredUpdate(context, ref)) return;
+    // The order save runs after awaits this page can be removed during.
+    final container = ProviderScope.containerOf(context, listen: false);
     final sourceDate = _dateOnly(event.startAt);
     final normalizedTarget = _dateOnly(targetDate);
     var movedEvent = event;
@@ -5036,7 +5045,7 @@ class _CalendarMonthPage extends ConsumerWidget {
     }
 
     await _saveManualOrderAfterDrop(
-      ref,
+      container,
       sourceDate: sourceDate,
       targetDate: normalizedTarget,
       targetIndex: targetIndex,
@@ -5055,7 +5064,7 @@ class _CalendarMonthPage extends ConsumerWidget {
   ) => _moveRecurringCalendarEvent(ref, occurrence, targetDate, scope);
 
   Future<void> _saveManualOrderAfterDrop(
-    WidgetRef ref, {
+    ProviderContainer container, {
     required DateTime sourceDate,
     required DateTime targetDate,
     required int targetIndex,
@@ -5074,7 +5083,9 @@ class _CalendarMonthPage extends ConsumerWidget {
     final manualOrders = <String, CalendarManualEventOrder>{
       ...settings.calendarManualEventOrders,
     };
-    final deviceId = await ref.read(settingsRepositoryProvider).deviceId();
+    final deviceId = await container
+        .read(settingsRepositoryProvider)
+        .deviceId();
     final now = DateTime.now();
 
     if (sourceKey != targetKey) {
@@ -5120,7 +5131,7 @@ class _CalendarMonthPage extends ConsumerWidget {
       calendarManualEventOrders: manualOrders,
     );
     await _persistCalendarManualOrder(
-      ref,
+      container,
       previous: settings,
       updated: updatedSettings,
     );
@@ -5170,6 +5181,8 @@ Future<void> _handleCalendarEventDrop(
     return;
   }
   if (blockedByRequiredUpdate(context, ref)) return;
+  // The order save runs after awaits the dropping view can be removed during.
+  final container = ProviderScope.containerOf(context, listen: false);
   final sourceDate = _dateOnly(event.startAt);
   final normalizedTarget = _dateOnly(targetDate);
   final rangeStart = sourceDate.isBefore(normalizedTarget)
@@ -5237,7 +5250,7 @@ Future<void> _handleCalendarEventDrop(
   }
 
   await _saveCalendarManualOrderAfterDrop(
-    ref,
+    container,
     sourceDate: sourceDate,
     targetDate: normalizedTarget,
     targetIndex: targetIndex,
@@ -5258,6 +5271,8 @@ Future<void> _handleCalendarEventTimeDrop(
     return;
   }
   if (blockedByRequiredUpdate(context, ref)) return;
+  // The order save runs after awaits the dropping view can be removed during.
+  final container = ProviderScope.containerOf(context, listen: false);
   final sourceDate = _dateOnly(event.startAt);
   final targetDate = _dateOnly(targetStart);
   final rangeStart = sourceDate.isBefore(targetDate) ? sourceDate : targetDate;
@@ -5330,7 +5345,7 @@ Future<void> _handleCalendarEventTimeDrop(
     (candidate) => _isSameCalendarEvent(candidate, movedEvent),
   );
   await _saveCalendarManualOrderAfterDrop(
-    ref,
+    container,
     sourceDate: sourceDate,
     targetDate: targetDate,
     targetIndex: targetIndex < 0 ? sortedTarget.length : targetIndex,
@@ -5431,7 +5446,7 @@ Future<CalendarEvent?> _moveRecurringCalendarEventToStart(
 }
 
 Future<void> _saveCalendarManualOrderAfterDrop(
-  WidgetRef ref, {
+  ProviderContainer container, {
   required DateTime sourceDate,
   required DateTime targetDate,
   required int targetIndex,
@@ -5450,7 +5465,7 @@ Future<void> _saveCalendarManualOrderAfterDrop(
   final manualOrders = <String, CalendarManualEventOrder>{
     ...settings.calendarManualEventOrders,
   };
-  final deviceId = await ref.read(settingsRepositoryProvider).deviceId();
+  final deviceId = await container.read(settingsRepositoryProvider).deviceId();
   final now = DateTime.now();
 
   if (sourceKey != targetKey) {
@@ -5496,14 +5511,14 @@ Future<void> _saveCalendarManualOrderAfterDrop(
     calendarManualEventOrders: manualOrders,
   );
   await _persistCalendarManualOrder(
-    ref,
+    container,
     previous: settings,
     updated: updatedSettings,
   );
 }
 
 Future<void> _persistCalendarManualOrder(
-  WidgetRef ref, {
+  ProviderContainer container, {
   required AppSettings previous,
   required AppSettings updated,
 }) async {
@@ -5524,16 +5539,16 @@ Future<void> _persistCalendarManualOrder(
       ...changed,
     },
   );
-  final settingsNotifier = ref.read(appSettingsProvider.notifier);
+  final settingsNotifier = container.read(appSettingsProvider.notifier);
   final before = settingsNotifier.state;
   final shown = settingsNotifier.state = apply(before);
   try {
-    final repository = ref.read(settingsRepositoryProvider);
+    final repository = container.read(settingsRepositoryProvider);
     await repository.updateLatest(apply);
     if (identical(settingsNotifier.state, shown)) {
       settingsNotifier.state = repository.load();
     }
-    await ref.read(syncServiceProvider).queueSettingsBackup();
+    await container.read(syncServiceProvider).queueSettingsBackup();
   } on Object {
     if (identical(settingsNotifier.state, shown)) {
       settingsNotifier.state = before;
@@ -5583,6 +5598,8 @@ Future<void> _openRangeEventEditor(
   List<int> defaultReminderMinutesList,
 ) async {
   if (blockedByRequiredUpdate(context, ref)) return;
+  // The month page that owns [ref] can be removed while the editor is open.
+  final container = ProviderScope.containerOf(context, listen: false);
   final analytics = ref.read(productAnalyticsProvider);
   final stopwatch = Stopwatch()..start();
   unawaited(
@@ -5598,13 +5615,18 @@ Future<void> _openRangeEventEditor(
   final templateOptions = eventTemplateEditorOptions(context, ref);
   // A quick add saves the event itself and closes the editor without a draft.
   var quickAdded = false;
+  // Read now: the dialog can rebuild after the page that owns [ref] is gone.
+  final frequentPlaces = ref.read(settingsRepositoryProvider).frequentPlaces;
+  final loadPlaceEvents = ref
+      .read(visibleEventRepositoryProvider)
+      .allEventsForSync;
+  final alarmService = ref.read(alarmServiceProvider);
+  final use24HourTime = ref.read(appSettingsProvider).use24HourTime;
   final draft = await showDialog<EventDraft>(
     context: context,
     builder: (_) => EventEditorDialog(
-      frequentPlaces: ref.read(settingsRepositoryProvider).frequentPlaces,
-      loadPlaceEvents: ref
-          .read(visibleEventRepositoryProvider)
-          .allEventsForSync,
+      frequentPlaces: frequentPlaces,
+      loadPlaceEvents: loadPlaceEvents,
       templates: templateOptions.templates,
       onQuickAdd: (template, date) async {
         await templateOptions.onQuickAdd(template, date);
@@ -5616,8 +5638,8 @@ Future<void> _openRangeEventEditor(
       initialAllDay: true,
       categories: categories,
       defaultReminderMinutesList: defaultReminderMinutesList,
-      alarmService: ref.read(alarmServiceProvider),
-      use24HourTime: ref.read(appSettingsProvider).use24HourTime,
+      alarmService: alarmService,
+      use24HourTime: use24HourTime,
     ),
   );
   unawaited(
@@ -5634,16 +5656,19 @@ Future<void> _openRangeEventEditor(
         .catchError((_) {}),
   );
   if (draft != null) {
-    if (updateRequired(ref)) {
+    if (container.read(requiredUpdateVersionProvider).value != null) {
       if (context.mounted) showUpdateRequiredNotice(context, ref);
       return;
     }
-    await ref.read(eventCommandServiceProvider).create(draft);
+    await container.read(eventCommandServiceProvider).create(draft);
   }
 }
 
-/// The calendar's LMS sync action the user started is still running.
-final _calendarLmsSyncRequestedProvider = StateProvider<bool>((ref) => false);
+/// The calendar's LMS sync action the user started for this school account
+/// ([LmsController.accountKey]) is still running.
+final _calendarLmsSyncRequestedProvider = StateProvider.family<bool, String?>(
+  (ref, accountKey) => false,
+);
 
 class _CalendarHeader extends ConsumerWidget {
   const _CalendarHeader({
@@ -5692,7 +5717,10 @@ class _CalendarHeader extends ConsumerWidget {
         dailyWindowClassFor(windowSize) != DailyWindowClass.compact;
     final actionSize = androidTablet ? 48.0 : 40.0;
     final lms = ref.watch(lmsControllerProvider);
-    final lmsSyncRequested = ref.watch(_calendarLmsSyncRequestedProvider);
+    // Another account's sync still running must not hold this one's button.
+    final lmsSyncRequested = ref.watch(
+      _calendarLmsSyncRequestedProvider(lms.accountKey),
+    );
     final lmsActions = [
       // Only a lost school login needs this action; while the login holds,
       // LMS refreshes by itself. An automatic recovery still running may yet
@@ -6066,19 +6094,27 @@ class _CalendarHeader extends ConsumerWidget {
   /// Backs up and pulls Google Drive changes and signs in to the school again
   /// in one action. A failure of one does not stop the other.
   Future<void> _syncLms(BuildContext context, WidgetRef ref) async {
-    final requested = ref.read(_calendarLmsSyncRequestedProvider.notifier);
+    final controller = ref.read(lmsControllerProvider);
+    final accountKey = controller.accountKey;
+    final requested = ref.read(
+      _calendarLmsSyncRequestedProvider(accountKey).notifier,
+    );
     if (requested.state) return;
     requested.state = true;
     try {
-      await _runLmsSync(context, ref);
+      await _runLmsSync(context, ref, controller, accountKey);
     } finally {
       // The app can be torn down while the sync is still running.
       if (requested.mounted) requested.state = false;
     }
   }
 
-  Future<void> _runLmsSync(BuildContext context, WidgetRef ref) async {
-    final controller = ref.read(lmsControllerProvider);
+  Future<void> _runLmsSync(
+    BuildContext context,
+    WidgetRef ref,
+    LmsController controller,
+    String? accountKey,
+  ) async {
     final driveLinked =
         ref.read(settingsRepositoryProvider).dailyAccount()?.googleAccount !=
         null;
@@ -6100,6 +6136,8 @@ class _CalendarHeader extends ConsumerWidget {
     await Future.wait([drive, school]);
     // The refresh can outlast this screen (for example local data was reset).
     if (!context.mounted) return;
+    // The controller's state now describes the account switched to meanwhile.
+    if (controller.accountKey != accountKey) return;
     final failed =
         controller.needsLogin || controller.sync.state == LmsSyncState.fallback;
     final partial =
@@ -6194,6 +6232,9 @@ class _CalendarHeader extends ConsumerWidget {
     var query = initialQuery;
     // Taken now: the sheet can outlive this widget's ref.
     final analytics = ref.read(productAnalyticsProvider);
+    // The sheet's saves finish after awaits that this header or the sheet can
+    // be removed during; the scope's container outlives both.
+    final container = ProviderScope.containerOf(context, listen: false);
 
     return showModalBottomSheet<void>(
       context: context,
@@ -6308,8 +6349,10 @@ class _CalendarHeader extends ConsumerWidget {
                         ),
                         onChanged: (value) {
                           query = value;
-                          ref.read(calendarSearchQueryProvider.notifier).state =
-                              value.trim();
+                          container
+                              .read(calendarSearchQueryProvider.notifier)
+                              .state = value
+                              .trim();
                         },
                       ),
                       const SizedBox(height: 4),
@@ -6326,21 +6369,23 @@ class _CalendarHeader extends ConsumerWidget {
                             onChanged: (value) async {
                               ddayOnly = value;
                               await savePending('dday', value, () async {
-                                final currentSettings = ref.read(
+                                final currentSettings = container.read(
                                   appSettingsProvider,
                                 );
                                 final updated = currentSettings.copyWith(
                                   calendarDdayOnly: value,
                                 );
-                                final settingsRepository = ref.read(
+                                final settingsRepository = container.read(
                                   settingsRepositoryProvider,
                                 );
                                 await settingsRepository.save(
                                   updated,
                                   changedFrom: currentSettings,
                                 );
-                                ref.read(appSettingsProvider.notifier).state =
-                                    settingsRepository.load();
+                                container
+                                    .read(appSettingsProvider.notifier)
+                                    .state = settingsRepository
+                                    .load();
                               });
                             },
                           ),
@@ -6354,21 +6399,23 @@ class _CalendarHeader extends ConsumerWidget {
                             onChanged: (value) async {
                               showHolidays = value;
                               await savePending('holidays', value, () async {
-                                final currentSettings = ref.read(
+                                final currentSettings = container.read(
                                   appSettingsProvider,
                                 );
                                 final updated = currentSettings.copyWith(
                                   calendarShowHolidays: value,
                                 );
-                                final settingsRepository = ref.read(
+                                final settingsRepository = container.read(
                                   settingsRepositoryProvider,
                                 );
                                 await settingsRepository.save(
                                   updated,
                                   changedFrom: currentSettings,
                                 );
-                                ref.read(appSettingsProvider.notifier).state =
-                                    settingsRepository.load();
+                                container
+                                    .read(appSettingsProvider.notifier)
+                                    .state = settingsRepository
+                                    .load();
                               });
                             },
                           ),
@@ -6423,9 +6470,8 @@ class _CalendarHeader extends ConsumerWidget {
                                       'category:${category.id}',
                                       !selected,
                                       () async {
-                                        final settingsRepository = ref.read(
-                                          settingsRepositoryProvider,
-                                        );
+                                        final settingsRepository = container
+                                            .read(settingsRepositoryProvider);
                                         // Changes only this id in the latest list,
                                         // keeping external and concurrent edits.
                                         await settingsRepository
@@ -6433,7 +6479,7 @@ class _CalendarHeader extends ConsumerWidget {
                                               category.id,
                                               !selected,
                                             );
-                                        ref
+                                        container
                                             .read(appSettingsProvider.notifier)
                                             .state = settingsRepository
                                             .load();
@@ -6453,7 +6499,7 @@ class _CalendarHeader extends ConsumerWidget {
                               onPressed: () {
                                 queryController.clear();
                                 query = '';
-                                ref
+                                container
                                         .read(
                                           calendarSearchQueryProvider.notifier,
                                         )
@@ -8157,6 +8203,14 @@ class _CalendarWeekViewState extends State<_CalendarWeekView> {
     DateTime sourceDate,
     bool dragging,
   ) {
+    // The drop's save can finish after this week view has been removed; the
+    // page must still leave the drag this view started.
+    if (!mounted) {
+      if (!dragging && _isSameCalendarEventOrNull(_draggingEvent, event)) {
+        widget.onEventDragStateChanged(false);
+      }
+      return;
+    }
     if (dragging) {
       final measureKey = _weekEventMeasureKey(event, sourceDate);
       final renderObject = _itemMeasureKeys[measureKey]?.currentContext
@@ -8904,3 +8958,12 @@ Future<void> debugDropCalendarEventOnDate(
   DateTime targetDate, {
   int targetIndex = 0,
 }) => _handleCalendarEventDrop(context, ref, event, targetDate, targetIndex);
+
+@visibleForTesting
+Future<void> debugOpenRangeEventEditor(
+  BuildContext context,
+  WidgetRef ref,
+  DateTime start,
+  DateTime end,
+  List<EventCategory> categories,
+) => _openRangeEventEditor(context, ref, start, end, categories, const []);
