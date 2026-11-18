@@ -23,10 +23,7 @@ void main() {
       );
       expect(seoul.timetableCampus, 'seoul');
       for (final profile in [glocal, seoul]) {
-        expect(
-          profile.timetableSupported,
-          UniversitySupportPolicy.timetableAvailable('konkuk'),
-        );
+        expect(profile.timetableUniversity, 'konkuk');
       }
     }
     const legacy = AcademicProfile(

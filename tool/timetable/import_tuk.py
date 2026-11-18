@@ -148,7 +148,7 @@ if __name__ == '__main__':
     parser.add_argument('--source-url', required=True)
     args = parser.parse_args()
     documents = [extract_document(p,args.year,args.semester) for p in (args.general,args.fusion)]
-    courses,audit = parse_documents(documents,json.loads(args.closures.read_text()),args.year,args.semester)
+    courses,audit = parse_documents(documents,json.loads(args.closures.read_text(encoding='utf-8')),args.year,args.semester)
     if audit['sourceRows'] != args.expected_source_rows:
         raise ValueError('Incomplete TUK source row coverage')
     result = {'schemaVersion':1,'universityId':'tuk','campus':'main','academicYear':args.year,
@@ -158,5 +158,5 @@ if __name__ == '__main__':
               'completionClaim':False,'remainingVerification':['latest time/room changes after snapshot',
               'company talent college separately operated curricula', 'actual field/service teaching dates',
               'first/second campus course location mapping'], 'audit':audit,'courses':courses}
-    args.output.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
+    args.output.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n', encoding='utf-8')
     print(len(courses), audit)

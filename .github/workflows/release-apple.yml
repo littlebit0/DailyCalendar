@@ -9,7 +9,7 @@ on:
         type: string
 
 permissions:
-  contents: write
+  contents: read
   # require-platform-builds.yml reads the tag commit's workflow runs.
   actions: read
 
@@ -63,7 +63,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ needs.resolve.outputs.sha }}
-      - uses: subosito/flutter-action@v2
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
         with:
           channel: stable
           flutter-version: "3.44.0"
@@ -73,8 +73,15 @@ jobs:
       - name: Verify built app version
         shell: bash
         run: |
-          built="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' build/ios/iphoneos/Runner.app/Info.plist)"
+          app=build/ios/iphoneos/Runner.app
+          built="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "$app/Info.plist")"
           test "$built" = "${{ needs.resolve.outputs.version }}" || { echo "Built iOS version $built != ${{ needs.resolve.outputs.version }}" >&2; exit 1; }
+          # The embedded widget must carry the app's version and build number.
+          for key in CFBundleShortVersionString CFBundleVersion; do
+            host="$(/usr/libexec/PlistBuddy -c "Print :$key" "$app/Info.plist")"
+            widget="$(/usr/libexec/PlistBuddy -c "Print :$key" "$app/PlugIns/DailyWidgets.appex/Info.plist")"
+            test "$widget" = "$host" || { echo "iOS widget $key $widget != app $host" >&2; exit 1; }
+          done
       - name: Stage IPA
         shell: bash
         run: |
@@ -96,7 +103,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ needs.resolve.outputs.sha }}
-      - uses: subosito/flutter-action@v2
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
         with:
           channel: stable
           flutter-version: "3.44.0"
@@ -117,8 +124,15 @@ jobs:
       - name: Verify built app version
         shell: bash
         run: |
-          built="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' build/macos/Build/Products/Release/Daily.app/Contents/Info.plist)"
+          app=build/macos/Build/Products/Release/Daily.app
+          built="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "$app/Contents/Info.plist")"
           test "$built" = "${{ needs.resolve.outputs.version }}" || { echo "Built macOS version $built != ${{ needs.resolve.outputs.version }}" >&2; exit 1; }
+          # The embedded widget must carry the app's version and build number.
+          for key in CFBundleShortVersionString CFBundleVersion; do
+            host="$(/usr/libexec/PlistBuddy -c "Print :$key" "$app/Contents/Info.plist")"
+            widget="$(/usr/libexec/PlistBuddy -c "Print :$key" "$app/Contents/PlugIns/DailyMacWidgets.appex/Contents/Info.plist")"
+            test "$widget" = "$host" || { echo "macOS widget $key $widget != app $host" >&2; exit 1; }
+          done
       - name: Stage DMG
         shell: bash
         run: |
@@ -136,6 +150,8 @@ jobs:
     name: Publish GitHub release
     needs: [resolve, ios, macos]
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
         with:
@@ -145,7 +161,7 @@ jobs:
           pattern: release-*
           path: dist
           merge-multiple: true
-      - uses: softprops/action-gh-release@v2
+      - uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2.6.2
         with:
           tag_name: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}
           name: DailyCalendar ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}

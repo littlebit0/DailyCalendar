@@ -18,6 +18,8 @@ public class StorageCipherImplementationAES18 implements StorageCipher {
     private static final int keySize = 16;
     private static final String KEY_ALGORITHM = "AES";
     private static final String SHARED_PREFERENCES_KEY = "VGhpcyBpcyB0aGUga2V5IGZvciBhIHNlY3VyZSBzdG9yYWdlIEFFUyBLZXkK";
+    /** Wrapped-key entry in the key storage file; its presence marks legacy (pre-marker) data. */
+    public static final String WRAPPED_KEY_ENTRY = SHARED_PREFERENCES_KEY;
     private final String keyStoragePrefsName;
     private final Cipher cipher;
     private final SecureRandom secureRandom;

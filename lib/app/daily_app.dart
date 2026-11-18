@@ -734,7 +734,7 @@ class _PinKeypad extends StatelessWidget {
                   ),
                 ),
         Semantics(
-          label: '한 자리 지우기',
+          label: context.tr('한 자리 지우기'),
           button: true,
           child: IconButton(
             onPressed: enabled ? onBackspace : null,
@@ -1108,8 +1108,7 @@ class _AppHomeState extends ConsumerState<_AppHome>
         _completeStartupResumeWaiter();
         ref.read(lmsControllerProvider).setForeground(true);
         unawaited(ref.read(updateRequirementControllerProvider)?.check());
-        _syncRestoreRetryTimer?.cancel();
-        _syncRestoreRetryIndex = 0;
+        _cancelSyncRestoreRetry();
         // App Intents update the shared SQLite file outside Drift's active
         // connection, so recreate range streams when Daily returns.
         ref.invalidate(eventsInRangeProvider);
@@ -1138,9 +1137,11 @@ class _AppHomeState extends ConsumerState<_AppHome>
     ref.listen(eventFollowUpFailureProvider, (_, _) {
       ScaffoldMessenger.maybeOf(context)?.showSnackBar(
         SnackBar(
-          content: const Text('일정 변경은 저장됐습니다. 알림·동기화 등 일부 후속 처리를 완료하지 못했습니다.'),
+          content: Text(
+            context.tr('일정 변경은 저장됐습니다. 알림·동기화 등 일부 후속 처리를 완료하지 못했습니다.'),
+          ),
           action: SnackBarAction(
-            label: '다시 시도',
+            label: context.tr('다시 시도'),
             onPressed: () {
               unawaited(
                 ref.read(eventCommandServiceProvider).retryPendingFollowUps(),
@@ -1298,8 +1299,7 @@ class _AppHomeState extends ConsumerState<_AppHome>
     try {
       final started = await operation;
       if (started) {
-        _syncRestoreRetryTimer?.cancel();
-        _syncRestoreRetryIndex = 0;
+        _cancelSyncRestoreRetry();
       } else {
         _scheduleSyncRestoreRetry();
       }
@@ -1468,6 +1468,14 @@ class _AppHomeState extends ConsumerState<_AppHome>
       // Google Drive sync is optional; local calendar use stays available.
       return false;
     }
+  }
+
+  /// Clears the field too: [_scheduleSyncRestoreRetry] treats a non-null
+  /// timer as "already scheduled", so a cancelled one would block retries.
+  void _cancelSyncRestoreRetry() {
+    _syncRestoreRetryTimer?.cancel();
+    _syncRestoreRetryTimer = null;
+    _syncRestoreRetryIndex = 0;
   }
 
   void _scheduleSyncRestoreRetry() {

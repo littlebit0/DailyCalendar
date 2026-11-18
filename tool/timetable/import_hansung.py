@@ -199,16 +199,16 @@ def main():
     parser.add_argument('--review', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
     args = parser.parse_args()
-    rows = json.loads(args.rows.read_text())
-    proofs = {f.stem: json.loads(f.read_text()) for f in args.proofs.glob('*.json')}
-    neutral = set(json.loads(args.review.read_text())['lines'])
+    rows = json.loads(args.rows.read_text(encoding='utf-8'))
+    proofs = {f.stem: json.loads(f.read_text(encoding='utf-8')) for f in args.proofs.glob('*.json')}
+    neutral = set(json.loads(args.review.read_text(encoding='utf-8'))['lines'])
     courses, reasons = prepare(rows, proofs, neutral)
     dataset = {'schemaVersion': 2, 'universityId': 'hansung', 'campus': 'main',
         'campusName': '본교', 'academicYear': 2026, 'semester': '2',
         'publishedDate': '2026-10-24',
         'sourceUrl': 'https://info.hansung.ac.kr/jsp_21/student/kyomu/siganpyo_aui.jsp?viewMode=oc',
         'courses': courses}
-    args.output.write_text(json.dumps(dataset, ensure_ascii=False, indent=2)+'\n')
+    args.output.write_text(json.dumps(dataset, ensure_ascii=False, indent=2)+'\n', encoding='utf-8')
     print('Whole', len(courses), dict(collections.Counter(c['scheduleStatus'] for c in courses)), dict(reasons))
 
 

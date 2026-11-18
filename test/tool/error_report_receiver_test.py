@@ -185,16 +185,16 @@ class ErrorReportTests(unittest.TestCase):
     def test_server_masks_secrets_and_stores_no_account(self):
         message = (
             "Authorization: Bearer ya29.secret token=abc123 mail kim@example.com "
-            "path /Users/kimhwi/Library title \"Dentist\" id 2026123456"
+            "path /Users/alice/Library title \"Dentist\" id 2026123456"
         )
         cleaned = normalize_error_report(payload(message=message))["report"]["message"]
-        for secret in ("ya29.secret", "abc123", "kim@example.com", "kimhwi", "Dentist", "2026123456"):
+        for secret in ("ya29.secret", "abc123", "kim@example.com", "alice", "Dentist", "2026123456"):
             self.assertNotIn(secret, cleaned)
         self.submit(payload(message=message))
         directory = Path(self.directory.name)
         stored = (directory / "error-reports-2026-11-05.json").read_text()
         stored += (directory / "error-reports-state.sqlite").read_bytes().decode("utf-8", "replace")
-        for secret in ("ya29.secret", "abc123", "kim@example.com", "kimhwi", "Dentist", "a@b.co", "user"):
+        for secret in ("ya29.secret", "abc123", "kim@example.com", "alice", "Dentist", "a@b.co", "user"):
             self.assertNotIn(secret, stored)
 
     def test_unterminated_quoted_text_is_masked(self):

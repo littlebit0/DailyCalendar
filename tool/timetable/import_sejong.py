@@ -108,5 +108,5 @@ if __name__ == '__main__':
                                       'campus': 'main', 'campusName': '서울',
                                       'academicYear': args.year, 'semester': args.semester,
                                       'publishedDate': args.published_date, 'sourceUrl': args.source_url,
-                                      'courses': courses}, ensure_ascii=False, indent=2)+'\n')
+                                      'courses': courses}, ensure_ascii=False, indent=2)+'\n', encoding='utf-8')
     print('Sejong courses:', len(courses), 'scheduled:', sum(bool(c['schedules']) for c in courses))

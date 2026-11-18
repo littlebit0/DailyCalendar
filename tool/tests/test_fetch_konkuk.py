@@ -133,6 +133,37 @@ class FetchKonkukTests(unittest.TestCase):
             self.run_glocal(answers, {'source': 's', 'cultArea': [],
                                       'hakgwa': [{'lec_cd': 'U1', 'lec_nm': 'x'}]})
 
+    def test_glocal_result_at_the_request_limit_is_not_saved_as_complete(self):
+        def answers(url):
+            if 'menu=5' in url:
+                return [glocal_row(f'A{i}') for i in range(konkuk.GLOCAL_ROWS)]
+            return []
+
+        with TemporaryDirectory() as folder:
+            seed = Path(folder) / 'seed.json'
+            seed.write_text(json.dumps({'source': 's', 'cultArea': [], 'hakgwa': []}),
+                            encoding='utf-8')
+            with mock.patch.object(konkuk.urllib.request, 'build_opener') as build, \
+                    mock.patch.object(konkuk, 'request', lambda url, *_: answers(url)):
+                build.return_value.open.return_value.read.return_value = b''
+                with self.assertRaises(ValueError):
+                    konkuk.glocal(Path(folder), 2026, 'B01012', seed)
+            self.assertFalse((Path(folder) / 'glocal.json').exists())
+
+    def test_seoul_result_at_the_request_limit_is_not_saved_as_complete(self):
+        def answers(url, data):
+            if 'cbxList' in url:
+                return []
+            return [{'open_yy': '2026', 'sbjt_id': str(i)} for i in range(konkuk.SEOUL_ROWS)]
+
+        with TemporaryDirectory() as folder:
+            with mock.patch.object(konkuk.urllib.request, 'build_opener') as build, \
+                    mock.patch.object(konkuk, 'request', lambda url, data, *_: answers(url, data)):
+                build.return_value.open.return_value.read.return_value = b''
+                with self.assertRaises(ValueError):
+                    konkuk.seoul(Path(folder), 2026, 'B01012')
+            self.assertFalse((Path(folder) / 'seoul.json').exists())
+
     def test_glocal_campus_requires_a_seed(self):
         with TemporaryDirectory() as folder:
             argv = ['fetch_konkuk.py', '--campus', 'glocal', '--output', folder]
