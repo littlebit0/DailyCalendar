@@ -6,6 +6,8 @@ export 'dart:io';
 
 const _root = 'test/fixtures/source_audits';
 final _manifestBytes = File('$_root/manifest.json').readAsBytesSync();
+final _manifest =
+    jsonDecode(utf8.decode(_manifestBytes)) as Map<String, dynamic>;
 final _fingerprint = sha256.convert(_manifestBytes).toString();
 final _cache = Directory(
   '${Directory.systemTemp.path}/daily-source-fixtures-$_fingerprint',
