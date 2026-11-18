@@ -155,6 +155,10 @@ class LmsController extends ChangeNotifier {
   bool get refreshing => _operation != null;
   LmsWebSession? get session => _session;
 
+  /// The Daily owner and school a request belongs to; a different value means
+  /// the user switched school accounts.
+  String? get accountKey => _desiredKey;
+
   String? get _desiredKey {
     final owner = _settings.dailyAccount()?.googleAccount?.email;
     if (owner == null || !supported) return null;

@@ -28,6 +28,7 @@ import 'package:daily/core/theme/daily_ui.dart';
 import 'package:daily/core/theme/event_completion_style.dart';
 import 'package:daily/features/events/domain/calendar_event.dart';
 import 'package:daily/features/events/application/event_command_service.dart';
+import 'package:daily/features/events/domain/event_draft.dart';
 import 'package:daily/features/events/domain/event_category.dart';
 import 'package:daily/features/events/domain/event_repository.dart';
 import 'package:daily/features/events/domain/recurrence_rule.dart';
@@ -1311,6 +1312,106 @@ void main() {
     debugDefaultTargetPlatformOverride = null;
     await tester.pumpWidget(const SizedBox.shrink());
   });
+
+  testWidgets(
+    'a week list drop saving after the week view is gone still saves its order (#966)',
+    (tester) async {
+      tester.view.physicalSize = const Size(393, 852);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+      addTearDown(() => debugDefaultTargetPlatformOverride = null);
+      SharedPreferences.setMockInitialValues({
+        'onboardingCompleted': true,
+        'defaultCalendarView': 'week',
+        'weekDayLayoutMode': 'list',
+        'calendarShowHolidays': false,
+      });
+      final settingsRepository = SettingsRepository(
+        preferences: await SharedPreferences.getInstance(),
+      );
+      final now = DateTime.now();
+      final day = DateTime(now.year, now.month, now.day);
+      // A neighbor in the same Sunday-first week.
+      final target = day.weekday == DateTime.saturday
+          ? DateTime(day.year, day.month, day.day - 1)
+          : DateTime(day.year, day.month, day.day + 1);
+      final event = CalendarEvent(
+        id: 'week-drop-removed',
+        title: '저장 중 제거',
+        startAt: DateTime(day.year, day.month, day.day, 9),
+        endAt: DateTime(day.year, day.month, day.day, 10),
+        allDay: false,
+        category: EventCategory.basic,
+        colorValue: EventCategory.basic.colorValue,
+        createdAt: now,
+        updatedAt: now,
+      );
+      final repository = _RecordingStreamingEventRepository([event]);
+      final commands = _GatedSaveCommands(repository, settingsRepository);
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            universityRegionsFromAsset(),
+            settingsRepositoryProvider.overrideWithValue(settingsRepository),
+            notificationServiceProvider.overrideWithValue(_FakeNotification()),
+            syncServiceProvider.overrideWithValue(_FakeSync()),
+            eventRepositoryProvider.overrideWithValue(repository),
+            eventCommandServiceProvider.overrideWithValue(commands),
+            googleDriveAuthServiceProvider.overrideWithValue(
+              _FakeGoogleDriveAuthService(),
+            ),
+          ],
+          child: const DailyApp(),
+        ),
+      );
+      await tester.pumpAndSettle();
+      final container = ProviderScope.containerOf(
+        tester.element(find.byType(DailyApp)),
+      );
+      String key(DateTime date) =>
+          '${date.year.toString().padLeft(4, '0')}-'
+          '${date.month.toString().padLeft(2, '0')}-'
+          '${date.day.toString().padLeft(2, '0')}';
+      final source = find.byKey(
+        ValueKey('week-event-drag-${event.id}@${key(day)}'),
+      );
+      final targetPanel = find.byKey(
+        ValueKey('week-day-panel-${target.year}-${target.month}-${target.day}'),
+      );
+      await tester.ensureVisible(targetPanel);
+      await tester.ensureVisible(source);
+      await tester.pumpAndSettle();
+
+      final gesture = await tester.startGesture(tester.getCenter(source));
+      await tester.pump(const Duration(milliseconds: 400));
+      await gesture.moveTo(tester.getCenter(targetPanel));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 220));
+      await gesture.up();
+      await tester.pump();
+      expect(commands.saved, hasLength(1));
+
+      // The week view goes away before the pending event save finishes.
+      container.read(calendarViewModeProvider.notifier).state =
+          CalendarViewMode.month;
+      await tester.pumpAndSettle();
+      commands.gate.complete();
+      await tester.pumpAndSettle();
+      expect(tester.takeException(), isNull);
+      expect(
+        settingsRepository
+            .load()
+            .calendarManualEventOrders[key(target)]
+            ?.eventKeys,
+        [event.id],
+      );
+
+      debugDefaultTargetPlatformOverride = null;
+      await tester.pumpWidget(const SizedBox.shrink());
+    },
+  );
 
   testWidgets('year overview follows the week start setting (#189)', (
     tester,
@@ -9410,6 +9511,42 @@ void main() {
   );
 
   testWidgets(
+    'a day sheet closes once the widened window shows the sidebar (#966)',
+    (tester) async {
+      tester.view.devicePixelRatio = 1;
+      tester.view.physicalSize = const Size(400, 860);
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      final now = DateTime.now();
+      final lastDay = DateTime(now.year, now.month + 1, 0);
+      final nextDay = DateTime(now.year, now.month + 1, 1);
+      await _pumpDaySheetSwipeApp(tester, lastDay, nextDay);
+      await tester.tap(
+        find
+            .byKey(
+              ValueKey(
+                'day-cell-${lastDay.year}-${lastDay.month}-${lastDay.day}',
+              ),
+            )
+            .hitTestable()
+            .first,
+      );
+      await tester.pumpAndSettle();
+      final sheet = find.byKey(const ValueKey('day-sheet-swipe-navigator'));
+      expect(sheet, findsOneWidget);
+
+      tester.view.physicalSize = const Size(1400, 1000);
+      await tester.pumpAndSettle();
+      // Only the sidebar lists the day now; the sheet would repeat it.
+      expect(sheet, findsNothing);
+      expect(find.byType(EventDetailsPanel), findsOneWidget);
+      expect(tester.takeException(), isNull);
+
+      await tester.pumpWidget(const SizedBox.shrink());
+    },
+  );
+
+  testWidgets(
     'day schedule sheet slides with the finger and in the swipe direction (#788)',
     (tester) async {
       final now = DateTime.now();
@@ -9853,6 +9990,54 @@ void main() {
       expect(find.byTooltip('지금 동기화'), findsNothing);
       await finish(tester);
     });
+
+    testWidgets(
+      'a sync of the previous school account does not hold the next one (#966)',
+      (tester) async {
+        final wait = Completer<void>();
+        final controller = await pumpToolbar(
+          tester,
+          connected: false,
+          needsLogin: true,
+          integrationEnabled: true,
+          refreshWait: wait,
+        );
+        await tester.tap(find.byTooltip('지금 동기화'));
+        await tester.pump();
+        expect(syncButton(tester).onPressed, isNull);
+
+        final previous = controller.accountKey;
+        final container = ProviderScope.containerOf(
+          tester.element(find.byType(MonthCalendarPage)),
+        );
+        final settings = container.read(settingsRepositoryProvider);
+        await settings.saveGoogleAccount(
+          const GoogleAccount(email: 'next@example.com'),
+        );
+        await settings.saveAcademicProfile(
+          const AcademicProfile(
+            universityId: 'institution:academyinfo:0000117',
+            universityName: '상명대학교',
+            schoolKind: 'fourYear',
+          ).withLmsConnection(enabled: true),
+          expectedGoogleEmail: 'next@example.com',
+        );
+        container.read(appSettingsProvider.notifier).state = settings.load();
+        // The next account's school also asks for a login.
+        controller.needsLoginOverride = true;
+        controller.setAutomaticRefreshing(false);
+        await tester.pump();
+        expect(controller.accountKey, isNot(previous));
+        expect(syncButton(tester).onPressed, isNotNull);
+
+        // The old result would describe the next account's state.
+        wait.complete();
+        await tester.pumpAndSettle();
+        expect(find.text('학교 연결을 확인하지 못했습니다. 다시 시도해 주세요.'), findsNothing);
+        expect(syncButton(tester).onPressed, isNotNull);
+        await finish(tester);
+      },
+    );
 
     testWidgets('a refresh finishing after the screen is gone is harmless', (
       tester,
@@ -11282,6 +11467,30 @@ class _RecordingStreamingEventRepository extends _StreamingEventRepository {
   }
 }
 
+/// Holds the drop's event save open without the app's follow-up effects.
+class _GatedSaveCommands extends EventCommandService {
+  _GatedSaveCommands(EventRepository repository, SettingsRepository settings)
+    : super(
+        repository: repository,
+        settingsRepository: settings,
+        notificationService: _FakeNotification(),
+        syncService: _FakeSync(),
+      );
+
+  final gate = Completer<void>();
+  final saved = <CalendarEvent>[];
+
+  @override
+  Future<void> save(
+    CalendarEvent event, {
+    bool preserveCategory = false,
+    EventDraft? editDraft,
+  }) async {
+    saved.add(event);
+    await gate.future;
+  }
+}
+
 class _PendingSaveStreamingEventRepository
     extends _RecordingStreamingEventRepository {
   _PendingSaveStreamingEventRepository(super.events);
@@ -11648,9 +11857,13 @@ class _ToolbarLms extends LmsController {
   @override
   bool get connected => isConnected();
   @override
-  bool get needsLogin => !loginRecovered && isNeedsLogin();
+  bool get needsLogin =>
+      needsLoginOverride ?? (!loginRecovered && isNeedsLogin());
   @override
   String? get localLoginUsername => savedLogin;
+
+  /// The login state of an account switched to during a test.
+  bool? needsLoginOverride;
 
   /// The automatic recovery signed in again.
   var loginRecovered = false;

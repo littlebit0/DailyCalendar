@@ -45,7 +45,10 @@ void main() {
   late SettingsRepository settings;
   late ProviderContainer container;
 
-  Future<void> openSheet(WidgetTester tester) async {
+  Future<void> openSheet(
+    WidgetTester tester, {
+    ValueNotifier<bool>? showPage,
+  }) async {
     tester.view.devicePixelRatio = 1;
     tester.view.physicalSize = const Size(1440, 900);
     addTearDown(tester.view.resetDevicePixelRatio);
@@ -82,7 +85,14 @@ void main() {
             GlobalCupertinoLocalizations.delegate,
           ],
           theme: DailyTheme.light().copyWith(platform: TargetPlatform.macOS),
-          home: const MonthCalendarPage(),
+          home: showPage == null
+              ? const MonthCalendarPage()
+              : ValueListenableBuilder<bool>(
+                  valueListenable: showPage,
+                  builder: (_, shown, _) => shown
+                      ? const MonthCalendarPage()
+                      : const SizedBox.shrink(),
+                ),
         ),
       ),
     );
@@ -204,4 +214,48 @@ void main() {
     expect(tile('공휴일 표시').value, !holidays);
     expect(tile('D-day 일정만 보기').value, isTrue);
   }, variant: _macOS);
+
+  testWidgets(
+    'the sheet still saves after the calendar page is gone (#966)',
+    (tester) async {
+      final showPage = ValueNotifier(true);
+      await openSheet(tester, showPage: showPage);
+      showPage.value = false;
+      await _frames(tester);
+      expect(find.byType(MonthCalendarPage), findsNothing);
+
+      tester
+          .widget<SwitchListTile>(
+            find.widgetWithText(SwitchListTile, 'D-day 일정만 보기'),
+          )
+          .onChanged!(true);
+      await _until(
+        tester,
+        Future.doWhile(() async {
+          await Future<void>.delayed(const Duration(milliseconds: 10));
+          return !settings.load().calendarDdayOnly;
+        }),
+      );
+      expect(tester.takeException(), isNull);
+      expect(container.read(appSettingsProvider).calendarDdayOnly, isTrue);
+      // The page's localizations are gone too, so take the first chip.
+      final id = settings.load().categories.first.id;
+      tester.widget<FilterChip>(find.byType(FilterChip).first).onSelected!(
+        false,
+      );
+      await _until(
+        tester,
+        Future.doWhile(() async {
+          await Future<void>.delayed(const Duration(milliseconds: 10));
+          return !storedHidden().contains(id);
+        }),
+      );
+      expect(storedHidden(), {id});
+      expect(
+        container.read(appSettingsProvider).hiddenCategoryIds,
+        contains(id),
+      );
+    },
+    variant: _macOS,
+  );
 }
