@@ -5,6 +5,7 @@ import 'package:daily/features/timetable/presentation/university_course_page.dar
 
 import 'package:daily/app/daily_app.dart';
 import 'package:daily/core/alarms/alarm_service.dart';
+import 'package:daily/core/calendar/calendar_event_ordering.dart';
 import 'package:daily/core/academic/academic_profile.dart';
 import 'package:daily/core/academic/university_directory.dart';
 import 'package:daily/core/auth/apple_sign_in_service.dart';
@@ -8456,6 +8457,109 @@ void main() {
       },
     );
   }
+
+  testWidgets(
+    'month grid drop orders the day by the rows shown under a search (#860)',
+    (tester) async {
+      tester.view.physicalSize = const Size(393, 852);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      SharedPreferences.setMockInitialValues({
+        'onboardingCompleted': true,
+        'defaultCalendarView': 'month',
+      });
+      final preferences = await SharedPreferences.getInstance();
+      final settingsRepository = SettingsRepository(preferences: preferences);
+      final now = DateTime.now();
+      final day = DateTime(now.year, now.month, 10);
+      CalendarEvent eventOn(DateTime day, String id, String title, int hour) =>
+          CalendarEvent(
+            id: id,
+            title: title,
+            startAt: DateTime(day.year, day.month, day.day, hour),
+            endAt: DateTime(day.year, day.month, day.day, hour + 1),
+            allDay: false,
+            category: EventCategory.basic,
+            colorValue: EventCategory.basic.colorValue,
+            createdAt: now,
+            updatedAt: now,
+          );
+      final shownFirst = eventOn(day, 'search-drop-shown', '팀 회의', 9);
+      final moving = eventOn(day, 'search-drop-moving', '이동 회의', 10);
+      // Filtered out by the search, so the drop must not order it.
+      final hiddenTarget = eventOn(day, 'search-drop-hidden', '점심 약속', 8);
+      final eventRepository = _RecordingStreamingEventRepository([
+        shownFirst,
+        moving,
+        hiddenTarget,
+      ]);
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            universityRegionsFromAsset(),
+            settingsRepositoryProvider.overrideWithValue(settingsRepository),
+            notificationServiceProvider.overrideWithValue(_FakeNotification()),
+            syncServiceProvider.overrideWithValue(_FakeSync()),
+            eventRepositoryProvider.overrideWithValue(eventRepository),
+            googleDriveAuthServiceProvider.overrideWithValue(
+              _FakeGoogleDriveAuthService(),
+            ),
+          ],
+          child: const DailyApp(),
+        ),
+      );
+      await tester.pumpAndSettle();
+      final container = ProviderScope.containerOf(
+        tester.element(find.byType(DailyApp)),
+      );
+      container.read(calendarSearchQueryProvider.notifier).state = '회의';
+      await tester.pumpAndSettle();
+
+      final flag = find
+          .byWidgetPredicate(
+            (widget) =>
+                widget.key is ValueKey<String> &&
+                (widget.key! as ValueKey<String>).value.startsWith(
+                  'event-span-${moving.id}-',
+                ),
+          )
+          .hitTestable();
+      expect(flag, findsOneWidget);
+      final shownFlag = find
+          .byWidgetPredicate(
+            (widget) =>
+                widget.key is ValueKey<String> &&
+                (widget.key! as ValueKey<String>).value.startsWith(
+                  'event-span-${shownFirst.id}-',
+                ),
+          )
+          .hitTestable();
+      final shownRect = tester.getRect(shownFlag);
+      final gesture = await tester.startGesture(tester.getCenter(flag));
+      await tester.pump(const Duration(milliseconds: 360));
+      await gesture.moveTo(Offset(shownRect.center.dx, shownRect.top + 1));
+      await tester.pump(const Duration(milliseconds: 150));
+      await gesture.moveBy(const Offset(0, 1));
+      await tester.pump(const Duration(milliseconds: 150));
+      await gesture.up();
+      await tester.pumpAndSettle();
+
+      expect(eventRepository.savedEvents, isEmpty);
+      // The hidden row keeps its time slot instead of being pinned by a
+      // drop the user made without seeing it.
+      expect(
+        container
+            .read(appSettingsProvider)
+            .calendarManualEventOrders[calendarDateKey(day)]
+            ?.eventKeys,
+        [moving.id, shownFirst.id],
+      );
+
+      await tester.pumpWidget(const SizedBox.shrink());
+    },
+  );
 
   testWidgets('canceling an event drag restores the lifted event in place', (
     tester,
