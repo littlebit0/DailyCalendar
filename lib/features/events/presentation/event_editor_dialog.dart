@@ -553,10 +553,10 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
                               if (value != null) {
                                 _clearValidation();
                                 setState(() {
+                                  // The switch and the save already ignore
+                                  // the alarm while repeating; keep the choice
+                                  // so switching back restores it.
                                   _frequency = value;
-                                  if (value != RecurrenceFrequency.none) {
-                                    _alarmEnabled = false;
-                                  }
                                 });
                               }
                             },

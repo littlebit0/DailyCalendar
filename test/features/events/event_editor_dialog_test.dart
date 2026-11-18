@@ -587,6 +587,50 @@ void main() {
     expect(savedDraft?.alarmEnabled, isTrue);
   });
 
+  testWidgets('alarm choice survives switching recurrence on and back off', (
+    tester,
+  ) async {
+    Future<EventDraft?> saveAfter(List<String> recurrenceChoices) async {
+      EventDraft? savedDraft;
+      await tester.pumpWidget(
+        _DialogHost(
+          key: UniqueKey(),
+          builder: (context) => EventEditorDialog(
+            initialDate: DateTime.now().add(const Duration(days: 1)),
+            alarmService: const _AuthorizedAlarmService(),
+          ),
+          onSaved: (draft) => savedDraft = draft,
+        ),
+      );
+      await tester.tap(find.text('열기'));
+      await tester.pumpAndSettle();
+      await tester.enterText(find.byType(TextField).first, '알람 일정');
+      await tester.ensureVisible(find.text('일정 알람'));
+      await tester.tap(find.text('일정 알람'));
+      await tester.pumpAndSettle();
+      var current = '반복 없음';
+      for (final choice in recurrenceChoices) {
+        await tester.ensureVisible(find.text(current));
+        await tester.pumpAndSettle();
+        await tester.tap(find.text(current));
+        await tester.pumpAndSettle();
+        await tester.tap(find.text(choice).last);
+        await tester.pumpAndSettle();
+        current = choice;
+      }
+      final alarmSwitch = tester.widget<SwitchListTile>(
+        find.widgetWithText(SwitchListTile, '일정 알람'),
+      );
+      expect(alarmSwitch.value, current == '반복 없음');
+      await tester.tap(find.text('저장'));
+      await tester.pumpAndSettle();
+      return savedDraft;
+    }
+
+    expect((await saveAfter(['매주', '반복 없음']))?.alarmEnabled, isTrue);
+    expect((await saveAfter(['매주']))?.alarmEnabled, isFalse);
+  });
+
   testWidgets('saves a relative alarm time independent of reminders', (
     tester,
   ) async {
@@ -1036,6 +1080,7 @@ void _overnightSwitchTests() {
 
 class _DialogHost extends StatelessWidget {
   const _DialogHost({
+    super.key,
     required this.builder,
     required this.onSaved,
     this.textScaler,
