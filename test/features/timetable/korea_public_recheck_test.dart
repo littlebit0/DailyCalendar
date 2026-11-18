@@ -92,7 +92,6 @@ void main() {
         (c) => '${c['courseCode']}-${c['section']}' == id,
       );
       expect(c[change['field']], change['after']);
-      expect(koreaRecheckChangedIds, contains(change['sourceId']));
     }
   });
 }

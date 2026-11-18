@@ -244,6 +244,35 @@ LazyDatabase _openConnection() {
     final directory = await getApplicationSupportDirectory();
     await directory.create(recursive: true);
     final file = File(p.join(directory.path, 'daily.sqlite'));
-    return NativeDatabase.createInBackground(file);
+    return openAppDatabaseFile(file);
   });
+}
+
+/// 앱 DB 파일 연결. Siri 코드가 같은 파일에 쓰는 동안(busy_timeout 5000ms,
+/// BEGIN IMMEDIATE) 앱 쪽도 바로 실패하지 않고 같은 시간만큼 기다린다.
+QueryExecutor openAppDatabaseFile(File file) {
+  return NativeDatabase.createInBackground(
+    file,
+    setup: (database) => database.busyHandler = appDatabaseBusyHandler(),
+  );
+}
+
+const appDatabaseBusyWait = Duration(milliseconds: 5000);
+
+/// PRAGMA busy_timeout 대신 직접 기다린다. package:sqlite3의 Linux용 빌드는
+/// busy_timeout을 설정해도 기다리지 않고 바로 SQLITE_BUSY를 돌려준다.
+bool Function(int) appDatabaseBusyHandler({
+  Duration wait = appDatabaseBusyWait,
+}) {
+  final waited = Stopwatch();
+  return (count) {
+    if (count == 0) {
+      waited
+        ..reset()
+        ..start();
+    }
+    if (waited.elapsed >= wait) return false;
+    sleep(const Duration(milliseconds: 20));
+    return true;
+  };
 }

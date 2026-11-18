@@ -28,7 +28,7 @@ void main() {
               return '{"key":1}';
           }
         }),
-        throwsA(isA<Object>()),
+        failure == 'dpapi' ? throwsStateError : throwsFormatException,
       );
       expect(await file.readAsBytes(), [1, 2, 3, 4]);
       expect(await readPreservingStore(file, (_) => '{"key":"value"}'), {

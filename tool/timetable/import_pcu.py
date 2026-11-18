@@ -50,7 +50,7 @@ def extract(src, out):
                 cells = [(c or '').strip() for c in r]
                 rows.append({'page': pno + 1, 'table_y': round(top, 1), 'hdr': hdr,
                              'cells': cells, 'heads': [h[3] for h in heads[-4:]], 'heading': carry})
-    json.dump(rows, open(out, 'w'), ensure_ascii=False, indent=0)
+    json.dump(rows, open(out, 'w', encoding='utf-8'), ensure_ascii=False, indent=0)
     print(len(rows))
 
 
@@ -183,9 +183,9 @@ def apply(rows_path, WT):
     DS = f'{WT}/assets/timetable/pcu-main-2026-2.json'
     ORG = f'{WT}/assets/timetable/organizations/pcu.json'
     NOTICE = 'https://hakgwa.pcu.ac.kr/ce/article/depart_ce_notice/37507'
-    off = official_listings(json.load(open(rows_path)))
-    ds = json.load(open(DS))
-    org = json.load(open(ORG))
+    off = official_listings(json.load(open(rows_path, encoding='utf-8')))
+    ds = json.load(open(DS, encoding='utf-8'))
+    org = json.load(open(ORG, encoding='utf-8'))
     labels = {m['sourceLabel']: m for m in org['mappings']}
 
     def join(cell, sep=''):
@@ -291,8 +291,8 @@ def apply(rows_path, WT):
     assert len(ids) == len(set(ids))
     ds['courses'].extend(added)
     org['courseOwners'].extend(owners)
-    json.dump(ds, open(DS, 'w'), ensure_ascii=False, indent=2); open(DS, 'a').write('\n')
-    json.dump(org, open(ORG, 'w'), ensure_ascii=False, indent=2); open(ORG, 'a').write('\n')
+    json.dump(ds, open(DS, 'w', encoding='utf-8'), ensure_ascii=False, indent=2); open(DS, 'a', encoding='utf-8').write('\n')
+    json.dump(org, open(ORG, 'w', encoding='utf-8'), ensure_ascii=False, indent=2); open(ORG, 'a', encoding='utf-8').write('\n')
     print(json.dumps({'stats': {' / '.join(k) if isinstance(k, tuple) else k: v for k, v in stats.items()}, 'changed': changed, 'added': len(added), 'owners': len(owners), 'fullwidth': fullwidth},
               ensure_ascii=False, indent=1))
     for k, v in sorted(stats.items(), key=str): print(v, k)

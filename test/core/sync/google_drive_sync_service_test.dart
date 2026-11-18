@@ -4813,6 +4813,96 @@ void _latestMergeTests() {
       },
     );
 
+    Map<String, Object?> titled(int i, String title) => _eventFileJson(
+      id: 'event-$i',
+      title: title,
+      startAt: '2026-09-17',
+      endAt: '2026-09-18',
+      updatedAt: '2026-09-25T01:00:00Z',
+    );
+
+    test(
+      'a change feed split into pages applies changes from every page',
+      () async {
+        for (var i = 0; i < 3; i++) {
+          drive.seed(
+            'file-$i',
+            'daily-sync-v2-event-event-$i.json',
+            titled(i, 'Event $i'),
+          );
+        }
+        await service.syncPendingChangesNow(restoreAfterBackup: true);
+        drive.changesPageSize = 1;
+        drive.seed(
+          'file-0',
+          'daily-sync-v2-event-event-0.json',
+          titled(0, 'First page'),
+        );
+        drive.seed(
+          'file-2',
+          'daily-sync-v2-event-event-2.json',
+          titled(2, 'Second page'),
+        );
+        drive.requests.clear();
+        await service.syncPendingChangesNow(restoreAfterBackup: true);
+        expect((await repository.findById('event-0'))!.title, 'First page');
+        expect((await repository.findById('event-2'))!.title, 'Second page');
+        expect((await repository.findById('event-1'))!.title, 'Event 1');
+        final feed = drive.requests.where(
+          (r) => r.url.path == '/drive/v3/changes',
+        );
+        expect(feed.map((r) => r.url.queryParameters['pageToken']), ['3', '4']);
+        expect(settings.driveChangePageToken('tester@example.com'), '5');
+      },
+    );
+
+    test(
+      'a removed change is skipped without download or local deletion',
+      () async {
+        drive.seed(
+          'file-1',
+          'daily-sync-v2-event-event-1.json',
+          titled(1, 'Kept'),
+        );
+        await service.syncPendingChangesNow(restoreAfterBackup: true);
+        // The file content differs, so following the removed change would show.
+        drive.files['file-1'] = (
+          name: 'daily-sync-v2-event-event-1.json',
+          data: titled(1, 'Must not download'),
+          version: drive.files['file-1']!.version + 1,
+        );
+        drive.reportRemoved('file-1');
+        drive.requests.clear();
+        await service.syncPendingChangesNow(restoreAfterBackup: true);
+        final kept = await repository.findById('event-1');
+        expect(kept!.title, 'Kept');
+        expect(kept.isDeleted, isFalse);
+        expect(
+          drive.requests.where((r) => r.url.queryParameters['alt'] == 'media'),
+          isEmpty,
+        );
+        expect(settings.driveChangePageToken('tester@example.com'), '2');
+      },
+    );
+
+    test('a 401 from Drive fails with the reconnect message', () async {
+      await service.syncPendingChangesNow(restoreAfterBackup: true);
+      drive.requestOverride = (request) =>
+          request.url.path == '/drive/v3/changes'
+          ? http.Response('{"error":{"code":401}}', 401)
+          : null;
+      await expectLater(
+        service.syncPendingChangesNow(restoreAfterBackup: true),
+        throwsA(
+          isA<GoogleDriveSyncException>().having(
+            (error) => error.message,
+            'message',
+            'Google Drive 연결이 만료되었습니다. 다시 연결해 주세요.',
+          ),
+        ),
+      );
+    });
+
     test(
       'incremental sync resolves an older local edit even when the remote cursor is current',
       () async {
@@ -5241,6 +5331,15 @@ class _VersionedDrive {
   int writes = 0;
   final requests = <http.Request>[];
   final changes = <String>[];
+  // Real Drive splits the change feed into pages; null keeps one page.
+  int? changesPageSize;
+  // Changes reported as removed, as Drive does for deleted or lost files.
+  final removedChanges = <int>{};
+  void reportRemoved(String id) {
+    removedChanges.add(changes.length);
+    changes.add(id);
+  }
+
   void seed(String id, String name, Map<String, Object?> data) {
     changes.add(id);
     files[id] = (
@@ -5261,14 +5360,23 @@ class _VersionedDrive {
     }
     if (path == '/drive/v3/changes') {
       final since = int.parse(request.url.queryParameters['pageToken']!);
+      final end = changesPageSize == null
+          ? changes.length
+          : (since + changesPageSize!).clamp(since, changes.length);
       return _jsonResponse({
-        'newStartPageToken': '${changes.length}',
+        if (end < changes.length)
+          'nextPageToken': '$end'
+        else
+          'newStartPageToken': '${changes.length}',
         'changes': [
-          for (final changed in changes.skip(since))
+          for (var index = since; index < end; index++)
             {
-              'fileId': changed,
-              'removed': false,
-              'file': {'id': changed, 'name': files[changed]!.name},
+              'fileId': changes[index],
+              'removed': removedChanges.contains(index),
+              'file': {
+                'id': changes[index],
+                'name': files[changes[index]]!.name,
+              },
             },
         ],
       });

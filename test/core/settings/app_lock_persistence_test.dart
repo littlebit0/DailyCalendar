@@ -36,7 +36,7 @@ void main() {
             ),
             markSyncPending: false,
           ),
-          throwsA(isA<Object>()),
+          throwsStateError,
         );
         expect(repository.load().appLockEnabled, isTrue);
         expect(repository.load().appLockMethod, AppLockMethod.appPin);

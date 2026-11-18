@@ -178,11 +178,11 @@ def main():
         rows = [sheet.row_values(i) for i in range(sheet.nrows)]
     courses = parse_rows(rows,args.year,args.semester)
     if args.operating_proof:
-        courses = apply_operating_proof(courses, json.loads(args.operating_proof.read_text()))
+        courses = apply_operating_proof(courses, json.loads(args.operating_proof.read_text(encoding='utf-8')))
     dataset = {'schemaVersion':1,'universityId':'uos','campus':'main',
         'academicYear':args.year,'semester':args.semester,'publishedDate':args.published_date,
         'sourceUrl':args.source_url,'courses':courses}
-    args.output.write_text(json.dumps(dataset,ensure_ascii=False,indent=2)+'\n')
+    args.output.write_text(json.dumps(dataset,ensure_ascii=False,indent=2)+'\n', encoding='utf-8')
     print(f'{len(courses)} unique courses; {sum(c["scheduleStatus"]=="scheduled" for c in courses)} scheduled')
 
 if __name__ == '__main__':

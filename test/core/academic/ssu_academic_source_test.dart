@@ -151,4 +151,17 @@ void main() {
       source.close();
     },
   );
+
+  test('SSU keeps rows shared by undergraduates and graduates', () {
+    final body = fixture(2026);
+    const graduate = '2026학년도 1학기 수업일수 1/2선(대학원)';
+    expect(body, contains(graduate));
+    expect(
+      SsuAcademicSource.parse(
+        body.replaceFirst(graduate, '2026학년도 1학기 수업일수 1/2선(학부·대학원)'),
+        2026,
+      ).map((e) => e.title),
+      contains('2026학년도 1학기 수업일수 1/2선(학부·대학원)'),
+    );
+  });
 }

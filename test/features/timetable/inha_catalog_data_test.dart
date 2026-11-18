@@ -30,6 +30,9 @@ void main() {
       final course = courses.singleWhere(
         (c) => c.codeAndSection == 'BPE4206-001',
       );
+      // 원문은 `목21,…,32`다. 공개 교시 목록은 24교시(21:00 종료)까지라, 21:00 이후
+      // 시각은 tool/timetable/import_inha.py가 30분 간격을 이어 붙인 추정값이다.
+      // 실제로 다음 날 01:00까지 수업하는지는 원문 미확인이다(#950).
       expect(
         course.meetings.map((m) => (m.weekday, m.startMinute, m.endMinute)),
         [(4, 1140, 1440), (5, 0, 60)],
