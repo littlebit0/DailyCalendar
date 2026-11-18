@@ -145,6 +145,9 @@ class _Harness {
     '/report/ubcompletion/user_progress.php': _learningMissing,
   };
   Future<LmsHtmlPage> Function(Uri)? intercept;
+  // Never fires unless a test replaces it: the deadline then follows `now`.
+  Future<void> Function(Duration) deadlineTimer = (_) =>
+      Completer<void>().future;
   int active = 0;
   int maxActive = 0;
 
@@ -187,6 +190,7 @@ class _Harness {
         waits.add(duration);
         now = now.add(duration);
       },
+      deadlineTimer: (duration) => deadlineTimer(duration),
     );
   }
 
@@ -1830,6 +1834,156 @@ void main() {
       final extended = byActivity('assignment', '9001');
       expect(extended.lms!.pastFinalSyncCount, 0);
       expect(extended.lms!.dueAt, DateTime.utc(2026, 9, 30, 14, 59));
+    });
+  });
+
+  group('sync deadline (#892)', () {
+    const optional = {
+      '/mod/quiz/view.php',
+      '/report/ubcompletion/user_progress.php',
+    };
+    final quizIndex = _fixture('quizzes');
+    LmsHtmlPage page(Uri url) => LmsHtmlPage(
+      url: url,
+      html:
+          url.path == '/mod/quiz/index.php' &&
+              url.queryParameters['id'] == '8002'
+          ? quizIndex.replaceAll('view.php?id=900', 'view.php?id=910')
+          : url.path == '/mod/quiz/view.php' &&
+                url.queryParameters['id']!.startsWith('910')
+          ? h.pages[url.path]!.replaceAll('id=8001', 'id=8002')
+          : h.pages[url.path]!,
+    );
+    List<String> optionalReads() => [
+      for (final url in h.requests)
+        if (optional.contains(url.path)) url.queryParameters['id']!,
+    ];
+    DateTime? savedSuccess() => h.settings.lmsLastSuccess(
+      ownerId: 'student@example.com',
+      schoolId: 'smu',
+      lmsUserId: '70001',
+    );
+    String? cursor() => h.settings.lmsSyncResumeCursor(
+      ownerId: 'student@example.com',
+      schoolId: 'smu',
+      lmsUserId: '70001',
+    );
+    CalendarEvent quiz(String course, String id) =>
+        h.repository.events.values.singleWhere(
+          (e) =>
+              e.lms!.activityType == 'quiz' &&
+              e.lms!.courseId == course &&
+              e.lms!.activityId == id,
+        );
+
+    setUp(() {
+      h.pages['/'] = _dashboard.replaceFirst(
+        '</div></main>',
+        '<a class="course_link" href="/course/view.php?id=8002"><div class="course-title"><h3>다른 수업</h3></div></a></div></main>',
+      );
+      h.pages['/report/ubcompletion/user_progress.php'] = _learning;
+      h.pages['/mod/quiz/view.php'] = quizFixtureHtml(['종료됨']);
+    });
+
+    test('stops optional reads after 5 minutes and the next sync resumes '
+        'there, then starts over after a full pass', () async {
+      var slow = true;
+      h.intercept = (url) async {
+        if (slow && optional.contains(url.path)) {
+          h.now = h.now.add(const Duration(minutes: 2));
+        }
+        return page(url);
+      };
+      final first = await h.service.refresh();
+      expect(LmsSyncService.syncDeadline, const Duration(minutes: 5));
+      expect(optionalReads(), ['9001', '9002', '8001']);
+      expect(first!.deadlineReached, isTrue);
+      expect(first.unresolvedQuizStatuses, 2);
+      expect(first.failedLearningCourses, 1);
+      expect(first.hasUnverifiedInformation, isTrue);
+      // Indexes were read: course 8002's quizzes exist, without a status.
+      expect(quiz('8002', '9101').lms!.sourceCompleted, isNull);
+      expect(quiz('8001', '9001').completed, isTrue);
+      expect(h.service.state, LmsSyncState.ready);
+      // A sync stopped by the deadline is not recorded as a success.
+      expect(h.service.lastSuccess, isNull);
+      expect(savedSuccess(), isNull);
+      expect(cursor(), 'quiz:8002:9101');
+
+      h.requests.clear();
+      slow = false;
+      final second = await h.service.refresh(force: true);
+      expect(optionalReads(), ['9101', '9102', '8002', '9001', '9002', '8001']);
+      expect(second!.deadlineReached, isFalse);
+      expect(second.failedLearningCourses, 0);
+      expect(savedSuccess(), isNotNull);
+      expect(h.service.lastSuccess, savedSuccess());
+      expect(cursor(), isNull);
+
+      h.requests.clear();
+      await h.service.refresh(force: true);
+      expect(optionalReads(), ['9001', '9002', '8001', '9101', '9102', '8002']);
+    });
+
+    test('abandons the read in flight at the deadline and keeps statuses '
+        'already read', () async {
+      h.intercept = (url) async => page(url);
+      await h.service.refresh();
+      final success = h.service.lastSuccess;
+      expect(success, isNotNull);
+      final before = quiz('8001', '9002');
+      expect(before.completed, isTrue);
+      expect(before.lms!.submissionStatus, isNotNull);
+
+      h.requests.clear();
+      h.now = h.now.add(const Duration(minutes: 6));
+      final hung = Completer<LmsHtmlPage>();
+      h.intercept = (url) {
+        if (url.path == '/mod/quiz/view.php' &&
+            url.queryParameters['id'] == '9002') {
+          // A newer status arrives (for example from Drive) during the sync.
+          final restored = quiz('8002', '9102');
+          h.repository.events[restored.id] = restored.copyWith(
+            completed: false,
+            lms: restored.lms!.copyWith(
+              sourceCompleted: false,
+              submissionStatus: '응시 가능',
+            ),
+          );
+          return hung.future;
+        }
+        return Future.value(page(url));
+      };
+      h.deadlineTimer = (_) async {};
+      final result = await h.service.refresh();
+      expect(optionalReads(), ['9001', '9002']);
+      expect(result!.deadlineReached, isTrue);
+      expect(result.unresolvedQuizStatuses, 3);
+      expect(result.failedLearningCourses, 2);
+      expect(cursor(), 'quiz:8001:9002');
+      expect(h.service.lastSuccess, success);
+      expect(savedSuccess(), success);
+      // Skipped quizzes keep the status last read, and are not finalized.
+      final newer = quiz('8002', '9102');
+      expect(newer.completed, isFalse);
+      expect(newer.lms!.sourceCompleted, isFalse);
+      expect(newer.lms!.submissionStatus, '응시 가능');
+      for (final event in [quiz('8001', '9002'), quiz('8002', '9101')]) {
+        expect(event.isDeleted, isFalse);
+        expect(event.completed, isTrue);
+        expect(event.lms!.sourceCompleted, isNotNull);
+        expect(event.lms!.submissionStatus, isNotNull);
+        expect(event.lms!.pastFinalSyncCount, 0);
+      }
+      expect(quiz('8001', '9002').lms, before.lms);
+
+      // The abandoned read finishing later changes nothing.
+      hung.complete(
+        page(Uri.parse('https://ecampus.smu.ac.kr/mod/quiz/view.php?id=9002')),
+      );
+      await pumpEventQueue();
+      expect(optionalReads(), ['9001', '9002']);
+      expect(quiz('8001', '9002').lms, before.lms);
     });
   });
 }

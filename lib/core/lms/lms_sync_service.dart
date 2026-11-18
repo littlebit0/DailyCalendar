@@ -77,6 +77,7 @@ class LmsSyncResult {
     this.frozenPastActivities = 0,
     this.skippedQuizDetails = 0,
     this.undatedLearning = const [],
+    this.deadlineReached = false,
   });
   final int courses,
       activities,
@@ -97,12 +98,17 @@ class LmsSyncResult {
   final int excludedLearningActivities;
   final int failedLearningCourses;
   final List<LmsUndatedLearning> undatedLearning;
+
+  /// The sync deadline stopped optional reads; the next sync resumes them.
+  final bool deadlineReached;
   bool get learningCoverageIncomplete =>
       unresolvedLearningActivities > 0 || failedLearningCourses > 0;
 
   /// Some school information could not be read or resolved this time.
   bool get hasUnverifiedInformation =>
-      learningCoverageIncomplete || unresolvedQuizStatuses > 0;
+      learningCoverageIncomplete ||
+      unresolvedQuizStatuses > 0 ||
+      deadlineReached;
 }
 
 typedef LmsFetchHtml = Future<LmsHtmlPage> Function(Uri url);
@@ -121,6 +127,7 @@ class LmsSyncService extends ChangeNotifier {
     bool Function(Object error)? isAuthenticationError,
     DateTime Function()? now,
     Future<void> Function(Duration duration)? wait,
+    Future<void> Function(Duration duration)? deadlineTimer,
     CoursemosParser parser = const CoursemosParser(),
     CoursemosLearningParser learningParser = const CoursemosLearningParser(),
   }) : _settings = settings,
@@ -132,6 +139,7 @@ class LmsSyncService extends ChangeNotifier {
        _isAuthenticationError = isAuthenticationError ?? ((_) => false),
        _now = now ?? DateTime.now,
        _wait = wait ?? Future<void>.delayed,
+       _deadlineTimer = deadlineTimer ?? Future<void>.delayed,
        _parser = parser,
        _learningParser = learningParser;
 
@@ -144,11 +152,15 @@ class LmsSyncService extends ChangeNotifier {
   final bool Function(Object) _isAuthenticationError;
   final DateTime Function() _now;
   final Future<void> Function(Duration) _wait;
+  final Future<void> Function(Duration) _deadlineTimer;
   final CoursemosParser _parser;
   final CoursemosLearningParser _learningParser;
 
   static const requestSpacing = Duration(milliseconds: 100);
   static const refreshInterval = Duration(minutes: 5);
+
+  /// One sync stops starting quiz-detail and learning reads after this (#892).
+  static const syncDeadline = refreshInterval;
   LmsSyncState _state = LmsSyncState.idle;
   LmsSyncState get state => _state;
   String? errorCode;
@@ -495,16 +507,160 @@ class LmsSyncService extends ChangeNotifier {
         epoch,
       );
       final courses = _parser.courses(dashboard);
+      final deadline = _now().add(syncDeadline);
+      final previousEvents = await _repository.allEventsForSync();
       final finalized = <String>{
-        for (final event in await _repository.allEventsForSync())
+        for (final event in previousEvents)
           if (_prunable(event, session) &&
               event.lms!.activityType == 'quiz' &&
               isFinalizedPast(event.lms!, _now()))
             event.id,
       };
       _check(session, epoch);
+      // Required reads first: every course's complete indexes. Without them
+      // nothing can be applied, so the deadline does not cut them (#892).
+      final assignmentsByCourse = <List<CoursemosActivity>>[];
+      final quizzesByCourse = <List<CoursemosActivity>>[];
+      for (final course in courses) {
+        for (final type in const ['assignment', 'quiz']) {
+          final module = type == 'assignment' ? 'assign' : 'quiz';
+          final page = await _read(
+            session.baseUrl.resolve('/mod/$module/index.php?id=${course.id}'),
+            session,
+            epoch,
+          );
+          (type == 'assignment' ? assignmentsByCourse : quizzesByCourse).add(
+            _parser.activities(page, course: course, type: type).activities,
+          );
+        }
+      }
       var skippedQuizDetails = 0;
+      final finalizedQuizzes = Set<CoursemosActivity>.identity();
+      // Optional reads, keyed for resuming; absent keys were not read.
+      final quizStatuses =
+          Map<CoursemosActivity, CoursemosQuizStatus?>.identity();
+      final learningReports = <int, CoursemosLearningIndex?>{};
+      var stopOptionalReads = false;
+      Future<LmsHtmlPage> readOptional(Uri url) {
+        if (stopOptionalReads) throw const _DeadlineReached();
+        return _read(url, session, epoch);
+      }
+
+      // Each step returns a commit applied only when it finished in time, so
+      // a step abandoned at the deadline never changes this sync's results.
+      final steps = <({String key, Future<void Function()> Function() run})>[];
+      for (var index = 0; index < courses.length; index++) {
+        final course = courses[index];
+        for (final activity in quizzesByCourse[index]) {
+          // The index still lists it; only the per-quiz request is skipped.
+          final due = activity.dueAt;
+          if (due != null &&
+              isPastDay(due, _now()) &&
+              finalized.contains(_activityEventId(session, activity))) {
+            skippedQuizDetails++;
+            finalizedQuizzes.add(activity);
+            continue;
+          }
+          steps.add((
+            key: 'quiz:${course.id}:${activity.id}',
+            run: () async {
+              CoursemosQuizStatus? status;
+              try {
+                final detail = await readOptional(activity.url);
+                status = _parser.quizStatus(
+                  detail,
+                  activity: activity,
+                  now: _now(),
+                );
+              } on _Cancelled {
+                rethrow;
+              } on Object catch (error) {
+                _check(session, epoch);
+                if (_authenticationFailure(error)) rethrow;
+              }
+              return () => quizStatuses[activity] = status;
+            },
+          ));
+        }
+        steps.add((
+          key: 'learning:${course.id}',
+          run: () async {
+            CoursemosLearningIndex? learning;
+            try {
+              final page = await readOptional(
+                session.baseUrl.resolve(
+                  '/report/ubcompletion/user_progress.php?id=${course.id}',
+                ),
+              );
+              var report = _learningParser.parse(page, course: course);
+              if (report.unresolvedRowCount > 0) {
+                try {
+                  final coursePage = await readOptional(course.url);
+                  report = _learningParser.recoverFromCourse(
+                    coursePage,
+                    report: report,
+                  );
+                } on _Cancelled {
+                  rethrow;
+                } on Object catch (error) {
+                  _check(session, epoch);
+                  if (_authenticationFailure(error)) rethrow;
+                  // Keep the verified report subset and explicit unresolved count.
+                }
+              }
+              learning = report;
+            } on _Cancelled {
+              rethrow;
+            } on Object catch (error) {
+              _check(session, epoch);
+              if (_authenticationFailure(error)) rethrow;
+            }
+            return () => learningReports[index] = learning;
+          },
+        ));
+      }
+      // Resume where the previous sync's deadline stopped, so later courses
+      // are not starved by always restarting from the first one.
+      final resumeKey = _resumeCursor(session);
+      var start = steps.indexWhere((step) => step.key == resumeKey);
+      if (start < 0 && resumeKey != null) {
+        final course = resumeKey.split(':').elementAtOrNull(1);
+        start = steps.indexWhere((step) => step.key.split(':')[1] == course);
+      }
+      if (start < 0) start = 0;
+      final ordered = [...steps.skip(start), ...steps.take(start)];
+      String? nextResumeKey;
+      // One timer per sync, started when the first raced step begins.
+      Future<void Function()?>? deadlineFired;
+      for (var position = 0; position < ordered.length; position++) {
+        final step = ordered[position];
+        // The first step always runs so every sync makes progress.
+        if (position > 0 && !_now().isBefore(deadline)) {
+          nextResumeKey = step.key;
+          break;
+        }
+        final work = step.run();
+        final commit = position == 0
+            ? await work
+            : await Future.any<void Function()?>([
+                work,
+                deadlineFired ??= _deadlineTimer(
+                  deadline.difference(_now()),
+                ).then((_) => null),
+              ]);
+        _check(session, epoch);
+        if (commit == null) {
+          // The read in flight is abandoned; the session queue still
+          // serializes it before any later read.
+          stopOptionalReads = true;
+          nextResumeKey = step.key;
+          break;
+        }
+        commit();
+      }
       final fetched = <CoursemosActivity>[];
+      // Quizzes the deadline skipped: they keep the stored status (#892).
+      final carriedQuizStatuses = Set<CoursemosActivity>.identity();
       // Activities whose learning values the school confirmed in this sync.
       final confirmedLearning = Set<CoursemosActivity>.identity();
       var unresolvedLearningActivities = 0;
@@ -516,125 +672,69 @@ class LmsSyncService extends ChangeNotifier {
       // resolved, including undated and nonattendance rows. A recovered row
       // keeps its report module id too, so both identities are listed.
       final learningRows = <String, List<(String, List<String>)>>{};
-      for (final course in courses) {
-        for (final type in const ['assignment', 'quiz']) {
-          final module = type == 'assignment' ? 'assign' : 'quiz';
-          final page = await _read(
-            session.baseUrl.resolve('/mod/$module/index.php?id=${course.id}'),
-            session,
-            epoch,
-          );
-          final activities = _parser
-              .activities(page, course: course, type: type)
-              .activities;
-          for (final activity in activities) {
-            if (type != 'quiz') {
-              fetched.add(activity);
-              continue;
-            }
-            // The index still lists it; only the per-quiz request is skipped.
-            final due = activity.dueAt;
-            if (due != null &&
-                isPastDay(due, _now()) &&
-                finalized.contains(_activityEventId(session, activity))) {
-              skippedQuizDetails++;
-              fetched.add(activity);
-              continue;
-            }
-            CoursemosQuizStatus? status;
-            try {
-              final detail = await _read(activity.url, session, epoch);
-              status = _parser.quizStatus(
-                detail,
-                activity: activity,
-                now: _now(),
-              );
-            } on _Cancelled {
-              rethrow;
-            } on Object catch (error) {
-              _check(session, epoch);
-              if (_authenticationFailure(error)) rethrow;
-            }
-            if (status == null) unresolvedQuizStatuses++;
-            fetched.add(
-              CoursemosActivity(
-                id: activity.id,
-                title: activity.title,
-                course: activity.course,
-                type: activity.type,
-                url: activity.url,
-                openAt: activity.openAt,
-                dueAt: activity.dueAt,
-                sourceCompleted: status?.completed,
-                submissionStatus: status?.label,
-              ),
-            );
+      for (var index = 0; index < courses.length; index++) {
+        final course = courses[index];
+        fetched.addAll(assignmentsByCourse[index]);
+        for (final activity in quizzesByCourse[index]) {
+          if (finalizedQuizzes.contains(activity)) {
+            fetched.add(activity);
+            continue;
           }
+          final read = quizStatuses.containsKey(activity);
+          final status = quizStatuses[activity];
+          if (status == null) unresolvedQuizStatuses++;
+          final updated = CoursemosActivity(
+            id: activity.id,
+            title: activity.title,
+            course: activity.course,
+            type: activity.type,
+            url: activity.url,
+            openAt: activity.openAt,
+            dueAt: activity.dueAt,
+            sourceCompleted: status?.completed,
+            submissionStatus: status?.label,
+          );
+          if (!read) carriedQuizStatuses.add(updated);
+          fetched.add(updated);
         }
-        try {
-          final page = await _read(
-            session.baseUrl.resolve(
-              '/report/ubcompletion/user_progress.php?id=${course.id}',
-            ),
-            session,
-            epoch,
-          );
-          var learning = _learningParser.parse(page, course: course);
-          if (learning.unresolvedRowCount > 0) {
-            try {
-              final coursePage = await _read(course.url, session, epoch);
-              learning = _learningParser.recoverFromCourse(
-                coursePage,
-                report: learning,
-              );
-            } on _Cancelled {
-              rethrow;
-            } on Object catch (error) {
-              _check(session, epoch);
-              if (_authenticationFailure(error)) rethrow;
-              // Keep the verified report subset and explicit unresolved count.
-            }
-          }
-          // `activities` builds new objects on every read: take it once so the
-          // instances kept as "confirmed" are the ones that get applied.
-          final reported = learning.activities;
-          fetched.addAll(reported);
-          confirmedLearning.addAll(reported);
-          unresolvedLearningActivities += learning.unresolvedRowCount;
-          if (learning.unresolvedRowCount == 0) {
-            learningRows[course.id] = [
-              for (final row in learning.rows)
-                (
-                  row.title,
-                  [
-                    if (row.sourceIdentity != null)
-                      'report:${row.sourceIdentity}',
-                    if (row.module != null && row.moduleId != null)
-                      'report:${row.module}:${row.moduleId}',
-                  ],
-                ),
-            ];
-          }
-          undatedLearning.addAll([
-            for (final row in learning.undatedRows)
-              LmsUndatedLearning(
-                courseTitle: course.title,
-                title: row.title,
-                requiredLearningSeconds: row.requiredLearningSeconds!,
-                learnedSeconds: row.learnedSeconds,
+        final learning = learningReports[index];
+        if (learning == null) {
+          failedLearningCourses++;
+          continue;
+        }
+        // `activities` builds new objects on every read: take it once so the
+        // instances kept as "confirmed" are the ones that get applied.
+        final reported = learning.activities;
+        fetched.addAll(reported);
+        confirmedLearning.addAll(reported);
+        unresolvedLearningActivities += learning.unresolvedRowCount;
+        if (learning.unresolvedRowCount == 0) {
+          learningRows[course.id] = [
+            for (final row in learning.rows)
+              (
+                row.title,
+                [
+                  if (row.sourceIdentity != null)
+                    'report:${row.sourceIdentity}',
+                  if (row.module != null && row.moduleId != null)
+                    'report:${row.module}:${row.moduleId}',
+                ],
               ),
-          ]);
-          excludedLearningActivities += learning.excludedNonAttendanceCount;
-          // An empty table has no independently verified empty marker. Report
-          // it as unavailable rather than silently claiming complete coverage.
-          if (!learning.coverageComplete && learning.rows.isEmpty) {
-            failedLearningCourses++;
-          }
-        } on _Cancelled {
-          rethrow;
-        } on Object catch (error) {
-          _check(session, epoch);
-          if (_authenticationFailure(error)) rethrow;
+          ];
+        }
+        undatedLearning.addAll([
+          for (final row in learning.undatedRows)
+            LmsUndatedLearning(
+              courseTitle: course.title,
+              title: row.title,
+              requiredLearningSeconds: row.requiredLearningSeconds!,
+              learnedSeconds: row.learnedSeconds,
+            ),
+        ]);
+        excludedLearningActivities += learning.excludedNonAttendanceCount;
+        // An empty table has no independently verified empty marker. Report
+        // it as unavailable rather than silently claiming complete coverage.
+        if (!learning.coverageComplete && learning.rows.isEmpty) {
           failedLearningCourses++;
         }
       }
@@ -653,6 +753,8 @@ class LmsSyncService extends ChangeNotifier {
         unresolvedQuizStatuses: unresolvedQuizStatuses,
         skippedQuizDetails: skippedQuizDetails,
         undatedLearning: undatedLearning,
+        carriedQuizStatuses: carriedQuizStatuses,
+        deadlineReached: nextResumeKey != null,
       );
       if (!kReleaseMode) {
         debugPrint(
@@ -660,21 +762,26 @@ class LmsSyncService extends ChangeNotifier {
         );
       }
       _check(session, epoch);
-      final checkedAt = _now().toUtc();
-      await _settings.saveLmsLastSuccess(
-        checkedAt,
-        ownerId: session.ownerId,
-        schoolId: session.schoolId,
-        lmsUserId: session.lmsUserId,
-        validateSession: () => _check(session, epoch),
-      );
-      _check(session, epoch);
+      await _saveResumeCursor(session, epoch, nextResumeKey);
+      // A sync stopped by the deadline applied what it read but is not a
+      // completed check: the last success time stays as it was (#892).
+      if (nextResumeKey == null) {
+        final checkedAt = _now().toUtc();
+        await _settings.saveLmsLastSuccess(
+          checkedAt,
+          ownerId: session.ownerId,
+          schoolId: session.schoolId,
+          lmsUserId: session.lmsUserId,
+          validateSession: () => _check(session, epoch),
+        );
+        _check(session, epoch);
+        lastSuccess = checkedAt;
+      }
       _activities = List.unmodifiable(fetched);
       _displaySession = session;
       _state = LmsSyncState.ready;
       _failures = 0;
       retryAfter = null;
-      lastSuccess = checkedAt;
       lastResult = result;
       return result;
     } on _Cancelled {
@@ -709,6 +816,36 @@ class LmsSyncService extends ChangeNotifier {
     } finally {
       if (!_disposed && epoch == _epoch) _notify();
     }
+  }
+
+  String? _resumeCursor(LmsSyncSession session) {
+    try {
+      return _settings.lmsSyncResumeCursor(
+        ownerId: session.ownerId,
+        schoolId: session.schoolId,
+        lmsUserId: session.lmsUserId,
+      );
+    } on Object {
+      return null;
+    }
+  }
+
+  Future<void> _saveResumeCursor(
+    LmsSyncSession session,
+    int epoch,
+    String? cursor,
+  ) async {
+    try {
+      await _settings.saveLmsSyncResumeCursor(
+        cursor,
+        ownerId: session.ownerId,
+        schoolId: session.schoolId,
+        lmsUserId: session.lmsUserId,
+      );
+    } on Object {
+      // A lost cursor only makes the next sync start from the first course.
+    }
+    _check(session, epoch);
   }
 
   bool _authenticationFailure(Object error) =>
@@ -809,6 +946,8 @@ class LmsSyncService extends ChangeNotifier {
     required int unresolvedQuizStatuses,
     required int skippedQuizDetails,
     List<LmsUndatedLearning> undatedLearning = const [],
+    Set<CoursemosActivity> carriedQuizStatuses = const {},
+    bool deadlineReached = false,
   }) async {
     final previous = await _repository.allEventsForSync();
     _check(session, epoch);
@@ -817,6 +956,7 @@ class LmsSyncService extends ChangeNotifier {
     final category = _configuredCategory() ?? EventCategory.basic;
     final candidates = <CalendarEvent>[];
     final confirmedEventIds = <String>{};
+    final keepStatusIds = <String>{};
     final now = _now();
     final previousIds = {for (final event in previous) event.id};
     for (final activity in activities) {
@@ -888,6 +1028,9 @@ class LmsSyncService extends ChangeNotifier {
       if (confirmedLearning.contains(activity)) {
         confirmedEventIds.add(eventId(metadata));
       }
+      if (carriedQuizStatuses.contains(activity)) {
+        keepStatusIds.add(eventId(metadata));
+      }
       candidates.add(
         CalendarEvent(
           id: eventId(metadata),
@@ -912,15 +1055,26 @@ class LmsSyncService extends ChangeNotifier {
     final saved = await _commands.importBatch(
       candidates,
       lmsCategory: _configuredCategory,
+      keepLatestLmsStatus: keepStatusIds,
       isCurrent: () => _currentIgnoringBlock(session, epoch),
-      prepare: (incoming) async {
+      prepare: (candidate) async {
         _check(session, epoch);
-        final local = await _repository.findById(incoming.id);
+        final local = await _repository.findById(candidate.id);
         _check(session, epoch);
         if (local == null) {
-          added.add(incoming.id);
-          return incoming;
+          added.add(candidate.id);
+          return candidate;
         }
+        // Compared with the stored status; the write re-reads it (#892).
+        final incoming =
+            keepStatusIds.contains(candidate.id) && local.lms != null
+            ? candidate.copyWith(
+                lms: candidate.lms!.copyWith(
+                  sourceCompleted: local.lms!.sourceCompleted,
+                  submissionStatus: local.lms!.submissionStatus,
+                ),
+              )
+            : candidate;
         // A deadline moved back to today or later is active again and merges
         // normally (its count returns to 0); a still-past finalized item stays.
         if (local.lms != null &&
@@ -1017,6 +1171,7 @@ class LmsSyncService extends ChangeNotifier {
       frozenPastActivities: frozen.length,
       skippedQuizDetails: skippedQuizDetails,
       undatedLearning: List.unmodifiable(undatedLearning),
+      deadlineReached: deadlineReached,
     );
   }
 
@@ -1088,4 +1243,8 @@ class LmsSyncService extends ChangeNotifier {
 
 class _Cancelled implements Exception {
   const _Cancelled();
+}
+
+class _DeadlineReached implements Exception {
+  const _DeadlineReached();
 }

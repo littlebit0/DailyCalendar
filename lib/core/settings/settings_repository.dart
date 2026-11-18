@@ -387,6 +387,46 @@ class SettingsRepository {
     );
   }
 
+  String _lmsResumeCursorKey(
+    String ownerId,
+    String schoolId,
+    String lmsUserId,
+  ) {
+    final identity = jsonEncode([
+      ownerId.trim().toLowerCase(),
+      schoolId,
+      lmsUserId,
+    ]);
+    return 'daily.lms.resumeCursor.v1.${sha256.convert(utf8.encode(identity))}';
+  }
+
+  /// Where the next LMS sync resumes optional reads its deadline skipped
+  /// (#892), kept on this device only.
+  String? lmsSyncResumeCursor({
+    required String ownerId,
+    required String schoolId,
+    required String lmsUserId,
+  }) {
+    final raw = _preferences.get(
+      _lmsResumeCursorKey(ownerId, schoolId, lmsUserId),
+    );
+    return raw is String ? raw : null;
+  }
+
+  Future<void> saveLmsSyncResumeCursor(
+    String? cursor, {
+    required String ownerId,
+    required String schoolId,
+    required String lmsUserId,
+  }) async {
+    final key = _lmsResumeCursorKey(ownerId, schoolId, lmsUserId);
+    if (cursor == null) {
+      await _preferences.remove(key);
+    } else {
+      await _preferences.setString(key, cursor);
+    }
+  }
+
   static const _defaultReminderKey = 'defaultReminderMinutes';
   static const _defaultReminderListKey = 'defaultReminderMinutesList';
   static const _allDayReminderHourKey = 'allDayReminderHour';
@@ -1785,7 +1825,7 @@ class SettingsRepository {
     await clearDriveChangePageToken();
     await _preferences.remove(_deviceIdKey);
     await _preferences.remove(_eventFollowUpKey);
-    // Per-account LMS check times (`daily.lms.lastSuccess`, `learningChecked`).
+    // Per-account LMS check times and resume cursor (`daily.lms.*`).
     for (final key in _preferences.getKeys().toList()) {
       if (key.startsWith('daily.lms.')) await _preferences.remove(key);
     }
