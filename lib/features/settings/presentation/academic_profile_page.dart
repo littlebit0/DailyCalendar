@@ -76,22 +76,8 @@ class _AcademicProfilePageState extends ConsumerState<AcademicProfilePage> {
     });
     try {
       final repository = ref.read(settingsRepositoryProvider);
-      final previous = repository.load().academicProfile;
-      final selected = AcademicProfile(
-        universityId: institution.id,
-        universityName: institution.name,
-        schoolKind: institution.kind.name,
-      );
-      final sameSchool =
-          previous?.timetableUniversity != null &&
-          previous!.timetableUniversity == selected.timetableUniversity;
-      await repository.saveAcademicProfile(
+      await repository.saveAcademicSchool(
         AcademicProfile(
-          lmsCategoryId: previous?.lmsCategoryId,
-          lmsUserId: sameSchool ? previous.lmsUserId : null,
-          lmsIntegrationEnabled: sameSchool
-              ? previous.lmsIntegrationEnabled
-              : null,
           universityId: institution.id,
           universityName: institution.name,
           schoolKind: institution.kind.name,

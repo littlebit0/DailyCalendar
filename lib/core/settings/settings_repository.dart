@@ -662,6 +662,45 @@ class SettingsRepository {
     );
   }
 
+  /// Changes only the school fields. The LMS fields come from the profile
+  /// stored when this queued write runs, so an LMS login that finished while
+  /// the editor was open is not replaced by the editor's older snapshot.
+  Future<void> saveAcademicSchool(
+    AcademicProfile school, {
+    required String expectedGoogleEmail,
+  }) {
+    final generation = _settingsMutationGeneration;
+    void validate() {
+      if (generation != _settingsMutationGeneration ||
+          dailyAccount()?.googleAccount?.email.toLowerCase() !=
+              expectedGoogleEmail.toLowerCase()) {
+        throw StateError('Academic profile account changed');
+      }
+    }
+
+    return _enqueueSettingsMutation(() {
+      final latest = load().academicProfile;
+      final sameSchool =
+          latest?.timetableUniversity != null &&
+          latest!.timetableUniversity == school.timetableUniversity;
+      return _saveAcademicProfile(
+        AcademicProfile(
+          universityId: school.universityId,
+          universityName: school.universityName,
+          schoolKind: school.schoolKind,
+          campus: school.campus,
+          campusId: school.campusId,
+          lmsCategoryId: latest?.lmsCategoryId,
+          lmsUserId: sameSchool ? latest.lmsUserId : null,
+          lmsIntegrationEnabled: sameSchool
+              ? latest.lmsIntegrationEnabled
+              : null,
+        ),
+        validate: validate,
+      );
+    });
+  }
+
   /// Update only LMS connection fields after queued school/category edits have
   /// committed. A finished login must not replace a newer profile snapshot.
   Future<bool> updateLmsConnection({
@@ -1173,6 +1212,13 @@ class SettingsRepository {
         changedAt: changedAt,
         deviceId: await deviceId(),
       );
+      // Pending goes first: a failure after the document is stored must still
+      // leave the change queued for upload.
+      if (!hasPendingSettingsSync) {
+        if (!await _preferences.setBool(_settingsSyncPendingKey, true)) {
+          throw StateError('Settings pending state write failed');
+        }
+      }
       final documentSaved = await _preferences.setString(
         _settingsSyncDocumentKey,
         canonicalSyncJson(document.toJson()),
@@ -1185,11 +1231,6 @@ class SettingsRepository {
         settingsSyncRevision + 1,
       );
       if (!revisionSaved) throw StateError('Settings revision write failed');
-      if (!hasPendingSettingsSync) {
-        if (!await _preferences.setBool(_settingsSyncPendingKey, true)) {
-          throw StateError('Settings pending state write failed');
-        }
-      }
     }
   }
 
@@ -1202,9 +1243,16 @@ class SettingsRepository {
   SettingsSyncDocument settingsSyncDocument() {
     final raw = _preferences.getString(_settingsSyncDocumentKey);
     if (raw != null) {
-      return SettingsSyncDocument.fromJson(
-        Map<String, Object?>.from(jsonDecode(raw) as Map),
-      );
+      try {
+        return SettingsSyncDocument.fromJson(
+          Map<String, Object?>.from(jsonDecode(raw) as Map),
+        );
+      } on Object {
+        // The document holds only merge registers; the values live in their
+        // own keys. Rebuild untimed registers from them so saving keeps
+        // working, and the next recorded change replaces the damaged value.
+        return SettingsSyncDocument.legacy(syncSettingsValues(load()));
+      }
     }
     return hasPendingSettingsSync
         ? SettingsSyncDocument.legacy(syncSettingsValues(load()))
@@ -1437,7 +1485,12 @@ class SettingsRepository {
 
   bool get hasStoredDailyAccount => _storedDailyAccount() != null;
 
-  Future<void> saveAppleAccount(AppleAccount account) async {
+  /// Queued with the Google account switch: both rewrite [_dailyAccountKey],
+  /// and a switch (or its rollback) must not drop an Apple link saved meanwhile.
+  Future<void> saveAppleAccount(AppleAccount account) =>
+      _enqueueSettingsMutation(() => _saveAppleAccount(account));
+
+  Future<void> _saveAppleAccount(AppleAccount account) async {
     final dailyAccount = _currentOrNewDailyAccount().copyWith(
       appleAccount: account,
     );
@@ -1451,7 +1504,10 @@ class SettingsRepository {
     await _setNullableString(_appleFamilyNameKey, account.familyName);
   }
 
-  Future<void> deleteAppleAccount() async {
+  Future<void> deleteAppleAccount() =>
+      _enqueueSettingsMutation(_deleteAppleAccount);
+
+  Future<void> _deleteAppleAccount() async {
     await _preferences.remove(_appleUserIdentifierKey);
     await _preferences.remove(_appleEmailKey);
     await _preferences.remove(_appleGivenNameKey);
