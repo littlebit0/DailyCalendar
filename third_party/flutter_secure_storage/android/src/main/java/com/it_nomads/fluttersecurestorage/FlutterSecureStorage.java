@@ -289,7 +289,16 @@ public class FlutterSecureStorage {
 
     /* package */ void initializeStorageCipher(NamespacedConfigSource configSource, SecurePreferencesCallback<Void> callback) {
         try {
-            storageCipherFactory = new StorageCipherFactory(configSource, config.getPrefOptionKeyCipherAlgorithm(), config.getPrefOptionStorageCipherAlgorithm(), config, context.getSharedPreferences(config.getEffectiveDataPrefsName(), Context.MODE_PRIVATE));
+            SharedPreferences dataPrefs = context.getSharedPreferences(config.getEffectiveDataPrefsName(), Context.MODE_PRIVATE);
+            storageCipherFactory = new StorageCipherFactory(configSource, config.getPrefOptionKeyCipherAlgorithm(), config.getPrefOptionStorageCipherAlgorithm(), config, dataPrefs,
+                    context.getSharedPreferences(config.getEffectiveKeyStoragePrefsName(), Context.MODE_PRIVATE));
+            if (storageCipherFactory.isFreshInstall()) {
+                // Daily (#970): record the current algorithms before any key or
+                // value exists, so later data is never read as legacy data.
+                SharedPreferences.Editor markers = dataPrefs.edit();
+                storageCipherFactory.stageDataAlgorithms(markers);
+                if (!markers.commit()) throw new java.io.IOException("Failed to persist algorithm markers");
+            }
 
             if (storageCipherFactory.requiresReEncryption()) {
                 Log.w(TAG, "Algorithm changed detected.");

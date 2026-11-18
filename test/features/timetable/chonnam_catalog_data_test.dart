@@ -94,6 +94,9 @@ void main() {
           ).allMatches(course.sourceSchedule))
             '${m[1]}${m[2]}',
         };
+        // n교시는 base + n×slot에 시작한다. 구간이 덮는 교시가 원문 교시와
+        // 정확히 같아야 한 교시 밀린 시각도 잡힌다.
+        final covered = <String>{};
         for (final meeting in course.meetings) {
           final tue =
               meeting.weekday == DateTime.tuesday ||
@@ -110,7 +113,17 @@ void main() {
             0,
             reason: course.sourceId,
           );
+          for (
+            var minute = meeting.originalStartMinute;
+            minute < meeting.originalEndMinute;
+            minute += slot
+          ) {
+            covered.add(
+              '${'월화수목금토일'[meeting.weekday - 1]}${(minute - base) ~/ slot}',
+            );
+          }
         }
+        expect(covered, periods, reason: course.sourceId);
         expect(
           course.meetings.fold<int>(
             0,

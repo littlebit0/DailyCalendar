@@ -118,7 +118,7 @@ def parse_responses(responses, year, semester):
 
 
 def load_complete(directory):
-    manifest=json.loads((directory/'manifest.json').read_text())
+    manifest=json.loads((directory/'manifest.json').read_text(encoding='utf-8'))
     if manifest.get('complete') is not True: raise ValueError('Incomplete INHA collection')
     queries=manifest['queries']
     if len({(q['kind'],q['code']) for q in queries})!=len(queries):
@@ -127,7 +127,7 @@ def load_complete(directory):
     for query in queries:
         if query['kind'] not in ['department','other'] or not re.fullmatch(r'\d+',query['code']):
             raise ValueError('Invalid INHA filter identity')
-        response=json.loads((directory/(query['kind']+'-'+query['code']+'.json')).read_text())
+        response=json.loads((directory/(query['kind']+'-'+query['code']+'.json')).read_text(encoding='utf-8'))
         if any(response[k]!=query[k] for k in ['kind','code','label']):
             raise ValueError('Wrong INHA query result')
         responses.append(response)
@@ -146,5 +146,5 @@ if __name__=='__main__':
     args.output.write_text(json.dumps({'schemaVersion':1,'universityId':'inha',
         'campus':'main','academicYear':manifest['year'],'semester':manifest['semester'],
         'publishedDate':args.checked_at,'sourceUrl':manifest['sourceUrl'],
-        'courses':courses},ensure_ascii=False,indent=2)+'\n')
+        'courses':courses},ensure_ascii=False,indent=2)+'\n', encoding='utf-8')
     print('INHA courses',len(courses),'scheduled',sum(bool(c['schedules']) for c in courses))

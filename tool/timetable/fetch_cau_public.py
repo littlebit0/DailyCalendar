@@ -10,11 +10,11 @@ with TemporaryDirectory() as temp:
     subprocess.run(["curl","-fsS","--max-time","30","-c",cookie,BASE+"search.do","-o",str(Path(temp)/"page.html")],check=True)
     def query(endpoint, params, name):
         target = ROOT/(name+".json")
-        if target.exists(): return json.loads(target.read_text())
+        if target.exists(): return json.loads(target.read_text(encoding='utf-8'))
         time.sleep(0.5)
         result = subprocess.run(["curl","-fsS","--max-time","30","-b",cookie,"-H","Content-Type: application/json;charset=UTF-8","-H","Referer: "+BASE+"search.do","--data",json.dumps(params),BASE+endpoint+".ajax"],check=True,capture_output=True)
         data = json.loads(result.stdout)
-        target.write_text(json.dumps(data,ensure_ascii=False))
+        target.write_text(json.dumps(data,ensure_ascii=False), encoding='utf-8')
         return data
     count=0
     for campus in ["1","2"]:

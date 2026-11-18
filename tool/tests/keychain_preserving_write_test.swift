@@ -46,6 +46,18 @@ import Security
         } else {
             print("Keychain unavailable (\(added)); live update check skipped")
         }
-        print("8 Keychain write policy cases passed")
+        // #969: searches ignore accessibility; add and update still carry it.
+        let withAccessibility: [CFString: Any] = [
+            kSecClass: kSecClassGenericPassword, kSecAttrService: "s", kSecAttrAccount: "k",
+            kSecAttrAccessible: kSecAttrAccessibleAfterFirstUnlock, kSecReturnData: true,
+        ]
+        precondition(PreservingKeychainWrite.matchQuery(withAccessibility)[kSecAttrAccessible] == nil)
+        precondition(PreservingKeychainWrite.matchQuery(withAccessibility)[kSecAttrAccount] as? String == "k")
+        precondition(PreservingKeychainWrite.updateSearchQuery(withAccessibility)[kSecAttrAccessible] == nil)
+        let attributes = PreservingKeychainWrite.updateAttributes(value: Data("v".utf8), query: withAccessibility)
+        precondition(attributes[kSecValueData] as? Data == Data("v".utf8))
+        precondition((attributes[kSecAttrAccessible] as! CFString) == kSecAttrAccessibleAfterFirstUnlock)
+        precondition(PreservingKeychainWrite.updateAttributes(value: Data(), query: base)[kSecAttrAccessible] == nil)
+        print("13 Keychain write policy cases passed")
     }
 }

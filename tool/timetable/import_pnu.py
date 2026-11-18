@@ -75,10 +75,10 @@ def parse_rows(rows,year=2026,semester='2'):
 
 if __name__=='__main__':
     p=argparse.ArgumentParser();p.add_argument('--raw',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--checked-at',required=True);a=p.parse_args()
-    manifest=json.loads((a.raw/'manifest.json').read_text());rows=json.loads((a.raw/'courses.json').read_text())
+    manifest=json.loads((a.raw/'manifest.json').read_text(encoding='utf-8'));rows=json.loads((a.raw/'courses.json').read_text(encoding='utf-8'))
     if manifest.get('complete') is not True or set(manifest['categoryCounts'])!={'1','2','3','4','5'} or manifest['total']!=len(rows) or sum(manifest['categoryCounts'].values())!=len(rows):raise ValueError('Incomplete PNU collection')
     courses=parse_rows(rows,manifest['year'],manifest['semester']);a.output.mkdir(parents=True,exist_ok=True)
     for campus in sorted({c['campus'] for c in courses}):
         selected=[c for c in courses if c['campus']==campus]
-        (a.output/f'pnu-{campus}-2026-2.json').write_text(json.dumps({'schemaVersion':1,'universityId':'pnu','campus':campus,'campusName':CAMPUS_NAMES[campus],'academicYear':manifest['year'],'semester':manifest['semester'],'publishedDate':a.checked_at,'sourceUrl':manifest['sourceUrl'],'courses':selected},ensure_ascii=False,indent=2)+'\n')
+        (a.output/f'pnu-{campus}-2026-2.json').write_text(json.dumps({'schemaVersion':1,'universityId':'pnu','campus':campus,'campusName':CAMPUS_NAMES[campus],'academicYear':manifest['year'],'semester':manifest['semester'],'publishedDate':a.checked_at,'sourceUrl':manifest['sourceUrl'],'courses':selected},ensure_ascii=False,indent=2)+'\n', encoding='utf-8')
         print(campus,len(selected),sum(bool(c['schedules']) for c in selected))

@@ -694,6 +694,70 @@ void main() {
     }
   }
   test(
+    'editing one occurrence to a new start stores only that occurrence moved',
+    () async {
+      SharedPreferences.setMockInitialValues({});
+      final settings = SettingsRepository(
+        preferences: await SharedPreferences.getInstance(),
+      );
+      final database = AppDatabase.forTesting(NativeDatabase.memory());
+      addTearDown(database.close);
+      final repository = DriftEventRepository(database);
+      final original = _event('edit-one', EventCategory.basic).copyWith(
+        recurrence: const RecurrenceRule(
+          frequency: RecurrenceFrequency.daily,
+          count: 5,
+        ),
+      );
+      await repository.save(original);
+      final selectedStart = original.startAt.add(const Duration(days: 2));
+      final occurrence = original.copyWith(
+        startAt: selectedStart,
+        endAt: selectedStart.add(original.duration),
+        occurrenceId: 'selected',
+      );
+      final newStart = selectedStart.add(const Duration(hours: 5));
+      final newEnd = newStart.add(const Duration(minutes: 90));
+      final commands = EventCommandService(
+        repository: repository,
+        settingsRepository: settings,
+        notificationService: _CountingNotificationService(),
+        syncService: _CountingSyncService(),
+      );
+      final result = await commands.editRecurringOccurrence(
+        occurrence: occurrence,
+        draft: EventDraft(
+          title: 'moved',
+          startAt: newStart,
+          endAt: newEnd,
+          categoryChanged: false,
+          recurrence: original.recurrence,
+        ),
+        scope: RecurringEditScope.onlyThis,
+      );
+      final detached = (await repository.findById(result.event.id))!;
+      expect(detached.id, isNot(original.id));
+      expect(detached.startAt, newStart);
+      expect(detached.endAt, newEnd);
+      expect(detached.recurrence.isRepeating, isFalse);
+      final series = (await repository.findById(original.id))!;
+      expect(series.recurrence.excludes(selectedStart), isTrue);
+      final expander = RecurrenceExpander();
+      final begin = original.startAt.subtract(const Duration(days: 1));
+      final end = original.startAt.add(const Duration(days: 10));
+      expect(
+        expander.expand(series, begin, end).map((e) => (e.startAt, e.endAt)),
+        [
+          for (final day in [0, 1, 3, 4])
+            (
+              original.startAt.add(Duration(days: day)),
+              original.endAt.add(Duration(days: day)),
+            ),
+        ],
+      );
+    },
+  );
+  test(
     'explicit future count and all-series date changes remain intentional',
     () async {
       final base = _event('edit', EventCategory.basic).copyWith(
@@ -962,7 +1026,7 @@ void main() {
               targetStart: DateTime(2026, 8, 1, 9),
               scope: scope,
             ),
-            throwsA(anything),
+            throwsA(isA<SqliteException>()),
           );
           final all = await repository.allEventsForSync();
           expect(all.length, 1);

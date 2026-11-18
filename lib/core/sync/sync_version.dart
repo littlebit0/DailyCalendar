@@ -98,7 +98,8 @@ Map<String, Object?> eventVersionValues(CalendarEvent event) => {
     'alarmMinutesBeforeList': event.alarmMinutesBeforeList,
     'alarmCustomAtList': encodeAlarmCustomList(event.alarmCustomAtList),
   },
-  if (!event.showOvernightOnFollowingDays) 'showOvernightOnFollowingDays': false,
+  if (!event.showOvernightOnFollowingDays)
+    'showOvernightOnFollowingDays': false,
 };
 
 String _day(DateTime date) =>
@@ -130,6 +131,21 @@ CalendarEvent restoreSyncTimestamps(
   String? storedCategory,
 }) {
   if (details == null) return event;
+  try {
+    return _restoreSyncTimestamps(event, details, storedCategory);
+  } on Object {
+    // Unreadable details cost only the sub-second precision and category
+    // identity they add; one damaged row must not fail every query or the
+    // schema upgrade that reads it.
+    return event;
+  }
+}
+
+CalendarEvent _restoreSyncTimestamps(
+  CalendarEvent event,
+  String details,
+  String? storedCategory,
+) {
   final data = jsonDecode(details) as Map<String, dynamic>;
   final identity = data['categoryIdentity'];
   if (identity is Map &&

@@ -214,14 +214,12 @@ void main() {
         }
         final slots = originalSlots[nativeCode]!;
         for (final m in c.meetings) {
-          final hh = slots.singleWhere(
+          slots.singleWhere(
             (h) =>
                 h[0] == m.weekday &&
                 h[1] == m.originalStartMinute &&
                 h[2] == m.originalEndMinute,
           );
-          expect(m.originalStartMinute, hh[1]);
-          expect(m.originalEndMinute, hh[2]);
           final source = independentMeetings[c.sourceId]!.singleWhere(
             (v) =>
                 v[0] == m.date &&

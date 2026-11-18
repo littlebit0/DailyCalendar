@@ -21,19 +21,46 @@ public class StorageCipherFactory {
     private final KeyCipherAlgorithm currentKeyAlgorithm;
     private final StorageCipherAlgorithm currentStorageAlgorithm;
     private final FlutterSecureStorageConfig config;
+    private final boolean freshInstall;
 
     public StorageCipherFactory(NamespacedConfigSource configSource, String keyCipherAlgorithm, String storageCipherAlgorithm, FlutterSecureStorageConfig config) {
         this(configSource, keyCipherAlgorithm, storageCipherAlgorithm, config, null);
     }
 
     public StorageCipherFactory(NamespacedConfigSource configSource, String keyCipherAlgorithm, String storageCipherAlgorithm, FlutterSecureStorageConfig config, SharedPreferences data) {
+        this(configSource, keyCipherAlgorithm, storageCipherAlgorithm, config, data, null);
+    }
+
+    /**
+     * Daily (#970): with [keyStorage], a store without markers, without stored
+     * values and without a legacy wrapped AES key is a fresh install. It uses
+     * the current algorithms directly instead of creating legacy keys for an
+     * empty migration; the caller must persist the markers before any write.
+     */
+    public StorageCipherFactory(NamespacedConfigSource configSource, String keyCipherAlgorithm, String storageCipherAlgorithm, FlutterSecureStorageConfig config, SharedPreferences data, SharedPreferences keyStorage) {
         this.config = config;
         final String savedKeyCipherAlgorithm = data != null && data.contains("__daily_algorithm_key")
                 ? data.getString("__daily_algorithm_key", null) : configSource.getString(ELEMENT_PREFERENCES_ALGORITHM_KEY, null);
         final String savedStorageCipherAlgorithm = data != null && data.contains("__daily_algorithm_storage")
                 ? data.getString("__daily_algorithm_storage", null) : configSource.getString(ELEMENT_PREFERENCES_ALGORITHM_STORAGE, null);
 
-        if (savedKeyCipherAlgorithm == null || savedStorageCipherAlgorithm == null) {
+        final boolean unmarked = savedKeyCipherAlgorithm == null || savedStorageCipherAlgorithm == null;
+        freshInstall = unmarked && data != null && keyStorage != null
+                && !keyStorage.contains(StorageCipherImplementationAES18.WRAPPED_KEY_ENTRY)
+                && !hasStoredValues(data, config.getSharedPreferencesKeyPrefix());
+
+        final StorageCipherAlgorithm currentStorageAlgorithmTmp = StorageCipherAlgorithm.fromString(storageCipherAlgorithm);
+        currentStorageAlgorithm = (currentStorageAlgorithmTmp.minVersionCode <= Build.VERSION.SDK_INT) ? currentStorageAlgorithmTmp : DEFAULT_STORAGE_ALGORITHM;
+
+        // Set current key algorithm with version check
+        final KeyCipherAlgorithm currentKeyAlgorithmTmp = KeyCipherAlgorithm.fromString(keyCipherAlgorithm);
+        currentKeyAlgorithm = (currentKeyAlgorithmTmp.minVersionCode <= Build.VERSION.SDK_INT) ? currentKeyAlgorithmTmp : DEFAULT_KEY_ALGORITHM;
+
+        if (freshInstall) {
+            // Nothing was ever stored: there is no legacy data to decrypt.
+            savedKeyAlgorithm = currentKeyAlgorithm;
+            savedStorageAlgorithm = currentStorageAlgorithm;
+        } else if (unmarked) {
             // Migration from v9.2.4 or v10.0.0-beta.4:
             // No algorithm markers exist in SharedPreferences, which means the data was encrypted
             // with the historical v9.2.4 defaults. We must use these defaults to decrypt the old
@@ -46,15 +73,17 @@ public class StorageCipherFactory {
             savedKeyAlgorithm = KeyCipherAlgorithm.fromString(savedKeyCipherAlgorithm);
             savedStorageAlgorithm = StorageCipherAlgorithm.fromString(savedStorageCipherAlgorithm);
         }
+    }
 
-        final StorageCipherAlgorithm currentStorageAlgorithmTmp = StorageCipherAlgorithm.fromString(storageCipherAlgorithm);
-        currentStorageAlgorithm = (currentStorageAlgorithmTmp.minVersionCode <= Build.VERSION.SDK_INT) ? currentStorageAlgorithmTmp : DEFAULT_STORAGE_ALGORITHM;
+    public boolean isFreshInstall() {
+        return freshInstall;
+    }
 
-        // Set current key algorithm with version check
-        final KeyCipherAlgorithm currentKeyAlgorithmTmp = KeyCipherAlgorithm.fromString(keyCipherAlgorithm);
-        currentKeyAlgorithm = (currentKeyAlgorithmTmp.minVersionCode <= Build.VERSION.SDK_INT) ? currentKeyAlgorithmTmp : DEFAULT_KEY_ALGORITHM;
-
-
+    private static boolean hasStoredValues(SharedPreferences data, String prefix) {
+        for (String key : data.getAll().keySet()) {
+            if (key.contains(prefix)) return true;
+        }
+        return false;
     }
 
     public void stageDataAlgorithms(SharedPreferences.Editor editor) {

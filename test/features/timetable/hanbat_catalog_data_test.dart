@@ -132,6 +132,8 @@ void main() {
             appointments++;
             // 학사안내 교시표: 쉬는 시간(주간 10분, 야간·토요일 14시 이후 5분)을 포함한
             // 슬롯의 시작·끝만 허용하고, 연속 교시는 한 구간으로 합친다.
+            // 야간 12교시 슬롯(1230~1290)만 60분이라 그 뒤 쉬는 시간은 10분이다. 이 교시표
+            // 원문은 저장소에 없어 원문 미확인이다(#950).
             final starts = m.weekday == 6 ? _satStarts : _weekStarts;
             final ends = m.weekday == 6 ? _satEnds : _weekEnds;
             expect(starts, contains(m.originalStartMinute));

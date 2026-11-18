@@ -180,5 +180,5 @@ if __name__ == '__main__':
         'remainingVerification':['Current340 general course changes lack exact course codes',
             'Final34 closure list lacks exact course codes','All university changes since July14',
             'Night fractional periods and individual practice dates'], 'courses':courses}
-    args.output.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
+    args.output.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n', encoding='utf-8')
     print(len(courses),audit['countsByStatus'])

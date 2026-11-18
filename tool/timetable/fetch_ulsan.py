@@ -19,7 +19,7 @@ def curl(cookie, data=None, out=None):
            '-w', '%{http_code}', '-o', out]
     if data is not None:
         body = out + '.body'
-        with open(body, 'w') as fh:
+        with open(body, 'w', encoding='utf-8') as fh:
             fh.write(urllib.parse.urlencode(data))
         cmd += ['-e', URL, '-H', 'Content-Type: application/x-www-form-urlencoded',
                 '--data-binary', '@' + body]
@@ -71,14 +71,14 @@ def post(s, target, **vals):
         f[P + k] = v
     return curl(CK, f, os.path.join(OUT, 'last.html'))
 
-results = json.load(open(os.path.join(OUT, 'major.json'))) if os.path.exists(os.path.join(OUT, 'major.json')) else []
+results = json.load(open(os.path.join(OUT, 'major.json'), encoding='utf-8')) if os.path.exists(os.path.join(OUT, 'major.json')) else []
 done = {(r['daehag'][0], r['hagbu'][0], r['sosog'][0], r['grade']) for r in results}
-tree = json.load(open(os.path.join(OUT, 'tree.json'))) if os.path.exists(os.path.join(OUT, 'tree.json')) else []
+tree = json.load(open(os.path.join(OUT, 'tree.json'), encoding='utf-8')) if os.path.exists(os.path.join(OUT, 'tree.json')) else []
 seen_tree = {(t['daehag'][0], t['hagbu'][0]) for t in tree}
 s = fresh()
 check_term(s)
 colleges = [(v, t) for v, t in options(s, P + 'ddlDaehag') if v not in GRAD]
-json.dump(options(s, P + 'ddlDaehag'), open(os.path.join(OUT, 'colleges.json'), 'w'), ensure_ascii=False)
+json.dump(options(s, P + 'ddlDaehag'), open(os.path.join(OUT, 'colleges.json'), 'w', encoding='utf-8'), ensure_ascii=False)
 
 def goto(dv, hv=None, tries=3):
     global s
@@ -108,7 +108,7 @@ for dv, dn in (colleges if os.environ.get('SKIP_MAJOR') != '1' else []):
             if (dv, hv) not in seen_tree:
                 tree.append({'daehag': [dv, dn], 'hagbu': [hv, hn], 'hagbuNames': [hn], 'sosog': []})
                 seen_tree.add((dv, hv))
-        json.dump(tree, open(os.path.join(OUT, 'tree.json'), 'w'), ensure_ascii=False, indent=1)
+        json.dump(tree, open(os.path.join(OUT, 'tree.json'), 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
         print('no sosog', dn, hagbus, flush=True)
         s = fresh()
         continue
@@ -138,8 +138,8 @@ for dv, dn in (colleges if os.environ.get('SKIP_MAJOR') != '1' else []):
                 r = rows(s)
                 results.append({'mode': '전공별', 'daehag': [dv, dn], 'hagbu': [hv, hn], 'sosog': [sv, sn], 'grade': y, 'rows': r})
                 print(dn, hn, sn, y, len(r), flush=True)
-        json.dump(results, open(os.path.join(OUT, 'major.json'), 'w'), ensure_ascii=False)
-        json.dump(tree, open(os.path.join(OUT, 'tree.json'), 'w'), ensure_ascii=False, indent=1)
+        json.dump(results, open(os.path.join(OUT, 'major.json'), 'w', encoding='utf-8'), ensure_ascii=False)
+        json.dump(tree, open(os.path.join(OUT, 'tree.json'), 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
 
 # 영역별
 def goto_areas(tries=3):
@@ -175,5 +175,5 @@ for av, an in areas:
 # Never replace an earlier area.json with a partial or empty crawl.
 if len(area_results) != len(areas) * 5 or not areas:
     raise RuntimeError(f'incomplete area crawl {len(area_results)} of {len(areas) * 5}')
-json.dump(area_results, open(os.path.join(OUT, 'area.json'), 'w'), ensure_ascii=False)
+json.dump(area_results, open(os.path.join(OUT, 'area.json'), 'w', encoding='utf-8'), ensure_ascii=False)
 print('DONE', sum(len(x['rows']) for x in results), sum(len(x['rows']) for x in area_results))

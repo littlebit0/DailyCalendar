@@ -577,7 +577,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                         title: context.tr('기본 일정 알림'),
                         values: settings.defaultReminderMinutesList,
                         presets: const [0, 10, 30, 60, 1440],
-                        onChanged: (values) => _save(
+                        onChanged: (values) => _saveSetting(
                           settings.copyWith(defaultReminderMinutesList: values),
                           changedFrom: settings,
                         ),
@@ -590,7 +590,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                             range: customReminderMinutesRange,
                           );
                           if (value != null) {
-                            await _save(
+                            await _saveSetting(
                               settings.copyWith(
                                 defaultReminderMinutesList:
                                     normalizeReminderMinutes([
@@ -611,7 +611,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                         hour: settings.allDayReminderHour,
                         minute: settings.allDayReminderMinute,
                         use24HourTime: settings.use24HourTime,
-                        onChanged: (time) => _save(
+                        onChanged: (time) => _saveSetting(
                           settings.copyWith(
                             allDayReminderHour: time.hour,
                             allDayReminderMinute: time.minute,
@@ -622,7 +622,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                       const Divider(height: 1),
                       _TimeFormatTile(
                         use24HourTime: settings.use24HourTime,
-                        onChanged: (value) => _save(
+                        onChanged: (value) => _saveSetting(
                           settings.copyWith(use24HourTime: value),
                           changedFrom: settings,
                         ),
@@ -642,19 +642,23 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                           final updated = settings.copyWith(
                             morningBriefingEnabled: value,
                           );
-                          await _save(updated, changedFrom: settings);
-                          if (value) {
-                            await ref
-                                .read(notificationServiceProvider)
-                                .scheduleMorningBriefing(
-                                  hour: updated.morningBriefingHour,
-                                  minute: updated.morningBriefingMinute,
-                                );
-                          } else {
-                            await ref
-                                .read(notificationServiceProvider)
-                                .cancelMorningBriefing();
+                          if (!await _saveSetting(
+                            updated,
+                            changedFrom: settings,
+                          )) {
+                            return;
                           }
+                          final notifications = ref.read(
+                            notificationServiceProvider,
+                          );
+                          await _applyMorningBriefing(
+                            () => value
+                                ? notifications.scheduleMorningBriefing(
+                                    hour: updated.morningBriefingHour,
+                                    minute: updated.morningBriefingMinute,
+                                  )
+                                : notifications.cancelMorningBriefing(),
+                          );
                         },
                       ),
                       if (settings.morningBriefingEnabled)
@@ -670,19 +674,27 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                               morningBriefingHour: time.hour,
                               morningBriefingMinute: time.minute,
                             );
-                            await _save(updated, changedFrom: settings);
-                            await ref
-                                .read(notificationServiceProvider)
-                                .scheduleMorningBriefing(
-                                  hour: time.hour,
-                                  minute: time.minute,
-                                );
+                            if (!await _saveSetting(
+                              updated,
+                              changedFrom: settings,
+                            )) {
+                              return;
+                            }
+                            final notifications = ref.read(
+                              notificationServiceProvider,
+                            );
+                            await _applyMorningBriefing(
+                              () => notifications.scheduleMorningBriefing(
+                                hour: time.hour,
+                                minute: time.minute,
+                              ),
+                            );
                           },
                         ),
                       const Divider(height: 1),
                       _DdayOffsetsTile(
                         offsets: settings.dDayReminderOffsets,
-                        onChanged: (offsets) => _save(
+                        onChanged: (offsets) => _saveSetting(
                           settings.copyWith(dDayReminderOffsets: offsets),
                           changedFrom: settings,
                         ),
@@ -699,7 +711,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                               ...settings.dDayReminderOffsets,
                               value,
                             }.toList()..sort();
-                            await _save(
+                            await _saveSetting(
                               settings.copyWith(dDayReminderOffsets: offsets),
                               changedFrom: settings,
                             );
@@ -734,7 +746,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                                 .toList(),
                             onChanged: (language) {
                               if (language != null) {
-                                _save(
+                                _saveSetting(
                                   settings.copyWith(language: language),
                                   changedFrom: settings,
                                 );
@@ -755,7 +767,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                           values: AppThemeMode.values,
                           selected: settings.themeMode,
                           labelFor: context.l10n.themeName,
-                          onChanged: (mode) => _save(
+                          onChanged: (mode) => _saveSetting(
                             settings.copyWith(themeMode: mode),
                             changedFrom: settings,
                           ),
@@ -802,7 +814,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                           selected: settings.weekStartsOnMonday,
                           labelFor: (startsOnMonday) =>
                               context.tr(startsOnMonday ? '월' : '일'),
-                          onChanged: (value) => _save(
+                          onChanged: (value) => _saveSetting(
                             settings.copyWith(weekStartsOnMonday: value),
                             changedFrom: settings,
                           ),
@@ -853,7 +865,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                         subtitle: _SettingsDescription(
                           context.tr('월 달력의 각 날짜에 음력 날짜를 함께 표시합니다.'),
                         ),
-                        onChanged: (value) => _save(
+                        onChanged: (value) => _saveSetting(
                           settings.copyWith(showLunarDates: value),
                           changedFrom: settings,
                         ),
@@ -890,7 +902,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                               settings.monthNavigationMode ==
                                   MonthNavigationMode.vertical
                               ? null
-                              : (value) => _save(
+                              : (value) => _saveSetting(
                                   settings.copyWith(
                                     showAdjacentMonthDates: value,
                                   ),
@@ -909,7 +921,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                           values: MonthNavigationMode.values,
                           selected: settings.monthNavigationMode,
                           labelFor: context.l10n.navigationName,
-                          onChanged: (value) => _save(
+                          onChanged: (value) => _saveSetting(
                             settings.copyWith(
                               monthNavigationMode: value,
                               showAdjacentMonthDates:
@@ -952,7 +964,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                           onChanged: (destination) {
                             final calendarView =
                                 _calendarViewForStartDestination(destination);
-                            _save(
+                            _saveSetting(
                               settings.copyWith(
                                 appStartView: calendarView == null
                                     ? AppStartView.quickView
@@ -985,7 +997,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                           labelFor: (mode) => context.tr(
                             mode == WeekDayLayoutMode.list ? '목록' : '스케줄',
                           ),
-                          onChanged: (value) => _save(
+                          onChanged: (value) => _saveSetting(
                             settings.copyWith(weekDayLayoutMode: value),
                             changedFrom: settings,
                           ),
@@ -1006,7 +1018,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                                 ? '기본'
                                 : '가운데',
                           ),
-                          onChanged: (value) => _save(
+                          onChanged: (value) => _saveSetting(
                             settings.copyWith(
                               calendarEventTitleAlignment: value,
                             ),
@@ -1017,7 +1029,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                       const Divider(height: 1),
                       _AppTextSizeSlider(
                         textSize: settings.appTextSize,
-                        onChanged: (value) => _save(
+                        onChanged: (value) => _saveSetting(
                           settings.copyWith(appTextSize: value),
                           changedFrom: settings,
                         ),
@@ -1197,7 +1209,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                                 ? '분류 우선'
                                 : '시간 우선',
                           ),
-                          onChanged: (value) => _save(
+                          onChanged: (value) => _saveSetting(
                             settings.copyWith(calendarEventSortPriority: value),
                             changedFrom: settings,
                           ),
@@ -1214,7 +1226,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                         subtitle: _SettingsDescription(
                           context.tr('공휴일 분류 색상을 날짜 배경에 표시합니다.'),
                         ),
-                        onChanged: (value) => _save(
+                        onChanged: (value) => _saveSetting(
                           settings.copyWith(
                             calendarHolidayBackgroundEnabled: value,
                           ),
@@ -1308,7 +1320,9 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                       _GoogleDriveSyncSettings(
                         email: account?.googleAccount?.email,
                         sessionConnected: _googleDriveAccount != null,
-                        busy: _syncBusy,
+                        // Apple sign-in also restores the linked Drive sync;
+                        // account deletion or another sync must not overlap.
+                        busy: accountBusy,
                         message: _syncMessage,
                         onConnect: _connectGoogleDrive,
                         onSync: _syncGoogleDriveNow,
@@ -1564,10 +1578,18 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
         context,
       ).showSnackBar(SnackBar(content: Text(context.tr(error.message))));
     } on GoogleDriveAuthException catch (error) {
+      // The draft stays in _unsentBugReportDraft for the next attempt.
       if (!mounted) return;
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text(context.tr(error.message))));
+    } on Object {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(context.tr('요청을 완료하지 못했습니다. 잠시 후 다시 시도해 주세요.')),
+        ),
+      );
     } finally {
       if (mounted) setState(() => _bugReportBusy = false);
     }
@@ -1763,17 +1785,46 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     }
   }
 
-  Future<void> _runLockChange(Future<void> Function() change) async {
+  /// Runs a settings change from a control. On failure the control shows the
+  /// stored value again and the user is told; returns whether it succeeded.
+  Future<bool> _runLockChange(Future<void> Function() change) async {
+    final windowsSaveRevision = _windowsSettingsSaveRevision;
+    try {
+      await change();
+      return true;
+    } on Object {
+      if (!mounted) return false;
+      // A Windows `_save` already restored the stored value when it was the
+      // newest change; a newer pending choice must stay on screen.
+      if (windowsSaveRevision == _windowsSettingsSaveRevision) {
+        ref.read(appSettingsProvider.notifier).state = ref
+            .read(settingsRepositoryProvider)
+            .load();
+        setState(() => _pendingWindowsSettings = null);
+      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(context.tr('선택을 저장하지 못했습니다. 다시 시도해 주세요.'))),
+      );
+      return false;
+    }
+  }
+
+  Future<bool> _saveSetting(
+    AppSettings settings, {
+    required AppSettings changedFrom,
+  }) => _runLockChange(() => _save(settings, changedFrom: changedFrom));
+
+  Future<void> _applyMorningBriefing(Future<void> Function() change) async {
     try {
       await change();
     } on Object {
       if (!mounted) return;
-      ref.read(appSettingsProvider.notifier).state = ref
-          .read(settingsRepositoryProvider)
-          .load();
-      setState(() => _pendingWindowsSettings = null);
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(context.tr('선택을 저장하지 못했습니다. 다시 시도해 주세요.'))),
+        SnackBar(
+          content: Text(
+            context.tr('아침 브리핑 알림 예약을 바꾸지 못했습니다. 알림 권한을 확인한 뒤 다시 시도해 주세요.'),
+          ),
+        ),
       );
     }
   }
