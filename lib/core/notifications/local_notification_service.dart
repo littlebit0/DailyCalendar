@@ -81,6 +81,10 @@ class _ReminderSnapshot {
   Map<String, int>? allowance;
   var allowanceReady = false;
 
+  /// Single-shot `<id>:reminder:<min>` keys left unscheduled for now because
+  /// the limit is full; set together with [allowance].
+  Set<String> deferred = const {};
+
   /// Repeating keys already trimmed to [allowance]; nothing in this snapshot
   /// schedules past it again, so trimming them once is enough.
   final trimmed = <String>{};
@@ -254,9 +258,12 @@ class LocalNotificationService implements NotificationService {
     final title = l10n.eventTitle(event.title, holiday: event.holiday);
     final base = _baseReminderTime(event, settings);
     var deliveredImmediateReminder = false;
-    final slotAllowance = event.recurrence.isRepeating
-        ? await _sharedSlotAllowance(snapshot, settings)
-        : null;
+    final slotAllowance = await _sharedSlotAllowance(snapshot, settings);
+    // Free what the other events must give up before adding this event's
+    // requests: iOS drops a request made while its queue is full.
+    if (retireLegacy) {
+      await _trimOtherRepeatingSlots(_snapshot(settings), settings, event.id);
+    }
     for (final reminderMinutes in reminderMinutesList) {
       if (event.recurrence.isRepeating) {
         deliveredImmediateReminder = await _scheduleRepeatingReminders(
@@ -286,10 +293,16 @@ class LocalNotificationService implements NotificationService {
         }
         deliveredImmediateReminder = true;
       }
+      final key = '${event.id}:reminder:$reminderMinutes';
+      if (plan.type == ReminderDeliveryType.scheduled &&
+          snapshot.deferred.contains(key)) {
+        // Too far out to fit the limit; a later reconciliation schedules it.
+        final id = _settingsRepository.existingNotificationId(key);
+        if (id != null) await _cancelPendingNotification(id);
+        continue;
+      }
       await _deliverPlan(
-        id: await _settingsRepository.notificationId(
-          '${event.id}:reminder:$reminderMinutes',
-        ),
+        id: await _settingsRepository.notificationId(key),
         title: title,
         body: reminderMinutes == 0 || plan.deliverAt == base
             ? l10n.text('일정이 시작됩니다.')
@@ -322,7 +335,6 @@ class LocalNotificationService implements NotificationService {
         _legacyIds(event.id, reminderMinutesList),
         exceptEventId: event.id,
       );
-      await _trimOtherRepeatingSlots(_snapshot(settings), settings, event.id);
     }
   }
 
@@ -338,9 +350,10 @@ class LocalNotificationService implements NotificationService {
     settings.allDayReminderMinute,
   ).add(Duration(days: offset));
 
-  /// Saving or editing one event can use up room the other repeating events
-  /// were holding. Re-share the app-wide limit by cancelling their slots that
-  /// no longer fit, so pending requests never exceed it until the next restart.
+  /// Saving or editing one event can use up room the other events were
+  /// holding. Re-share the app-wide limit by cancelling their repeating slots
+  /// and deferred single-shot reminders that no longer fit, so pending requests
+  /// never exceed it until the next restart.
   Future<void> _trimOtherRepeatingSlots(
     _ReminderSnapshot snapshot,
     AppSettings settings,
@@ -352,6 +365,12 @@ class LocalNotificationService implements NotificationService {
       if (entry.key.startsWith('$exceptEventId:reminder:')) continue;
       if (!snapshot.trimmed.add(entry.key)) continue;
       await _cancelSlotsFrom(entry.key, entry.value);
+    }
+    for (final key in snapshot.deferred) {
+      if (key.startsWith('$exceptEventId:reminder:')) continue;
+      if (!snapshot.trimmed.add(key)) continue;
+      final id = _settingsRepository.existingNotificationId(key);
+      if (id != null) await _cancelPendingNotification(id);
     }
   }
 
@@ -376,11 +395,13 @@ class LocalNotificationService implements NotificationService {
 
   /// How many occurrence slots each repeating `<id>:reminder:<min>` key may use.
   ///
-  /// Single-shot reminders, D-day reminders, the morning briefing and one slot
-  /// per repeating key are counted first; the remaining room goes to the
-  /// soonest upcoming occurrences of all repeating events together. Null on
-  /// platforms without the limit. Other events are only re-planned when they
-  /// are next scheduled (app start, edit, sync restore).
+  /// The morning briefing and D-day reminders are counted first, then one slot
+  /// per repeating key (soonest key first), then single-shot reminders; the
+  /// remaining room goes to the soonest further occurrences of all repeating
+  /// events together. Single-shot reminders that do not fit are deferred,
+  /// latest first, so the total never exceeds the limit. Null on platforms
+  /// without the limit. Other events, and deferred reminders, are only
+  /// re-planned when they are next scheduled (app start, edit, sync restore).
   @visibleForTesting
   Future<Map<String, int>?> repeatingSlotAllowance(AppSettings settings) =>
       _repeatingSlotAllowance(
@@ -408,9 +429,13 @@ class LocalNotificationService implements NotificationService {
     final now = snapshot.now;
     var fixed = settings.morningBriefingEnabled ? _briefingScheduleDays : 0;
     final candidates = <MapEntry<String, DateTime>>[];
+    final singles = <MapEntry<String, DateTime>>[];
     final keys = <String>[];
+    final owner = _settingsRepository.dailyAccount()?.googleAccount?.email;
     for (final other in await _events(snapshot)) {
-      if (other.isDeleted ||
+      // Another account's cached LMS events are never scheduled.
+      if (!other.isVisibleToOwner(owner) ||
+          other.isDeleted ||
           other.completed ||
           other.systemEvent ||
           other.readOnly) {
@@ -433,7 +458,11 @@ class LocalNotificationService implements NotificationService {
             allowImmediate: false,
             dueGrace: _dueReminderGrace,
           );
-          if (plan.type == ReminderDeliveryType.scheduled) fixed++;
+          if (plan.type == ReminderDeliveryType.scheduled) {
+            singles.add(
+              MapEntry('${other.id}:reminder:$minutes', plan.deliverAt!),
+            );
+          }
           continue;
         }
         final key = '${other.id}:reminder:$minutes';
@@ -455,7 +484,20 @@ class LocalNotificationService implements NotificationService {
     // Earliest first, so each key keeps a contiguous prefix of its slots.
     candidates.sort((a, b) => a.value.compareTo(b.value));
     final allowance = {for (final key in keys) key: 0};
-    for (final candidate in candidates.take(room)) {
+    final further = <MapEntry<String, DateTime>>[];
+    for (final candidate in candidates) {
+      if (allowance[candidate.key] == 0 && room > 0) {
+        allowance[candidate.key] = 1;
+        room--;
+      } else {
+        further.add(candidate);
+      }
+    }
+    singles.sort((a, b) => a.value.compareTo(b.value));
+    final kept = singles.length < room ? singles.length : room;
+    snapshot.deferred = {for (final single in singles.skip(kept)) single.key};
+    room -= kept;
+    for (final candidate in further.take(room)) {
       allowance[candidate.key] = allowance[candidate.key]! + 1;
     }
     return allowance;
