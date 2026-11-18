@@ -1175,6 +1175,64 @@ void main() {
     }
   });
 
+  testWidgets('back-to-back short events do not cover each other', (
+    tester,
+  ) async {
+    final day = DateTime(2026, 5, 5);
+    CalendarEvent timed(String id, int startMinute, int endMinute) =>
+        CalendarEvent(
+          id: id,
+          title: id,
+          startAt: day.add(Duration(minutes: startMinute)),
+          endAt: day.add(Duration(minutes: endMinute)),
+          allDay: false,
+          category: EventCategory.basic,
+          colorValue: EventCategory.basic.colorValue,
+          createdAt: day,
+          updatedAt: day,
+        );
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: ScheduleTimelineView(
+            days: [day],
+            events: [
+              timed('short-a', 9 * 60, 9 * 60 + 15),
+              timed('short-b', 9 * 60 + 15, 9 * 60 + 30),
+              timed('half-a', 13 * 60, 13 * 60 + 30),
+              timed('half-b', 13 * 60 + 30, 14 * 60),
+            ],
+            selectedDate: day,
+            use24HourTime: true,
+            showAllDayEvents: true,
+            holidayBackgroundEnabled: true,
+            holidayColorValue: EventCategory.holiday.colorValue,
+            onShowAllDayEventsChanged: (_) {},
+            onDateSelected: (_) {},
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    Rect block(String id) => tester.getRect(
+      find.byKey(ValueKey('schedule-event-$id-${day.toIso8601String()}')),
+    );
+    final shortA = block('short-a');
+    final shortB = block('short-b');
+    expect(shortA.overlaps(shortB), isFalse);
+    expect(shortA.height, 24);
+    expect(shortB.left, greaterThan(shortA.left));
+
+    // Events of 30 minutes or more that only touch keep the full width.
+    final halfA = block('half-a');
+    final halfB = block('half-b');
+    expect(halfA.overlaps(halfB), isFalse);
+    expect(halfA.left, halfB.left);
+    expect(halfA.width, halfB.width);
+    expect(halfA.width, greaterThan(shortA.width * 1.9));
+  });
+
   testWidgets('overlapping schedule lanes follow category order', (
     tester,
   ) async {
