@@ -14,6 +14,18 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:sqlite3/sqlite3.dart';
 
 void main() {
+  test('only schemas before 8 need the old cloud migration', () {
+    expect(requiresLegacyCloudMigrationFrom(7), isTrue);
+    // Independent of the current schema version: raising it changes nothing.
+    for (
+      var version = 8;
+      version <= AppDatabase.currentSchemaVersion + 3;
+      version++
+    ) {
+      expect(requiresLegacyCloudMigrationFrom(version), isFalse);
+    }
+  });
+
   late Directory directory;
   late File databaseFile;
 
