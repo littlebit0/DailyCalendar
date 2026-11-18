@@ -162,6 +162,38 @@ void main() {
     );
   }
 
+  test('a database newer than the app is left untouched', () async {
+    final database = AppDatabase.forTesting(NativeDatabase(databaseFile));
+    await DriftEventRepository(database).save(_event(id: 'future'));
+    await database.close();
+    final newer = AppDatabase.currentSchemaVersion + 1;
+    final raw = sqlite3.open(databaseFile.path);
+    raw.execute('PRAGMA user_version = $newer');
+    final rows = _storedRows(raw, 'event_records');
+    raw.close();
+    var cloudCalls = 0;
+    final service = TodoDatabaseMigrationService(
+      databaseFile: () async => databaseFile,
+      hasLinkedGoogleAccount: () => true,
+      loadRemoteEvents: () async {
+        cloudCalls++;
+        return null;
+      },
+      backupMigratedEvents: () async => cloudCalls++,
+    );
+    addTearDown(service.dispose);
+
+    final result = await service.migrateIfNeeded();
+
+    expect(result.migrated, isFalse);
+    expect(result.backupPending, isFalse);
+    expect(cloudCalls, 0);
+    final reader = sqlite3.open(databaseFile.path);
+    addTearDown(reader.close);
+    expect(_userVersion(reader), newer);
+    expect(_storedRows(reader, 'event_records'), rows);
+  });
+
   test('write completed during cloud wait participates in merge', () async {
     final local = _event(id: 'kept');
     await _createSchemaSixDatabase(databaseFile, [local]);
@@ -199,7 +231,7 @@ void main() {
     );
   });
 
-  for (final oldVersion in [8, 9, 10]) {
+  for (final oldVersion in [8, 9, 10, 11, 14]) {
     for (final hasLmsColumns in [false, true]) {
       test('schema $oldVersion adds nullable columns locally without cloud work '
           '(existing metadata: $hasLmsColumns)', () async {
