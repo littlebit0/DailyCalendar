@@ -96,6 +96,14 @@ correctly until OAuth clients and scopes are configured.
   file. The current Daily Desktop OAuth client rejects token exchange without
   its generated client secret, so Windows installs must provide that secret from
   a local secret store, CI secret, or `%APPDATA%\Daily\google_desktop_oauth.json`.
+- This Desktop client secret is not confidential. Google treats desktop apps as
+  public clients, and anyone can extract the value from a shipped Windows,
+  Linux or macOS binary. The flow is protected by PKCE (S256) and the loopback
+  redirect check. Keeping the value in GitHub secrets only keeps it out of the
+  repository; do not add protections that assume it stays secret. Checked for
+  #870: without `client_secret` the current Desktop client answers both code
+  exchange and refresh with `invalid_request`, so build injection stays until
+  the app moves to a client type that does not require it.
 
 ```powershell
 $env:GOOGLE_DESKTOP_CLIENT_ID = "<desktop-client-id>"
