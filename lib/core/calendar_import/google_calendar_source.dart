@@ -784,6 +784,15 @@ class _WallAxis {
     // The wall-clock end can fall at or before the start across a daylight
     // saving fall-back, so keep the real length.
     final length = device.endAt.difference(device.startAt);
+    // Implicit day constraints (start day of month, week start) follow the
+    // start date, which can differ between the device and source zones.
+    final reparsed = CalendarImportService.recurrenceFromRrule(
+      rawRule,
+      startAt: start,
+    );
+    final recurrence = reparsed.rawRule == null
+        ? reparsed.copyWith(excludedDates: device.recurrence.excludedDates)
+        : device.recurrence;
     return _WallAxis._(
       zone,
       device,
@@ -791,8 +800,8 @@ class _WallAxis {
         startAt: start,
         endAt: start.add(length.isNegative ? Duration.zero : length),
         recurrence: utcUntil
-            ? device.recurrence.copyWith(until: wallOf(zone, until))
-            : device.recurrence,
+            ? recurrence.copyWith(until: wallOf(zone, until))
+            : recurrence,
       ),
     );
   }
