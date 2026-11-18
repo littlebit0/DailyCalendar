@@ -2659,36 +2659,101 @@ private enum DailySiriDatabase {
       base = event
     }
     let updatedTitle = normalized(newTitle) ?? base.title
-    let updatedStart = newStartAt ?? base.startAt
+    // "Entire series" keeps the series start. Only the day difference between
+    // the chosen occurrence and the new start moves it, with the new time, as
+    // the app's all-occurrences edit does (#930).
+    let calendar = Calendar.current
+    var dayShift = 0
+    let updatedStart: Date
+    if entireSeries, let newStartAt {
+      dayShift = calendar.dateComponents(
+        [.day], from: calendar.startOfDay(for: event.startAt), to: calendar.startOfDay(for: newStartAt)
+      ).day ?? 0
+      let day = calendar.date(byAdding: .day, value: dayShift, to: calendar.startOfDay(for: base.startAt)) ?? base.startAt
+      let time = calendar.dateComponents([.hour, .minute, .second], from: newStartAt)
+      updatedStart = calendar.date(
+        bySettingHour: time.hour ?? 0, minute: time.minute ?? 0, second: time.second ?? 0, of: day
+      ) ?? newStartAt
+    } else {
+      updatedStart = newStartAt ?? base.startAt
+    }
+    typealias SeriesFields = (until: Date?, exclusions: Set<String>, details: String?)
+    func shiftedSeriesFields(_ source: DailySiriEvent) -> SeriesFields {
+      guard dayShift != 0 else {
+        return (source.recurrenceUntil, source.recurrenceExcludedDates, source.recurrenceDetails)
+      }
+      return (
+        source.recurrenceUntil.map { calendar.date(byAdding: .day, value: dayShift, to: $0) ?? $0 },
+        Set(source.recurrenceExcludedDates.map { shiftedDayKey($0, days: dayShift) }),
+        shiftedRecurrenceDetails(source.recurrenceDetails, frequency: source.recurrenceFrequency, days: dayShift)
+      )
+    }
+    // The series keeps the length of [from, to]. An all-day event keeps its
+    // calendar days: elapsed seconds differ across a daylight-saving change,
+    // and a time of day on either side must not shorten the span. The days
+    // are counted between dates, as the app's all-day bounds are.
+    func seriesEnd(lengthFrom from: Date, to: Date) -> Date {
+      guard newAllDay ?? event.allDay,
+            let days = calendar.dateComponents(
+              [.day], from: calendar.startOfDay(for: from), to: calendar.startOfDay(for: to)
+            ).day,
+            let end = calendar.date(
+              byAdding: .day, value: max(days, 1), to: calendar.startOfDay(for: updatedStart)
+            ) else {
+        return updatedStart.addingTimeInterval(to.timeIntervalSince(from))
+      }
+      return end
+    }
     let updatedEnd: Date
-    if let newEndAt {
+    if let newEndAt, entireSeries, let newStartAt {
+      updatedEnd = seriesEnd(lengthFrom: newStartAt, to: newEndAt)
+    } else if let newEndAt {
       updatedEnd = newEndAt
     } else if newStartAt != nil {
-      updatedEnd = updatedStart.addingTimeInterval(base.endAt.timeIntervalSince(base.startAt))
+      updatedEnd = entireSeries
+        ? seriesEnd(lengthFrom: base.startAt, to: base.endAt)
+        : updatedStart.addingTimeInterval(base.endAt.timeIntervalSince(base.startAt))
     } else {
       updatedEnd = base.endAt
     }
     guard updatedEnd > updatedStart else { throw DailySiriError.invalidTime }
     let resolvedReminders = reminderMinutesBefore.map { [$0] } ?? event.reminderMinutesBefore
-    let mutationID = try withDatabase { database in
+    let (mutationID, series): (String, SeriesFields) = try withDatabase { database in
       try beginMutation(database)
       var committed = false
       defer { if !committed { sqlite3_exec(database, "ROLLBACK", nil, nil, nil) } }
       let target = try prepareMutation(database, event: event, entireSeries: entireSeries, deleting: false)
-      let resetAnchor = entireSeries && !Calendar.current.isDate(updatedStart, inSameDayAs: base.startAt)
-      let hasAnchorColumn = try hasEventColumn(database, name: "recurrence_anchor_day")
-      let anchorUpdate = resetAnchor && hasAnchorColumn
-        ? ", recurrence_anchor_day = NULL" : ""
-      // Weekday/position conditions are relative to the old date: a series moved
-      // to another day repeats on its new date instead.
-      let hasDetailsColumn = try hasEventColumn(database, name: "recurrence_details")
-      let detailsUpdate = resetAnchor && hasDetailsColumn
-        ? ", recurrence_details = NULL" : ""
+      // A series moved to another day moves its conditions, end and
+      // exclusions by the same days; an unmoved one keeps them. They are read
+      // again under the write lock so a change made meanwhile is not lost.
+      let current = entireSeries ? try events(withIDs: [sourceID], database: database).first ?? base : base
+      let (shiftedUntil, shiftedExclusions, shiftedDetails) = shiftedSeriesFields(current)
+      var seriesUpdate = ""
+      var seriesBindings: [Binding] = []
+      if dayShift != 0 {
+        if try hasEventColumn(database, name: "recurrence_anchor_day") {
+          seriesUpdate += ", recurrence_anchor_day = NULL"
+        }
+        if try hasEventColumn(database, name: "recurrence_details") {
+          if let shiftedDetails {
+            seriesUpdate += ", recurrence_details = ?"
+            seriesBindings.append(.text(shiftedDetails))
+          } else {
+            seriesUpdate += ", recurrence_details = NULL"
+          }
+        }
+        if let shiftedUntil {
+          seriesUpdate += ", recurrence_until = ?"
+          seriesBindings.append(.integer(Int64(shiftedUntil.timeIntervalSince1970)))
+        }
+        seriesUpdate += ", recurrence_excluded_dates = ?"
+        seriesBindings.append(.text(String(data: try JSONEncoder().encode(shiftedExclusions.sorted()), encoding: .utf8)!))
+      }
       let sql = """
         UPDATE event_records SET title = ?, start_at = ?, end_at = ?, all_day = ?,
           category = ?, color_value = ?, location = ?, memo = ?, url = ?, weather = ?,
           reminder_minutes_before = ?, reminder_minutes_before_list = ?,
-          show_dday = ?, alarm_enabled = ?, updated_at = ?, sync_status = 'pending'\(anchorUpdate)\(detailsUpdate)
+          show_dday = ?, alarm_enabled = ?, updated_at = ?, sync_status = 'pending'\(seriesUpdate)
         WHERE id = ? AND id NOT LIKE 'lms:%' \(try lmsMutationPredicate(database))
         """
       var statement: OpaquePointer?
@@ -2716,12 +2781,18 @@ private enum DailySiriDatabase {
       sqlite3_bind_int(statement, 13, (showDday ?? event.showDday) ? 1 : 0)
       sqlite3_bind_int(statement, 14, (alarmEnabled ?? event.alarmEnabled) ? 1 : 0)
       sqlite3_bind_int64(statement, 15, Int64(Date().timeIntervalSince1970))
-      bind(target, to: 16, in: statement)
+      for (offset, binding) in seriesBindings.enumerated() {
+        switch binding {
+        case .integer(let value): sqlite3_bind_int64(statement, Int32(16 + offset), value)
+        case .text(let value): bind(value, to: Int32(16 + offset), in: statement)
+        }
+      }
+      bind(target, to: Int32(16 + seriesBindings.count), in: statement)
       guard sqlite3_step(statement) == SQLITE_DONE else { throw DailySiriError.databaseUnavailable }
       guard sqlite3_changes(database) == 1 else { throw DailySiriError.eventNotFound }
       try commitMutation(database)
       committed = true
-      return target
+      return (target, (shiftedUntil, shiftedExclusions, shiftedDetails))
     }
     if #available(iOS 18.0, macOS 15.0, *) {
       DailySiriSearchIndexer.scheduleRefresh()
@@ -2753,12 +2824,48 @@ private enum DailySiriDatabase {
       allDayAlarmMinutes: event.allDayAlarmMinutes,
       recurrenceFrequency: entireSeries ? event.recurrenceFrequency : "none",
       recurrenceInterval: event.recurrenceInterval,
-      recurrenceUntil: entireSeries ? event.recurrenceUntil : nil,
+      recurrenceUntil: entireSeries ? series.until : nil,
       recurrenceCount: entireSeries ? event.recurrenceCount : nil,
-      recurrenceAnchorDay: entireSeries && Calendar.current.isDate(updatedStart, inSameDayAs: base.startAt) ? base.recurrenceAnchorDay : nil,
-      recurrenceDetails: entireSeries && Calendar.current.isDate(updatedStart, inSameDayAs: base.startAt) ? base.recurrenceDetails : nil,
-      recurrenceExcludedDates: entireSeries ? event.recurrenceExcludedDates : []
+      recurrenceAnchorDay: entireSeries && dayShift == 0 ? base.recurrenceAnchorDay : nil,
+      recurrenceDetails: entireSeries ? series.details : nil,
+      recurrenceExcludedDates: entireSeries ? series.exclusions : []
     )
+  }
+
+  private static func shiftedDayKey(_ key: String, days: Int) -> String {
+    let parts = key.split(separator: "-").compactMap { Int($0) }
+    let calendar = Calendar.current
+    guard parts.count == 3,
+          let date = calendar.date(from: DateComponents(year: parts[0], month: parts[1], day: parts[2])),
+          let shifted = calendar.date(byAdding: .day, value: days, to: date) else { return key }
+    return dayKey(shifted)
+  }
+
+  /// Detail conditions after the series moves by [days], as the app's
+  /// `shiftRecurrenceRuleByDays`: weekly and daily weekday lists rotate, and
+  /// month positions and month days go back to repeating on the new date.
+  static func shiftedRecurrenceDetails(_ json: String?, frequency: String, days: Int) -> String? {
+    guard let json, let data = json.data(using: .utf8),
+          let object = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+          frequency == "weekly" || frequency == "daily" else { return nil }
+    let codes = ["MO", "TU", "WE", "TH", "FR", "SA", "SU"]
+    func rotated(_ token: String) -> String? {
+      codes.firstIndex(of: String(token.uppercased().filter { $0 >= "A" && $0 <= "Z" }))
+        .map { codes[((($0 + days) % 7) + 7) % 7] }
+    }
+    var shifted: [String: Any] = [:]
+    let byDay = (object["byDay"] as? [String] ?? []).compactMap(rotated)
+    if !byDay.isEmpty { shifted["byDay"] = byDay }
+    if frequency == "daily", let byMonth = object["byMonth"] as? [Any], !byMonth.isEmpty {
+      shifted["byMonth"] = byMonth
+    }
+    // A week start alone is not a condition.
+    guard !shifted.isEmpty else { return nil }
+    if frequency == "weekly", let weekStart = (object["weekStart"] as? String).flatMap(rotated) {
+      shifted["weekStart"] = weekStart
+    }
+    return (try? JSONSerialization.data(withJSONObject: shifted, options: [.sortedKeys]))
+      .flatMap { String(data: $0, encoding: .utf8) }
   }
 
   static func delete(matching title: String, entireSeries: Bool = false) throws -> DailySiriEvent {
