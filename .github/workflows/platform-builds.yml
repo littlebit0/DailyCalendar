@@ -213,6 +213,11 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
+      - name: Check Android versionCode against pubspec version
+        run: |
+          python3 -m unittest discover -s tool/tests -p test_android_version_code.py -v
+          python3 tool/check_android_version_code.py
+
       - name: Test Android cookie expiry format
         run: python3 -m unittest discover -s tool/tests -p test_android_cookie_expires.py -v
 
