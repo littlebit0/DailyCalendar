@@ -108,7 +108,9 @@ void main() {
       // completion modifier instead of solving the same contrast twice.
       expect(
         source,
-        contains('category: event.color, backgroundAlpha: 0.18, palette: colors'),
+        contains(
+          'category: event.color, backgroundAlpha: 0.18, palette: colors',
+        ),
       );
       expect(source, contains('let colors = palette ?? {'));
       // The shared Swift palette is exercised against numeric RGB fixtures and
@@ -215,4 +217,22 @@ void main() {
       expect(source, contains('shortTitle: "Signal"'));
     },
   );
+
+  test('iOS Runner declares its UserDefaults use (#922)', () async {
+    final manifest = await _readNormalized('ios/Runner/PrivacyInfo.xcprivacy');
+    expect(
+      manifest,
+      contains('<string>NSPrivacyAccessedAPICategoryUserDefaults</string>'),
+    );
+    expect(manifest, contains('<string>CA92.1</string>'));
+    final project = await _readNormalized(
+      'ios/Runner.xcodeproj/project.pbxproj',
+    );
+    // In the Runner target's Resources phase, so it lands in Runner.app.
+    final resources = RegExp(
+      r'97C146EC1CF9000F007C117D /\* Resources \*/ = \{.*?files = \((.*?)\);',
+      dotAll: true,
+    ).firstMatch(project)!.group(1)!;
+    expect(resources, contains('PrivacyInfo.xcprivacy in Resources'));
+  });
 }
