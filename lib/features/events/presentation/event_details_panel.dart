@@ -1738,9 +1738,20 @@ class _EventDetailSheetState extends ConsumerState<_EventDetailSheet> {
 Future<void> _openMap(BuildContext context, String location) async {
   final opened = await MapLauncher().openLocation(location);
   if (opened || !context.mounted) return;
-  ScaffoldMessenger.maybeOf(
-    context,
-  )?.showSnackBar(SnackBar(content: Text(context.tr('지도를 열지 못했습니다.'))));
+  // A dialog, not a SnackBar: the detail sheet is a modal bottom sheet without
+  // its own Scaffold, so a SnackBar would appear underneath it.
+  await showDialog<void>(
+    context: context,
+    builder: (context) => AlertDialog(
+      content: Text(context.tr('지도를 열지 못했습니다.')),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: Text(context.tr('확인')),
+        ),
+      ],
+    ),
+  );
 }
 
 class _DetailRow extends StatelessWidget {
