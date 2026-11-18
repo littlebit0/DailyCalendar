@@ -82,7 +82,7 @@ def syllabus_dates(path):
     """Session dates written in the syllabus weekly table, or None."""
     if not path.exists():
         return None
-    text = html.unescape(re.sub(r'<[^>]+>', ' ', path.read_text()))
+    text = html.unescape(re.sub(r'<[^>]+>', ' ', path.read_text(encoding='utf-8')))
     dates = re.findall(r'\d+주\s*\d+회차\s*\((\d{2})/(\d{2})\)', text)
     sessions = re.findall(r'\d+주\s*\d+회차', text)
     if not dates or len(dates) != len(sessions):
@@ -97,11 +97,12 @@ def meetings_for(parsed, rooms, dates_by_weekday):
             result.append({'date': date.isoformat(), 'weekday': date.isoweekday(),
                            'startMinute': start, 'endMinute': end, 'classroom': room})
     result.sort(key=lambda m: (m['date'], m['startMinute'], m['endMinute']))
-    # 같은 날 이어지는 교시(사이가 한 교시 미만)는 한 구간으로 합친다.
+    # 같은 날 같은 강의실에서 이어지는 교시(사이가 한 교시 미만)는 한 구간으로 합친다.
     merged = []
     for meeting in result:
-        last = merged[-1] if merged else None
-        if last and last['date'] == meeting['date'] and meeting['startMinute'] - last['endMinute'] < 60:
+        last = next((m for m in reversed(merged) if m['date'] == meeting['date']
+                     and m['classroom'] == meeting['classroom']), None)
+        if last and meeting['startMinute'] - last['endMinute'] < 60:
             last['endMinute'] = max(last['endMinute'], meeting['endMinute'])
         else:
             merged.append(meeting)
@@ -171,10 +172,10 @@ def load_rows(raw_dir):
     key = lambda r: (r['orgClsfCd'], r['dptMjrCd'], r['sbjNo'], r['dvcls'])
     by_category = {}
     for path in sorted(raw_dir.glob('mng_*.json')):
-        for row in json.loads(path.read_text()):
+        for row in json.loads(path.read_text(encoding='utf-8')):
             if row['orgClsfCd'] == 'COMM075.101':
                 by_category[key(row)] = row
-    by_course = {key(r): r for r in json.loads((raw_dir / 'obj_10.json').read_text())}
+    by_course = {key(r): r for r in json.loads((raw_dir / 'obj_10.json').read_text(encoding='utf-8'))}
     if set(by_category) != set(by_course) or any(r['orgClsfCd'] != 'COMM075.101' for r in by_course.values()):
         raise ValueError('Partitions disagree; collection incomplete')
     return [by_course[k] for k in sorted(by_course)]
@@ -199,7 +200,7 @@ def main():
             'courses': courses,
         }
         path = args.output / f'sungshin-{campus}-2026-2.json'
-        path.write_text(json.dumps(document, ensure_ascii=False, indent=2) + '\n')
+        path.write_text(json.dumps(document, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
         counts, held = {}, {}
         for c in courses:
             counts[c['scheduleStatus']] = counts.get(c['scheduleStatus'], 0) + 1

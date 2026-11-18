@@ -125,4 +125,17 @@ void main() {
       throwsFormatException,
     );
   });
+
+  test('JBNU keeps joint parts and skips graduate-only parts', () {
+    final body = fixture(2026, 1);
+    const row = '제1학기 개강, 일반대학원 종합시험';
+    expect(body, contains(row));
+    final titles = JbnuAcademicSource.parse(
+      body.replaceFirst(row, '제1학기 개강, 학부·대학원 수강신청, 일반대학원 종합시험'),
+      2026,
+      1,
+    ).map((e) => e.title);
+    expect(titles, contains('제1학기 개강, 학부·대학원 수강신청'));
+    expect(titles.where((t) => t.contains('일반대학원')), isEmpty);
+  });
 }

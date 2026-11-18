@@ -127,6 +127,7 @@ void main() {
               ).readAsStringSync(),
             )
             as Map<String, dynamic>;
+    var checked = 0;
     for (final entry in before.entries.where(
       (e) =>
           e.key.startsWith('assets/timetable/organizations/') &&
@@ -140,6 +141,8 @@ void main() {
             entry.value,
         reason: entry.key,
       );
+      checked++;
     }
+    expect(checked, greaterThan(0));
   });
 }

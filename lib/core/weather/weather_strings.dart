@@ -108,7 +108,7 @@ const _strings = <WeatherText, List<String>>{
   WeatherText.high: ['최고', 'High', '最高', '最高'],
   WeatherText.rainProbability: ['강수확률', 'Rain chance', '降水確率', '降雨機率'],
   WeatherText.clear: ['맑음', 'Clear', '晴れ', '晴天'],
-  WeatherText.partlyCloudy: ['구름 많음', 'Partly cloudy', '晴れ時々曇り', '多雲'],
+  WeatherText.partlyCloudy: ['구름 많음', 'Partly cloudy', '雲が多い', '多雲'],
   WeatherText.cloudy: ['흐림', 'Cloudy', '曇り', '陰天'],
   WeatherText.rain: ['비', 'Rain', '雨', '雨'],
   WeatherText.snow: ['눈', 'Snow', '雪', '雪'],

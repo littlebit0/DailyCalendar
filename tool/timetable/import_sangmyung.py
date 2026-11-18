@@ -115,5 +115,5 @@ if __name__ == '__main__':
     p.add_argument('--year',type=int,required=True)
     for name in ['semester','pdf','source-url','published-date','output']: p.add_argument('--'+name,required=True)
     a=p.parse_args();result=extract(a.pdf,a.campus,a.year,a.semester,a.source_url,a.published_date)
-    Path(a.output).write_text(json.dumps(result,ensure_ascii=False,separators=(',',':'))+'\n')
+    Path(a.output).write_text(json.dumps(result,ensure_ascii=False,separators=(',',':'))+'\n', encoding='utf-8')
     print(a.campus,'rows',result['sourceRowCount'],'unique sections',len(result['courses']))

@@ -1,0 +1,21 @@
+/* App Shortcut invocation phrases (#958). Keys are the English source in DailySiriIntents.swift; short titles are in Localizable.xcstrings. */
+"Add an event in ${applicationName}" = "${applicationName} 앱에 일정 추가";
+"Create an event with ${applicationName}" = "${applicationName}에서 일정 만들어줘";
+"Show today's events in ${applicationName}" = "${applicationName} 앱에서 오늘 일정 알려줘";
+"Check today's schedule in ${applicationName}" = "${applicationName}에서 오늘 스케줄 확인";
+"Show tomorrow's events in ${applicationName}" = "${applicationName} 앱에서 내일 일정 알려줘";
+"Check tomorrow's schedule in ${applicationName}" = "${applicationName}에서 내일 스케줄 확인";
+"Show events on a date in ${applicationName}" = "${applicationName} 앱에서 지정 날짜 일정 알려줘";
+"Check events by date in ${applicationName}" = "${applicationName}에서 날짜별 일정 확인";
+"What's next in ${applicationName}" = "${applicationName} 앱에서 다음 일정 알려줘";
+"Show my nearest event in ${applicationName}" = "${applicationName}에서 가장 가까운 일정 알려줘";
+"Search events in ${applicationName}" = "${applicationName} 앱에서 일정 검색";
+"Find an event in ${applicationName}" = "${applicationName}에서 일정 찾아줘";
+"Update an event in ${applicationName}" = "${applicationName} 앱에서 일정 수정";
+"Change an event in ${applicationName}" = "${applicationName}에서 일정 바꿔줘";
+"Delete an event in ${applicationName}" = "${applicationName} 앱에서 일정 삭제";
+"Remove an event from ${applicationName}" = "${applicationName}에서 일정 지워줘";
+"Show D-day events in ${applicationName}" = "${applicationName} 앱에서 D-day 알려줘";
+"Check D-days in ${applicationName}" = "${applicationName}에서 디데이 일정 확인";
+"Run Signal in ${applicationName}" = "${applicationName}에서 시그널 실행";
+"${applicationName} Signal" = "${applicationName} 시그널";

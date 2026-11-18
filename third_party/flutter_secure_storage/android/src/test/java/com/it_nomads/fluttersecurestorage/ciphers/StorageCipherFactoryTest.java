@@ -65,6 +65,59 @@ public class StorageCipherFactoryTest {
     // First launch — no saved algorithm markers
     // -------------------------------------------------------------------------
 
+    private static final String OAEP = "RSA_ECB_OAEPwithSHA_256andMGF1Padding";
+    private static final String GCM = "AES_GCM_NoPadding";
+
+    private SharedPreferences prefs(String name) {
+        SharedPreferences prefs = RuntimeEnvironment.getApplication().getSharedPreferences(name, Context.MODE_PRIVATE);
+        prefs.edit().clear().commit();
+        return prefs;
+    }
+
+    private StorageCipherFactory factory(SharedPreferences data, SharedPreferences keyStorage) {
+        return new StorageCipherFactory(configSource, OAEP, GCM, config, data, keyStorage);
+    }
+
+    @Test
+    public void emptyStoreIsFreshAndUsesCurrentAlgorithms() {
+        StorageCipherFactory fresh = factory(prefs("data"), prefs("keys"));
+        assertTrue(fresh.isFreshInstall());
+        assertFalse(fresh.requiresReEncryption());
+    }
+
+    @Test
+    public void storedValuesWithoutMarkersStillUseLegacyDefaults() {
+        SharedPreferences data = prefs("data");
+        data.edit().putString(config.getSharedPreferencesKeyPrefix() + "_token", "ciphertext").commit();
+        StorageCipherFactory legacy = factory(data, prefs("keys"));
+        assertFalse(legacy.isFreshInstall());
+        assertTrue(legacy.requiresReEncryption());
+    }
+
+    @Test
+    public void legacyWrappedKeyWithoutValuesStillUsesLegacyDefaults() {
+        SharedPreferences keys = prefs("keys");
+        keys.edit().putString(StorageCipherImplementationAES18.WRAPPED_KEY_ENTRY, "wrapped").commit();
+        StorageCipherFactory legacy = factory(prefs("data"), keys);
+        assertFalse(legacy.isFreshInstall());
+        assertTrue(legacy.requiresReEncryption());
+    }
+
+    @Test
+    public void freshMarkersStagedOnceAreReadAsCurrent() {
+        SharedPreferences data = prefs("data");
+        SharedPreferences keys = prefs("keys");
+        SharedPreferences.Editor editor = data.edit();
+        factory(data, keys).stageDataAlgorithms(editor);
+        editor.commit();
+        // A later value no longer makes the store look like legacy data.
+        data.edit().putString(config.getSharedPreferencesKeyPrefix() + "_token", "ciphertext").commit();
+        StorageCipherFactory restarted = factory(data, keys);
+        assertFalse(restarted.isFreshInstall());
+        assertFalse(restarted.requiresReEncryption());
+    }
+
+
     @Test
     public void noSavedMarkers_savedAlgorithmsDefaultToLegacy() {
         // With no markers, saved algorithms are the v9.2.4 defaults.

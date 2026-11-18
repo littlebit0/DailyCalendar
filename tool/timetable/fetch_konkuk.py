@@ -37,6 +37,8 @@ GLOCAL_FIELDS = (
     'lt_knd', 'clse_fg', 'sust_list', 'lt_type_nm', 'intensive_nm',
 )
 SLEEP = .6
+SEOUL_ROWS = 10000
+GLOCAL_ROWS = 2000
 
 
 def request(url, data=None, referer=None, opener=None):
@@ -69,6 +71,12 @@ def request(url, data=None, referer=None, opener=None):
     return rows
 
 
+def require_below_limit(rows, limit, scope):
+    # One page is requested per scope; a full page may be a cut-off result.
+    if len(rows) >= limit:
+        raise ValueError(f'Result reached the {limit}-row request limit: {scope}')
+
+
 def merge(store, key, row, scope):
     previous = store.get(key)
     if previous is None:
@@ -82,7 +90,7 @@ def merge(store, key, row, scope):
 
 def write_json(path, data):
     temporary = path.with_suffix(path.suffix + '.tmp')
-    temporary.write_text(json.dumps(data, ensure_ascii=False, indent=1) + '\n')
+    temporary.write_text(json.dumps(data, ensure_ascii=False, indent=1) + '\n', encoding='utf-8')
     temporary.replace(path)
 
 
@@ -114,8 +122,9 @@ def seoul(output, year, term):
         rows = request(SEOUL + '/search?attribute=lectListOuter', {
             **base, 'pPobt': pobt, 'pSearchGb': '1', 'pUniv': college,
             'pSustMjCd': unit, 'pLang': '', 'pKind': '', 'pSearchKind': '1',
-            'pSearchNm': '', '_search': 'false', 'rows': '10000', 'page': '1',
+            'pSearchNm': '', '_search': 'false', 'rows': str(SEOUL_ROWS), 'page': '1',
         }, SEOUL_PAGE, opener)
+        require_below_limit(rows, SEOUL_ROWS, [pobt, college, unit])
         if any(r.get('code') in ('999', '500') for r in rows):
             raise ValueError('Seoul query refused')
         scope = {'pobt': pobt, 'college': college, 'unit': unit,
@@ -141,15 +150,16 @@ def glocal(output, year, term, seed_units):
     opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor())
     opener.open(urllib.request.Request(GLOCAL_PAGE, headers={'User-Agent': UA}),
                 timeout=60).read()
-    seeds = json.loads(seed_units.read_text())
+    seeds = json.loads(seed_units.read_text(encoding='utf-8'))
     store = {}
     scopes = []
 
     def query(menu, code=None, name=''):
         url = (f'{GLOCAL}/core?attribute=timeList&year={year}&hakgi={term}'
                f'&menu={menu}' + (f'&lectCd={code}' if code else '')
-               + '&_search=false&rows=2000&page=1')
+               + f'&_search=false&rows={GLOCAL_ROWS}&page=1')
         rows = request(url, None, GLOCAL_PAGE, opener)
+        require_below_limit(rows, GLOCAL_ROWS, [menu, code or '', name])
         scopes.append({'menu': menu, 'lectCd': code, 'name': name,
                        'count': len(rows)})
         for row in rows:

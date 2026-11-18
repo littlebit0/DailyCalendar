@@ -14,6 +14,8 @@ private final class DailyAppleWidgets {
     DailySharedStore.notificationName("com.littlebit0.daily.widgetTodoActionsChanged")
   )
   private static var channel: FlutterMethodChannel?
+  /// Snapshot writes wait for the shared file lock off the platform thread, in order.
+  private static let snapshotQueue = DispatchQueue(label: "com.littlebit0.daily.widgets.snapshot")
   private static var todoActionsObserver: NSObjectProtocol?
 
   static func register(with flutterViewController: FlutterViewController) {
@@ -29,18 +31,24 @@ private final class DailyAppleWidgets {
           result(FlutterError(code: "invalid_widget_snapshot", message: "위젯 데이터 형식이 올바르지 않습니다.", details: nil))
           return
         }
-        do {
-          try writeSnapshot(snapshot)
-          if #available(macOS 11.0, *) {
-            reloadTimelines()
+        snapshotQueue.async {
+          do {
+            try writeSnapshot(snapshot)
+            DispatchQueue.main.async {
+              if #available(macOS 11.0, *) {
+                reloadTimelines()
+              }
+              if #available(macOS 15.0, *) {
+                DailySiriSearchIndexer.scheduleRefresh()
+              }
+              result(nil)
+            }
+          } catch {
+            NSLog("[DailyWidgets] Snapshot update failed: \(error.localizedDescription)")
+            DispatchQueue.main.async {
+              result(FlutterError(code: "widget_snapshot_failed", message: error.localizedDescription, details: nil))
+            }
           }
-          if #available(macOS 15.0, *) {
-            DailySiriSearchIndexer.scheduleRefresh()
-          }
-          result(nil)
-        } catch {
-          NSLog("[DailyWidgets] Snapshot update failed: \(error.localizedDescription)")
-          result(FlutterError(code: "widget_snapshot_failed", message: error.localizedDescription, details: nil))
         }
       case "pendingTodoActions":
         do {
@@ -98,12 +106,17 @@ private final class DailyAppleWidgets {
     return url
   }
 
+  /// The widget rewrites this file when a to-do is toggled. Both writers hold
+  /// the action queue lock, so neither overwrites the other's snapshot (#920).
   private static func writeSnapshot(_ snapshot: [String: Any]) throws {
     let data = try JSONSerialization.data(withJSONObject: snapshot)
-    try data.write(
-      to: try containerURL().appendingPathComponent(snapshotFileName),
-      options: .atomic
-    )
+    let containerURL = try containerURL()
+    try withTodoActionsLock(in: containerURL) {
+      try data.write(
+        to: containerURL.appendingPathComponent(snapshotFileName),
+        options: .atomic
+      )
+    }
   }
 
   /// Serializes read-modify-write of the shared action queue across the app and
@@ -1195,10 +1208,32 @@ private final class DailyPasswordInputBridge {
   }
 }
 
+// BEGIN LMS COOKIE BIND REGISTRY
+// A bind answered after Daily gave up on it (a newer bind or a clear came
+// first) must not replace the current store.
+struct DailyLmsBindRegistry<Store> {
+  private var generation = 0
+  private var stores: [String: Store] = [:]
+  mutating func begin() -> Int {
+    generation += 1
+    return generation
+  }
+  /// Registers the store only for the latest bind.
+  mutating func finish(_ bind: Int, store: Store, host: String) -> Bool {
+    guard bind == generation else { return false }
+    stores[host] = store
+    return true
+  }
+  mutating func supersedeBinds() { generation += 1 }
+  func store(host: String) -> Store? { stores[host] }
+  mutating func remove(host: String) { stores.removeValue(forKey: host) }
+}
+// END LMS COOKIE BIND REGISTRY
+
 // The school browser uses a nonpersistent WKWebsiteDataStore. This channel is
 // callable only by Daily, never exposed as a JavaScript message handler.
 private final class DailyLmsCookieStore {
-  private static var stores: [String: WKWebsiteDataStore] = [:]
+  private static var registry = DailyLmsBindRegistry<WKWebsiteDataStore>()
   // BEGIN LMS COOKIE READ POLICY
   private static let hosts: Set<String> = [
     "ecampus.smu.ac.kr", "sel.jnu.ac.kr", "ecampus.changwon.ac.kr", "lms.jnue.kr",
@@ -1237,6 +1272,7 @@ private final class DailyLmsCookieStore {
         guard !candidates.isEmpty else {
           result(FlutterError(code: "school_view_missing", message: nil, details: nil)); return
         }
+        let bind = registry.begin()
         let group = DispatchGroup()
         var matches: [WKWebsiteDataStore] = []
         var scriptFailures = 0
@@ -1257,12 +1293,15 @@ private final class DailyLmsCookieStore {
               : scriptFailures > 0 ? "school_script_unavailable" : "school_marker_missing"
             result(FlutterError(code: code, message: nil, details: nil)); return
           }
-          stores[host] = store
+          guard registry.finish(bind, store: store, host: host) else {
+            result(FlutterError(code: "school_bind_superseded", message: nil, details: nil)); return
+          }
           result(true)
         }
         return
       }
-      guard let store = stores[host], !store.isPersistent else {
+      if call.method == "clear" { registry.supersedeBinds() }
+      guard let store = registry.store(host: host), !store.isPersistent else {
         if call.method == "clear" { result(true) }
         else { result(FlutterError(code: "school_view_missing", message: nil, details: nil)) }
         return
@@ -1311,7 +1350,7 @@ private final class DailyLmsCookieStore {
         }
         group.notify(queue: .main) { result(true) }
       case "clear":
-        stores.removeValue(forKey: host)
+        registry.remove(host: host)
         // This store belongs exclusively to the bound private school WebView.
         store.removeData(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes(),
                          modifiedSince: .distantPast) { result(true) }

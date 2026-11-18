@@ -75,6 +75,15 @@ checkEnglish("Meeting is an all-day event on Oct 14.", "Meeting is a half-day ev
 checkEnglish("Meeting is an all-day event on Oct 14.", "Meeting lasts all day on Oct 14.", ["Meeting"], true, "all-day rephrased")
 checkEnglish("2026년 10월 14일 회의 일정입니다.", "2026년 10월 14일 정기회의 일정입니다.", ["회의"], false, "korean prefix")
 checkEnglish("2026년 10월 14일 회의 일정입니다.", "2026년 10월 14일 회의는 일정이에요.", ["회의"], true, "korean particle")
+checkEnglish("오전 9:00~오전 10:00에 회의 일정이 있습니다.", "오후 9:00~오전 10:00에 회의 일정이 있습니다.", ["회의"], false, "korean AM changed to PM")
+checkEnglish("오전 9:00~오전 10:00에 회의 일정이 있습니다.", "9:00~10:00에 회의 일정이 있습니다.", ["회의"], false, "korean AM dropped")
+checkEnglish("오전 9:00~오전 10:00에 회의 일정이 있습니다.", "오전 9:00~오전 10:00에 회의가 있어요.", ["회의"], true, "korean AM kept")
+checkEnglish("Meeting is scheduled from 9:00 AM~10:00 AM.", "Meeting is scheduled from 9:00 PM~10:00 AM.", ["Meeting"], false, "english AM changed to PM")
+checkEnglish("Meeting is scheduled from 9:00 AM~10:00 AM.", "Meeting runs from 9:00 a.m.~10:00 a.m.", ["Meeting"], true, "english AM respelled")
+checkEnglish("15:00~16:00에 회의 일정이 있습니다.", "오전 15:00~16:00에 회의 일정이 있습니다.", ["회의"], false, "24-hour line gains a wrong AM")
+checkEnglish("15:00~16:00에 회의 일정이 있습니다.", "오후 15:00~16:00에 회의 일정이 있습니다.", ["회의"], true, "24-hour line gains a matching PM")
+checkEnglish("Meeting is an all-day event on Nov 15.", "Meeting is an all-day event on Dec 15.", ["Meeting"], false, "english month changed")
+checkEnglish("Meeting is an all-day event on Nov 15.", "Meeting is an all-day event on November 15.", ["Meeting"], true, "english month spelled out")
 print("Siri narration validator checks passed")
 '''
 

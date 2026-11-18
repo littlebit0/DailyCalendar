@@ -148,7 +148,7 @@ def main():
                 'srchOpenShtm': f'U00020000{args.semester}U000300001', 'srchCptnCorsFg': 'C013300001'})
             subprocess.run(['curl', '-fsS', '--max-time', '30', '--retry', '2', '--retry-delay', '2', URL, '--data', data, '-o', str(path)], check=True)
             time.sleep(0.5)
-        count, courses = parse_page(path.read_text(), args.year, args.semester)
+        count, courses = parse_page(path.read_text(encoding='utf-8'), args.year, args.semester)
         if total is None:
             total = count
         if total != count or len(courses) != min(10, total - (page - 1) * 10):
@@ -165,7 +165,7 @@ def main():
     result = {'schemaVersion': 1, 'universityId': 'snu', 'campus': 'main', 'academicYear': args.year,
         'semester': str(args.semester), 'publishedDate': args.fetched_date, 'sourceUrl': URL,
         'courses': list(all_courses.values())}
-    args.output.write_text(json.dumps(result, ensure_ascii=False, separators=(',', ':')) + '\n')
+    args.output.write_text(json.dumps(result, ensure_ascii=False, separators=(',', ':')) + '\n', encoding='utf-8')
     print(f'Complete: {total} SNU undergraduate courses', flush=True)
 
 

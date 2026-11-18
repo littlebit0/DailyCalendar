@@ -5680,6 +5680,65 @@ void main() {
   );
 
   testWidgets(
+    'resume during a pending sync restore retry reschedules the retries',
+    (tester) async {
+      SharedPreferences.setMockInitialValues({'onboardingCompleted': true});
+      final settingsRepository = SettingsRepository(
+        preferences: await SharedPreferences.getInstance(),
+      );
+      await settingsRepository.saveGoogleAccount(
+        const GoogleAccount(email: 'restored@example.com'),
+      );
+      final authService = _TimedOutRestoreAuthService();
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            universityRegionsProvider.overrideWith(
+              (ref) async => UniversityRegions.fromJson(
+                jsonDecode(
+                      File(
+                        'assets/academic/university_regions.json',
+                      ).readAsStringSync(),
+                    )
+                    as Map<String, dynamic>,
+              ),
+            ),
+            settingsRepositoryProvider.overrideWithValue(settingsRepository),
+            notificationServiceProvider.overrideWithValue(_FakeNotification()),
+            syncServiceProvider.overrideWithValue(_FakeSync()),
+            eventRepositoryProvider.overrideWithValue(_FakeEventRepository()),
+            googleDriveAuthServiceProvider.overrideWithValue(authService),
+          ],
+          child: const DailyApp(),
+        ),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+      expect(authService.restorePreviousSignInCalls, 1);
+
+      // The 1s retry is pending; background and return before it fires.
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+      expect(authService.restorePreviousSignInCalls, 2);
+
+      // The resume attempt failed too, so 1s/3s/8s retries run again.
+      await tester.pump(const Duration(seconds: 1));
+      expect(authService.restorePreviousSignInCalls, 3);
+      await tester.pump(const Duration(seconds: 3));
+      expect(authService.restorePreviousSignInCalls, 4);
+      await tester.pump(const Duration(seconds: 8));
+      expect(authService.restorePreviousSignInCalls, 5);
+      await tester.pump(const Duration(seconds: 30));
+      expect(authService.restorePreviousSignInCalls, 5);
+
+      await tester.pumpWidget(const SizedBox.shrink());
+    },
+  );
+
+  testWidgets(
     'local-first startup keeps calendar visible and resume does not duplicate sync',
     (tester) async {
       SharedPreferences.setMockInitialValues({'onboardingCompleted': true});
@@ -6447,8 +6506,10 @@ void main() {
 
       settingsRepository.releasePendingSave();
       await tester.pump();
-      expect(saveError, isA<StateError>());
+      // The failed save is reported on screen (#916), not thrown out of the control.
+      expect(saveError, isNull);
       await tester.pumpAndSettle();
+      expect(find.text('선택을 저장하지 못했습니다. 다시 시도해 주세요.'), findsOneWidget);
       expect(container.read(appSettingsProvider).weekStartsOnMonday, isFalse);
       expect(settingsRepository.load().weekStartsOnMonday, isFalse);
       expect(tester.widget<SwitchListTile>(lunarToggle).value, isFalse);
@@ -6500,6 +6561,41 @@ void main() {
       expect(container.read(appSettingsProvider).showLunarDates, isTrue);
       expect(tester.widget<SwitchListTile>(lunarToggle).value, isTrue);
 
+      await tester.pumpWidget(const SizedBox.shrink());
+      debugDefaultTargetPlatformOverride = null;
+    },
+  );
+
+  testWidgets(
+    'Windows older save failure keeps a newer pending choice on screen (#916)',
+    (tester) async {
+      final (_, settingsRepository) = await _pumpWindowsAppearanceSettings(
+        tester,
+      );
+      final adjacentToggle = find.byKey(
+        const ValueKey('show-adjacent-month-dates-toggle'),
+      );
+      final lunarToggle = find.byKey(const ValueKey('show-lunar-dates-toggle'));
+      expect(tester.widget<SwitchListTile>(lunarToggle).value, isTrue);
+
+      settingsRepository.failNextSave();
+      await tester.tap(adjacentToggle);
+      await tester.pump(const Duration(milliseconds: 240));
+      expect(settingsRepository.saveCalls, 1);
+      await tester.tap(lunarToggle);
+      await tester.pump();
+      expect(tester.widget<SwitchListTile>(lunarToggle).value, isFalse);
+
+      settingsRepository.releasePendingSave();
+      await tester.pump();
+      await tester.pump();
+      expect(find.text('선택을 저장하지 못했습니다. 다시 시도해 주세요.'), findsOneWidget);
+      // The newer lunar choice is still saving and must not flip back.
+      expect(tester.widget<SwitchListTile>(lunarToggle).value, isFalse);
+
+      await tester.pumpAndSettle();
+      expect(settingsRepository.load().showLunarDates, isFalse);
+      expect(tester.widget<SwitchListTile>(lunarToggle).value, isFalse);
       await tester.pumpWidget(const SizedBox.shrink());
       debugDefaultTargetPlatformOverride = null;
     },
@@ -10887,6 +10983,16 @@ class _FakeGoogleDriveAuthService extends GoogleDriveAuthService {
       return null;
     }
     return const {'Authorization': 'Bearer test-token'};
+  }
+}
+
+class _TimedOutRestoreAuthService extends _FakeGoogleDriveAuthService {
+  _TimedOutRestoreAuthService() : super(account: null);
+
+  @override
+  Future<GoogleDriveAccount?> restorePreviousSignIn() async {
+    restorePreviousSignInCalls += 1;
+    throw TimeoutException('offline');
   }
 }
 
