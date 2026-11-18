@@ -1320,7 +1320,9 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                       _GoogleDriveSyncSettings(
                         email: account?.googleAccount?.email,
                         sessionConnected: _googleDriveAccount != null,
-                        busy: _syncBusy,
+                        // Apple sign-in also restores the linked Drive sync;
+                        // account deletion or another sync must not overlap.
+                        busy: accountBusy,
                         message: _syncMessage,
                         onConnect: _connectGoogleDrive,
                         onSync: _syncGoogleDriveNow,
