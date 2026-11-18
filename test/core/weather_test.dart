@@ -167,7 +167,7 @@ void main() {
           fetchedAt: weatherClock,
           region: seoul,
         ),
-        throwsA(anything),
+        throwsStateError,
       );
       expect(
         () => WeatherForecast.parse(

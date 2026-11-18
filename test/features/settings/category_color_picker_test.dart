@@ -111,7 +111,9 @@ void main() {
           scale: 1.5,
         );
         expect(tester.takeException(), isNull);
-        for (final chip in find.byType(ChoiceChip).evaluate()) {
+        final chips = find.byType(ChoiceChip).evaluate();
+        expect(chips, isNotEmpty);
+        for (final chip in chips) {
           final size = tester.getSize(
             find.byElementPredicate((e) => e == chip),
           );

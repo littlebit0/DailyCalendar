@@ -29,12 +29,6 @@ class WindowsNotificationTime64Test(unittest.TestCase):
         self.assertEqual(PLUGIN.count("_scheduleOrThrow("), 3)  # helper + two schedule methods
         self.assertNotIn("_bindings.scheduleNotification(\n      _plugin", PLUGIN)
 
-    def test_post_2038_seconds_need_more_than_32_bits(self):
-        boundary = 2_147_483_647  # 2038-01-19 03:14:07 UTC
-        year_2100 = 4_102_444_800
-        self.assertGreater(year_2100, boundary)
-        self.assertLess(year_2100, 2**63 - 1)
-
 
 if __name__ == "__main__":
     unittest.main()

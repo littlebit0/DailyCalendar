@@ -962,7 +962,7 @@ void main() {
               targetStart: DateTime(2026, 8, 1, 9),
               scope: scope,
             ),
-            throwsA(anything),
+            throwsA(isA<SqliteException>()),
           );
           final all = await repository.allEventsForSync();
           expect(all.length, 1);

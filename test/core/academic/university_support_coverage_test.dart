@@ -35,10 +35,12 @@ void main() {
               as List;
       expect(status['completionClaim'], isFalse);
       expect(status['lmsExpansion'], isFalse);
+      var checked = 0;
       for (final row in rows) {
         if (row['academicCalendar']['status'] != 'implemented_live_verified') {
           continue;
         }
+        checked++;
         final matched = targets.where((t) => t['name'] == row['name']);
         final target = matched.isNotEmpty
             ? matched.single as Map
@@ -85,6 +87,7 @@ void main() {
           }
         }
       }
+      expect(checked, greaterThan(0));
     },
   );
 }
