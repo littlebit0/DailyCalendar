@@ -203,7 +203,7 @@ void main() {
           var date = DateTime.parse(startText as String);
           !date.isAfter(DateTime.parse(endText as String)) &&
               !date.isAfter(DateTime(2026, 12, 13));
-          date = date.add(const Duration(days: 1))
+          date = DateTime(date.year, date.month, date.day + 1)
         ) {
           final day = date.toIso8601String().substring(0, 10);
           if (holidays.contains(day) ||
@@ -477,7 +477,7 @@ void main() {
             var date = DateTime.parse(start);
             !date.isAfter(DateTime.parse(end)) &&
                 !date.isAfter(DateTime(2026, 12, 13));
-            date = date.add(const Duration(days: 1))
+            date = DateTime(date.year, date.month, date.day + 1)
           ) {
             final ds = date.toIso8601String().substring(0, 10);
             if ((calendar['holidays'] as List).contains(ds) ||

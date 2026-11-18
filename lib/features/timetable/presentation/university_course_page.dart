@@ -1379,8 +1379,10 @@ List<TimetableClass> _conflictingClasses(
                   (meeting.date == null ||
                       course.period == null ||
                       course.period!.contains(meeting.teachingDate!)) &&
-                  meeting.startMinute < candidate.endMinute &&
-                  candidate.startMinute < meeting.endMinute,
+                  // Published times decide a collision; the half-hour slot
+                  // values would join lessons that only share a grid row.
+                  meeting.originalStartMinute < candidate.originalEndMinute &&
+                  candidate.originalStartMinute < meeting.originalEndMinute,
             ),
           ),
     )

@@ -39,7 +39,17 @@ class DailyAlarmService : Service() {
             else -> {
                 val alarm = DailyAlarmScheduler.read(this, id)
                 if (alarm == null) {
-                    if (alarms.isEmpty()) stopSelf()
+                    if (alarms.isEmpty()) {
+                        // The receiver used startForegroundService(); the system kills the
+                        // app unless startForeground() answers it, even for an alarm that
+                        // was cancelled in between (#877).
+                        startForeground(NOTIFICATION_ID, NotificationCompat.Builder(this, DailyAlarmScheduler.CHANNEL)
+                            .setSmallIcon(R.drawable.ic_alarm_notification)
+                            .setContentTitle(getString(R.string.event_alarm))
+                            .build())
+                        stopForeground(STOP_FOREGROUND_REMOVE)
+                        stopSelf()
+                    }
                     return START_NOT_STICKY
                 }
                 alarms[id] = alarm
@@ -60,7 +70,8 @@ class DailyAlarmService : Service() {
         .setOngoing(true)
         .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
         .setContentIntent(DailyAlarmScheduler.showIntent(this, alarm.id))
-        .setFullScreenIntent(DailyAlarmScheduler.showIntent(this, alarm.id), true)
+        // Without the full-screen permission (Android 14+) it stays a plain alarm notification (#840).
+        .apply { if (DailyAlarmScheduler.fullScreenAllowed(this@DailyAlarmService)) setFullScreenIntent(DailyAlarmScheduler.showIntent(this@DailyAlarmService, alarm.id), true) }
         .addAction(0, getString(R.string.alarm_stop), actionIntent(alarm.id, DailyAlarmScheduler.STOP))
         .addAction(0, getString(R.string.alarm_snooze, alarm.snoozeMinutes), actionIntent(alarm.id, DailyAlarmScheduler.SNOOZE))
         .build()
@@ -74,7 +85,8 @@ class DailyAlarmService : Service() {
     )
 
     private fun startSound() {
-        wakeLock = getSystemService(PowerManager::class.java)
+        // A retry after failed playback must not orphan the held lock (#877).
+        if (wakeLock?.isHeld != true) wakeLock = getSystemService(PowerManager::class.java)
             .newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "$packageName:EventAlarm")
             .apply { acquire(10 * 60 * 1000L) }
         val attributes = AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_ALARM)
@@ -135,6 +147,7 @@ class DailyAlarmService : Service() {
     companion object {
         private const val NOTIFICATION_ID = 0xDA11
         private var active: DailyAlarmService? = null
+        internal fun ringing(id: String) = active?.alarms?.containsKey(id) == true
         internal fun stopEvent(context: android.content.Context, id: String) {
             active?.remove(id, false)
             context.sendBroadcast(Intent(DailyAlarmScheduler.CLOSED).setPackage(context.packageName).putExtra(DailyAlarmScheduler.EVENT_ID, id))

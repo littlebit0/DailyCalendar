@@ -104,12 +104,29 @@ def main(bundle, package):
             assert timer_state == 'masked', 'Preserve explicit administrator masking'
             run("sudo", "systemctl", "unmask", "dailycalendar-update.timer")
             assert subprocess.run(["systemctl", "is-enabled", "dailycalendar-update.timer"]).returncode != 0
+            # Reinstalling after "remove" must bring the enabled timer back (#879).
+            # A started timer can run the updater at once; stop it so it never
+            # holds the dpkg lock against the next apt-get call.
+            run("sudo", "systemctl", "enable", "--now", "dailycalendar-update.timer")
+            run("sudo", "systemctl", "stop", "dailycalendar-update.service")
+            run("sudo", "apt-get", "remove", "-y", "dailycalendar")
+            run("sudo", "apt-get", "install", "-y", "--no-install-recommends", str(archive / package.name))
+            run("sudo", "systemctl", "stop", "dailycalendar-update.service")
+            for query in ("is-enabled", "is-active"):
+                assert subprocess.run(["systemctl", query, "dailycalendar-update.timer"]).returncode == 0, query
+            run("sudo", "systemctl", "mask", "dailycalendar-update.timer")
+            run("sudo", "apt-get", "remove", "-y", "dailycalendar")
+            run("sudo", "apt-get", "install", "-y", "--no-install-recommends", str(archive / package.name))
+            assert subprocess.run(["systemctl", "is-enabled", "dailycalendar-update.timer"],
+                                  capture_output=True, text=True).stdout.strip() == 'masked'
+            run("sudo", "systemctl", "unmask", "dailycalendar-update.timer")
             run("sudo", "apt-get", "remove", "-y", "dailycalendar")
             assert hashlib.sha256(marker.read_bytes()).hexdigest() == before
             assert pathlib.Path('/usr/share/keyrings/dailycalendar-archive-keyring.asc').exists()
             run("sudo", "apt-get", "purge", "-y", "dailycalendar")
             assert not pathlib.Path('/etc/apt/sources.list.d/dailycalendar.sources').exists()
             assert not pathlib.Path('/usr/share/keyrings/dailycalendar-archive-keyring.asc').exists()
+            assert not os.path.lexists('/etc/systemd/system/timers.target.wants/dailycalendar-update.timer')
             assert hashlib.sha256(marker.read_bytes()).hexdigest() == before
             print("PASS: signed install/upgrade, bad signature rejection, active-app deferral, hold, disabled timer and user-file preservation. App not launched.")
         finally:

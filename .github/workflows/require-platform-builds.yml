@@ -1,0 +1,33 @@
+name: Require Platform Builds
+
+# Release workflows call this first: a tag whose commit did not pass
+# Platform Builds must not produce installers or a draft release.
+on:
+  workflow_call:
+    inputs:
+      tag:
+        description: "Release tag to verify, for example v3.5.2"
+        required: true
+        type: string
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  verify:
+    name: Platform Builds passed for the tag
+    runs-on: ubuntu-latest
+    steps:
+      # The script comes from the ref the release workflow runs from, not from
+      # the tag, so an older tag is checked by the current rule.
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: tool/require_platform_builds.sh
+          sparse-checkout-cone-mode: false
+      - name: Check the latest Platform Builds run of the tag commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          RELEASE_TAG: ${{ inputs.tag }}
+        run: bash tool/require_platform_builds.sh "$REPO" "$RELEASE_TAG"

@@ -5,6 +5,13 @@ import 'package:intl/intl.dart';
 import '../../../core/localization/app_localizations.dart';
 import '../../../core/theme/daily_ui.dart';
 
+const _channel = MethodChannel('daily/siri_logs');
+
+/// Deletes the Siri activity log (event titles, memos, places) kept in the
+/// App Group on iOS and macOS.
+Future<void> clearSiriActivityLogs() =>
+    _channel.invokeMethod<void>('clearLogs');
+
 class SiriActivityLogPage extends StatefulWidget {
   const SiriActivityLogPage({super.key});
 
@@ -13,8 +20,6 @@ class SiriActivityLogPage extends StatefulWidget {
 }
 
 class _SiriActivityLogPageState extends State<SiriActivityLogPage> {
-  static const _channel = MethodChannel('daily/siri_logs');
-
   var _logs = const <_SiriActivityLog>[];
   var _loading = true;
   DateTime? _selectedDate;
@@ -163,7 +168,12 @@ class _SiriActivityLogPageState extends State<SiriActivityLogPage> {
       ),
     );
     if (confirmed != true) return;
-    await _channel.invokeMethod<void>('clearLogs');
+    try {
+      await clearSiriActivityLogs();
+    } on PlatformException {
+      // The file is still there, so the list keeps showing it.
+      return;
+    }
     if (!mounted) return;
     setState(() {
       _logs = const [];
@@ -223,15 +233,9 @@ class _SiriActivityLogPageState extends State<SiriActivityLogPage> {
                         value: dateFormat.format(log.occurredAt),
                       ),
                       if (log.summary.isNotEmpty)
-                        _DetailRow(
-                          label: context.tr('요약'),
-                          value: log.summary,
-                        ),
+                        _DetailRow(label: context.tr('요약'), value: log.summary),
                       if (log.result.isNotEmpty)
-                        _DetailRow(
-                          label: context.tr('결과'),
-                          value: log.result,
-                        ),
+                        _DetailRow(label: context.tr('결과'), value: log.result),
                       if ((log.details['title'] ?? '').isNotEmpty)
                         _DetailRow(
                           label: context.tr('제목'),

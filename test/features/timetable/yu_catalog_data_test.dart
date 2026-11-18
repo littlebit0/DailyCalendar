@@ -101,7 +101,7 @@ void main() {
         for (
           var d = start;
           !d.isAfter(DateTime(2026, 12, 7));
-          d = d.add(const Duration(days: 1))
+          d = DateTime(d.year, d.month, d.day + 1)
         ) {
           final date = d.toIso8601String().substring(0, 10);
           if (['2026-10-03', '2026-10-05', '2026-10-09'].contains(date) ||

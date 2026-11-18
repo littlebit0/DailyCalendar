@@ -135,4 +135,29 @@ void main() {
       );
     }
   });
+
+  test('Changwon timed row fails only inside the requested year', () {
+    List<dynamic> rows(String year) {
+      final rows = jsonDecode(fixture(2026, '03')) as List;
+      final timed = Map<String, dynamic>.of(
+        rows.firstWhere((r) => r['schdulSeq'] == 'portal')
+            as Map<String, dynamic>,
+      );
+      timed
+        ..['scheno'] = 99999999
+        ..['bgnde'] = '$year/03/03'
+        ..['endde'] = '$year/03/03'
+        ..['alldayAt'] = 'N';
+      return rows..add(timed);
+    }
+
+    expect(
+      ChangwonAcademicSource.parse(jsonEncode(rows('2024')), 2026),
+      hasLength(ChangwonAcademicSource.parse(fixture(2026, '03'), 2026).length),
+    );
+    expect(
+      () => ChangwonAcademicSource.parse(jsonEncode(rows('2026')), 2026),
+      throwsFormatException,
+    );
+  });
 }

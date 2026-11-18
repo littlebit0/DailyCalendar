@@ -55,7 +55,7 @@ Dates are Korean forecast dates, even when the device timezone is elsewhere.
 - iOS uses When In Use permission; Android requests coarse location only.
   macOS adds the sandbox location entitlement. No background-location service,
   persistent tracking, analytics event or server location history is added.
-- Windows uses the geolocator plugin and MSIX location capability.
+- Windows uses the geolocator plugin.
 - Linux uses GeoClue with `com.littlebit0.daily`, matching the installed desktop
   file. Automatic refresh requires an existing location permission-store grant.
   Desktops unable to expose that grant require an explicit Retry for location;
