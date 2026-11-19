@@ -15,6 +15,7 @@ import '../../../core/settings/app_settings.dart';
 import '../../../core/theme/calendar_date_color.dart';
 import '../../../core/theme/daily_ui.dart';
 import '../../../core/theme/event_completion_style.dart';
+import '../../../core/time/calendar_clock.dart';
 import '../../../core/weather/weather_widgets.dart';
 import '../../events/domain/calendar_event.dart';
 import '../../events/presentation/event_completion_action.dart';
@@ -974,7 +975,10 @@ class _WeekRowState extends State<_WeekRow> {
                                 _sameDay(day, widget.selectedDate),
                             rangeHighlighted:
                                 showContent && _inSelectedRange(day),
-                            today: _sameDay(day, DateTime.now()),
+                            today: _sameDay(
+                              day,
+                              CalendarClock.todayOf(context),
+                            ),
                             holiday: widget.holidayDays.contains(
                               _dayStart(day),
                             ),
@@ -1757,7 +1761,9 @@ class _EventSpanFlag extends StatelessWidget {
         event.startAt.year == segmentStart.year &&
         event.startAt.month == segmentStart.month &&
         event.startAt.day == segmentStart.day;
-    final prefix = event.showDday && !compact ? '${_formatDday(event)}  ' : '';
+    final prefix = event.showDday && !compact
+        ? '${_formatDday(event, CalendarClock.todayOf(context))}  '
+        : '';
     final suffix = showStartTime
         ? '  ${calendarTimeLabel(event.startAt, locale: Localizations.localeOf(context).toLanguageTag(), use24HourTime: use24HourTime)}'
         : '';
@@ -1859,9 +1865,7 @@ class _EventSpanFlag extends StatelessWidget {
     return shiftCalendarDateByDays(segmentStart, dayIndex);
   }
 
-  String _formatDday(CalendarEvent event) {
-    final now = DateTime.now();
-    final today = DateTime(now.year, now.month, now.day);
+  String _formatDday(CalendarEvent event, DateTime today) {
     final target = DateTime(
       event.startAt.year,
       event.startAt.month,

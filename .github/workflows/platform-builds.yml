@@ -81,6 +81,7 @@ jobs:
           TZ: America/New_York
         run: >-
           flutter test --no-pub
+          test/core/calendar_clock_test.dart
           test/core/calendar_event_movement_test.dart
           test/core/calendar_event_span_test.dart
           test/core/calendar_import/google_calendar_source_test.dart

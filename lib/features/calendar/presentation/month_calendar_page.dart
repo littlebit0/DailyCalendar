@@ -13,6 +13,7 @@ import 'package:flutter_riverpod/legacy.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/weather/weather_widgets.dart';
+import '../../../core/time/calendar_clock.dart';
 import '../../../core/di/app_providers.dart';
 import '../../../core/lms/lms_controller.dart';
 import '../../../core/lms/lms_sync_service.dart';
@@ -7472,7 +7473,7 @@ class _MiniMonthCalendar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final now = DateTime.now();
+    final today = CalendarClock.todayOf(context);
     final theme = Theme.of(context);
     final colorScheme = Theme.of(context).colorScheme;
     final locale = Localizations.localeOf(context).toLanguageTag();
@@ -7497,7 +7498,7 @@ class _MiniMonthCalendar extends StatelessWidget {
                 weekStartsOnMonday: weekStartsOnMonday,
               ),
               weekStartsOnMonday: weekStartsOnMonday,
-              today: DateTime(now.year, now.month, now.day),
+              today: today,
               textDirection: Directionality.of(context),
               textScaler: MediaQuery.textScalerOf(context),
               monthStyle: (theme.textTheme.labelLarge ?? const TextStyle())

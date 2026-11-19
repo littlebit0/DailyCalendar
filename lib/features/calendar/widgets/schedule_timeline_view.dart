@@ -14,6 +14,7 @@ import '../../../core/settings/app_settings.dart';
 import '../../../core/theme/daily_ui.dart';
 import '../../../core/theme/calendar_date_color.dart';
 import '../../../core/theme/event_completion_style.dart';
+import '../../../core/time/calendar_clock.dart';
 import '../../../core/weather/weather_widgets.dart';
 import '../../../core/widgets/smooth_mouse_wheel_scroll_controller.dart';
 import '../../events/domain/calendar_event.dart';
@@ -440,7 +441,11 @@ class _ScheduleDayHeader extends StatelessWidget {
                           style: Theme.of(context).textTheme.labelMedium
                               ?.copyWith(
                                 color: _dayColor(day, scheme),
-                                fontWeight: _isSameDay(day, DateTime.now())
+                                fontWeight:
+                                    _isSameDay(
+                                      day,
+                                      CalendarClock.todayOf(context),
+                                    )
                                     ? FontWeight.w700
                                     : FontWeight.w500,
                               ),
@@ -996,7 +1001,9 @@ class _ScheduleTimeGrid extends StatelessWidget {
                         days[entry.key],
                         hidden: true,
                       ),
-              if (days.any((day) => _isSameDay(day, DateTime.now())))
+              if (days.any(
+                (day) => _isSameDay(day, CalendarClock.todayOf(context)),
+              ))
                 _buildCurrentTimeIndicator(
                   context,
                   days,
@@ -1123,32 +1130,44 @@ class _ScheduleTimeGrid extends StatelessWidget {
     double gutterWidth,
     double dayWidth,
   ) {
-    final now = DateTime.now();
-    final dayIndex = days.indexWhere((day) => _isSameDay(day, now));
-    final top = (now.hour * 60 + now.minute) / 60 * _hourHeight;
-    return Positioned(
-      left: gutterWidth + dayWidth * dayIndex,
-      top: top,
-      width: dayWidth,
-      child: Row(
-        children: [
-          Container(
-            width: 7,
-            height: 7,
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.error,
-              shape: BoxShape.circle,
-            ),
+    return CalendarMinuteTicker(
+      builder: (context, now) {
+        final dayIndex = days.indexWhere((day) => _isSameDay(day, now));
+        if (dayIndex < 0) {
+          // The minute tick can land just before the midnight rebuild.
+          return const SizedBox.shrink();
+        }
+        final top = (now.hour * 60 + now.minute) / 60 * _hourHeight;
+        return Positioned(
+          left: gutterWidth + dayWidth * dayIndex,
+          top: top,
+          width: dayWidth,
+          child: _currentTimeLine(context),
+        );
+      },
+    );
+  }
+
+  Widget _currentTimeLine(BuildContext context) {
+    return Row(
+      key: const ValueKey('schedule-current-time-indicator'),
+      children: [
+        Container(
+          width: 7,
+          height: 7,
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.error,
+            shape: BoxShape.circle,
           ),
-          Expanded(
-            child: Divider(
-              height: 1,
-              thickness: 1.5,
-              color: Theme.of(context).colorScheme.error,
-            ),
+        ),
+        Expanded(
+          child: Divider(
+            height: 1,
+            thickness: 1.5,
+            color: Theme.of(context).colorScheme.error,
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 

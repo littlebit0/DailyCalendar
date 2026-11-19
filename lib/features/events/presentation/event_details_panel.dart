@@ -21,6 +21,7 @@ import '../../../core/theme/event_completion_style.dart';
 import '../../../core/theme/calendar_date_color.dart';
 import '../../../core/theme/daily_ui.dart';
 import '../../../core/weather/weather_widgets.dart';
+import '../../../core/time/calendar_clock.dart';
 import '../../calendar/widgets/calendar_event_drag_layer.dart';
 import '../application/event_command_service.dart';
 import '../domain/calendar_event.dart';
@@ -1221,7 +1222,10 @@ class _EventTile extends StatelessWidget {
                               LmsEventStatus(metadata: event.lms!),
                             if (event.showDday)
                               Text(
-                                _formatDday(event),
+                                _formatDday(
+                                  event,
+                                  CalendarClock.todayOf(context),
+                                ),
                                 style: calendarEventCompletionStyle(
                                   context,
                                   Theme.of(context).textTheme.labelMedium
@@ -1356,9 +1360,7 @@ class _EventTile extends StatelessWidget {
     return '${dateFormatter.format(event.startAt)} ${timeFormatter.format(event.startAt)} - ${dateFormatter.format(event.endAt)} ${timeFormatter.format(event.endAt)}';
   }
 
-  String _formatDday(CalendarEvent event) {
-    final today = DateTime.now();
-    final base = DateTime(today.year, today.month, today.day);
+  String _formatDday(CalendarEvent event, DateTime base) {
     final target = DateTime(
       event.startAt.year,
       event.startAt.month,
@@ -1559,7 +1561,7 @@ class _EventDetailSheetState extends ConsumerState<_EventDetailSheet> {
               _DetailRow(
                 icon: Icons.flag_outlined,
                 label: 'D-day',
-                value: _formatDday(event),
+                value: _formatDday(event, CalendarClock.todayOf(context)),
               ),
             if ((event.location?.trim().isEmpty ?? true) &&
                 (event.weather?.trim().isEmpty ?? true) &&
@@ -1678,9 +1680,7 @@ class _EventDetailSheetState extends ConsumerState<_EventDetailSheet> {
         '${dateFormatter.format(event.endAt)} ${timeFormatter.format(event.endAt)}';
   }
 
-  String _formatDday(CalendarEvent event) {
-    final now = DateTime.now();
-    final today = DateTime(now.year, now.month, now.day);
+  String _formatDday(CalendarEvent event, DateTime today) {
     final target = DateTime(
       event.startAt.year,
       event.startAt.month,
