@@ -5011,7 +5011,7 @@
         "verification": "Two annual POST requests; all59 numeric full periods match monthly layers independently. Two focused tests passed."
       },
       "timetable": {
-        "status": "temporarily_unsupported",
+        "status": "implemented_partial_catalog",
         "universityId": "chosun",
         "courses": 135,
         "scheduled": 96,
