@@ -72,7 +72,6 @@ class UniversitySupportPolicy {
     'skku',
     'sku',
     'sogang',
-    'sookmyung',
     'ssu',
     'sungkyul',
     'sungshin',
