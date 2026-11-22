@@ -116,9 +116,9 @@ void main() {
         hasLength(22),
       );
       expect(byStatus, {
-        'scheduled': 3647,
+        'scheduled': 3703,
         'unscheduled': 137,
-        'unrecognized': 97,
+        'unrecognized': 41,
       });
       // Held: weeks-only intensive GLOCAL rows and Seoul's literal period 00.
       for (final c in courses.where(
@@ -134,8 +134,15 @@ void main() {
         );
       }
       final approved = courses.where((c) => c.hasSchedulableMeetings).toList();
+      // 집중이수 rows are scheduled only within the weeks their public syllabus confirms.
+      final intensive = approved.where((c) => c.remarks.contains('집중이수제: '));
+      expect(intensive, hasLength(56));
+      for (final c in intensive) {
+        expect(c.campus, 'glocal');
+        expect(c.remarks.contains('공개 강의계획서'), isTrue);
+        expect(c.period, isNotNull);
+      }
       for (final c in approved) {
-        expect(c.remarks.contains('집중이수제: '), isFalse);
         expect(
           [
             for (final m in c.meetings)
@@ -145,7 +152,7 @@ void main() {
           reason: c.sourceId,
         );
       }
-      expect(approved.expand((c) => c.meetings), hasLength(4844));
+      expect(approved.expand((c) => c.meetings), hasLength(4900));
       for (final mode in [
         LectureMode.inPerson,
         LectureMode.liveOnline,
