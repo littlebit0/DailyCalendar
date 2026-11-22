@@ -18,9 +18,9 @@ void main() {
       );
       expect(
         data.courses.where((c) => c.hasSchedulableMeetings),
-        hasLength(1309),
+        hasLength(1311),
       );
-      expect(data.courses.expand((c) => c.meetings), hasLength(21141));
+      expect(data.courses.expand((c) => c.meetings), hasLength(21145));
       final c = data.courses.singleWhere(
         (c) => c.codeAndSection == 'AIE4011-01',
       );

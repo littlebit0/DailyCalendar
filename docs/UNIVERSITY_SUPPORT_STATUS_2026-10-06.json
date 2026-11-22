@@ -3178,7 +3178,7 @@
         "suspensionEvidence": "work/university-support-suspension-20261012/support-decisions.json",
         "productionIntegrationEnabled": true,
         "reopenedDate": "2026-11-22",
-        "reopenNote": "기존 자산으로 재개. 시각 미확정(unrecognized) 강좌는 검색에 보이되 추가 불가로 유지, 시각을 추측하지 않음. 전체 운영 검증은 아님."
+        "reopenNote": "기존 자산으로 재개. 시각 미확정(unrecognized) 강좌는 검색에 보이되 추가 불가로 유지, 시각을 추측하지 않음. 전체 운영 검증은 아님. 2026-11-23: COR1007-06·07(대면 1박2일 합숙형, 11/21~11/22)을 공개 조회 비고 원문으로 날짜 일정 확정(unrecognized 186)."
       },
       "installedAcceptance": "macos_build_signature_install_verified_ui_not_run",
       "deferredAsImpossible": false,

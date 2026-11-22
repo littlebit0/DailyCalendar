@@ -128,7 +128,7 @@ void main() {
     expect(raw['publishedExamAppointmentOnlyAdditionCount'], 392);
     expect(
       courses.where((c) => c['scheduleStatus'] == 'unrecognized'),
-      hasLength(188),
+      hasLength(186),
     );
   });
 
