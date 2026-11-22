@@ -35,7 +35,6 @@ class UniversitySupportPolicy {
     'iccu',
     'inje',
     'inu',
-    'jbnu',
     'jeju',
     'jnu',
     'jnue',
