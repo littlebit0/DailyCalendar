@@ -685,7 +685,7 @@
         "sourceUrl": "https://www.kmu.ac.kr/uni/main/page.jsp?mnu_uid=3373"
       },
       "timetable": {
-        "status": "temporarily_unsupported",
+        "status": "implemented_catalog_partial",
         "universityId": "kmu",
         "campuses": [
           "seongseo",

@@ -45,7 +45,6 @@ class UniversitySupportPolicy {
     'kau',
     'khu',
     'kmou',
-    'kmu',
     'knu',
     'knue',
     'kongju',
