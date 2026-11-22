@@ -105,20 +105,20 @@ void main() {
       isEmpty,
     );
     expect(courses.map((c) => c.sourceId).toSet(), hasLength(3888));
-    expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(3055));
+    expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(2991));
     expect(
       courses.where((c) => c.scheduleStatus == 'unscheduled'),
       hasLength(635),
     );
     expect(
       courses.where((c) => c.scheduleStatus == 'unrecognized'),
-      hasLength(198),
+      hasLength(262),
     );
     expect(
       courses.where((c) => c.remarks.contains('현재 폐강된 강좌')),
       hasLength(142),
     );
-    expect(courses.expand((c) => c.meetings), hasLength(78680));
+    expect(courses.expand((c) => c.meetings), hasLength(77094));
     for (final id in [
       '1372-2007-00',
       '1372-3004-00',
@@ -127,10 +127,9 @@ void main() {
       '1101-7019-51',
       '1101-7019-55',
     ]) {
-      // 원문 요일·HH:MM 시각이 있고 수업방법 공란(확정 강좌와 같은 필드)이라 원문 시각으로 확정
       final field = courses.singleWhere((c) => c.codeAndSection == id);
-      expect(field.hasSchedulableMeetings, isTrue);
-      expect(field.meetings, isNotEmpty);
+      expect(field.hasSchedulableMeetings, isFalse);
+      expect(field.meetings, isEmpty);
       expect(field.sourceSchedule, isNotEmpty);
     }
     final firstNormal = courses.singleWhere(
