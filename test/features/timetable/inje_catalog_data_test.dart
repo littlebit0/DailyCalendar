@@ -46,8 +46,8 @@ void main() {
         "수업계획서 출력 서버 오류(XML 대신 'AA문자열이나 이진 데이터는 잘립니다.' 응답)": 3,
       });
       expect(dataset.courses.every((c) => c.meetings.isEmpty), true);
-      // Timetable search stays suspended while clock times are unresolved.
-      expect(UniversitySupportPolicy.timetableAvailable('inje'), false);
+      // Search is open; courses without a confirmed clock stay unaddable.
+      expect(UniversitySupportPolicy.timetableAvailable('inje'), true);
     },
   );
 }

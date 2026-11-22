@@ -319,7 +319,7 @@ class AcademicProfile {
     };
     if (campusId != null && !allowed.contains(campusId)) return null;
     return switch ((timetableUniversity, selectedCampusId)) {
-      ('inje', 'academyinfo:0000166') => null,
+      ('inje', 'academyinfo:0000166') => 'unknown',
       ('inje', _) => 'gimhae',
       ('hongik', 'academyinfo:0002949') => 'sejong',
       ('hongik', _) => 'seoul',

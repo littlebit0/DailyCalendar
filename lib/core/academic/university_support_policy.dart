@@ -33,7 +33,6 @@ class UniversitySupportPolicy {
     'hufs',
     'hyupsung',
     'iccu',
-    'inje',
     'inu',
     'jbnu',
     'jeju',
