@@ -87,7 +87,6 @@ class UniversitySupportPolicy {
     'ut',
     'wsu',
     'yongin',
-    'yonsei',
     'yu',
     'deu',
     'snue',
