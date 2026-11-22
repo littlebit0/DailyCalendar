@@ -62,7 +62,6 @@ class UniversitySupportPolicy {
     'mokpo',
     'nambu',
     'nsu',
-    'pcu',
     'pknu',
     'postech',
     'sangji',

@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:daily/core/academic/university_support_policy.dart';
 import 'package:daily/features/timetable/data/course_organization_directory.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -103,12 +102,6 @@ void main() {
     expect(
       courses.where((c) => c.offeringOrganizations.isNotEmpty),
       hasLength(1258),
-    );
-
-    // Times still waiting for a user decision keep search suspended.
-    expect(
-      UniversitySupportPolicy.suspendedTimetableUniversities,
-      contains('pcu'),
     );
   });
 }
