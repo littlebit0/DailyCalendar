@@ -767,7 +767,7 @@
         "campusEvidence": "Sejong official 2026-08-26 revision notice links common undergraduate registrar calendar. All66 Feb-Dec2026 rows of attached revised integrated XLS match public monthly dates/titles exactly; January adds2 events. Annual view lacks duration endpoints and is not used."
       },
       "timetable": {
-        "status": "temporarily_unsupported",
+        "status": "implemented_catalog_partial",
         "universityId": "korea",
         "courses": 5339,
         "scheduled": 4173,

@@ -51,7 +51,6 @@ class UniversitySupportPolicy {
     'kongju',
     'konkuk',
     'kookmin',
-    'korea',
     'koreatech',
     'kumoh',
     'kunsan',
