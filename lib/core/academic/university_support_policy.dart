@@ -6,7 +6,6 @@ class UniversitySupportPolicy {
     'baekseok',
     'bnue',
     'catholic',
-    'cbnu',
     'changwon',
     'chosun',
     'cje',
