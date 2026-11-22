@@ -6145,7 +6145,7 @@
         "events2026": 45
       },
       "timetable": {
-        "status": "temporarily_unsupported",
+        "status": "implemented_partial_catalog",
         "universityId": "kau",
         "courses": 83,
         "scheduled": 22,
