@@ -77,7 +77,6 @@ class UniversitySupportPolicy {
     'sungkyul',
     'sungshin',
     'sunmoon',
-    'suwon',
     'swu',
     'syu',
     'tuk',

@@ -32,8 +32,8 @@ void main() {
     });
     expect(
       UniversitySupportPolicy.timetableAvailable('suwon'),
-      isFalse,
-      reason: '368 unrecognized and 6 partially scheduled courses remain',
+      isTrue,
+      reason: 'unrecognized rows stay searchable as source text only',
     );
   });
 
