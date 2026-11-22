@@ -411,7 +411,7 @@
         "sourceUrl": "https://www.knu.ac.kr/wbbs/wbbs/user/yearSchedule/index.action?menu_idx=43&vo.search_year=2026"
       },
       "timetable": {
-        "status": "temporarily_unsupported",
+        "status": "implemented_catalog_partial",
         "sourceId": "knu",
         "courseCount": 3847,
         "scheduledCourses": 3602,

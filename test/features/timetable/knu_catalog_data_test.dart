@@ -31,7 +31,7 @@ void main() {
       expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(3607));
       expect(
         courses.where((c) => c.scheduleStatus == 'unrecognized'),
-        hasLength(240),
+        hasLength(115),
       );
       for (final id in [
         'TCHR0601-001',
@@ -44,7 +44,12 @@ void main() {
       for (final c in courses) {
         if (!c.hasSchedulableMeetings) {
           expect(c.meetings, isEmpty);
-          expect(c.departmentRemarks.values.join('\n'), contains('시간표 추가 불가'));
+          expect(
+            c.departmentRemarks.values.join('\n'),
+            contains(
+              c.scheduleStatus == 'unscheduled' ? '요일·시각 미게시' : '시간표 추가 불가',
+            ),
+          );
         } else {
           final saved = c.toTimetable(
             id: c.sourceId,

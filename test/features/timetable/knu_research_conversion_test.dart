@@ -55,7 +55,11 @@ void main() {
     expect(courses.where((c) => !c.hasSchedulableMeetings), hasLength(240));
     for (final course in courses) {
       if (!course.hasSchedulableMeetings) {
-        expect(course.scheduleStatus, 'unrecognized');
+        // Rows whose official timetable cell is empty are time-unpublished.
+        expect(
+          course.scheduleStatus,
+          course.sourceSchedule.trim().isEmpty ? 'unscheduled' : 'unrecognized',
+        );
         continue;
       }
       final saved = course.toTimetable(
