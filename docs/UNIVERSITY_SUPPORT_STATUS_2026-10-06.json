@@ -18,7 +18,7 @@
         "events2026": 55
       },
       "timetable": {
-        "status": "temporarily_unsupported",
+        "status": "implemented_catalog_partial",
         "checkedAt": "2026-10-08",
         "universityId": "gachon",
         "courses": 3809,
