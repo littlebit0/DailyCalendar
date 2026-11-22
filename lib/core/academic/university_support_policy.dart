@@ -50,7 +50,6 @@ class UniversitySupportPolicy {
     'knue',
     'kongju',
     'konkuk',
-    'kookmin',
     'korea',
     'koreatech',
     'kumoh',
