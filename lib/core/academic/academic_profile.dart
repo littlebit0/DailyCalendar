@@ -122,6 +122,7 @@ class AcademicProfile {
     'academyinfo:0000109' ||
     'academyinfo:0000111' => 'mju',
     'institution:academyinfo:0000121' || 'academyinfo:0000121' => 'sku',
+    'institution:academyinfo:0000107' || 'academyinfo:0000107' => 'deu',
     'institution:academyinfo:0000116' || 'academyinfo:0000116' => 'syu',
     'institution:academyinfo:0000105' || 'academyinfo:0000105' => 'donga',
     'institution:academyinfo:0000149' ||
@@ -250,6 +251,7 @@ class AcademicProfile {
 
       'mju' => const ['academyinfo:0000109', 'academyinfo:0000111'],
       'sku' => const ['academyinfo:0000121'],
+      'deu' => const ['academyinfo:0000107'],
       'syu' => const ['academyinfo:0000116'],
       'donga' => const ['academyinfo:0000105'],
       'yonsei' => const ['academyinfo:0000149', 'academyinfo:0000150'],
@@ -367,6 +369,7 @@ class AcademicProfile {
       ('mju', 'academyinfo:0000111') => 'natural',
       ('mju', _) => 'humanities',
       ('sku', _) => 'unknown',
+      ('deu', _) => 'main',
       ('syu', _) => 'main',
       ('donga', _) => 'seunghak',
       ('yonsei', 'academyinfo:0000150') => 'mirae',

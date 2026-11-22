@@ -2752,7 +2752,7 @@
         "events2026": 66
       },
       "timetable": {
-        "status": "unsupported",
+        "status": "implemented_partial_catalog",
         "checkedAt": "2026-10-08",
         "currentSourceMetadataAvailable": true,
         "currentRegularClockVerified": false,
@@ -2792,8 +2792,16 @@
         "latestSourceProcessingPass": "work/university-research/resume-20261011/current-packaged-coverage.json",
         "latestSourceEvidence": "work/university-research/resume-20261011/deu/HANDOFF.md",
         "priorImplementationStatus": "investigating",
-        "productionIntegrationEnabled": false,
-        "reason": "No active timetable integration."
+        "productionIntegrationEnabled": true,
+        "reason": "No active timetable integration.",
+        "universityId": "deu",
+        "reopenedDate": "2026-11-22",
+        "courses": 1253,
+        "campuses": [
+          "main"
+        ],
+        "sourceUrl": "https://www.deu.ac.kr/www/gra-notice.do?mode=view&articleNo=88345",
+        "reopenNote": "공개 자료는 1학년 수강과목 PDF 3종(1260강좌, 폐강 7 제외 1253)뿐. 2~4학년 전체 목록은 sugang.deu.ac.kr 로그인 전용. 학부 교시 시각 공식표 미공개라 교시 강좌 1193건은 원문만 표시(추가 불가), 원격 60건은 시간 미정."
       },
       "installedAcceptance": "not_verified",
       "deferredAsImpossible": false,
