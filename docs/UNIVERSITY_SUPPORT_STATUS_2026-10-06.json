@@ -998,7 +998,7 @@
         "events2026": 58
       },
       "timetable": {
-        "status": "temporarily_unsupported",
+        "status": "implemented_catalog_partial",
         "universityId": "kwangwoon",
         "courses": 1261,
         "scheduled": 936,

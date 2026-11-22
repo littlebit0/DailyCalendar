@@ -55,7 +55,6 @@ class UniversitySupportPolicy {
     'koreatech',
     'kumoh',
     'kunsan',
-    'kwangwoon',
     'kyonggi',
     'mju',
     'mmu',
