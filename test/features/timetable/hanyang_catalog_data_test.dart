@@ -1,6 +1,5 @@
 import 'dart:convert';
 import '../../support/source_fixture.dart';
-import '../../support/suspended_assets.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
 import 'package:daily/features/timetable/domain/timetable.dart';
@@ -49,7 +48,7 @@ void main() {
         final raw =
             jsonDecode(
                   File(
-                    '$suspendedAssetRoot/timetable/hanyang-$campus-2026-2.json',
+                    'assets/timetable/hanyang-$campus-2026-2.json',
                   ).readAsStringSync(),
                 )
                 as Map<String, dynamic>;

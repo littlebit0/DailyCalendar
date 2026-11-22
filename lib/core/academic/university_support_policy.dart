@@ -27,7 +27,6 @@ class UniversitySupportPolicy {
     'hanbat',
     'hansei',
     'hansung',
-    'hanyang',
     'hknu',
     'hoseo',
     'hufs',

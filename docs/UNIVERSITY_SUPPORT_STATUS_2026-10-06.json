@@ -6309,7 +6309,7 @@
         }
       },
       "timetable": {
-        "status": "temporarily_unsupported",
+        "status": "implemented_partial_catalog",
         "universityId": "hanyang",
         "courses": 4961,
         "scheduled": 3491,
