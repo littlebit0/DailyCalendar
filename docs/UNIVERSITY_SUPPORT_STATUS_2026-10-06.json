@@ -6057,7 +6057,7 @@
         "events2026": 64
       },
       "timetable": {
-        "status": "temporarily_unsupported",
+        "status": "implemented_partial_catalog",
         "sourceId": "hufs",
         "courseCount": 3372,
         "scheduledCourses": 2481,

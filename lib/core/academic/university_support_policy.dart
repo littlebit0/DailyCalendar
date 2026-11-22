@@ -30,7 +30,6 @@ class UniversitySupportPolicy {
     'hanyang',
     'hknu',
     'hoseo',
-    'hufs',
     'hyupsung',
     'iccu',
     'inje',

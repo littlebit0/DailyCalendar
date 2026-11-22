@@ -20,14 +20,14 @@ void main() {
         {'seoul': 1823, 'global': 1549},
       );
       final courses = data.expand((d) => d.courses).toList();
-      expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(3147));
+      expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(3343));
       expect(
         courses.where((c) => c.scheduleStatus == 'unrecognized'),
-        hasLength(221),
+        hasLength(6),
       );
       expect(
         courses.where((c) => c.scheduleStatus == 'unscheduled'),
-        hasLength(4),
+        hasLength(23),
       );
       for (final key in [
         'A084891-01',
@@ -152,7 +152,8 @@ void main() {
           expect(m.originalStartMinute % 60, 0, reason: course.sourceId);
           expect(m.originalEndMinute % 60, 0, reason: course.sourceId);
           checked++;
-          byDate.putIfAbsent('${m.date}', () => []).add((
+          // 주간 구간(date 없음)은 요일별로 묶는다
+          byDate.putIfAbsent('${m.date ?? 'w'}-${m.weekday}', () => []).add((
             m.originalStartMinute,
             m.originalEndMinute,
             m.classroom,
@@ -171,7 +172,7 @@ void main() {
           }
         }
       }
-      expect(checked, 43820);
+      expect(checked, 46533);
     },
   );
 
@@ -189,7 +190,7 @@ void main() {
         );
         expect(profile.timetableUniversity, 'hufs');
         expect(profile.timetableCampus, 'seoul');
-        expect(profile.timetableSupported, isFalse);
+        expect(profile.timetableSupported, isTrue);
       }
       const wrong = AcademicProfile(
         universityId: 'institution:academyinfo:0000192',
