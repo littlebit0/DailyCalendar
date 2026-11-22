@@ -59,7 +59,6 @@ class UniversitySupportPolicy {
     'kyonggi',
     'mju',
     'mmu',
-    'mokpo',
     'nambu',
     'nsu',
     'pcu',
