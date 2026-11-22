@@ -43,7 +43,6 @@ class UniversitySupportPolicy {
     'kangnam',
     'kangwon',
     'kau',
-    'khu',
     'kmou',
     'kmu',
     'knu',
