@@ -67,7 +67,6 @@ class UniversitySupportPolicy {
     'postech',
     'sangji',
     'sch',
-    'scnu',
     'seoultech',
     'skku',
     'sku',
