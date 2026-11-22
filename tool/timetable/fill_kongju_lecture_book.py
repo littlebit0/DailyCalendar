@@ -100,13 +100,13 @@ def college_for(table):
     return None
 
 
-def main(book_path):
+def main(book_path, datasets=DATASETS, org_path=ORG):
     rows = book_rows(book_path)
-    org = json.loads(ORG.read_text())
+    org = json.loads(Path(org_path).read_text())
     known = {(m['sourceLabel'], m.get('campus')) for m in org['mappings']}
     counts = collections.Counter()
     new_labels = {}
-    for path in DATASETS:
+    for path in map(Path, datasets):
         data = json.loads(path.read_text())
         for c in data['courses']:
             code = c['courseCode'] if len(c['courseCode']) == 9 else c['courseCode'] + c['section']
@@ -138,7 +138,8 @@ def main(book_path):
                 counts['departments'] += 1
                 note.append('개설 학과')
             for dept in c.get('departments') or []:
-                if cls and not (c.get('departmentClassifications') or {}).get(dept):
+                # A department value that is itself a ditto mark is unresolved too.
+                if cls and (c.get('departmentClassifications') or {}).get(dept, '') in ('', *DITTO):
                     c.setdefault('departmentClassifications', {})[dept] = cls
                 if c.get('credits') is not None and dept not in (c.get('departmentCredits') or {}):
                     c.setdefault('departmentCredits', {})[dept] = c['credits']
@@ -162,7 +163,8 @@ def main(book_path):
             'affiliationEvidence': f'공식 홈페이지 학부/대학원 안내의 {college or "본부소속 " + group} 목록과 강의일람표 단원 일치',
         })
         counts['mappings'] += 1
-    ORG.write_text(json.dumps(org, ensure_ascii=False, separators=(',', ':')))
+    Path(org_path).write_text(json.dumps(org, ensure_ascii=False, separators=(',', ':')))
+    return counts
     print(dict(counts))
 
 

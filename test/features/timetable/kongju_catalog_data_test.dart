@@ -1,4 +1,5 @@
 import 'dart:convert';
+import '../../support/file_asset_bundle.dart';
 import '../../support/source_fixture.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:daily/core/academic/academic_profile.dart';
@@ -7,6 +8,49 @@ import 'package:daily/features/timetable/data/timetable_sync_document.dart';
 import 'package:daily/features/timetable/domain/timetable.dart';
 
 void main() {
+  test(
+    'Kongju lecture-book enrichment leaves no ditto mark or ownerless major course',
+    () async {
+      final courses = (await UniversityCatalog.load(
+        bundle: FileAssetBundle(),
+        university: 'kongju',
+      )).expand((d) => d.courses).toList();
+      expect(courses, hasLength(2675));
+      const ditto = {'〃', '″'};
+      for (final c in courses) {
+        expect(
+          ditto.contains(c.sourceClassification),
+          isFalse,
+          reason: c.sourceId,
+        );
+        expect(
+          c.departmentClassifications.values.where(ditto.contains),
+          isEmpty,
+          reason: c.sourceId,
+        );
+        if (c.sourceClassification.startsWith('전')) {
+          expect(c.departments, isNotEmpty, reason: c.sourceId);
+        }
+      }
+      final dittoRow = courses.singleWhere((c) => c.code == '200497201');
+      expect(dittoRow.departmentClassifications.values.toSet(), {
+        dittoRow.sourceClassification,
+      });
+      final contract = courses.singleWhere((c) => c.code == '2005640');
+      expect(contract.sourceClassification, '전선');
+      expect(contract.professor, '임정란');
+      expect(contract.departments, ['생산기계공학과']);
+      expect(
+        courses.where(
+          (c) =>
+              c.sourceClassification.isEmpty &&
+              c.departmentClassifications.values.every((v) => v.isEmpty),
+        ),
+        hasLength(11),
+      );
+    },
+  );
+
   test(
     'Kongju institutional profile uses the published Cheonan scoped dataset',
     () {
