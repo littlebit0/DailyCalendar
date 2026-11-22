@@ -36,7 +36,6 @@ class UniversitySupportPolicy {
     'inje',
     'inu',
     'jbnu',
-    'jeju',
     'jnu',
     'jnue',
     'kaist',
