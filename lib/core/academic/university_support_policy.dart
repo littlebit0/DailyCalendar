@@ -48,7 +48,6 @@ class UniversitySupportPolicy {
     'kmu',
     'knu',
     'knue',
-    'kongju',
     'konkuk',
     'kookmin',
     'korea',
