@@ -80,7 +80,6 @@ class UniversitySupportPolicy {
     'suwon',
     'swu',
     'syu',
-    'tuk',
     'ulsan',
     'unist',
     'uos',
