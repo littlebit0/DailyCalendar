@@ -57,7 +57,6 @@ class UniversitySupportPolicy {
     'kunsan',
     'kwangwoon',
     'kyonggi',
-    'mju',
     'mmu',
     'mokpo',
     'nambu',
