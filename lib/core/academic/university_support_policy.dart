@@ -52,7 +52,6 @@ class UniversitySupportPolicy {
     'konkuk',
     'kookmin',
     'korea',
-    'koreatech',
     'kumoh',
     'kunsan',
     'kwangwoon',
