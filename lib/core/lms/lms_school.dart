@@ -115,8 +115,6 @@ class LmsSchool {
       domain: 'mokpo.ac.kr',
       loginForm: _bothThemes,
     ),
-    // Gachon posted a notice on 2026-11-06 against entering school accounts
-    // into outside services. Delete this row to withdraw Gachon support.
     LmsSchool(
       id: 'gachon',
       host: 'cyber.gachon.ac.kr',
