@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:daily/core/academic/university_support_policy.dart';
 import 'package:daily/features/timetable/data/course_organization_directory.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -63,11 +62,5 @@ void main() {
     expect(seminar.sourceClassroom, '1402');
     expect(seminar.offeringOrganizations.single.college, '혜화리버럴아츠칼리지');
     expect(seminar.offeringOrganizations.single.department, '혜화리버럴아츠칼리지대학');
-
-    // No published clock table, so search stays suspended.
-    expect(
-      UniversitySupportPolicy.suspendedTimetableUniversities,
-      contains('dju'),
-    );
   });
 }
