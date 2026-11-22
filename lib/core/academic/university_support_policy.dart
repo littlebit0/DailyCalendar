@@ -14,7 +14,6 @@ class UniversitySupportPolicy {
     'daegu',
     'dgist',
     'dnue',
-    'donga',
     'dongguk',
     'eulji',
     'gachon',

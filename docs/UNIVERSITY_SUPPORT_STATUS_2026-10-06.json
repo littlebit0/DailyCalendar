@@ -2677,7 +2677,7 @@
         "verification": "Official annual table plus full-date legacy detail cross-check and current seasonal notice search; regression/build/install pending."
       },
       "timetable": {
-        "status": "temporarily_unsupported",
+        "status": "implemented_partial_catalog",
         "universityId": "donga",
         "courses": 80,
         "scheduled": 25,
@@ -2732,7 +2732,9 @@
         "suspensionDate": "2026-10-12",
         "reason": "User stopped expansion; incomplete source coverage, unresolved interpretation or whole-scope review remains. See support-decisions.json for per-school evidence.",
         "suspensionEvidence": "work/university-support-suspension-20261012/support-decisions.json",
-        "productionIntegrationEnabled": false
+        "productionIntegrationEnabled": true,
+        "reopenedDate": "2026-11-22",
+        "reopenNote": "기존 80강좌(공개 공지 첨부)로 재개. 전체 개설강좌는 dxsugang.donga.ac.kr 로그인 전용이라 공개 자료 없음. 시각 미확정 강좌는 원문만 표시."
       },
       "installedAcceptance": "macos_build_signature_install_verified_ui_not_run",
       "deferredAsImpossible": false,
