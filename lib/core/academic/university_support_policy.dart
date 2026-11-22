@@ -24,7 +24,6 @@ class UniversitySupportPolicy {
     'gknu',
     'gnu',
     'gnue',
-    'hanbat',
     'hansei',
     'hansung',
     'hanyang',
