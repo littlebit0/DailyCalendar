@@ -3,7 +3,6 @@
 /// work and verification, not simply changing this policy.
 class UniversitySupportPolicy {
   static const suspendedTimetableUniversities = <String>{
-    'baekseok',
     'bnue',
     'catholic',
     'cbnu',
