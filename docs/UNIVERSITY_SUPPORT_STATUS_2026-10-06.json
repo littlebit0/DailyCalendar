@@ -6216,7 +6216,7 @@
         "sourceNote": "Annual December rendering has wrong year after winter rollover. Official December month view supplies dates matched against all annual titles; no guessed year repairs."
       },
       "timetable": {
-        "status": "temporarily_unsupported",
+        "status": "implemented_partial_catalog",
         "sourceId": "hansung",
         "courseCount": 1489,
         "scheduledCourses": 1111,
