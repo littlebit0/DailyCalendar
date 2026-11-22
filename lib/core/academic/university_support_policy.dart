@@ -29,7 +29,6 @@ class UniversitySupportPolicy {
     'hansung',
     'hanyang',
     'hknu',
-    'hoseo',
     'hufs',
     'hyupsung',
     'iccu',

@@ -83,7 +83,7 @@ void main() {
       // conflicting rows); search stays suspended.
       expect(
         courses.where((c) => c.scheduleStatus == 'unrecognized'),
-        hasLength(756),
+        hasLength(698),
       );
     },
     timeout: const Timeout(Duration(minutes: 3)),
