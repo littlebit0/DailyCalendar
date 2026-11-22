@@ -68,4 +68,30 @@ void main() {
       }
     },
   );
+
+  test(
+    'published in-person residential COR1007 sessions stay in person with a video default',
+    () {
+      final data = UniversityDataset.fromJson(
+        jsonDecode(
+              File(
+                'assets/timetable/sogang-unknown-2026-2.json',
+              ).readAsStringSync(),
+            )
+            as Map<String, dynamic>,
+      );
+      for (final id in ['COR1007-06', 'COR1007-07']) {
+        final c = data.courses.singleWhere((c) => c.codeAndSection == id);
+        final saved = c.toTimetable(id: c.sourceId, mode: LectureMode.video);
+        final restored = TimetableClass.fromJson(saved.toJson());
+        expect(restored.meetings.map((m) => m.teachingDate), [
+          DateTime(2026, 11, 21),
+          DateTime(2026, 11, 22),
+        ]);
+        for (final m in restored.meetings) {
+          expect(restored.modeOn(m, m.teachingDate!), LectureMode.inPerson);
+        }
+      }
+    },
+  );
 }
