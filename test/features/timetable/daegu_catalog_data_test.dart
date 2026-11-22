@@ -74,7 +74,8 @@ void main() {
           expect(c.meetings, isEmpty);
         }
       }
-      expect(added.where((c) => c.meetings.isNotEmpty), hasLength(104));
+      // 104 printed clocks plus 1 DU-Flex row confirmed from the official legend.
+      expect(added.where((c) => c.meetings.isNotEmpty), hasLength(105));
     },
   );
   test(
@@ -107,7 +108,11 @@ void main() {
           .toSet();
       for (final c in courses.where(
         (c) =>
-            held.contains(c.code) && !resolvedGeometry.containsKey(c.sourceId),
+            held.contains(c.code) &&
+            !resolvedGeometry.containsKey(c.sourceId) &&
+            // DU-Flex: the official timetable legend prints only the weekly
+            // in-person 75 minutes, confirmed on 2026-11-23.
+            !c.remarks.contains('DU-Flex 대면 시각 확정'),
       )) {
         expect(c.meetings, isEmpty);
       }
@@ -174,8 +179,8 @@ void main() {
         }
         expect(actual, expected, reason: 'native registration ${c.code}');
       }
-      expect(count, 57187);
-      expect(courses.where((c) => c.meetings.isNotEmpty), hasLength(2905));
+      expect(count, 57978);
+      expect(courses.where((c) => c.meetings.isNotEmpty), hasLength(2963));
     },
   );
   for (final mode in [
@@ -184,7 +189,7 @@ void main() {
     LectureMode.video,
   ]) {
     test(
-      'Actual 2905 model classes 57187 dates full Drive JSON roundtrip ${mode.name}',
+      'Actual 2963 model classes 57978 dates full Drive JSON roundtrip ${mode.name}',
       () {
         final values = <String, TimetableSyncValue>{};
         var count = 0;
@@ -208,8 +213,8 @@ void main() {
             'research',
           );
         }
-        expect(values, hasLength(2905));
-        expect(count, 57187);
+        expect(values, hasLength(2963));
+        expect(count, 57978);
         final doc = TimetableSyncDocument.records(
           courses: values,
           schemaVersion: 2,
@@ -217,7 +222,7 @@ void main() {
         final json =
             jsonDecode(jsonEncode(doc.toJson())) as Map<String, dynamic>;
         final restored = TimetableSyncDocument.fromJson(json);
-        expect(restored.materializeClasses(), hasLength(2905));
+        expect(restored.materializeClasses(), hasLength(2963));
         for (final c in restored.materializeClasses()) {
           expect(c.isValid, true);
           expect(c.toJson(), values[timetableCourseSyncKey(c)]!.value);
