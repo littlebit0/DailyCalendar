@@ -3327,7 +3327,7 @@
         "suspensionEvidence": "work/university-support-suspension-20261012/support-decisions.json",
         "productionIntegrationEnabled": true,
         "reopenedDate": "2026-11-22",
-        "reopenNote": "기존 자산으로 재개. 시각 미확정 강좌는 원문만 표시하고 추가 불가, 소속 미확인 전공 강좌는 학과 필터 없이 검색에만 노출. 시각은 추측하지 않음."
+        "reopenNote": "기존 자산으로 재개. 시각 미확정 강좌는 원문만 표시하고 추가 불가, 소속 미확인 전공 강좌는 학과 필터 없이 검색에만 노출. 시각은 추측하지 않음. OCU 학점교류 107강좌는 시간표 책 \"인터넷 온라인수업\" 원문에 따라 시간 미정(unscheduled)으로 분류. 남은 시각 미확정 223(폐강 104, 공식 교시표에 없는 10~13교시 48, 요일·교시 미공개 53, 집중·현장 운영일 17, 시수 불일치 1)."
       },
       "installedAcceptance": "macos_build_signature_install_verified_ui_not_run",
       "deferredAsImpossible": false,
