@@ -17,7 +17,7 @@ void main() {
       final data =
           jsonDecode(
                 File(
-                  '$suspendedAssetRoot/timetable/skku-$campus-2026-2.json',
+                  'assets/timetable/skku-$campus-2026-2.json',
                 ).readAsStringSync(),
               )
               as Map<String, dynamic>;
@@ -110,7 +110,7 @@ void main() {
         final raw =
             jsonDecode(
                   File(
-                    '$suspendedAssetRoot/timetable/skku-$campus-2026-2.json',
+                    'assets/timetable/skku-$campus-2026-2.json',
                   ).readAsStringSync(),
                 )
                 as Map<String, dynamic>;

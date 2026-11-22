@@ -69,7 +69,6 @@ class UniversitySupportPolicy {
     'sch',
     'scnu',
     'seoultech',
-    'skku',
     'sku',
     'sogang',
     'sookmyung',
