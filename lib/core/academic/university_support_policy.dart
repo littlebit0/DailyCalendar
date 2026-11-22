@@ -73,7 +73,6 @@ class UniversitySupportPolicy {
     'sku',
     'sogang',
     'sookmyung',
-    'ssu',
     'sungkyul',
     'sungshin',
     'sunmoon',
