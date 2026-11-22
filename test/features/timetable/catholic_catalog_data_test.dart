@@ -11,7 +11,7 @@ import '../../support/file_asset_bundle.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   test(
-    'Catholic integrated profile loads catalog without inventing campus',
+    'Catholic integrated profile loads its songsim catalog',
     () async {
       final datasets = await UniversityCatalog.load(
         bundle: FileAssetBundle(),
@@ -19,7 +19,7 @@ void main() {
       );
       expect(
         {for (final d in datasets) d.campus: d.courses.length},
-        {'songsim': 1086, 'unknown': 373},
+        {'songsim': 1459},
       );
       expect(
         datasets.expand((d) => d.courses).map((c) => c.sourceId).toSet(),
@@ -69,7 +69,7 @@ void main() {
     () {
       final rawCourses = <dynamic>[];
       final datasets = <UniversityDataset>[];
-      for (final campus in ['songsim', 'unknown']) {
+      for (final campus in ['songsim']) {
         final raw =
             jsonDecode(
                   File(

@@ -5,7 +5,6 @@ class UniversitySupportPolicy {
   static const suspendedTimetableUniversities = <String>{
     'baekseok',
     'bnue',
-    'catholic',
     'cbnu',
     'changwon',
     'chosun',
