@@ -61,7 +61,6 @@ class UniversitySupportPolicy {
     'mmu',
     'mokpo',
     'nambu',
-    'nsu',
     'pcu',
     'pknu',
     'postech',
