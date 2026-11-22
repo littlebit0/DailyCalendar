@@ -80,8 +80,8 @@ void main() {
         {for (final d in datasets) d.campus: d.courses.length},
         {'sujeong': 1368, 'unjung': 670},
       );
-      // Rows with an unresolved slot keep the university suspended.
-      expect(UniversitySupportPolicy.timetableAvailable('sungshin'), isFalse);
+      // Unresolved rows stay searchable as source text; only confirmed slots can be added.
+      expect(UniversitySupportPolicy.timetableAvailable('sungshin'), isTrue);
       final profile = AcademicProfile.fromJson(
         const AcademicProfile(
           universityId: 'institution:academyinfo:0000136',

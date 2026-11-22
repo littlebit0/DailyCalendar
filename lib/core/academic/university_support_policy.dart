@@ -75,7 +75,6 @@ class UniversitySupportPolicy {
     'sookmyung',
     'ssu',
     'sungkyul',
-    'sungshin',
     'sunmoon',
     'suwon',
     'swu',
