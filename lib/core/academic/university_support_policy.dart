@@ -34,7 +34,6 @@ class UniversitySupportPolicy {
     'hyupsung',
     'iccu',
     'inje',
-    'inu',
     'jbnu',
     'jeju',
     'jnu',
