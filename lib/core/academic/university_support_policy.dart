@@ -81,7 +81,6 @@ class UniversitySupportPolicy {
     'swu',
     'syu',
     'tuk',
-    'ulsan',
     'unist',
     'uos',
     'ut',
