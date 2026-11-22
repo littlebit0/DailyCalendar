@@ -4361,7 +4361,7 @@
         "focusedTests": "test/core/academic/yu_academic_source_test.dart"
       },
       "timetable": {
-        "status": "temporarily_unsupported",
+        "status": "implemented_partial_catalog",
         "universityId": "yu",
         "courses": 60,
         "scheduled": 59,
@@ -4411,7 +4411,9 @@
         "suspensionDate": "2026-10-12",
         "reason": "User stopped expansion; incomplete source coverage, unresolved interpretation or whole-scope review remains. See support-decisions.json for per-school evidence.",
         "suspensionEvidence": "work/university-support-suspension-20261012/support-decisions.json",
-        "productionIntegrationEnabled": false
+        "productionIntegrationEnabled": true,
+        "reopenedDate": "2026-11-22",
+        "reopenNote": "사용자 지시(2026-11-22)로 기존 데이터 그대로 검색 재개. 시각 미확정(unrecognized) 강좌는 원문만 표시하고 시간표 추가 불가. 전체 범위 완료 아님."
       },
       "installedAcceptance": "macos_build_signature_install_verified_ui_not_run",
       "deferredAsImpossible": false,
