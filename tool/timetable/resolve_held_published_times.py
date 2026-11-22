@@ -12,7 +12,8 @@ Only two evidence-backed cases change; everything else stays `unrecognized`:
    - CNU: the public course list prints `요일HH:MM~HH:MM(강의실)`
      (`sourceEducation.actualDisplayedClocks`). Held rows whose lesson method
      (`LSN_METHOD_CD_NM`) is empty — the same fields as the already scheduled
-     rows — become weekly meetings at the printed clock.
+     rows — become meetings at the printed clock. Rows with an individual
+     field-operation review or without a current public plan stay held.
    - HUFS: period rows `요일 n n (강의실)` without a mode note, converted with
      the official period table already used for the scheduled rows (서울 수강편람
      134쪽: 교시 시작 60분 간격, 1교시 09:00, 0~12교시; 슬롯 = 수업 50분 + 쉬는
@@ -26,6 +27,8 @@ import re
 from pathlib import Path
 
 ROOT = Path('assets/timetable')
+# Suspended universities keep their datasets out of the app bundle.
+SUSPENDED_ROOT = Path('test/fixtures/suspended_assets/timetable')
 UNTIMED_FILES = [
     'hufs-seoul', 'hufs-global', 'hoseo-unknown', 'hoseo-asan', 'hoseo-cheonan',
     'hanyang-seoul', 'hanyang-erica', 'chosun-unknown', 'tuk-first',
@@ -69,6 +72,12 @@ def cnu_meetings(course):
     if fields.get('LSN_METHOD_CD_NM') or fields.get('CLOSE_YN') != '0':
         return None
     if fields.get('CNCL_LT_YN') or '폐강' in remarks(course):
+        return None
+    # Individually reviewed field/practicum operations and courses without a
+    # current public plan stay held; the scheduled rows never carry these.
+    if edu.get('fieldOperationReview') or edu.get('registrationStatus', '').startswith('blockedIndividual'):
+        return None
+    if edu.get('individualReviewStatus') == 'currentPublicPlanAbsent':
         return None
     clocks = edu.get('actualDisplayedClocks') or []
     if not clocks:
@@ -148,9 +157,17 @@ def recount(data):
     return counts
 
 
-def process(name, timed=None, note=None, replacement=''):
-    path = ROOT / f'{name}-2026-2.json'
-    data = json.loads(path.read_text())
+def dataset_path(name, root=None, suspended=None):
+    for base in (root or ROOT, suspended or SUSPENDED_ROOT):
+        path = Path(base) / f'{name}-2026-2.json'
+        if path.exists():
+            return path
+    raise FileNotFoundError(f'{name}-2026-2.json')
+
+
+def process(name, timed=None, note=None, replacement='', path=None):
+    path = path or dataset_path(name)
+    data = json.loads(path.read_text(encoding='utf-8'))
     changed = {'unscheduled': 0, 'scheduled': 0}
     for course in data['courses']:
         if course['scheduleStatus'] != 'unrecognized':
@@ -168,17 +185,18 @@ def process(name, timed=None, note=None, replacement=''):
         if note:
             strip_note(course, note, replacement)
     counts = recount(data)
-    path.write_text(json.dumps(data, ensure_ascii=False, separators=(',', ':')))
+    path.write_text(json.dumps(data, ensure_ascii=False, separators=(',', ':')), encoding='utf-8')
     print(name, changed, counts)
 
 
-def main():
-    process('cnu-unknown', cnu_meetings, CNU_HOLD, CNU_PLAN)
-    for name in ('hufs-seoul', 'hufs-global'):
-        process(name, hufs_meetings, HUFS_HOLD)
-    for name in UNTIMED_FILES:
-        if not name.startswith('hufs'):
-            process(name)
+def main(root=None, suspended=None):
+    jobs = [('cnu-unknown', cnu_meetings, CNU_HOLD, CNU_PLAN)]
+    jobs += [(name, hufs_meetings, HUFS_HOLD, '') for name in ('hufs-seoul', 'hufs-global')]
+    jobs += [(name, None, None, '') for name in UNTIMED_FILES if not name.startswith('hufs')]
+    # Resolve every input before writing any, so a missing file never leaves a partial batch.
+    paths = {name: dataset_path(name, root, suspended) for name, *_ in jobs}
+    for name, timed, note, replacement in jobs:
+        process(name, timed, note, replacement, paths[name])
 
 
 if __name__ == '__main__':

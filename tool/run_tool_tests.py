@@ -38,6 +38,7 @@ IMPORT_SUITES = [
     "test_fetch_konkuk",
     "test_gachon_fetch",
     "test_hansung_import",
+    "test_resolve_held_published_times",
     "test_hknu_import",
     "test_hufs_fetch",
     "test_hufs_import",
