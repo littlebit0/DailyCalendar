@@ -14,15 +14,19 @@ void main() {
       final datasets = catalog.where((d) => d.universityId == 'eulji').toList();
       expect(
         {for (final d in datasets) d.campus: d.courses.length},
-        {'seongnam': 389, 'uijeongbu': 34},
+        {'seongnam': 389, 'uijeongbu': 34, 'daejeon': 2},
       );
 
       final raw = <String>{};
       final orphans = <String>{};
       for (final dataset in datasets) {
         for (final course in dataset.courses) {
+          // Daejeon's two official online electives publish no period.
           expect(
-            course.hasSchedulableMeetings,
+            dataset.campus == 'daejeon'
+                ? course.scheduleStatus == 'unscheduled' &&
+                      !course.hasSchedulableMeetings
+                : course.hasSchedulableMeetings,
             isTrue,
             reason: course.sourceId,
           );
@@ -70,7 +74,7 @@ void main() {
         }
       }
     }
-    expect(checked, 423);
+    expect(checked, 425);
   });
 
   test('Eulji period slots include the following break', () {

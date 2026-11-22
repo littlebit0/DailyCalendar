@@ -818,5 +818,9 @@
   "assets/timetable/organizations/ut.json": {
     "sha256": "f269a25d83492e93f8b28fe49f2ffa4ebcf89b63385dab2948fb2ed441e0bdb0",
     "reason": "공백만 제거(내용 동일): 파싱 비용과 앱 용량 절감"
+  },
+  "assets/timetable/eulji-daejeon-2026-2.json": {
+    "sha256": "6f1829b5e2c775595b593ba9def281f7d90347eda9cc2cd5a79dea0a5c956889",
+    "reason": "을지대 대전캠퍼스 공식 학사공지(2026-2 교양 교과목 시간표 안내) 대전 표 2과목 추가(온라인, 교시 미공개라 시간 미정)"
   }
 }
