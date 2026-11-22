@@ -10,7 +10,6 @@ class UniversitySupportPolicy {
     'changwon',
     'chosun',
     'cje',
-    'cnu',
     'daegu',
     'dgist',
     'dnue',
