@@ -59,7 +59,7 @@ void main() {
       expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(5108));
       expect(
         courses.where((c) => c.scheduleStatus == 'unrecognized'),
-        hasLength(653),
+        hasLength(510),
       );
       for (final c in courses.where((c) => c.hasSchedulableMeetings)) {
         final saved = c.toTimetable(id: c.sourceId, mode: LectureMode.inPerson);
