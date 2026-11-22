@@ -1847,7 +1847,10 @@
         "verification": "Namhae source/profile42+additionalidentityfooter guard; officiallive2026 39unique/valid and2027winter8unique/valid. Full1344pass/1skip/analyzer/Macbuild/inplaceinstall. No interactiveacceptance."
       },
       "timetable": {
-        "status": "temporarily_unsupported",
+        "status": "implemented_partial_catalog",
+        "productionIntegrationEnabled": true,
+        "reopenedDate": "2026-11-22",
+        "reopenNote": "사용자 지시로 기존 데이터셋을 열어 검색 재개. 시각 미확정 강좌는 원문만 보이고 시간표 추가는 확정 시각 강좌만 가능.",
         "sourceId": "changwon",
         "courses": 1754,
         "scheduled": 1390,

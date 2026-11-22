@@ -7,7 +7,6 @@ class UniversitySupportPolicy {
     'bnue',
     'catholic',
     'cbnu',
-    'changwon',
     'chosun',
     'cje',
     'cnu',

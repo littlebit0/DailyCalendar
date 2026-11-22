@@ -9,7 +9,7 @@ import 'package:daily/features/timetable/domain/timetable.dart';
 
 void main() {
   test(
-    'Changwon own main academic profile keeps other campus catalogs unavailable',
+    'Changwon campuses share the integrated catalog; other schools stay unavailable',
     () {
       for (final id in [
         'institution:academyinfo:0000028',
@@ -22,10 +22,11 @@ void main() {
         );
         expect(profile.timetableUniversity, 'changwon');
         expect(profile.timetableCampus, 'unknown');
-        for (final campus in [
-          'academyinfo:0003297',
-          'academyinfo:0003298',
-          'academyinfo:0000117',
+        // The integrated catalog also lists Geochang/Namhae-only rows.
+        for (final (campus, supported) in [
+          ('academyinfo:0003297', true),
+          ('academyinfo:0003298', true),
+          ('academyinfo:0000117', false),
         ]) {
           expect(
             AcademicProfile(
@@ -34,7 +35,7 @@ void main() {
               schoolKind: 'fourYear',
               campusId: campus,
             ).timetableSupported,
-            isFalse,
+            supported,
           );
         }
       }
