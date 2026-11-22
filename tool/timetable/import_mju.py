@@ -5,7 +5,14 @@ Source: 입학처 게시글 「2026-2학기 개설강좌현황표_20260812(학�
 https://iphak.mju.ac.kr/pages/?p=1&b=B_1_1&bn=30276&m=read&nPage=1&cate=%EC%8B%9C%EA%B0%84%EC%A0%9C
 file https://iphak.mju.ac.kr/_common/new_download_file.php?menu=boardfile&file_no=10702
 
-  python3 tool/timetable/import_mju.py <xlsx> <repository root>
+  python3 tool/timetable/import_mju.py <xlsx> <repository root> <closures.json>
+
+<closures.json> is the official 2026-09-09 「2026-2학기 최종폐강 강좌 내역」
+(https://www.mju.ac.kr/bbs/mjukr/143/180492/download.do, includes 1차 폐강),
+frozen as work/university-research/catalog-f/mju/mju-current-final-closure-education-20261008.json
+in the source-audit fixtures. Closed (campus, 강좌번호) rows are left out of the
+assets and listed in `excludedClosedCourses`; a closure whose 교과목명 differs
+from the spreadsheet row stops the import.
 
 Writes assets/timetable/mju-{humanities,natural}-2026-2.json and
 assets/timetable/organizations/mju.json as compact JSON.
@@ -91,8 +98,18 @@ def slots(r):
     return out
 
 
-def build(src, root):
+def closed_rows(path):
+    data = json.loads(Path(path).read_text(encoding='utf-8'))
+    if data.get('nativeHeading') != '2026-2학기 최종폐강 강좌 내역':
+        raise ValueError('unexpected closure list')
+    return {(c['campus'], c['nativeLectureNumber']): c for c in data['closedCourses']
+            if c['status'] == '폐강'}, data
+
+
+def build(src, root, closures_path):
     data = rows(src)
+    closed, closure_doc = closed_rows(closures_path)
+    excluded = {cid: [] for cid, _ in CAMPUS.values()}
     sha = hashlib.sha256(Path(src).read_bytes()).hexdigest()
     head = [re.sub(r'\s+', '', h) for h in data[0]]
     table = [dict(zip(head, r + [''] * (len(head) - len(r)))) for r in data[1:]]
@@ -105,6 +122,13 @@ def build(src, root):
         code, dept, college = r['강좌번호'], r['학과명'], r['단과대']
         if not (code and dept and college and r['교과목명']):
             raise ValueError(f'missing key cell: {r}')
+        closure = closed.get((r['캠퍼스'], code))
+        if closure:
+            if re.sub(r'\s', '', closure['courseName']) != re.sub(r'\s', '', r['교과목명']):
+                raise ValueError(f'{code}: closure name {closure["courseName"]} != {r["교과목명"]}')
+            excluded[campus].append({'courseCode': code, 'courseName': r['교과목명'],
+                                     'remark': closure.get('remark', '')})
+            continue
         labels.setdefault(dept, (campus, college, code))
         if labels[dept][:2] != (campus, college):
             raise ValueError(f'{dept}: printed under two campuses/colleges')
@@ -139,7 +163,7 @@ def build(src, root):
             course['holdReasons'] = [hold.removeprefix('시각 보류: ')]
         by_campus[campus].append(course)
     ids = [c['courseCode'] for cs in by_campus.values() for c in cs]
-    assert len(ids) == len(set(ids)) == len(table), 'duplicate 강좌번호'
+    assert len(ids) == len(set(ids)) == len(table) - sum(map(len, excluded.values())), 'duplicate 강좌번호'
     root = Path(root)
     summary = {}
     for code_name, (campus, name) in CAMPUS.items():
@@ -153,7 +177,11 @@ def build(src, root):
             'sourceUrl': NOTICE,
             'sourceNotice': f'입학처 게시 「{FILE_NAME}」({FILE_URL}) 캠퍼스 열 "{code_name}" 행. '
                             '학생 참고용 자료이며 분반·이수구분은 공개되지 않았습니다.',
-            'sourceHashes': {FILE_NAME: sha}, 'sourceRowCount': len(courses), 'courseScheduleStatusCounts': counts,
+            'sourceHashes': {FILE_NAME: sha}, 'sourceRowCount': len(courses) + len(excluded[campus]),
+            'courseScheduleStatusCounts': counts,
+            'excludedClosedCourses': {'sourceUrl': closure_doc['sourceUrl'],
+                                      'publishedDate': closure_doc['publishedDate'],
+                                      'courses': excluded[campus]},
             'researchOnly': False, 'productionIntegrationEnabled': True,
             'completionClaim': False, 'wholeOperatingVerified': False,
             'courses': courses,
@@ -176,7 +204,8 @@ def build(src, root):
                              'isOfferingUnit': False, 'affiliationStatus': 'verified'})
     write(root / 'assets/timetable/organizations/mju.json',
           {'schemaVersion': 1, 'university': 'mju', 'mappings': mappings, 'courseOwners': []})
-    result = {'rows': len(table), 'status': summary, 'mappings': len(mappings)}
+    result = {'rows': len(table), 'excluded': {k: len(v) for k, v in excluded.items()},
+              'status': summary, 'mappings': len(mappings)}
     print(json.dumps(result, ensure_ascii=False))
     return result
 
@@ -186,4 +215,4 @@ def write(path, value):
 
 
 if __name__ == '__main__':
-    build(sys.argv[1], sys.argv[2])
+    build(sys.argv[1], sys.argv[2], sys.argv[3])

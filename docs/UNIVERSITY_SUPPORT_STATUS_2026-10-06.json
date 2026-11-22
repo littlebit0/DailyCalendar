@@ -2815,7 +2815,7 @@
       "timetable": {
         "status": "implemented_partial_catalog",
         "universityId": "mju",
-        "courses": 1523,
+        "courses": 1444,
         "scheduled": 46,
         "plannedDatedMeetings": 733,
         "unrecognized": 134,
@@ -2879,7 +2879,7 @@
         "productionIntegrationEnabled": true,
         "reopenedDate": "2026-11-22",
         "sourceUrl": "https://iphak.mju.ac.kr/pages/?p=1&b=B_1_1&bn=30276&m=read&nPage=1&cate=%EC%8B%9C%EA%B0%84%EC%A0%9C",
-        "reopenNote": "입학처 공개 xlsx(2026-2학기 개설강좌현황표_20260812, 1523강좌, 실제 시각) 전체로 추가. scheduled 1440/unrecognized 72(비고상 주차 한정·원격 자리표시 시각)/unscheduled 11. 원문에 이수구분이 없어 학과 칩의 전공 필터에는 들지 않음."
+        "reopenNote": "입학처 공개 xlsx(2026-2학기 개설강좌현황표_20260812, 1523행, 실제 시각)에서 2026-09-09 공식 「최종폐강 강좌 내역」(https://www.mju.ac.kr/bbs/mjukr/143/180492/download.do) 79강좌를 빼고 1444강좌로 추가. scheduled 1368/unrecognized 65(비고상 주차 한정·원격 자리표시 시각)/unscheduled 11. 원문에 이수구분이 없어 학과 칩의 전공 필터에는 들지 않음."
       },
       "installedAcceptance": "macos_build_signature_install_verified_ui_not_run",
       "deferredAsImpossible": false,

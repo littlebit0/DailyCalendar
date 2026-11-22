@@ -36,18 +36,23 @@ class ImportMjuSlotTests(unittest.TestCase):
 
 class ImportMjuAssetTests(unittest.TestCase):
     def test_generated_assets_cover_every_source_row(self):
-        courses, counts = [], {}
+        courses, counts, closed = [], {}, 0
         for campus in ('humanities', 'natural'):
             data = json.loads((ROOT / f'assets/timetable/mju-{campus}-2026-2.json').read_text(encoding='utf-8'))
-            self.assertEqual(data['sourceRowCount'], len(data['courses']))
+            excluded = data['excludedClosedCourses']['courses']
+            self.assertEqual(data['sourceRowCount'], len(data['courses']) + len(excluded))
+            self.assertFalse({e['courseCode'] for e in excluded} & {c['courseCode'] for c in data['courses']})
+            closed += len(excluded)
             self.assertEqual(sum(data['courseScheduleStatusCounts'].values()), len(data['courses']))
             for c in data['courses']:
                 counts[c['scheduleStatus']] = counts.get(c['scheduleStatus'], 0) + 1
                 self.assertEqual(bool(c['schedules']), c['scheduleStatus'] == 'scheduled', c['sourceId'])
             courses += data['courses']
-        self.assertEqual(len(courses), 1523)
-        self.assertEqual(len({c['courseCode'] for c in courses}), 1523)
-        self.assertEqual(sum(counts.values()), 1523)
+        # 1523 printed rows minus 79 in the 2026-09-09 final closure list.
+        self.assertEqual(closed, 79)
+        self.assertEqual(len(courses), 1444)
+        self.assertEqual(len({c['courseCode'] for c in courses}), 1444)
+        self.assertEqual(sum(counts.values()), 1444)
         labels = {d for c in courses for d in c['departments']}
         org = json.loads((ROOT / 'assets/timetable/organizations/mju.json').read_text(encoding='utf-8'))
         self.assertEqual({m['sourceLabel'] for m in org['mappings']}, labels)
