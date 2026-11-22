@@ -11,7 +11,6 @@ class UniversitySupportPolicy {
     'chosun',
     'cje',
     'cnu',
-    'daegu',
     'dgist',
     'dnue',
     'donga',
