@@ -499,7 +499,7 @@
         "sourceUrl": "https://www.gnu.ac.kr/main/ps/schdul/selectSchdulMainList.do?mi=1084"
       },
       "timetable": {
-        "status": "temporarily_unsupported",
+        "status": "implemented_catalog_partial",
         "sourceId": "gnu",
         "courses": 4842,
         "scheduled": 3005,
