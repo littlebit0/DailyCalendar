@@ -83,7 +83,6 @@ class UniversitySupportPolicy {
     'tuk',
     'ulsan',
     'unist',
-    'uos',
     'ut',
     'wsu',
     'yongin',
