@@ -94,7 +94,8 @@ void main() {
               isTrue,
             );
             expect(m.originalStartMinute, greaterThanOrEqualTo(540));
-            expect(m.originalEndMinute, lessThanOrEqualTo(1080));
+            // 10교시 18:00~18:50까지 표에 있고 11~13교시는 같은 60분 간격으로 이어 계산한다.
+            expect(m.originalEndMinute, lessThanOrEqualTo(1320));
             // 공식 교시표(menu_idx=134): 교시 시작 간격 60분(50분 수업+10분 쉬는 시간).
             // 연속 교시는 한 구간이고 구간 끝은 마지막 교시 시작+60분이다.
             final periods = RegExp(r'^[월화수목금]([\d,]+)\[')
@@ -115,8 +116,11 @@ void main() {
         }
       }
       expect(total, 24);
-      expect(scheduled, hasLength(14));
-      expect(appointments, 170);
+      expect(scheduled, hasLength(24));
+      expect(appointments, 292);
+      final night = scheduled.firstWhere((c) => c.title == '사회복지현장실습');
+      expect(night.meetings.first.originalStartMinute, 1080);
+      expect(night.meetings.first.originalEndMinute, 1320);
       for (final mode in [
         LectureMode.inPerson,
         LectureMode.liveOnline,
@@ -137,7 +141,7 @@ void main() {
         final restored = TimetableSyncDocument.fromJson(
           jsonDecode(jsonEncode(document.toJson())) as Map<String, dynamic>,
         ).materializeClasses();
-        expect(restored, hasLength(14));
+        expect(restored, hasLength(24));
         final before = {for (final c in classes) c.sourceId: c};
         for (final c in restored) {
           final original = before[c.sourceId]!;
