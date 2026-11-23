@@ -20,6 +20,7 @@ from pathlib import Path
 import re
 
 from import_knu import DAYS, clock
+from apply_knu_remark_periods import remark_meeting
 
 ROOT = Path(__file__).parents[2]
 OLD_NOTE = '실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가'
@@ -48,7 +49,12 @@ def main():
         changed = 0
         for course in data['courses']:
             status = course['scheduleStatus']
-            if status == 'scheduled' and not any('date' in s for s in course['schedules']):
+            if status == 'scheduled' and not course['sourceSchedule'].strip():
+                # 시간 칸이 비고 비고의 '이론은 <요일> <n>교시'로 확정한 강좌는 비고 변환기로 검사한다.
+                meeting = remark_meeting(course['departmentRemarks'])
+                if meeting is None or [dict(meeting, classroom=course['sourceClassroom'])] != course['schedules']:
+                    raise ValueError('Remark converter disagrees with existing course: ' + course['sourceId'])
+            elif status == 'scheduled' and not any('date' in s for s in course['schedules']):
                 if convert(course) != course['schedules']:
                     raise ValueError('Converter disagrees with existing course: ' + course['sourceId'])
             elif status == 'unscheduled' and course['sourceSchedule'].strip():
