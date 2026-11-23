@@ -6655,7 +6655,7 @@
         "suspensionEvidence": "work/university-support-suspension-20261012/support-decisions.json",
         "productionIntegrationEnabled": true,
         "reopenedDate": "2026-11-22",
-        "reopenNote": "사용자 지시(2026-11-22)로 기존 데이터 그대로 검색 재개. 시각 미확정(unrecognized) 강좌는 원문만 표시하고 시간표 추가 불가. 전체 범위 완료 아님. 2026-11-23 사용자 결정으로 폐강·개설유예 공고로 빠졌던 교양 10강좌와 보류였던 온라인 야간 2강좌를 공지 1077 원문대로 추가(남은 보류 1행: 야간4~5교시는 공식 시각이 겹침)."
+        "reopenNote": "사용자 지시(2026-11-22)로 기존 데이터 그대로 검색 재개. 시각 미확정(unrecognized) 강좌는 원문만 표시하고 시간표 추가 불가. 전체 범위 완료 아님. 2026-11-23 사용자 결정으로 폐강·개설유예 공고로 빠졌던 교양 10강좌와 보류였던 온라인 야간 2강좌를 공지 1077 원문대로 추가(남은 보류 1행: 야간4~5교시는 공식 시각이 겹침). 야간 4~5교시 1강좌는 공식 학사안내의 겹친 시각 중 4교시 시작~5교시 끝(20:25~21:55)으로 확정(보류 0)."
       },
       "sourceEvidence": "work/university-research/expansion17-20261011/"
     },
