@@ -4,10 +4,14 @@
 Uses the importer's official clock (시행세칙 제11조, 1교시 09:00, 60-minute
 slots) and the 2026-2 수강신청 안내 p5 teaching dates (weeks 1-15). Intensive
 courses whose official remark names their weeks (e.g. '8~15주차') get only
-those weeks; the rest get all 15 weeks.
+those weeks; the rest get all 15 weeks. When the remark also states an explicit
+start date ('(10/26~12월 중순)'), the course starts on that date and keeps the
+same number of sessions per weekday (8~15주차 = 8), so no meeting falls before
+the stated start.
 
     python3 tool/timetable/confirm_held_sungshin.py
 """
+import datetime as dt
 import re
 import sys
 from pathlib import Path
@@ -38,6 +42,11 @@ def main():
             remark = course['departmentRemarks'][department]
             first, last = weeks_for(remark) if '집중' in remark else (1, 15)
             dates = {w: v[first - 1:last] for w, v in source.TEACHING_DATES.items()}
+            start = re.search(r'\((\d{1,2})/(\d{1,2})~', remark) if '집중' in remark else None
+            if start:
+                begin = dt.date(2026, int(start[1]), int(start[2]))
+                dates = {w: [d for d in v if d >= begin][:last - first + 1]
+                         for w, v in source.TEACHING_DATES.items()}
             rooms = source.rooms_for(course.get('sourceClassroom') or '', len(parsed))
             meetings = source.meetings_for(parsed, rooms, dates)
             pieces = [p for p in remark.split(' · ') if not p.startswith('시각 보류: ')]

@@ -130,6 +130,14 @@ void main() {
       if (c.remarks.contains('집중이수: ')) {
         // 수업계획서 날짜(DB095500) 또는 공식 비고의 운영 주차(예: 8~15주차)만 쓴다.
         expect(_expected(c).containsAll(actual), isTrue, reason: c.sourceId);
+        // 비고가 시작일(10/26~)을 밝힌 집중이수는 그날 전 수업이 없다.
+        if (c.remarks.contains('(10/26~')) {
+          expect(
+            actual.every((m) => m.$1.compareTo('2026-10-26') >= 0),
+            isTrue,
+            reason: c.sourceId,
+          );
+        }
         if (c.code == 'DB095500') {
           final dates = actual.map((m) => m.$1).toList()..sort();
           expect(dates, hasLength(15));
@@ -147,7 +155,7 @@ void main() {
           .every((m) => m.weekday == DateTime.tuesday),
       isTrue,
     );
-    expect(scheduled.expand((c) => c.meetings), hasLength(30594));
+    expect(scheduled.expand((c) => c.meetings), hasLength(30586));
     for (final mode in [
       LectureMode.inPerson,
       LectureMode.liveOnline,
