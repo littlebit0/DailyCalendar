@@ -37,7 +37,7 @@ void main() {
     expect(period?.end, DateTime(2026, 12, 21));
   });
 
-  test('only clock-published honors courses get meetings', () {
+  test('the official 2026 period clock places every course with a day and period', () {
     final raw =
         jsonDecode(
               File(
@@ -59,15 +59,17 @@ void main() {
       if (status == 'unscheduled') expect(row['sourceSchedule'], isEmpty);
     }
     expect(statuses, {
-      'scheduled': 23,
-      'unrecognized': 1706,
+      'scheduled': 1712,
+      'unrecognized': 17,
       'unscheduled': 317,
     });
 
     final approved = courses.where((c) => c.hasSchedulableMeetings).toList();
-    expect(approved, hasLength(23));
+    expect(approved, hasLength(1712));
     // 출처: tool/timetable/ulsan_honors_clock.json의 source(아너스칼리지 자율전공학부
-    // 학년별 시간표). 공개 강의시간 조회는 요일·교시만 있어 나머지는 unrecognized다.
+    // 학년별 시간표). 2026-11-23 사용자 결정으로 이 공식 교시표를 학교 전체에
+    // 적용하고 표 밖 교시는 같은 60분 슬롯으로 이어 계산한다. A/B 표기와 같은
+    // 교시가 겹치는 강좌만 unrecognized로 남는다.
     // The honors 학년별 시간표 prints 1~9교시 as 09:00~17:50 (50분 수업 + 10분
     // 쉬는 시간 = 60분 슬롯). Each period owns its break, so every meeting
     // starts and ends on the 60-minute grid from 09:00, and a same-room run of
@@ -96,10 +98,10 @@ void main() {
         }
       }
     }
-    expect(approved.map((c) => c.code).toSet(), {
+    expect(approved.map((c) => c.code).toSet(), containsAll({
       'A01460', 'A01472', 'A01473', 'A01477', 'A01478', 'A01529', 'A01532', //
       'A01533', 'A01534', 'A01535', 'A01536', 'A01537', 'A01538', 'A01539',
-    });
+    }));
     final chemistry = approved.singleWhere(
       (c) => c.codeAndSection == 'A01535-01',
     );
