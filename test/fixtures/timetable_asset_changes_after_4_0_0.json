@@ -818,5 +818,21 @@
   "assets/timetable/organizations/ut.json": {
     "sha256": "f269a25d83492e93f8b28fe49f2ffa4ebcf89b63385dab2948fb2ed441e0bdb0",
     "reason": "공백만 제거(내용 동일): 파싱 비용과 앱 용량 절감"
+  },
+  "assets/timetable/konyang-glocal-2026-2.json": {
+    "sha256": "98209cd8c830f290b67b1e56d534e1ae82190ff17cd85c4b7d29af8002d5401e",
+    "reason": "건양대 시간표 검색 신규 개방(부분 자료): 공개 수업계획서 조회 2026-2와 첨부 수업계획서 수업시간, 공식 캠퍼스·학과 안내 기준"
+  },
+  "assets/timetable/konyang-medical-2026-2.json": {
+    "sha256": "d14bc55ae918f2ee13d9a19a8d912c3dfd44844f72f66663d756a37263b599c1",
+    "reason": "건양대 시간표 검색 신규 개방(부분 자료): 공개 수업계획서 조회 2026-2와 첨부 수업계획서 수업시간, 공식 캠퍼스·학과 안내 기준"
+  },
+  "assets/timetable/konyang-unknown-2026-2.json": {
+    "sha256": "2b5b2c4d83d27adc49eff2893c44a399e1ca83c8c8b035674131bba199d31b7b",
+    "reason": "건양대 시간표 검색 신규 개방(부분 자료): 공개 수업계획서 조회 2026-2와 첨부 수업계획서 수업시간, 공식 캠퍼스·학과 안내 기준"
+  },
+  "assets/timetable/organizations/konyang.json": {
+    "sha256": "80c597f1bbc38ac1d8985df9882e425d2f4f1827fdd283c8f2346c37fe079922",
+    "reason": "건양대 시간표 검색 신규 개방(부분 자료): 공개 수업계획서 조회 2026-2와 첨부 수업계획서 수업시간, 공식 캠퍼스·학과 안내 기준"
   }
 }

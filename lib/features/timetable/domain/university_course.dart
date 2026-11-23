@@ -415,6 +415,9 @@ class UniversityCourse {
       // Seokyeong prints 융합 only in the tables titled "<name> 융합전공",
       // so it is that convergence major's own course classification.
       ('sku', '융합') => true,
+      // Konyang rules (학칙 시행세칙 제49조) name "전공과목 중 기본과정과목";
+      // its 교육과정 경과 tables split 전공교과목 into 기본·심화 과정.
+      ('konyang', '제1기본') => true,
       _ => false,
     };
     // A literal curriculum-stage label can have an official course-wide

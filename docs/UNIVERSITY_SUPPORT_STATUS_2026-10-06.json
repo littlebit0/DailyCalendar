@@ -6960,29 +6960,31 @@
         "checkedAt": "2026-10-12"
       },
       "timetable": {
-        "status": "unsupported",
-        "checkedAt": "2026-10-12",
+        "status": "implemented_partial_catalog",
+        "checkedAt": "2026-11-23",
         "universityId": "konyang",
-        "courses": 0,
-        "scheduled": 0,
-        "datasets": [],
-        "coverageNote": "SmartKY 강좌개설조회에 학생 로그인 필요; 공개 TERM 이미지에 시각·과목코드 등 부족",
+        "campuses": [
+          "glocal",
+          "medical",
+          "unknown"
+        ],
+        "courses": 1558,
+        "scheduled": 262,
+        "unscheduled": 1253,
+        "unrecognized": 43,
+        "datasets": [
+          "assets/timetable/konyang-glocal-2026-2.json",
+          "assets/timetable/konyang-medical-2026-2.json",
+          "assets/timetable/konyang-unknown-2026-2.json"
+        ],
+        "sourceUrl": "https://www.konyang.ac.kr/prog/sueopgyehoek/kor/sub06_01_04_02/list.do",
+        "coverageNote": "공개 수업계획서 조회(2026-2) 1,564행 중 대학원 학석사연계 6행 제외. 시각은 첨부 수업계획서의 수업시간만 사용(첨부 없는 강좌는 시간 미정). 강의실 미공개. SmartKY 강좌개설 조회는 로그인 필요.",
         "wholeUniversityCompletionClaim": false,
-        "publicAlternativeResearch20261012": {
-          "routeLedger": "work/university-research/public8-20261012/public-route-ledger.json",
-          "perSchoolReport": "work/university-research/public8-20261012/REPORT.md",
-          "observedRoutes": 15,
-          "loginPerformed": false,
-          "unavailableEverywhereClaim": false,
-          "blocker": "추가 공식 학과 게시판의 시간표 검색 0건. 정규 조회 SMARTKY 인증 필요; OCW·사이버교류는 본교 정규 시간표가 아니며 바이오 부분이미지 시각근거 부족.",
-          "sourceAcquisitionAndInstallVerified": false
-        },
-        "priorResearchStatus": "held_actual_offering_clocks_not_acquired",
-        "userDecision": "2026-10-12: leave timetable unapplied; stop further research unless user resumes",
-        "academicCalendarUnaffected": true,
-        "priorImplementationStatus": "not_applied_by_user_decision",
-        "productionIntegrationEnabled": false,
-        "reason": "No active timetable integration; Daejeon removal was previously requested explicitly."
+        "productionIntegrationEnabled": true,
+        "reopenedDate": "2026-11-23",
+        "reopenNote": "사용자 결정(2026-11-23): 학부 전체 시간표가 없다는 것은 미지원 사유가 아님. 부분 자료로 검색을 열고 빠진 범위는 PR에 적음.",
+        "priorStatus": "unsupported",
+        "priorCoverageNote": "SmartKY 강좌개설조회에 학생 로그인 필요; 공개 TERM 이미지에 시각·과목코드 등 부족"
       },
       "sourceEvidence": "work/university-research/expansion17-20261011/"
     },

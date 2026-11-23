@@ -94,7 +94,6 @@ class UniversitySupportPolicy {
     'cue',
     'cnue',
     'kentech',
-    'konyang',
     'dju',
   };
 
