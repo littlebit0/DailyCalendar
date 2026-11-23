@@ -6,7 +6,9 @@
 - 교시 슬롯 = 그 교시 시작~다음 교시 시작 직전. 같은 요일·같은 강의실이고 간격 60분 미만이면
   합친다. 0교시(08:00~08:50)는 기존 자료처럼 늘리거나 합치지 않는다.
 - 표에 없는 교시(서울 11교시 이후, 세종 14교시 이후)는 같은 표의 마지막 슬롯 길이(60분)로
-  이어 계산한다. 이어 계산해도 24시를 넘으면 시각을 만들지 않고 `unrecognized`로 둔다.
+  이어 계산한다. 이어 계산해도 24시를 넘으면 시각을 만들지 않는다. 그런 강좌(세종 약학과 실무실습
+  6강좌)는 약학대학 학사공지·공개 강의계획서 본문에도 실습 날짜·시각이 없어(2026-11-23 확인,
+  첨부 HWP는 미열람) 원문 교시 표기를 보존한 `unscheduled`(시간 미정)로 둔다.
 - 강의실은 원문 줄의 강의실 그대로, 줄에 강의실이 없으면 원문 sourceClassroom을 쓴다.
   같은 시각에 강의실이 여러 개면 강의실마다 구간을 둔다(서울대 자료 선례).
 - '미정(1-2)'처럼 요일이 없는 줄은 시각을 만들지 않는다. 원문에 요일·교시가 없으면
@@ -68,8 +70,10 @@ UNDATED_LINE = " 요일이 '미정'인 원문 줄은 시각을 만들지 않았�
 TEACHING_ZERO_NOTE = (" 교직 0교시는 공식 교시표의 '교직과목0교시 설정 수업시간:08:40~'와 과목 비고 "
                       "'수업시작시간 8:40'에 따라 08:40부터 1교시 시작(09:00)까지를 0교시 슬롯으로 계산했습니다.")
 TEACHING_REMARK = '수업시작시간 8:40'
-PAST_MIDNIGHT = ('미확정(추가 불가): 원문 교시 번호를 공식 교시표 간격으로 이어 계산하면 24시를 넘어 '
-                 '시각으로 바꿀 수 없습니다.')
+OLD_PAST_MIDNIGHT = ('미확정(추가 불가): 원문 교시 번호를 공식 교시표 간격으로 이어 계산하면 24시를 넘어 '
+                     '시각으로 바꿀 수 없습니다.')
+PAST_MIDNIGHT = ('시간 미정: 원문 교시 번호를 공식 교시표 간격으로 이어 계산하면 24시를 넘고, 약학대학 공지·'
+                 '공개 강의계획서 본문에도 실습 날짜·시각이 없어 원문 교시 표기를 보존한 채 시간 미정으로 둡니다.')
 
 
 class Unparsable(ValueError):
@@ -249,9 +253,9 @@ def apply(path):
             schedules, skipped = build(c)
         except Unparsable as e:
             if str(e) == 'past-midnight':
-                c['scheduleStatus'], c['schedules'] = 'unrecognized', []
-                c['remarks'] = replace_hold(hold, PAST_MIDNIGHT)
-                counts['unrecognized:past-midnight'] = counts.get('unrecognized:past-midnight', 0) + 1
+                c['scheduleStatus'], c['schedules'] = 'unscheduled', []
+                c['remarks'] = replace_hold(hold.replace(' ' + OLD_PAST_MIDNIGHT, ''), PAST_MIDNIGHT)
+                counts['unscheduled:past-midnight'] = counts.get('unscheduled:past-midnight', 0) + 1
             else:
                 counts[f'kept:{status}:{src}'] = counts.get(f'kept:{status}:{src}', 0) + 1
             continue

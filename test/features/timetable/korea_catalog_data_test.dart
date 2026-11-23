@@ -289,10 +289,10 @@ void main() {
         expect(c['remarks'], contains('공식 요일·교시 기준 확정'), reason: id);
         expect(c['remarks'], isNot(contains('일정 보류')), reason: id);
       } else {
-        expect(c['remarks'], contains('미확정(추가 불가)'), reason: id);
+        expect(c['remarks'], contains('원문 교시 표기를 보존한 채 시간 미정'), reason: id);
       }
     }
-    expect(statuses, {'scheduled': 95, 'unrecognized': 6});
+    expect(statuses, {'scheduled': 95, 'unscheduled': 6});
 
     // 교직 0교시는 08:40 시작, 1교시 시작(09:00)까지를 0교시 슬롯으로 보고 1교시와 합친다.
     final teaching = byId['korea/seoul/2026-2/SEDU101-01']!;
@@ -339,11 +339,11 @@ void main() {
       'classroom': '2-329',
       'date': '2026-09-03',
     });
-    // 24시를 넘는 교시 번호(약학과 토(8-17) 등)는 시각을 만들지 않는다.
-    expect(
-      byId['korea/sejong/2026-2/PHAR528-00']!['scheduleStatus'],
-      'unrecognized',
-    );
+    // 24시를 넘는 교시 번호(약학과 토(8-17) 등)는 시각을 만들지 않고 원문을 보존한 시간 미정으로 둔다.
+    final pharmacy = byId['korea/sejong/2026-2/PHAR528-00']!;
+    expect(pharmacy['scheduleStatus'], 'unscheduled');
+    expect(pharmacy['schedules'], isEmpty);
+    expect(pharmacy['sourceSchedule'], contains('토(8-17)'));
   });
 
   test('KU 의학과 공개 강의계획서 첨부의 회차별 날짜·교시로 확정한 강좌', () {
