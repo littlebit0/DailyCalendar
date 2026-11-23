@@ -99,11 +99,12 @@ void main() {
         'GEDM001-E6',
         'GEDW001-23',
       ]) {
+        // 2026-11-23 사용자 결정: 실시간 온라인 강좌도 공시 요일·시각으로 확정한다.
         expect(
           courses
               .singleWhere((c) => c.codeAndSection == id)
               .hasSchedulableMeetings,
-          isFalse,
+          isTrue,
         );
       }
     },
