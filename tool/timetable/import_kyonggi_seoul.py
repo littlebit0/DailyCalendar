@@ -9,8 +9,7 @@
   625952 교내이러닝·가상대학이러닝 합반 안내 첨부 '2026-2 이러닝 합반내역.pdf' (2026-09-10)
   625108 2026-2 교양/일반선택 이수요건 및 수강신청 안내 첨부 PDF (자유교양대학, 2026-07-31)
          p.12 '교양 및 일반선택 영역별 교양 그룹번호 (서울)': 그룹명에 요일·교시가 있다.
-  625109 같은 날 '교양 및 일반선택 교과목 동일·유사과목 지정 및 재수강 안내' 붙임1·2 PDF
-         (2026 교양 교육과정 학수코드)
+  623139 학사혁신팀 '2026학년도 교육과정 책자 안내' 첨부 '2026학년도 교육과정 안내 책자.pdf' (2026-04-08)
 
 규칙
 - 원문 행(캠퍼스 '서울' 또는 '서울주간')만 넣는다. 강좌명·과목번호·요일교시 원문은 그대로 둔다.
@@ -22,21 +21,19 @@
 - 시각이 없는 행(이러닝 합반, 교육봉사)은 unscheduled.
 - 학수코드·이수구분·학점은 서울 원문에 없다. 공지가 수원 강좌와 합반(같은 수업)이라고 밝힌
   행만 그 수원 강좌(kyonggi-suwon-2026-2.json, 2026-2 수원 공식 PDF) 값을 쓰고 비고에 근거를 남긴다.
-  교과목명만 같은 강좌에서는 가져오지 않는다. 그 밖의 행은 공지의 구분 원문을 classification에 두고
-  학수코드는 비우며 학점 필드는 생략한다.
+  교과목명만 같은 수원 강좌에서는 가져오지 않는다. 그 밖의 행은 공지의 구분 원문을 classification에 둔다.
 - 서울 교양 그룹 중 한 과목만 있는 영역(진성애인성·지역문제의창의적해결·사고와표현·대학영어·
   소프트웨어기초·컴퓨팅사고)은 그룹 = 그 과목의 그 요일·교시 강좌로 넣는다(sourceId ...-group-NN).
   여러 과목이 있는 영역(핵심교양·외국어영역·일반선택)은 과목명이 없어 넣지 않는다.
   같은 과목(명칭 접두 일치)·같은 요일교시의 공지 강좌가 이미 있으면 그 그룹은 중복이라 넣지 않는다.
   그룹 안 분반 수·과목번호는 원문에 없다.
-- 625109 붙임1·2가 '2026 교양 교육과정' 학수코드를 적은 과목은 그 코드를 쓴다(CURRICULUM의 원문 줄을
-  PDF에서 확인). 학점은 붙임 원문이 밝힌 것만: 붙임2 'AS395 대학영어(3학점)', 붙임1은 '동일과목,
-  유사과목은 학점이 같은 경우만 지정됩니다'라고 했으므로 지정 근거가 된 폐지 과목 학점.
+- 학수코드·학점은 학사혁신팀 '2026학년도 교육과정 안내 책자'(통합공지 623139 첨부) 교양(p.38~48)·교직(p.190~191)
+  표에서 교과목명이 정확히 같은 행의 학수번호·학점을 쓴다. 책자에 없는 과목은 비운다.
 - 교수·강의실은 원문에 없으므로 비운다.
 
 실행(저장소 루트): python3 tool/timetable/import_kyonggi_seoul.py <원본 폴더>
 원본 폴더에는 n625361.html, n625587.html, n625261.html, 988383_2026-2 이러닝 합반내역.pdf 와
-SOURCE_PDFS의 세 PDF가 있어야 한다(기본: work/tt1a-reopen/kyonggi/seoul-src).
+SOURCE_PDFS의 PDF가 있어야 한다(기본: work/tt1a-reopen/kyonggi/seoul-src).
 PDF는 pdfplumber로 읽는다(development/pdf-venv).
 """
 import hashlib
@@ -55,30 +52,13 @@ WEEKDAYS = '월화수목금토일'
 MERGED = {}  # 서울 과목번호 → 원문 합반 표기
 TERM = {'startDate': '2026-09-01', 'endDate': '2026-12-14'}
 GUIDE_PDF = '987011_2026-2 교양 이수요건 및 수강신청 안내.pdf'
-SAME_PDF = '986953_붙임1 교양 및 일반선택 동일 및 유사과목 지정현황.pdf'
-ENGLISH_PDF = '986954_붙임2 대학영어 및 제2외국어 재수강 안내.pdf'
-TEACHER_HTML = 'u_teacher_contents_key7041.html'  # 교직학부 교직과목(https://www.kyonggi.ac.kr/u_teacher/contents.do?key=7041)
-SOURCE_PDFS = [GUIDE_PDF, SAME_PDF, ENGLISH_PDF, TEACHER_HTML]
-# 학점만 원문에 있는 과목: 과목명 → (학점, 원문 줄). ②는 필수 2학점 표기.
-CREDIT_ONLY = {'교육철학및교육사': (2.0, '교육철학및교육사 ②')}
+BOOK_PDF = '983558_2026학년도 교육과정 안내 책자.pdf'
+BOOK_PAGES = list(range(38, 49)) + [190, 191]  # 교양교육과정·일반선택(인문사회예체능)·교직교육과정
+SOURCE_PDFS = [GUIDE_PDF, BOOK_PDF]
 # 서울 교양 그룹명 머리 → 과목명 (한 과목만 있는 영역)
 GROUP_COURSES = {'인성-진성애인성': '진성애인성', '인성-지역문제의창의적해결': '지역문제의창의적해결',
                  '사고-사고와표현': '사고와표현', '대학영어': '대학영어',
                  'SW-소프트웨어기초': '소프트웨어기초', 'SW-컴퓨팅사고': '컴퓨팅사고'}
-# 과목명 → (2026 학수코드, 학점, PDF, 원문 줄). 학점은 동일·유사과목 '학점이 같은 경우만 지정' 규칙의 폐지 과목 학점.
-CURRICULUM = {
-    '대학영어5(시사영어)': ('AS364', 3.0, SAME_PDF, 'AS042 시사영어 3학점 외영 AS364 대학영어5(시사영어)'),
-    '데이터와통계': ('AS446', 3.0, SAME_PDF, 'CB005 컴퓨터경영통계 3학점 융합 AS446 데이터와통계'),
-    '경제학이해하기': ('AS407', 3.0, SAME_PDF, 'AS685 경제학원론 3학점 사회 AS407 경제학이해하기'),
-    '디지털콘텐츠로만나는세계의교육': ('AT039', 3.0, SAME_PDF, 'AS993 글로컬시대의대학교육 3학점 역사 AT039 디지털콘텐츠로만나는세계의교육'),
-    '에피소드로읽는서양철학의인물과사상': ('AT017', 3.0, SAME_PDF, 'AS886 철학과영화 3학점 인간 AT017 에피소드로읽는서양철학의인물과사상'),
-    '테마로보는미술': ('AS420', 3.0, SAME_PDF, 'AS834 미술사 3학점 심미 AS420 테마로보는미술'),
-    '소셜리빙랩과지역혁신': ('AT025', 3.0, SAME_PDF, 'AT005 지역문제해결과소셜리빙랩 3 사회 AT025 소셜리빙랩과지역혁신'),
-    '이공계학부생들을위한바이오기술의이해': ('AT049', 3.0, SAME_PDF, 'AS945 바이오테크놀러지,A에서Z까지 3 과학 AT049 이공계학부생들을위한바이오기술의이해'),
-    '지역문제의창의적해결': ('AT101', 3.0, SAME_PDF, 'AS379 창의적문제해결 3 인성 AT101 지역문제의창의적해결'),
-    '사고와표현': ('AS371', 3.0, SAME_PDF, 'AS794 글쓰기 3학점 사고 AS371 사고와표현'),
-    '대학영어': ('AS395', 3.0, ENGLISH_PDF, "2024년 개설되는 ‘AS395 대학영어(3학점)’"),
-}
 
 
 def notice_text(path):
@@ -113,6 +93,19 @@ def pdf_text(path):
         return [p.extract_text() or '' for p in d.pages]
 
 
+def book_codes(src):
+    """교육과정 책자 표 행 'AS978 삶과철학 3 3 0 3'(교직은 '직필' 등 이수구분 포함) → 과목명: (학수번호, 학점, 쪽)"""
+    pages = pdf_text(os.path.join(src, BOOK_PDF))
+    out = {}
+    for no in BOOK_PAGES:
+        for m in re.finditer(r'([A-Z]{2}\d{3}) (?:직[필선자] )?(\S+) (\d) \d \d \d', pages[no - 1]):
+            out.setdefault(m.group(2), set()).add((m.group(1), float(m.group(3)), no))
+    # p.191 교직자유선택 표는 과목명이 두 줄로 나뉜다: '관광교재연구및지' … '2 ZD002 3 3 0 3 직자' … '도법'
+    assert re.search(r'관광교재연구및지\s.*?2 ZD002 3 3 0 3 직자\s.*?도법', pages[190], re.S)
+    out['관광교재연구및지도법'] = {('ZD002', 3.0, 191)}
+    return {k: v.pop() for k, v in out.items() if len(v) == 1}
+
+
 def seoul_groups(src):
     """625108 첨부 p.12 서울 교양 그룹 → [(번호, 그룹명, 과목명, 요일교시, 영역)]"""
     pages = pdf_text(os.path.join(src, GUIDE_PDF))
@@ -131,15 +124,7 @@ def seoul_groups(src):
 
 
 def main(src):
-    flat = {}
-    for f in (SAME_PDF, ENGLISH_PDF):
-        flat[f] = re.sub(r'\s+', ' ', ' '.join(pdf_text(os.path.join(src, f))))
-    for title, (code, _, f, line) in CURRICULUM.items():
-        assert line in flat[f], (title, line)
-    teacher = re.sub(r'\s+', ' ', html.unescape(
-        re.sub(r'<[^>]+>', ' ', open(os.path.join(src, TEACHER_HTML), encoding='utf-8').read())))
-    for title, (_, line) in CREDIT_ONLY.items():
-        assert line in teacher, (title, line)
+    book = book_codes(src)
     rows = []  # (reg, name, schedule or '', source key, remark)
     for ntt, label in [('625361', '1차 폐강 강좌 안내(2026-08-18)'), ('625587', '2차 폐강 강좌 안내(2026-08-27)')]:
         text = notice_text(os.path.join(src, f'n{ntt}.html'))
@@ -222,14 +207,9 @@ def main(src):
         else:
             classification = '교양/일반선택/교육학전공'
             notes.append('이수구분: 공지 제목의 구분 원문(과목별 구분 미게시)')
-        if not code and title in CURRICULUM:
-            code, credits, f, line = CURRICULUM[title]
-            label = '붙임1 교양 및 일반선택 교과목 중 동일 및 유사과목 지정현황' if f == SAME_PDF else '붙임2 대학영어 및 제2외국어 재수강 안내'
-            notes.append(f'학수코드·학점: 625109 {label}(2026 교양 교육과정) "{line}"'
-                         + (' · 동일·유사과목은 학점이 같은 경우만 지정' if f == SAME_PDF else ''))
-        if credits is None and title in CREDIT_ONLY:
-            credits, line = CREDIT_ONLY[title]
-            notes.append(f'학점: 교직학부 교직과목 안내(u_teacher contents.do?key=7041) 교직이론 "{line}"(② 필수 2학점) · 학수코드 미게시')
+        if not code and title in book:
+            code, credits, page = book[title]
+            notes.append(f'학수코드·학점: 2026학년도 교육과정 안내 책자(통합공지 623139 첨부) p.{page} "{code} {title} {credits:g}학점"')
         if sched:
             try:
                 ms = meetings(sched)

@@ -42,6 +42,22 @@ void main() {
       );
     }
   });
+
+  test('Kyonggi Seoul profiles saved by the Seoul campus row map to Seoul', () {
+    for (final id in [
+      'academyinfo:0000058',
+      'institution:academyinfo:0000058',
+    ]) {
+      final profile = AcademicProfile(
+        universityId: id,
+        universityName: '경기대학교',
+        schoolKind: 'fourYear',
+      );
+      expect(profile.timetableUniversity, 'kyonggi');
+      expect(profile.timetableCampus, 'seoul');
+      expect(profile.timetableSupported, isTrue);
+    }
+  });
   test(
     'actual Kyonggi subject codes and stable registration IDs preserve plans through Drive',
     () {
@@ -281,12 +297,13 @@ void main() {
     final english = byReg('9037');
     expect(english.title, '대학영어5(시사영어)');
     expect(english.sourceSchedule, '금789');
-    // 학수코드는 수원 강좌가 아니라 625109 붙임1(2026 교양 교육과정) 원문에서 온다.
+    // 학수코드·학점은 수원 강좌가 아니라 2026학년도 교육과정 안내 책자 표에서 온다.
     expect(english.code, 'AS364');
-    expect(english.remarks, contains('AS042 시사영어 3학점 외영 AS364 대학영어5(시사영어)'));
+    expect(english.remarks, contains('p.45 "AS364 대학영어5(시사영어) 3학점"'));
     expect(english.sourceClassification, '교양/일반선택/교육학전공');
-    // 원문에 학수코드가 없는 강좌는 비워 둔다.
-    expect(byReg('9051').code, isEmpty);
+    expect(byReg('9051').code, 'AT031');
+    // 책자 p.191 교직자유선택: 과목명이 두 줄로 나뉜 행.
+    expect(byReg('9126').code, 'ZD002');
     expect(english.meetings.single.weekday, 5);
     expect(english.meetings.single.originalStartMinute, 900);
     expect(english.meetings.single.originalEndMinute, 1080);
