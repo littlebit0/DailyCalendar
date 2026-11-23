@@ -176,8 +176,8 @@
     "reason": "2026-11-23 사용자 결정: 표 밖 늦은 교시 확정, 의학과 33건을 공식 JUMP 조회 결과로 교체"
   },
   "assets/timetable/jbnu-unknown-2026-2.json": {
-    "sha256": "a993d77591eaa3b52e105ac5f714fc14334155ab71d7f68c6904f4c7b3e9d5e3",
-    "reason": "2026-11-23 사용자 결정: 표 밖 늦은 교시 확정, 의학과 33건을 공식 JUMP 조회 결과로 교체"
+    "sha256": "401a6c30d367f581520a25d3f0dc82f7c522330763b7bf9fce844bb9e073ec24",
+    "reason": "2026-11-23: 사회봉사 1·2를 공식 일정 안내에 따라 시간 미정으로 둠"
   },
   "assets/timetable/organizations/jeju.json": {
     "sha256": "f8bd7a4d4594536f540ac54ab0437d083d92e445375d4142ff1457517f7d06c8",

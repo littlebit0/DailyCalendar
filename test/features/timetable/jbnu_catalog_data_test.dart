@@ -122,7 +122,7 @@ void main() {
     },
   );
   test(
-    'JBNU restored catalog keeps 3571 courses and 2 held clocks',
+    'JBNU restored catalog keeps 3571 courses and no held clocks',
     () async {
       final datasets = await UniversityCatalog.load(
         bundle: FileAssetBundle(),
@@ -144,9 +144,17 @@ void main() {
       expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(3569));
       expect(
         courses.where((c) => c.scheduleStatus == 'unrecognized'),
-        hasLength(2),
+        isEmpty,
       );
-      expect(courses.where((c) => c.scheduleStatus == 'unscheduled'), isEmpty);
+      // 사회봉사 1·2 (원문 교시 '0') run as 30 volunteer hours with no class
+      // time per the official 2026-2 guide, so they are untimed courses.
+      expect(
+        courses
+            .where((c) => c.scheduleStatus == 'unscheduled')
+            .map((c) => c.code)
+            .toSet(),
+        {'LAB2014', 'LAB2015'},
+      );
       // Late half-slots past the handbook table continue the same 30-minute
       // unit (2026-11-23 user decision): 월 11-A 19:00 ... 월 13-B ~22:00.
       final late = courses.singleWhere(
