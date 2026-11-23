@@ -74,8 +74,9 @@ void main() {
           expect(c.meetings, isEmpty);
         }
       }
-      // 104 printed clocks plus 1 DU-Flex row confirmed from the official legend.
-      expect(added.where((c) => c.meetings.isNotEmpty), hasLength(105));
+      // 104 printed clocks, 1 DU-Flex row and 3 rows whose official clock is
+      // confirmed by the 2026-11-23 user decision.
+      expect(added.where((c) => c.meetings.isNotEmpty), hasLength(108));
     },
   );
   test(
@@ -112,7 +113,10 @@ void main() {
             !resolvedGeometry.containsKey(c.sourceId) &&
             // DU-Flex: the official timetable legend prints only the weekly
             // in-person 75 minutes, confirmed on 2026-11-23.
-            !c.remarks.contains('DU-Flex 대면 시각 확정'),
+            !c.remarks.contains('DU-Flex 대면 시각 확정') &&
+            // 2026-11-23 user decision: official weekday/clock is confirmed
+            // even when the operation mode is unclear.
+            !c.remarks.contains('공식 시각 확정(2026-11-23)'),
       )) {
         expect(c.meetings, isEmpty);
       }
@@ -152,6 +156,18 @@ void main() {
             final start = int.parse(b[2]!) * 60 + int.parse(b[3]!);
             final end = int.parse(b[4]!) * 60 + int.parse(b[5]!);
             var room = source['강의실'];
+            final rooms = [
+              for (final row in record['publicEducationRows'] as List)
+                row['education']['강의실'] as String,
+            ];
+            if (c.remarks.contains('긴 표기로 통일')) {
+              room = rooms.reduce((a, b) => b.length > a.length ? b : a);
+              expect(rooms.every((r) => room.startsWith(r.split(' ').first)), true);
+            }
+            final notice = RegExp(r'변경 강의실 (\S+)을').firstMatch(c.remarks);
+            if (notice != null) {
+              room = notice[1];
+            }
             final proof = resolvedGeometry[c.sourceId];
             if (proof != null) {
               final printedRows = proof['printedGeometryRows'] as List;
@@ -179,8 +195,8 @@ void main() {
         }
         expect(actual, expected, reason: 'native registration ${c.code}');
       }
-      expect(count, 57978);
-      expect(courses.where((c) => c.meetings.isNotEmpty), hasLength(2963));
+      expect(count, 61985);
+      expect(courses.where((c) => c.meetings.isNotEmpty), hasLength(3160));
     },
   );
   for (final mode in [
@@ -189,7 +205,7 @@ void main() {
     LectureMode.video,
   ]) {
     test(
-      'Actual 2963 model classes 57978 dates full Drive JSON roundtrip ${mode.name}',
+      'Actual 3160 model classes 61985 dates full Drive JSON roundtrip ${mode.name}',
       () {
         final values = <String, TimetableSyncValue>{};
         var count = 0;
@@ -213,8 +229,8 @@ void main() {
             'research',
           );
         }
-        expect(values, hasLength(2963));
-        expect(count, 57978);
+        expect(values, hasLength(3160));
+        expect(count, 61985);
         final doc = TimetableSyncDocument.records(
           courses: values,
           schemaVersion: 2,
@@ -222,7 +238,7 @@ void main() {
         final json =
             jsonDecode(jsonEncode(doc.toJson())) as Map<String, dynamic>;
         final restored = TimetableSyncDocument.fromJson(json);
-        expect(restored.materializeClasses(), hasLength(2963));
+        expect(restored.materializeClasses(), hasLength(3160));
         for (final c in restored.materializeClasses()) {
           expect(c.isValid, true);
           expect(c.toJson(), values[timetableCourseSyncKey(c)]!.value);
