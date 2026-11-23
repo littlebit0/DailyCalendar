@@ -6,6 +6,7 @@ import 'package:daily/core/academic/academic_profile.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
 import 'package:daily/features/timetable/domain/timetable.dart';
+import 'package:daily/features/timetable/domain/university_course.dart';
 
 void main() {
   test('GNU integrated profile uses its own campus-filterable catalog', () {
@@ -163,8 +164,8 @@ void main() {
         }
       }
       expect(count, 4842);
-      expect(scheduled, 3005);
-      expect(meetings, 53869);
+      expect(scheduled, 3477);
+      expect(meetings, 62695);
       for (final mode in [
         LectureMode.inPerson,
         LectureMode.liveOnline,
@@ -226,9 +227,47 @@ void main() {
         ),
         isTrue,
       );
+      // 2026-11-23 1차 재개: 보류 강좌를 공식 교시표(n교시 08:00+60n분, 60분 슬롯)로 확정.
+      // 표 밖 교시·토요일도 같은 슬롯으로 이어 계산한다.
+      final all = datasets.expand((d) => d.courses).toList();
+      UniversityCourse course(String code, String section) =>
+          all.singleWhere((c) => c.code == code && c.section == section);
+      final night = course('11021421', '001');
+      expect(night.sourceSchedule, '화14,15[405-0107]');
+      expect(night.meetings, hasLength(14));
+      for (final m in night.meetings) {
+        expect([m.originalStartMinute, m.originalEndMinute], [1320, 1440]);
+        expect(m.classroom, '405-0107');
+      }
+      final saturdayRemote = course('11011228', '001');
+      expect(saturdayRemote.sourceSchedule, '토3');
+      expect(saturdayRemote.meetings, hasLength(13));
+      expect(
+        saturdayRemote.meetings.every(
+          (m) =>
+              m.weekday == 6 &&
+              m.originalStartMinute == 660 &&
+              m.originalEndMinute == 720,
+        ),
+        isTrue,
+      );
+      expect(
+        saturdayRemote.meetings.map((m) => m.date),
+        contains('2026-12-12'),
+      );
+      expect(
+        saturdayRemote.meetings.map((m) => m.date),
+        isNot(contains('2026-10-03')),
+      );
+      expect(
+        all.where((c) => c.scheduleStatus == 'unrecognized'),
+        hasLength(4),
+      );
       for (final pair in [
         ['11026184', '002'],
         ['11002308', '001'],
+        ['11020698', '002'],
+        ['11022792', '001'],
       ]) {
         expect(
           datasets

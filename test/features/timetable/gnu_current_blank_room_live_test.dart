@@ -12,6 +12,8 @@ const directory =
     'work/university-research/catalog-r/gnu/blank-room-and-live-source-followup-v6-20261009';
 const baseline =
     'work/university-research/catalog-r/gnu/remaining-campus-clock-followup-v5-20261008';
+// 2026-11-23 1차 재개: 보류 강좌를 공식 요일·교시로 확정한 행(tool/timetable/apply_gnu_official_times.py).
+const confirmedBasis = 'nativeWeeklyPeriodsOfficialClockUserDecision20261123';
 Map<String, dynamic> read(String path) {
   final actual = path.startsWith('$directory/gnu-')
       ? 'assets/timetable/${path.split('/').last.split('.').first}.json'
@@ -112,6 +114,7 @@ void main() {
         'gnu/unknown/2026-2/11027084-001',
       };
       var unchanged = 0;
+      var confirmed = 0;
       var oldScheduled = 0;
       var oldDates = 0;
       var newDates = 0;
@@ -122,6 +125,14 @@ void main() {
         final previous = before[entry.key]!;
         oldDates += (previous['schedules'] as List).length;
         oldScheduled += (previous['schedules'] as List).isNotEmpty ? 1 : 0;
+        if ((entry.value['metadata'] as Map)['reservationBasis'] ==
+            confirmedBasis) {
+          expect(previous['scheduleStatus'], 'unrecognized');
+          expect(previous['schedules'], isEmpty);
+          expect(entry.value['sourceSchedule'], previous['sourceSchedule']);
+          confirmed++;
+          continue;
+        }
         if (!additions.containsKey(entry.key)) {
           expect(entry.value, previous, reason: entry.key);
           unchanged++;
@@ -255,20 +266,21 @@ void main() {
           expect(current['campus'], 'chilam');
         }
       }
-      expect(unchanged, 4799);
+      expect(unchanged, 4327);
+      expect(confirmed, 472);
       expect(oldScheduled, 2962);
       expect(oldDates, 53239);
       expect(newDates, 630);
       expect(blankRooms, 39);
       expect(blankRoomDates, 574);
       expect(nurseCases, 36);
-      expect(models.where((c) => c.meetings.isNotEmpty).length, 3005);
+      expect(models.where((c) => c.meetings.isNotEmpty).length, 3477);
       expect(
         after.values.fold<int>(
           0,
           (sum, c) => sum + (c['schedules'] as List).length,
         ),
-        53869,
+        62695,
       );
       for (final mode in [
         LectureMode.inPerson,
@@ -305,7 +317,7 @@ void main() {
         final restored = TimetableSyncDocument.fromJson(
           jsonDecode(jsonEncode(document.toJson())),
         );
-        expect(restored.courses.length, 3005);
+        expect(restored.courses.length, 3477);
         for (final entry in savedByKey.entries) {
           final actual = TimetableClass.fromJson(
             Map<String, dynamic>.from(

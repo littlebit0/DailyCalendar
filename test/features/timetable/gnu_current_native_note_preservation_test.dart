@@ -14,6 +14,8 @@ const frozenV6 =
     'work/university-research/catalog-r/gnu/blank-room-and-live-source-followup-v6-20261009';
 const frozenV5 =
     'work/university-research/catalog-r/gnu/remaining-campus-clock-followup-v5-20261008';
+// 2026-11-23 1차 재개: 보류 강좌를 공식 요일·교시로 확정한 행(tool/timetable/apply_gnu_official_times.py).
+const confirmedBasis = 'nativeWeeklyPeriodsOfficialClockUserDecision20261123';
 Map<String, dynamic> readJson(String path) {
   final actual = path.startsWith('$currentDirectory/gnu-')
       ? 'assets/timetable/${path.split('/').last.split('.').first}.json'
@@ -44,6 +46,7 @@ void main() {
       final models = <UniversityCourse>[];
       var nativeCount = 0;
       var changed = 0;
+      var confirmed = 0;
       var scheduled = 0;
       var dates = 0;
       var preservedV5Scheduled = 0;
@@ -76,7 +79,7 @@ void main() {
         final earlierRows = {
           for (final r in earlier['courses'] as List) (r as Map)['sourceId']: r,
         };
-        expect(current.keys.toSet(), old.keys.toSet());
+        expect(current.keys.toSet(), {...old.keys, 'periodEvidence'});
         for (final key in old.keys.where((k) => k != 'courses')) {
           expect(current[key], old[key]);
         }
@@ -84,7 +87,11 @@ void main() {
           final row = r as Map;
           final previous = oldRows[row['sourceId']] as Map;
           nativeCount++;
-          if (row['sourceId'] == 'gnu/gajwa/2026-2/11000004-001') {
+          if ((row['metadata'] as Map)['reservationBasis'] == confirmedBasis) {
+            expect(previous['scheduleStatus'], 'unrecognized');
+            expect(previous['schedules'], isEmpty);
+            confirmed++;
+          } else if (row['sourceId'] == 'gnu/gajwa/2026-2/11000004-001') {
             changed++;
             expect(
               (row['metadata'] as Map)['originalEducationalFields']['remarks'],
@@ -127,8 +134,9 @@ void main() {
       }
       expect(nativeCount, 4842);
       expect(changed, 1);
-      expect(scheduled, 3005);
-      expect(dates, 53869);
+      expect(confirmed, 472);
+      expect(scheduled, 3477);
+      expect(dates, 62695);
       expect(preservedV5Scheduled, 2962);
       expect(preservedV5Dates, 53239);
       for (final mode in [
@@ -159,7 +167,7 @@ void main() {
         final restored = TimetableSyncDocument.fromJson(
           jsonDecode(jsonEncode(doc.toJson())),
         );
-        expect(restored.courses.length, 3005);
+        expect(restored.courses.length, 3477);
         for (final entry in saved.entries) {
           final actual = TimetableClass.fromJson(
             Map<String, dynamic>.from(
