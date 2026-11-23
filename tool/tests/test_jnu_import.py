@@ -33,6 +33,7 @@ class ChonnamTimetableImportTests(unittest.TestCase):
         for value,room in [('일1','강의실'),('미정',''),('월3월4','A\nB\nC')]:
             with self.subTest(value=value): self.assertEqual(jnu.meetings(value,room),([], 'unrecognized'))
         self.assertEqual(jnu.meetings('', ''),([], 'unscheduled'))
+        self.assertEqual(jnu.meetings('****', '****'),([], 'unscheduled'))
 
     def test_unambiguous_late_modules_remain_available(self):
         parsed,status=jnu.meetings('월14월15화10','공6-420')

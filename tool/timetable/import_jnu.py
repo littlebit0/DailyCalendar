@@ -133,6 +133,8 @@ def meetings(schedule, classroom):
     compact = re.sub(r'\s+', '', schedule)
     if not compact:
         return [], 'unscheduled'
+    if re.fullmatch(r'\*+', compact):
+        return [], 'unscheduled'  # '****' = no time assigned (2026-11-23)
     tokens = re.findall(r'([월화수목금토일])(\d+)', compact)
     if ''.join(day + period for day, period in tokens) != compact:
         return [], 'unrecognized'

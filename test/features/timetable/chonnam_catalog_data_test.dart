@@ -14,8 +14,8 @@ Map<String, dynamic> source(String campus) =>
 
 void main() {
   for (final (campus, rows, total, scheduled, unrecognized, unscheduled) in [
-    ('gwangju', 16885, 3166, 3163, 2, 1),
-    ('yeosu', 3344, 696, 693, 3, 0),
+    ('gwangju', 16885, 3166, 3163, 0, 3),
+    ('yeosu', 3344, 696, 693, 0, 3),
   ]) {
     test('all $campus public courses survive catalog import and round trip', () {
       final raw = source(campus);
@@ -71,7 +71,8 @@ void main() {
           if (course.scheduleStatus == 'unrecognized') {
             expect(course.sourceSchedule, isNotEmpty);
           } else {
-            expect(course.sourceSchedule, isEmpty);
+            // '****' marks a course with no time assigned (2026-11-23).
+            expect(course.sourceSchedule, anyOf(isEmpty, '****'));
           }
           // Only courses with verified meetings enter the add/round-trip path.
           continue;
@@ -161,8 +162,9 @@ void main() {
         (c) => c.code == 'JAU0002' && c.section == '1',
       );
       expect(ambiguous.sourceSchedule, '****');
-      expect(ambiguous.scheduleStatus, 'unrecognized');
+      expect(ambiguous.scheduleStatus, 'unscheduled');
       expect(ambiguous.hasSchedulableMeetings, isFalse);
+      expect(ambiguous.canAddToTimetable, isTrue);
       expect(ambiguous.matchesQuery('자유과제2'), isTrue);
 
       final late = courses.singleWhere(
