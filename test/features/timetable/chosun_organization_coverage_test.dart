@@ -32,7 +32,7 @@ void main() {
           }
         }
       }
-      expect(courses, 3063);
+      expect(courses, 3255);
       expect(raw, isEmpty);
       expect(orphans, isEmpty);
     },
@@ -47,7 +47,7 @@ void main() {
       ];
       expect(
         courses.where((c) => c.scheduleStatus == 'scheduled'),
-        hasLength(3063),
+        hasLength(3255),
       );
       expect(
         courses.where((c) => c.scheduleStatus == 'unrecognized'),
