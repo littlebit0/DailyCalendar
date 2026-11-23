@@ -21,18 +21,30 @@ void main() {
       );
       final courses = datasets.expand((d) => d.courses).toList();
       expect(courses.map((c) => c.sourceId).toSet(), hasLength(3166));
-      expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(2997));
-      expect(
-        courses.where((c) => c.scheduleStatus == 'unscheduled'),
-        hasLength(162),
-      );
-      final blocked = courses.where((c) => c.scheduleStatus == 'unrecognized');
-      expect(blocked, hasLength(7));
-      for (final c in blocked) {
-        expect(c.meetings, isEmpty);
-        expect(c.sourceSchedule, isNotEmpty);
-        expect(c.remarks, contains('적용 기간 미확정'));
+      expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(3004));
+      final untimed = courses.where((c) => c.scheduleStatus == 'unscheduled');
+      expect(untimed, hasLength(162));
+      for (final c in untimed) {
+        expect(c.sourceSchedule, anyOf(isEmpty, startsWith('원격수업(')));
       }
+      expect(courses.where((c) => c.scheduleStatus == 'unrecognized'), isEmpty);
+      expect(courses.any((c) => c.remarks.contains('적용 기간 미확정')), isFalse);
+      // 실습 강좌: 운영 기간 미표기여도 원문 시각 그대로 주간 확정.
+      final practicum = courses.singleWhere(
+        (c) => c.codeAndSection == '13830-01',
+      );
+      expect(practicum.sourceSchedule, '화13:30~15:20 토15:30~17:20(봉325)');
+      expect(practicum.scheduleStatus, 'scheduled');
+      expect(
+        practicum.meetings
+            .map((m) => [m.weekday, m.originalStartMinute, m.originalEndMinute])
+            .toList(),
+        [
+          [2, 810, 920],
+          [6, 930, 1040],
+        ],
+      );
+      expect(practicum.remarks, contains('공식 요일·시각 기준 확정'));
       expect(courses.any((c) => c.codeAndSection == '32233-01'), isFalse);
       final changed = courses.singleWhere(
         (c) => c.codeAndSection == '46708-01',
