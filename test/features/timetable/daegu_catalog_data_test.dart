@@ -138,6 +138,16 @@ void main() {
         );
         expect(m.date, isNot('2026-09-04'));
       }
+      // The same notice moves law major 2165 to Tuesday 11:00-11:50.
+      final lawCareer = courses.singleWhere((c) => c.code == '2165');
+      expect(lawCareer.sourceSchedule, '수(12:00-12:50)');
+      expect(lawCareer.meetings, hasLength(14));
+      for (final m in lawCareer.meetings) {
+        expect(
+          [m.weekday, m.originalStartMinute, m.originalEndMinute],
+          [2, 660, 710],
+        );
+      }
       // Courses whose official clock cell is blank stay without meetings and
       // are listed as unscheduled (2026-11-23 instruction); none stays held.
       for (final row in raw['courses'] as List) {
