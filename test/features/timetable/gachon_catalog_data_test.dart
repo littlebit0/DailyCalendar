@@ -68,8 +68,8 @@ void main() {
       }
       expect(courses.map((c) => c.sourceId).toSet(), hasLength(3809));
       final approved = courses.where((c) => c.hasSchedulableMeetings).toList();
-      expect(approved, hasLength(3805));
-      expect(approved.expand((c) => c.meetings), hasLength(65290));
+      expect(approved, hasLength(3807));
+      expect(approved.expand((c) => c.meetings), hasLength(65316));
       for (final mode in [
         LectureMode.inPerson,
         LectureMode.liveOnline,
@@ -211,7 +211,7 @@ void main() {
         }
       }
     }
-    expect(checked, 65289);
+    expect(checked, 65315);
     expect(clockText, 1);
   });
 
@@ -238,14 +238,28 @@ void main() {
       }
     }
     expect(status, {
-      'global': {'scheduled': 3240, 'unrecognized': 2},
+      'global': {'scheduled': 3242},
       'medical': {'scheduled': 565, 'unscheduled': 2},
     });
-    // 원문 모순(개강 전 8/27~8/28 집중 일정 vs 금13·14)은 보류로 남는다.
+    // AI-NTree: 강의계획서의 1박 2일 일정과 달라도 공식 시간표 금13·14 →
+    // 금 21:00~23:00, 9/1~12/14 매주(추석 9/25·한글날 10/9 제외).
     for (final id in ['16013/001', '16013/019']) {
-      final held = courses['gachon/20/2026/2/$id']!;
-      expect(held['scheduleStatus'], 'unrecognized');
-      expect(held['schedules'], isEmpty);
+      final course = courses['gachon/20/2026/2/$id']!;
+      expect(course['scheduleStatus'], 'scheduled');
+      final schedules = course['schedules'] as List;
+      expect(schedules, hasLength(13));
+      expect(schedules.first, {
+        'weekday': 5,
+        'startMinute': 1260,
+        'endMinute': 1380,
+        'classroom': '',
+        'date': '2026-09-04',
+      });
+      expect((schedules.last as Map)['date'], '2026-12-11');
+      expect(
+        (course['departmentRemarks'] as Map).values.single,
+        contains('참고: 공개 강의계획서 일정은 강화캠퍼스'),
+      );
     }
     // 휴강·보강 비고가 있던 강좌: 금1·금2 → 금 09:00~11:00, 추석 9/25·한글날 10/9 제외.
     final makeup = courses['gachon/21/2026/2/M3040/001']!;
