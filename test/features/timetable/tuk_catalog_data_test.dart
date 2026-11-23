@@ -53,9 +53,10 @@ void main() {
       ...UniversityDataset.fromJson(read(e['file'])).courses,
   ];
   test(
-    '1431 native education lossless with physical campus evidence separate',
+    '1466 native education lossless with physical campus evidence separate',
     () {
-      expect(courses, hasLength(1431));
+      // 2026-11-23 사용자 결정: 9/8 공개 폐강 목록 35강좌도 7월 원표 그대로 넣는다.
+      expect(courses, hasLength(1466));
       for (final e in audit['datasets'] as List) {
         expect(
           sha256
@@ -91,8 +92,8 @@ void main() {
           expect(b['departmentRemarks'][e.key], startsWith(e.value));
         }
       }
-      expect(courses.where((c) => c.campus == 'first'), hasLength(824));
-      expect(courses.where((c) => c.campus == 'unknown'), hasLength(607));
+      expect(courses.where((c) => c.campus == 'first'), hasLength(848));
+      expect(courses.where((c) => c.campus == 'unknown'), hasLength(618));
     },
   );
   for (final mode in [
@@ -100,7 +101,7 @@ void main() {
     LectureMode.liveOnline,
     LectureMode.video,
   ]) {
-    test('1414 dated school plans actual sync roundtrip $mode', () {
+    test('1449 dated school plans actual sync roundtrip $mode', () {
       final values = <String, TimetableSyncValue>{};
       var count = 0;
       for (final c in courses) {
@@ -173,8 +174,8 @@ void main() {
           'research',
         );
       }
-      expect(values, hasLength(1414));
-      expect(count, 21334);
+      expect(values, hasLength(1449));
+      expect(count, 21893);
       final doc = TimetableSyncDocument.records(
         courses: values,
         schemaVersion: 2,
@@ -250,6 +251,6 @@ void main() {
         checked++;
       }
     }
-    expect(checked, 1739);
+    expect(checked, 1785);
   });
 }

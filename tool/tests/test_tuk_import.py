@@ -33,9 +33,10 @@ class TukImportTest(unittest.TestCase):
         self.assertEqual(sum(c['courseCode']=='AAE31014' and c['section']=='01' for c in self.courses),1)
 
     def test_extended_code_and_unscheduled_course_retained(self):
+        # 2026-11-23 사용자 결정: 현장연구도 원표 강의시간으로 확정한다.
         practice = self.course('AFE200003','01')
-        self.assertEqual(practice['scheduleStatus'],'unrecognized')
-        self.assertEqual(practice['schedules'],[])
+        self.assertEqual(practice['scheduleStatus'],'scheduled')
+        self.assertEqual([(s['startMinute'],s['endMinute']) for s in practice['schedules']],[(570,1250)])
         self.assertIn('09:30~20:50',practice['sourceSchedule'])
         online = self.course('AAK4S010','01')
         self.assertEqual(online['scheduleStatus'],'unscheduled')
@@ -47,9 +48,12 @@ class TukImportTest(unittest.TestCase):
         self.assertTrue(eh['schedules'])
         self.assertTrue(any('소속학과 수강 원칙' in r for r in eh['departmentRemarks'].values()))
 
-    def test_official_closed_section_excluded(self):
-        self.assertFalse(any(c['courseCode']=='ACS48012' and c['section']=='01' for c in self.courses))
-        self.assertIn(('ACS48012','01'),self.audit['excludedClosedKeys'])
+    def test_official_closed_section_kept_with_note(self):
+        # 2026-11-23 사용자 결정: 폐강 목록 강좌도 원표 그대로 넣는다.
+        closed = self.course('ACS48012','01')
+        self.assertEqual(closed['scheduleStatus'],'scheduled')
+        self.assertTrue(all('폐강 목록' in r for r in closed['departmentRemarks'].values()))
+        self.assertIn(('ACS48012','01'),self.audit['closedKeysKept'])
 
     def test_bad_clock_mapping_and_incomplete_pages_rejected(self):
         for value in ['월[1]09:90~10:20(C동1호)','월[1]10:20~09:30(C동1호)','월[1]09:30~10:20(C동1호,C동2호)']:

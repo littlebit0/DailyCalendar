@@ -51,7 +51,7 @@ def parse_documents(documents, closures, year, semester):
     closed = {(r[1], r[2]) for r in closures}
     if not closures or len(closed) != len(closures):
         raise ValueError('Empty or duplicate TUK closure list')
-    courses, count, removed = {}, 0, set()
+    courses, count, listed = {}, 0, set()
     for document in documents:
         tables, departments = document['tables'], document['departments']
         if [t['page'] for t in tables] != list(range(1, len(tables)+1)) or any(t['table'] != 0 for t in tables):
@@ -69,19 +69,19 @@ def parse_documents(documents, closures, year, semester):
                 code, section = compact(row[3]), compact(row[4])
                 if not re.fullmatch(r'[A-Z]{3}[A-Z0-9]{5,6}', code) or not re.fullmatch(r'\d{2}', section) or not row[2]:
                     raise ValueError('Invalid TUK course identity')
-                if (code, section) in closed:
-                    removed.add((code, section)); continue
+                # 2026-11-23 사용자 결정: 폐강 목록에 있어도 원표 행을 빼지 않고 표시만 남긴다.
+                is_closed = (code, section) in closed
+                if is_closed:
+                    listed.add((code, section))
                 credit_match = re.fullmatch(r'(\d+(?:\.\d+)?)\((\d+(?:\.\d+)?)\)', compact(row[5]))
                 if not credit_match:
                     raise ValueError('Invalid TUK credit/design-credit notation')
                 credits = float(credit_match[1])
                 parsed = meetings(row[8])
-                # Published field research/practice and service placeholder clocks
-                # do not establish actual attendance dates. Retain source evidence
-                # and block weekly scheduling until separately published dates exist.
-                unresolved = compact(row[2]).startswith(('ER(', '현장실습')) or compact(row[2]) == '사회봉사'
-                slots = [] if unresolved else parsed
-                status = 'unrecognized' if unresolved else 'scheduled' if slots else 'unscheduled'
+                # 2026-11-23 사용자 결정: 현장연구·현장실습·사회봉사도 원표 강의시간으로 확정한다.
+                field = compact(row[2]).startswith(('ER(', '현장실습')) or compact(row[2]) == '사회봉사'
+                slots = parsed
+                status = 'scheduled' if slots else 'unscheduled'
                 remark_fields = [(grade, '학년'), (row[5], '학점(설계)'), (row[6], '시수'),
                                  (row[1], '공식 이수구분(구이수구분)'), (row[10], '부전공'),
                                  (row[11], '복수전공'), (row[12], '융합전공 운영학과'),
@@ -89,8 +89,10 @@ def parse_documents(documents, closures, year, semester):
                 remark = '\n'.join(f'{label}: {v}' for v,label in remark_fields if v)
                 if compact(row[2]).startswith('EH'):
                     remark += '\nEH: 소속학과 수강 원칙, 타학과 후순위·담당교수 승인 필요(공식 수강안내)'
-                if unresolved:
+                if field:
                     remark += '\n실제 현장연구/사회봉사 수업 기간·일자는 별도 확인 필요'
+                if is_closed:
+                    remark += '\n9월8일 학교 공개 폐강 목록에 있던 강좌입니다. 폐강 여부와 관계없이 원표 시간표 그대로 넣었습니다.'
                 key = (code, section)
                 candidate = {'sourceId':f'tuk/main/{year}/{semester}/{code}/{section}',
                              'universityId':'tuk','campus':'main','academicYear':year,'semester':semester,
@@ -116,8 +118,8 @@ def parse_documents(documents, closures, year, semester):
                     course['departmentCredits'][department] = credits
                     course['departmentClassifications'][department] = classification
                     course['departmentRemarks'][department] = remark
-    return list(courses.values()), {'sourceRows':count,'excludedClosedKeys':sorted(removed),
-                                   'closureKeysNotInSnapshot':sorted(closed-removed)}
+    return list(courses.values()), {'sourceRows':count,'closedKeysKept':sorted(listed),
+                                   'closureKeysNotInSnapshot':sorted(closed-listed)}
 
 
 def extract_document(path, year, semester):
