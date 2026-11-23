@@ -76,6 +76,10 @@ void main() {
             '${DateTime.parse(m.date!).weekday}/${m.originalStartMinute}/${m.originalEndMinute}',
         };
         expect(actual, expected, reason: c.sourceId);
+        // 학기종료일(2026-12-18) 뒤에는 수업을 만들지 않는다.
+        for (final m in c.meetings) {
+          expect(m.date!.compareTo('2026-12-18') <= 0, true, reason: c.sourceId);
+        }
         checked++;
       }
       expect(checked, 2450);
