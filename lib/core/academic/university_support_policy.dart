@@ -56,7 +56,6 @@ class UniversitySupportPolicy {
     'kumoh',
     'kunsan',
     'kwangwoon',
-    'kyonggi',
     'mju',
     'mmu',
     'mokpo',
