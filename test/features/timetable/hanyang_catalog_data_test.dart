@@ -43,8 +43,8 @@ void main() {
         };
         final dataset = UniversityDataset.fromJson(raw);
         final count = campus == 'seoul' ? 2805 : 2156;
-        final eligibleCount = campus == 'seoul' ? 2439 : 1971;
-        final datedCount = campus == 'seoul' ? 58291 : 46711;
+        final eligibleCount = campus == 'seoul' ? 2447 : 1971;
+        final datedCount = campus == 'seoul' ? 58407 : 46711;
         expect(dataset.courses, hasLength(count));
         expect(
           dataset.courses.map((c) => c.sourceId).toSet(),
@@ -122,6 +122,17 @@ void main() {
             (meta['reservationProjection'] as Map)['heldReasons'],
             isEmpty,
           );
+          // 원문에 시각이 없어 학과 공지 시간표로 확정한 집중수업(2026-11-23).
+          final alternate = meta['alternatePublishedSchedule'] as Map?;
+          if (alternate != null) {
+            expect(c.sourceSchedule, isNot(contains('(')));
+            for (final m in c.meetings) {
+              expect(m.date!.compareTo(alternate['validFrom'] as String) >= 0, true);
+              expect(m.date!.compareTo(alternate['validTo'] as String) <= 0, true);
+              expect(holidays.contains(m.date), false);
+            }
+            continue;
+          }
           // Independently derive exact clocks and campus rooms from native fields.
           final pattern = RegExp(
             r'([월화수목금토일])\((\d{2}):(\d{2})-(\d{2}):(\d{2})\)',
