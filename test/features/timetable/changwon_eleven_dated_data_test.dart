@@ -57,8 +57,8 @@ void main() {
       final published = dataset.courses
           .where((c) => c.hasSchedulableMeetings)
           .toList();
-      expect(published, hasLength(1432));
-      expect(published.expand((c) => c.meetings), hasLength(28978));
+      expect(published, hasLength(1501));
+      expect(published.expand((c) => c.meetings), hasLength(30101));
       final baseline =
           jsonDecode(
                 fixtureFile(
