@@ -98,19 +98,42 @@ class ImportPcuTests(unittest.TestCase):
         def listing(time, page):
             raw = ['4', '전선', 'LAR25405', '조경BIM설계', '3', '4', '01', '김', time, 'J316', '']
             return {'name': '조경BIM설계', 'time': time, 'room': 'J316', 'raw': raw, 'page': page}
-        def course(slots):
-            return {'schedules': pcu.meetings(pcu.slots_std(slots), 'J316')}
         mon, tue = listing('월7,월8,월9,월10', 221), listing('화7,화8,화9,화10', 265)
+        aug_tue, aug_tue6 = [listing('화7,화8,화9,화10', 264)], [listing('화6,화7,화8,화9', 264)]
         # one listing kept the August value: the other (updated) one wins
-        o = pcu.settle_conflict([mon, tue], course('화7,화8,화9,화10'), '2026-11-04')
+        o = pcu.settle_conflict([mon, tue], aug_tue, '2026-11-04')
         self.assertEqual(o['status'], 'scheduled')
         self.assertEqual([m['weekday'] for m in o['schedules']], [1])
         self.assertIn('265쪽', o['remarks'])
         # both differ from August: the value printed in more listings
-        o = pcu.settle_conflict([mon, tue, listing('월7,월8,월9,월10', 291)], course('화6,화7,화8,화9'), '2026-11-04')
+        o = pcu.settle_conflict([mon, tue, listing('월7,월8,월9,월10', 291)], aug_tue6, '2026-11-04')
         self.assertEqual([m['weekday'] for m in o['schedules']], [1])
         # a tie stays unsettled
-        self.assertIsNone(pcu.settle_conflict([mon, tue], course('화6,화7,화8,화9'), '2026-11-04'))
+        self.assertIsNone(pcu.settle_conflict([mon, tue], aug_tue6, '2026-11-04'))
+
+    def test_rerunning_the_latest_edition_on_its_own_output_changes_nothing(self):
+        import json, tempfile, os
+        hdr = ['학년', '이수구분', '교과목코드', '교과목명', '학점', '시수', '분반', '담당교수', '강의시간', '강의실']
+        def row(time, page):
+            return {'page': page, 'table_y': 1, 'hdr': hdr, 'heads': [], 'heading': None,
+                    'cells': ['4', '전선', 'LAR25405', '조경BIM설계', '3', '4', '01', '김용훈', time, 'J316']}
+        aug = [row('화6,화7,화8,화9', 264), row('화6,화7,화8,화9', 290)]
+        nov = [row('월7,월8,월9,월10', 221), row('화7,화8,화9,화10', 265), row('월7,월8,월9,월10', 291)]
+        with tempfile.TemporaryDirectory() as wt:
+            os.makedirs(f'{wt}/assets/timetable/organizations')
+            for name, data in (('rows_aug.json', aug), ('rows_nov.json', nov)):
+                json.dump(data, open(f'{wt}/{name}', 'w'))
+            json.dump({'courses': []}, open(f'{wt}/assets/timetable/pcu-main-2026-2.json', 'w'))
+            json.dump({'mappings': [], 'courseOwners': []}, open(f'{wt}/assets/timetable/organizations/pcu.json', 'w'))
+            pcu.apply(f'{wt}/rows_aug.json', wt)
+            outputs = []
+            for _ in range(3):
+                pcu.apply(f'{wt}/rows_nov.json', wt, '2026-11-04', f'{wt}/rows_aug.json')
+                outputs.append(open(f'{wt}/assets/timetable/pcu-main-2026-2.json').read())
+            self.assertEqual(outputs[1], outputs[0])
+            self.assertEqual(outputs[2], outputs[0])
+            course = json.loads(outputs[0])['courses'][0]
+            self.assertEqual([m['weekday'] for m in course['schedules']], [1])
 
     def test_unknown_numeric_period_is_rejected(self):
         self.assertIsNone(pcu.meetings([(1, '99')], 'AM108'))

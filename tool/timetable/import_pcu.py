@@ -6,7 +6,8 @@ Source: https://hakgwa.pcu.ac.kr/ce/article/depart_ce_notice/37507
 
   extract <handbook.pdf> <rows.json>        (needs PyMuPDF)
   apply   <rows.json> <repository root>     (pure Python)
-  apply   <rows_latest.json> <repository root> 2026-11-04   update to the latest edition (LATEST)
+  apply   <rows_latest.json> <repository root> 2026-11-04 <rows_aug.json>
+          update to the latest edition (LATEST); the August rows are the conflict baseline
 
 `apply` keeps every existing course value. Rows the earlier extraction skipped
 are added. A schedule is set only when the official listings state the weekday
@@ -366,17 +367,13 @@ def refresh(c, o):
     return True
 
 
-def _slot_order(slot):
-    day, p = slot[0], slot[1]
-    return day, (NUM[int(p)] if p.isdigit() else LET[p])[0]
-
-
-def settle_conflict(L, c, edition):
+def settle_conflict(L, base, edition):
     """Listings of the latest edition that disagree on weekday/period (2026-11-23 사용자 결정):
-    take the value that differs from the earlier edition's course c (the updated listings);
-    when several values differ from it, the value printed in more listings. A tie stays
-    unsettled (None). The other listings' values are kept in remarks."""
-    span = lambda s: sorted((m['weekday'], m['startMinute'], m['endMinute']) for m in s)
+    take the value that differs from the August edition's listings `base` of the same offering
+    (the updated listings); when several values differ from it, the value printed in more
+    listings. A tie stays unsettled (None). The other listings' values are kept in remarks.
+    `base` comes from the August rows, never from the catalogue being updated, so a rerun on
+    an already updated catalogue picks the same value."""
     by = collections.OrderedDict()
     for l in L:
         k, v = listing_slots(l)
@@ -384,8 +381,8 @@ def settle_conflict(L, c, edition):
             by.setdefault(v, []).append(l)
     if len(by) < 2:
         return None
-    before = span(c['schedules'])
-    changed = {v: ls for v, ls in by.items() if span(meetings(sorted(v, key=_slot_order), '')) != before}
+    before = {v for k, v in map(listing_slots, base) if k == 'slots'}
+    changed = {v: ls for v, ls in by.items() if v not in before}
     if not changed:
         return None
     ranked = sorted(changed.items(), key=lambda kv: -len(kv[1]))
@@ -399,7 +396,22 @@ def settle_conflict(L, c, edition):
     return o
 
 
-def apply(rows_path, WT, edition='2026-08'):
+def _groups(off):
+    """Offerings: code+section, split by course name when the PDF prints one code+section for
+    different courses (사회봉사1~4 share GEN22692; also when an edition prints only one of
+    them for a section, so it is never matched to another 사회봉사 course)."""
+    groups = collections.OrderedDict()
+    for k, L in off.items():
+        names = list(dict.fromkeys(l['name'] for l in L))
+        if all(re.fullmatch(r'사회봉사\d', n) for n in names):
+            for n in names:
+                groups[(k, n)] = [l for l in L if l['name'] == n]
+        else:
+            groups[(k, None)] = L
+    return groups
+
+
+def apply(rows_path, WT, edition='2026-08', base_rows=None):
     DS = f'{WT}/assets/timetable/pcu-main-2026-2.json'
     ORG = f'{WT}/assets/timetable/organizations/pcu.json'
     ed = EDITIONS[edition]
@@ -408,18 +420,11 @@ def apply(rows_path, WT, edition='2026-08'):
     org = json.load(open(ORG, encoding='utf-8'))
     labels = {m['sourceLabel']: m for m in org['mappings']}
 
-    # group listings into offerings: code+section, split by course name when the PDF
-    # prints one code+section for different courses (사회봉사1~4 share GEN22692).
-    groups = collections.OrderedDict()
-    for k, L in off.items():
-        names = list(dict.fromkeys(l['name'] for l in L))
-        # (also when an edition prints only one of them for a section, so it is never matched
-        # to another 사회봉사 course of the same code+section)
-        if all(re.fullmatch(r'사회봉사\d', n) for n in names):
-            for n in names:
-                groups[(k, n)] = [l for l in L if l['name'] == n]
-        else:
-            groups[(k, None)] = L
+    groups = _groups(off)
+    if edition != '2026-08':
+        if base_rows is None:
+            sys.exit('apply 2026-11-04 needs the August rows as the 4th argument (conflict baseline)')
+        base = _groups(official_listings(json.load(open(base_rows, encoding='utf-8'))))
 
     existing = {f"{c['courseCode']}-{c['section']}": c for c in ds['courses']}
     existing_by_id = {c['sourceId']: c for c in ds['courses']}
@@ -435,7 +440,7 @@ def apply(rows_path, WT, edition='2026-08'):
             stats[('existing', status, reason)] += 1
             if edition != '2026-08':
                 if status == 'unrecognized':
-                    o = settle_conflict(L, c, edition) or o
+                    o = settle_conflict(L, base.get((k, split), []), edition) or o
                 if refresh(c, o):
                     changed.append(c['sourceId'])
             elif status == 'unrecognized' and c['scheduleStatus'] == 'scheduled':
