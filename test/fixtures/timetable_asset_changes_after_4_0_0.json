@@ -616,8 +616,8 @@
     "reason": "#620 원문 요일·교시·강의실이 모두 비어 있는 442개 강좌의 scheduleStatus를 unrecognized에서 unscheduled로 정정(강좌 원본 값 변경 없음), 교시 기반 모든 구간을 쉬는 시간 10분을 포함한 60분 슬롯으로 정정(1교시 09:30, 50분+10분; 9교시 이후는 근거 없어 자산에 없음); 공백만 제거(내용 동일): 파싱 비용과 앱 용량 절감"
   },
   "assets/timetable/baekseok-unknown-2026-2.json": {
-    "sha256": "f45c96b0c0f07ce7a6c083eae06e3ee901c4a6d61cddc9f9622df9b80f1f27ce",
-    "reason": "공백만 제거(내용 동일): 파싱 비용과 앱 용량 절감"
+    "sha256": "13042ff975102a5adc1dc0b4feff7280da54bfd40855209fe52363a161792485",
+    "reason": "백석대 2026-2 수업시간표 주요사항 책자 38쪽 대면수업 예시(월 7교시 15:00-15:50, 다음 교시 16:00-16:50)의 60분 슬롯으로 1교시 09:00부터 교시 시각을 확정해 학부 강좌 2364개를 시간표에 추가할 수 있게 하고, 요일·교시가 없는 사이버(사)·별도(-)·빈 칸 강좌는 시간 미정으로 정리(tool/timetable/apply_baekseok_period_clock.py); 공백만 제거(내용 동일): 파싱 비용과 앱 용량 절감"
   },
   "assets/timetable/cbnu-main-2026-2.json": {
     "sha256": "22ba3ed882f74b79614426c6cd270674f290dc95635e8c8291cbade84fcf0627",

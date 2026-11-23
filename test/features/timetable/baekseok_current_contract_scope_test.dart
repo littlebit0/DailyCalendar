@@ -199,9 +199,22 @@ void main() {
         );
         if (!((b['departments'] as List).length == 1 &&
             (b['departments'] as List).single == '계약학과')) {
-          expect(c, b);
+          if (b.containsKey('sourceClockProof')) {
+            expect(c, b);
+            oldPlans += (b['schedules'] as List).length;
+          } else {
+            // 학부 교시 시각 확정(apply_baekseok_period_clock.py)은 시간 필드만 바꾼다.
+            for (final k in (b as Map).keys) {
+              if (![
+                'departmentRemarks',
+                'schedules',
+                'scheduleStatus',
+              ].contains(k)) {
+                expect(c[k], b[k]);
+              }
+            }
+          }
           unchanged++;
-          oldPlans += (b['schedules'] as List).length;
           continue;
         }
         for (final k in (b as Map).keys) {
@@ -238,7 +251,14 @@ void main() {
                     (v) => v['sourceId'] == c.sourceId,
                   )['schedules']
                   as List;
-          if (plans.isEmpty) continue;
+          final rawCourse = (raw['courses'] as List).singleWhere(
+            (v) => v['sourceId'] == c.sourceId,
+          );
+          if (plans.isEmpty ||
+              !(rawCourse.containsKey('scopedClockProof') ||
+                  rawCourse.containsKey('sourceClockProof'))) {
+            continue;
+          }
           final saved = c.toTimetable(id: c.sourceId, mode: mode);
           expect(saved.isValid, true);
           expect(saved.defaultMode, mode);
