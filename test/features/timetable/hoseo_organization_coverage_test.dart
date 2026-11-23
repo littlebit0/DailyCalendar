@@ -78,7 +78,7 @@ void main() {
         expect(actual, expected, reason: c.sourceId);
         checked++;
       }
-      expect(checked, 2441);
+      expect(checked, 2450);
       // 2026-11-23 사용자 결정: p.152 교시표를 0~14교시·토·일 강좌 전체에 적용하고
       // 원격·하이브리드 운영도 원문 교시로 확정한다.
       expect(
