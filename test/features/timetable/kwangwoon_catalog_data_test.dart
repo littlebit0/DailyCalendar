@@ -57,7 +57,7 @@ void main() {
       );
       expect(
         data.courses.where((c) => c.scheduleStatus == 'unrecognized'),
-        hasLength(75),
+        isEmpty,
       );
       for (final c in data.courses) {
         expect(c.campus, 'unknown');
@@ -176,12 +176,16 @@ void main() {
     final short = byId('0000-1-5930-01');
     expect(short.scheduleStatus, 'scheduled');
     expect(short.meetings.last.date, '2026-11-09');
-    // 토 17 같은 원격 강좌 배정 번호는 24시를 넘어 시각으로 만들지 않는다.
-    final held = data.courses.where((c) => c.scheduleStatus == 'unrecognized');
-    expect(held, hasLength(75));
-    for (final c in held) {
+    // 토 17 같은 원격 강좌 배정 번호는 24시를 넘어 교시로 해석할 수 없다:
+    // 시각을 만들지 않고 시간 미정 강좌로 둔다(원문은 그대로).
+    final untimed = data.courses.where(
+      (c) => c.scheduleStatus == 'unscheduled',
+    );
+    expect(untimed, hasLength(75));
+    for (final c in untimed) {
       expect(c.sourceSchedule, startsWith('토 '), reason: c.sourceId);
       expect(c.meetings, isEmpty);
+      expect(c.canAddToTimetable, isTrue, reason: c.sourceId);
     }
   });
   test(

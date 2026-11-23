@@ -98,11 +98,15 @@ def main():
             assert convert(c) == c['schedules'], c['sourceId']
             stats['scheduledRecheck'] += 1
             continue
-        assert c['scheduleStatus'] == 'unrecognized', c['sourceId']
+        assert c['scheduleStatus'] in ('unrecognized', 'unscheduled'), c['sourceId']
         try:
             c['schedules'] = convert(c)
         except ValueError as e:
+            # 교시로 해석할 수 없는 번호(예: 토 42)는 시각을 만들지 않고 시간 미정으로 둔다
+            # (2026-11-23 사용자 결정). 원문은 sourceSchedule에 그대로 남는다.
             unresolved[c['sourceId']] = str(e)
+            c['schedules'] = []
+            c['scheduleStatus'] = 'unscheduled'
             continue
         c['scheduleStatus'] = 'scheduled'
         stats['confirmed'] += 1
@@ -111,7 +115,8 @@ def main():
                  'https://www.kw.ac.kr/ko/life/bachelor_info13.jsp'],
         'checkedOn': '2026-11-23',
         'rule': '주간 1~6교시 75분+15분, 야간 7~11교시 45분+5분(수업안내 수업시간 편성), '
-                '0교시 08:00, 12교시 이후 50분 이어 계산, 원격·사전녹화 등 운영 방식은 대면으로 간주',
+                '0교시 08:00, 12교시 이후 50분 이어 계산, 원격·사전녹화 등 운영 방식은 대면으로 간주, '
+                '교시로 해석할 수 없는 번호(unresolved)는 시간 미정',
         'unresolved': unresolved,
     }
     stats['unresolved'] = len(unresolved)
