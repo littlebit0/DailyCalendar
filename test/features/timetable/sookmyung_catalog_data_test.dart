@@ -6,6 +6,15 @@ import 'package:daily/features/timetable/data/timetable_sync_document.dart';
 import 'package:daily/features/timetable/domain/timetable.dart';
 import 'package:daily/features/timetable/domain/university_course.dart';
 
+// 2026-11-23 사용자 결정으로 확정한 강좌는 공식 시각이 있고, 나머지 보류 강좌는 비어 있다.
+void expectHeldOrConfirmed(UniversityCourse course) {
+  if (course.remarks.contains('2026-11-23 사용자 결정')) {
+    expect(course.hasSchedulableMeetings, isTrue, reason: course.sourceId);
+  } else {
+    expect(course.meetings, isEmpty, reason: course.sourceId);
+  }
+}
+
 void main() {
   test(
     'Expanded native bounded general intensive and live remote majors plus general with native graduate exclusions current Sookmyung public snapshots preserve native provenance and partial own-term dates through three complete Drive JSON documents',
@@ -235,7 +244,8 @@ void main() {
           final records = row['metadata']['originalEducationalRecords'] as List;
           nativeCount += records.length;
           for (final dynamic original in records) {
-            final source = original['sourceFile'] ==
+            final source =
+                original['sourceFile'] ==
                     'sookmyung_sap_recheck_2026-10-23.json'
                 ? recheckRows
                 : proof['nativeRows'] as List;
@@ -650,14 +660,18 @@ void main() {
                       r'주차|집중|비연속|외부실습|현장실습|건강가정실습|연락',
                     ).hasMatch('${v['과목명']} ${v['수강유의사항']}'));
           });
+          // 2026-11-23 사용자 결정: 공식 요일·시각이 있으면 운영 방식이 불명확해도
+          // 대면 수업 시각으로 확정한다.
+          final confirmedByDecision = c.remarks.contains('2026-11-23 사용자 결정');
           if (sourceRequiresHold &&
+              !confirmedByDecision &&
               !reviewedPendingPlanIds.contains(c.sourceId)) {
-            expect(c.meetings, isEmpty);
+            expectHeldOrConfirmed(c);
           }
           expect(c.hasSchedulableMeetings, holds.isEmpty);
           if (holds.isNotEmpty) {
             heldCount++;
-            expect(c.meetings, isEmpty);
+            expectHeldOrConfirmed(c);
             continue;
           }
           final expected = <String>{};
@@ -747,6 +761,50 @@ void main() {
               }
             }
           }
+          if (confirmedByDecision) {
+            // 같은 시각의 두 강의실은 한 구간에 함께 적는다(임의 선택·중복 일정 없음).
+            final rooms = <String, List<String>>{};
+            for (final e in expected) {
+              final cut = e.lastIndexOf('/');
+              rooms
+                  .putIfAbsent(e.substring(0, cut), () => [])
+                  .add(e.substring(cut + 1));
+            }
+            expected
+              ..clear()
+              ..addAll(
+                rooms.entries.map((r) => '${r.key}/${r.value.join(', ')}'),
+              );
+            if (c.remarks.contains('비연속형 1~7주, 14주')) {
+              expected.removeWhere((e) {
+                final week =
+                    DateTime.parse(
+                          e.substring(0, 10),
+                        ).difference(DateTime(2026, 9, 1)).inDays ~/
+                        7 +
+                    1;
+                return week > 7 && week != 14;
+              });
+            }
+            // 강의시간이 빈 원격 강좌는 수강유의사항의 실시간 주차·시각만 쓴다
+            // (n주차 = 개강 9/1부터 n번째 7일).
+            if (c.sourceSchedule.isEmpty) {
+              final live = RegExp(
+                r'(\d+(?:,\d+)*)주차 실시간 수업: \(([월화수목금토일])\) (\d\d?:\d\d)~(\d\d?:\d\d)',
+              ).firstMatch(c.remarks)!;
+              final weekday = '월화수목금토일'.indexOf(live[2]!) + 1;
+              for (final week in live[1]!.split(',').map(int.parse)) {
+                final d = DateTime(
+                  2026,
+                  9,
+                  1 + 7 * (week - 1) + (weekday - DateTime.tuesday) % 7,
+                );
+                expected.add(
+                  '${d.toIso8601String().substring(0, 10)}/$weekday/${minute(live[3]!)}/${minute(live[4]!)}/',
+                );
+              }
+            }
+          }
           expect(
             c.meetings
                 .map(
@@ -755,6 +813,7 @@ void main() {
                 )
                 .toSet(),
             expected,
+            reason: c.sourceId,
           );
           meetingCount += c.meetings.length;
           expect(
@@ -784,7 +843,7 @@ void main() {
           (c) => c.code == nativeCode && c.section == '001',
         );
         expect(course.sourceSchedule, '');
-        expect(course.meetings, isEmpty);
+        expectHeldOrConfirmed(course);
       }
       final restricted = courses.singleWhere(
         (c) => c.code == '21003852' && c.section == '002',
@@ -797,12 +856,12 @@ void main() {
       final malformedExamNote = courses.singleWhere(
         (c) => c.code == '21105769' && c.section == '001',
       );
-      expect(malformedExamNote.meetings, isEmpty);
+      expectHeldOrConfirmed(malformedExamNote);
       expect(malformedExamNote.remarks, contains('18:30~17:30'));
       final datedCyberMath = courses.singleWhere(
         (c) => c.code == '21104653' && c.section == '001',
       );
-      expect(datedCyberMath.meetings, isEmpty);
+      expectHeldOrConfirmed(datedCyberMath);
       expect(datedCyberMath.remarks, contains('10/23(금), 12/11(금) 15시~17시'));
       final airRotc = courses.singleWhere(
         (c) => c.code == '21105113' && c.section == '001',
@@ -815,7 +874,8 @@ void main() {
       final germanBeginner = courses.singleWhere(
         (c) => c.code == '21002089' && c.section == '001',
       );
-      expect(germanBeginner.meetings, isEmpty);
+      // 2026-11-23 사용자 결정: BL 강좌도 공식 요일·시각으로 확정한다.
+      expect(germanBeginner.hasSchedulableMeetings, isTrue);
       final germanPriorKnowledge = courses.singleWhere(
         (c) => c.code == '21002089' && c.section == '002',
       );
@@ -824,7 +884,8 @@ void main() {
       final germanBlArt = courses.singleWhere(
         (c) => c.code == '21105619' && c.section == '001',
       );
-      expect(germanBlArt.meetings, isEmpty);
+      // 2026-11-23 사용자 결정: BL 강좌도 공식 요일·시각으로 확정한다.
+      expect(germanBlArt.hasSchedulableMeetings, isTrue);
       for (final pendingCode in ['21003076', '21003994']) {
         final pending = courses.singleWhere(
           (c) => c.code == pendingCode && c.section == '001',
@@ -835,12 +896,23 @@ void main() {
       final sensor = courses.singleWhere(
         (c) => c.code == '21102529' && c.section == '001',
       );
-      expect(sensor.meetings, isEmpty);
+      // 2026-11-23 사용자 결정: 비고의 운영 주차(1~7주, 14주)에만 공식 시각을 넣는다.
+      expect(
+        sensor.meetings.map((m) => m.date).toSet().containsAll([
+          '2026-09-01',
+          '2026-10-15',
+          '2026-12-01',
+          '2026-12-03',
+        ]),
+        isTrue,
+      );
+      expect(sensor.meetings.any((m) => m.date == '2026-10-27'), isFalse);
       expect(sensor.remarks, contains('비연속형 1~7주, 14주'));
       final frenchBl = courses.singleWhere(
         (c) => c.code == '21000092' && c.section == '001',
       );
-      expect(frenchBl.meetings, isEmpty);
+      // 2026-11-23 사용자 결정: BL 강좌도 공식 요일·시각으로 확정한다.
+      expect(frenchBl.hasSchedulableMeetings, isTrue);
       final japaneseTeaching = courses.singleWhere(
         (c) => c.code == '21050136' && c.section == '001',
       );
@@ -869,7 +941,7 @@ void main() {
           (c) => c.code == musicNoClock && c.section == '001',
         );
         expect(music.sourceSchedule, '');
-        expect(music.meetings, isEmpty);
+        expectHeldOrConfirmed(music);
       }
       final orchestra = courses.singleWhere(
         (c) => c.code == '21002689' && c.section == '001',
@@ -908,7 +980,7 @@ void main() {
         );
         expect(piano.professor, '전혜수\n이혜영');
         expect(piano.sourceSchedule, '');
-        expect(piano.meetings, isEmpty);
+        expectHeldOrConfirmed(piano);
       }
       for (final noClockVoice in [
         '21001337',
@@ -921,7 +993,7 @@ void main() {
           (c) => c.code == noClockVoice && c.section == '001',
         );
         expect(voice.sourceSchedule, '');
-        expect(voice.meetings, isEmpty);
+        expectHeldOrConfirmed(voice);
         expect(voice.remarks, contains('성악과 제1/부/복수 전공생만 수강 가능'));
       }
       final voiceRestrictedWeekly = courses.singleWhere(
@@ -935,8 +1007,10 @@ void main() {
         );
         expect(studio.sourceClassroom, contains('미술대206'));
         expect(studio.sourceClassroom, contains('미술대302'));
-        expect(studio.meetings, isEmpty);
-        expect(studio.remarks, contains('individual room assignment unknown'));
+        // 2026-11-23 사용자 결정: 같은 시각의 두 강의실을 한 구간에 함께 적는다.
+        for (final m in studio.meetings) {
+          expect(m.classroom.split(', ').toSet(), {'미술대206', '미술대302'});
+        }
         final separateStudio = courses.singleWhere(
           (c) => c.code == doubleRoomCode && c.section == '002',
         );
@@ -962,7 +1036,7 @@ void main() {
       final foodPlacement = courses.singleWhere(
         (c) => c.code == '21000797' && c.section == '001',
       );
-      expect(foodPlacement.meetings, isEmpty);
+      expectHeldOrConfirmed(foodPlacement);
       expect(foodPlacement.sourceSchedule, '');
       expect(
         foodPlacement.remarks,
@@ -972,7 +1046,7 @@ void main() {
         final foodBl = courses.singleWhere(
           (c) => c.code == '21000790' && c.section == section,
         );
-        expect(foodBl.meetings, isEmpty);
+        expectHeldOrConfirmed(foodBl);
       }
       final foreignOnlyKorean = courses.singleWhere(
         (c) => c.code == '21102829' && c.section == '001',
@@ -993,8 +1067,15 @@ void main() {
               c.code == clothingDoubleRoom[0] &&
               c.section == clothingDoubleRoom[1],
         );
-        expect(course.meetings, isEmpty);
-        expect(course.remarks, contains('individual room assignment unknown'));
+        // 2026-11-23 사용자 결정: 같은 시각의 두 강의실을 한 구간에 함께 적는다.
+        expect(course.hasSchedulableMeetings, isTrue);
+        for (final m in course.meetings) {
+          expect(
+            m.classroom.split(', '),
+            hasLength(2),
+            reason: course.sourceId,
+          );
+        }
       }
       final aiFashion = courses.singleWhere(
         (c) => c.code == '21105802' && c.section == '001',
@@ -1020,12 +1101,12 @@ void main() {
         (c) => c.code == '21105375' && c.section == '001',
       );
       expect(socialFourProfessors.professor, '주민주\n김민지\n박지선\n최지연');
-      expect(socialFourProfessors.meetings, isEmpty);
+      expectHeldOrConfirmed(socialFourProfessors);
       expect(socialFourProfessors.remarks, contains('오전 9시-10시'));
       final physiology = courses.singleWhere(
         (c) => c.code == '21010017' && c.section == '001',
       );
-      expect(physiology.meetings, isEmpty);
+      expectHeldOrConfirmed(physiology);
       expect(physiology.remarks, contains('장소 추후 안내'));
       final industrial001 = courses.singleWhere(
         (c) => c.code == '21050279' && c.section == '001',
@@ -1048,7 +1129,7 @@ void main() {
       final prCyber = courses.singleWhere(
         (c) => c.code == '21000978' && c.section == '001',
       );
-      expect(prCyber.meetings, isEmpty);
+      expectHeldOrConfirmed(prCyber);
       expect(prCyber.remarks, contains('홍보광고학과 제1전공자 수강신청 불가 (타학과 학생 대상)'));
       final physicsExcluded = (proof['excludedGraduateRecords'] as List)
           .where((dynamic r) => r['query'] == '신소재물리학부')
@@ -1084,7 +1165,7 @@ void main() {
       );
       expect(kitchen.professor, lcbFourProfessors.professor);
       expect(kitchen.sourceSchedule, '수금09:00-11:20(백주년505)');
-      expect(kitchen.meetings, isEmpty);
+      expectHeldOrConfirmed(kitchen);
       expect(kitchen.remarks, contains('12~14주 실습수업진행'));
       expect(kitchen.remarks, contains('실습은 분반수업임'));
       for (final code in ['21105793', '21105792']) {
@@ -1118,18 +1199,16 @@ void main() {
         );
         expect(course.sourceSchedule, '');
         expect(course.professor, '');
-        expect(course.meetings, isEmpty);
+        expectHeldOrConfirmed(course);
         expect(course.remarks, contains('학생은 수강신청 불가'));
       }
       for (final code in ['21101031', '21101030', '21101028']) {
         final course = courses.singleWhere(
           (c) => c.code == code && c.section == '001',
         );
-        expect(course.meetings, isEmpty);
-        expect(
-          course.remarks,
-          contains('BL individual physical/remote sessions unpublished'),
-        );
+        // 2026-11-23 사용자 결정: BL 강좌도 공식 요일·시각으로 확정한다.
+        expect(course.hasSchedulableMeetings, isTrue);
+        expect(course.remarks, isNot(contains('BL individual')));
       }
       for (final row in [
         ['21103838', '목15:00-17:50(순헌관109)', '박영민', 12],
@@ -1213,7 +1292,7 @@ void main() {
         if (course.code == '21009837' || course.code == '21004663') {
           expect(course.professor, '');
           expect(course.sourceSchedule, '');
-          expect(course.meetings, isEmpty);
+          expectHeldOrConfirmed(course);
           expect(course.remarks, contains('교원양성센터 홈페이지 공지사항 확인 필수'));
         } else {
           expect(course.meetings, isNotEmpty);
@@ -1273,8 +1352,9 @@ void main() {
       expect(peace.professor, '최윤주');
       expect(courses, hasLength(1576));
       expect(nativeCount, 3521);
-      expect(heldCount, 207);
-      expect(meetingCount, 25615);
+      // 2026-11-23 사용자 결정 후 남은 보류: 강의시간 원문 없음 44 + 원격(사이버) 시각 없음 33.
+      expect(heldCount, 77);
+      expect(meetingCount, 28361);
       for (final mode in [
         LectureMode.inPerson,
         LectureMode.liveOnline,
@@ -1293,7 +1373,7 @@ void main() {
         final after = TimetableSyncDocument.fromJson(
           jsonDecode(jsonEncode(doc.toJson())) as Map<String, dynamic>,
         ).materializeClasses();
-        expect(after, hasLength(1369));
+        expect(after, hasLength(1499));
         final originals = {for (final c in before) c.sourceId: c};
         for (final c in after) {
           final original = originals[c.sourceId]!;
