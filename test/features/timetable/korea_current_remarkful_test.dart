@@ -81,7 +81,7 @@ List<String> ownDates(int weekday) {
 
 void main() {
   test(
-    'KU exact current raw79 remarkful ownclock, other5260 preserved and full4268 three-mode Drive',
+    'KU exact current raw79 remarkful ownclock, other5260 preserved and full4283 three-mode Drive',
     () {
       final audit = read(
         'whole-remaining1245-native79-remark-operating-audit.json',
@@ -211,8 +211,8 @@ void main() {
       }
       expect(newMeetings, 1241);
       expect(all, hasLength(5339));
-      expect(all.where((c) => c.hasSchedulableMeetings), hasLength(4268));
-      expect(all.fold<int>(0, (n, c) => n + c.meetings.length), 91822);
+      expect(all.where((c) => c.hasSchedulableMeetings), hasLength(4283));
+      expect(all.fold<int>(0, (n, c) => n + c.meetings.length), 91963);
       for (final mode in [
         LectureMode.inPerson,
         LectureMode.liveOnline,
@@ -231,7 +231,7 @@ void main() {
         final restored = TimetableSyncDocument.fromJson(
           jsonDecode(jsonEncode(doc.toJson())) as Map<String, dynamic>,
         ).materializeClasses();
-        expect(restored, hasLength(4268));
+        expect(restored, hasLength(4283));
         final by = {for (final c in classes) c.sourceId: c};
         for (final c in restored) {
           final original = by[c.sourceId]!;

@@ -201,7 +201,7 @@ void main() {
       'seoul': (
         [540, 630, 720, 810, 900, 990, 1080, 1140, 1200, 1260],
         [615, 705, 795, 885, 975, 1065, 1130, 1190, 1250, 1310],
-        63656,
+        63797,
       ),
       'sejong': (
         [540, 600, 660, 720, 780, 840, 900, 960, 1020, 1080, 1140, 1200, 1260],
@@ -344,5 +344,73 @@ void main() {
       byId['korea/sejong/2026-2/PHAR528-00']!['scheduleStatus'],
       'unrecognized',
     );
+  });
+
+  test('KU 의학과 공개 강의계획서 첨부의 회차별 날짜·교시로 확정한 강좌', () {
+    final data =
+        jsonDecode(
+              fixtureFile(
+                'assets/timetable/korea-seoul-2026-2.json',
+              ).readAsStringSync(),
+            )
+            as Map<String, dynamic>;
+    final evidence =
+        jsonDecode(
+              fixtureFile(
+                'tool/timetable/korea_medicine_sessions_2026_2.json',
+              ).readAsStringSync(),
+            )
+            as Map<String, dynamic>;
+    final byId = {
+      for (final c in data['courses'] as List)
+        c['sourceId'] as String: c as Map<String, dynamic>,
+    };
+    final courses = evidence['courses'] as Map<String, dynamic>;
+    expect(courses, hasLength(15));
+    for (final entry in courses.entries) {
+      final c = byId[entry.key]!;
+      expect(c['scheduleStatus'], 'scheduled', reason: entry.key);
+      expect(c['sourceSchedule'], '', reason: entry.key);
+      final period = c['period'] as Map;
+      for (final s in c['schedules'] as List) {
+        final date = s['date'] as String;
+        expect(
+          date.compareTo(period['startDate'] as String) >= 0 &&
+              date.compareTo(period['endDate'] as String) <= 0,
+          isTrue,
+          reason: '${entry.key} $date',
+        );
+        expect(
+          DateTime.parse(date).weekday,
+          s['weekday'],
+          reason: '${entry.key} $date',
+        );
+      }
+    }
+    // 응급의학: 11.24(화) 1·2교시, 11.27(금) 1~6교시, 12.7(월) 1~5교시, 12.10(목) 4·5교시.
+    // 교시 슬롯은 50분+10분, 4교시 뒤 점심(50분)은 60분 미만이라 합친다.
+    expect(
+      [
+        for (final s
+            in byId['korea/seoul/2026-2/MEDI230-00']!['schedules'] as List)
+          (s['date'], s['startMinute'], s['endMinute']),
+      ],
+      [
+        ('2026-11-24', 510, 630),
+        ('2026-11-27', 510, 920),
+        ('2026-12-07', 510, 860),
+        ('2026-12-10', 690, 860),
+      ],
+    );
+    // 미생물학은 8월 24일 개강이라 강좌 기간 시작을 첫 회차로 넓혔다.
+    final micro = byId['korea/seoul/2026-2/MEDI108-00']!;
+    expect(micro['period']['startDate'], '2026-08-24');
+    expect((micro['schedules'] as List).first, {
+      'weekday': 1,
+      'startMinute': 510,
+      'endMinute': 630,
+      'classroom': '',
+      'date': '2026-08-24',
+    });
   });
 }

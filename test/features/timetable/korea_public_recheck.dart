@@ -304,10 +304,84 @@ Map<String, dynamic> _applyOfficialTimes(Map<String, dynamic> course) {
   return copy;
 }
 
+/// 2026-11-23 의학과 공개 강의계획서 첨부 회차(tool/timetable/apply_korea_medicine_sessions.py) 기록.
+final Map<String, dynamic> koreaMedicineSessions =
+    jsonDecode(
+          File(
+            'tool/timetable/korea_medicine_sessions_2026_2.json',
+          ).readAsStringSync(),
+        )
+        as Map<String, dynamic>;
+
+const koreaMedicineConfirmed =
+    '공개 강의계획서 첨부의 회차별 날짜·교시(의과대학 교시표 08:30 시작, 50분 수업+10분)로 확정했습니다. '
+    '강의실은 원문에 없어 비워 두었습니다.';
+
+/// 회차별 날짜·교시를 50분+10분 슬롯으로 바꾸고 같은 날 60분 미만 간격을 합친다(파이썬과 독립 구현).
+List<Map<String, dynamic>> koreaMedicineSchedules(List sessions) {
+  final starts = [
+    for (final s in koreaMedicineSessions['periodTable']['starts'] as List)
+      s as int,
+  ];
+  final slots = <(String, int)>[
+    for (final s in sessions)
+      for (final p in (s as List)[1] as List)
+        (s[0] as String, starts[(p as int) - 1]),
+  ]..sort((a, b) => a.$1 != b.$1 ? a.$1.compareTo(b.$1) : a.$2 - b.$2);
+  final out = <Map<String, dynamic>>[];
+  for (final (date, start) in slots) {
+    if (out.isNotEmpty &&
+        out.last['date'] == date &&
+        start - (out.last['endMinute'] as int) < 60) {
+      out.last['endMinute'] = start + 60;
+      continue;
+    }
+    out.add({
+      'weekday': DateTime.parse(date).weekday,
+      'startMinute': start,
+      'endMinute': start + 60,
+      'classroom': '',
+      'date': date,
+    });
+  }
+  return out;
+}
+
+Map<String, dynamic> _applyMedicineSessions(Map<String, dynamic> course) {
+  final record =
+      (koreaMedicineSessions['courses'] as Map)[course['sourceId']] as Map?;
+  if (record == null) return course;
+  final copy = jsonDecode(jsonEncode(course)) as Map<String, dynamic>;
+  if (copy['scheduleStatus'] != 'unscheduled' ||
+      (copy['schedules'] as List).isNotEmpty) {
+    throw StateError('${course['sourceId']} 확정 전 값 불일치');
+  }
+  final schedules = koreaMedicineSchedules(record['sessions'] as List);
+  copy['scheduleStatus'] = 'scheduled';
+  copy['schedules'] = schedules;
+  final period = copy['period'] as Map<String, dynamic>;
+  final dates = [for (final s in schedules) s['date'] as String]..sort();
+  if (dates.first.compareTo(period['startDate'] as String) < 0) {
+    period['startDate'] = dates.first;
+  }
+  if (dates.last.compareTo(period['endDate'] as String) > 0) {
+    period['endDate'] = dates.last;
+  }
+  final remarks = copy['remarks'] as String;
+  final hold = [
+    ' 일정 보류: ',
+    ' 예약 보류: ',
+  ].map(remarks.indexOf).firstWhere((i) => i >= 0, orElse: () => -1);
+  copy['remarks'] = hold >= 0
+      ? '${remarks.substring(0, hold)} $koreaMedicineConfirmed'
+      : '$remarks $koreaMedicineConfirmed';
+  return copy;
+}
+
 /// 바뀐 강좌면 재조회 값으로 고친 사본을, 아니면 원본을 돌려준다. 쉬는 시간 포함 슬롯과
-/// 2026-11-23 공식 교시표 확정도 적용한다.
+/// 2026-11-23 공식 교시표 확정·의학과 강의계획서 회차 확정도 적용한다.
 Map<String, dynamic> applyKoreaRecheck(Map<String, dynamic> course) =>
-    _applyOfficialTimes(_applyKoreaRecheck(course));
+    _applyMedicineSessions(_applyOfficialTimes(_applyKoreaRecheck(course)));
 
 Map<String, dynamic> _applyKoreaRecheck(Map<String, dynamic> course) {
   final records = _changes[course['sourceId']];
