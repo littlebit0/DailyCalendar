@@ -36,17 +36,17 @@ void main() {
       expect(courses.where((c) => !c.hasSchedulableMeetings), hasLength(198));
       for (final course in courses) {
         if (!course.hasSchedulableMeetings) {
-          // 원문 시간표 칸이 비었거나 '0'뿐(강의실도 '0')이면 시간 미정, 같은
-          // 교시를 여러 번 적은 표기('토1,1,1')만 모순으로 보류한다.
+          // 원문 시간표 칸이 비었거나 '0'뿐(강의실도 '0')이거나 같은 교시를 여러 번
+          // 적어 교시로 해석할 수 없는 표기('토1,1,1')는 시간 미정이다.
           final source = course.sourceSchedule.trim();
+          expect(course.scheduleStatus, 'unscheduled', reason: course.sourceId);
           expect(
-            course.scheduleStatus,
-            source.isEmpty || source == '0' ? 'unscheduled' : 'unrecognized',
+            source.isEmpty ||
+                source == '0' ||
+                RegExp(r'^[토일],?(\d+),\1,\1$').hasMatch(source),
+            isTrue,
             reason: course.sourceId,
           );
-          if (course.scheduleStatus == 'unrecognized') {
-            expect(source, matches(RegExp(r'^[토일],?(\d+),\1,\1$')));
-          }
           continue;
         }
         final saved = course.toTimetable(
@@ -125,7 +125,8 @@ void main() {
       final repeated = courses.singleWhere(
         (c) => c.sourceId == 'kangwon/samcheok/2026/2/81220004/2',
       );
-      expect(repeated.scheduleStatus, 'unrecognized');
+      expect(repeated.scheduleStatus, 'unscheduled');
+      expect(repeated.canAddToTimetable, isTrue);
       expect(repeated.sourceSchedule, '토1,1,1');
       final zero = courses.singleWhere(
         (c) => c.sourceId == 'kangwon/gangneung/2026/2/22205004/01',

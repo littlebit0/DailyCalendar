@@ -16,7 +16,8 @@ https://www.kangwon.ac.kr/ko/conts/465/web.do (2026-11-23 조회)
 - 운영 방식(이러닝·집중·현장실습·임상실습·봉사 등)이 불명확해도 원문 요일·교시로 확정한다.
 - 원문이 '0'뿐(요일 없음, 강의실도 '0')인 강좌는 시간표 칸이 빈 것과 같아 시각이 없다
   → unscheduled. 시각을 만들지 않는다.
-- 한 묶음에 같은 교시를 여러 번 적은 표기('토1,1,1', 3학점)는 원문끼리 모순 → unrecognized.
+- 한 묶음에 같은 교시를 여러 번 적은 표기('토1,1,1', 3학점)는 교시로 해석할 수 없다
+  → 시각을 만들지 않고 unscheduled(시간 미정, 2026-11-23 사용자 결정). 원문은 그대로.
 - 파싱 못 하는 표기는 그 강좌만 unrecognized로 남긴다.
 - 원문 필드는 바꾸지 않고, 비고의 옛 '시간표 추가 불가' 줄만 고친다.
 
@@ -32,6 +33,7 @@ DAYS = '월화수목금토일'
 OLD_NOTE = '실제 수업시간·운영기간 미확인: 시간표 추가 불가'
 NEW_NOTE = '공식 요일·교시 기준 확정(이러닝·집중·실습 등 운영 방식과 관계없이 원문 시각 적용)'
 HELD_NOTE = '같은 교시가 여러 번 적혀 학점과 교시가 맞지 않음: 시간표 추가 불가'
+REPEATED_NOTE = '같은 교시가 여러 번 적혀 교시로 해석할 수 없음: 요일·시각 미정'
 NONE_NOTE = '원문 수업시간이 0으로만 표기됨: 요일·시각 미정'
 
 
@@ -121,11 +123,12 @@ def main():
                 try:
                     status, schedules, note = 'scheduled', convert(c), NEW_NOTE
                 except ValueError as error:
-                    counts['unrecognized'][str(error)] = counts['unrecognized'].get(str(error), 0) + 1
-                    if str(error) == 'repeated_source_period':
-                        c['departmentRemarks'] = {k: v.replace(OLD_NOTE, HELD_NOTE)
-                                                  for k, v in c['departmentRemarks'].items()}
-                    continue
+                    if str(error) != 'repeated_source_period':
+                        counts['unrecognized'][str(error)] = counts['unrecognized'].get(str(error), 0) + 1
+                        continue
+                    status, schedules, note = 'unscheduled', [], REPEATED_NOTE
+                    c['departmentRemarks'] = {k: v.replace(HELD_NOTE, OLD_NOTE)
+                                              for k, v in c['departmentRemarks'].items()}
             c['scheduleStatus'], c['schedules'] = status, schedules
             c['departmentRemarks'] = {k: v.replace(OLD_NOTE, note)
                                       for k, v in c['departmentRemarks'].items()}
