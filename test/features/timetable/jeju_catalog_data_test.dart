@@ -206,15 +206,16 @@ void main() {
       expect(courses, hasLength(3095));
       expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(2090));
       final held = courses.where((c) => c.scheduleStatus == 'unrecognized');
-      expect(held, hasLength(1001));
-      // 거점국립대 원격수업 4강좌: 공개 강의계획서가 온라인 수업으로 안내.
+      expect(held, hasLength(70));
+      // 거점국립대 원격 4, 시수 0(상담·현장실습 등) 816, OCU 92, 원격수업강좌 17,
+      // JOY공유대학 6: 공식 수업시간표·수강편람상 정해진 주간 수업 시각이 없음.
       expect(
         courses.where((c) => c.scheduleStatus == 'unscheduled'),
-        hasLength(4),
+        hasLength(935),
       );
       expect(
         held.where((c) => c.sourceSchedule == '시간표자료없음'),
-        hasLength(935),
+        hasLength(28),
       );
       final saturday = courses.singleWhere(
         (c) => c.sourceId == 'jeju/unknown/2026-2/KN0001',
