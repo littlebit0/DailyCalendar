@@ -6496,7 +6496,7 @@
         "suspensionEvidence": "work/university-support-suspension-20261012/support-decisions.json",
         "productionIntegrationEnabled": true,
         "reopenedDate": "2026-11-22",
-        "reopenNote": "사용자 지시(2026-11-22)로 기존 데이터 그대로 검색 재개. 시각 미확정(unrecognized) 강좌는 원문만 표시하고 시간표 추가 불가. 전체 범위 완료 아님."
+        "reopenNote": "사용자 지시(2026-11-22)로 기존 데이터 그대로 검색 재개. 시각 미확정(unrecognized) 강좌는 원문만 표시하고 시간표 추가 불가. 전체 범위 완료 아님. 2026-11-23 사용자 결정으로 공식 2026-2 학과 시간표(글로벌경영학과 공지 76188)의 교시표를 학교 전체에 적용해 1,589건 확정(남은 167건은 수업계획서에 시간 칸이 비었거나 미등록)."
       },
       "sourceEvidence": "work/university-research/expansion17-20261011/"
     },
