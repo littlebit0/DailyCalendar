@@ -102,8 +102,7 @@ void main() {
       expect(unnamed, hasLength(10));
       expect(
         unnamed.every(
-          (c) =>
-              c.campus == 'glocal' && c.remarks.contains('학수번호 BZZA'),
+          (c) => c.campus == 'glocal' && c.remarks.contains('학수번호 BZZA'),
         ),
         isTrue,
       );
@@ -115,33 +114,34 @@ void main() {
         courses.where((c) => c.departments.contains('교직과')),
         hasLength(22),
       );
-      expect(byStatus, {
-        'scheduled': 3703,
-        'unscheduled': 137,
-        'unrecognized': 41,
-      });
-      // Held: weeks-only intensive GLOCAL rows and Seoul's literal period 00.
-      for (final c in courses.where(
-        (c) => c.scheduleStatus == 'unrecognized',
-      )) {
-        expect(c.meetings, isEmpty);
-        expect(
-          c.campus == 'glocal'
-              ? c.remarks.contains('집중이수제: ')
-              : c.sourceSchedule.contains('00('),
-          isTrue,
-          reason: c.sourceId,
-        );
-      }
+      expect(byStatus, {'scheduled': 3743, 'unscheduled': 138});
+      // Seoul's literal period 00 e-러닝 row has no published time.
+      final untimed = courses.singleWhere(
+        (c) => c.sourceId == 'konkuk/seoul/2026/2/3704',
+      );
+      expect(untimed.scheduleStatus, 'unscheduled');
+      expect(untimed.meetings, isEmpty);
       final approved = courses.where((c) => c.hasSchedulableMeetings).toList();
-      // 집중이수 rows are scheduled only within the weeks their public syllabus confirms.
+      // 집중이수 rows are scheduled only within the weeks the timetable publishes.
       final intensive = approved.where((c) => c.remarks.contains('집중이수제: '));
-      expect(intensive, hasLength(56));
+      expect(intensive, hasLength(96));
       for (final c in intensive) {
         expect(c.campus, 'glocal');
-        expect(c.remarks.contains('공개 강의계획서'), isTrue);
+        expect(c.remarks.contains('강의시간표 집중이수'), isTrue);
         expect(c.period, isNotNull);
       }
+      final k002 = intensive.singleWhere(
+        (c) => c.sourceId == 'konkuk/glocal/2026/2/K002',
+      );
+      expect(k002.period?.start, DateTime(2026, 8, 31));
+      expect(k002.period?.end, DateTime(2026, 10, 25));
+      expect(
+        [
+          for (final m in k002.meetings)
+            (m.weekday, m.originalStartMinute, m.originalEndMinute),
+        ],
+        [(3, 540, 720)],
+      );
       for (final c in approved) {
         expect(
           [
@@ -152,7 +152,7 @@ void main() {
           reason: c.sourceId,
         );
       }
-      expect(approved.expand((c) => c.meetings), hasLength(4900));
+      expect(approved.expand((c) => c.meetings), hasLength(4940));
       for (final mode in [
         LectureMode.inPerson,
         LectureMode.liveOnline,
