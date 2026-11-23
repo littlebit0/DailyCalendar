@@ -11,6 +11,7 @@ C-4 원격교육 운영안내 ⑦ 출석정보 확인방법) 의 대면수업 �
 계약학과 자체 시각(scopedClockProof)·기존 직접 시각(sourceClockProof) 강좌는 건드리지 않는다.
 원문 필드(sourceSchedule, sourceClassroom 등)는 바꾸지 않는다. 다시 실행해도 결과가 같다.
 """
+import datetime as dt
 import json
 import re
 import sys
@@ -101,6 +102,105 @@ def meetings(parsed):
                          'classroom': room, 'sourcePeriodNumbers': [p]})
     return rows
 
+# 교무처 「2026학년도 2학기 수업 주차 현황」(2026. 8. 25. 수정, 2026-2 수업 운영 주요사항 공지 첨부)
+WEEK_SOURCE = 'https://www.bu.ac.kr/bbs/web/788/57347/download.do'
+WEEK_NOTICE = 'https://www.bu.ac.kr/bbs/web/788/58632/artclView.do'
+WEEK_GRID = {  # 요일 → 1~15주차 수업일(원문 그대로, 지정보강일은 실제 날짜)
+    1: ['09-07', '09-14', '09-21', '09-28', '10-12', '10-19', '10-26', '11-02', '11-09',
+        '11-16', '11-23', '11-30', '12-07', '12-14', '12-21'],
+    2: ['09-01', '09-08', '09-15', '09-22', '09-29', '10-06', '10-13', '10-20', '10-27',
+        '11-03', '11-10', '11-17', '11-24', '12-01', '12-15'],
+    3: ['09-02', '09-09', '09-16', '09-23', '09-30', '10-07', '10-14', '10-21', '10-28',
+        '11-04', '11-11', '11-18', '11-25', '12-02', '12-16'],
+    4: ['09-03', '09-10', '09-17', '10-01', '10-08', '10-15', '10-22', '10-29', '11-05',
+        '11-12', '11-19', '11-26', '12-03', '12-10', '12-17'],
+    5: ['09-04', '09-11', '09-18', '10-02', '10-16', '10-23', '11-06', '11-13', '11-20',
+        '11-27', '12-04', '12-08', '12-09', '12-11', '12-18'],
+}
+TERM = {'startDate': '2026-09-01', 'endDate': '2026-12-21'}  # 개강일 9.1.(화) ~ 종강일 12.21.(월)
+
+# 교양 시간표 책자 「⑩ 집중이수제 적용 교과 안내」: AI와 대인관계 분반별 백석연수원 1박 2일(금10~13/토1,2교시)
+AI_CAMP = {
+    '01': '09-11', '02': '09-11', '03': '09-11', '04': '09-11', '08': '09-11',
+    '05': '09-18', '11': '09-18', '20': '09-18', '17': '09-18',
+    '19': '10-16', '18': '10-16', '12': '10-16', '13': '10-16',
+    '22': '10-30', '23': '10-30', '09': '10-30', '10': '10-30',
+}
+AI_NOTE = (
+    '수업 주차: 원문 비고 "13~15주차/백석연수원/집중이수"에 따라 교무처 「2026학년도 2학기 수업 주차 현황」'
+    '(' + WEEK_SOURCE + ', 2026.8.25. 수정)의 해당 요일 13~15주차 날짜만 넣었습니다. 교양 책자의 수업기간 '
+    '"26.12.03~12.17(3주)"은 목요일 분반에만 맞아 더 최근 공식 자료인 주차 현황을 따랐습니다. '
+    '같은 책자 집중이수제 안내의 백석연수원 1박 2일(금10~13교시/토1,2교시)은 분반별 날짜로 넣었습니다'
+    '(10.30.은 주차 현황상 휴업일이나 책자 일정 그대로, "일정은 사정에 의해 변경될 수 있음").'
+)
+OT3_CODES = {'09502', '32123', '31381', '31746'}
+OT3_CHAPEL = {('03355', '24'), ('03355', '25')}
+OT3_START, OT3_END = '2026-10-26', '2026-12-20'
+OT3_NOTE = (
+    '수업 주차: 보건학부 시간표 책자 작업치료학과 3학년 안내 "현장임상실습 이후 10월 26일부터 집중수업'
+    '(8주간 15주차 수업)으로 운영됨"에 따라 2026.10.26.부터 8주간(~12.20.)의 수업 주차 현황 날짜만 넣었습니다'
+    '(' + WEEK_SOURCE + ').'
+)
+EMT_CODES = {'09957', '08956'}
+EMT_NOTE = (
+    '보건학부 시간표 책자 응급구조학과 4학년 안내에 「종합응급처치실습2」와 「응급구조학각론」이 '
+    '"집중이수제(1-5주, 1-8주 더블수업)"로 운영된다고 적혀 있으나 어느 과목이 어느 주차인지 정해져 있지 않아 '
+    '수업 날짜를 정할 수 없어 원문 교시만 표시하고 시간표 추가를 보류합니다.'
+)
+
+
+def week_dates(weekday, weeks=None, start=None, end=None):
+    out = []
+    for i, md in enumerate(WEEK_GRID[weekday], 1):
+        day = '2026-' + md
+        if weeks and i not in weeks:
+            continue
+        if start and not (start <= day <= end):
+            continue
+        out.append(day)
+    return out
+
+
+def dated(rows, dates_for):
+    out = []
+    for r in rows:
+        for day in dates_for(r['weekday']):
+            out.append({'date': day, 'weekday': dt.date.fromisoformat(day).isoweekday(),
+                        'startMinute': r['startMinute'], 'endMinute': r['endMinute'],
+                        'classroom': r['classroom'], 'deliveryMode': 'inPerson',
+                        'sourceWeekday': r['weekday'], 'sourcePeriodNumbers': r['sourcePeriodNumbers']})
+    return sorted(out, key=lambda s: (s['date'], s['startMinute']))
+
+
+def camp(md):
+    fri = dt.date.fromisoformat('2026-' + md)
+    sat = fri + dt.timedelta(days=1)
+    return [
+        {'date': fri.isoformat(), 'weekday': 5, 'startMinute': period_start(10),
+         'endMinute': period_start(13) + SLOT, 'classroom': '백석연수원', 'deliveryMode': 'inPerson',
+         'sourceWeekday': 5, 'sourcePeriodNumbers': [10, 11, 12, 13]},
+        {'date': sat.isoformat(), 'weekday': 6, 'startMinute': period_start(1),
+         'endMinute': period_start(2) + SLOT, 'classroom': '백석연수원', 'deliveryMode': 'inPerson',
+         'sourceWeekday': 6, 'sourcePeriodNumbers': [1, 2]},
+    ]
+
+
+def week_limited(c, rows):
+    """주차 제한이 있는 강좌: (일정, 비고) 또는 보류(None, 사유). 해당 없으면 False."""
+    code, sec = c['courseCode'], c['section']
+    remark = '\n'.join(c.get('departmentRemarks', {}).values())
+    if code == '32065' and '13~15주차' in remark:
+        meet = dated(rows, lambda w: week_dates(w, weeks={13, 14, 15}))
+        if sec in AI_CAMP:
+            meet = sorted(meet + camp(AI_CAMP[sec]), key=lambda s: (s['date'], s['startMinute']))
+        return meet, AI_NOTE
+    if code in OT3_CODES and re.search(r'작업치료학\s*3[ABC]|작업치료학과\s*3학년', remark) \
+            or (code, sec) in OT3_CHAPEL:
+        return dated(rows, lambda w: week_dates(w, start=OT3_START, end=OT3_END)), OT3_NOTE
+    if code in EMT_CODES and '응급구조학과' in remark:
+        return None, EMT_NOTE
+    return False
+
 
 def strip_hold(remarks):
     out = {}
@@ -128,9 +228,24 @@ def apply(data):
             c['schedules'] = []
             c['remarks'] = CYBER_NOTE if has_cyber else UNTIMED_NOTE
         else:
-            c['scheduleStatus'] = 'scheduled'
-            c['schedules'] = meetings(parsed)
-            c['remarks'] = CLOCK_NOTE + (' ' + CYBER_NOTE if has_cyber else '')
+            rows = meetings(parsed)
+            limited = week_limited(c, rows)
+            note = CLOCK_NOTE + (' ' + CYBER_NOTE if has_cyber else '')
+            if limited is False:
+                c['scheduleStatus'] = 'scheduled'
+                c['schedules'] = rows
+                c['remarks'] = note
+            elif limited[0] is None:
+                c['scheduleStatus'] = 'unrecognized'
+                c['schedules'] = []
+                c['remarks'] = limited[1]
+            else:
+                c['scheduleStatus'] = 'scheduled'
+                c['schedules'] = limited[0]
+                c['period'] = dict(TERM)
+                c['remarks'] = note + ' ' + limited[1]
+                continue
+        c['period'] = None
     data['periodEvidence'] = {
         'periodTable': {
             'articleUrl': TABLE_URL, 'attachmentUrl': TABLE_FILE,
@@ -164,6 +279,15 @@ def self_check():
     assert [r['classroom'] for r in meetings(parse('수1,2/ 수3,4', 'a, b', ''))] == ['a', 'b']
     assert len(meetings(parse('월8,9, 화5,6', '조형210', ''))) == 2
     assert parse('사/ 수2,3/ 수4', '조형401, 조형404', '') == [(3, [2, 3], '조형401'), (3, [4], '조형404')]
+    assert week_dates(1, weeks={13, 14, 15}) == ['2026-12-07', '2026-12-14', '2026-12-21']
+    assert week_dates(4, weeks={13, 14, 15}) == ['2026-12-03', '2026-12-10', '2026-12-17']
+    assert week_dates(2, start=OT3_START, end=OT3_END)[0] == '2026-10-27'
+    assert len(week_dates(1, start=OT3_START, end=OT3_END)) == 8
+    assert all(len(v) == 15 for v in WEEK_GRID.values())
+    assert [s['startMinute'] for s in camp('09-11')] == [18 * 60, 9 * 60]
+    ai = {'courseCode': '32065', 'section': '01', 'departmentRemarks': {'교양': '13~15주차'}}
+    got, _ = week_limited(ai, meetings(parse('화2,3', '진리511', '')))
+    assert [s['date'] for s in got] == ['2026-09-11', '2026-09-12', '2026-11-24', '2026-12-01', '2026-12-15']
 
 
 if __name__ == '__main__':

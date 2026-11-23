@@ -128,7 +128,35 @@ void main() {
     for (final c in data.courses) {
       byStatus[c.scheduleStatus] = (byStatus[c.scheduleStatus] ?? 0) + 1;
     }
-    expect(byStatus, {'scheduled': 2386, 'unscheduled': 183, 'unrecognized': 2});
+    expect(byStatus, {'scheduled': 2382, 'unscheduled': 183, 'unrecognized': 6});
+    // 비고 "13~15주차/백석연수원/집중이수": 수업 주차 현황의 13~15주차와 연수원 1박 2일만
+    final ai = data.courses.singleWhere((c) => c.codeAndSection == '32065-01');
+    expect(ai.meetings.map((m) => m.date), [
+      '2026-09-11',
+      '2026-09-12',
+      '2026-11-24',
+      '2026-12-01',
+      '2026-12-15',
+    ]);
+    // 작업치료학과 3학년: 10월 26일부터 8주간 집중수업
+    final ot = data.courses.singleWhere((c) => c.codeAndSection == '09502-01');
+    expect(ot.meetings.map((m) => m.date).toSet(), {
+      '2026-10-26',
+      '2026-11-02',
+      '2026-11-09',
+      '2026-11-16',
+      '2026-11-23',
+      '2026-11-30',
+      '2026-12-07',
+      '2026-12-14',
+    });
+    expect(
+      data.courses
+          .where((c) => ['09957', '08956'].contains(c.code))
+          .map((c) => c.scheduleStatus)
+          .toSet(),
+      {'unrecognized'},
+    );
     // 목5,6 → 13:00~15:00 (5교시 13:00 시작, 60분 슬롯 두 개)
     final music = data.courses.singleWhere(
       (c) => c.codeAndSection == '07294-01',

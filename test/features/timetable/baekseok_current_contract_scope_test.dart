@@ -209,6 +209,7 @@ void main() {
                 'departmentRemarks',
                 'schedules',
                 'scheduleStatus',
+                'period',
               ].contains(k)) {
                 expect(c[k], b[k]);
               }
