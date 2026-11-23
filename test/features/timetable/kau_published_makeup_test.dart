@@ -51,7 +51,7 @@ void main() {
   };
 
   test(
-    'Final closures removed, remaining40 identities and old meetings preserved, held18 remain deep equal',
+    'Final closures kept from the predicted list, remaining40 identities and old meetings preserved',
     () {
       final baselineIds = original.keys
           .map((id) => (id as String).split('/').last)
@@ -65,16 +65,50 @@ void main() {
         );
         expect(old['sourceEducation']['predictedClosureHeld'] == true, closed);
       }
-      expect(candidate['courses'], hasLength(40));
+      // 2026-11-23 사용자 결정: 폐강 공고 강좌도 원문(9/4 폐강 예상 목록) 그대로 넣는다.
+      expect(candidate['courses'], hasLength(83));
       expect(
         (candidate['courses'] as List)
             .map((c) => (c['sourceId'] as String).split('/').last)
             .toSet(),
-        baselineIds.difference(finalClosed),
+        baselineIds,
       );
       var modified = 0;
+      var closedTimed = 0;
+      const holidays = {
+        '2026-09-24', '2026-09-25', '2026-09-26', '2026-10-03', '2026-10-05', //
+        '2026-10-09',
+      };
       for (final c in candidate['courses'] as List) {
         final old = original[c['sourceId']];
+        if (finalClosed.contains((c['sourceId'] as String).split('/').last)) {
+          for (final field in old.keys) {
+            if ([
+              'schedules',
+              'period',
+              'departmentRemarks',
+              'scheduleStatus',
+              'sourceEducation',
+            ].contains(field)) {
+              continue;
+            }
+            expect(c[field], old[field], reason: field);
+          }
+          final meetings = c['schedules'] as List;
+          expect(meetings.isEmpty, (old['sourceSchedule'] as String).isEmpty);
+          if (meetings.isNotEmpty) {
+            closedTimed++;
+            expect(c['scheduleStatus'], 'scheduled');
+            for (final m in meetings) {
+              final date = m['date'] as String;
+              expect(date.compareTo('2026-09-01') >= 0, true);
+              expect(date.compareTo('2026-12-07') <= 0, true);
+              expect(holidays.contains(date), false);
+              expect(m['weekday'], DateTime.parse(date).weekday);
+            }
+          }
+          continue;
+        }
         final before = old['schedules'] as List;
         final after = c['schedules'] as List;
         expect(after.take(before.length).toList(), before);
@@ -93,11 +127,12 @@ void main() {
         }
       }
       expect(modified, 14);
+      expect(closedTimed, 28);
       expect(
         (candidate['courses'] as List).where(
           (c) => (c['schedules'] as List).isEmpty,
         ),
-        hasLength(18),
+        hasLength(33),
       );
       expect(candidate['completionClaim'], false);
       expect(candidate['wholeSchoolCourseCoverageComplete'], false);
@@ -130,12 +165,13 @@ void main() {
       }, expectedPairs);
       var count = 0;
       for (final c in candidate['courses'] as List) {
+        final nativeNumber = (c['sourceId'] as String).split('/').last;
+        if (finalClosed.contains(nativeNumber)) continue;
         final before = original[c['sourceId']]['schedules'] as List;
         final added = (c['schedules'] as List).skip(before.length).toList();
         if (added.isEmpty) {
           continue;
         }
-        final nativeNumber = (c['sourceId'] as String).split('/').last;
         final native = rows.firstWhere(
           (r) => r['nativeLectureNumber'] == nativeNumber,
         );
@@ -185,13 +221,13 @@ void main() {
   );
 
   test(
-    'Actual40model22scheduled350meetings preserve three user modes and complete Drive JSON',
+    'Actual83model50scheduled831meetings preserve three user modes and complete Drive JSON',
     () {
       final ds = UniversityDataset.fromJson(candidate);
-      expect(ds.courses, hasLength(40));
+      expect(ds.courses, hasLength(83));
       final usable = ds.courses.where((c) => c.hasSchedulableMeetings).toList();
-      expect(usable, hasLength(22));
-      expect(usable.fold<int>(0, (sum, c) => sum + c.meetings.length), 350);
+      expect(usable, hasLength(50));
+      expect(usable.fold<int>(0, (sum, c) => sum + c.meetings.length), 831);
       for (final mode in [
         LectureMode.inPerson,
         LectureMode.liveOnline,
@@ -212,7 +248,7 @@ void main() {
           jsonDecode(payload) as Map<String, dynamic>,
         ).materializeClasses();
         final originalClasses = {for (final c in classes) c.sourceId: c};
-        expect(restored, hasLength(22));
+        expect(restored, hasLength(50));
         for (final c in restored) {
           expect(c.isValid, true);
           expect(c.defaultMode, mode);
