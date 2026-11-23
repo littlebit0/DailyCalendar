@@ -6969,8 +6969,8 @@
           "unknown"
         ],
         "courses": 1558,
-        "scheduled": 262,
-        "unscheduled": 1266,
+        "scheduled": 260,
+        "unscheduled": 1268,
         "unrecognized": 30,
         "datasets": [
           "assets/timetable/konyang-glocal-2026-2.json",

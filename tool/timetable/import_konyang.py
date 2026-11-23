@@ -212,7 +212,7 @@ class NoClock(ValueError):
     """The text names no weekday or clock at all ('[시수]', 'TBA', '3시수')."""
 
 
-def meetings(text, campus):
+def meetings(text, campus, hours=None):
     """Return (campus, [(weekday, start, end)]) or raise ValueError."""
     t = text.strip()
     bare = t.replace('시수', '')  # "[시수]", "3시수" are credit-hour words, not 수요일
@@ -236,6 +236,8 @@ def meetings(text, campus):
     # Run-together period digits ("화12/목78") are split only when some run cannot be one period.
     split_runs = any(int(x) > 14 for x in re.findall(r'(?<![\d:])(\d{2,})(?![\d:])', t))
     out = []
+    period_count = 0
+    shared = False
     for seg_campus, seg in segments:
         parts = list(re.finditer(DAY, seg))
         if not parts or seg[:parts[0].start()].strip(' ,/'):
@@ -244,10 +246,21 @@ def meetings(text, campus):
         for k, m in enumerate(parts):
             spec = seg[m.end():parts[k + 1].start() if k + 1 < len(parts) else len(seg)]
             specs.append(spec.strip().strip(',/;:').strip().lstrip('-:/').strip())
-        # "월,수 3,4교시": a weekday with nothing after it shares the next weekday's periods.
+        # "월,수 3,4교시": a weekday joined to the next one only by "," or "·" shares
+        # its periods. Anything less explicit ("월 수/5, /1~2") is not guessed.
+        # "월 수/5, /1~2": bare weekdays then one "/"-separated period group per
+        # weekday pair up in order (월=5, 수=1~2); the hours check below confirms it.
+        if len(specs) > 1 and not any(specs[:-1]) and '/' in specs[-1]:
+            groups = [g.strip(' ,') for g in specs[-1].split('/')]
+            if len(groups) != len(specs) or not all(groups):
+                raise ValueError('weekday and period groups do not pair')
+            specs = groups
+            shared = True
         for k in range(len(specs) - 2, -1, -1):
-            if not specs[k]:
+            between = seg[parts[k].end():parts[k + 1].start()]
+            if not specs[k] and re.fullmatch(r'\s*[,·]\s*', between) and '/' not in specs[k + 1]:
                 specs[k] = specs[k + 1]
+                shared = True
         for k, m in enumerate(parts):
             spec = specs[k]
             day = WEEKDAYS[ENGLISH.get(m.group(1), m.group(1))]
@@ -281,6 +294,7 @@ def meetings(text, campus):
                 raise ValueError('weekday without period %r' % spec)
             if max(periods) >= 10 and sorted(periods) != list(range(min(periods), max(periods) + 1)):
                 raise ValueError('ambiguous period list %r' % spec)  # "목(13,7,8)" 
+            period_count += len(periods)
             if seg_campus not in PERIOD_START:
                 raise ValueError('campus unknown; period table cannot be chosen')
             for p in periods:
@@ -289,6 +303,8 @@ def meetings(text, campus):
     for day, s, e in out:
         if not 0 <= s < e <= 1440:
             raise ValueError('invalid clock')
+    if shared and hours is not None and period_count != hours:
+        raise ValueError('shared periods do not match weekly hours')
     return campus, merge(out)
 
 
@@ -350,7 +366,9 @@ def main(work):
             note = '첨부 수업계획서 형식(HWP 3.0·PowerPoint)을 읽지 못해 수업시간을 확인하지 못했습니다. 시간표에 추가할 수 없습니다.'
         if text:
             try:
-                campus, found = meetings(for_section(text, row['section']), campus)
+                theory, practice = (int(x) for x in row['creditSystem'].split('-')[1:3])
+                campus, found = meetings(for_section(text, row['section']), campus,
+                                         hours=theory + practice)
                 schedules = [{'weekday': d, 'startMinute': s, 'endMinute': e, 'classroom': ''}
                              for d, s, e in found]
                 status = 'scheduled'
@@ -369,6 +387,9 @@ def main(work):
                 else:
                     # Orchestrator decision (PR 1246): unreadable notation is "time undecided".
                     note = '원문 수업시간 표기를 교시로 해석할 수 없어 시간 미정 강좌로 추가할 수 있습니다. 원문 표기를 확인하세요.'
+                    if 'weekly hours' in str(error) or 'do not pair' in str(error):
+                        note = ('원문 수업시간의 요일·교시 대응이 학점-이론-실습 시수와 맞지 않아 '
+                                '시간 미정 강좌로 추가할 수 있습니다. 원문 표기를 확인하세요.')
         credit = float(row['creditSystem'].split('-')[0])
         course = {
             'sourceId': 'konyang/%s/2026/2/%s-%s' % (campus, row['code'], row['section']),
@@ -456,6 +477,16 @@ def _self_check():
     assert class_time(['강의시간 및 장소', '화 1, 2교시', '수 3교시,', '담당교수']) == ('화 1, 2교시, 수 3교시,', None)
     assert class_time(['DYC 수업계획서', '논산 글로컬캠퍼스', '화요일 : 6.7.8 교시', '과정명']) == ('화요일 : 6.7.8 교시', 'glocal')
     assert meetings('월,수 3,4교시', 'glocal')[1] == [(1, 690, 810), (3, 690, 810)]
+    assert meetings('월,수 3,4교시', 'glocal', hours=4)[1] == [(1, 690, 810), (3, 690, 810)]
+    assert meetings('월 수/5, /1~2', 'medical', hours=3)[1] == [(1, 780, 840), (3, 540, 660)]
+    for unclear, hours in (('월 수/5, /1~2', 4), ('월,수 3,4교시', 2), ('월 수 목/5, /1~2', 3)):
+        try:
+            meetings(unclear, 'glocal', hours=hours)
+            raise AssertionError(unclear)
+        except NoClock:
+            raise AssertionError(unclear)
+        except ValueError:
+            pass
     assert meetings('화요일 5,6,7교시 (13:30~16:30)', 'glocal')[1] == [(2, 810, 990)]
     assert meetings('죽헌정보관 605호/ 월 5,6,7 목 1,2,3', 'medical')[1] == [(1, 780, 960), (4, 540, 720)]
     assert meetings('대캠, 화(7, 8, 9)', 'glocal') == ('medical', [(2, 900, 1080)])

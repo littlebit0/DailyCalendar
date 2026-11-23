@@ -24,10 +24,10 @@ void main() {
       final courses = [for (final d in datasets) ...d.courses];
       expect(courses, hasLength(1558));
       expect(courses.map((c) => c.sourceId).toSet(), hasLength(1558));
-      expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(262));
+      expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(260));
       expect(
         courses.where((c) => c.scheduleStatus == 'unscheduled'),
-        hasLength(1266),
+        hasLength(1268),
       );
       expect(
         courses.where((c) => c.scheduleStatus == 'unrecognized'),
@@ -67,6 +67,15 @@ void main() {
       expect(typo.scheduleStatus, 'unscheduled');
       expect(typo.meetings, isEmpty);
       expect(typo.canAddToTimetable, isTrue);
+      // "월 수/5, /1~2" pairs weekdays and period groups in order: 월 5, 수 1~2.
+      final paired = find('61482A-01');
+      expect(paired.sourceSchedule, '월 수/5, /1~2');
+      expect(clocks(paired), [(1, 780, 840), (3, 540, 660)]);
+      // "월,수 3,4교시" on a 2-2-0 course would be 4 hours a week: time undecided.
+      final mismatch = find('80207C-01');
+      expect(mismatch.sourceSchedule, '월,수 3,4교시');
+      expect(mismatch.scheduleStatus, 'unscheduled');
+      expect(mismatch.meetings, isEmpty);
 
       expect(
         abap.isMajorForSourceDepartment('기업소프트웨어학부'),
