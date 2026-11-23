@@ -11,7 +11,7 @@ Map<String, dynamic> _json(String path) =>
 
 void main() {
   test('Dong-eui 2026-2 keeps the official 1st-year sections and shows '
-      'periods only as published text', () {
+      'periods on the 09:00 + 60-minute DAP period clock', () {
     final raw = _json('assets/timetable/deu-main-2026-2.json');
     final directory = CourseOrganizationDirectory.fromJson(
       _json('assets/timetable/organizations/deu.json'),
@@ -32,17 +32,28 @@ void main() {
     for (final c in courses) {
       byStatus[c.scheduleStatus] = (byStatus[c.scheduleStatus] ?? 0) + 1;
     }
-    expect(byStatus, {'unrecognized': 1200, 'unscheduled': 60});
+    // The one unrecognized row is 300278-002, whose PDF cell is clipped
+    // mid-slot ("지천관620[토").
+    expect(byStatus, {'scheduled': 1199, 'unrecognized': 1, 'unscheduled': 60});
 
-    // No official undergraduate period-to-clock table: nothing is placed.
     for (final c in courses) {
-      expect(c.meetings, isEmpty, reason: c.sourceId);
+      expect(
+        c.meetings.isNotEmpty,
+        c.scheduleStatus == 'scheduled',
+        reason: c.sourceId,
+      );
       expect(
         c.sourceSchedule.isEmpty,
         c.scheduleStatus == 'unscheduled',
         reason: c.sourceId,
       );
     }
+    expect(
+      courses
+          .singleWhere((c) => c.sourceId.endsWith('/300278-002'))
+          .scheduleStatus,
+      'unrecognized',
+    );
     final korean = courses.firstWhere(
       (c) => c.sourceId == 'deu/main/2026/2/401763-001',
     );
@@ -50,6 +61,23 @@ void main() {
     expect(korean.sourceSchedule, '[화4],[수2-3]');
     expect(korean.sourceClassroom, '2인207');
     expect(korean.departments, ['국어국문학과']);
+    // n교시 = 09:00 + (n-1) h, 60-minute slot: 화4 12:00-13:00, 수2-3 10:00-12:00.
+    expect(
+      korean.meetings
+          .map(
+            (m) => [
+              m.weekday,
+              m.originalStartMinute,
+              m.originalEndMinute,
+              m.classroom,
+            ],
+          )
+          .toList(),
+      [
+        [2, 720, 780, '2인207'],
+        [3, 600, 720, '2인207'],
+      ],
+    );
     expect(
       courses
           .singleWhere((c) => c.sourceId.endsWith('/300267-003'))

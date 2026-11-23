@@ -10,8 +10,10 @@ all titled "1학년 수강과목". Closures: 개강 전 폐강강좌현황 전�
 
 PDF text is read with macOS PDFKit through tool/timetable/daegu_pdf_columns.swift
 (PyMuPDF is not installed here). The school publishes no 교시→시각 table for
-undergraduate classes, so a weekday/period like [월1-3] is kept literally as
-`unrecognized` with no meetings; a row without one is `unscheduled`.
+undergraduate classes as a table; the 2026-2 출석인정 manual's DAP screen gives
+"09:00 1교시" and "23:50 15교시" (see FIRST_PERIOD_MINUTE), so [월1-3] becomes
+Monday 09:00-12:00 (60-minute slots). A cell clipped mid-slot stays
+`unrecognized`; a row without a weekday/period is `unscheduled`.
 Courses on the official pre-semester closure list stay courses: closure is not
 judged (2026-11-23 사용자 결정), a remark notes the listing and
 `closureListedCourses` records the 강좌번호.
@@ -33,6 +35,20 @@ CLOSURE_URL = 'https://www.deu.ac.kr/www/gra-notice.do?mode=view&articleNo=90692
 CLOSURE_DATE = '2026-08-27'
 CODE = re.compile(r'^(\d{6})-(\d{3})$')
 SLOT = re.compile(r'\[[월화수목금토일][^\]]*\]')
+# One printed meeting: optional room, then [요일교시] or [요일교시-교시].
+MEETING = re.compile(r'([^\[\],]*)\[([월화수목금토일])(\d+)(?:-(\d+))?\]')
+WEEKDAYS = '월화수목금토일'
+# Period clock (2026-11-23 research): the 2026-2 출석인정 신청 manual attached to
+# the 학사 notice re-posted on department boards (e.g.
+# https://deuhome.deu.ac.kr/biopharm/sub06_03.do?mode=view&articleNo=90395,
+# 2026-08-24, attachNo=139516 「출석인정 신청 순서 메뉴얼」) shows the DAP 출석인정의뢰
+# screen whose period pickers read "09:00 1교시" and "23:50 15교시"; 「강의시간편성및
+# 수업규정」 제2조① sets 50-minute classes. 09:00 + 14 x 60 + 50 = 23:50, so period n
+# starts 09:00 + (n-1) h and its slot runs 60 minutes (50 class + 10 break).
+FIRST_PERIOD_MINUTE = 9 * 60
+PERIOD_SLOT_MINUTES = 60
+PERIOD_EVIDENCE = ('교시 시각: n교시 = 09:00+(n-1)시간, 60분 슬롯(2026-2 출석인정 신청 순서 메뉴얼 attachNo=139516의 '
+                   'DAP 화면 "09:00 1교시"·"23:50 15교시", 「강의시간편성및수업규정」 제2조① 강의 50분)')
 
 # kind -> (column edges, column names, attachNo, PDF title). Edges sit in the
 # blank gaps between the printed table columns.
@@ -151,6 +167,30 @@ def audience(label):
     return label.rstrip('('), None
 
 
+def meetings(lecture):
+    """'2인207[화4],[수2-3](50)' -> merged weekly meetings; None when the printed
+    cell is clipped mid-slot (an unclosed '['), so nothing is guessed."""
+    body = re.sub(r'\(\d*$|\(\d+\)$', '', lecture.strip())
+    if body.count('[') != body.count(']'):
+        return None
+    out = []
+    room = ''
+    for m in MEETING.finditer(body):
+        room = m.group(1).strip() or room  # '[수2-3]' after '2인207[화4]' keeps the room
+        first, last = int(m.group(3)), int(m.group(4) or m.group(3))
+        start = FIRST_PERIOD_MINUTE + (first - 1) * PERIOD_SLOT_MINUTES
+        end = FIRST_PERIOD_MINUTE + last * PERIOD_SLOT_MINUTES
+        meeting = {'weekday': WEEKDAYS.index(m.group(2)) + 1, 'startMinute': start, 'endMinute': end,
+                   'classroom': room}
+        prev = out[-1] if out else None
+        if (prev and prev['weekday'] == meeting['weekday'] and prev['classroom'] == room
+                and 0 <= start - prev['endMinute'] < 60):
+            prev['endMinute'] = max(prev['endMinute'], end)
+        else:
+            out.append(meeting)
+    return out
+
+
 def build(rows, closures):
     closed = {r['교과목코드']: r for r in closures}
     courses = {}
@@ -192,9 +232,12 @@ def build(rows, closures):
                 'credits': float(credit), 'departments': [], 'departmentCredits': {},
                 'departmentClassifications': {}, 'departmentRemarks': {},
                 'sourceSchedule': ','.join(slots), 'sourceClassroom': rooms,
-                'remarks': '', 'scheduleStatus': 'unrecognized' if slots else 'unscheduled',
-                'schedules': [], '_rows': [],
+                'remarks': '', 'scheduleStatus': 'unscheduled', 'schedules': [], '_rows': [],
             }
+            if slots:
+                placed = meetings(lecture)
+                course['scheduleStatus'] = 'scheduled' if placed else 'unrecognized'
+                course['schedules'] = placed or []
         else:
             for field, value in (('courseName', title), ('professor', professor), ('credits', float(credit)),
                                  ('classification', c['구분']), ('sourceSchedule', ','.join(slots))):
@@ -225,9 +268,9 @@ def build(rows, closures):
             course['_capacity'] = capacity.group(1)
     out = []
     for course in courses.values():
-        status = ('교시 원문만 표시: 학부 교시별 시각표가 공개되지 않아 시각으로 바꾸지 않음'
-                  if course['scheduleStatus'] == 'unrecognized' else
-                  '요일·교시 표기 없음(원격사이버강좌 등)')
+        status = {'scheduled': PERIOD_EVIDENCE,
+                  'unrecognized': '교시 원문만 표시: PDF 칸에서 강의시간 원문이 잘려 시각으로 바꾸지 않음',
+                  'unscheduled': '요일·교시 표기 없음(원격사이버강좌 등)'}[course['scheduleStatus']]
         closure = ([f'개강 전 폐강강좌현황({CLOSURE_DATE})에도 실린 강좌(폐강 여부는 판단하지 않음, 2026-11-23 사용자 결정)']
                    if course['sourceId'].rsplit('/', 1)[1] in excluded else [])
         course['remarks'] = ' | '.join(course.pop('_rows') + [
@@ -251,8 +294,9 @@ def main(argv):
         'sourceNotice': (
             f'동의대학교 학부 공지(2026-08-13) 2026학년도 2학기 1학년 수강과목 PDF 3개(계열·균형교양, 전공, 공통교양) '
             f'{len(rows)}행, 고유 강좌번호 {len(courses)}개. 개강 전 폐강강좌현황({CLOSURE_DATE}, '
-            f'{CLOSURE_URL})에 실린 {len(excluded)}강좌도 비고로만 표시하고 그대로 둡니다. 학부 교시별 시각표가 공개되지 않아 '
-            f'요일·교시는 원문만 표시합니다.'),
+            f'{CLOSURE_URL})에 실린 {len(excluded)}강좌도 비고로만 표시하고 그대로 둡니다. 교시는 2026-2 출석인정 신청 '
+            f'메뉴얼(attachNo=139516)의 DAP 화면 "09:00 1교시"·"23:50 15교시"와 강의 50분 규정에 따라 '
+            f'n교시 = 09:00+(n-1)시간, 60분 슬롯으로 바꿉니다.'),
         'scopeNote': '1학년 수강과목 PDF만 반영했습니다. 2~4학년 전공·교양 강좌는 이 자료에 없습니다.',
         'sourceRowCount': len(rows),
         'sourceHashes': {f'{n} (sha256)': hashlib.sha256(Path(p).read_bytes()).hexdigest()

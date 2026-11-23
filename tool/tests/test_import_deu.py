@@ -1,4 +1,4 @@
-"""Dong-eui 2026-2 importer: merge, closure and period-literal rules, plus asset totals."""
+"""Dong-eui 2026-2 importer: merge, closure and period-clock rules, plus asset totals."""
 import collections
 import importlib.util
 import json
@@ -22,7 +22,7 @@ def row(kind, key, target, lecture, more=(), department=None, title='소통과�
 
 
 class DeuImportTest(unittest.TestCase):
-    def test_periods_stay_literal_and_rows_merge_without_duplicates(self):
+    def test_periods_become_clock_meetings_and_rows_merge_without_duplicates(self):
         rows = [
             row('c', '100137-004', '조선해양공학과(1)', '원격사이버강좌 (별도제한)'),
             row('c', '100137-004', '토목공학과(1)', '원격사이버강좌 (별도제한)', more=['도시공학과(1)']),
@@ -39,10 +39,22 @@ class DeuImportTest(unittest.TestCase):
         self.assertEqual(len(online['remarks'].split(' | ')), 3)  # one source line, credits, status
         period = by['201061-002']
         self.assertEqual((period['scheduleStatus'], period['schedules'], period['sourceSchedule'],
-                          period['sourceClassroom']), ('unrecognized', [], '[월1-3]', '생과310'))
+                          period['sourceClassroom']),
+                         ('scheduled', [{'weekday': 1, 'startMinute': 540, 'endMinute': 720,
+                                         'classroom': '생과310'}], '[월1-3]', '생과310'))
         major = by['401763-001']
         self.assertEqual((major['courseName'], major['departments'], major['sourceSchedule']),
                          ('이야기와소설의이해', ['국어국문학과'], '[화4],[수2-3]'))
+        # A room printed once carries to the next slot: 화4 = 12:00-13:00, 수2-3 = 10:00-12:00.
+        self.assertEqual([(m['weekday'], m['startMinute'], m['endMinute'], m['classroom'])
+                          for m in major['schedules']], [(2, 720, 780, '2인207'), (3, 600, 720, '2인207')])
+
+    def test_meetings_merge_only_same_room_and_hold_clipped_cells(self):
+        self.assertEqual(D.meetings('1인302[월3],[월4-5](30)'),
+                         [{'weekday': 1, 'startMinute': 660, 'endMinute': 840, 'classroom': '1인302'}])
+        self.assertEqual(len(D.meetings('1인302[월3],1인303[월4-5](30)')), 2)
+        self.assertEqual(D.meetings('지천관[토12](20)')[0]['endMinute'], 21 * 60)  # 12교시 20:00-21:00
+        self.assertIsNone(D.meetings('지천관621[토8-9],지천관620[토'))
 
     def test_closure_listed_courses_stay_and_conflicts_raise(self):
         rows = [row('a', '300267-003', '전체(1)', '공과215[월1](58)'),
@@ -67,10 +79,10 @@ class DeuImportTest(unittest.TestCase):
         self.assertEqual(len({c['sourceId'] for c in courses}), 1260)
         self.assertEqual(len(ASSET['closureListedCourses']), 7)
         status = collections.Counter(c['scheduleStatus'] for c in courses)
-        self.assertEqual(status, {'unrecognized': 1200, 'unscheduled': 60})
-        self.assertTrue(all(c['schedules'] == [] for c in courses))
+        self.assertEqual(status, {'scheduled': 1199, 'unrecognized': 1, 'unscheduled': 60})
+        self.assertTrue(all(bool(c['schedules']) == (c['scheduleStatus'] == 'scheduled') for c in courses))
         self.assertTrue(all(D.SLOT.search(c['sourceSchedule']) for c in courses
-                            if c['scheduleStatus'] == 'unrecognized'))
+                            if c['scheduleStatus'] != 'unscheduled'))
 
 
 if __name__ == '__main__':
