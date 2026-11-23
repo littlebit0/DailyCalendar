@@ -11,8 +11,6 @@ from pathlib import Path
 
 DAYS = {d: i + 1 for i, d in enumerate('월화수목금토일')}
 SLOT = re.compile(r'^([월화수목금토일]) (\d+[AB])~(\d+[AB])\((\d\d):(\d\d)~(\d\d):(\d\d)\)$')
-HELD_MODES = {'비대면', '블렌디드'}
-HELD_KINDS = {'02', '03', '04', '35'}  # 현장실습·산업체현장실습·사회봉사·임상실습
 SOURCE_URL = 'https://a.chosun.ac.kr/S/sugang/gaeseol'
 
 
@@ -51,24 +49,13 @@ def meetings_for(row):
     return meetings
 
 
-def hold_reasons(row, kinds):
-    reasons = []
-    mode = row['SUEOP_BANGSIK_NM']
-    if mode in HELD_MODES:
-        reasons.append(f'원문 수업방식 {mode}: 공식 요일·교시를 확정 시각으로 볼지 판단 대기')
-    elif row['CYBER_GANGUI_GB'] == '1' or '사이버강좌' in row['GANGUISIL_NM']:
-        reasons.append('원문 사이버강좌 구분: 공식 요일·교시를 확정 시각으로 볼지 판단 대기')
-    if row['GANGUI_GB'] in HELD_KINDS:
-        reasons.append(f"원문 강의구분 {kinds[row['GANGUI_GB']]}: 실제 운영 기간·시각 미확인")
-    return reasons
-
-
 def course_for(row, isu, kinds):
     label = row['HAKGWA_NM'].strip()
     classification = isu[row['ISU_GB']]
     credits = float(row['HAKJEOM'])
+    # 2026-11-23 사용자 결정: 비대면·블렌디드·사이버·현장실습 등 운영 방식과 관계없이
+    # 원문 요일·시각으로 확정한다. 원문 수업방식·강의구분은 비고에 그대로 남긴다.
     meetings = meetings_for(row)
-    reasons = hold_reasons(row, kinds)
     notes = []
     if row['GANGUI_GB']:
         notes.append(f"강의구분 {kinds[row['GANGUI_GB']]}")
@@ -82,8 +69,6 @@ def course_for(row, isu, kinds):
         notes.append(f"수강가능학과 {row['SUGANG_HAKGWA_ISU_GB']}")
     if row['BIGO'].strip():
         notes.append(f"비고 {row['BIGO'].strip()}")
-    if reasons:
-        notes.append('시각 보류: ' + ' / '.join(reasons))
     course = {
         'sourceId': f"chosun/unknown/2026/2/{row['GWAMOK_CD']}/{row['BUNBAN']}",
         'campus': 'unknown',
@@ -101,11 +86,9 @@ def course_for(row, isu, kinds):
         'departmentRemarks': {label: ' | '.join(notes)},
         'sourceSchedule': row['GANGUI_TIME_NM'],
         'sourceClassroom': row['GANGUISIL_NM'].strip(),
-        'scheduleStatus': 'unrecognized' if reasons else 'scheduled',
-        'schedules': [] if reasons else meetings,
+        'scheduleStatus': 'scheduled',
+        'schedules': meetings,
     }
-    if reasons:
-        course['holdReasons'] = reasons
     return course
 
 
