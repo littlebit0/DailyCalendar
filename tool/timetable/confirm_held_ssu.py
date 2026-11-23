@@ -4,7 +4,10 @@
 The public course list prints weekday(s), HH:mm-HH:mm and '(room-professor)',
 e.g. '토 12:00-13:15 (숭덕경상관 02111-이서진)'. Clocks are kept as written and
 the room drops the trailing professor name, as in the dataset's regular rows.
-Dates follow the dataset's regular weekly pattern. Rows with no time stay held.
+Dates follow the dataset's regular weekly pattern. Rows whose official list
+has no time at all (사회봉사: 'no in-class lessons', 현장실습: term date range only,
+recorded/숭실사이버대 courses with no public syllabus clock) become
+'unscheduled' (time not set), per the 2026-11-23 instruction.
 
     python3 tool/timetable/confirm_held_ssu.py
 """
@@ -21,6 +24,8 @@ PATH = 'assets/timetable/ssu-main-2026-2.json'
 DAYS = '월화수목금토일'
 NOTE = common.DECISION + '.'
 DROP = ('현재 공개 강의의 수강 조건을 보존했습니다. 개별 수업 운영 검토 전으로 자동 시간표 추가는 아직 지원하지 않습니다.',)
+UNTIMED_NOTE = ('2026-11-23 사용자 지시: 공식 강의시간표·공지·강의계획서 어디에도 수업 요일·시각이 없어 '
+                '시간 미정 강좌로 둡니다.')
 BLOCK = re.compile(r'((?:[월화수목금토일] )+)(\d{2}):(\d{2})-(\d{2}):(\d{2}) \((.*?)\)(?= [월화수목금토일] |\s*$)')
 KEEP = '현재 공개 강의의 수강 조건을 보존했습니다.'
 
@@ -64,6 +69,10 @@ def main():
         if course.get('scheduleStatus') != 'unrecognized':
             continue
         if not (course.get('sourceSchedule') or '').strip():
+            course['scheduleStatus'] = 'unscheduled'
+            course['departmentRemarks'] = {k: '\n'.join(l for l in v.replace(DROP[0], '').split('\n') if l.strip())
+                                           + '\n' + UNTIMED_NOTE
+                                           for k, v in course['departmentRemarks'].items()}
             held += 1
             continue
         found = meetings(course['sourceSchedule'])
@@ -73,7 +82,7 @@ def main():
         common.confirm(course, schedules, NOTE, DROP)
         course.setdefault('period', period)
     common.save(PATH, dataset, '숭실대 대면+녹화·운영 검토 보류 강좌를 공개 요일·시각으로 확정(2026-11-23 사용자 결정)')
-    print('held', held)
+    print('untimed', held)
 
 
 if __name__ == '__main__':

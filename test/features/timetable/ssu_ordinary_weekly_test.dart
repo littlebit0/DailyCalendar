@@ -172,6 +172,19 @@ void main() {
           restored.remove('period');
           expect(jsonEncode(restored), jsonEncode(before));
           confirmed++;
+        } else if (jsonEncode(
+          c['departmentRemarks'],
+        ).contains('2026-11-23 사용자 지시')) {
+          // 공식 자료 어디에도 시각이 없는 강좌는 시간 미정으로 옮겼다.
+          expect(before['scheduleStatus'], 'unrecognized');
+          expect(c['scheduleStatus'], 'unscheduled');
+          expect(c['schedules'], isEmpty);
+          final restored = jsonDecode(jsonEncode(c)) as Map<String, dynamic>;
+          for (final f in ['scheduleStatus', 'departmentRemarks']) {
+            restored[f] = before[f];
+          }
+          expect(jsonEncode(restored), jsonEncode(before));
+          held++;
         } else if (!added.contains(cid)) {
           expect(jsonEncode(c), jsonEncode(before));
           if ((c['schedules'] as List).isEmpty) {

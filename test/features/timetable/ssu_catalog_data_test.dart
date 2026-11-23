@@ -50,6 +50,7 @@ void main() {
     final frozens = frozen['courses'] as List;
     expect(products, hasLength(frozens.length));
     var confirmed = 0;
+    var untimed = 0;
     for (var i = 0; i < products.length; i++) {
       final now = Map<String, dynamic>.from(products[i] as Map);
       final before = frozens[i] as Map;
@@ -61,10 +62,22 @@ void main() {
         }
         now.remove('period');
         confirmed++;
+      } else if (jsonEncode(
+        now['departmentRemarks'],
+      ).contains('2026-11-23 사용자 지시')) {
+        // 공식 자료 어디에도 시각이 없는 강좌는 시간 미정으로 옮겼다.
+        expect(before['scheduleStatus'], 'unrecognized');
+        expect(now['scheduleStatus'], 'unscheduled');
+        expect(now['schedules'], isEmpty);
+        for (final f in ['scheduleStatus', 'departmentRemarks']) {
+          now[f] = before[f];
+        }
+        untimed++;
       }
       expect(now, before);
     }
     expect(confirmed, 139);
+    expect(untimed, 36);
     final period =
         (jsonDecode(
                   fixtureFile(
