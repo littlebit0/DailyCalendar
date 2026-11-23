@@ -49,23 +49,40 @@ void main() {
       ];
       expect(courses.length, 1718);
       expect(courses.map((c) => c.sourceId).toSet().length, 1718);
-      expect(courses.where((c) => c.hasSchedulableMeetings).length, 1322);
-      expect(courses.expand((c) => c.meetings).length, 29729);
+      expect(courses.where((c) => c.hasSchedulableMeetings).length, 1375);
+      expect(courses.expand((c) => c.meetings).length, 30573);
       expect(
         courses.where((c) => c.scheduleStatus == 'unrecognized').length,
-        298,
+        25,
       );
-      // 남은 미확정은 토요일·0시수 원문자 자리표시와 시간이 빈 JST 강좌뿐이다.
+      // 남은 미확정은 원문자 수가 실습 시수와 다르거나 같은 칸을 다른 분반과 겹쳐 쓰는
+      // 음악 실기·실습(원문끼리 모순)뿐이다.
       expect(
         courses
             .where((c) => c.scheduleStatus == 'unrecognized')
             .every(
               (c) =>
-                  c.sourceSchedule.isEmpty ||
-                  RegExp('[①-⑳]').hasMatch(c.sourceSchedule),
+                  c.sourceSchedule.startsWith('토') &&
+                  c.sourceSchedule.contains('음악관'),
             ),
         isTrue,
       );
+      // 토요일 원문자도 같은 번호 교시: 기초실기(2) 01 토① = 09:10~10:10.
+      final saturday = courses.singleWhere(
+        (c) => c.codeAndSection == '109430-01',
+      );
+      expect(
+        saturday.meetings
+            .map((m) => (m.weekday, m.originalStartMinute, m.originalEndMinute))
+            .toSet(),
+        {(6, 550, 610)},
+      );
+      // 0시수 현장실습·12월 집중강의는 시간 미정, 시간이 빈 JST 강좌도 시간 미정.
+      for (final code in ['104025-06', '116759-01', '115186-01']) {
+        final c = courses.singleWhere((c) => c.codeAndSection == code);
+        expect(c.scheduleStatus, 'unscheduled');
+        expect(c.meetings, isEmpty);
+      }
       // 야간 11~13교시는 1~10교시와 같은 60분 슬롯으로 이어 19:10~22:10.
       final night = courses.singleWhere((c) => c.codeAndSection == '100088-02');
       expect(night.sourceSchedule, '목11 12 13 [사회관-2403]');
@@ -81,7 +98,7 @@ void main() {
       );
       expect(
         courses.where((c) => c.scheduleStatus == 'unscheduled').length,
-        98,
+        318,
       );
       // 원문자 교시는 같은 번호 교시의 실습 시간이다(이론·실습 시수와 일치): 월①②=09:10~11:10.
       final circled = courses.singleWhere(
@@ -154,7 +171,7 @@ void main() {
         final restored = TimetableSyncDocument.fromJson(
           jsonDecode(jsonEncode(doc.toJson())) as Map<String, dynamic>,
         );
-        expect(restored.courses.length, 1322);
+        expect(restored.courses.length, 1375);
         for (final e in restored.courses.entries) {
           expect(e.value.value, values[e.key]!.value);
         }

@@ -83,6 +83,34 @@ class KunsanHeldPeriodsTest(unittest.TestCase):
             self.assertEqual(by[sid]['scheduleStatus'], 'unrecognized')
         self.assertEqual(apply_kunsan.apply_circled(data), [])
 
+    def test_saturday_circled_confirms_unless_zero_hour_mismatch_or_shared_slot(self):
+        def sat(sid, code, schedule, room):
+            c = course(sid, schedule, room, '원문 원문자 교시(① 등)의 실제 시각 미확인')
+            c['courseCode'] = code
+            return c
+        data = {'counts': {}, 'courses': [
+            sat('lesson', '109430', '토② [음악관-10108]', '음악관-10108'),
+            sat('shared1', '109430', '토① [음악관-10107]', '음악관-10107'),
+            sat('shared2', '102966', '토① [음악관-10107]', '음악관-10107'),
+            sat('field', '104025', '토① [공학3-13103]', '공학3-13103'),
+            sat('ski', '101765', '토① ② [집중강의(야외)]', '집중강의(야외)'),
+            sat('kunsan/unknown/2026/2/110404/12', '110404', '토① ② ④ ⑤ [음악관-10111]', '음악관-10111'),
+            course('jst', '', '', 'JST 공개 목록에 실제 시간표·담당교원 미게시'),
+        ]}
+        self.assertEqual(apply_kunsan.apply_saturday([data]), ['lesson'])
+        by = {c['sourceId']: c for c in data['courses']}
+        self.assertEqual({(m['weekday'], m['startMinute'], m['endMinute']) for m in by['lesson']['schedules']},
+                         {(6, 610, 670)})
+        self.assertEqual(len(by['lesson']['schedules']), len(apply_kunsan.DATES[6]))
+        self.assertEqual(apply_kunsan.apply_untimed(data), ['field', 'ski', 'jst'])
+        self.assertIn('동기방학 집중 실습', by['field']['remarks'])
+        self.assertIn('12월 집중강의', by['ski']['remarks'])
+        for sid in ('shared1', 'shared2', 'kunsan/unknown/2026/2/110404/12'):
+            self.assertEqual(by[sid]['scheduleStatus'], 'unrecognized')
+        self.assertEqual(data['counts'], {'scheduled': 1, 'unrecognized': 3, 'unscheduled': 3})
+        self.assertEqual(apply_kunsan.apply_saturday([data]), [])
+        self.assertEqual(apply_kunsan.apply_untimed(data), [])
+
     def test_saturday_skips_holidays(self):
         self.assertNotIn('2026-09-26', apply_kunsan.DATES[6])
         self.assertNotIn('2026-10-03', apply_kunsan.DATES[6])
