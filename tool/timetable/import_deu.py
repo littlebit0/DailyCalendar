@@ -12,8 +12,9 @@ PDF text is read with macOS PDFKit through tool/timetable/daegu_pdf_columns.swif
 (PyMuPDF is not installed here). The school publishes no 교시→시각 table for
 undergraduate classes, so a weekday/period like [월1-3] is kept literally as
 `unrecognized` with no meetings; a row without one is `unscheduled`.
-Courses on the official pre-semester closure list are excluded, as the other
-importers do with confirmed closures (cau, chosun, konkuk, kau).
+Courses on the official pre-semester closure list stay courses: closure is not
+judged (2026-11-23 사용자 결정), a remark notes the listing and
+`closureListedCourses` records the 강좌번호.
 """
 import collections
 import hashlib
@@ -159,7 +160,6 @@ def build(rows, closures):
         key = c['강좌번호']
         if key in closed:
             excluded.add(key)
-            continue
         code, section = CODE.match(key).groups()
         title = c['교과목명']
         grade = None
@@ -228,8 +228,10 @@ def build(rows, closures):
         status = ('교시 원문만 표시: 학부 교시별 시각표가 공개되지 않아 시각으로 바꾸지 않음'
                   if course['scheduleStatus'] == 'unrecognized' else
                   '요일·교시 표기 없음(원격사이버강좌 등)')
+        closure = ([f'개강 전 폐강강좌현황({CLOSURE_DATE})에도 실린 강좌(폐강 여부는 판단하지 않음, 2026-11-23 사용자 결정)']
+                   if course['sourceId'].rsplit('/', 1)[1] in excluded else [])
         course['remarks'] = ' | '.join(course.pop('_rows') + [
-            f'학점/시간 {course["credits"]:g}/{course.pop("_hours")}', status])
+            f'학점/시간 {course["credits"]:g}/{course.pop("_hours")}', status] + closure)
         course.pop('_capacity', None)
         out.append(course)
     return out, sorted(excluded)
@@ -248,8 +250,8 @@ def main(argv):
         'sourceUrl': SOURCE_URL,
         'sourceNotice': (
             f'동의대학교 학부 공지(2026-08-13) 2026학년도 2학기 1학년 수강과목 PDF 3개(계열·균형교양, 전공, 공통교양) '
-            f'{len(rows)}행, 고유 강좌번호 {len(courses) + len(excluded)}개 중 개강 전 폐강강좌현황({CLOSURE_DATE}, '
-            f'{CLOSURE_URL}) 대상 {len(excluded)}강좌를 뺀 {len(courses)}강좌. 학부 교시별 시각표가 공개되지 않아 '
+            f'{len(rows)}행, 고유 강좌번호 {len(courses)}개. 개강 전 폐강강좌현황({CLOSURE_DATE}, '
+            f'{CLOSURE_URL})에 실린 {len(excluded)}강좌도 비고로만 표시하고 그대로 둡니다. 학부 교시별 시각표가 공개되지 않아 '
             f'요일·교시는 원문만 표시합니다.'),
         'scopeNote': '1학년 수강과목 PDF만 반영했습니다. 2~4학년 전공·교양 강좌는 이 자료에 없습니다.',
         'sourceRowCount': len(rows),
@@ -258,13 +260,13 @@ def main(argv):
                                       ('공통교양 PDF attachNo=138762', c), ('폐강 전공 xlsx attachNo=140140', close_m),
                                       ('폐강 교양·기타 xlsx attachNo=140141', close_g))},
         'courseScheduleStatusCounts': dict(sorted(statuses.items())),
-        'excludedClosedCourses': excluded,
+        'closureListedCourses': excluded,
         'researchOnly': False, 'productionIntegrationEnabled': True,
         'completionClaim': False, 'wholeOperatingVerified': False,
         'courses': courses,
     }
     Path(out).write_text(json.dumps(data, ensure_ascii=False, separators=(',', ':')), encoding='utf-8')
-    print(json.dumps({'rows': len(rows), 'courses': len(courses), 'excluded': excluded,
+    print(json.dumps({'rows': len(rows), 'courses': len(courses), 'closureListed': excluded,
                       'status': statuses}, ensure_ascii=False))
 
 

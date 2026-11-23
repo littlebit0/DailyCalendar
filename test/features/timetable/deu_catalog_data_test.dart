@@ -23,16 +23,16 @@ void main() {
     expect(raw['completionClaim'], isFalse);
     expect(raw['scopeNote'], contains('1학년'));
     final courses = dataset.courses;
-    // 1,260 unique 강좌번호 in the three PDFs minus 7 on the 2026-08-27
-    // pre-semester closure list.
-    expect(courses, hasLength(1253));
-    expect(courses.map((c) => c.sourceId).toSet(), hasLength(1253));
+    // All 1,260 unique 강좌번호 in the three PDFs; 7 are also on the
+    // 2026-08-27 pre-semester closure list (closure is not judged).
+    expect(courses, hasLength(1260));
+    expect(courses.map((c) => c.sourceId).toSet(), hasLength(1260));
 
     final byStatus = <String?, int>{};
     for (final c in courses) {
       byStatus[c.scheduleStatus] = (byStatus[c.scheduleStatus] ?? 0) + 1;
     }
-    expect(byStatus, {'unrecognized': 1193, 'unscheduled': 60});
+    expect(byStatus, {'unrecognized': 1200, 'unscheduled': 60});
 
     // No official undergraduate period-to-clock table: nothing is placed.
     for (final c in courses) {
@@ -51,9 +51,10 @@ void main() {
     expect(korean.sourceClassroom, '2인207');
     expect(korean.departments, ['국어국문학과']);
     expect(
-      courses.where((c) => c.sourceId.endsWith('/300267-003')),
-      isEmpty,
-      reason: 'closed before the semester',
+      courses
+          .singleWhere((c) => c.sourceId.endsWith('/300267-003'))
+          .sourceRemarks,
+      contains('폐강 여부는 판단하지 않음'),
     );
 
     // Every major department heading belongs to an official college.
@@ -73,6 +74,6 @@ void main() {
         );
       }
     }
-    expect(majors, 333);
+    expect(majors, 334);
   });
 }

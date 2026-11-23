@@ -44,12 +44,14 @@ class DeuImportTest(unittest.TestCase):
         self.assertEqual((major['courseName'], major['departments'], major['sourceSchedule']),
                          ('이야기와소설의이해', ['국어국문학과'], '[화4],[수2-3]'))
 
-    def test_closed_courses_are_excluded_and_conflicts_raise(self):
+    def test_closure_listed_courses_stay_and_conflicts_raise(self):
         rows = [row('a', '300267-003', '전체(1)', '공과215[월1](58)'),
                 row('a', '300267-004', '전체(1)', '공과215[월2](58)')]
-        courses, excluded = D.build(rows, [{'교과목코드': '300267-003'}])
-        self.assertEqual(excluded, ['300267-003'])
-        self.assertEqual([c['section'] for c in courses], ['004'])
+        courses, listed = D.build(rows, [{'교과목코드': '300267-003'}])
+        self.assertEqual(listed, ['300267-003'])
+        self.assertEqual([c['section'] for c in courses], ['003', '004'])
+        self.assertIn('폐강 여부는 판단하지 않음', courses[0]['remarks'])
+        self.assertNotIn('폐강', courses[1]['remarks'])
         with self.assertRaises(ValueError):
             D.build([row('a', '300267-004', '전체(1)', '공과215[월2](58)'),
                      row('a', '300267-004', '전체(1)', '공과215[화2](58)')], [])
@@ -61,11 +63,11 @@ class DeuImportTest(unittest.TestCase):
     def test_asset_totals(self):
         courses = ASSET['courses']
         self.assertEqual(ASSET['sourceRowCount'], 1263)
-        self.assertEqual(len(courses), 1253)
-        self.assertEqual(len({c['sourceId'] for c in courses}), 1253)
-        self.assertEqual(len(ASSET['excludedClosedCourses']), 7)
+        self.assertEqual(len(courses), 1260)
+        self.assertEqual(len({c['sourceId'] for c in courses}), 1260)
+        self.assertEqual(len(ASSET['closureListedCourses']), 7)
         status = collections.Counter(c['scheduleStatus'] for c in courses)
-        self.assertEqual(status, {'unrecognized': 1193, 'unscheduled': 60})
+        self.assertEqual(status, {'unrecognized': 1200, 'unscheduled': 60})
         self.assertTrue(all(c['schedules'] == [] for c in courses))
         self.assertTrue(all(D.SLOT.search(c['sourceSchedule']) for c in courses
                             if c['scheduleStatus'] == 'unrecognized'))
