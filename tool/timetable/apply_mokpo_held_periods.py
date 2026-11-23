@@ -100,7 +100,9 @@ def check_existing(datasets):
     for data in datasets:
         for c in data['courses']:
             if c['scheduleStatus'] == 'scheduled' and c['period'] == {'startDate': START, 'endDate': END}:
-                rule = meetings(blocks(c['sourceSchedule']), c['sourceClassroom'])
+                schedule, room, _ = SUPPLEMENT.get((c['courseCode'], c['section']),
+                                                   (c['sourceSchedule'], c['sourceClassroom'], ''))
+                rule = meetings(blocks(schedule), room)
                 assert rule == c['schedules'] or all(s in rule for s in c['schedules']), c['sourceId']
                 checked += rule == c['schedules']
     return checked
@@ -164,12 +166,43 @@ def restore_source_rows(datasets):
     return added
 
 
+# 2차 재검토(2026-11-23): UNCO04 시간 칸이 빈 강좌를 교무과 학사공지 "2026학년도 2학기
+# 수강신청 안내"(https://www.mokpo.ac.kr/bbs/www/149/173061/artclView.do) 첨부
+# "2026학년도 제2학기 수업시간표 편성표(수정).xlsx"에서 찾았다. 시각이 적힌 것만 쓴다.
+# 같은 편성표의 OCU·글로벌한국학 시트는 강의시간이 비었고, ZBD008·ZBE132는 "원격수업 예정",
+# ZZA006은 "실제 수업 이루어지지 않음", CA926은 "-"라 그대로 둔다.
+SUPPLEMENT = {  # (학수번호, 분반): (편성표 강의시간을 UNCO 표기로, 편성표 강의실, 근거)
+    ('ZZA002', '00'): ('금13,14,15,16,17,18', '미정',
+                       '학생지원과 시트 "금 13~18교시", 강의실 "미정"'),
+}
+SUPPLEMENT_NOTE = ('시각 근거: 교무과 2026학년도 제2학기 수업시간표 편성표(수정) {}. '
+                   'UNCO04 시간 칸은 비어 있습니다.')
+
+
+def apply_supplement(data):
+    changed = []
+    for c in data['courses']:
+        found = SUPPLEMENT.get((c['courseCode'], c['section']))
+        if c['scheduleStatus'] != 'unrecognized' or not found:
+            continue
+        schedule, room, why = found
+        c['schedules'] = meetings(blocks(schedule), room)
+        c['scheduleStatus'] = 'scheduled'
+        c['period'] = {'startDate': START, 'endDate': END}
+        note = SUPPLEMENT_NOTE.format(why)
+        c['departmentRemarks'] = {
+            k: '\n'.join([line for line in v.split('\n') if not line.startswith(REVIEW)] + [note])
+            for k, v in c['departmentRemarks'].items()}
+        changed.append(c['sourceId'])
+    return changed
+
+
 def main():
     raws = [p.read_text(encoding='utf-8') for p in PATHS]
     datasets = [json.loads(r) for r in raws]
     checked = check_existing(datasets)
     restored = restore_source_rows(datasets)
-    changed = [sid for d in datasets for sid in apply(d)]
+    changed = [sid for d in datasets for sid in apply_supplement(d) + apply(d)]
     for path, raw, data in zip(PATHS, raws, datasets):
         out = json.dumps(data, ensure_ascii=False, separators=(',', ':'))
         if out != raw:

@@ -21,11 +21,26 @@ void main() {
       );
       final courses = data.expand((d) => d.courses).toList();
       expect(courses.map((c) => c.sourceId).toSet(), hasLength(1316));
-      expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(1232));
-      // 남은 미확정은 원문 시간이 빈 강좌뿐이다.
+      expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(1233));
+      // 남은 미확정은 UNCO04와 교무과 편성표 모두 시간이 빈 강좌뿐이다.
       expect(
         courses.where((c) => c.scheduleStatus == 'unrecognized'),
-        hasLength(78),
+        hasLength(77),
+      );
+      // UNCO04 시간 칸이 빈 창의인성프로젝트2: 교무과 편성표 "금 13~18교시"(15:00~18:00).
+      final mentoring = courses.singleWhere(
+        (c) => c.codeAndSection == 'ZZA002-00',
+      );
+      expect(mentoring.meetings, hasLength(12));
+      expect(
+        mentoring.meetings.every(
+          (m) =>
+              m.weekday == 5 &&
+              m.originalStartMinute == 900 &&
+              m.originalEndMinute == 1080 &&
+              m.classroom == '미정',
+        ),
+        isTrue,
       );
       expect(
         courses

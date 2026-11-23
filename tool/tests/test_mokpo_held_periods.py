@@ -57,6 +57,20 @@ class MokpoHeldPeriodsTest(unittest.TestCase):
         self.assertEqual(sum(len(d['courses']) for d in datasets), 3 + 1 + 9)
         self.assertEqual(apply_mokpo.restore_source_rows(datasets), [])
 
+    def test_supplement_fills_blank_unco_time_from_official_timetable_once(self):
+        z = {'sourceId': 'z', 'courseCode': 'ZZA002', 'section': '00', 'sourceSchedule': '',
+             'sourceClassroom': '', 'scheduleStatus': 'unrecognized', 'schedules': [],
+             'departmentRemarks': {'학생지원과': '원 이수구분: 0006 일반선택. \n운영 검토: Actual clock absent.'}}
+        blank = dict(z, sourceId='y', courseCode='ZZA006', departmentRemarks={'x': ''})
+        data = {'courses': [z, blank]}
+        self.assertEqual(apply_mokpo.apply_supplement(data), ['z'])
+        self.assertEqual(z['schedules'][0], {'weekday': 5, 'startMinute': 900, 'endMinute': 1080,
+                                             'date': '2026-09-04', 'classroom': '미정'})
+        self.assertEqual(z['sourceSchedule'], '')
+        self.assertNotIn('운영 검토', z['departmentRemarks']['학생지원과'])
+        self.assertEqual(blank['scheduleStatus'], 'unrecognized')
+        self.assertEqual(apply_mokpo.apply_supplement(data), [])
+
     def test_rerun_changes_nothing(self):
         data = self.data()
         apply_mokpo.apply(data)
