@@ -16,20 +16,6 @@ void main() {
       final native = read(
         'work/university-research/catalog-d/hanyang-cached-educational-scope-20261008.json',
       );
-      final roomProofs =
-          jsonDecode(
-                fixtureFile(
-                  'work/university-research/catalog-c/hanyang-native-clock-room-only-v4-20261009/independent36-native-clock-room-proof.json',
-                ).readAsStringSync(),
-              )
-              as List;
-      final bulkProof = read(
-        'work/university-research/catalog-c/hanyang-held-native-bulk-v5-20261010/independent-native-calendar-validation.json',
-      );
-      final reviewedRoomIds = {
-        for (final p in roomProofs) p['sourceId'],
-        for (final p in bulkProof['byCourse'] as List) p['sourceId'],
-      };
       final originals = {
         for (final r in native['courses'] as List) r['classId']: r,
       };
@@ -57,8 +43,8 @@ void main() {
         };
         final dataset = UniversityDataset.fromJson(raw);
         final count = campus == 'seoul' ? 2805 : 2156;
-        final eligibleCount = campus == 'seoul' ? 2132 : 1803;
-        final datedCount = campus == 'seoul' ? 51195 : 43599;
+        final eligibleCount = campus == 'seoul' ? 2411 : 1971;
+        final datedCount = campus == 'seoul' ? 57755 : 46711;
         expect(dataset.courses, hasLength(count));
         expect(
           dataset.courses.map((c) => c.sourceId).toSet(),
@@ -142,17 +128,31 @@ void main() {
             r'([월화수목금토일])\((\d{2}):(\d{2})-(\d{2}):(\d{2})\)',
           );
           final matches = pattern.allMatches(a['suupTimes'] as String).toList();
-          final correction = meta['currentOfficialClassroomCorrection'] as Map?;
-          final rooms =
-              ((correction?['changedSourceClassroom'] ?? a['suupRoomNms'])
-                      as String)
+          final parts = (a['suupTimes'] as String)
+              .split(',')
+              .map((s) => s.trim())
+              .toList();
+          var cells = c.sourceClassroom
                   .split(',')
                   .map((s) => s.trim())
                   .toList();
+          // 강의실 칸 수가 시간 칸 수와 다르면 실제 강의실 이름만 모아 모든 구간에 적는다.
+          if (cells.length != parts.length) {
+            final real = cells
+                .where((s) => s.isNotEmpty && !s.startsWith('비지정('))
+                .toSet()
+                .join(', ');
+            cells = List.filled(parts.length, real);
+          }
+          final rooms = [
+            for (var i = 0; i < parts.length; i++)
+              if (parts[i] != '시간미지정강좌') cells[i],
+          ];
           expect(rooms, hasLength(matches.length));
           expect(
             (a['suupTimes'] as String)
                 .replaceAll(pattern, '')
+                .replaceAll('시간미지정강좌', '')
                 .replaceAll(',', '')
                 .trim(),
             isEmpty,
@@ -168,16 +168,13 @@ void main() {
             for (var i = 0; i < matches.length; i++) {
               final m = matches[i];
               final weekday = '월화수목금토일'.indexOf(m[1]!) + 1;
-              if (!reviewedRoomIds.contains(c.sourceId) &&
-                  !rooms[i].startsWith('비지정(')) {
-                expect(
-                  rooms[i],
-                  startsWith(campus == 'seoul' ? '서울 ' : 'ERICA '),
-                );
-              } else {
-                expect(a['campusNm'], campus == 'seoul' ? '서울' : 'ERICA');
-                expect(a['suupViewtypeNm'] == '원격', false);
-              }
+              // 2026-11-23 사용자 결정: 원격·캠퍼스 표기 없는 강의실도 원문 시각으로 확정한다.
+              // 캠퍼스 이름이 붙은 강의실은 그 강좌 캠퍼스여야 한다.
+              expect(a['campusNm'], campus == 'seoul' ? '서울' : 'ERICA');
+              expect(
+                rooms[i].startsWith(campus == 'seoul' ? 'ERICA ' : '서울 '),
+                false,
+              );
               if (d.weekday == weekday) {
                 expected.add({
                   'date': date,
