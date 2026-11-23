@@ -26,6 +26,18 @@ void main() {
                   as List)
               .cast<String>()
               .toSet();
+      // 간호학과 공지 첨부 '2026-2 간호학과 시간표(26.09.14최종).pdf' 격자에서 옮긴 값
+      // (1교시=09:00, 교시당 60분; 3학년 이론 9/1~10/23 304호, 4학년 이론 11/2~12/24 404호).
+      const nursing = <String, (String, String, List<(int, int, int, String)>)>{
+        '12079': ('2026-09-01', '2026-10-23', [(1, 660, 780, '304호'), (4, 660, 780, '304호')]),
+        '12065': ('2026-09-01', '2026-10-23', [(1, 900, 1020, '304호'), (5, 600, 720, '304호')]),
+        '12066': ('2026-09-01', '2026-10-23', [(2, 660, 780, '304호'), (4, 900, 1020, '304호')]),
+        '12068': ('2026-09-01', '2026-10-23', [(2, 840, 900, '304호'), (3, 840, 900, '304호')]),
+        '12077': ('2026-09-01', '2026-10-23', [(2, 900, 1020, '304호'), (5, 780, 900, '304호')]),
+        '12070': ('2026-09-01', '2026-10-23', [(3, 900, 1020, '304호'), (5, 900, 1020, '304호')]),
+        '10306': ('2026-11-02', '2026-12-24', [(1, 540, 660, '404호'), (3, 900, 1020, '404호')]),
+        '10308': ('2026-11-02', '2026-12-24', [(1, 900, 1020, '404호'), (4, 600, 720, '404호')]),
+      };
       const recensusRooms = {
         'hanyang/seoul/2026-2/10351': '서울 재성토목관 103강의실,서울 재성토목관 103강의실',
         'hanyang/erica/2026-2/24136': 'ERICA 컨퍼런스홀 201 강의실,ERICA 컨퍼런스홀 101 강의실',
@@ -125,12 +137,33 @@ void main() {
           // 원문에 시각이 없어 학과 공지 시간표로 확정한 집중수업(2026-11-23).
           final alternate = meta['alternatePublishedSchedule'] as Map?;
           if (alternate != null) {
-            expect(c.sourceSchedule, isNot(contains('(')));
-            for (final m in c.meetings) {
-              expect(m.date!.compareTo(alternate['validFrom'] as String) >= 0, true);
-              expect(m.date!.compareTo(alternate['validTo'] as String) <= 0, true);
-              expect(holidays.contains(m.date), false);
+            final spec = nursing[c.sourceId.split('/').last]!;
+            expect(c.period?.start, DateTime.parse(spec.$1));
+            expect(c.period?.end, DateTime.parse(spec.$2));
+            final want = <String>[];
+            for (
+              var d = DateTime.parse(spec.$1);
+              !d.isAfter(DateTime.parse(spec.$2));
+              d = DateTime(d.year, d.month, d.day + 1)
+            ) {
+              final date = d.toIso8601String().substring(0, 10);
+              if (holidays.contains(date)) continue;
+              for (final slot in spec.$3) {
+                if (slot.$1 == d.weekday) {
+                  want.add('$date/${slot.$1}/${slot.$2}/${slot.$3}/${slot.$4}');
+                }
+              }
             }
+            expect(
+              c.meetings
+                  .map(
+                    (m) =>
+                        '${m.date}/${m.weekday}/${m.originalStartMinute}/${m.originalEndMinute}/${m.classroom}',
+                  )
+                  .toList(),
+              want,
+              reason: c.sourceId,
+            );
             continue;
           }
           // Independently derive exact clocks and campus rooms from native fields.
