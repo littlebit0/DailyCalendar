@@ -544,8 +544,8 @@
     "reason": "#604 서강대 2026-10-23 공식 개설교과목 조회 재대조(시험일자·교수·학과·강의실 변경 반영, 시험일자가 빠진 시험만 강좌 4개는 미확정으로 되돌림)와 공개 강의계획서가 대면 운영·수업 시각을 직접 적은 23강좌의 정규 주간 예약 추가; 공백만 제거(내용 동일): 파싱 비용과 앱 용량 절감"
   },
   "assets/timetable/organizations/dongguk.json": {
-    "sha256": "8ac479369a2185ad2ea15947c765d8c6bce785c4236179c6804ea6a957341a81",
-    "reason": "#596 동국대 소속 없던 학과·전공 10개와 원자료 개설 라벨 24개를 공식 종합강의시간표 개설대학·개설학과 코드 트리와 2026-2 다전공 신청가능 목록 기준 단과대·연계전공·융합전공에 배정; 공백만 제거(내용 동일): 파싱 비용과 앱 용량 절감"
+    "sha256": "7badbfbcf74710d0a26b170afc97105342b5bbc4cf726b3dd0295d0d99ede055",
+    "reason": "#596 동국대 소속 없던 학과·전공 10개와 원자료 개설 라벨 24개를 공식 종합강의시간표 개설대학·개설학과 코드 트리와 2026-2 다전공 신청가능 목록 기준 단과대·연계전공·융합전공에 배정; 공백만 제거(내용 동일): 파싱 비용과 앱 용량 절감; 동국대 WISE캠퍼스 개설대학·학과·전공 라벨 63개를 공식 종합강의시간표 COLG_NM/DPT_NM/MJR_NM 기준으로 매핑"
   },
   "assets/timetable/organizations/baekseok.json": {
     "sha256": "4c3af0e1b66fdd1628d6ce1eeded8c8ad07245875fa254690b0075e9804ea46c",
@@ -818,5 +818,9 @@
   "assets/timetable/organizations/ut.json": {
     "sha256": "f269a25d83492e93f8b28fe49f2ffa4ebcf89b63385dab2948fb2ed441e0bdb0",
     "reason": "공백만 제거(내용 동일): 파싱 비용과 앱 용량 절감"
+  },
+  "assets/timetable/dongguk-wise-2026-2.json": {
+    "sha256": "9041ff01add39c2857f37758bcafe87e942cc5e05f876d12887725d6a1dfde18",
+    "reason": "동국대 WISE캠퍼스 학부 2026-2 종합강의시간표(국문) 공개 조회 1683강좌 추가(tool/timetable/import_dongguk_wise.py)"
   }
 }
