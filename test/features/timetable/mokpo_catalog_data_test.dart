@@ -22,11 +22,8 @@ void main() {
       final courses = data.expand((d) => d.courses).toList();
       expect(courses.map((c) => c.sourceId).toSet(), hasLength(1316));
       expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(1233));
-      // 남은 미확정은 UNCO04와 교무과 편성표 모두 시간이 빈 강좌뿐이다.
-      expect(
-        courses.where((c) => c.scheduleStatus == 'unrecognized'),
-        hasLength(77),
-      );
+      // UNCO04·강의계획서·교무과 편성표 모두 시간이 빈 77강좌는 시간 미정(2026-11-23 사용자 결정).
+      expect(courses.where((c) => c.scheduleStatus == 'unrecognized'), isEmpty);
       // UNCO04 시간 칸이 빈 창의인성프로젝트2: 교무과 편성표 "금 13~18교시"(15:00~18:00).
       final mentoring = courses.singleWhere(
         (c) => c.codeAndSection == 'ZZA002-00',
@@ -44,8 +41,10 @@ void main() {
       );
       expect(
         courses
-            .where((c) => c.scheduleStatus == 'unrecognized')
-            .every((c) => c.sourceSchedule.trim().isEmpty),
+            .where((c) => c.scheduleStatus == 'unscheduled')
+            .every(
+              (c) => c.sourceSchedule.trim().isEmpty && c.meetings.isEmpty,
+            ),
         isTrue,
       );
       // 운영 방식 검토로 보류했던 강좌: 공식 30분 교시(10교시 13:30)로 확정.
@@ -65,7 +64,7 @@ void main() {
       expect(held.meetings, hasLength(27));
       expect(
         courses.where((c) => c.scheduleStatus == 'unscheduled'),
-        hasLength(6),
+        hasLength(83),
       );
       // 공개 UNCO04 원표의 교양필수 프론티어정신 9분반(빠져 있던 행 복원).
       final frontier = courses.where((c) => c.code == 'ZAA006').toList();

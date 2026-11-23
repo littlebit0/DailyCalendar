@@ -10,7 +10,9 @@
 (19교시 18:00). 기존 정규 예약도 같은 규칙이다(실행 때 대조).
 날짜: 기존 정규 예약과 같은 9/1~12/7 매주, 공휴일·개교기념일 9/24·9/25·9/26·
 10/3·10/5·10/9·10/31 제외.
-원문 강의실은 그대로 쓴다. 시간이 빈 강좌('미개설'·원격수업 포함)는 그대로 둔다.
+원문 강의실은 그대로 쓴다.
+3차(2026-11-23 사용자 결정): 공식 시간표(UNCO04)·강의계획서·편성표에 요일·교시가 모두 빈 강좌는
+다른 공개 자료(학과·단과대 공지, 편람)에서도 시각을 찾지 못해 시간 미정(unscheduled)으로 둔다.
 이미 scheduled인 강좌는 건드리지 않고, 재실행해도 바뀌지 않는다.
 
     python3 tool/timetable/apply_mokpo_held_periods.py
@@ -197,12 +199,28 @@ def apply_supplement(data):
     return changed
 
 
+UNTIMED_NOTE = '운영 검토: 공식 시간표·강의계획서·편성표에 요일·교시가 없어 시간 미정으로 둡니다(2026-11-23 사용자 결정).'
+
+
+def apply_untimed(data):
+    changed = []
+    for c in data['courses']:
+        if c['scheduleStatus'] != 'unrecognized' or (c['sourceSchedule'] or '').strip():
+            continue
+        c['scheduleStatus'] = 'unscheduled'
+        c['departmentRemarks'] = {
+            k: '\n'.join([line for line in v.split('\n') if not line.startswith(REVIEW)] + [UNTIMED_NOTE])
+            for k, v in c['departmentRemarks'].items()}
+        changed.append(c['sourceId'])
+    return changed
+
+
 def main():
     raws = [p.read_text(encoding='utf-8') for p in PATHS]
     datasets = [json.loads(r) for r in raws]
     checked = check_existing(datasets)
     restored = restore_source_rows(datasets)
-    changed = [sid for d in datasets for sid in apply_supplement(d) + apply(d)]
+    changed = [sid for d in datasets for sid in apply_supplement(d) + apply(d) + apply_untimed(d)]
     for path, raw, data in zip(PATHS, raws, datasets):
         out = json.dumps(data, ensure_ascii=False, separators=(',', ':'))
         if out != raw:

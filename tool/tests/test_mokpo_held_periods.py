@@ -71,6 +71,18 @@ class MokpoHeldPeriodsTest(unittest.TestCase):
         self.assertEqual(blank['scheduleStatus'], 'unrecognized')
         self.assertEqual(apply_mokpo.apply_supplement(data), [])
 
+    def test_blank_time_becomes_unscheduled_once(self):
+        blank = {'sourceId': 'b', 'sourceSchedule': '', 'scheduleStatus': 'unrecognized', 'schedules': [],
+                 'departmentRemarks': {'법학과': '원 이수구분: 0005 전공선택.\n운영 검토: Actual clock absent.'}}
+        timed = dict(blank, sourceId='t', sourceSchedule='월1-3')
+        data = {'courses': [blank, timed]}
+        self.assertEqual(apply_mokpo.apply_untimed(data), ['b'])
+        self.assertEqual((blank['scheduleStatus'], blank['schedules']), ('unscheduled', []))
+        self.assertEqual(blank['departmentRemarks']['법학과'],
+                         '원 이수구분: 0005 전공선택.\n' + apply_mokpo.UNTIMED_NOTE)
+        self.assertEqual(timed['scheduleStatus'], 'unrecognized')
+        self.assertEqual(apply_mokpo.apply_untimed(data), [])
+
     def test_rerun_changes_nothing(self):
         data = self.data()
         apply_mokpo.apply(data)
