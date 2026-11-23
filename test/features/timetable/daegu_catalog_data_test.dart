@@ -138,6 +138,15 @@ void main() {
         );
         expect(m.date, isNot('2026-09-04'));
       }
+      // Courses whose official clock cell is blank stay without meetings and
+      // are listed as unscheduled (2026-11-23 instruction); none stays held.
+      for (final row in raw['courses'] as List) {
+        expect(row['scheduleStatus'], isNot('unrecognized'));
+        if ((row['sourceSchedule'] as String).trim().isEmpty) {
+          expect(row['schedules'], isEmpty);
+          expect(row['scheduleStatus'], 'unscheduled');
+        }
+      }
       // HUSS consortium courses are online with no weekly clock (notice 224170).
       final huss = courses.where(
         (c) => c.remarks.contains('HUSS_004/detail/224170'),
