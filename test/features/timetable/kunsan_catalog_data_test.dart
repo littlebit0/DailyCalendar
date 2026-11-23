@@ -49,23 +49,19 @@ void main() {
       ];
       expect(courses.length, 1718);
       expect(courses.map((c) => c.sourceId).toSet().length, 1718);
-      expect(courses.where((c) => c.hasSchedulableMeetings).length, 1375);
-      expect(courses.expand((c) => c.meetings).length, 30573);
+      expect(courses.where((c) => c.hasSchedulableMeetings).length, 1400);
+      expect(courses.expand((c) => c.meetings).length, 30885);
       expect(
         courses.where((c) => c.scheduleStatus == 'unrecognized').length,
-        25,
+        0,
       );
-      // 남은 미확정은 원문자 수가 실습 시수와 다르거나 같은 칸을 다른 분반과 겹쳐 쓰는
-      // 음악 실기·실습(원문끼리 모순)뿐이다.
+      // 원문자 수가 실습 시수와 다른 음악 분반도 적힌 교시대로: 전공실습(2) 12 토① ② ④ ⑤.
+      final gap = courses.singleWhere((c) => c.codeAndSection == '110404-12');
       expect(
-        courses
-            .where((c) => c.scheduleStatus == 'unrecognized')
-            .every(
-              (c) =>
-                  c.sourceSchedule.startsWith('토') &&
-                  c.sourceSchedule.contains('음악관'),
-            ),
-        isTrue,
+        gap.meetings
+            .map((m) => (m.originalStartMinute, m.originalEndMinute))
+            .toSet(),
+        {(550, 670), (730, 850)},
       );
       // 토요일 원문자도 같은 번호 교시: 기초실기(2) 01 토① = 09:10~10:10.
       final saturday = courses.singleWhere(
@@ -171,7 +167,7 @@ void main() {
         final restored = TimetableSyncDocument.fromJson(
           jsonDecode(jsonEncode(doc.toJson())) as Map<String, dynamic>,
         );
-        expect(restored.courses.length, 1375);
+        expect(restored.courses.length, 1400);
         for (final e in restored.courses.entries) {
           expect(e.value.value, values[e.key]!.value);
         }

@@ -27,8 +27,9 @@
 학기 중 주간 수업 시각이 없으므로 시간 미정으로 둔다. 근거: 현장실습(2)(4)(6)은 동기방학 집중
 실습(lincedu 공지 wr_id=343·347), 현장종합실습·R&D인턴십은 실습기관 전일제(같은 공지), 진로탐색은
 자기주도 활동 시수(식품영양학과 공지 dataSid=1384742 붙임1), 교육봉사활동은 '도해표에는 없으나
-수강 신청 가능'(교직 공지 dataSid=1385294). 원문자 수와 실습 시수가 다르거나('토① ①' 포함) 같은
-칸을 다른 분반과 겹쳐 쓰는 강좌는 원문끼리 모순이라 미확정으로 남긴다.
+수강 신청 가능'(교직 공지 dataSid=1385294). 원문자 수와 실습 시수가 다른 음악 13강좌와 같은
+칸을 다른 분반과 겹쳐 쓰는 음악 12강좌(같은 교수 합반 2쌍 포함)도 시각은 원문에 있으므로 적힌
+교시대로 확정한다('토① ①'은 ① 한 번, 겹침은 공주대 토요일 선례처럼 원문을 따름; 2026-11-23 재지시).
 
 (이전 기록) 남기는 것: 토요일 원문자(사회연계진로탐색1~5 = 토①~⑤처럼 과목마다 번호를 매긴 자리표시이고
 스키·스노보드는 수강편람 p.31에 12월 집중강의로 적혀 있다), 이론·실습 0시수 강좌의
@@ -276,7 +277,7 @@ ZERO_HOUR_CODES = {'104025', '104027', '107753', '111761', '111902', '112398', '
                    '111101', '111102', '111103', '115186', '115187', '115188', '115189', '115190', '115338',
                    '115339', '115340', '109934', '102162', '117309', '118096', '116583', '117899'}
 DECEMBER_INTENSIVE = {'101765', '116759'}  # 스키·스노보드: 수강편람 p.31 '2학기 종강 후 12월 중 2박 3일 집중강의'
-# 원문자 수가 공식 실습 시수(1)와 다른 음악 실기·실습 분반.
+# 원문자 수가 공식 실습 시수(1)와 다른 음악 실기·실습 분반: 적힌 교시대로 확정하고 비고에 남긴다.
 COUNT_MISMATCH = {f'kunsan/unknown/2026/2/{k}' for k in (
     '109432/02', '109432/12', '109432/14', '110404/01', '110404/04', '110404/11', '110404/12', '110404/14',
     '110404/17', '107860/04', '107860/08', '107860/09', '107860/14')}
@@ -304,7 +305,7 @@ def apply_saturday(datasets):
         raw = c['sourceSchedule'] or ''
         return (c['scheduleStatus'] == 'unrecognized' and CIRCLED.search(raw)
                 and c['courseCode'] not in ZERO_HOUR_CODES | DECEMBER_INTENSIVE
-                and c['sourceId'] not in COUNT_MISMATCH and segments(raw))
+                and segments(raw))
     held = [c for d in datasets for c in d['courses'] if candidate(c)]
     used = {}
     for c in held:
@@ -313,10 +314,15 @@ def apply_saturday(datasets):
     changed = []
     for c in held:
         segs = segments(c['sourceSchedule'])
-        if any(used[slot] > 1 for slot in _circled_slots(segs)):
-            continue  # 같은 칸을 다른 분반과 겹쳐 씀: 모순이라 보류
         late = any(end > FIRST_START + SLOT * 10 for _, _, end, _ in segs)
-        note = NOTE_C + (NOTE11 if late else '')
+        if c['sourceId'] in COUNT_MISMATCH:
+            note = ('공식 요일·교시로 정규 예약했습니다. 원문자 교시(①…)는 같은 번호 교시로 계산했고, '
+                    '원문자 수가 공식 실습 시수와 달라도 원문에 적힌 교시를 따랐습니다(같은 번호 반복은 한 번).')
+        else:
+            note = NOTE_C
+        if any(used[slot] > 1 for slot in _circled_slots(segs)):
+            note += ' 같은 강의실·교시를 다른 분반도 쓰지만 원문 시간표를 따랐습니다.'
+        note += NOTE11 if late else ''
         c['schedules'] = meetings_multi(segs)
         c['scheduleStatus'] = 'scheduled'
         c['period'] = dict(PERIOD)

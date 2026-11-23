@@ -97,7 +97,8 @@ class KunsanHeldPeriodsTest(unittest.TestCase):
             sat('kunsan/unknown/2026/2/110404/12', '110404', '토① ② ④ ⑤ [음악관-10111]', '음악관-10111'),
             course('jst', '', '', 'JST 공개 목록에 실제 시간표·담당교원 미게시'),
         ]}
-        self.assertEqual(apply_kunsan.apply_saturday([data]), ['lesson'])
+        self.assertEqual(apply_kunsan.apply_saturday([data]),
+                         ['lesson', 'shared1', 'shared2', 'kunsan/unknown/2026/2/110404/12'])
         by = {c['sourceId']: c for c in data['courses']}
         self.assertEqual({(m['weekday'], m['startMinute'], m['endMinute']) for m in by['lesson']['schedules']},
                          {(6, 610, 670)})
@@ -105,9 +106,12 @@ class KunsanHeldPeriodsTest(unittest.TestCase):
         self.assertEqual(apply_kunsan.apply_untimed(data), ['field', 'ski', 'jst'])
         self.assertIn('동기방학 집중 실습', by['field']['remarks'])
         self.assertIn('12월 집중강의', by['ski']['remarks'])
-        for sid in ('shared1', 'shared2', 'kunsan/unknown/2026/2/110404/12'):
-            self.assertEqual(by[sid]['scheduleStatus'], 'unrecognized')
-        self.assertEqual(data['counts'], {'scheduled': 1, 'unrecognized': 3, 'unscheduled': 3})
+        # 같은 칸 겹침도 원문대로, 원문자 수≠실습 시수도 적힌 교시대로(①② / ④⑤ 두 구간).
+        self.assertIn('다른 분반도 쓰지만', by['shared1']['remarks'])
+        self.assertEqual({(m['startMinute'], m['endMinute'])
+                          for m in by['kunsan/unknown/2026/2/110404/12']['schedules']}, {(550, 670), (730, 850)})
+        self.assertIn('실습 시수와 달라도', by['kunsan/unknown/2026/2/110404/12']['remarks'])
+        self.assertEqual(data['counts'], {'scheduled': 4, 'unrecognized': 0, 'unscheduled': 3})
         self.assertEqual(apply_kunsan.apply_saturday([data]), [])
         self.assertEqual(apply_kunsan.apply_untimed(data), [])
 
