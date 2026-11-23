@@ -109,6 +109,22 @@ void main() {
           }
           continue;
         }
+        // 0595: TA 표(12:00~13:30)와 8/13 증원 표(12:00~12:30)가 달라 최신 표로 확정했다
+        // (2026-11-23 사용자 결정). 날짜는 같은 교수의 화·금 0594와 같다.
+        if ((c['sourceId'] as String).endsWith('/0595')) {
+          expect(c['scheduleStatus'], 'scheduled');
+          final sibling = (candidate['courses'] as List).singleWhere(
+            (x) => (x['sourceId'] as String).endsWith('/0594'),
+          );
+          expect(
+            (c['schedules'] as List).map((m) => m['date']).toList(),
+            (sibling['schedules'] as List).map((m) => m['date']).toList(),
+          );
+          for (final m in c['schedules'] as List) {
+            expect((m['startMinute'], m['endMinute']), (720, 750));
+          }
+          continue;
+        }
         final before = old['schedules'] as List;
         final after = c['schedules'] as List;
         expect(after.take(before.length).toList(), before);
@@ -132,7 +148,7 @@ void main() {
         (candidate['courses'] as List).where(
           (c) => (c['schedules'] as List).isEmpty,
         ),
-        hasLength(33),
+        hasLength(32),
       );
       expect(candidate['completionClaim'], false);
       expect(candidate['wholeSchoolCourseCoverageComplete'], false);
@@ -166,7 +182,9 @@ void main() {
       var count = 0;
       for (final c in candidate['courses'] as List) {
         final nativeNumber = (c['sourceId'] as String).split('/').last;
-        if (finalClosed.contains(nativeNumber)) continue;
+        if (finalClosed.contains(nativeNumber) || nativeNumber == '0595') {
+          continue;
+        }
         final before = original[c['sourceId']]['schedules'] as List;
         final added = (c['schedules'] as List).skip(before.length).toList();
         if (added.isEmpty) {
@@ -221,13 +239,13 @@ void main() {
   );
 
   test(
-    'Actual83model50scheduled831meetings preserve three user modes and complete Drive JSON',
+    'Actual83model51scheduled859meetings preserve three user modes and complete Drive JSON',
     () {
       final ds = UniversityDataset.fromJson(candidate);
       expect(ds.courses, hasLength(83));
       final usable = ds.courses.where((c) => c.hasSchedulableMeetings).toList();
-      expect(usable, hasLength(50));
-      expect(usable.fold<int>(0, (sum, c) => sum + c.meetings.length), 831);
+      expect(usable, hasLength(51));
+      expect(usable.fold<int>(0, (sum, c) => sum + c.meetings.length), 859);
       for (final mode in [
         LectureMode.inPerson,
         LectureMode.liveOnline,
@@ -248,7 +266,7 @@ void main() {
           jsonDecode(payload) as Map<String, dynamic>,
         ).materializeClasses();
         final originalClasses = {for (final c in classes) c.sourceId: c};
-        expect(restored, hasLength(50));
+        expect(restored, hasLength(51));
         for (final c in restored) {
           expect(c.isValid, true);
           expect(c.defaultMode, mode);
