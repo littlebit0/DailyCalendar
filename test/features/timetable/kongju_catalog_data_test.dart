@@ -8,6 +8,13 @@ import 'package:daily/features/timetable/data/timetable_sync_document.dart';
 import 'package:daily/features/timetable/domain/timetable.dart';
 
 void main() {
+  // 강의일람표 table 212(0~9교시 60분 슬롯)와 table 213 평일 야간(10~14교시 50분 슬롯).
+  final slotStarts = {
+    for (var p = 0; p <= 9; p++) 480 + 60 * p,
+    for (var p = 0; p < 5; p++) 1080 + 50 * p,
+  };
+  final slotEnds = {...slotStarts.skip(1), 1330};
+
   test(
     'Kongju lecture-book enrichment leaves no ditto mark or ownerless major course',
     () async {
@@ -174,8 +181,9 @@ void main() {
         }
       }
       expect(total, 65);
-      expect(scheduled, hasLength(22));
-      expect(appointments, 242);
+      // 비고 '사업주훈련예정' 43행도 원문 실제수업시간으로 확정했다(apply_kongju_held_periods.py).
+      expect(scheduled, hasLength(65));
+      expect(appointments, 715);
       for (final mode in [
         LectureMode.inPerson,
         LectureMode.liveOnline,
@@ -196,7 +204,7 @@ void main() {
         final restored = TimetableSyncDocument.fromJson(
           jsonDecode(jsonEncode(document.toJson())) as Map<String, dynamic>,
         ).materializeClasses();
-        expect(restored, hasLength(22));
+        expect(restored, hasLength(65));
         final before = {for (final c in classes) c.sourceId: c};
         for (final c in restored) {
           final original = before[c.sourceId]!;
@@ -237,8 +245,10 @@ void main() {
           }
         }
       }
-      expect(unrecognized, 633);
-      expect(resolved, hasLength(19));
+      // 남은 미확정: 교시 없음(빈 칸·미개설·원격수업·'-'), 같은 과목번호 원문 행끼리 모순,
+      // 토요일 10교시 이후(표 213 토요일 야간 13:00이 같은 행의 주간 교시와 모순).
+      expect(unrecognized, 201);
+      expect(resolved, hasLength(408));
       const holidays = {
         '2026-09-24',
         '2026-09-25',
@@ -267,11 +277,13 @@ void main() {
             isTrue,
           );
           // 강의일람표 table 212: 교시 p는 (8+p):00 시작, 50분 수업 + 10분
-          // 쉬는 시간 = 60분 슬롯. 연속 교시는 한 구간으로 합친다.
-          expect((s['startMinute'] as int) % 60, 0);
-          expect((s['endMinute'] as int) % 60, 0);
-          expect(s['startMinute'], greaterThanOrEqualTo(540));
-          expect(s['endMinute'], lessThanOrEqualTo(1080));
+          // 쉬는 시간 = 60분 슬롯. table 213 평일 야간 10~14교시는 18:00부터
+          // 45분 수업 + 5분 = 50분 슬롯. 연속 교시는 한 구간으로 합친다.
+          expect(slotStarts, contains(s['startMinute']));
+          expect(slotEnds, contains(s['endMinute']));
+          if (s['weekday'] == 6) {
+            expect(s['endMinute'], lessThanOrEqualTo(1080));
+          }
         }
       }
       Set<String> slots(String code) => {
@@ -284,10 +296,14 @@ void main() {
       expect(slots('200365301'), {'2 840-960 (10공715)', '2 960-1080 (10공805)'});
       // 월7 월8 월9: 요일·교시·강의실이 같아 한 구간으로 합쳐진다.
       expect(slots('000131302'), {'1 900-1080 9공605'});
+      // 화10 화8 화9: 8·9교시 주간 슬롯 + 10교시 야간 18:00~18:50.
+      expect(slots('200685701'), {'2 960-1130 교양206'});
+      // 목11,12,13,14: 야간 18:50~22:10.
+      expect(slots('201066301'), {'4 1130-1330 (산업111-1)\n(실습실101)'});
     },
   );
 
-  test('Kongju 교시 계산 구간은 쉬는 시간 포함 60분 슬롯이고 연속 구간이 남지 않는다', () {
+  test('Kongju 교시 계산 구간은 쉬는 시간 포함 슬롯이고 연속 구간이 남지 않는다', () {
     for (final campus in ['cheonan', 'singwan', 'yesan', 'unknown']) {
       final raw =
           jsonDecode(
@@ -305,9 +321,8 @@ void main() {
         Map? previous;
         for (final s in schedules) {
           final reason = '${c['sourceId']} ${s['date']}';
-          expect((s['startMinute'] as int) % 60, 0, reason: reason);
-          expect((s['endMinute'] as int) % 60, 0, reason: reason);
-          expect(s['endMinute'], lessThanOrEqualTo(1080), reason: reason);
+          expect(slotStarts, contains(s['startMinute']), reason: reason);
+          expect(slotEnds, contains(s['endMinute']), reason: reason);
           if (previous != null &&
               previous['date'] == s['date'] &&
               previous['classroom'] == s['classroom']) {
