@@ -28,7 +28,21 @@ void main() {
       final courses = [for (final d in data) ...d.courses];
       expect(courses, hasLength(3847));
       expect(courses.map((c) => c.sourceId).toSet(), hasLength(3847));
-      expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(3722));
+      expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(3724));
+      // Official remark "이론은 금 6/7교시 강의" + KNU period table (n교시 = (8+n):00).
+      for (final (id, start) in [('NURS0309-001', 840), ('NURS0309-002', 900)]) {
+        final nursing = courses.singleWhere((c) => c.codeAndSection == id);
+        expect(nursing.sourceSchedule, isEmpty);
+        expect(nursing.scheduleStatus, 'scheduled');
+        expect(
+          nursing.meetings
+              .map((m) => [m.weekday, m.originalStartMinute, m.originalEndMinute])
+              .toList(),
+          [
+            [5, start, start + 60],
+          ],
+        );
+      }
       expect(courses.where((c) => c.scheduleStatus == 'unrecognized'), isEmpty);
       // Remote/exchange rows keep their official HH:mm clocks as-is.
       final exchange = courses.singleWhere(
@@ -86,6 +100,10 @@ void main() {
             ),
           );
         } else {
+          expect(
+            c.departmentRemarks.values.join('\n'),
+            isNot(contains('요일·시각 미게시')),
+          );
           final saved = c.toTimetable(
             id: c.sourceId,
             mode: LectureMode.inPerson,

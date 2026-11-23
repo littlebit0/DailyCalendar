@@ -52,7 +52,7 @@ void main() {
   test('KNU whole official scope parses with blocked exceptions preserved', () {
     expect(courses, hasLength(3847));
     expect(courses.map((c) => c.sourceId).toSet(), hasLength(3847));
-    expect(courses.where((c) => !c.hasSchedulableMeetings), hasLength(125));
+    expect(courses.where((c) => !c.hasSchedulableMeetings), hasLength(123));
     for (final course in courses) {
       if (!course.hasSchedulableMeetings) {
         // Rows whose official timetable cell is empty are time-unpublished.
