@@ -175,6 +175,16 @@ void main() {
         expect(course.meetings.every((m) => m.classroom.isEmpty), isTrue);
         expect(course.remarks, contains('강의실은 학교 공시 자료에 미표기'));
       }
+      // 2026-11-23 개설과목조회 재조회 값으로 강의실을 교체한 강좌(시각은 그대로).
+      for (final (id, source, room, count) in [
+        ('03792-01', '목8~10(K256)', 'K256', 15),
+        ('04411-01', '수5~7(K233)', 'K233', 16),
+      ]) {
+        final course = courses.singleWhere((c) => c.codeAndSection == id);
+        expect(course.sourceSchedule, source);
+        expect(course.meetings, hasLength(count));
+        expect(course.meetings.every((m) => m.classroom == room), isTrue);
+      }
       for (final course in rawCourses) {
         expect(course['sourceEducation']['actualAttendanceConfirmed'], isFalse);
         for (final meeting in course['schedules'] as List) {

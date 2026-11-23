@@ -19,6 +19,8 @@ https://www.catholic.ac.kr/ko/campuslife/notice.do?mode=view&articleNo=274170
   비고의 날짜 지정 행사(수도원체험)는 비고로만 두고 주간 일정으로 바꾸지 않는다.
 - 먼저 기존 scheduled 강좌 전부를 같은 규칙으로 다시 만들어 일치하는지 확인한다.
 - 파싱 못 하는 표기는 그 강좌만 unrecognized로 남긴다.
+- 개설과목조회 재조회(2026-11-23) 결과가 기존 자료와 다른 강좌는 새 자료로 교체한다
+  (REFRESH: 강의실만 바뀐 2강좌, 시각은 그대로).
 
 사용: 저장소 루트에서 python3 tool/timetable/apply_catholic_official_times.py
 """
@@ -38,6 +40,14 @@ TOKEN = re.compile(r'([월화수목금토일])(\d{1,2})(?:~(\d{1,2}))?\(([^()]*)
 STD = '학교 공시의 정규 수업 계획입니다. 시험·보강·변경 사항은 학교 공지를 확인하세요.'
 ROOM_NOTE = '강의실은 학교 공시 자료에 미표기되어 확인이 필요합니다.'
 CONFIRMED = '공식 요일·교시 기준 확정(운영 방식 미표기는 대면으로 간주).'
+# 2026-11-23 개설과목조회 전체 재조회에서 기존 자료와 다른 행(강의실만 바뀜).
+# 같은 강좌의 새 공식 조회 결과로 원문·강의실·구간을 교체한다(시각은 같음).
+REFRESH_URL = ('https://www.catholic.ac.kr/ko/support/subject.do'
+               '?mode=list&sust=ALL&year=2026&openShtm=20')
+REFRESH = {
+    ('03792', '01'): '목8~10(K256)',  # 행정법2, 기존 C110
+    ('04411', '01'): '수5~7(K233)',  # 영화를통한영미문화의이해, 기존 K250
+}
 
 
 def slot(period):
@@ -111,6 +121,19 @@ def main():
     for c in courses:
         if c['scheduleStatus'] == 'scheduled':
             assert schedules(c['sourceSchedule']) == c['schedules'], c['sourceId']
+    refreshed = 0
+    for c in courses:
+        new = REFRESH.get((c['courseCode'], c['section']))
+        if new is None or c['sourceSchedule'] == new:
+            continue
+        rooms = sorted({room for *_, room in blocks(new)})
+        c['sourceSchedule'] = new
+        c['sourceClassroom'] = ', '.join(rooms)
+        c['schedules'] = schedules(new)
+        c['sourceEducation']['derivedPhysicalCampusEvidence'][
+            'exactBuildingPrefixes'] = sorted(
+                {re.match(r'[A-Z]+', r)[0] for r in rooms if r})
+        refreshed += 1
     confirmed, held = 0, []
     for c in courses:
         if c['scheduleStatus'] != 'unrecognized':
@@ -138,9 +161,15 @@ def main():
         'massDayUrl': ('https://www.catholic.ac.kr/ko/campuslife/notice.do'
                        '?mode=view&articleNo=275275'),
     }
+    data['sourceRefreshEvidence'] = {
+        'sourceUrl': REFRESH_URL,
+        'retrievedDate': '2026-11-23',
+        'scope': '2026-2 개설과목조회 1459행 전체 재조회·대조, 다른 행은 강의실 2건뿐',
+        'changes': {f'{k[0]}-{k[1]}': v for k, v in REFRESH.items()},
+    }
     PATH.write_text(json.dumps(data, ensure_ascii=False, separators=(',', ':'))
                     + ('\n' if raw.endswith('\n') else ''), encoding='utf-8')
-    print(f'confirmed={confirmed} held={len(held)}')
+    print(f'refreshed={refreshed} confirmed={confirmed} held={len(held)}')
     for item in held:
         print('held', *item)
 
