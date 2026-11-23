@@ -69,45 +69,38 @@ List<(int, int)> _merge(List<(int, int)> ranges) {
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
-  test(
-    'Sungshin catalog exposes both campuses and the published term',
-    () async {
-      final datasets = await UniversityCatalog.load(
-        bundle: FileAssetBundle(),
-        university: 'sungshin',
-      );
-      expect(
-        {for (final d in datasets) d.campus: d.courses.length},
-        {'sujeong': 1368, 'unjung': 670},
-      );
-      // Unresolved rows stay searchable as source text; only confirmed slots can be added.
-      expect(UniversitySupportPolicy.timetableAvailable('sungshin'), isTrue);
-      final profile = AcademicProfile.fromJson(
-        const AcademicProfile(
-          universityId: 'institution:academyinfo:0000136',
-          universityName: '성신여자대학교',
-          schoolKind: 'fourYear',
-        ).toJson(),
-      );
-      expect(profile.timetableUniversity, 'sungshin');
-      expect(profile.timetableCampus, 'sujeong');
-      final period = (await TimetablePeriodDefaults.load(
-        bundle: FileAssetBundle(),
-      )).periodFor(2026, '2', university: 'sungshin');
-      expect(period?.start, DateTime(2026, 9, 1));
-      expect(period?.end, DateTime(2026, 12, 22));
-      for (final course in datasets.expand((d) => d.courses)) {
-        expect(
-          course.offeringOrganizations,
-          isNotEmpty,
-          reason: course.sourceId,
-        );
-        for (final unit in course.offeringOrganizations) {
-          expect(unit.college, isNotNull, reason: course.sourceId);
-        }
+  test('Sungshin catalog exposes both campuses and the published term', () async {
+    final datasets = await UniversityCatalog.load(
+      bundle: FileAssetBundle(),
+      university: 'sungshin',
+    );
+    expect(
+      {for (final d in datasets) d.campus: d.courses.length},
+      {'sujeong': 1368, 'unjung': 670},
+    );
+    // Unresolved rows stay searchable as source text; only confirmed slots can be added.
+    expect(UniversitySupportPolicy.timetableAvailable('sungshin'), isTrue);
+    final profile = AcademicProfile.fromJson(
+      const AcademicProfile(
+        universityId: 'institution:academyinfo:0000136',
+        universityName: '성신여자대학교',
+        schoolKind: 'fourYear',
+      ).toJson(),
+    );
+    expect(profile.timetableUniversity, 'sungshin');
+    expect(profile.timetableCampus, 'sujeong');
+    final period = (await TimetablePeriodDefaults.load(
+      bundle: FileAssetBundle(),
+    )).periodFor(2026, '2', university: 'sungshin');
+    expect(period?.start, DateTime(2026, 9, 1));
+    expect(period?.end, DateTime(2026, 12, 22));
+    for (final course in datasets.expand((d) => d.courses)) {
+      expect(course.offeringOrganizations, isNotEmpty, reason: course.sourceId);
+      for (final unit in course.offeringOrganizations) {
+        expect(unit.college, isNotNull, reason: course.sourceId);
       }
-    },
-  );
+    }
+  });
 
   test('Sungshin meetings follow the published dates and clock', () {
     final courses = _courses();
@@ -115,11 +108,8 @@ void main() {
     for (final c in courses) {
       byStatus.update(c.scheduleStatus!, (v) => v + 1, ifAbsent: () => 1);
     }
-    expect(byStatus, {
-      'scheduled': 1743,
-      'unrecognized': 282,
-      'unscheduled': 13,
-    });
+    // 2026-11-23 사용자 결정: 블렌디드·원격·집중이수 보류 강좌도 공식 교시·수업일로 확정한다.
+    expect(byStatus, {'scheduled': 2025, 'unscheduled': 13});
     for (final c in courses.where((c) => c.scheduleStatus != 'scheduled')) {
       expect(c.meetings, isEmpty, reason: c.sourceId);
       expect(
@@ -131,19 +121,20 @@ void main() {
       );
     }
     final scheduled = courses.where((c) => c.hasSchedulableMeetings).toList();
-    expect(scheduled, hasLength(1743));
+    expect(scheduled, hasLength(2025));
     for (final c in scheduled) {
       final actual = {
         for (final m in c.meetings)
           (m.date!, m.originalStartMinute, m.originalEndMinute),
       };
       if (c.remarks.contains('집중이수: ')) {
-        // Only the syllabus that dates every session is scheduled.
-        expect(c.code, 'DB095500');
-        final dates = actual.map((m) => m.$1).toList()..sort();
-        expect(dates, hasLength(15));
-        expect((dates.first, dates.last), ('2026-09-01', '2026-10-22'));
-        expect(_expected(c).containsAll(actual), isTrue);
+        // 수업계획서 날짜(DB095500) 또는 공식 비고의 운영 주차(예: 8~15주차)만 쓴다.
+        expect(_expected(c).containsAll(actual), isTrue, reason: c.sourceId);
+        if (c.code == 'DB095500') {
+          final dates = actual.map((m) => m.$1).toList()..sort();
+          expect(dates, hasLength(15));
+          expect((dates.first, dates.last), ('2026-09-01', '2026-10-22'));
+        }
       } else {
         expect(actual, _expected(c), reason: c.sourceId);
       }
@@ -156,7 +147,7 @@ void main() {
           .every((m) => m.weekday == DateTime.tuesday),
       isTrue,
     );
-    expect(scheduled.expand((c) => c.meetings), hasLength(26370));
+    expect(scheduled.expand((c) => c.meetings), hasLength(30594));
     for (final mode in [
       LectureMode.inPerson,
       LectureMode.liveOnline,
