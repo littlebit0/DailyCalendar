@@ -57,7 +57,9 @@ def extract(src, out):
 DAYS = '월화수목금토일'
 # 학사가이드 수업시간표: 50분제는 수업 50분 + 쉬는 시간 10분, 75분제는 수업 75분 + 쉬는 시간 15분.
 # 슬롯은 교시 시작부터 다음 교시 시작까지(수업 + 쉬는 시간)이고, Z는 A 시작에서 끊는다(08:10~09:30).
-NUM = {n: (480 + 60 * n, 540 + 60 * n) for n in range(0, 14)}  # 0교시 08:00, 1교시 09:00 ... 13교시 21:00
+# 0교시 08:00, 1교시 09:00 ... 13교시 21:00. 표에 없는 14교시는 같은 60분 슬롯으로 이어 계산한다
+# (2026-11-23 사용자 결정: 표에 없는 교시는 같은 슬롯 길이로 이어 계산).
+NUM = {n: (480 + 60 * n, 540 + 60 * n) for n in range(0, 15)}
 LET = {'Z': (490, 570), 'A': (570, 660), 'B': (660, 750), 'C': (810, 900), 'D': (900, 990),
        'E': (990, 1080), 'F': (1080, 1170), 'G': (1170, 1260), 'H': (1260, 1350)}
 # 같은 날·같은 강의실에서 사이가 이 값(분) 미만이면 한 구간으로 합친다.
@@ -67,11 +69,19 @@ def nfkc(s):
     return unicodedata.normalize('NFKC', s or '')
 
 def slots_std(t):
-    """'월A,수B' / '월13,월14' -> [(day, period)] or None if not standard (each token has its own weekday)."""
+    """'월A,수B' / '월13,월14' / '수D,E' -> [(day, period)] or None if not standard.
+
+    A token without a weekday ('수D,E' -> 수D, 수E) takes the weekday written before it
+    (2026-11-23 사용자 결정)."""
     t = nfkc(t)
-    if not re.fullmatch(r'([월화수목금토일](\d{1,2}|[A-HZ]))(,[월화수목금토일](\d{1,2}|[A-HZ]))*', t):
+    if not re.fullmatch(r'([월화수목금토일](\d{1,2}|[A-HZ]))(,[월화수목금토일]?(\d{1,2}|[A-HZ]))*', t):
         return None
-    return [(DAYS.index(tok[0]) + 1, tok[1:]) for tok in t.split(',')]
+    out, day = [], None
+    for tok in t.split(','):
+        if tok[0] in DAYS:
+            day, tok = DAYS.index(tok[0]) + 1, tok[1:]
+        out.append((day, tok))
+    return out
 
 def slots_shared(t):
     """공유혁신 table '강의실및강의시간': 'P408월(D)|P408화(C)' (whitespace removed)."""
@@ -142,12 +152,11 @@ def decide(L):
     kinds = [listing_slots(l) for l in L]
     slotsets = {v for k, v in kinds if k == 'slots'}
     timed = [l for l, (k, v) in zip(L, kinds) if k == 'slots']
-    untimed = {k for k, v in kinds if k.startswith('untimed') or k in ('online', 'notime')}
     nonstd = [v for k, v in kinds if k == 'nonstd']
     if len(slotsets) > 1:
         return 'unrecognized', '원문 간 요일·교시 불일치', None
-    if slotsets and untimed - {'notime'}:
-        return 'unrecognized', '원문 간 불일치(온라인·미배정과 요일·교시)', None
+    # 한 목록은 온라인·미배정, 다른 공식 목록은 요일·교시를 적은 경우: 공식 요일·교시를 대면 수업으로
+    # 확정한다(2026-11-23 사용자 결정: 운영 방식이 불명확해도 공식 시각이 있으면 확정).
     if slotsets and any(p not in LET and not (p.isdigit() and int(p) in NUM) for ss in slotsets for _, p in ss):
         return 'unrecognized', '공식 수업 시간표에 없는 교시(14교시)', None
     if slotsets:

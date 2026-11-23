@@ -32,9 +32,9 @@ void main() {
       byStatus[c.scheduleStatus] = (byStatus[c.scheduleStatus] ?? 0) + 1;
     }
     expect(byStatus, {
-      'scheduled': 1629,
+      'scheduled': 1665,
       'unscheduled': 236,
-      'unrecognized': 41,
+      'unrecognized': 5,
     });
 
     // Handbook page 2 (https://www.pcu.ac.kr/kor/contents/25): 50-minute
@@ -74,7 +74,8 @@ void main() {
             (end == letterSlots[start] ||
                 (letterSlots.containsValue(end) && end > start));
         expect(numeric || letter, isTrue, reason: c.sourceId);
-        expect(end <= 1350, isTrue, reason: c.sourceId);
+        // 14교시 (22:00-23:00) continues the 60 minute slot past the table.
+        expect(end <= (numeric ? 1380 : 1350), isTrue, reason: c.sourceId);
       }
       // Same day and room with a gap under 60 minutes is one block.
       final sorted = [...c.meetings]
@@ -96,7 +97,7 @@ void main() {
         }
       }
     }
-    expect(segments, 2386);
+    expect(segments, 2433);
 
     // Every major course under a mapped department heading keeps its owner.
     expect(

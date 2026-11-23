@@ -33,6 +33,20 @@ class ImportPcuTests(unittest.TestCase):
         far = spans('월1,월5')
         self.assertEqual(far, [(1, 540, 600, 'AM108'), (1, 780, 840, 'AM108')])
 
+    def test_a_token_without_weekday_takes_the_previous_weekday(self):
+        self.assertEqual(spans('수D,E'), [(3, 900, 1080, 'AM108')])
+        self.assertEqual(spans('목5,6'), [(4, 780, 900, 'AM108')])
+        self.assertIsNone(pcu.slots_std('D,수E'))
+
+    def test_period_14_continues_the_sixty_minute_slot(self):
+        self.assertEqual(spans('월13,월14'), [(1, 1260, 1380, 'AM108')])
+
+    def test_online_listing_does_not_block_another_listings_period(self):
+        online = {'time': '온라인', 'room': '온라인'}
+        timed = {'time': '월Z,화Z', 'room': 'MC314'}
+        self.assertEqual(pcu.decide([online, timed])[0], 'scheduled')
+        self.assertEqual(pcu.decide([{'time': '월C,목B', 'room': 'Y'}, {'time': '목B', 'room': 'Y'}])[0], 'unrecognized')
+
     def test_unknown_numeric_period_is_rejected(self):
         self.assertIsNone(pcu.meetings([(1, '99')], 'AM108'))
 
