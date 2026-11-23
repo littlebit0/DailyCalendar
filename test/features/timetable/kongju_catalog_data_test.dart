@@ -236,6 +236,7 @@ void main() {
     () {
       final resolved = <String, Map<String, dynamic>>{};
       var unrecognized = 0;
+      var unscheduled = 0;
       for (final campus in ['cheonan', 'singwan', 'yesan', 'unknown']) {
         final raw =
             jsonDecode(
@@ -246,15 +247,18 @@ void main() {
                 as Map<String, dynamic>;
         for (final c in (raw['courses'] as List).cast<Map<String, dynamic>>()) {
           if (c['scheduleStatus'] == 'unrecognized') unrecognized++;
+          if (c['scheduleStatus'] == 'unscheduled') unscheduled++;
           final meta = c['sourceEducationalMetadata'] as Map?;
           if (meta?['resolvedHoldReasons'] != null) {
             resolved[c['courseCode'] as String] = c;
           }
         }
       }
-      // 남은 미확정: 교시 없음(빈 칸·미개설·원격수업·'-'), 같은 과목번호·과목명·교수의
-      // 원문 행끼리 시각만 다른 고체역학·국제경영학은 두 수업 시간으로 모두 확정.
-      expect(unrecognized, 142);
+      // 교시 없는 행(빈 칸 87·미개설 30·원격수업 24·'-' 1)은 원문 행 그대로 시간 미정
+      // (2026-11-23 사용자 결정). 같은 과목번호·과목명·교수의 원문 행끼리 시각만 다른
+      // 고체역학·국제경영학은 두 수업 시간으로 모두 확정.
+      expect(unrecognized, 0);
+      expect(unscheduled, 142);
       expect(resolved, hasLength(467));
       const holidays = {
         '2026-09-24',
@@ -289,7 +293,10 @@ void main() {
           // 강의일람표 table 212: 교시 p는 (8+p):00 시작, 50분 수업 + 10분
           // 쉬는 시간 = 60분 슬롯. table 213 평일 야간 10~14교시는 18:00부터
           // 45분 수업 + 5분 = 50분 슬롯. 연속 교시는 한 구간으로 합친다.
-          expect({...slotStarts, ...saturdayStarts}, contains(s['startMinute']));
+          expect({
+            ...slotStarts,
+            ...saturdayStarts,
+          }, contains(s['startMinute']));
           expect(slotEnds, contains(s['endMinute']));
         }
       }

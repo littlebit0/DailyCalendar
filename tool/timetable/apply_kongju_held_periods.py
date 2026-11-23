@@ -24,8 +24,12 @@ course's two meetings and both are scheduled (user decision 2026-11-23).
 
 Held reasons that only said the operation (field/intensive/block, remote),
 the published closure list, or the missing 10+ clock was uncertain are
-scheduled. Rows with no printed period, conflicting row variants or Saturday
-10+ periods are left as they are.
+scheduled. Rows with conflicting row variants are left as they are.
+
+Rows whose official time cell is empty, '-', '미개설' or '원격수업' print no weekday
+or period. No other public source (department and college notices, center
+notices, the book) gave a time, so they become unscheduled with their published
+fields kept (user decision 2026-11-23, round 3).
 
 Contract-department rows (sourceId kongju/cheonan/...) print their own clock
 (e.g. "08:30~11:20"); the ones held only for "사업주훈련예정" use that clock.
@@ -209,6 +213,23 @@ def convert_contract(c, dates):
     return None
 
 
+UNTIMED = {'': '시간 칸이 비어', '-': "시간 칸이 '-'여서", '미개설': "시간 칸이 '미개설'이어서",
+           '원격수업': "시간 칸이 '원격수업'이고 실시간 시각이 없어"}
+UNTIMED_NOTE = ' 공식 강의일람표 {} 요일·교시가 없으므로 시간 미정으로 둡니다(원문 행 유지, 2026-11-23 사용자 결정).'
+
+
+def convert_untimed(c):
+    why = UNTIMED.get((c['sourceSchedule'] or '').strip())
+    if why is None:
+        return 'reason:printed'
+    note = UNTIMED_NOTE.format(why)
+    c['scheduleStatus'] = 'unscheduled'
+    c['remarks'] = HOLD.sub(note, c['remarks'], 1) if HOLD.search(c['remarks']) else c['remarks'] + note
+    for d, text in (c.get('departmentRemarks') or {}).items():
+        c['departmentRemarks'][d] = HOLD.sub(note, text, 1) if HOLD.search(text) else text + note
+    return 'unscheduled'
+
+
 def apply(datasets):
     public = weekday_dates(datasets, 'kongju/current-public/')
     contract = weekday_dates(datasets, 'kongju/cheonan/')
@@ -221,6 +242,8 @@ def apply(datasets):
                 held = convert_public(c, public)
             else:
                 held = convert_contract(c, contract)
+            if held and c['sourceId'].startswith('kongju/current-public/'):
+                held = convert_untimed(c)
             key = held or 'scheduled'
             stats[key] = stats.get(key, 0) + 1
     return stats

@@ -2,7 +2,7 @@ import copy
 import json
 import unittest
 
-from tool.timetable.apply_kongju_held_periods import PATHS, apply, convert_public, periodic_blocks
+from tool.timetable.apply_kongju_held_periods import PATHS, apply, convert_public, convert_untimed, periodic_blocks
 
 DATES = {wd: [f'2026-09-0{wd}'] for wd in range(1, 7)}
 
@@ -42,6 +42,18 @@ class KongjuHeldPeriodsTest(unittest.TestCase):
         none = held('', ['noPublishedWeekdayPeriod'])
         self.assertTrue(convert_public(none, DATES))
         self.assertEqual((none['scheduleStatus'], none['schedules']), ('unrecognized', []))
+
+    def test_untimed_rows_become_unscheduled_with_fields_kept(self):
+        for raw in ('', '-', '미개설', '원격수업'):
+            c = held(raw, ['noPublishedWeekdayPeriod', 'actualRoomUnpublished'])
+            self.assertEqual(convert_untimed(c), 'unscheduled')
+            self.assertEqual((c['scheduleStatus'], c['schedules'], c['sourceSchedule']), ('unscheduled', [], raw))
+            self.assertNotIn('보류', c['remarks'])
+            self.assertIn('시간 미정으로 둡니다', c['remarks'])
+            self.assertTrue(c['remarks'].endswith(' 이수구분: 원문.'))
+        printed = held('토①', ['other'])
+        self.assertEqual(convert_untimed(printed), 'reason:printed')
+        self.assertEqual(printed['scheduleStatus'], 'unrecognized')
 
     def test_variant_with_own_title_and_professor_wins(self):
         c = held('월8/수7,8', ['sameNativeSourceVariantsClockRoomOrTeacherConflict'], '사범2관 (401)')
