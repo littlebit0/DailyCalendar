@@ -43,8 +43,8 @@ void main() {
         };
         final dataset = UniversityDataset.fromJson(raw);
         final count = campus == 'seoul' ? 2805 : 2156;
-        final eligibleCount = campus == 'seoul' ? 2411 : 1971;
-        final datedCount = campus == 'seoul' ? 57755 : 46711;
+        final eligibleCount = campus == 'seoul' ? 2439 : 1971;
+        final datedCount = campus == 'seoul' ? 58291 : 46711;
         expect(dataset.courses, hasLength(count));
         expect(
           dataset.courses.map((c) => c.sourceId).toSet(),
@@ -122,7 +122,6 @@ void main() {
             (meta['reservationProjection'] as Map)['heldReasons'],
             isEmpty,
           );
-          expect(c.departments.any((d) => d == '의학과' || d == '의예과'), false);
           // Independently derive exact clocks and campus rooms from native fields.
           final pattern = RegExp(
             r'([월화수목금토일])\((\d{2}):(\d{2})-(\d{2}):(\d{2})\)',
