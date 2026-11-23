@@ -366,6 +366,39 @@ def refresh(c, o):
     return True
 
 
+def _slot_order(slot):
+    day, p = slot[0], slot[1]
+    return day, (NUM[int(p)] if p.isdigit() else LET[p])[0]
+
+
+def settle_conflict(L, c, edition):
+    """Listings of the latest edition that disagree on weekday/period (2026-11-23 사용자 결정):
+    take the value that differs from the earlier edition's course c (the updated listings);
+    when several values differ from it, the value printed in more listings. A tie stays
+    unsettled (None). The other listings' values are kept in remarks."""
+    span = lambda s: sorted((m['weekday'], m['startMinute'], m['endMinute']) for m in s)
+    by = collections.OrderedDict()
+    for l in L:
+        k, v = listing_slots(l)
+        if k == 'slots':
+            by.setdefault(v, []).append(l)
+    if len(by) < 2:
+        return None
+    before = span(c['schedules'])
+    changed = {v: ls for v, ls in by.items() if span(meetings(sorted(v, key=_slot_order), '')) != before}
+    if not changed:
+        return None
+    ranked = sorted(changed.items(), key=lambda kv: -len(kv[1]))
+    if len(ranked) > 1 and len(ranked[0][1]) == len(ranked[1][1]):
+        return None
+    pick = ranked[0][1]
+    rule = ('8월판과 달라진 목록의 값' if len(changed) == 1 else '8월판과 다른 값 중 더 많은 목록에 나온 값')
+    o = offering(pick + [l for l in L if listing_slots(l)[0] != 'slots'], edition)
+    rest = '; '.join(f"{where(l)} {l['time']} {l['room'] or ''}".strip() for l in L if l not in pick and listing_slots(l)[0] == 'slots')
+    o['remarks'] += f" | 갱신본 목록끼리 요일·교시가 달라 {rule}으로 정함(다른 목록: {rest})"
+    return o
+
+
 def apply(rows_path, WT, edition='2026-08'):
     DS = f'{WT}/assets/timetable/pcu-main-2026-2.json'
     ORG = f'{WT}/assets/timetable/organizations/pcu.json'
@@ -401,6 +434,8 @@ def apply(rows_path, WT, edition='2026-08'):
             seen.add(c['sourceId'])
             stats[('existing', status, reason)] += 1
             if edition != '2026-08':
+                if status == 'unrecognized':
+                    o = settle_conflict(L, c, edition) or o
                 if refresh(c, o):
                     changed.append(c['sourceId'])
             elif status == 'unrecognized' and c['scheduleStatus'] == 'scheduled':

@@ -94,6 +94,24 @@ class ImportPcuTests(unittest.TestCase):
         kept = course('scheduled', mon_c, '김교수', 'C104')
         self.assertFalse(pcu.refresh(kept, pcu.offering([listing('월C', 'C104(new)', '')], '2026-11-04')))
 
+    def test_conflicting_latest_listings_take_the_updated_or_most_printed_value(self):
+        def listing(time, page):
+            raw = ['4', '전선', 'LAR25405', '조경BIM설계', '3', '4', '01', '김', time, 'J316', '']
+            return {'name': '조경BIM설계', 'time': time, 'room': 'J316', 'raw': raw, 'page': page}
+        def course(slots):
+            return {'schedules': pcu.meetings(pcu.slots_std(slots), 'J316')}
+        mon, tue = listing('월7,월8,월9,월10', 221), listing('화7,화8,화9,화10', 265)
+        # one listing kept the August value: the other (updated) one wins
+        o = pcu.settle_conflict([mon, tue], course('화7,화8,화9,화10'), '2026-11-04')
+        self.assertEqual(o['status'], 'scheduled')
+        self.assertEqual([m['weekday'] for m in o['schedules']], [1])
+        self.assertIn('265쪽', o['remarks'])
+        # both differ from August: the value printed in more listings
+        o = pcu.settle_conflict([mon, tue, listing('월7,월8,월9,월10', 291)], course('화6,화7,화8,화9'), '2026-11-04')
+        self.assertEqual([m['weekday'] for m in o['schedules']], [1])
+        # a tie stays unsettled
+        self.assertIsNone(pcu.settle_conflict([mon, tue], course('화6,화7,화8,화9'), '2026-11-04'))
+
     def test_unknown_numeric_period_is_rejected(self):
         self.assertIsNone(pcu.meetings([(1, '99')], 'AM108'))
 
