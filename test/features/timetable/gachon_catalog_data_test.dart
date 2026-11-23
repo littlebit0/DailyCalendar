@@ -68,8 +68,8 @@ void main() {
       }
       expect(courses.map((c) => c.sourceId).toSet(), hasLength(3809));
       final approved = courses.where((c) => c.hasSchedulableMeetings).toList();
-      expect(approved, hasLength(3445));
-      expect(approved.expand((c) => c.meetings), hasLength(58145));
+      expect(approved, hasLength(3805));
+      expect(approved.expand((c) => c.meetings), hasLength(65290));
       for (final mode in [
         LectureMode.inPerson,
         LectureMode.liveOnline,
@@ -211,7 +211,75 @@ void main() {
         }
       }
     }
-    expect(checked, 58144);
+    expect(checked, 65289);
     expect(clockText, 1);
+  });
+
+  test('Gachon held courses with official weekday periods are confirmed', () {
+    // 근거: 강의시간표(2026-2).pdf https://www.gachon.ac.kr/bbs/kor/475/151337/download.do
+    // 1교시 09:00 … 14교시 22:00, 슬롯 60분. tool/timetable/apply_gachon_official_times.py
+    final courses = <String, Map<String, dynamic>>{};
+    final status = <String, Map<String, int>>{};
+    for (final campus in ['global', 'medical']) {
+      final raw =
+          jsonDecode(
+                File(
+                  'assets/timetable/gachon-$campus-2026-2.json',
+                ).readAsStringSync(),
+              )
+              as Map<String, dynamic>;
+      UniversityDataset.fromJson(raw);
+      for (final course in raw['courses'] as List) {
+        final row = Map<String, dynamic>.from(course as Map);
+        courses[row['sourceId'] as String] = row;
+        final counts = status.putIfAbsent(campus, () => {});
+        final key = row['scheduleStatus'] as String;
+        counts[key] = (counts[key] ?? 0) + 1;
+      }
+    }
+    expect(status, {
+      'global': {'scheduled': 3240, 'unrecognized': 2},
+      'medical': {'scheduled': 565, 'unscheduled': 2},
+    });
+    // 원문 모순(개강 전 8/27~8/28 집중 일정 vs 금13·14)은 보류로 남는다.
+    for (final id in ['16013/001', '16013/019']) {
+      final held = courses['gachon/20/2026/2/$id']!;
+      expect(held['scheduleStatus'], 'unrecognized');
+      expect(held['schedules'], isEmpty);
+    }
+    // 휴강·보강 비고가 있던 강좌: 금1·금2 → 금 09:00~11:00, 추석 9/25·한글날 10/9 제외.
+    final makeup = courses['gachon/21/2026/2/M3040/001']!;
+    expect(makeup['scheduleStatus'], 'scheduled');
+    final makeupDates = [
+      for (final s in makeup['schedules'] as List) (s as Map)['date'],
+    ];
+    expect(makeupDates, hasLength(13));
+    expect(makeupDates, isNot(contains('2026-09-25')));
+    expect(makeupDates, isNot(contains('2026-10-09')));
+    for (final s in makeup['schedules'] as List) {
+      expect((s as Map)['startMinute'], 540);
+      expect(s['endMinute'], 660);
+    }
+    expect(
+      (makeup['departmentRemarks'] as Map).values.single,
+      startsWith('공식 요일·교시 기준 확정'),
+    );
+    // 숨은 보류였던 MOOC 강좌: 화7~9 → 화 15:00~18:00.
+    final mooc = courses['gachon/20/2026/2/13548/001']!;
+    expect(mooc['scheduleStatus'], 'scheduled');
+    expect((mooc['schedules'] as List).first, {
+      'weekday': 2,
+      'startMinute': 900,
+      'endMinute': 1080,
+      'classroom': '화상강의강의실(가상)',
+      'date': '2026-09-01',
+    });
+    // 기간이 없던 12주 강좌는 같은 파일의 12주 강좌 기간(9/1~11/23)을 쓴다.
+    final twelveWeeks = courses['gachon/20/2026/2/61305/001']!;
+    expect(twelveWeeks['period'], {
+      'startDate': '2026-09-01',
+      'endDate': '2026-11-23',
+    });
+    expect((twelveWeeks['schedules'] as List).last['date'], '2026-11-23');
   });
 }
