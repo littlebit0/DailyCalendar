@@ -5,9 +5,10 @@ Uses the importer's official clock (시행세칙 제11조, 1교시 09:00, 60-min
 slots) and the 2026-2 수강신청 안내 p5 teaching dates (weeks 1-15). Intensive
 courses whose official remark names their weeks (e.g. '8~15주차') get only
 those weeks; the rest get all 15 weeks. When the remark also states an explicit
-start date ('(10/26~12월 중순)'), the course starts on that date and keeps the
-same number of sessions per weekday (8~15주차 = 8), so no meeting falls before
-the stated start.
+start date ('(10/26~12월 중순)'), the course starts on that date and keeps at
+most that many sessions per weekday (8~15주차 = 8) from the official teaching
+dates. No date outside the guide's 15-week table is added: after 10/26 the table
+has 8 Mondays but only 7 Tuesdays/Wednesdays (last 12/08, 12/09).
 
     python3 tool/timetable/confirm_held_sungshin.py
 """

@@ -137,6 +137,19 @@ void main() {
             isTrue,
             reason: c.sourceId,
           );
+          // 공식 수업일표(15주) 안에서 10/26 이후 요일별 회차: 월 8, 화·수 7(12/08·12/09가 마지막).
+          final perWeekday = <int, int>{};
+          for (final d in actual.map((m) => m.$1).toSet()) {
+            final w = DateTime.parse(d).weekday;
+            perWeekday[w] = (perWeekday[w] ?? 0) + 1;
+          }
+          for (final e in perWeekday.entries) {
+            expect(
+              e.value,
+              e.key == DateTime.monday ? 8 : 7,
+              reason: '${c.sourceId} weekday ${e.key}',
+            );
+          }
         }
         if (c.code == 'DB095500') {
           final dates = actual.map((m) => m.$1).toList()..sort();
