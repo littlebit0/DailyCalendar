@@ -33,7 +33,6 @@ POLICY_SUITES = [
 
 # University timetable import and fetch checks.
 IMPORT_SUITES = [
-    "test_kunsan_held_periods",
     "test_dankook_import",
     "test_expanded_university_courses",
     "test_fetch_konkuk",
@@ -58,6 +57,12 @@ IMPORT_SUITES = [
     "test_ulsan_view",
     "test_uos_import",
 ]
+
+# Per-university held-course period checks, found by name so that each
+# university's pull request adds its own test without editing this list.
+IMPORT_SUITES += sorted(
+    path.stem for path in (ROOT / "tool" / "tests").glob("test_*_held_periods.py")
+)
 
 # Apple widget behaviour checks (compile Swift).
 WIDGET_SUITES = [
