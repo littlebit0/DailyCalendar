@@ -199,6 +199,11 @@ void main() {
                 rooms.every((r) => room.startsWith(r.split(' ').first)),
                 true,
               );
+              // Two rooms printed on two lines pair with the two clock lines.
+              final parts = (room as String).split(' ');
+              if (parts.length == blocks.length) {
+                room = parts[blocks.indexOf(b)];
+              }
             }
             final notice = RegExp(r'변경 강의실 (\S+)을').firstMatch(c.remarks);
             if (notice != null) {

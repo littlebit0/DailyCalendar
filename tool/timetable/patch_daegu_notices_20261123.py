@@ -8,6 +8,7 @@
   이 분반(원문 공공인재-230)에 해당하는지 알 수 없으므로 원문 강의실을 유지한다.
 - HUSS 포용사회융합학부 21강좌: DU-HUSS 공지 224170(첨부 교과목 목록)이 HUSS LMS(lms.hussis.ac.kr) 온라인
   수강과 시험 일정만 공개하고 주간 수업 시각이 없으므로 시간 미정(unscheduled)으로 둔다.
+- 2951 디지털트윈응용설계: 원문 강의시간·강의실 줄 짝대로 월=공학6관-6508, 수=공학6관-6201(PR 1162 리뷰).
 
     python3 tool/timetable/patch_daegu_notices_20261123.py   # 다시 실행해도 결과 동일
 """
@@ -115,6 +116,20 @@ def main():
         c['remarks'] += NOTICE_HUSS
         c['departmentRemarks'] = {k: v + NOTICE_HUSS for k, v in c['departmentRemarks'].items()}
         changed.append(c['courseCode'])
+
+    # 2951 디지털트윈응용설계: 원문 강의시간·강의실 칸이 줄마다 짝지어 있다(273쪽 '월(12:00-13:15)'↔'공학6관-6508',
+    # '수(12:00-13:15)'↔'공학6관-6201'; 같은 수업의 4306도 이 짝으로 확정됨). 두 강의실을 한 문자열로 붙이지 않는다.
+    c = by_code['2951']
+    cells = [r['sourceCells'] for r in c['publicEducationRows'] if r['sourcePage'] == 273][0]
+    times, rooms = cells[8].split('\n'), cells[9].split('\n')
+    assert times == ['월(12:00-13:15)', '수(12:00-13:15)'] and rooms == ['공학6관-6508', '공학6관-6201']
+    per_day = {'월화수목금토일'.index(t[0]) + 1: r for t, r in zip(times, rooms)}
+    for m in c['schedules']:
+        room = per_day[m['weekday']]
+        if m['classroom'] != room:
+            m['classroom'] = room
+            if '2951' not in changed:
+                changed.append('2951')
 
     ASSET.write_text(json.dumps(asset, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     print(json.dumps({'changed': len(changed), 'huss': len(huss), 'codes': changed}, ensure_ascii=False))
