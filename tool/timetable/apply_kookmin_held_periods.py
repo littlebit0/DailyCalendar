@@ -5,7 +5,8 @@
 when the operation mode (blended, field training, social service) is unclear.
 Published clocks are used as-is and merged with import_kookmin.meetings_for, so
 the result matches every other scheduled Kookmin course. Courses whose official
-sources contradict each other stay unrecognized. Re-running changes nothing.
+contradicting sources follow the official timetable clock (2026-11-23).
+Re-running changes nothing.
 
 2026-11-23 decision: a section the official catalog still lists with closed=true
 (폐강) is kept like any other row. --snapshot takes a fresh public traversal
@@ -32,10 +33,16 @@ _spec.loader.exec_module(import_kookmin)
 BLOCK_NOTE = ('실제 적용 수업일·기간 확인 필요: 진행 방식도 확인 전에는 '
               '공개 시각을 학기 전체에 반복하지 않음')
 CONFIRMED_NOTE = '공식 요일·시각으로 확정(운영 방식 세부는 미게시)'
-# The syllabus start (18:30) contradicts the catalog clock (18:00), so it stays held.
-CONTRADICTED = {'1659202-51'}
+# 2026-11-23 (2차): no contradiction is held. The official timetable clock wins
+# over other sources; 1659202-51's public syllabus also prints 수 18:00~20:40.
+CONTRADICTED = set()
 # Stale instructions written while the course was held; the facts before them stay.
 STALE_CLAUSES = ['; API14~17로 Zoom3시간 생성 금지']
+# Held-era research lines replaced by the confirmed fact.
+REPLACED_LINES = {
+    '실제18:30시작과 API18:00~20:40 대조; 실제 종료시각 별도 확정 문장 없음. 비대면 예정표와10/28합반행 충돌,9/23녹화/실시간 미구분':
+        '공식 강의시간표 수 18:00~20:40 기준 확정(공개 강의계획서 수업시간도 수 18:00~20:40)',
+}
 LINE = re.compile(r'^([월화수목금토일])요일 (\d{2}):(\d{2})~(\d{2}):(\d{2})$')
 DAY_NAMES = {label: name for label, name in zip(
     import_kookmin.DAY_LABELS, import_kookmin.DAYS)}
@@ -90,6 +97,8 @@ def apply(data):
         for department, text in course['departmentRemarks'].items():
             for clause in STALE_CLAUSES:
                 text = text.replace(clause, '')
+            for line, fact in REPLACED_LINES.items():
+                text = text.replace(line, fact)
             course['departmentRemarks'][department] = text.replace(BLOCK_NOTE, CONFIRMED_NOTE)
         changed.append(key)
     return changed

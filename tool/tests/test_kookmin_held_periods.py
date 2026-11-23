@@ -27,8 +27,8 @@ class KookminHeldPeriodsTest(unittest.TestCase):
 
     def test_published_clocks_are_confirmed_as_is(self):
         data = self.data()
-        self.assertEqual(apply_kookmin.apply(data), ['0160508-51', '0294104-01'])
-        law, contradicted, sunday = data['courses']
+        self.assertEqual(apply_kookmin.apply(data), ['0160508-51', '1659202-51', '0294104-01'])
+        law, syllabus_differs, sunday = data['courses']
         self.assertEqual(law['scheduleStatus'], 'scheduled')
         # A 5-minute gap is not merged, like import_kookmin.meetings_for.
         self.assertEqual(law['schedules'], [
@@ -38,8 +38,9 @@ class KookminHeldPeriodsTest(unittest.TestCase):
                          '혼합수업\n' + apply_kookmin.CONFIRMED_NOTE)
         self.assertEqual(sunday['schedules'],
                          [{'weekday': 7, 'startMinute': 480, 'endMinute': 600, 'classroom': ''}])
-        self.assertEqual(contradicted['scheduleStatus'], 'unrecognized')
-        self.assertEqual(contradicted['schedules'], [])
+        # The official timetable clock is used even when another source differed.
+        self.assertEqual(syllabus_differs['schedules'],
+                         [{'weekday': 3, 'startMinute': 1080, 'endMinute': 1130, 'classroom': '법학관2층4호실'}])
 
     def test_closed_published_row_is_added_once_and_open_rows_are_not(self):
         fixture = __import__('json').loads(

@@ -19,18 +19,17 @@ void main() {
       expect(data.campusName, '북악');
       expect(courses, hasLength(3014));
       expect(courses.map((c) => c.sourceId).toSet(), hasLength(3014));
-      expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(2987));
+      expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(2988));
       expect(
         courses.where((c) => c.scheduleStatus == 'unscheduled'),
         hasLength(26),
       );
-      final blocked = courses.where((c) => c.scheduleStatus == 'unrecognized');
-      // 강의계획서 시작 시각(18:30)이 공개 시각(18:00)과 달라 보류한다.
-      expect(blocked.map((c) => c.codeAndSection), ['1659202-51']);
-      for (final c in blocked) {
-        expect(c.meetings, isEmpty);
-        expect(c.sourceSchedule, isNotEmpty);
-      }
+      expect(courses.where((c) => c.scheduleStatus == 'unrecognized'), isEmpty);
+      // 다른 자료와 달라도 공식 강의시간표 시각(수 18:00~20:40)으로 확정한다.
+      final law = courses.singleWhere((c) => c.codeAndSection == '1659202-51');
+      expect(law.scheduleStatus, 'scheduled');
+      expect(law.meetings.first.originalStartMinute, 1080);
+      expect(law.meetings.last.originalEndMinute, 1240);
       // 혼합수업이어도 공개 요일·시각을 그대로 확정한다.
       final blended = courses.singleWhere(
         (c) => c.codeAndSection == '1652001-01',
