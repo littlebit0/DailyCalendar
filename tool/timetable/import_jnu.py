@@ -150,14 +150,11 @@ def meetings(schedule, classroom):
     for index, (day, period_text) in enumerate(tokens):
         weekday, period = '월화수목금토일'.index(day) + 1, int(period_text)
         if day in '화목':
-            # The 2026-2 notice contradicts another official module table for
-            # period 9. Preserve that raw notation instead of guessing a time.
-            if period not in (*range(9), 10):
-                return [], 'unrecognized'
+            # Periods outside the official table (e.g. 9, where two official
+            # modules disagree) continue the same 75+15 minute slot
+            # (2026-11-23 user decision).
             start, slot = 450 + period * 90, 90
         elif day in '월수금':
-            if period not in (*range(13), 14, 15):
-                return [], 'unrecognized'
             start, slot = 480 + period * 60, 60
         elif day == '토':
             # 2026 official freshman handbook, page 5, defines Saturday.
@@ -166,6 +163,8 @@ def meetings(schedule, classroom):
             start, slot = 480 + period * 60, 60
         else:
             return [], 'unrecognized'  # Neither official module defines Sunday.
+        if start + slot > 1440:
+            return [], 'unrecognized'
         entries.append((weekday, start, start + slot, rooms[index] if len(rooms) > 1 else rooms[0] if rooms else ''))
     result = []
     for weekday, start, end, room in sorted(set(entries)):

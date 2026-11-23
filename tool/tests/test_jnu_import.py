@@ -26,7 +26,11 @@ class ChonnamTimetableImportTests(unittest.TestCase):
         self.assertEqual(parsed,[{'weekday':1,'startMinute':900,'endMinute':1140,'classroom':'공6-420'}])
 
     def test_unknown_or_conflicting_periods_never_invent_times(self):
-        for value,room in [('화9','강의실'),('월13','강의실'),('일1','강의실'),('미정',''),('월3월4','A\nB\nC')]:
+        # Periods past the official table continue the same slot (2026-11-23 user decision).
+        self.assertEqual(jnu.meetings('화9','강의실'),([{'weekday':2,'startMinute':1260,'endMinute':1350,'classroom':'강의실'}],'scheduled'))
+        self.assertEqual(jnu.meetings('월13','강의실'),([{'weekday':1,'startMinute':1260,'endMinute':1320,'classroom':'강의실'}],'scheduled'))
+        self.assertEqual(jnu.meetings('화11','강의실'),([], 'unrecognized'))  # would end past midnight
+        for value,room in [('일1','강의실'),('미정',''),('월3월4','A\nB\nC')]:
             with self.subTest(value=value): self.assertEqual(jnu.meetings(value,room),([], 'unrecognized'))
         self.assertEqual(jnu.meetings('', ''),([], 'unscheduled'))
 
