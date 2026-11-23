@@ -672,20 +672,20 @@
     "reason": "공백만 제거(내용 동일): 파싱 비용과 앱 용량 절감"
   },
   "assets/timetable/inu-michuhol-2026-2.json": {
-    "sha256": "afec0cc855100ff0f404eaf4164a96137dc91bc639b0706ff80e02469f76ee90",
-    "reason": "공백만 제거(내용 동일): 파싱 비용과 앱 용량 절감"
+    "sha256": "50df16ebfe07380f35819eba3873adff00c69ecfe5ff7bbe833182aedaba1130",
+    "reason": "2026-11-23 사용자 결정: 공식 요일·시각이 있는 운영 방식·폐강 보류 강좌를 그 시각으로 확정"
   },
   "assets/timetable/inu-multiple-2026-2.json": {
     "sha256": "252c9c0af0085b62306bf5402767208153d2b6e8036a80dffe165851f3e3a2b6",
     "reason": "공백만 제거(내용 동일): 파싱 비용과 앱 용량 절감"
   },
   "assets/timetable/inu-songdo-2026-2.json": {
-    "sha256": "0eb73eba75b5c25f470e5b7270d7831d53403bf493c1a080da32d76741993f0d",
-    "reason": "공백만 제거(내용 동일): 파싱 비용과 앱 용량 절감"
+    "sha256": "e903fff46f0e6c9b65dd419d739344822e882ccb4fb53e867e3d35037fd8c303",
+    "reason": "2026-11-23 사용자 결정: 공식 요일·시각이 있는 운영 방식·폐강 보류 강좌를 그 시각으로 확정"
   },
   "assets/timetable/inu-unknown-2026-2.json": {
-    "sha256": "baf0793beffff63b75347f16e7ae9ee4fab47f64700a03033226494dbeeb0878",
-    "reason": "공백만 제거(내용 동일): 파싱 비용과 앱 용량 절감"
+    "sha256": "4c90976847134a1a9df982246a4f0873d7483b378ab63bf7964d393e430ccec9",
+    "reason": "2026-11-23 사용자 결정: 공식 요일·시각이 있는 운영 방식·폐강 보류 강좌를 그 시각으로 확정"
   },
   "assets/timetable/jbnu-gochang-2026-2.json": {
     "sha256": "576cbd2e8f52873d8788121bce9d299edcad4ca7fedfb7b4bed330651026d128",

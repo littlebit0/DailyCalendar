@@ -4711,7 +4711,7 @@
         "suspensionEvidence": "work/university-support-suspension-20261012/support-decisions.json",
         "productionIntegrationEnabled": true,
         "reopenedDate": "2026-11-22",
-        "reopenNote": "사용자 지시(2026-11-22)로 기존 데이터 그대로 검색 재개. 시각 미확정(unrecognized) 강좌는 원문만 표시하고 시간표 추가 불가. 전체 범위 완료 아님."
+        "reopenNote": "사용자 지시(2026-11-22)로 기존 데이터 그대로 검색 재개. 시각 미확정(unrecognized) 강좌는 원문만 표시하고 시간표 추가 불가. 전체 범위 완료 아님. 2026-11-23 사용자 결정으로 공식 요일·시각이 있는 운영 방식·폐강 보류 315건을 확정(남은 147건은 원문에 시각 없음)."
       },
       "installedAcceptance": "macos_build_signature_install_verified_ui_not_run",
       "deferredAsImpossible": false,

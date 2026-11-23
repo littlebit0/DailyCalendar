@@ -84,8 +84,8 @@ void main() {
       expect(sourceIds, hasLength(2437));
       final all = datasets.expand((d) => d.courses).toList();
       final scheduled = all.where((c) => c.meetings.isNotEmpty).toList();
-      expect(scheduled, hasLength(1975));
-      expect(scheduled.fold<int>(0, (n, c) => n + c.meetings.length), 62689);
+      expect(scheduled, hasLength(2290));
+      expect(scheduled.fold<int>(0, (n, c) => n + c.meetings.length), 116736);
       expect(all.every((c) => c.section.isEmpty), true);
       for (final mode in [
         LectureMode.inPerson,
@@ -104,7 +104,7 @@ void main() {
         final restored = TimetableSyncDocument.fromJson(
           jsonDecode(jsonEncode(document.toJson())) as Map<String, dynamic>,
         ).materializeClasses();
-        expect(restored, hasLength(1975));
+        expect(restored, hasLength(2290));
         final lookup = {for (final c in originals) c.sourceId: c};
         expect(restored.map((c) => c.sourceId).toSet(), lookup.keys.toSet());
         for (final c in restored) {
