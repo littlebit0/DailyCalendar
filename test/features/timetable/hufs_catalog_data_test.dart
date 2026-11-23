@@ -120,11 +120,12 @@ void main() {
         (clock.originalStartMinute, clock.originalEndMinute, clock.classroom),
         (1030, 1130, '2201'),
       );
+      // 2026-11-23 사용자 결정: 비대면 표기 강좌도 원문 교시로 확정한다.
       expect(
         courses
             .singleWhere((c) => c.sourceId.endsWith('/N073604/01'))
             .hasSchedulableMeetings,
-        isFalse,
+        isTrue,
       );
       expect(
         courses
