@@ -9,7 +9,9 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   final raw =
       jsonDecode(
-            File('assets/timetable/sogang-unknown-2026-2.json').readAsStringSync(),
+            File(
+              'assets/timetable/sogang-unknown-2026-2.json',
+            ).readAsStringSync(),
           )
           as Map<String, dynamic>;
   final courses = (raw['courses'] as List).cast<Map<String, dynamic>>();
@@ -179,6 +181,38 @@ void main() {
     );
   });
 
+  test('주간 예약 설명이 화면에 보이는 effective remarks에 들어간다', () {
+    // UniversityCourse.remarks prefers departmentRemarks, so the note must be
+    // there too and the old exam-only wording must be gone.
+    final notes = {
+      for (final c in courses)
+        if (c['userDecisionWeeklyReservation'] case final Map r)
+          c['sourceId'] as String: r['note'] as String
+        else if (c.containsKey('syllabusClockEvidence'))
+          c['sourceId'] as String: c['remarks'] as String,
+    };
+    expect(notes, hasLength(578));
+    final data = UniversityDataset.fromJson(raw);
+    for (final course in data.courses) {
+      final note = notes[course.sourceId];
+      if (note == null) continue;
+      expect(course.remarks, contains(note), reason: course.sourceId);
+      expect(course.remarks, contains('정규 주간 예약'), reason: course.sourceId);
+      expect(
+        course.remarks,
+        isNot(contains('약속만 제공')),
+        reason: course.sourceId,
+      );
+      expect(course.remarks, isNot(contains('주간 수업으로 확장하지 않')));
+      expect(course.remarks, isNot(contains('주간수업을 확대하지 않')));
+    }
+    // Source enrollment lines are kept next to the note.
+    final sample = data.courses.singleWhere(
+      (c) => c.sourceId == 'sogang/unknown/2026/2/AAS3006-01',
+    );
+    expect(sample.remarks, contains('공개시험일자: 10.22(목)16:30~17:45[D202]'));
+  });
+
   test('PHY4201·PHY4204는 공개 강의계획서의 화 16:30-18:00 R404 주간 예약이다', () {
     for (final id in ['PHY4201-01', 'PHY4204-01']) {
       final c = byId(id);
@@ -215,7 +249,10 @@ void main() {
     final moved = data.courses.singleWhere(
       (c) => c.codeAndSection == 'GKS3024-01',
     );
-    final saved = moved.toTimetable(id: moved.sourceId, mode: LectureMode.video);
+    final saved = moved.toTimetable(
+      id: moved.sourceId,
+      mode: LectureMode.video,
+    );
     final restored = TimetableClass.fromJson(saved.toJson());
     expect(
       restored.meetings.where((m) => m.date == '2026-10-21'),
@@ -226,7 +263,9 @@ void main() {
     );
     expect(room.meetings.map((m) => m.classroom).toSet(), {'X349'});
     expect(
-      data.courses.singleWhere((c) => c.codeAndSection == 'STS2008-02').departments,
+      data.courses
+          .singleWhere((c) => c.codeAndSection == 'STS2008-02')
+          .departments,
       ['전인교육원'],
     );
     expect(
