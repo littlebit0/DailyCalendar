@@ -32,7 +32,7 @@ class HanbatHeldPeriodsTest(unittest.TestCase):
 
     def test_extends_slot_and_keeps_courses_without_clock(self):
         data = self.data()
-        self.assertEqual(apply_hanbat.apply(data), ['a', 'c', 'e', 'f'])
+        self.assertEqual(apply_hanbat.apply(data), ['a', 'c', 'd', 'e', 'f'])
         a, b, c, d, e, f = data['courses']
         self.assertEqual(a['scheduleStatus'], 'scheduled')
         # 13교시 21:30 시작, 14교시는 55분 슬롯으로 이어 23:20까지, 한 구간으로 합침.
@@ -50,7 +50,10 @@ class HanbatHeldPeriodsTest(unittest.TestCase):
         for online in (e, f):  # 학교가 실시간 시각이 없다고 밝힌 온라인 강좌
             self.assertEqual(online['scheduleStatus'], 'unscheduled')
             self.assertEqual(online['schedules'], [])
-        for held in (b, d):
+        # 반교시 2.5 = 2교시 슬롯 끝 직후 30분(11:00~11:30), 1교시와 간격 60분이라 나눈다.
+        self.assertEqual([(m['startMinute'], m['endMinute']) for m in d['schedules'][:2]],
+                         [(540, 600), (660, 690)])
+        for held in (b,):
             self.assertEqual(held['scheduleStatus'], 'unrecognized')
             self.assertEqual(held['schedules'], [])
 

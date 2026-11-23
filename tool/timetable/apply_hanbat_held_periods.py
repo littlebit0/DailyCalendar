@@ -26,8 +26,11 @@ https://www.hanbat.ac.kr/kor/sub05_030301.do (2026-11-23 조회)
     https://www.hanbat.ac.kr/kor/sub05_030304.do), 연합교양 2('화14,15', 2026-07-22 학사공지 안내자료:
     구글 클래스룸 동영상 14회+지역탐방 1회).
 
-보류 유지: 분수 교시('수2.5', 1·2차 개설표·학과 공지에 정의 없음), 시각 근거가 없는
-현장실습·현장과제 등. 교시 묶음과 강의실 수가 맞지 않으면 기존 정규 예약처럼 강의실을 비운다. 이미 scheduled인 강좌는 건드리지 않는다. 재실행해도
+  - 반교시 'N.5'(캡스톤디자인(2) '수1,수2.5' 4강좌): 1·2차 개설표와 데이터셋 전체에 '.5'
+    표기는 이 4강좌뿐이라 다른 강좌의 공표 시각으로 뜻을 확인할 수 없다. 2026-11-23 사용자
+    결정으로 N교시 슬롯 끝 직후 30분(2.5교시 = 11:00~11:30)으로 읽는다. 슬롯·합치기 규칙은 같다.
+
+보류 유지: 시각 근거가 없는 현장실습·현장과제 등. 교시 묶음과 강의실 수가 맞지 않으면 기존 정규 예약처럼 강의실을 비운다. 이미 scheduled인 강좌는 건드리지 않는다. 재실행해도
 바뀌지 않는다.
 
     python3 tool/timetable/apply_hanbat_held_periods.py
@@ -60,6 +63,8 @@ NOTE = (' 공식 요일·교시로 정규 예약했습니다(운영 방식·폐�
 NOTE14 = ' 14교시 이후는 공식 교시표의 13교시 슬롯(55분)으로 이어 계산했습니다.'
 NOTE15 = (' 15교시는 학과 공표 시간표(23:15~00:05)대로 자정을 넘으므로 다음 날 00:00~00:15'
           ' 구간으로 나눴습니다.')
+NOTE_HALF = (' 반교시 N.5는 원문에 정의가 없어 N교시 슬롯 끝 직후 30분으로 읽었습니다'
+             '(2026-11-23 사용자 결정).')
 NO_CLOCK = {
     'ocu': ('노마드칼리지', 'OCU 온라인 강좌(2026-07-22 성인학습자 전담학과 수강신청 안내)'),
     'service': ('사회봉사', '사회봉사: 이론 2시간+봉사활동 30시간(학사안내 sub05_030304)'),
@@ -74,8 +79,6 @@ def spans(schedule, room_text):
     text = (schedule or '').replace(' ', '')
     if not text or text == 'None':
         return None, 'no-time'
-    if '.' in text:
-        return None, '분수 교시 공식 규칙 없음'
     matches = list(re.finditer(r'([월화수목금토일])([^월화수목금토일]+)', text))
     if not matches or ''.join(m[0] for m in matches) != text:
         return None, '교시 표기 미확인'
@@ -87,14 +90,17 @@ def spans(schedule, room_text):
         day = DAYS.index(m[1]) + 1
         room = rooms[0 if len(rooms) == 1 else j]
         ps = m[2].strip(',').split(',')
-        if day == 7 or not all(p.isdigit() for p in ps):
+        if day == 7 or not all(re.fullmatch(r'\d+(\.5)?', p) for p in ps):
             return None, '교시 표기 미확인'
         clock = SAT if day == 6 else WEEK
-        for p in map(int, ps):
+        for token in ps:
+            p = int(float(token))
             if p not in clock:
                 return None, '교시 표기 미확인'
-            out.append({'weekday': day, 'startMinute': clock[p][0],
-                        'endMinute': clock[p][1], 'classroom': room, 'period': p})
+            # 반교시 'N.5' = N교시 슬롯 끝 직후 30분(사용자 결정 2026-11-23).
+            a, b = (clock[p][1], clock[p][1] + 30) if '.' in token else clock[p]
+            out.append({'weekday': day, 'startMinute': a, 'endMinute': b,
+                        'classroom': room, 'period': p})
     return out, ''
 
 
@@ -178,6 +184,8 @@ def apply(data):
             note += NOTE14
         if any(p['period'] == 15 for p in parts):
             note += NOTE15
+        if '.' in c['sourceSchedule']:
+            note += NOTE_HALF
         c['remarks'] = note
         changed.append(c['sourceId'])
     return changed
