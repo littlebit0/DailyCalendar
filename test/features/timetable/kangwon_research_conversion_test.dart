@@ -33,16 +33,20 @@ void main() {
       expect(courses, hasLength(5761));
       expect(courses.map((c) => c.sourceId).toSet(), hasLength(5761));
       expect(datasets.map((d) => d.campus).toSet(), hasLength(5));
-      expect(courses.where((c) => !c.hasSchedulableMeetings), hasLength(653));
+      expect(courses.where((c) => !c.hasSchedulableMeetings), hasLength(198));
       for (final course in courses) {
         if (!course.hasSchedulableMeetings) {
-          // Rows whose official timetable cell is empty are time-unpublished.
+          // 원문 시간표 칸이 비었거나 '0'뿐(강의실도 '0')이면 시간 미정, 같은
+          // 교시를 여러 번 적은 표기('토1,1,1')만 모순으로 보류한다.
+          final source = course.sourceSchedule.trim();
           expect(
             course.scheduleStatus,
-            course.sourceSchedule.trim().isEmpty
-                ? 'unscheduled'
-                : 'unrecognized',
+            source.isEmpty || source == '0' ? 'unscheduled' : 'unrecognized',
+            reason: course.sourceId,
           );
+          if (course.scheduleStatus == 'unrecognized') {
+            expect(source, matches(RegExp(r'^[토일],?(\d+),\1,\1$')));
+          }
           continue;
         }
         final saved = course.toTimetable(
@@ -65,16 +69,19 @@ void main() {
     () {
       final service = courses.where((c) => c.code == '14207025').toList();
       expect(service, hasLength(137));
-      expect(service.where((c) => c.hasSchedulableMeetings), hasLength(135));
-      for (final section in ['01', '02']) {
+      expect(service.where((c) => c.period != null), hasLength(135));
+      // 기관 시각이 없는 01·02분반은 원문 요일·교시(목·수 10,11교시)로 확정한다.
+      for (final (section, weekday) in [('01', 4), ('02', 3)]) {
+        final course = service.singleWhere((c) => c.section == section);
+        expect(course.period, isNull);
         expect(
-          service
-              .singleWhere((c) => c.section == section)
-              .hasSchedulableMeetings,
-          isFalse,
+          course.meetings.map(
+            (m) => (m.weekday, m.originalStartMinute, m.originalEndMinute),
+          ),
+          [(weekday, 1080, 1200)],
         );
       }
-      for (final course in service.where((c) => c.hasSchedulableMeetings)) {
+      for (final course in service.where((c) => c.period != null)) {
         final restored = TimetableClass.fromJson(
           course
               .toTimetable(id: course.sourceId, mode: LectureMode.inPerson)
@@ -97,6 +104,34 @@ void main() {
           isEmpty,
         );
       }
+    },
+  );
+
+  test(
+    'Official day-period rows map to the published Kangwon period clock',
+    () {
+      List<(int, int, int, String)> meetings(String id) => [
+        for (final m in courses.singleWhere((c) => c.sourceId == id).meetings)
+          (m.weekday, m.originalStartMinute, m.originalEndMinute, m.classroom),
+      ];
+      // A7은 공식 표(A1~A6, 90분 슬롯)를 같은 길이로 이어 18:00부터다.
+      expect(meetings('kangwon/gangneung/2026/2/61400002/02'), [
+        (1, 1080, 1170, 'C2-107'),
+      ]);
+      // 10~15교시 실습: 15교시는 60분 슬롯으로 이어 23:00~24:00.
+      expect(meetings('kangwon/dogye/2026/2/53100095/1'), [
+        (3, 1080, 1440, '보건과학관 응급간호학실습실(320호)'),
+      ]);
+      final repeated = courses.singleWhere(
+        (c) => c.sourceId == 'kangwon/samcheok/2026/2/81220004/2',
+      );
+      expect(repeated.scheduleStatus, 'unrecognized');
+      expect(repeated.sourceSchedule, '토1,1,1');
+      final zero = courses.singleWhere(
+        (c) => c.sourceId == 'kangwon/gangneung/2026/2/22205004/01',
+      );
+      expect(zero.scheduleStatus, 'unscheduled');
+      expect(zero.sourceSchedule, '0');
     },
   );
 
