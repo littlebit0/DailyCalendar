@@ -13,7 +13,9 @@
   (`미정`, 빈 값, `(6-8)`) unscheduled 그대로 둔다.
 - 날짜: 원문 period 안의 같은 요일 날짜에서 공휴일(9/24~26, 10/3, 10/5 대체, 10/9)과
   중간(10/20~26)·기말(12/14~18) 주간을 뺀다. 기존 scheduled 강좌가 쓰는 날짜와 같다.
-- 원문끼리 모순이면 `unrecognized`: 서울 교직 0교시(08:40 시작 공지와 일반 08:00 시작).
+- 서울 교직 0교시: 같은 교시표 PDF의 '교직과목0교시 설정 수업시간:08:40~'와 과목 원문 비고
+  '*수업시작시간 8:40'(APPLY_DEPT)이 있는 강좌는 0교시를 08:40~1교시 시작(09:00) 슬롯으로 보고
+  이어지는 1교시와 합친다(예: 수(0-1) → 08:40~10:30). 일반 0교시 08:00보다 구체적인 규칙이다.
 
 근거(2026-11-23 curl 재확인, sha256 8528da9c…dc1d9 일치):
 - 서울·세종 정규학기 교시표: https://koreanstudies.korea.ac.kr/bbs/software/352/181231/download.do
@@ -54,11 +56,18 @@ EVIDENCE = {
     ],
     'checkedDate': '2026-11-23',
     'rule': '교시 시작~다음 교시 시작 직전 슬롯, 표 밖 교시는 60분 슬롯으로 이어 계산, 0교시 08:00~08:50',
+    'seoulTeachingPeriod0': {
+        'sourceText': '교직과목0교시 설정 수업시간:08:40~',
+        'courseRemark': '*수업시작시간 8:40',
+        'startMinute': 520,
+        'slotEnd': '1교시 시작 09:00(다음 교시 시작 직전까지)',
+    },
 }
 CONFIRMED = '공식 요일·교시 기준 확정(운영 방식 미표기는 대면으로 간주).'
 UNDATED_LINE = " 요일이 '미정'인 원문 줄은 시각을 만들지 않았습니다."
-TEACHING_ZERO = ('미확정(추가 불가): 교직 0교시 08:40 시작 원문과 일반 0교시 08:00 시작 원문이 서로 달라 '
-                 '시각을 만들지 않았습니다.')
+TEACHING_ZERO_NOTE = (" 교직 0교시는 공식 교시표의 '교직과목0교시 설정 수업시간:08:40~'와 과목 비고 "
+                      "'수업시작시간 8:40'에 따라 08:40부터 1교시 시작(09:00)까지를 0교시 슬롯으로 계산했습니다.")
+TEACHING_REMARK = '수업시작시간 8:40'
 PAST_MIDNIGHT = ('미확정(추가 불가): 원문 교시 번호를 공식 교시표 간격으로 이어 계산하면 24시를 넘어 '
                  '시각으로 바꿀 수 없습니다.')
 
@@ -111,9 +120,12 @@ def parse_lines(course):
     return out, skipped
 
 
-def weekly_segments(campus, lines):
+def weekly_segments(campus, lines, teaching0=False):
     segs, fixed = [], []
     for wd, a, b, room in lines:
+        if a == 0 and teaching0:  # 교직 0교시 08:40~09:00 슬롯, 1교시와 이어진다
+            segs.append((wd, 520, slot(campus, b)[1] if b >= 1 else 540, room))
+            continue
         if a == 0:
             fixed.append((wd, 480, 530, room))
             a = 1
@@ -151,9 +163,15 @@ def dated(course, weekly):
     return [x[3] for x in sorted(out, key=lambda x: x[:3])]
 
 
+def teaching_zero(course):
+    apply_dept = (course.get('sourceEducationalMetadata') or {}).get('APPLY_DEPT') or ''
+    return course['campus'] == 'seoul' and TEACHING_REMARK in apply_dept
+
+
 def build(course):
     lines, skipped = parse_lines(course)
-    return dated(course, weekly_segments(course['campus'], lines)), skipped
+    weekly = weekly_segments(course['campus'], lines, teaching_zero(course))
+    return dated(course, weekly), skipped
 
 
 def key(schedules):
@@ -227,11 +245,6 @@ def apply(path):
         if status == 'scheduled' or src in ('', '미정'):
             continue
         hold = c['remarks']
-        if 'teaching-course0 starts08:40' in hold or TEACHING_ZERO in hold:
-            c['scheduleStatus'], c['schedules'] = 'unrecognized', []
-            c['remarks'] = replace_hold(hold, TEACHING_ZERO)
-            counts['unrecognized:teaching-zero'] = counts.get('unrecognized:teaching-zero', 0) + 1
-            continue
         try:
             schedules, skipped = build(c)
         except Unparsable as e:
@@ -244,7 +257,8 @@ def apply(path):
             continue
         c['scheduleStatus'], c['schedules'] = 'scheduled', schedules
         c['remarks'] = replace_hold(hold.replace(PARTIAL_SENTENCE, ''),
-                                    CONFIRMED + (UNDATED_LINE if skipped else ''))
+                                    CONFIRMED + (UNDATED_LINE if skipped else '')
+                                    + (TEACHING_ZERO_NOTE if teaching_zero(c) else ''))
         if 'sourcePartialCoverage' in c:
             c['sourcePartialCoverage'] = bool(skipped)
         label = f'scheduled:from-{status}'

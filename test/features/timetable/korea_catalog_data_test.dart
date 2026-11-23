@@ -201,7 +201,7 @@ void main() {
       'seoul': (
         [540, 630, 720, 810, 900, 990, 1080, 1140, 1200, 1260],
         [615, 705, 795, 885, 975, 1065, 1130, 1190, 1250, 1310],
-        63492,
+        63656,
       ),
       'sejong': (
         [540, 600, 660, 720, 780, 840, 900, 960, 1020, 1080, 1140, 1200, 1260],
@@ -229,7 +229,7 @@ void main() {
           // `토(0-1)`, SAEK334·SAEK434 `일(0-1)`)와 지리교육과 `토(0)` 3개 강좌(GEOG172·272·372,
           // 2026-11-23 확정)가 쓴다. 근거는 수강신청 교시표 사본
           // (source-current-ui-regular-campus-clock-education.json의 0교시 행)이다.
-          // 교직 0교시 강좌 12개는 08:40 시작 원문과 모순이라 unrecognized로 보류되어 여기 오지 않는다.
+          // 교직 0교시 강좌 12개는 교직과목 0교시(08:40~) 원문으로 520에서 시작해 여기 오지 않는다.
           if (start == 480) continue;
           expect(
             starts.contains(start) && periodEnds.contains(end),
@@ -292,7 +292,18 @@ void main() {
         expect(c['remarks'], contains('미확정(추가 불가)'), reason: id);
       }
     }
-    expect(statuses, {'scheduled': 83, 'unrecognized': 18});
+    expect(statuses, {'scheduled': 95, 'unrecognized': 6});
+
+    // 교직 0교시는 08:40 시작, 1교시 시작(09:00)까지를 0교시 슬롯으로 보고 1교시와 합친다.
+    final teaching = byId['korea/seoul/2026-2/SEDU101-01']!;
+    expect(teaching['sourceSchedule'], '수(0-1) 교육관 501호');
+    expect(
+      {
+        for (final s in teaching['schedules'] as List)
+          (s['weekday'], s['startMinute'], s['endMinute'], s['classroom']),
+      },
+      {(3, 520, 630, '교육관 501호')},
+    );
 
     // 서울 화(10-12): 10교시 21:00 시작, 표 밖 11·12교시는 60분 슬롯으로 이어 24:00까지.
     final lab = byId['korea/seoul/2026-2/KMSE302-01']!;

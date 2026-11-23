@@ -204,9 +204,18 @@ List<Map<String, dynamic>> koreaOfficialSchedules(Map<String, dynamic> c) {
       ));
     }
   }
+  // 서울 교직 0교시: 교시표 '교직과목0교시 설정 수업시간:08:40~'와 과목 비고 '*수업시작시간 8:40'.
+  final teaching0 =
+      campus == 'seoul' &&
+      ((c['sourceEducationalMetadata'] as Map?)?['APPLY_DEPT'] as String? ?? '')
+          .contains('수업시작시간 8:40');
   final weekly = <(int, int, int, String)>[];
   final open = <(int, int, int, String)>[];
   for (var (wd, a, b, r) in lines) {
+    if (a == 0 && teaching0) {
+      open.add((wd, 520, b >= 1 ? _koreaSlot(campus, b).$2 : 540, r));
+      continue;
+    }
     if (a == 0) {
       weekly.add((wd, 480, 530, r));
       a = 1;
