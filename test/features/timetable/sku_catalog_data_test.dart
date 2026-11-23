@@ -216,14 +216,20 @@ void main() {
           expect(actualSpans, expectedSpans);
         }
       }
-      // 학칙 학사내규 제6조: 21~26교시는 75분 수업이다. 3시간·3학점인데 화 22(75분)
-      // 하나뿐인 영어회화(EGM025-01)는 수업시간이 맞지 않아 보류한다.
-      expect(scheduled.where((c) => c.code == 'EGM025'), isEmpty);
+      // 3시간·3학점인데 화 22 하나뿐인 영어회화(EGM025-01)는 최신 공개 시간표 책의
+      // 요일·교시를 같은 슬롯 규칙(22교시 10:30~12:00)으로 예약한다(2026-11-23).
+      final egm = scheduled.singleWhere((c) => c.code == 'EGM025');
+      expect(
+        egm.meetings
+            .map((m) => '${m.originalStartMinute}-${m.originalEndMinute}')
+            .toSet(),
+        {'630-720'},
+      );
       expect(rows, 1698);
       expect(seen, hasLength(1698));
       expect(closedRows, 104);
-      expect(scheduled, hasLength(1537));
-      expect(slots, 19236);
+      expect(scheduled, hasLength(1538));
+      expect(slots, 19249);
       expect(night, greaterThan(0));
       expect(seventyFive, greaterThan(0));
       expect(fifty, greaterThan(0));
@@ -245,7 +251,7 @@ void main() {
         final restored = TimetableSyncDocument.fromJson(
           jsonDecode(jsonEncode(document.toJson())) as Map<String, dynamic>,
         ).materializeClasses();
-        expect(restored, hasLength(1537));
+        expect(restored, hasLength(1538));
         for (final c in restored) {
           final prior = before[c.sourceId]!;
           expect(c.isValid, isTrue);
