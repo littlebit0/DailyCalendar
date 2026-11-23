@@ -10,6 +10,8 @@ import '../../support/file_asset_bundle.dart';
 // 수강편람 교시표: 50분제 50분+쉬는 시간 10분(60분 슬롯), 75분제 75분+15분(90분
 // 슬롯), 야간 45분+5분(50분 슬롯). 연속 교시는 한 구간으로 합쳐 저장한다.
 const _slotStarts = {
+  // -1·0교시는 표 밖이라 같은 60분 슬롯으로 이어 계산(2026-11-23 사용자 결정)
+  420, 480,
   540, 600, 660, 720, 780, 840, 900, 960, 1020, // 50분제
   630, 810, 990, // 75분제 2B·5B·8B 시작(1A·4A·7A는 50분제와 같은 시작)
   1110, 1160, 1210, 1260, 1310, // 야간
@@ -61,7 +63,7 @@ void main() {
           }
         }
       }
-      expect(segments, 37651);
+      expect(segments, 41769);
     },
   );
   test(
@@ -188,6 +190,38 @@ void main() {
           }
         }
       }
+    },
+  );
+  test(
+    'Jeju courses with an official day and period are placed whatever the delivery label',
+    () async {
+      // 2026-11-23 user decision: 원격·블렌디드·거점국립대 표기와 무관하게 공식
+      // 요일·교시로 확정하고, 토요일은 같은 교시 규칙을 쓴다. 원문에 시각이 없는
+      // 강좌(시간표자료없음 등)만 추가 불가로 남는다.
+      final datasets = await UniversityCatalog.load(
+        bundle: FileAssetBundle(),
+        university: 'jeju',
+      );
+      final courses = datasets.expand((d) => d.courses).toList();
+      expect(courses, hasLength(3095));
+      expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(2090));
+      final held = courses.where((c) => c.scheduleStatus == 'unrecognized');
+      expect(held, hasLength(1005));
+      expect(
+        held.where((c) => c.sourceSchedule == '시간표자료없음'),
+        hasLength(935),
+      );
+      final saturday = courses.singleWhere(
+        (c) => c.sourceId == 'jeju/unknown/2026-2/KN0001',
+      );
+      expect(saturday.sourceSchedule, startsWith('거점국립대 [] 토5'));
+      expect(saturday.meetings.first.weekday, DateTime.saturday);
+      expect(saturday.meetings.first.originalStartMinute, 13 * 60);
+      expect(saturday.meetings.first.originalEndMinute, 14 * 60);
+      expect(
+        saturday.toTimetable(id: saturday.sourceId, mode: LectureMode.inPerson).isValid,
+        isTrue,
+      );
     },
   );
 }
