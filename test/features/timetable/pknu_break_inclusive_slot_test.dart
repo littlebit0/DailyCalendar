@@ -6,7 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 // 부경대 교시 슬롯 = 수업 + 쉬는 시간: 50분 교시는 60분, 75분 교시는 90분.
 // 같은 과목·날짜·강의실의 연속 교시는 한 구간으로 합쳐 저장한다.
 void main() {
-  const expectedSegments = {'unknown': 625, 'daeyeon': 40335};
+  const expectedSegments = {'unknown': 2014, 'daeyeon': 44227};
   for (final campus in expectedSegments.keys) {
     test('pknu $campus 교시 슬롯이 쉬는 시간을 포함하고 연속 교시가 합쳐짐', () {
       final data =
@@ -56,4 +56,25 @@ void main() {
       expect(total, expectedSegments[campus]);
     });
   }
+  // 혼합 수업이라 보류했던 강좌도 공식 화·목 75분 교시로 확정한다(apply_pknu_held_periods.py).
+  test('pknu 보류였던 화5 목5 75분 강좌가 15:00~16:30으로 확정됨', () {
+    final data =
+        jsonDecode(
+              File('assets/timetable/pknu-daeyeon-2026-2.json').readAsStringSync(),
+            )
+            as Map<String, dynamic>;
+    final course = (data['courses'] as List).singleWhere(
+      (c) => c['sourceId'] == 'pknu-2026-2-112671-101',
+    );
+    expect(course['scheduleStatus'], 'scheduled');
+    expect(course['schedules'].first, {
+      'weekday': 2,
+      'startMinute': 900,
+      'endMinute': 990,
+      'classroom': 'C23-312',
+      'sourcePeriod': 5,
+      'sourceMinuteUnit': 75,
+      'date': '2026-09-01',
+    });
+  });
 }
