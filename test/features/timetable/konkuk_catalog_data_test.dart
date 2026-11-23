@@ -21,7 +21,22 @@ const _seoulClock = {
 };
 const _days = '월화수목금토일';
 
+// Seoul 융합대학 rows with an empty 강의시간 give the host time in 비고.
+final _remarkTime = RegExp(
+  r'강의요시: ([월화수목금토일]) (\d{2}):(\d{2})~(\d{2}):(\d{2})',
+);
+
 List<(int, int, int)> _expected(UniversityCourse course) {
+  if (course.sourceSchedule.isEmpty) {
+    return [
+      if (_remarkTime.firstMatch(course.remarks) case final m?)
+        (
+          _days.indexOf(m[1]!) + 1,
+          int.parse(m[2]!) * 60 + int.parse(m[3]!),
+          int.parse(m[4]!) * 60 + int.parse(m[5]!),
+        ),
+    ];
+  }
   final seoul = course.campus == 'seoul';
   final pattern = seoul
       ? RegExp(r'([월화수목금토일])(\d{2})(?:-(\d{2}))?')
@@ -109,7 +124,7 @@ void main() {
       hasLength(423),
     );
     expect(courses.where((c) => c.departments.contains('교직과')), hasLength(22));
-    expect(byStatus, {'scheduled': 3743, 'unscheduled': 191});
+    expect(byStatus, {'scheduled': 3749, 'unscheduled': 185});
     // Rows the GLOCAL timetable marks 폐강 stay in the catalog; none publishes a time.
     final closed = courses.where((c) => c.remarks.contains('강의시간표 폐강 표시'));
     expect(closed, hasLength(53));
@@ -124,6 +139,24 @@ void main() {
     expect(untimed.scheduleStatus, 'unscheduled');
     expect(untimed.meetings, isEmpty);
     final approved = courses.where((c) => c.hasSchedulableMeetings).toList();
+    // 비고 강의요시 rows use the host university's HH:mm time as-is.
+    final remarkTimed = approved.where((c) => c.sourceSchedule.isEmpty);
+    expect(remarkTimed, hasLength(6));
+    final xr = remarkTimed.singleWhere(
+      (c) => c.sourceId == 'konkuk/seoul/2026/2/4264',
+    );
+    expect(
+      [
+        for (final m in xr.meetings)
+          (m.weekday, m.originalStartMinute, m.originalEndMinute),
+      ],
+      [(1, 540, 710)],
+    );
+    final online = courses.singleWhere(
+      (c) => c.sourceId == 'konkuk/seoul/2026/2/4253',
+    );
+    expect(online.remarks.contains('강의요시: 온라인'), isTrue);
+    expect(online.scheduleStatus, 'unscheduled');
     // 집중이수 rows are scheduled only within the weeks the timetable publishes.
     final intensive = approved.where((c) => c.remarks.contains('집중이수제: '));
     expect(intensive, hasLength(96));
@@ -154,7 +187,7 @@ void main() {
         reason: c.sourceId,
       );
     }
-    expect(approved.expand((c) => c.meetings), hasLength(4940));
+    expect(approved.expand((c) => c.meetings), hasLength(4946));
     for (final mode in [
       LectureMode.inPerson,
       LectureMode.liveOnline,
