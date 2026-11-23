@@ -26,13 +26,33 @@ class KongjuHeldPeriodsTest(unittest.TestCase):
         self.assertTrue(c['remarks'].endswith(' 이수구분: 원문.'))
         self.assertEqual(c['sourceSchedule'], '화10 화8 화9')
 
-    def test_saturday_night_and_no_period_rows_stay_held(self):
-        sat = held('토8,9,10', ['normalDayPeriod10plusNotPublishedOrNightScopeUnknown'])
-        self.assertEqual(convert_public(sat, DATES), 'saturday10plus')
+    def test_saturday_late_periods_follow_weekday_night_clock(self):
+        sat = held('토13,14,15', ['normalDayPeriod10plusNotPublishedOrNightScopeUnknown'])
+        self.assertIsNone(convert_public(sat, DATES))
+        self.assertEqual([(s['weekday'], s['startMinute'], s['endMinute']) for s in sat['schedules']],
+                         [(6, 1230, 1380)])
+        self.assertIn('토요일 10교시 이후도 평일 야간 시각', sat['remarks'])
+
+    def test_no_period_rows_stay_held(self):
         none = held('', ['noPublishedWeekdayPeriod'])
         self.assertTrue(convert_public(none, DATES))
-        for c in (sat, none):
-            self.assertEqual((c['scheduleStatus'], c['schedules']), ('unrecognized', []))
+        self.assertEqual((none['scheduleStatus'], none['schedules']), ('unrecognized', []))
+
+    def test_variant_with_own_title_and_professor_wins(self):
+        c = held('월8/수7,8', ['sameNativeSourceVariantsClockRoomOrTeacherConflict'], '사범2관 (401)')
+        c.update(courseName='수질오염론', professor='이정현', campus='singwan', courseCode='200775901')
+        rows = c['sourceEducationalMetadata']['originalPublishedRowVariants']
+        rows[0].update(courseTitle='수질오염론', professor='이정현')
+        rows.append({'periodRaw': '목5,6,7', 'roomRaw': '사범2관 (401)', 'hours': '3',
+                     'courseTitle': '신재생에너지와미래환경', 'professor': ''})
+        self.assertIsNone(convert_public(c, DATES))
+        self.assertEqual(sorted({s['weekday'] for s in c['schedules']}), [1, 3])
+        same = copy.deepcopy(c)
+        same.update(scheduleStatus='unrecognized', schedules=[])
+        same['sourceEducationalMetadata']['holdReasons'] = ['sameNativeSourceVariantsClockRoomOrTeacherConflict']
+        same['sourceEducationalMetadata']['originalPublishedRowVariants'][1].update(
+            courseTitle='수질오염론', professor='이정현')
+        self.assertEqual(convert_public(same, DATES), 'variantConflict')
 
     def test_continuation_line_needs_matching_hours(self):
         self.assertIsNotNone(periodic_blocks('화2,3,4\n6,7,8\n목2,3,4', '5공208', '9'))

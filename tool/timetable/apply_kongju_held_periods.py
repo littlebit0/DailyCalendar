@@ -3,10 +3,25 @@
 Clock: 2026-2 강의일람표 본책 (https://www.kongju.ac.kr/bbs/KNU/2128/655398/download.do),
 "XIII. 강의시간" table 212 (0~9교시, 50분 수업 + 10분 휴식, 0교시 08:00) and the
 night table 213 printed under it (평일 10~14교시 18:00~18:45, 18:50~19:35,
-19:40~20:25, 20:30~21:15, 21:20~22:05). The book gives no other 10교시 clock, so
-the weekday night row applies to every weekday 10+ period. Its Saturday row
-(10교시 13:00) would put 토8,9,10 or 토10,11,12 before or over the same row's or
-room's own day periods, so Saturday 10+ periods stay held as contradictory.
+19:40~20:25, 20:30~21:15, 21:20~22:05; 학사운영 규정 제17조 same clock). The
+weekday night row applies to every weekday 10+ period.
+
+Saturday 10+ (2nd review 2026-11-23): table 213's Saturday row (10교시 13:00)
+contradicts the same rooms' own Saturday sequence (토7,8,9 15:00 -> 토10,11,12 ->
+토13,14,15 in one room, 토8,9,10 -> 토11,12,13 back to back), and the latest
+official notices put these Saturday periods in the evening: 강사 추가채용 1차
+(https://kongju.ac.kr/bbs/KNU/2165/654781/download.do, 2026-07-16) asks
+전기전자제어공학부(주말과정) 정보통신공학개론 for "주말(토요일) 저녁강의", and the
+Cheonan contract-department timetable prints 토11,12,13 as 17:55~20:20. So
+Saturday 10+ uses the weekday clock (18:00 night table), like the already
+scheduled 토0~9 rows; 15교시 continues with the same 50-minute slot (22:10).
+전기전자응용공학과 종합프로젝트Ⅱ (9공807) uses its department's printed clock
+(CONTRACT_CLOCK).
+
+Variant rows of one 9-digit number that print another title or professor are
+other courses with a reused number; the variant matching the course's own title
+and professor is used (and, for 학군단 rows printed in both campus tables, the
+one whose room is on the course's campus).
 
 Held reasons that only said the operation (field/intensive/block, remote),
 the published closure list, or the missing 10+ clock was uncertain are
@@ -29,7 +44,7 @@ from pathlib import Path
 
 PATHS = sorted(Path('assets/timetable').glob('kongju-*-2026-2.json'))
 WEEKDAYS = '월화수목금토'
-NIGHT = {10: 1080, 11: 1130, 12: 1180, 13: 1230, 14: 1280}  # table 213 평일 row
+NIGHT = {10: 1080, 11: 1130, 12: 1180, 13: 1230, 14: 1280, 15: 1330}  # table 213 평일 row; 15 continued
 CONVERTIBLE = {
     'individualFieldIntensiveOrBlockOperatingBoundsUnknown',
     'currentPublishedClosure',
@@ -37,10 +52,18 @@ CONVERTIBLE = {
     'remoteOrAsynchronousOperationNotActuallyAllocated',
     'unrecognizedLiteralPeriodSyntax',
     'actualRoomUnpublished',
+    'sameNativeSourceVariantsClockRoomOrTeacherConflict',
 }
+# 전기전자응용공학과 계약학과 공지 시간표 (https://homepage.kongju.ac.kr/bbs/ZD9003/1352/429486/artclView.do
+# 첨부 654927): 종합프로젝트Ⅱ 토11,12,13 17:55~20:20 [9공807], same room and periods as this row.
+CONTRACT_CLOCK = {'200928901': (6, 1075, 1220)}
+CHEONAN_ROOM = re.compile(r'\(?(\d+공|기초)')
 HOLD = re.compile(r' 보류: [A-Za-z0-9]+(?:, [A-Za-z0-9]+)*')
 NOTE = ' 공식 강의일람표의 요일·교시로 예약했습니다(운영 방식·폐강 여부는 판단하지 않음).'
 NIGHT_NOTE = ' 10교시 이후는 같은 책 강의시간 표의 평일 야간 시각(10교시 18:00~18:45, 45분 수업·5분 휴식)을 따랐습니다.'
+SATURDAY_NOTE = (' 토요일 10교시 이후도 평일 야간 시각을 따랐습니다(같은 강의실의 토요일 교시 순서와 강사 채용 공고의'
+                 ' "주말(토요일) 저녁강의"가 표 213 토요일 13:00과 맞지 않음).')
+CONTRACT_NOTE = ' 학과 공지 계약학과 시간표의 같은 과목·강의실 시각(토 17:55~20:20)을 따랐습니다.'
 EMPLOYER_HELD = ' 사업주훈련예정·승인 여부에 따른 변경 가능으로 예약 보류.'
 EMPLOYER_NOTE = ' 원문 비고 "사업주훈련예정"(승인 여부에 따라 변경 가능)이 있으나 원문 실제수업시간으로 예약했습니다.'
 
@@ -50,7 +73,7 @@ def lesson(period, weekday):
     if 0 <= period <= 9:
         start = 480 + 60 * period
         return start, start + 50, start + 60
-    if weekday != 6 and period in NIGHT:
+    if period in NIGHT:
         start = NIGHT[period]
         return start, start + 45, NIGHT.get(period + 1, start + 50)
     return None
@@ -144,16 +167,26 @@ def convert_public(c, dates):
     reasons = meta.get('holdReasons') or []
     if not set(reasons) <= CONVERTIBLE:
         return 'reason:' + ','.join(sorted(set(reasons) - CONVERTIBLE))
-    variants = {(v['periodRaw'], v['roomRaw'], v['hours']) for v in meta['originalPublishedRowVariants']}
+    rows = meta['originalPublishedRowVariants']
+    if len({(v['periodRaw'], v['roomRaw'], v['hours']) for v in rows}) > 1:
+        own = [v for v in rows if v.get('courseTitle') == c['courseName'] and v.get('professor') == c['professor']]
+        if len({(v['periodRaw'], v['roomRaw'], v['hours']) for v in own}) > 1:
+            own = [v for v in own if bool(CHEONAN_ROOM.match(v['roomRaw'])) == (c['campus'] == 'cheonan')]
+        rows = own
+    variants = {(v['periodRaw'], v['roomRaw'], v['hours']) for v in rows}
     if len(variants) != 1:
         return 'variantConflict'
     raw, room, hours = variants.pop()
     parsed = periodic_blocks(raw, room, hours)
     if not parsed:
-        return 'saturday10plus' if re.search(r'토[^월화수목금]*1\d', raw) else 'unreadable'
+        return 'unreadable'
     exact, blocks = parsed
     m = HOLD.search(c['remarks'])
-    note = NOTE + (NIGHT_NOTE if any(max(b['nativePeriods']) >= 10 for b in exact) else '')
+    late = {b['weekday'] for b in exact if max(b['nativePeriods']) >= 10}
+    note = NOTE + (NIGHT_NOTE if late else '') + (SATURDAY_NOTE if 6 in late else '')
+    if c.get('courseCode') in CONTRACT_CLOCK:
+        wd, start, end = CONTRACT_CLOCK[c['courseCode']]
+        blocks, note = [[wd, start, end, room]], NOTE + CONTRACT_NOTE
     if m:
         reword(c, m[0], note)
     c['scheduleStatus'] = 'scheduled'
