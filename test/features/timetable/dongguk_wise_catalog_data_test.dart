@@ -127,4 +127,32 @@ void main() {
     expect(wise.timetableCampus, 'wise');
     expect(wise.timetableSupported, isTrue);
   });
+
+  test('a department label printed under two WISE colleges keeps each '
+      "course's own college", () async {
+    final courses = (await UniversityCatalog.load(
+      bundle: FileAssetBundle(),
+      university: 'dongguk',
+    )).singleWhere((d) => d.campus == 'wise').courses;
+    Set<String?> colleges(String code) => {
+      for (final o in courses
+          .singleWhere((c) => c.codeAndSection == code)
+          .offeringOrganizations)
+        if (o.department == '창의융합공학부') o.college,
+    };
+    expect(colleges('CCE20218-01'), {'과학기술대학'});
+    expect(colleges('EES13225-01'), {'글로컬에너지대학'});
+    for (final c in courses.where(
+      (c) => c.departments.contains('창의융합공학부'),
+    )) {
+      expect(
+        {
+          for (final o in c.offeringOrganizations)
+            if (o.department == '창의융합공학부') o.college,
+        },
+        {c.departments.first},
+        reason: c.sourceId,
+      );
+    }
+  });
 }
