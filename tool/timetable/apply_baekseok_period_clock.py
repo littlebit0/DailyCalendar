@@ -151,9 +151,9 @@ DAY_ONLY_NOTE = (
     '표기는 시각을 만들지 않고 시간 미정으로 둔다는 규칙(광운대 사례)에 따라 시간 미정으로 둡니다(조회 2026-11-23).'
 )
 EMT_NOTE = (
-    '보건학부 시간표 책자 응급구조학과 4학년 안내에 「종합응급처치실습2」와 「응급구조학각론」이 '
-    '"집중이수제(1-5주, 1-8주 더블수업)"로 운영된다고 적혀 있으나 어느 과목이 어느 주차인지 정해져 있지 않아 '
-    '수업 날짜를 정할 수 없어 원문 교시만 표시하고 시간표 추가를 보류합니다.'
+    '원문 요일·교시는 "{schedule}"입니다. 집중이수 주차 미공개: 보건학부 시간표 책자 응급구조학과 4학년 안내의 '
+    '"집중이수제(1-5주, 1-8주 더블수업)"가 「종합응급처치실습2」와 「응급구조학각론」 중 어느 과목이 어느 주차인지 '
+    '정하지 않아 매주 반복으로 넣지 않고 시간 미정으로 둡니다.'
 )
 
 
@@ -206,7 +206,7 @@ def week_limited(c, rows):
             or (code, sec) in OT3_CHAPEL:
         return dated(rows, lambda w: week_dates(w, start=OT3_START, end=OT3_END)), OT3_NOTE
     if code in EMT_CODES and '응급구조학과' in remark:
-        return None, EMT_NOTE
+        return None, EMT_NOTE.format(schedule=c.get('sourceSchedule') or '')
     return False
 
 
@@ -253,7 +253,7 @@ def apply(data):
                 c['schedules'] = rows
                 c['remarks'] = note
             elif limited[0] is None:
-                c['scheduleStatus'] = 'unrecognized'
+                c['scheduleStatus'] = 'unscheduled'
                 c['schedules'] = []
                 c['remarks'] = limited[1]
             else:

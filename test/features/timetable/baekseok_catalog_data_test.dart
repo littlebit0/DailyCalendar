@@ -128,7 +128,7 @@ void main() {
     for (final c in data.courses) {
       byStatus[c.scheduleStatus] = (byStatus[c.scheduleStatus] ?? 0) + 1;
     }
-    expect(byStatus, {'scheduled': 2382, 'unscheduled': 185, 'unrecognized': 4});
+    expect(byStatus, {'scheduled': 2382, 'unscheduled': 189});
     // 비고 "13~15주차/백석연수원/집중이수": 수업 주차 현황의 13~15주차와 연수원 1박 2일만
     final ai = data.courses.singleWhere((c) => c.codeAndSection == '32065-01');
     expect(ai.meetings.map((m) => m.date), [
@@ -155,7 +155,7 @@ void main() {
           .where((c) => ['09957', '08956'].contains(c.code))
           .map((c) => c.scheduleStatus)
           .toSet(),
-      {'unrecognized'},
+      {'unscheduled'},
     );
     // 목5,6 → 13:00~15:00 (5교시 13:00 시작, 60분 슬롯 두 개)
     final music = data.courses.singleWhere(
