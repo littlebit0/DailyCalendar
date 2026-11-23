@@ -274,8 +274,19 @@ void main() {
         }
       }
       expect(splitByProfessor, hasLength(6));
-      expect(segments, 1690);
-      expect(minutes, 3933 * 60);
+      // 현장·임상실습·캡스톤·폐강 대조 행 10개도 원문 교시로 확정했다(apply_nsu_held_periods.py).
+      expect(segments, 1858);
+      expect(minutes, 4376 * 60);
+      final courses = (asset['courses'] as List).cast<Map<String, dynamic>>();
+      expect(courses.where((c) => c['scheduleStatus'] != 'scheduled'), isEmpty);
+      final capstone = courses.firstWhere(
+        (c) => c['sourceId'] == 'nsu-image102907-g3-d2-p6-bandg3tue-upper-s01',
+      );
+      final first = (capstone['schedules'] as List).first as Map;
+      expect(
+        [first['weekday'], first['startMinute'], first['endMinute']],
+        [2, 840, 1080],
+      );
     },
   );
 }
