@@ -39,23 +39,34 @@ class ImportMjuAssetTests(unittest.TestCase):
         courses, counts, closed = [], {}, 0
         for campus in ('humanities', 'natural'):
             data = json.loads((ROOT / f'assets/timetable/mju-{campus}-2026-2.json').read_text(encoding='utf-8'))
-            excluded = data['excludedClosedCourses']['courses']
-            self.assertEqual(data['sourceRowCount'], len(data['courses']) + len(excluded))
-            self.assertFalse({e['courseCode'] for e in excluded} & {c['courseCode'] for c in data['courses']})
-            closed += len(excluded)
+            listed = data['closureListing']['courseCodes']
+            self.assertEqual(data['sourceRowCount'], len(data['courses']))
+            self.assertTrue(set(listed) <= {c['courseCode'] for c in data['courses']})
+            closed += len(listed)
             self.assertEqual(sum(data['courseScheduleStatusCounts'].values()), len(data['courses']))
             for c in data['courses']:
                 counts[c['scheduleStatus']] = counts.get(c['scheduleStatus'], 0) + 1
                 self.assertEqual(bool(c['schedules']), c['scheduleStatus'] == 'scheduled', c['sourceId'])
             courses += data['courses']
-        # 1523 printed rows minus 79 in the 2026-09-09 final closure list.
+        # All 1523 printed rows; 79 are also on the 2026-09-09 final closure list.
         self.assertEqual(closed, 79)
-        self.assertEqual(len(courses), 1444)
-        self.assertEqual(len({c['courseCode'] for c in courses}), 1444)
-        self.assertEqual(sum(counts.values()), 1444)
+        self.assertEqual(len(courses), 1523)
+        self.assertEqual(len({c['courseCode'] for c in courses}), 1523)
+        self.assertEqual(sum(counts.values()), 1523)
         labels = {d for c in courses for d in c['departments']}
         org = json.loads((ROOT / 'assets/timetable/organizations/mju.json').read_text(encoding='utf-8'))
         self.assertEqual({m['sourceLabel'] for m in org['mappings']}, labels)
+
+
+class ImportMjuRequiredTests(unittest.TestCase):
+    def test_subject_names_match_without_spaces(self):
+        self.assertIn(mju.subject_key('DB설계 및 구현1'), mju.REQUIRED_KEYS['융합소프트웨어학부 응용소프트웨어전공'])
+
+    def test_choice_and_subgroup_subjects_are_not_required(self):
+        # 화학나노학전공 lists only 택 1 choices; 문헌정보학전공 is under 필수해제 신청.
+        self.assertNotIn('화학·에너지융합학부 화학나노학전공', mju.MAJOR_REQUIRED)
+        self.assertNotIn('인문콘텐츠학부 문헌정보학전공', mju.MAJOR_REQUIRED)
+        self.assertNotIn('국제학생을위한경영학개론1', mju.MAJOR_REQUIRED['경영학부 경영학전공'])
 
 
 if __name__ == '__main__':

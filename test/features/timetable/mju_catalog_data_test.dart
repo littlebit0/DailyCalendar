@@ -39,32 +39,62 @@ void main() {
         expect(c.offeringOrganizations, isNotEmpty, reason: c.sourceId);
       }
     }
-    // 1523 printed rows minus 79 closed in the 2026-09-09 final closure list.
-    expect(total, 1444);
-    expect(ids, hasLength(1444));
+    // Every printed row stays a course; closure is not judged (2026-11-23).
+    expect(total, 1523);
+    expect(ids, hasLength(1523));
     expect(byStatus, {
-      'scheduled': 1368,
-      'unrecognized': 65,
+      'scheduled': 1493,
+      'unrecognized': 19,
       'unscheduled': 11,
     });
   });
 
-  test('courses in the official final closure list cannot be added', () {
+  test('closure-listed rows stay courses and only a remark notes the list', () {
     final natural = _json('assets/timetable/mju-natural-2026-2.json');
     final humanities = _json('assets/timetable/mju-humanities-2026-2.json');
-    final codes = {
-      'natural': {for (final c in natural['courses']) c['courseCode']},
-      'humanities': {for (final c in humanities['courses']) c['courseCode']},
-    };
-    // 캡스톤디자인1 (자연 0529), 법논리학2 (인문 5938) are closed on 2026-09-09.
-    expect(codes['natural'], isNot(contains('0529')));
-    expect(codes['humanities'], isNot(contains('5938')));
-    final closed = {
-      for (final raw in [natural, humanities])
-        for (final c in raw['excludedClosedCourses']['courses'])
-          c['courseCode'],
-    };
-    expect(closed, containsAll(['0529', '5938']));
-    expect(closed, hasLength(79));
+    final listed = <String>{};
+    for (final raw in [natural, humanities]) {
+      final codes = {
+        for (final c in raw['courses'] as List) c['courseCode'] as String,
+      };
+      final noted = {
+        for (final c in raw['courses'] as List)
+          if ((c['remarks'] as String).contains('최종폐강 강좌 내역'))
+            c['courseCode'] as String,
+      };
+      final codesListed = (raw['closureListing']['courseCodes'] as List)
+          .cast<String>()
+          .toSet();
+      expect(codesListed, noted);
+      expect(codes, containsAll(codesListed));
+      listed.addAll(codesListed);
+    }
+    // 캡스톤디자인1 (자연 0529), 법논리학2 (인문 5938) are on the 2026-09-09 list.
+    expect(listed, containsAll(['0529', '5938']));
+    expect(listed, hasLength(79));
+  });
+
+  test('전공필수 only from the latest-admission 학사안내문 table', () {
+    final directory = CourseOrganizationDirectory.fromJson(
+      _json('assets/timetable/organizations/mju.json'),
+    );
+    var required = 0;
+    for (final campus in ['humanities', 'natural']) {
+      final raw = _json('assets/timetable/mju-$campus-2026-2.json');
+      final courses = UniversityDataset.fromJson(
+        raw,
+        organizationDirectory: directory,
+      ).courses;
+      for (final c in courses) {
+        final labels = c.departmentClassifications.values.toSet();
+        expect(labels.difference({'전공필수'}), isEmpty, reason: c.sourceId);
+        expect(c.sourceClassification, isEmpty, reason: c.sourceId);
+        if (labels.isNotEmpty) {
+          required++;
+          expect(c.sourceRemarks, contains('전공필수 2025학번 이후'));
+        }
+      }
+    }
+    expect(required, 167);
   });
 }
