@@ -11,11 +11,23 @@ https://www.hanbat.ac.kr/kor/sub05_030301.do (2026-11-23 조회)
   11교시 19:35, 12교시 20:30, 13교시 21:30~22:20.
   토요일 1~5교시 09:00부터 60분 간격, 6교시 14:00부터 55분 간격, 13교시 20:25~21:15.
 슬롯 끝은 기존 정규 예약과 같다(다음 교시 시작, 마지막 교시는 직전 슬롯 길이).
-14교시 이후는 13교시 슬롯(55분)으로 이어 계산한다. 월~금 15교시는 이어 계산하면
-24:15에 끝나 하루 범위(24:00)를 넘으므로 보류한다.
+14교시 이후는 13교시 슬롯(55분)으로 이어 계산한다.
 
-보류 유지: 원문 시간 없음(None), 분수 교시('수2.5', 공식 규칙 없음), 하루를 넘는
-교시. 교시 묶음과 강의실 수가 맞지 않으면 기존 정규 예약처럼 강의실을 비운다. 이미 scheduled인 강좌는 건드리지 않는다. 재실행해도
+2차 재검토(2026-11-23 사용자 반려):
+  - 15교시: 기계소재융합시스템공학과 2026-2 시간표(안)(2026-07-23 학과 공지
+    https://www.hanbat.ac.kr/prog/bbsArticle/BBSMSTR_000000000207/view.do?nttId=B000000168507Vp1yV6f
+    첨부 이미지)가 14교시 22:20~23:10, 15교시 23:15~00:05로 자정을 넘는 교시를 공표했다.
+    따라서 이어 계산한 15교시(23:20~)를 자정에서 나눠 다음 날 00:00~00:15 구간을 둔다
+    (인하대 '목21~32' 선례와 같은 방식). 학교 교시표의 13교시(21:30)를 기준으로 이어 계산하며
+    학과 표의 5분 앞선 시각은 쓰지 않는다(기존 13·14교시 정규 예약과 일관).
+  - 원문 시간 없음 중 학교가 실시간 수업 시각이 없다고 밝힌 강좌는 시간 미정으로 둔다:
+    노마드칼리지 OCU 온라인 교양 24(융합건설시스템학과 2026-07-22 수강신청 안내 'OCU
+    (열린사이버대학교) 온라인 수강과목'), 사회봉사 7(학사안내 사회봉사: 이론 2시간+봉사 30시간,
+    https://www.hanbat.ac.kr/kor/sub05_030304.do), 연합교양 2('화14,15', 2026-07-22 학사공지 안내자료:
+    구글 클래스룸 동영상 14회+지역탐방 1회).
+
+보류 유지: 분수 교시('수2.5', 1·2차 개설표·학과 공지에 정의 없음), 시각 근거가 없는
+현장실습·현장과제 등. 교시 묶음과 강의실 수가 맞지 않으면 기존 정규 예약처럼 강의실을 비운다. 이미 scheduled인 강좌는 건드리지 않는다. 재실행해도
 바뀌지 않는다.
 
     python3 tool/timetable/apply_hanbat_held_periods.py
@@ -46,6 +58,15 @@ assert SAT[6] == (840, 895) and SAT[13] == (1225, 1280)
 HELD_PREFIX = ' 예약 보류: '
 NOTE = (' 공식 요일·교시로 정규 예약했습니다(운영 방식·폐강 여부는 판단하지 않음, 이전 보류 사유: {}).')
 NOTE14 = ' 14교시 이후는 공식 교시표의 13교시 슬롯(55분)으로 이어 계산했습니다.'
+NOTE15 = (' 15교시는 학과 공표 시간표(23:15~00:05)대로 자정을 넘으므로 다음 날 00:00~00:15'
+          ' 구간으로 나눴습니다.')
+NO_CLOCK = {
+    'ocu': ('노마드칼리지', 'OCU 온라인 강좌(2026-07-22 성인학습자 전담학과 수강신청 안내)'),
+    'service': ('사회봉사', '사회봉사: 이론 2시간+봉사활동 30시간(학사안내 sub05_030304)'),
+    'joint': ('', '연합교양대학 온라인 동영상+지역탐방(2026-07-22 학사공지 안내자료)'),
+}
+JOINT = {'대전의 재발견', '인문학의 향기'}
+NO_CLOCK_NOTE = ' 학교가 정한 실시간 수업 시각이 없어 시간 미정으로 둡니다({}).'
 
 
 def spans(schedule, room_text):
@@ -70,8 +91,8 @@ def spans(schedule, room_text):
             return None, '교시 표기 미확인'
         clock = SAT if day == 6 else WEEK
         for p in map(int, ps):
-            if p not in clock or clock[p][1] > 1440:
-                return None, '이어 계산한 교시가 24:00을 넘음'
+            if p not in clock:
+                return None, '교시 표기 미확인'
             out.append({'weekday': day, 'startMinute': clock[p][0],
                         'endMinute': clock[p][1], 'classroom': room, 'period': p})
     return out, ''
@@ -97,7 +118,29 @@ def meetings(parts):
                 else:
                     result.append(m)
         d += dt.timedelta(days=1)
-    return result
+    out = []
+    for m in result:  # 자정을 넘는 구간(15교시)은 다음 날 00:00부터 이어 둔다.
+        out.append(m)
+        if m['endMinute'] > 1440:
+            nxt = dt.date.fromisoformat(m['date']) + dt.timedelta(days=1)
+            out.append({'weekday': nxt.isoweekday(), 'startMinute': 0,
+                        'endMinute': m['endMinute'] - 1440, 'classroom': m['classroom'],
+                        'date': nxt.isoformat()})
+            m['endMinute'] = 1440
+    return out
+
+
+def no_clock(c):
+    """학교가 실시간 수업 시각이 없다고 밝힌 강좌의 근거. 아니면 None."""
+    dept = c['metadata']['originalEducationalFields'].get('openingDepartment')
+    if c['courseName'] in JOINT:
+        return NO_CLOCK['joint'][1]
+    if c['sourceSchedule'] in ('None', '', None):
+        for key in ('ocu', 'service'):
+            name, why = NO_CLOCK[key]
+            if dept == name or (key == 'service' and c['courseName'] == name):
+                return why
+    return None
 
 
 def apply(data):
@@ -109,6 +152,15 @@ def apply(data):
             assert parts and meetings(parts) == c['schedules'], c['sourceId']
             continue
         if c['scheduleStatus'] != 'unrecognized':
+            continue
+        why = no_clock(c)
+        if why:
+            c['scheduleStatus'] = 'unscheduled'
+            meta = c['metadata']
+            meta['formerHeldReason'] = meta.get('heldReason', '')
+            meta['heldReason'] = ''
+            c['remarks'] = c['remarks'].split(HELD_PREFIX)[0] + NO_CLOCK_NOTE.format(why)
+            changed.append(c['sourceId'])
             continue
         parts, _ = spans(c['sourceSchedule'], c['sourceClassroom'])
         if not parts:
@@ -124,6 +176,8 @@ def apply(data):
         note = c['remarks'].split(HELD_PREFIX)[0] + NOTE.format(reason or '없음')
         if any(p['period'] >= 14 for p in parts):
             note += NOTE14
+        if any(p['period'] == 15 for p in parts):
+            note += NOTE15
         c['remarks'] = note
         changed.append(c['sourceId'])
     return changed

@@ -10,11 +10,13 @@ apply_hanbat = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(apply_hanbat)
 
 
-def course(sid, schedule, room, reason):
+def course(sid, schedule, room, reason, name='과목', dept='학과'):
     return {'sourceId': sid, 'sourceSchedule': schedule, 'sourceClassroom': room,
+            'courseName': name,
             'scheduleStatus': 'unrecognized', 'schedules': [],
             'remarks': '원문 비고' + apply_hanbat.HELD_PREFIX + reason,
-            'metadata': {'heldReason': reason}}
+            'metadata': {'heldReason': reason,
+                         'originalEducationalFields': {'openingDepartment': dept}}}
 
 
 class HanbatHeldPeriodsTest(unittest.TestCase):
@@ -24,12 +26,14 @@ class HanbatHeldPeriodsTest(unittest.TestCase):
             course('b', 'None', '', '개별 강의실 미확인'),
             course('c', '화13,14,15', '그린에너지관(609)', '공식 시각 범위 밖 교시'),
             course('d', '수1,수2.5', '기계관(501),기계관(501)', '분수 교시 실제 시작·종료 시각 미확인'),
+            course('e', 'None', '', '개별 강의실 미확인', '모두의 인공지능', '노마드칼리지'),
+            course('f', '화14,15', '', '개별 강의실 미확인', '인문학의 향기', '교무처'),
         ]}
 
     def test_extends_slot_and_keeps_courses_without_clock(self):
         data = self.data()
-        self.assertEqual(apply_hanbat.apply(data), ['a'])
-        a, b, c, d = data['courses']
+        self.assertEqual(apply_hanbat.apply(data), ['a', 'c', 'e', 'f'])
+        a, b, c, d, e, f = data['courses']
         self.assertEqual(a['scheduleStatus'], 'scheduled')
         # 13교시 21:30 시작, 14교시는 55분 슬롯으로 이어 23:20까지, 한 구간으로 합침.
         self.assertEqual(a['schedules'][0], {'weekday': 1, 'startMinute': 1290, 'endMinute': 1400,
@@ -37,7 +41,16 @@ class HanbatHeldPeriodsTest(unittest.TestCase):
         self.assertNotIn('2026-10-05', [m['date'] for m in a['schedules']])
         self.assertTrue(a['remarks'].startswith('원문 비고 공식 요일·교시로 정규 예약'))
         self.assertEqual(a['metadata']['heldReason'], '')
-        for held in (b, c, d):
+        # 15교시는 학과 공표 시간표대로 자정을 넘어 다음 날 00:00~00:15로 나눈다.
+        self.assertEqual(c['schedules'][:2], [
+            {'weekday': 2, 'startMinute': 1290, 'endMinute': 1440,
+             'classroom': '그린에너지관(609)', 'date': '2026-09-01'},
+            {'weekday': 3, 'startMinute': 0, 'endMinute': 15,
+             'classroom': '그린에너지관(609)', 'date': '2026-09-02'}])
+        for online in (e, f):  # 학교가 실시간 시각이 없다고 밝힌 온라인 강좌
+            self.assertEqual(online['scheduleStatus'], 'unscheduled')
+            self.assertEqual(online['schedules'], [])
+        for held in (b, d):
             self.assertEqual(held['scheduleStatus'], 'unrecognized')
             self.assertEqual(held['schedules'], [])
 
