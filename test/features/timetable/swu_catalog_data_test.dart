@@ -161,7 +161,8 @@ void main() {
         (c) => c.code == '1111111' || c.code == '1111112',
       )) {
         // 대면 경건회 01~05분반만 9/16 개강부터 공식 교시로 확정한다(2026-11-23 사용자 결정).
-        if (c.code == '1111111' && int.parse(c.section) <= 5) {
+        if ((c.code == '1111111' && int.parse(c.section) <= 5) ||
+            c.code == '1111112') {
           expect(
             c.meetings
                     .map((m) => m.date!)
@@ -174,7 +175,7 @@ void main() {
           expect(c.meetings, isEmpty);
         }
       }
-      expect(courses.where((c) => c.meetings.isNotEmpty), hasLength(1327));
+      expect(courses.where((c) => c.meetings.isNotEmpty), hasLength(1328));
     },
   );
 
@@ -329,7 +330,8 @@ void main() {
               final date = timetableDateKey(day);
               // 대면 경건회는 9/16 개강.
               final chapelBefore =
-                  c.code == '1111111' && date.compareTo('2026-09-16') < 0;
+                  (c.code == '1111111' || c.code == '1111112') &&
+                  date.compareTo('2026-09-16') < 0;
               if (day.weekday == b['weekday'] &&
                   !holidayDates.contains(date) &&
                   !chapelBefore) {
@@ -382,7 +384,7 @@ void main() {
     LectureMode.video,
   ]) {
     test(
-      '1327 published plans 21083 dates actual full sync roundtrip $mode',
+      '1328 published plans 21095 dates actual full sync roundtrip $mode',
       () {
         final values = <String, TimetableSyncValue>{};
         var count = 0;
@@ -412,8 +414,8 @@ void main() {
             'research',
           );
         }
-        expect(count, 21083);
-        expect(values, hasLength(1327));
+        expect(count, 21095);
+        expect(values, hasLength(1328));
         final doc = TimetableSyncDocument.records(
           courses: values,
           schemaVersion: 2,
@@ -421,7 +423,7 @@ void main() {
         final json =
             jsonDecode(jsonEncode(doc.toJson())) as Map<String, dynamic>;
         final restored = TimetableSyncDocument.fromJson(json);
-        expect(restored.materializeClasses(), hasLength(1327));
+        expect(restored.materializeClasses(), hasLength(1328));
         for (final c in restored.materializeClasses()) {
           expect(c.isValid, true);
           expect(c.toJson(), values[timetableCourseSyncKey(c)]!.value);

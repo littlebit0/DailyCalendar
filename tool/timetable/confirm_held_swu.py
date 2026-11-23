@@ -11,8 +11,10 @@ Clock: the dataset's regular rows use periods 1-6 as 90-minute slots from
 The regular pattern includes the makeup days on which another weekday's
 classes are held (e.g. 12/8 holds Monday classes), read from the dataset's
 regular rows.
-Rows without a weekday ('방학중') and the separate chapel code whose '일1'
-contradicts the official notice stay held.
+The separate chapel code (1111112) shows '일1' only in the official course
+list; the official timetable's weekday and period are used as published
+(2026-11-23 instruction), on the regular Sunday pattern. Rows without a
+weekday ('방학중') stay held.
 
     python3 tool/timetable/confirm_held_swu.py
 """
@@ -30,7 +32,9 @@ PATH = 'assets/timetable/swu-main-2026-2.json'
 DAYS = '월화수목금토일'
 NOTE = common.DECISION + '.'
 CHAPEL_START = '2026-09-16'
-DROP_LINES = ('10주 집중이수 강좌입니다.', '합숙/캠프형 바롬인성교육은', '전체 경건회 회차별 운영일은 추가 확인 필요.')
+# Dataset audit regularTeachingDatesThrough; a generated Sunday pattern stops here too.
+REGULAR_THROUGH = '2026-12-07'
+DROP_LINES = ('별도 경건회 코드의 일1 표시는', '10주 집중이수 강좌입니다.', '합숙/캠프형 바롬인성교육은', '전체 경건회 회차별 운영일은 추가 확인 필요.')
 
 
 def slot(period):
@@ -114,7 +118,7 @@ def main():
             continue
         remark = '\n'.join((course.get('departmentRemarks') or {}).values()) or course.get('remarks') or ''
         text = course['sourceSchedule']
-        if text.startswith('방학중') or '공식 운영안내와 대조되지 않아' in remark:
+        if text.startswith('방학중'):
             held.append(text)
             continue
         found = meetings(text)
@@ -123,7 +127,8 @@ def main():
         else:
             dates = regular
         if course['courseName'] == '경건회':
-            dates = {w: [d for d in v if d >= CHAPEL_START] for w, v in regular.items()}
+            dates = {w: [d for d in v if d >= CHAPEL_START and (w != 7 or d <= REGULAR_THROUGH)]
+                     for w, v in regular.items()}
         if course['courseName'] == '바롬인성교육':
             schedules = common.expand(found, dates)
         else:
