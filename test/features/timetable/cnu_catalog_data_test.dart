@@ -105,20 +105,20 @@ void main() {
       isEmpty,
     );
     expect(courses.map((c) => c.sourceId).toSet(), hasLength(3888));
-    expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(2991));
+    expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(3206));
     expect(
       courses.where((c) => c.scheduleStatus == 'unscheduled'),
-      hasLength(635),
+      hasLength(682),
     );
     expect(
       courses.where((c) => c.scheduleStatus == 'unrecognized'),
-      hasLength(262),
+      isEmpty,
     );
     expect(
       courses.where((c) => c.remarks.contains('현재 폐강된 강좌')),
       hasLength(142),
     );
-    expect(courses.expand((c) => c.meetings), hasLength(77094));
+    expect(courses.expand((c) => c.meetings), hasLength(83129));
     for (final id in [
       '1372-2007-00',
       '1372-3004-00',
@@ -127,9 +127,9 @@ void main() {
       '1101-7019-51',
       '1101-7019-55',
     ]) {
+      // 2026-11-23 사용자 결정: 현장 운영 강좌도 공개 요일·시각으로 확정한다.
       final field = courses.singleWhere((c) => c.codeAndSection == id);
-      expect(field.hasSchedulableMeetings, isFalse);
-      expect(field.meetings, isEmpty);
+      expect(field.hasSchedulableMeetings, isTrue);
       expect(field.sourceSchedule, isNotEmpty);
     }
     final firstNormal = courses.singleWhere(
