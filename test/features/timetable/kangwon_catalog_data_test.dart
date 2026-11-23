@@ -56,7 +56,7 @@ void main() {
       final courses = [for (final d in data) ...d.courses];
       expect(courses, hasLength(5761));
       expect(courses.map((c) => c.sourceId).toSet(), hasLength(5761));
-      expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(5563));
+      expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(5615));
       expect(courses.where((c) => c.scheduleStatus == 'unrecognized'), isEmpty);
       for (final c in courses.where((c) => c.hasSchedulableMeetings)) {
         final saved = c.toTimetable(id: c.sourceId, mode: LectureMode.inPerson);

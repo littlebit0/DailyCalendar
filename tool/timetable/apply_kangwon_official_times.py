@@ -16,8 +16,12 @@ https://www.kangwon.ac.kr/ko/conts/465/web.do (2026-11-23 조회)
 - 운영 방식(이러닝·집중·현장실습·임상실습·봉사 등)이 불명확해도 원문 요일·교시로 확정한다.
 - 원문이 '0'뿐(요일 없음, 강의실도 '0')인 강좌는 시간표 칸이 빈 것과 같아 시각이 없다
   → unscheduled. 시각을 만들지 않는다.
-- 한 묶음에 같은 교시를 여러 번 적은 표기('토1,1,1', 3학점)는 교시로 해석할 수 없다
-  → 시각을 만들지 않고 unscheduled(시간 미정, 2026-11-23 사용자 결정). 원문은 그대로.
+- 한 묶음에 같은 교시를 여러 번 적은 삼척 이러닝 표기('토1,1,1', 3학점)는 그 교시 한 칸이다
+  (2차, 2026-11-23). 근거: 학사공지 pstSn=2540 첨부 LRS 시간표(자연어처리·유기화학 토1 등
+  15강좌가 같은 요일·교시 한 칸, '강의시간은 시험시간'), 춘천 같은 과목 1분반 원문 '토1'·'토4'
+  ·'토5'·'토6', 학사공지 pstSn=346(이러닝 강좌 수업시간(시험시간) 편성).
+- 원문 '0'이어도 pstSn=2540 첨부 표에 강좌번호가 있는 LRS·원격 강좌는 그 요일·시각으로 확정한다
+  (LRS_TIMES). 표에 없는 '0' 강좌(현장실습 등)만 unscheduled로 둔다.
 - 파싱 못 하는 표기는 그 강좌만 unrecognized로 남긴다.
 - 원문 필드는 바꾸지 않고, 비고의 옛 '시간표 추가 불가' 줄만 고친다.
 
@@ -35,6 +39,40 @@ NEW_NOTE = '공식 요일·교시 기준 확정(이러닝·집중·실습 등 �
 HELD_NOTE = '같은 교시가 여러 번 적혀 학점과 교시가 맞지 않음: 시간표 추가 불가'
 REPEATED_NOTE = '같은 교시가 여러 번 적혀 교시로 해석할 수 없음: 요일·시각 미정'
 NONE_NOTE = '원문 수업시간이 0으로만 표기됨: 요일·시각 미정'
+REPEATED_OK_NOTE = '같은 교시 반복 표기는 그 교시 한 칸(이러닝 수업·시험시간)으로 확정: 공식 LRS 시간표·같은 과목 춘천 분반 원문 기준'
+LRS_NOTE = '원문 수업시간 0: 공식 미래융합가상학과·강원LRS공유대학 시간표의 요일·시각(시험시간)으로 확정'
+
+# 2차(2026-11-23): 강원대 학사공지 '2026학년도 2학기 미래융합가상학과(융합전공) 개설 교과목
+# 및 시간표 안내'(강릉교육지원과, 2026-07-24) 첨부 엑셀. 본문: '강원LRS공유대학에서 정규학기에
+# 운영되는 교과목은 중간·기말 시험을 위하여 편성되었으며, 강의시간은 시험시간'.
+LRS_URL = 'https://www.kangwon.ac.kr/ko/bbs/720/detail.do?pstSn=2540'
+# 강좌번호 → 원문 강의시간 칸. 'n (HH:mm~HH:mm)' 교시는 숫자 교시 60분 슬롯과 같은 값이다.
+LRS_TIMES = {
+    '83090004': '일7 (15:00~16:00)', '83090010': '일8 (16:00~17:00)',
+    '83090022': '일6 (14:00~15:00)', '83090024': '일2 (10:00~11:00)',
+    '83090025': '일3 (11:00~12:00)', '83090026': '일1 (09:00~10:00)',
+    '83090029': '일5 (13:00~14:00)', '83090031': '토1 (09:00~10:00)',
+    '83170015': '일5 (13:00~14:00)', '83120002': '일7 (15:00~16:00)',
+    '83170011': '일2 (10:00~11:00)', '83120018': '일3 (11:00~12:00)',
+    '83120019': '일6 (14:00~15:00)', '83120022': '일8 (16:00~17:00)',
+    '83170010': '일7 (15:00~16:00)', '83170031': '일3 (11:00~12:00)',
+    '83170033': '일6 (14:00~15:00)', '83170034': '일8 (16:00~17:00)',
+    '83080005': '일09:00~10:00', '83080026': '일09:00~10:00',
+    '83020005': '일6 (14:00~15:00)', '83020007': '일3 (11:00~12:00)',
+    '83020017': '일7 (15:00~16:00)', '83020018': '일2 (10:00~11:00)',
+    '83020020': '토2 (10:00~11:00)', '83020021': '일5 (13:00~14:00)',
+    '83020031': '토7 (15:00~16:00)',
+}
+
+
+def lrs_meeting(text):
+    m = re.fullmatch(r'([토일])(?:(\d+) )?\(?(\d\d):(\d\d)~(\d\d):(\d\d)\)?', text)
+    if not m:
+        raise ValueError('unparsed_lrs_clock')
+    start, end = int(m[3]) * 60 + int(m[4]), int(m[5]) * 60 + int(m[6])
+    if m[2]:
+        assert slot(m[2])[:2] == (start, end), text  # 표의 교시와 시각이 교시표와 같다.
+    return [{'weekday': DAYS.index(m[1]) + 1, 'startMinute': start, 'endMinute': end, 'classroom': ''}]
 
 
 def slot(period):
@@ -52,6 +90,8 @@ def slot(period):
 # 공식 표 원문 값 고정 확인(수업 시작 시각).
 assert slot('A1')[0] == 540 and slot('A6')[0] == 990 and slot('1')[0] == 540
 assert slot('14')[0] == 1320 and slot('15') == (1380, 1440, 'N', 15)
+assert lrs_meeting('토1 (09:00~10:00)') == [{'weekday': 6, 'startMinute': 540, 'endMinute': 600, 'classroom': ''}]
+assert lrs_meeting('일09:00~10:00')[0]['weekday'] == 7
 
 
 def parse(source, embedded, room):
@@ -75,8 +115,11 @@ def parse(source, embedded, room):
                 raise ValueError('unbalanced_source_classroom')
             classroom = source[start:cursor - 1]
         periods = re.sub(r'\s+', '', m[2]).split(',')
-        if len(set(periods)) != len(periods):
-            # '토1,1,1'(3학점): 한 교시를 여러 번 적어 수업 시간과 교시가 모순된다.
+        if len(set(periods)) == 1:
+            # '토1,1,1'(이러닝 3학점): 공식 LRS 시간표·춘천 같은 과목 1분반 원문('토1')이
+            # 그 교시 한 칸(시험시간)이다(LRS_URL 참고).
+            periods = periods[:1]
+        elif len(set(periods)) != len(periods):
             raise ValueError('repeated_source_period')
         slots = sorted(slot(p) for p in periods)
         chunks = []
@@ -112,9 +155,25 @@ def main():
         # 일관성 검사: 기존 scheduled 강좌(봉사 기관 시각 강좌 제외) 전부를 다시 계산.
         for c in data['courses']:
             if c['scheduleStatus'] == 'scheduled' and c['courseCode'] != '14207025':
-                assert convert(c) == c['schedules'], c['sourceId']
-        counts = {'scheduled': 0, 'unscheduled': 0, 'unrecognized': {}}
+                if c['sourceSchedule'].strip() == '0':
+                    assert lrs_meeting(LRS_TIMES[c['courseCode']]) == c['schedules'], c['sourceId']
+                else:
+                    assert convert(c) == c['schedules'], c['sourceId']
+        counts = {'scheduled': 0, 'unscheduled': 0, 'unrecognized': {}, 'lrs': 0, 'repeated': 0}
         for c in data['courses']:
+            # 2차: 시간 미정으로 둔 '0'(LRS 강좌)과 '토1,1,1' 표기를 공식 LRS 시간표로 확정한다.
+            if c['scheduleStatus'] == 'unscheduled':
+                remarks = ' '.join(c['departmentRemarks'].values())
+                if NONE_NOTE in remarks and c['courseCode'] in LRS_TIMES:
+                    schedules, old, note, key = lrs_meeting(LRS_TIMES[c['courseCode']]), NONE_NOTE, LRS_NOTE, 'lrs'
+                elif REPEATED_NOTE in remarks:
+                    schedules, old, note, key = convert(c), REPEATED_NOTE, REPEATED_OK_NOTE, 'repeated'
+                else:
+                    continue
+                c['scheduleStatus'], c['schedules'] = 'scheduled', schedules
+                c['departmentRemarks'] = {k: v.replace(old, note) for k, v in c['departmentRemarks'].items()}
+                counts[key] += 1
+                continue
             if c['scheduleStatus'] != 'unrecognized':
                 continue
             if c['sourceSchedule'].strip() == '0' and c['sourceClassroom'].strip() == '0':
@@ -138,6 +197,13 @@ def main():
             'text': 'A1교시(75분) 09:00~10:15 … A6교시(75분) 16:30~17:45 / '
                     '1교시(50분) 09:00~09:50 … 14교시(50분) 22:00~22:50',
             'rule': '슬롯=교시 시작~다음 교시 시작(숫자 60분·A 90분), 15교시·A7~A9는 같은 슬롯 길이로 이어 계산'}
+        if campus in ('gangneung', 'samcheok'):
+            data['periodEvidence']['lrsTimetable'] = {
+                'url': LRS_URL, 'checkedDate': '2026-11-23',
+                'text': '강원LRS공유대학에서 정규학기에 운영되는 교과목은 중간·기말 시험을 위하여 '
+                        '편성되었으며, 강의시간은 시험시간 (첨부: 개설 교과목 및 시간표 취합 안내.xlsx, '
+                        '강원LRS공유대학 2026학년도 2학기 개설 교과목 시간표.xlsx)',
+                'rule': "원문 '0' LRS 강좌는 첨부 표의 요일·시각, 삼척 '토n,n,n' 이러닝은 그 교시 한 칸"}
         text = json.dumps(data, ensure_ascii=False, separators=(',', ':'))
         path.write_text(text + ('\n' if raw.endswith('\n') else ''), encoding='utf-8')
         report[campus] = counts
