@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """백석대 2026-2 학부 강좌의 교시 원문을 교시 시각으로 확정하고 시간 미정 강좌를 정리한다.
 
-근거: 교무처 「2026학년도 제2학기 수업시간표」 주요사항 책자
+근거: 간호학과 공지 「2026-1 자율실습 시간표」 첨부 교시표(1교시(9-10)~8교시(16-17))와 교무처 「2026학년도 제2학기 수업시간표」 주요사항 책자
 (https://www.bu.ac.kr/sites/web/files/sugang/2026_2/2026_2_juyo.pdf, PDF 43쪽, 인쇄 38쪽,
 C-4 원격교육 운영안내 ⑦ 출석정보 확인방법) 의 대면수업 예시
 "월요일 7교시" 강의시간 15:00-15:50, 다음 교시 16:00-16:50.
@@ -19,12 +19,14 @@ from pathlib import Path
 ASSET = Path(__file__).resolve().parents[2] / 'assets/timetable/baekseok-unknown-2026-2.json'
 HOLD = '학교 전체 교시 시각과 개별 운영·변경 사항을 검증하기 전으로 시간표 자동 추가를 보류합니다.'
 SOURCE = 'https://www.bu.ac.kr/sites/web/files/sugang/2026_2/2026_2_juyo.pdf'
+TABLE_URL = 'https://community.bu.ac.kr/bbs/nurse/915/54397/artclView.do'
+TABLE_FILE = 'https://community.bu.ac.kr/bbs/nurse/915/52175/download.do'
 CLOCK_NOTE = (
-    '교시 시각: 교무처 2026-2학기 수업시간표 주요사항 책자 38쪽(PDF 43쪽) 대면수업 예시 '
-    '"월요일 7교시" 15:00-15:50·다음 교시 16:00-16:50과 같은 60분 슬롯(50분 수업+10분)으로 '
-    '1교시 09:00부터 이어 계산했습니다(' + SOURCE + ', 조회 2026-11-23). '
-    '학부 교시표가 따로 공개되지 않아, 공식 근거가 없다는 것은 반증이 아니라는 원칙(호서대 교시표 적용 사례와 같음)에 따라 '
-    '학부 강좌 전체에 적용했습니다.'
+    '교시 시각: 간호학과 공지 「2026-1 자율실습 시간표」 첨부 교시표(Sheet1 A4~A11: 1교시(9-10)~8교시(16-17), '
+    + TABLE_URL + ')와 교무처 2026-2학기 수업시간표 주요사항 책자 38쪽(PDF 43쪽) 대면수업 예시 '
+    '"월요일 7교시" 15:00-15:50·다음 교시 16:00-16:50(' + SOURCE + ')에 따라 1교시 09:00부터 교시마다 '
+    '60분 슬롯(50분 수업+10분)으로 계산했습니다. 9·10교시는 같은 슬롯 길이로 이어 계산했습니다(조회 2026-11-23). '
+    '공식 교시표는 반대 근거가 없으면 학부 강좌 전체에 적용합니다(근거 없음은 반증이 아님, 호서대 사례).'
 )
 CYBER_NOTE = '"사"는 책자의 사이버(원격) 교시로 정해진 수업 시각이 없습니다.'
 UNTIMED_NOTE = '원문 시간표에 요일·교시가 없습니다(별도 운영).'
@@ -38,6 +40,7 @@ SEARCHED = [
     'https://www.bu.ac.kr/bbs/web/788/58632/artclView.do (2026-2 수업 운영 주요사항)',
     '2019~2025학기 주요사항 책자(sugang/<학기>/<학기>_juyo.pdf): 404',
     '공개 강의계획서: 포털 로그인 필요',
+    'https://community.bu.ac.kr/<학부>/ 학부·학과·교양대학 게시판 24개 사이트의 제목 검색(시간표·교시)',
 ]
 FIRST_START = 9 * 60
 SLOT = 60
@@ -129,15 +132,22 @@ def apply(data):
             c['schedules'] = meetings(parsed)
             c['remarks'] = CLOCK_NOTE + (' ' + CYBER_NOTE if has_cyber else '')
     data['periodEvidence'] = {
+        'periodTable': {
+            'articleUrl': TABLE_URL, 'attachmentUrl': TABLE_FILE,
+            'attachment': '26-1 자율실습 시간표.xlsx', 'sheet': 'Sheet1', 'cells': 'A4:A11',
+            'sha256': 'edda0f19ba7ef34e83b0541fa7a0dc49be6f81519f3a6dd7a4eb056ebb75cd76',
+            'literal': '1교시(9-10) 2교시(10-11) 3교시(11-12) 4교시(12-13) 5교시(13-14) 6교시(14-15) 7교시(15-16) 8교시(16-17)',
+            'note': '본문: 각 자율실습 시간은 정각-50분까지',
+        },
         'sourceUrl': SOURCE, 'pdfPage': 43, 'printedPage': 38, 'checkedAt': '2026-11-23',
         'literal': '대면수업 월요일 7교시 / 강의시간 15:00-15:50, 16:00-16:50',
         'rule': '1교시 09:00 시작, 교시마다 60분 슬롯(50분 수업+10분)',
         'scope': '계약학과 자체 시각(scopedClockProof)·직접 시각(sourceClockProof) 강좌 제외',
-        'basis': '근거 없음은 반증이 아님(DailyCalendar-Timetable 스킬 5장, 호서대 교시표 전체 적용 사례)',
+        'basis': '공식 교시표는 반대 근거가 없으면 전체 적용, 근거 없음은 반증이 아님(DailyCalendar-Timetable 스킬 5장, 호서대 사례); 9·10교시는 같은 60분 슬롯',
     }
     data['periodSearch'] = {
         'checkedAt': '2026-11-23',
-        'result': '학부 교시별 시각표 문서는 찾지 못함',
+        'result': '학칙·규정·책자에는 교시 시각표 없음; 간호학과 공지 첨부 교시표(1~8교시)에서 찾음',
         'searched': SEARCHED,
     }
     return data
