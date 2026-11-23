@@ -258,7 +258,8 @@ void main() {
       // (2026-11-23 사용자 결정). 같은 과목번호·과목명·교수의 원문 행끼리 시각만 다른
       // 고체역학·국제경영학은 두 수업 시간으로 모두 확정.
       expect(unrecognized, 0);
-      expect(unscheduled, 142);
+      // KNU창업옴니버스는 창업교육센터 공지의 목 15:00~17:00으로 확정해 141.
+      expect(unscheduled, 141);
       expect(resolved, hasLength(467));
       const holidays = {
         '2026-09-24',

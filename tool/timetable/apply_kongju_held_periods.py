@@ -29,7 +29,10 @@ scheduled. Rows with conflicting row variants are left as they are.
 Rows whose official time cell is empty, '-', '미개설' or '원격수업' print no weekday
 or period. No other public source (department and college notices, center
 notices, the book) gave a time, so they become unscheduled with their published
-fields kept (user decision 2026-11-23, round 3).
+fields kept (user decision 2026-11-23, round 3). Exception (SUPPLEMENT): 창업교육센터
+notice "26학년도 2학기 창업교과목 운영 및 수강 안내" (2026-08-10,
+https://startup.kongju.ac.kr/bbs/M02044/643/430296/artclView.do, image) prints KNU창업옴니버스
+as "목요일 7-8교시(15:00~17:00) 4공학관 228호", so that course is scheduled with the printed clock.
 
 Contract-department rows (sourceId kongju/cheonan/...) print their own clock
 (e.g. "08:30~11:20"); the ones held only for "사업주훈련예정" use that clock.
@@ -218,6 +221,30 @@ UNTIMED = {'': '시간 칸이 비어', '-': "시간 칸이 '-'여서", '미개�
 UNTIMED_NOTE = ' 공식 강의일람표 {} 요일·교시가 없으므로 시간 미정으로 둡니다(원문 행 유지, 2026-11-23 사용자 결정).'
 
 
+SUPPLEMENT = {  # sourceId: (weekday, start, end, room, note)
+    'kongju/current-public/2026/2/200482601': (
+        4, 900, 1020, '4공학관 228호',
+        ' 창업교육센터 공지(2026-08-10 "26학년도 2학기 창업교과목 운영 및 수강 안내" 안내 이미지)의'
+        ' "목요일 7-8교시(15:00~17:00), 4공학관 228호"로 예약했습니다.'),
+}
+
+
+def apply_supplement(datasets, dates):
+    changed = []
+    for data in datasets:
+        for c in data['courses']:
+            found = SUPPLEMENT.get(c['sourceId'])
+            if not found or c['scheduleStatus'] == 'scheduled':
+                continue
+            wd, start, end, room, note = found
+            c['schedules'] = meetings([[wd, start, end, room]], dates)
+            c['scheduleStatus'] = 'scheduled'
+            c['remarks'] = re.sub(r' 공식 강의일람표 [^.]*시간 미정으로 둡니다\([^)]*\)\.', '', c['remarks'])
+            c['remarks'] = HOLD.sub('', c['remarks']) + note
+            changed.append(c['sourceId'])
+    return changed
+
+
 def convert_untimed(c):
     why = UNTIMED.get((c['sourceSchedule'] or '').strip())
     if why is None:
@@ -242,10 +269,13 @@ def apply(datasets):
                 held = convert_public(c, public)
             else:
                 held = convert_contract(c, contract)
-            if held and c['sourceId'].startswith('kongju/current-public/'):
+            if held and c['sourceId'].startswith('kongju/current-public/') and c['sourceId'] not in SUPPLEMENT:
                 held = convert_untimed(c)
             key = held or 'scheduled'
             stats[key] = stats.get(key, 0) + 1
+    supplemented = apply_supplement(datasets, public)
+    if supplemented:
+        stats['supplement'] = len(supplemented)
     return stats
 
 

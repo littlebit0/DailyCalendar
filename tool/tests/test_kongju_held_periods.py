@@ -2,7 +2,8 @@ import copy
 import json
 import unittest
 
-from tool.timetable.apply_kongju_held_periods import PATHS, apply, convert_public, convert_untimed, periodic_blocks
+from tool.timetable.apply_kongju_held_periods import (PATHS, apply, apply_supplement, convert_public, convert_untimed,
+                                                     periodic_blocks)
 
 DATES = {wd: [f'2026-09-0{wd}'] for wd in range(1, 7)}
 
@@ -54,6 +55,17 @@ class KongjuHeldPeriodsTest(unittest.TestCase):
         printed = held('토①', ['other'])
         self.assertEqual(convert_untimed(printed), 'reason:printed')
         self.assertEqual(printed['scheduleStatus'], 'unrecognized')
+
+    def test_supplement_uses_startup_center_notice_clock(self):
+        c = held('', ['noPublishedWeekdayPeriod'])
+        c['sourceId'] = 'kongju/current-public/2026/2/200482601'
+        data = {'courses': [c]}
+        self.assertEqual(apply_supplement([data], DATES), [c['sourceId']])
+        self.assertEqual([(s['weekday'], s['startMinute'], s['endMinute'], s['classroom']) for s in c['schedules']],
+                         [(4, 900, 1020, '4공학관 228호')])
+        self.assertNotIn('보류', c['remarks'])
+        self.assertIn('창업교육센터 공지', c['remarks'])
+        self.assertEqual(apply_supplement([data], DATES), [])
 
     def test_variant_with_own_title_and_professor_wins(self):
         c = held('월8/수7,8', ['sameNativeSourceVariantsClockRoomOrTeacherConflict'], '사범2관 (401)')
