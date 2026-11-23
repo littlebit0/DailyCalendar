@@ -96,6 +96,9 @@ void main() {
           }
           final meetings = c['schedules'] as List;
           expect(meetings.isEmpty, (old['sourceSchedule'] as String).isEmpty);
+          if (meetings.isEmpty) {
+            expect(c['scheduleStatus'], 'unscheduled');
+          }
           if (meetings.isNotEmpty) {
             closedTimed++;
             expect(c['scheduleStatus'], 'scheduled');
@@ -128,7 +131,19 @@ void main() {
         final before = old['schedules'] as List;
         final after = c['schedules'] as List;
         expect(after.take(before.length).toList(), before);
-        if (after.length == before.length) {
+        if (after.isEmpty) {
+          // 2026-11-23 결정: 원문에 요일·교시가 없으면 시간 미정으로 추가할 수 있다.
+          expect(c['scheduleStatus'], 'unscheduled');
+          for (final field in old.keys) {
+            if (['scheduleStatus', 'departmentRemarks'].contains(field)) {
+              continue;
+            }
+            expect(c[field], old[field], reason: field);
+          }
+          for (final e in (old['departmentRemarks'] as Map).entries) {
+            expect(c['departmentRemarks'][e.key], startsWith(e.value));
+          }
+        } else if (after.length == before.length) {
           expect(c, old);
         } else {
           modified++;
@@ -149,6 +164,12 @@ void main() {
           (c) => (c['schedules'] as List).isEmpty,
         ),
         hasLength(32),
+      );
+      expect(
+        (candidate['courses'] as List).where(
+          (c) => c['scheduleStatus'] == 'unrecognized',
+        ),
+        isEmpty,
       );
       expect(candidate['completionClaim'], false);
       expect(candidate['wholeSchoolCourseCoverageComplete'], false);
