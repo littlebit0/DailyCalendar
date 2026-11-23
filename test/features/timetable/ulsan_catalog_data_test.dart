@@ -37,128 +37,173 @@ void main() {
     expect(period?.end, DateTime(2026, 12, 21));
   });
 
-  test('the official 2026 period clock places every course with a day and period', () {
-    final raw =
-        jsonDecode(
-              File(
-                'assets/timetable/ulsan-main-2026-2.json',
-              ).readAsStringSync(),
-            )
-            as Map<String, dynamic>;
-    final courses = UniversityDataset.fromJson(raw).courses;
-    expect(courses.map((c) => c.sourceId).toSet(), hasLength(2046));
-    final statuses = <String, int>{};
-    for (final row in raw['courses'] as List) {
-      final status = (row as Map)['scheduleStatus'] as String;
-      statuses[status] = (statuses[status] ?? 0) + 1;
-      if (status == 'unrecognized') {
-        expect(row['schedules'], isEmpty);
-        final remarks = (row['departmentRemarks'] as Map).values;
-        expect(remarks, everyElement(contains('수업 시각 미확정')));
+  test(
+    'the official 2026 period clock places every course with a day and period',
+    () {
+      final raw =
+          jsonDecode(
+                File(
+                  'assets/timetable/ulsan-main-2026-2.json',
+                ).readAsStringSync(),
+              )
+              as Map<String, dynamic>;
+      final courses = UniversityDataset.fromJson(raw).courses;
+      expect(courses.map((c) => c.sourceId).toSet(), hasLength(2046));
+      final statuses = <String, int>{};
+      for (final row in raw['courses'] as List) {
+        final status = (row as Map)['scheduleStatus'] as String;
+        statuses[status] = (statuses[status] ?? 0) + 1;
+        if (status == 'unrecognized') {
+          expect(row['schedules'], isEmpty);
+          final remarks = (row['departmentRemarks'] as Map).values;
+          expect(remarks, everyElement(contains('수업 시각 미확정')));
+        }
+        if (status == 'unscheduled') expect(row['sourceSchedule'], isEmpty);
       }
-      if (status == 'unscheduled') expect(row['sourceSchedule'], isEmpty);
-    }
-    expect(statuses, {
-      'scheduled': 1712,
-      'unrecognized': 17,
-      'unscheduled': 317,
-    });
+      expect(statuses, {'scheduled': 1729, 'unscheduled': 317});
 
-    final approved = courses.where((c) => c.hasSchedulableMeetings).toList();
-    expect(approved, hasLength(1712));
-    // 출처: tool/timetable/ulsan_honors_clock.json의 source(아너스칼리지 자율전공학부
-    // 학년별 시간표). 2026-11-23 사용자 결정으로 이 공식 교시표를 학교 전체에
-    // 적용하고 표 밖 교시는 같은 60분 슬롯으로 이어 계산한다. A/B 표기와 같은
-    // 교시가 겹치는 강좌만 unrecognized로 남는다.
-    // The honors 학년별 시간표 prints 1~9교시 as 09:00~17:50 (50분 수업 + 10분
-    // 쉬는 시간 = 60분 슬롯). Each period owns its break, so every meeting
-    // starts and ends on the 60-minute grid from 09:00, and a same-room run of
-    // consecutive periods on one day is a single block.
-    for (final course in approved) {
-      for (final m in course.meetings) {
-        expect((m.originalStartMinute - 540) % 60, 0, reason: course.sourceId);
-        expect((m.originalEndMinute - 540) % 60, 0, reason: course.sourceId);
-        expect(
-          m.originalEndMinute - m.originalStartMinute,
-          greaterThanOrEqualTo(60),
-        );
-      }
-      final byDay = <int, List<dynamic>>{};
-      for (final m in course.meetings) {
-        byDay.putIfAbsent(m.weekday, () => []).add(m);
-      }
-      for (final day in byDay.values) {
-        day.sort(
-          (a, b) => a.originalStartMinute.compareTo(b.originalStartMinute),
-        );
-        for (var i = 1; i < day.length; i++) {
-          final gap = day[i].originalStartMinute - day[i - 1].originalEndMinute;
-          final sameRoom = day[i].classroom == day[i - 1].classroom;
-          expect(sameRoom && gap < 60, isFalse, reason: course.sourceId);
+      final approved = courses.where((c) => c.hasSchedulableMeetings).toList();
+      expect(approved, hasLength(1729));
+      // 출처: tool/timetable/ulsan_honors_clock.json의 source(아너스칼리지 자율전공학부
+      // 학년별 시간표). 2026-11-23 사용자 결정으로 이 공식 교시표를 학교 전체에
+      // 적용하고 표 밖 교시는 같은 60분 슬롯으로 이어 계산한다. A/B는 그 교시의
+      // 앞·뒤 30분, 한 교시에 강의실 두 곳이면 두 강의실을 함께 적는다.
+      // The honors 학년별 시간표 prints 1~9교시 as 09:00~17:50 (50분 수업 + 10분
+      // 쉬는 시간 = 60분 슬롯). Each period owns its break, so every meeting
+      // starts and ends on the 60-minute grid from 09:00, and a same-room run of
+      // consecutive periods on one day is a single block.
+      for (final course in approved) {
+        // A/B half periods are the first/second 30 minutes of a period slot.
+        final grid = RegExp(r'\d[AB]').hasMatch(course.sourceSchedule)
+            ? 30
+            : 60;
+        for (final m in course.meetings) {
+          expect(
+            (m.originalStartMinute - 540) % grid,
+            0,
+            reason: course.sourceId,
+          );
+          expect(
+            (m.originalEndMinute - 540) % grid,
+            0,
+            reason: course.sourceId,
+          );
+          expect(
+            m.originalEndMinute - m.originalStartMinute,
+            greaterThanOrEqualTo(60),
+          );
+        }
+        final byDay = <int, List<dynamic>>{};
+        for (final m in course.meetings) {
+          byDay.putIfAbsent(m.weekday, () => []).add(m);
+        }
+        for (final day in byDay.values) {
+          day.sort(
+            (a, b) => a.originalStartMinute.compareTo(b.originalStartMinute),
+          );
+          for (var i = 1; i < day.length; i++) {
+            final gap =
+                day[i].originalStartMinute - day[i - 1].originalEndMinute;
+            final sameRoom = day[i].classroom == day[i - 1].classroom;
+            expect(sameRoom && gap < 60, isFalse, reason: course.sourceId);
+          }
         }
       }
-    }
-    expect(approved.map((c) => c.code).toSet(), containsAll({
-      'A01460', 'A01472', 'A01473', 'A01477', 'A01478', 'A01529', 'A01532', //
-      'A01533', 'A01534', 'A01535', 'A01536', 'A01537', 'A01538', 'A01539',
-    }));
-    final chemistry = approved.singleWhere(
-      (c) => c.codeAndSection == 'A01535-01',
-    );
-    expect(chemistry.sourceSchedule, '월3,화7,8');
-    expect(
-      chemistry.meetings
-          .map(
-            (m) => [
-              m.weekday,
-              m.originalStartMinute,
-              m.originalEndMinute,
-              m.classroom,
-            ],
-          )
-          .toList(),
-      [
-        [1, 660, 720, '5-201'],
-        [2, 900, 1020, '5-201'],
-      ],
-    );
-    final track = approved.singleWhere((c) => c.codeAndSection == 'A01536-01');
-    expect(track.meetings.single.classroom, '5-205');
-
-    for (final mode in [
-      LectureMode.inPerson,
-      LectureMode.liveOnline,
-      LectureMode.video,
-    ]) {
-      final values = <String, TimetableSyncValue>{};
-      for (final course in approved) {
-        final saved = course.toTimetable(id: course.sourceId, mode: mode);
-        expect(saved.isValid, isTrue);
-        expect(saved.note, course.remarks);
-        final key = timetableCourseSyncKey(saved);
-        values[key] = TimetableSyncValue(
-          {...saved.toJson(), 'id': key},
-          DateTime.utc(2026, 10, 23),
-          'test',
-        );
-      }
-      final restored = TimetableSyncDocument.fromJson(
-        jsonDecode(
-              jsonEncode(
-                TimetableSyncDocument.records(
-                  courses: values,
-                  schemaVersion: 2,
-                ).toJson(),
-              ),
-            )
-            as Map<String, dynamic>,
+      expect(
+        approved.map((c) => c.code).toSet(),
+        containsAll({
+          'A01460',
+          'A01472',
+          'A01473',
+          'A01477',
+          'A01478',
+          'A01529',
+          'A01532', //
+          'A01533', 'A01534', 'A01535', 'A01536', 'A01537', 'A01538', 'A01539',
+        }),
       );
-      expect(restored.courses.keys.toSet(), values.keys.toSet());
-      for (final entry in restored.courses.entries) {
-        expect(entry.value.value, values[entry.key]!.value);
+      final chemistry = approved.singleWhere(
+        (c) => c.codeAndSection == 'A01535-01',
+      );
+      expect(chemistry.sourceSchedule, '월3,화7,8');
+      expect(
+        chemistry.meetings
+            .map(
+              (m) => [
+                m.weekday,
+                m.originalStartMinute,
+                m.originalEndMinute,
+                m.classroom,
+              ],
+            )
+            .toList(),
+        [
+          [1, 660, 720, '5-201'],
+          [2, 900, 1020, '5-201'],
+        ],
+      );
+      final half = approved.singleWhere((c) => c.codeAndSection == 'A01521-01');
+      expect(half.sourceSchedule, '화2A,2B,3A,목3A,3B,4A');
+      expect(
+        half.meetings
+            .map(
+              (m) => [
+                m.weekday,
+                m.originalStartMinute,
+                m.originalEndMinute,
+                m.classroom,
+              ],
+            )
+            .toList(),
+        [
+          [2, 600, 690, '8-211'],
+          [4, 660, 750, '18-425'],
+        ],
+      );
+      final twoRooms = approved.singleWhere(
+        (c) => c.codeAndSection == 'S00066-01',
+      );
+      expect(twoRooms.meetings.single.classroom, '29-303, 29-305');
+      final track = approved.singleWhere(
+        (c) => c.codeAndSection == 'A01536-01',
+      );
+      expect(track.meetings.single.classroom, '5-205');
+
+      for (final mode in [
+        LectureMode.inPerson,
+        LectureMode.liveOnline,
+        LectureMode.video,
+      ]) {
+        final values = <String, TimetableSyncValue>{};
+        for (final course in approved) {
+          final saved = course.toTimetable(id: course.sourceId, mode: mode);
+          expect(saved.isValid, isTrue);
+          expect(saved.note, course.remarks);
+          final key = timetableCourseSyncKey(saved);
+          values[key] = TimetableSyncValue(
+            {...saved.toJson(), 'id': key},
+            DateTime.utc(2026, 10, 23),
+            'test',
+          );
+        }
+        final restored = TimetableSyncDocument.fromJson(
+          jsonDecode(
+                jsonEncode(
+                  TimetableSyncDocument.records(
+                    courses: values,
+                    schemaVersion: 2,
+                  ).toJson(),
+                ),
+              )
+              as Map<String, dynamic>,
+        );
+        expect(restored.courses.keys.toSet(), values.keys.toSet());
+        for (final entry in restored.courses.entries) {
+          expect(entry.value.value, values[entry.key]!.value);
+        }
       }
-    }
-  });
+    },
+  );
 
   test('every Ulsan offering label is placed in the official tree', () {
     final organizations =

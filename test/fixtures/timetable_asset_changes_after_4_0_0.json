@@ -76,8 +76,8 @@
     "reason": "#637 인제대 인나비 수업계획서 조회 2026-2 학부 전체 1,838행/1,756 코드·분반 신규 수록(교시→시각 공식 원문이 없어 모든 강좌 시각 미확정, 캠퍼스 미확인); 공백만 제거(내용 동일): 파싱 비용과 앱 용량 절감"
   },
   "assets/timetable/ulsan-main-2026-2.json": {
-    "sha256": "4392dcd713da9e990c611eb2835982abe2fb9634f817d635be8d4e51aea3f07d",
-    "reason": "2026-11-23 사용자 결정: 2026 자율전공학부 공식 교시표를 학교 전체에 적용"
+    "sha256": "c68cb25c20a985c2cf366ca1ed91bce8f162639acde28ad41246e0abbcac5ff1",
+    "reason": "2026-11-23: A/B 반교시 15건과 강의실 2개 2건 확정"
   },
   "assets/timetable/organizations/ulsan.json": {
     "sha256": "8c1e6196c9979694d4dde25e38fc7e38c37e5371d40d02b8966d448ebaa0236b",
