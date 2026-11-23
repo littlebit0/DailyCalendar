@@ -6,6 +6,8 @@ import 'package:daily/features/timetable/data/timetable_sync_document.dart';
 import 'package:daily/features/timetable/domain/timetable.dart';
 import 'package:daily/features/timetable/domain/university_course.dart';
 
+import 'korea_public_recheck.dart';
+
 void main() {
   test(
     'KU current Sejong source clocks and dates preserve user modes through full Drive JSON',
@@ -199,12 +201,12 @@ void main() {
       'seoul': (
         [540, 630, 720, 810, 900, 990, 1080, 1140, 1200, 1260],
         [615, 705, 795, 885, 975, 1065, 1130, 1190, 1250, 1310],
-        62148,
+        63492,
       ),
       'sejong': (
         [540, 600, 660, 720, 780, 840, 900, 960, 1020, 1080, 1140, 1200, 1260],
         [590, 650, 710, 770, 830, 890, 950, 1010, 1070, 1130, 1190, 1250, 1310],
-        28024,
+        28166,
       ),
     };
     for (final entry in slots.entries) {
@@ -224,10 +226,10 @@ void main() {
           final start = s['startMinute'] as int;
           final end = s['endMinute'] as int;
           // 480은 서울 일반 0교시(08:00~08:50)로, 체육교육과 주말 4개 강좌(SAEK232·SAEK242
-          // `토(0-1)`, SAEK334·SAEK434 `일(0-1)`)만 쓴다. 근거는 수강신청 교시표 사본
+          // `토(0-1)`, SAEK334·SAEK434 `일(0-1)`)와 지리교육과 `토(0)` 3개 강좌(GEOG172·272·372,
+          // 2026-11-23 확정)가 쓴다. 근거는 수강신청 교시표 사본
           // (source-current-ui-regular-campus-clock-education.json의 0교시 행)이다.
-          // 다른 0교시 강좌 15개(교직 0교시 08:40~, 끝 시각 없음인 교직 13개 포함)는 시간 없이
-          // 보류되어 여기 오지 않는다.
+          // 교직 0교시 강좌 12개는 08:40 시작 원문과 모순이라 unrecognized로 보류되어 여기 오지 않는다.
           if (start == 480) continue;
           expect(
             starts.contains(start) && periodEnds.contains(end),
@@ -253,5 +255,83 @@ void main() {
       }
       expect(count, total, reason: entry.key);
     }
+  });
+
+  test('KU 2026-11-23 공식 교시표 확정 강좌는 원문 요일·교시 그대로 구간을 만든다', () {
+    final byId = <String, Map<String, dynamic>>{};
+    for (final campus in ['seoul', 'sejong']) {
+      final data =
+          jsonDecode(
+                fixtureFile(
+                  'assets/timetable/korea-$campus-2026-2.json',
+                ).readAsStringSync(),
+              )
+              as Map<String, dynamic>;
+      expect(
+        data['periodEvidence']['sourceUrl'],
+        'https://koreanstudies.korea.ac.kr/bbs/software/352/181231/download.do',
+      );
+      for (final c in data['courses'] as List) {
+        byId[c['sourceId'] as String] = c as Map<String, dynamic>;
+      }
+    }
+    final statuses = <String, int>{};
+    for (final id in koreaOfficialTimes.keys) {
+      final c = byId[id]!;
+      final status = c['scheduleStatus'] as String;
+      statuses[status] = (statuses[status] ?? 0) + 1;
+      expect(
+        c['schedules'],
+        status == 'scheduled' ? koreaOfficialSchedules(c) : isEmpty,
+        reason: id,
+      );
+      if (status == 'scheduled') {
+        expect(c['remarks'], contains('공식 요일·교시 기준 확정'), reason: id);
+        expect(c['remarks'], isNot(contains('일정 보류')), reason: id);
+      } else {
+        expect(c['remarks'], contains('미확정(추가 불가)'), reason: id);
+      }
+    }
+    expect(statuses, {'scheduled': 83, 'unrecognized': 18});
+
+    // 서울 화(10-12): 10교시 21:00 시작, 표 밖 11·12교시는 60분 슬롯으로 이어 24:00까지.
+    final lab = byId['korea/seoul/2026-2/KMSE302-01']!;
+    expect(lab['sourceSchedule'], '화(10-12)');
+    expect(
+      {
+        for (final s in lab['schedules'] as List)
+          (s['weekday'], s['startMinute'], s['endMinute']),
+      },
+      {(2, 1260, 1440)},
+    );
+    // 같은 시각에 강의실이 둘이면 원문 강의실마다 구간을 둔다.
+    final twoRooms = byId['korea/seoul/2026-2/ACEE232-00']!;
+    expect(
+      {
+        for (final s in twoRooms['schedules'] as List)
+          (s['weekday'], s['startMinute'], s['endMinute'], s['classroom']),
+      },
+      {
+        (2, 720, 810, '신공학관 B105호'),
+        (2, 720, 810, '신공학관 B109호-전산실습실'),
+        (4, 720, 810, '신공학관 B105호'),
+      },
+    );
+    // 세종 목9교시(17:00~17:50)는 분반별 강의실로 주간 반복 확정.
+    final sejong = byId['korea/sejong/2026-2/spa-181339-t0-r9-c4-item20']!;
+    expect(sejong['scheduleStatus'], 'scheduled');
+    final first = (sejong['schedules'] as List).first as Map;
+    expect(first, {
+      'weekday': 4,
+      'startMinute': 1020,
+      'endMinute': 1080,
+      'classroom': '2-329',
+      'date': '2026-09-03',
+    });
+    // 24시를 넘는 교시 번호(약학과 토(8-17) 등)는 시각을 만들지 않는다.
+    expect(
+      byId['korea/sejong/2026-2/PHAR528-00']!['scheduleStatus'],
+      'unrecognized',
+    );
   });
 }
