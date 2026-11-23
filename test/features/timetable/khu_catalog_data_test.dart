@@ -182,12 +182,12 @@ void main() {
           isFalse,
         );
       }
-      expect(
-        courses
-            .singleWhere((c) => c.codeAndSection == 'KMS4117-01')
-            .hasSchedulableMeetings,
-        isFalse,
-      );
+      // 원문·공개 강의계획서 모두 요일 없이 '09:00-09:05'뿐: 원문 보존 시간 미정.
+      final kms = courses.singleWhere((c) => c.codeAndSection == 'KMS4117-01');
+      expect(kms.hasSchedulableMeetings, isFalse);
+      expect(kms.scheduleStatus, 'unscheduled');
+      expect(kms.canAddToTimetable, isTrue);
+      expect(courses.where((c) => !c.canAddToTimetable), isEmpty);
       final econ = courses.singleWhere(
         (c) => c.codeAndSection == 'ECON1001-00',
       );

@@ -5,6 +5,8 @@
 요일과 HH:mm 시각을 직접 적는다. 교시 변환이 없으므로 교시표가 필요 없다.
 2026-11-23 사용자 결정: 공식 요일·시각이 있으면 운영 방식(원격·집중·온라인 선택 등)이
 불명확해도 대면으로 보고 확정한다. 원문에 시각이 없으면 unscheduled(시간 미정) 유지.
+원문에 시각만 있고 요일이 없으면(KMS4117-01 '09:00-09:05 ()', 공개 강의계획서도 같은 표기·
+외래·입원 실습) 원문을 보존한 채 unscheduled(시간 미정)로 옮긴다.
 
 날짜 규칙은 기존 정규 예약과 같다: 9/1~12/21의 해당 요일, 추석 9/24~26·개천절 10/3·
 대체공휴일 10/5·한글날 10/9, 중간시험 10/20~26, 기말시험 12/15~ 제외. 비고에 원문
@@ -44,7 +46,8 @@ NEW_ONLINE = ('날짜별 실시간/녹화 배정은 미공개이나 공식 요�
               '(운영 방식 미표기는 대면으로 간주). 학교 시험·공휴일과 원문 계획의 시험·휴일 '
               '주차는 제외했습니다.')
 NEW_UNSCHEDULED = '원문에 요일·시각이 없어 시간 미정 강좌로 둡니다.'
-NEW_NO_WEEKDAY = '원문 수업시간에 요일이 없어 시간표 배치를 보류합니다.'
+OLD_NO_WEEKDAY = '원문 수업시간에 요일이 없어 시간표 배치를 보류합니다.'
+NEW_NO_WEEKDAY = '원문 수업시간에 요일이 없어 시간 미정 강좌로 둡니다(원문 시각 표기는 그대로 보존).'
 CLOCK = re.compile(r'\d{1,2}:\d{2}')
 PRIOR_DIR = 'work/university-research/catalog-c/ordinary-weekly-held-audit-20261008'
 
@@ -165,8 +168,9 @@ def main():
                     restored_count += previous is not None
                 except ValueError:
                     assert not re.search('[월화수목금토일]', c['sourceSchedule']), c['sourceId']
-                    replace_remarks(c, [(OLD_HELD, NEW_NO_WEEKDAY)])
-                    kept_unrecognized += 1
+                    c['scheduleStatus'] = 'unscheduled'
+                    replace_remarks(c, [(OLD_HELD, NEW_NO_WEEKDAY), (OLD_NO_WEEKDAY, NEW_NO_WEEKDAY)])
+                    kept_unscheduled += 1
                     continue
                 assert c['schedules'], c['sourceId']
                 c['scheduleStatus'] = 'scheduled'
@@ -177,7 +181,8 @@ def main():
                 replace_remarks(c, [(OLD_HELD + '\n', ''), (OLD_HELD, NEW_HELD)])
             elif c['scheduleStatus'] == 'unscheduled':
                 # 시각(HH:mm)이 있는 숨은 보류는 없어야 한다. 생기면 규칙을 다시 본다.
-                assert not CLOCK.search(c['sourceSchedule']), c['sourceId']
+                src = c['sourceSchedule']
+                assert not CLOCK.search(src) or not re.search('[월화수목금토일]', src), c['sourceId']
                 replace_remarks(c, [(OLD_HELD, NEW_UNSCHEDULED)])
                 kept_unscheduled += 1
         for c in courses:
