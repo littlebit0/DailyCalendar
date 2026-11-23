@@ -17,15 +17,24 @@ void main() {
       final courses = data.courses;
       expect(courses, hasLength(2112));
       expect(courses.map((c) => c.sourceId).toSet(), hasLength(2112));
-      expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(1488));
+      expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(1493));
       expect(
         courses.where((c) => c.scheduleStatus == 'unscheduled'),
         hasLength(619),
       );
-      expect(
-        courses.where((c) => c.scheduleStatus == 'unrecognized'),
-        hasLength(5),
+      expect(courses.where((c) => c.scheduleStatus == 'unrecognized'), isEmpty);
+      // 부트캠프 집중수업은 최신 공지(seq=9898) 실제 운영 시간표의 날짜만 쓴다.
+      final bootcamp = courses.singleWhere(
+        (c) => c.codeAndSection == '92107-01',
       );
+      expect(bootcamp.meetings, hasLength(15));
+      expect(bootcamp.meetings.first.date, '2026-11-02');
+      expect(bootcamp.meetings.last.date, '2026-11-20');
+      expect(bootcamp.meetings.first.startMinute, 1140);
+      expect(bootcamp.meetings.first.endMinute, 1320);
+      final early = courses.singleWhere((c) => c.codeAndSection == '92105-01');
+      expect(early.meetings.map((m) => m.date), isNot(contains('2026-10-05')));
+      expect(early.meetings.map((m) => m.date), isNot(contains('2026-10-09')));
       // 2026-11-23 사용자 결정: 11~15교시는 같은 60분 슬롯으로 이어 계산한다.
       final late = courses.singleWhere((c) => c.codeAndSection == '46105-01');
       expect(late.meetings.single.startMinute, 1320);
@@ -83,18 +92,7 @@ void main() {
         expect(c.departmentRemarks.values.join('\n'), contains('비실시간'));
         expect(c.sourceSchedule, isNotEmpty);
       }
-      for (final code in [
-        '01564',
-        '02072',
-        '02082',
-        '02089',
-        '02105',
-        '92105',
-        '92106',
-        '92107',
-        '92108',
-        '92109',
-      ]) {
+      for (final code in ['01564', '02072', '02082', '02089', '02105']) {
         for (final c in courses.where((c) => c.code == code)) {
           expect(c.meetings, isEmpty);
           expect(c.period, isNull);
