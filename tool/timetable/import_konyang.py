@@ -255,7 +255,17 @@ def meetings(text, campus, hours=None):
     segments = [(campus, marks[0])] + [(CAMPUS_MARK[marks[i]], marks[i + 1]) for i in range(1, len(marks), 2)]
     if len(segments) > 1 and not segments[0][1].strip():
         segments = segments[1:]
-        campus = segments[0][0]
+        if len(segments) == 1:
+            campus = segments[0][0]
+    # Several campus-marked parts: keep only the offering campus's part
+    # (00011L-02 '교양학부(대전)': "(논산) 월5,6 (대전) 목 5,6" -> 메디컬 목 5,6).
+    by_campus = len(segments) > 1
+    if by_campus:
+        if campus not in PERIOD_START:
+            raise ValueError('campus-marked parts without an offering campus')
+        segments = [s for s in segments if s[0] == campus]
+        if len(segments) != 1:
+            raise ValueError('offering campus part missing or repeated')
     # Run-together period digits ("화12/목78") are split only when some run cannot be one period.
     split_runs = any(int(x) > 14 for x in re.findall(r'(?<![\d:])(\d{2,})(?![\d:])', t))
     out = []
@@ -326,6 +336,8 @@ def meetings(text, campus, hours=None):
     for day, s, e in out:
         if not 0 <= s < e <= 1440:
             raise ValueError('invalid clock')
+    if by_campus and (hours is None or period_count != hours):
+        raise ValueError('offering campus part does not match weekly hours')
     if shared and hours is not None and period_count != hours:
         # "월,수 3,4교시" on a 2-hour course: n weekdays and n periods pair up in order.
         listed = re.fullmatch(r'\s*((?:[월화수목금토일](?:요일)?\s*[,·]\s*)+[월화수목금토일](?:요일)?)'
@@ -499,7 +511,16 @@ def _self_check():
     assert meetings('수 1, 2 / 목 5', 'glocal')[1] == [(3, 570, 690), (4, 810, 870)]
     assert meetings('목 5-6 / 7-8', 'glocal')[1] == [(4, 810, 1050)]
     assert meetings('화12/목78', 'glocal')[1] == [(2, 570, 690), (4, 930, 1050)]
-    assert meetings('(논산) 월5,6 (대전) 목 5,6', 'medical') == ('glocal', [(1, 810, 930), (4, 780, 900)])
+    assert meetings('(논산) 월5,6 (대전) 목 5,6', 'medical', hours=2) == ('medical', [(4, 780, 900)])
+    assert meetings('(논산) 월5,6 (대전) 목 5,6', 'glocal', hours=2) == ('glocal', [(1, 810, 930)])
+    for campus, hours in (('medical', 3), ('unknown', 2), ('medical', None)):
+        try:
+            meetings('(논산) 월5,6 (대전) 목 5,6', campus, hours=hours)
+            raise AssertionError(campus)
+        except NoClock:
+            raise AssertionError(campus)
+        except ValueError:
+            pass
     assert meetings('Mon 7,8,9', 'medical')[1] == [(1, 900, 1080)]
     assert meetings('(화)1,2,3', 'glocal')[1] == [(2, 570, 750)]
     assert meetings('수(3,4), 금(2,.3)', 'glocal')[1] == [(3, 690, 810), (5, 630, 750)]

@@ -24,10 +24,10 @@ void main() {
       final courses = [for (final d in datasets) ...d.courses];
       expect(courses, hasLength(1558));
       expect(courses.map((c) => c.sourceId).toSet(), hasLength(1558));
-      expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(281));
+      expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(280));
       expect(
         courses.where((c) => c.scheduleStatus == 'unscheduled'),
-        hasLength(1266),
+        hasLength(1267),
       );
       expect(
         courses.where((c) => c.scheduleStatus == 'unrecognized'),
@@ -55,6 +55,16 @@ void main() {
       expect(daejeon.campus, 'medical');
       expect(daejeon.scheduleStatus, 'unscheduled');
       expect(daejeon.meetings, isEmpty);
+      // Campus-marked text keeps only the offering campus's part:
+      // '교양학부(대전)' 2시수 "(논산) 월5,6 (대전) 목 5,6" -> 메디컬 목 5,6교시.
+      final split = find('00011L-02');
+      expect(split.campus, 'medical');
+      expect(clocks(split), [(4, 780, 900)]);
+      // 3시수 but the 글로컬 part has 2 periods: time undecided, text kept.
+      final mismatch = find('31390B-01');
+      expect(mismatch.campus, 'glocal');
+      expect(mismatch.scheduleStatus, 'unscheduled');
+      expect(mismatch.sourceSchedule, '(논산) 월5,6 (대전) 목 5,6');
       // A course added by notice (nttId=292200) gets each campus's time.
       expect(clocks(find('00086K-01')), [(3, 810, 930)]);
       expect(clocks(find('00086K-02')), [(2, 780, 900)]);
