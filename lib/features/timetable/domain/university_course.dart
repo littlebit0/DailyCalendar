@@ -415,8 +415,11 @@ class UniversityCourse {
       // Seokyeong prints 융합 only in the tables titled "<name> 융합전공",
       // so it is that convergence major's own course classification.
       ('sku', '융합') => true,
-      // Konyang rules (학칙 시행세칙 제49조) name "전공과목 중 기본과정과목";
-      // its 교육과정 경과 tables split 전공교과목 into 기본·심화 과정.
+      // Konyang 2026 curricula (https://www.konyang.ac.kr/prog/curriculum/kor/
+      // sub06_01_04_04/list.do, e.g. 기업소프트웨어학부) list 제1전공 courses
+      // in the "전공 교과목 일람표" under 구분 기본·심화; 68212A is "기본"
+      // there and "제1기본" in the public syllabus list. 학칙 시행세칙 제49조:
+      // "전공과목 중 기본과정과목".
       ('konyang', '제1기본') => true,
       _ => false,
     };

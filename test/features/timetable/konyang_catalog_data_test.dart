@@ -27,11 +27,11 @@ void main() {
       expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(262));
       expect(
         courses.where((c) => c.scheduleStatus == 'unscheduled'),
-        hasLength(1253),
+        hasLength(1266),
       );
       expect(
         courses.where((c) => c.scheduleStatus == 'unrecognized'),
-        hasLength(43),
+        hasLength(30),
       );
       expect(courses.every((c) => c.meetings.every((m) => m.isValid)), isTrue);
       expect(courses.any((c) => c.sourceClassification == '학석사연계'), isFalse);
@@ -61,6 +61,12 @@ void main() {
       expect(accounting.scheduleStatus, 'unrecognized');
       expect(accounting.sourceSchedule, '화요일 2-3교시, 수요일 5교시');
       expect(accounting.canAddToTimetable, isFalse);
+      // Notation that cannot be read as periods stays verbatim, time undecided.
+      final typo = find('61714A-01');
+      expect(typo.sourceSchedule, '울(6,7), 수(3)');
+      expect(typo.scheduleStatus, 'unscheduled');
+      expect(typo.meetings, isEmpty);
+      expect(typo.canAddToTimetable, isTrue);
 
       expect(
         abap.isMajorForSourceDepartment('기업소프트웨어학부'),

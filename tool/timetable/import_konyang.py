@@ -26,11 +26,15 @@ Rules
   the department's campus on the official campus pages
   (/kor/sub03_01_01.do 메디컬캠퍼스, /kor/sub03_01_03.do 글로컬캠퍼스, the
   창의융합계열 homepage footer "글로컬캠퍼스 : 충청남도 논산시"), "(대전)"
-  offering labels = 메디컬캠퍼스 and the same unit without "(대전)" =
-  글로컬캠퍼스. Anything else stays campus "unknown"; period-only times there
+  offering labels = 메디컬캠퍼스, 교양학부 = 글로컬캠퍼스 (휴머니티칼리지 소개
+  "위치 : 글로컬캠퍼스 명곡정보관 1층", buseo_cd=32200000) and 교직과정 =
+  글로컬캠퍼스 (교직부 https://teaching.konyang.ac.kr/ "글로컬캠퍼스 : 32992
+  충청남도 논산시 대학로 121 건양대학교 명곡정보관 1층 교학처 교직부"). Anything else stays campus "unknown"; period-only times there
   cannot pick a period table and stay "unrecognized".
 - Direct HH:mm clocks are used as written. Text that the parser does not
-  fully understand raises and the course stays "unrecognized".
+  fully understand keeps its original text and becomes "unscheduled"
+  (orchestrator decision on PR 1246); only a missing campus table or an
+  unreadable attachment format stays "unrecognized".
 - 학석사연계 rows (graduate fast-track courses) are excluded (skill rule 10).
 
 Usage (repository root):
@@ -357,12 +361,14 @@ def main(work):
             except NoClock:
                 pass
             except ValueError as error:
-                status = 'unrecognized'
                 key = re.sub(r" '.*", '', str(error))
                 reasons[key] = reasons.get(key, 0) + 1
-                note = '수업계획서의 수업시간 표기를 확정하지 못해 시간표에 추가할 수 없습니다.'
                 if 'campus unknown' in str(error):
+                    status = 'unrecognized'
                     note = '캠퍼스가 공개 자료에 없어 교시 시각을 정할 수 없습니다. 원문 수업시간만 표시합니다.'
+                else:
+                    # Orchestrator decision (PR 1246): unreadable notation is "time undecided".
+                    note = '원문 수업시간 표기를 교시로 해석할 수 없어 시간 미정 강좌로 추가할 수 있습니다. 원문 표기를 확인하세요.'
         credit = float(row['creditSystem'].split('-')[0])
         course = {
             'sourceId': 'konyang/%s/2026/2/%s-%s' % (campus, row['code'], row['section']),
