@@ -50,6 +50,39 @@ class KunsanHeldPeriodsTest(unittest.TestCase):
             self.assertEqual(held['scheduleStatus'], 'unrecognized')
             self.assertEqual(held['schedules'], [])
 
+    def test_circled_weekday_practice_uses_same_period(self):
+        data = self.data()
+        data['courses'] += [
+            course('e', '화6 7 [공학3-13225],화⑧ ⑨ [공학3-13226(PC실)]', '공학3-13225 / 공학3-13226(PC실)',
+                   '원문 원문자 교시(① 등)의 실제 시각 미확인'),
+            course('f', '토① ② [집중강의(야외)]', '집중강의(야외)', '원문 원문자 교시(① 등)의 실제 시각 미확인'),
+            course('kunsan/unknown/2026/2/104025/12', '목① [해양1-701207]', '해양1-701207',
+                   '원문 원문자 교시(① 등)의 실제 시각 미확인'),
+        ]
+        partial = course('g', '월1 2 ③ ④ [인문관-1244(PC실)]', '인문관-1244(PC실)',
+                         '원문 원문자 교시(① 등)의 실제 시각 미확인')
+        partial.update(scheduleStatus='scheduled', schedules=[{'weekday': 1}],
+                       remarks=partial['remarks'] + '\n부분 시간표: 숫자 교시만 반영했습니다.',
+                       sourceEducation={'projection': 'publishedRegularTimetablePartial',
+                                        'unresolvedSourcePeriodScope': []})
+        data['courses'].append(partial)
+        apply_kunsan.apply(data)
+        self.assertEqual(apply_kunsan.apply_circled(data), ['c', 'e', 'g'])
+        by = {c['sourceId']: c for c in data['courses']}
+        # 원문자 ①②는 1·2교시(09:10~11:10). 강의실이 다르면 이어지는 교시라도 합치지 않는다.
+        self.assertEqual(by['c']['schedules'][0]['startMinute'], 550)
+        self.assertEqual(by['c']['schedules'][0]['endMinute'], 670)
+        self.assertEqual({(m['startMinute'], m['endMinute'], m['classroom']) for m in by['e']['schedules']},
+                         {(850, 970, '공학3-13225'), (970, 1090, '공학3-13226(PC실)')})
+        self.assertEqual({(m['startMinute'], m['endMinute']) for m in by['g']['schedules']}, {(550, 790)})
+        self.assertNotIn('부분 시간표', by['g']['remarks'])
+        self.assertNotIn('원문자 교시(① 등)', by['c']['remarks'])
+        self.assertNotIn('unresolvedSourcePeriodScope', by['g']['sourceEducation'])
+        # 토요일 원문자(과목별 자리표시)와 이론·실습 0시수 강좌는 보류.
+        for sid in ('f', 'kunsan/unknown/2026/2/104025/12'):
+            self.assertEqual(by[sid]['scheduleStatus'], 'unrecognized')
+        self.assertEqual(apply_kunsan.apply_circled(data), [])
+
     def test_saturday_skips_holidays(self):
         self.assertNotIn('2026-09-26', apply_kunsan.DATES[6])
         self.assertNotIn('2026-10-03', apply_kunsan.DATES[6])

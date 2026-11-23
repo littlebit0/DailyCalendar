@@ -49,13 +49,13 @@ void main() {
       ];
       expect(courses.length, 1718);
       expect(courses.map((c) => c.sourceId).toSet().length, 1718);
-      expect(courses.where((c) => c.hasSchedulableMeetings).length, 1184);
-      expect(courses.expand((c) => c.meetings).length, 24087);
+      expect(courses.where((c) => c.hasSchedulableMeetings).length, 1322);
+      expect(courses.expand((c) => c.meetings).length, 29729);
       expect(
         courses.where((c) => c.scheduleStatus == 'unrecognized').length,
-        436,
+        298,
       );
-      // 남은 미확정은 원문자 교시(공식 정의 없음)와 시간이 빈 강좌뿐이다.
+      // 남은 미확정은 토요일·0시수 원문자 자리표시와 시간이 빈 JST 강좌뿐이다.
       expect(
         courses
             .where((c) => c.scheduleStatus == 'unrecognized')
@@ -83,18 +83,19 @@ void main() {
         courses.where((c) => c.scheduleStatus == 'unscheduled').length,
         98,
       );
-      final partial = courses.singleWhere(
+      // 원문자 교시는 같은 번호 교시의 실습 시간이다(이론·실습 시수와 일치): 월①②=09:10~11:10.
+      final circled = courses.singleWhere(
         (c) => c.codeAndSection == '115911-01',
       );
-      expect(partial.sourceSchedule, contains('①'));
+      expect(circled.sourceSchedule, '월① ②,수3 [황룡문화관-3306]');
       expect(
-        partial.meetings.every(
-          (m) => m.originalStartMinute == 670 && m.originalEndMinute == 730,
-        ),
-        isTrue,
+        circled.meetings
+            .map((m) => (m.weekday, m.originalStartMinute, m.originalEndMinute))
+            .toSet(),
+        {(1, 550, 670), (3, 670, 730)},
       );
-      expect(partial.remarks, contains('부분'));
-      expect(partial.remarks, contains('월'));
+      expect(circled.remarks, isNot(contains('부분')));
+      expect(circled.remarks, contains('원문자'));
       for (final mode in [
         LectureMode.inPerson,
         LectureMode.liveOnline,
@@ -153,7 +154,7 @@ void main() {
         final restored = TimetableSyncDocument.fromJson(
           jsonDecode(jsonEncode(doc.toJson())) as Map<String, dynamic>,
         );
-        expect(restored.courses.length, 1184);
+        expect(restored.courses.length, 1322);
         for (final e in restored.courses.entries) {
           expect(e.value.value, values[e.key]!.value);
         }

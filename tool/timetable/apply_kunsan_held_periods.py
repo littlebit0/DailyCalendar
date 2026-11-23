@@ -13,8 +13,18 @@
 월~금 날짜는 기존 정규 예약과 같은 집합이고(실행 때 대조), 토요일은 같은 규칙에
 공휴일 9/26(추석 연휴)·10/3(개천절)만 뺀다.
 
-남기는 것: 원문자 교시(①…, 공식 정의 없음)와 시간이 빈 강좌. 이미 scheduled인
-강좌는 건드리지 않고, 재실행해도 바뀌지 않는다.
+2단계(2026-11-23 재검토, apply_circled): 원문자 교시(①…)는 같은 번호 교시의 실습 시간이다.
+공식 수업시간표(붙임2~4)의 이론·실습 열과 대조하면 원문자 교시가 있는 평일 강좌는 모두
+숫자 교시 수 = 이론 시수, 원문자 교시 수 = 실습 시수이고, 하기·동기 계절수업 시간표도
+'월1 2 ③ ④'(이론2·실습2)처럼 같은 날 교시 번호를 이어 쓴다. 그래서 원문자 n은 n교시 슬롯으로
+계산한다. 숫자 교시만 넣고 원문자·원격·11교시 부분을 뺀 '부분 시간표' 강좌도 같은 규칙으로
+전체 교시를 채운다. 학교 원문자 기호 뜻을 적은 문장은 공개 자료에서 찾지 못했다.
+
+남기는 것: 토요일 원문자(사회연계진로탐색1~5 = 토①~⑤처럼 과목마다 번호를 매긴 자리표시이고
+스키·스노보드는 수강편람 p.31에 12월 집중강의로 적혀 있다), 이론·실습 0시수 강좌의
+원문자(실습 시수가 없어 원문자 뜻과 맞지 않음), 시간이 빈 강좌(JST 공유대학: 강의계획서가
+JST 학사관리시스템 로그인 뒤에만 있다). 이미 scheduled인 정규 강좌는 건드리지 않고, 재실행해도
+바뀌지 않는다.
 
     python3 tool/timetable/apply_kunsan_held_periods.py
 """
@@ -132,6 +142,97 @@ def apply(data):
     return changed
 
 
+CIRCLED_REASON = '원문 원문자 교시(① 등)의 실제 시각 미확인'
+CIRCLED_DIGITS = '①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳'
+# 원문자 교시가 있지만 공식 시간표 이론·실습이 모두 0인 평일 강좌(현장실습·외부 특강): 실습 교시 뜻과 맞지 않아 보류.
+ZERO_HOUR_CIRCLED = {f'kunsan/unknown/2026/2/{k}' for k in (
+    '116583/01', '104025/12', '104027/12', '104025/25', '107753/26', '117899/01')}
+NOTE_C = ('공식 요일·교시로 정규 예약했습니다. 원문자 교시(①…)는 같은 번호 교시의 실습 시간으로 계산했습니다'
+          '(공식 시간표의 이론·실습 시수와 일치).')
+
+
+def segments(raw):
+    """'화6 7 [공학3-13225],화⑧ ⑨ [공학3-13226(PC실)]' -> [(요일, 시작, 끝, 강의실)].
+
+    원문자 n은 n교시로 본다. 같은 요일·같은 강의실에서 이어지는 교시만 합친다."""
+    groups = re.findall(r'([^\[\]]+?) \[([^\]]+)\],?', raw or '')
+    if not groups or ''.join(f'{p} [{r}]' for p, r in groups) != (raw or '').replace('],', ']'):
+        return None
+    periods = {}
+    for text, room in groups:
+        for part in text.split(','):
+            days = re.findall(r'([월화수목금토일])((?: ?[\d①-⑳]+)+)', part.strip())
+            if not days or ''.join(d + p for d, p in days).replace(' ', '') != part.replace(' ', ''):
+                return None
+            for day, ps in days:
+                for tok in ps.split():
+                    for p in ([int(tok)] if tok.isascii() else [CIRCLED_DIGITS.index(ch) + 1 for ch in tok]):
+                        periods.setdefault((DAYS.index(day) + 1, room), set()).add(p)
+    out = []
+    for (w, room), ps in sorted(periods.items()):
+        for p in sorted(ps):
+            start = FIRST_START + SLOT * (p - 1)
+            if out and out[-1][0] == w and out[-1][3] == room and start - out[-1][2] < 60:
+                out[-1] = (w, out[-1][1], start + SLOT, room)
+            else:
+                out.append((w, start, start + SLOT, room))
+    return out
+
+
+def meetings_multi(segs):
+    rows = [m for w, start, end, room in segs for m in meetings(room, [(w, start, end)])]
+    return sorted(rows, key=lambda r: (r['date'], r['startMinute'], r['classroom']))
+
+
+def _rewrite(text, note):
+    first, *rest = text.split('\n')
+    first = ' / '.join(p for p in first.split(' / ') if p != CIRCLED_REASON)
+    lines = [l for l in _clean('\n'.join([first] + rest)).split('\n')
+             if not l.startswith('부분 시간표:') and l != SEMESTER_NOTE]
+    return '\n'.join(lines + [note, SEMESTER_NOTE])
+
+
+def apply_circled(data):
+    """원문자 교시 미확정과 '부분 시간표' 강좌를 전체 공식 교시로 정규 예약한다."""
+    changed = []
+    for c in data['courses']:
+        raw = c['sourceSchedule']
+        partial = c['scheduleStatus'] == 'scheduled' and c['sourceEducation'].get(
+            'projection', '').endswith('Partial')
+        held = c['scheduleStatus'] == 'unrecognized' and CIRCLED.search(raw or '')
+        if not (partial or held) or c['sourceId'] in ZERO_HOUR_CIRCLED:
+            continue
+        segs = segments(raw)
+        if not segs or (CIRCLED.search(raw) and any(w > 5 for w, *_ in segs)):
+            continue  # 토·일 원문자는 과목별 자리표시라 보류
+        assert ' / '.join(dict.fromkeys(r for _, r in re.findall(r'([^\[\]]+?) \[([^\]]+)\]', raw))) \
+            == c['sourceClassroom'], c['sourceId']
+        late = any(end > FIRST_START + SLOT * 10 for _, _, end, _ in segs)
+        note = (NOTE_C if CIRCLED.search(raw) else NOTE) + (NOTE11 if late else '')
+        c['schedules'] = meetings_multi(segs)
+        c['scheduleStatus'] = 'scheduled'
+        c['period'] = dict(PERIOD)
+        c['remarks'] = _rewrite(c['remarks'], note)
+        c['departmentRemarks'] = {k: _rewrite(v, note) for k, v in c['departmentRemarks'].items()}
+        edu = c['sourceEducation']
+        for k in ('unresolvedSourcePeriodScope', 'unresolvedSourceRemoteScope', 'verifiedLiteralNumericBlocks',
+                  'verifiedLiteralPhysicalBlocks', 'partialWholeClassConfirmed', 'publishedPartialScope'):
+            edu.pop(k, None)
+        edu.update(
+            projection='publishedRegularTimetable',
+            datedPlanProof='kunsan-operating-date-next-audit-20261008.json',
+            heldPeriodDecision='2026-11-23 user decision: official weekday/period confirmed as in-person',
+            officialSemesterPeriod=dict(PERIOD), generatedOrdinaryMakeupDateScopeEnd='2026-12-10',
+            courseEarlyEndConfirmed=False,
+            semesterBoundaryProof='kunsan-current-calendar-operating-review-20261008.json:개강08/31+종강12/17',
+            clockProof=('official numeric1–10 09:10 start, 60-minute slots; periods 11+ continued with the same '
+                        'slot length; circled n = practice hour in period n (published 이론/실습 columns)'))
+        changed.append(c['sourceId'])
+    data['counts'] = {s: sum(c['scheduleStatus'] == s for c in data['courses'])
+                      for s in ('scheduled', 'unrecognized', 'unscheduled')}
+    return changed
+
+
 def check_existing(datasets):
     """월~금 날짜·교시 규칙이 기존 정규 예약과 같은지 대조한다."""
     for data in datasets:
@@ -139,19 +240,30 @@ def check_existing(datasets):
             parsed = c['scheduleStatus'] == 'scheduled' and blocks(c['sourceSchedule'])
             if parsed and all(w <= 5 for w, _, _ in parsed[1]) and '부분' not in c['remarks']:
                 assert meetings(*parsed) == c['schedules'], c['sourceId']
+            # 여러 강의실 정규 예약도 segments()가 같은 결과를 내는지 본다.
+            segs = (c['scheduleStatus'] == 'scheduled' and '부분' not in c['remarks']
+                    and not CIRCLED.search(c['sourceSchedule'] or '') and segments(c['sourceSchedule']))
+            if segs and all(w <= 5 for w, *_ in segs):
+                key = lambda r: (r['date'], r['startMinute'], r['classroom'])
+                assert meetings_multi(segs) == sorted(c['schedules'], key=key), c['sourceId']
 
 
 def main():
     raws = [p.read_text(encoding='utf-8') for p in PATHS]
     datasets = [json.loads(r) for r in raws]
     check_existing(datasets)
-    changed = [sid for d in datasets for sid in apply(d)]
+    changed = [sid for d in datasets for sid in apply(d) + apply_circled(d)]
     # 두 캠퍼스 파일은 같은 학교 전체 보류 목록을 함께 두므로, 정규 예약한 강좌만 뺀다.
     done = {(c['courseCode'], c['section'], c['sourceSchedule'])
             for d in datasets for c in d['courses'] if c['sourceId'] in changed}
     for d in datasets:
         d['individualBlocked'] = [b for b in d['individualBlocked']
                                   if (b['courseCode'], b['section'], b['sourceSchedule']) not in done]
+    for d in datasets:
+        d['sourceBoundary'] = d['sourceBoundary'].replace(
+            'Circled practical or period11+ clocks remain blocked.',
+            'Circled weekday practice periods use the same-number period clock and periods 11+ continue the '
+            '60-minute slot (2026-11-23); Saturday or zero-hour circled placeholders remain blocked.')
     for path, raw, data in zip(PATHS, raws, datasets):
         out = json.dumps(data, ensure_ascii=False, separators=(',', ':'))
         if out != raw:
