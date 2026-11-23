@@ -28,10 +28,45 @@ void main() {
       final courses = [for (final d in data) ...d.courses];
       expect(courses, hasLength(3847));
       expect(courses.map((c) => c.sourceId).toSet(), hasLength(3847));
-      expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(3607));
+      expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(3722));
+      expect(courses.where((c) => c.scheduleStatus == 'unrecognized'), isEmpty);
+      // Remote/exchange rows keep their official HH:mm clocks as-is.
+      final exchange = courses.singleWhere(
+        (c) => c.codeAndSection == 'AAAA0101-001',
+      );
+      expect(exchange.sourceSchedule, '토 10:00 ~ 11:00');
+      expect(exchange.scheduleStatus, 'scheduled');
       expect(
-        courses.where((c) => c.scheduleStatus == 'unrecognized'),
-        hasLength(115),
+        exchange.meetings
+            .map((m) => [m.weekday, m.originalStartMinute, m.originalEndMinute])
+            .toList(),
+        [
+          [6, 600, 660],
+        ],
+      );
+      final remote = courses.singleWhere(
+        (c) => c.codeAndSection == 'CLTR0539-001',
+      );
+      expect(remote.sourceSchedule, '목 16:30 ~ 18:00,화 16:30 ~ 18:00');
+      expect(
+        remote.meetings
+            .map(
+              (m) => [
+                m.weekday,
+                m.originalStartMinute,
+                m.originalEndMinute,
+                m.classroom,
+              ],
+            )
+            .toList(),
+        [
+          [4, 990, 1080, '상주캠퍼스 제6호관 / 124'],
+          [2, 990, 1080, '상주캠퍼스 제6호관 / 124'],
+        ],
+      );
+      expect(
+        remote.departmentRemarks.values.join('\n'),
+        allOf(contains('공식 요일·시각 기준 확정'), isNot(contains('시간표 추가 불가'))),
       );
       for (final id in [
         'TCHR0601-001',
@@ -111,9 +146,20 @@ void main() {
           expect(restored.meetings, hasLength(7));
         }
       }
+      // Without a dated weekly plan the official weekly clocks are used as-is.
+      final weekly = courses.singleWhere(
+        (c) => c.codeAndSection == 'AAAA0908-001',
+      );
+      expect(weekly.meetings.every((m) => m.date == null), isTrue);
       expect(
-        courses.singleWhere((c) => c.codeAndSection == 'AAAA0908-001').meetings,
-        isEmpty,
+        weekly.meetings
+            .map((m) => [m.weekday, m.originalStartMinute, m.originalEndMinute])
+            .toList(),
+        [
+          [6, 840, 900],
+          [5, 1080, 1140],
+          [5, 1140, 1200],
+        ],
       );
     },
   );
