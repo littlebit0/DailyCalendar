@@ -34,7 +34,7 @@ void main() {
       final scheduled = <UniversityCourse>[];
       final seen = <String>{};
       var rows = 0, slots = 0, closedRows = 0, seventyFive = 0, fifty = 0;
-      var night = 0;
+      var night = 0, blankUnscheduled = 0, unscheduled = 0;
       for (final campus in ['main', 'unknown']) {
         final raw =
             jsonDecode(
@@ -113,6 +113,13 @@ void main() {
             expect(meta['closureMatched'], isTrue);
             expect(course.sourceRemarks, contains('폐강 여부는 판단하지 않음'));
           }
+          if (row['scheduleStatus'] == 'unscheduled') {
+            unscheduled++;
+            expect(row['schedules'], isEmpty);
+            // 요일ㆍ교시 칸이 빈 강좌는 공개 경로를 다 확인해도 시각이 없어 시간 미정이다.
+            if (compact(source('요일ㆍ교시')).isEmpty) blankUnscheduled++;
+          }
+          expect(row['scheduleStatus'], isNot('unrecognized'));
           if (!course.hasSchedulableMeetings) continue;
           scheduled.add(course);
           expect(course.sourceRemarks, contains('공개 예약 계획, 실제 등교'));
@@ -231,6 +238,8 @@ void main() {
       expect(scheduled, hasLength(1538));
       expect(slots, 19249);
       expect(night, greaterThan(0));
+      expect(blankUnscheduled, 53);
+      expect(unscheduled, 160);
       expect(seventyFive, greaterThan(0));
       expect(fifty, greaterThan(0));
       for (final mode in [
