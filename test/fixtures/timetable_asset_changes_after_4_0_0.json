@@ -780,8 +780,8 @@
     "reason": "공백만 제거(내용 동일): 파싱 비용과 앱 용량 절감"
   },
   "assets/timetable/yu-unknown-2026-2.json": {
-    "sha256": "77cb473405ea1b804319dea8ce634a8b0c754ff6931dfcd184f9baa39980d3d9",
-    "reason": "공백만 제거(내용 동일): 파싱 비용과 앱 용량 절감"
+    "sha256": "c67e5d4bdb9d4ed7c1228e519bd9e9538a70054e51c9127575ea5bf0689e8982",
+    "reason": "2026-11-23 사용자 결정: 폐강 여부를 판단하지 않고 수강번호 0263을 원문 시각으로 배치"
   },
   "assets/timetable/organizations/cau.json": {
     "sha256": "0b13532ec9560e4e314f2866cfdb63ce9c81e70658acf34a96183d63ed9bbd95",

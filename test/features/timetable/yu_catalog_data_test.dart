@@ -85,9 +85,9 @@ void main() {
         );
         expect(row['metadata']['publishedClosureMatch'], closed);
         if (closed) {
+          // Closure is not judged (2026-11-23 user decision): the published
+          // course keeps its official time like every other row.
           expect(native['수강번호'], '0263');
-          expect(c.hasSchedulableMeetings, isFalse);
-          continue;
         }
         final period = RegExp(
           r'^2026\.(\d\d)\.(\d\d)~(\d\d)\.(\d\d)$',
@@ -137,7 +137,7 @@ void main() {
         );
         expect(row['metadata']['actualAttendanceConfirmed'], isFalse);
       }
-      expect(total, 1890);
+      expect(total, 1941);
       for (final mode in [
         LectureMode.inPerson,
         LectureMode.liveOnline,
@@ -156,7 +156,7 @@ void main() {
         final after = TimetableSyncDocument.fromJson(
           jsonDecode(jsonEncode(doc.toJson())) as Map<String, dynamic>,
         ).materializeClasses();
-        expect(after, hasLength(59));
+        expect(after, hasLength(60));
         final originals = {for (final c in before) c.sourceId: c};
         for (final c in after) {
           final prior = originals[c.sourceId]!;
