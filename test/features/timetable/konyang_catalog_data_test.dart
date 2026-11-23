@@ -24,14 +24,14 @@ void main() {
       final courses = [for (final d in datasets) ...d.courses];
       expect(courses, hasLength(1558));
       expect(courses.map((c) => c.sourceId).toSet(), hasLength(1558));
-      expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(262));
+      expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(281));
       expect(
         courses.where((c) => c.scheduleStatus == 'unscheduled'),
         hasLength(1266),
       );
       expect(
         courses.where((c) => c.scheduleStatus == 'unrecognized'),
-        hasLength(30),
+        hasLength(11),
       );
       expect(courses.every((c) => c.meetings.every((m) => m.isValid)), isTrue);
       expect(courses.any((c) => c.sourceClassification == '학석사연계'), isFalse);
@@ -49,18 +49,27 @@ void main() {
       expect(clocks(abap), [(2, 630, 750), (5, 630, 690)]);
       // 메디컬캠퍼스: 1교시 09:00.
       expect(clocks(find('61570A-01')), [(1, 780, 900), (3, 780, 900)]);
-      // The newer timetable-change notice wins over the syllabus.
+      // The latest notice (nttId=292203) makes 대전학 a pre-recorded online
+      // course, so the earlier 화 10,11교시 change is not used.
       final daejeon = find('00042K-01');
       expect(daejeon.campus, 'medical');
-      expect(clocks(daejeon), [(2, 1080, 1200)]);
+      expect(daejeon.scheduleStatus, 'unscheduled');
+      expect(daejeon.meetings, isEmpty);
+      // A course added by notice (nttId=292200) gets each campus's time.
+      expect(clocks(find('00086K-01')), [(3, 810, 930)]);
+      expect(clocks(find('00086K-02')), [(2, 780, 900)]);
       // A syllabus that names its campus overrides the department campus.
       expect(find('11055A-01').campus, 'glocal');
-      // No published campus: the period table cannot be chosen.
+      // The 경영학부 homepage footer names 글로컬캠퍼스.
       final accounting = find('31613A-01');
-      expect(accounting.campus, 'unknown');
-      expect(accounting.scheduleStatus, 'unrecognized');
+      expect(accounting.campus, 'glocal');
       expect(accounting.sourceSchedule, '화요일 2-3교시, 수요일 5교시');
-      expect(accounting.canAddToTimetable, isFalse);
+      expect(clocks(accounting), [(2, 630, 750), (3, 810, 870)]);
+      // No published campus: the period table cannot be chosen.
+      final tourism = find('11101A-01');
+      expect(tourism.campus, 'unknown');
+      expect(tourism.scheduleStatus, 'unrecognized');
+      expect(tourism.canAddToTimetable, isFalse);
       // Notation that cannot be read as periods stays verbatim, time undecided.
       final typo = find('61714A-01');
       expect(typo.sourceSchedule, '울(6,7), 수(3)');

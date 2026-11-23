@@ -74,10 +74,33 @@ GLOCAL = {
     '융합디자인학과', '임상의약학과', '의약바이오학과', '드론기계학과', '융합IT학과',
     '교양학부', '교직과정',
 }
-# Newer official notice wins over the syllabus (nttId=290996, 2026-07-20,
-# 휴머니티칼리지): "기존 금요일 6,7교시 → 변경 화요일 10,11교시".
-OVERRIDES = {'00042K-01': '화요일 10,11교시', '00025H-01': '화요일 10,11교시'}
-OVERRIDE_URL = 'https://www.konyang.ac.kr/cop/bbs/BBSMSTR_000000000584/selectBoardArticle.do?nttId=290996'
+# Department homepage footers (checked 2026-11-23) print "글로컬캠퍼스 : 32992 충청남도
+# 논산시 대학로 121 ..."; se.konyang.ac.kr names "특수교육과(초등특수교육과·중등특수교육과)".
+FOOTER_GLOCAL = {
+    '경영학부': 'https://business.konyang.ac.kr/', '금융세무학부': 'https://fintax.konyang.ac.kr/',
+    '아동교육학과': 'https://kychild.konyang.ac.kr/', '디지털콘텐츠학과': 'https://dcd.konyang.ac.kr/',
+    '시각디자인학과': 'https://vcd.konyang.ac.kr/', '호텔관광학과': 'https://tourism.konyang.ac.kr/',
+    '마케팅비즈니스학과': 'https://mktgbiz.konyang.ac.kr/', '초등특수교육과': 'https://se.konyang.ac.kr/',
+    '중등특수교육과': 'https://se.konyang.ac.kr/', '군사학과(계약)': 'https://military.konyang.ac.kr/',
+}
+GLOCAL |= set(FOOTER_GLOCAL)
+# Newer official notices win over the syllabus: code-section -> (class time or
+# None for "no live class time", note). Board BBSMSTR_000000000584, 휴머니티칼리지.
+# nttId=290996 (2026-07-20) moved 대전학·인문학의 향기 to 화 10,11교시, but the later
+# nttId=292203 (2026-08-25) says both run as "비대면 온라인 강의(사전제작 강의영상
+# 온라인 시청)" with weekly uploads, so they have no class time.
+ONLINE_NOTE = ('2026-08-25 학교 공지(연합교양대학 교양교과목 수업운영 안내, nttId=292203) 기준 '
+               '비대면 온라인 강의(사전제작 강의영상 시청, 매주 화요일 10시 게시)라 수업 시각이 없습니다. '
+               '이전 공지(nttId=290996)의 화요일 10,11교시는 쓰지 않습니다.')
+BIGDATA_NOTE = ('2026-08-25 학교 공지(2026학년도 2학기 교양강좌(빅데이터가 만드는 세상) 개설 안내, '
+                'nttId=292200) 기준입니다. 강의실은 공개 자료에 없습니다.')
+OVERRIDES = {
+    '00042K-01': (None, ONLINE_NOTE), '00025H-01': (None, ONLINE_NOTE),
+    # Notice table: 메디컬캠퍼스 화 5,6 교시 / 글로컬캠퍼스 수 5,6 교시 (가석현, 2(2-0)).
+    '00086K-01': ('수 5,6교시', BIGDATA_NOTE), '00086K-02': ('화 5,6교시', BIGDATA_NOTE),
+}
+OVERRIDE_URLS = ['https://www.konyang.ac.kr/cop/bbs/BBSMSTR_000000000584/selectBoardArticle.do?nttId=%d' % n
+                 for n in (290996, 292200, 292203)]
 WEEKDAYS = {'월': 1, '화': 2, '수': 3, '목': 4, '금': 5, '토': 6, '일': 7}
 
 
@@ -361,8 +384,8 @@ def main(work):
             if not data:
                 empty_files.append(row['code'] + '-' + row['section'])
         override = OVERRIDES.get(row['code'] + '-' + row['section'])
-        if override:
-            text = override
+        if override and override[0]:
+            text = override[0]
         schedules, status = [], 'unscheduled'
         note = '공개 수업계획서 목록에 첨부 수업계획서가 없어 수업 시각을 확인할 수 없습니다.'
         if row['syllabusUrl']:
@@ -372,7 +395,9 @@ def main(work):
         if legacy_files and legacy_files[-1] == row['code'] + '-' + row['section']:
             status = 'unrecognized'
             note = '첨부 수업계획서 형식(HWP 3.0·PowerPoint)을 읽지 못해 수업시간을 확인하지 못했습니다. 시간표에 추가할 수 없습니다.'
-        if text:
+        if override and not override[0]:
+            note = override[1]
+        elif text:
             try:
                 theory, practice = (int(x) for x in row['creditSystem'].split('-')[1:3])
                 campus, found = meetings(for_section(text, row['section']), campus,
@@ -382,8 +407,7 @@ def main(work):
                 status = 'scheduled'
                 note = '공개 수업계획서의 수업시간 기준입니다. 강의실은 공개 자료에 없습니다.'
                 if override:
-                    note = ('2026-07-20 학교 공지(연합교양대학 수업 시간표 변경 안내) 기준입니다: '
-                            '기존 금요일 6,7교시 → 화요일 10,11교시. 강의실은 공개 자료에 없습니다.')
+                    note = override[1]
             except NoClock:
                 pass
             except ValueError as error:
@@ -453,7 +477,9 @@ def main(work):
                 'medical': '[메디컬캠퍼스 수업시간] 1교시(09:00~09:50) 2교시(10:00~10:50) ~ 7교시(15:00~15:50), 8교시(16:00~16:50)',
                 'slotMinutes': 60,
             },
-            'campusEvidence': {'medical': MEDICAL_URL, 'glocal': [GLOCAL_URL, PRIME_URL]},
+            'campusEvidence': {'medical': MEDICAL_URL, 'glocal': [GLOCAL_URL, PRIME_URL],
+                               'departmentFooters': FOOTER_GLOCAL},
+            'scheduleNoticeUrls': OVERRIDE_URLS,
             'courses': courses,
         }
         out = os.path.join(root, 'assets', 'timetable', 'konyang-%s-2026-2.json' % campus)
