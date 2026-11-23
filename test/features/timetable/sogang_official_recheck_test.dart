@@ -111,13 +111,58 @@ void main() {
     }
   });
 
-  test('공식 조회에서 시험일자가 빠진 시험만 강좌는 미확정으로 남는다', () {
+  test('공식 요일·시각이 있는 시험만·미확정 강좌는 정규 주간 예약으로 확정된다', () {
+    // 2026-11-23 user decision: an official weekday and clock is a weekly
+    // in-person reservation even when the operation mode is unclear.
     for (final id in ['HSS4003-01', 'HSS4007-01', 'MEE3301-04', 'SOCG017-01']) {
       final c = byId(id);
-      expect(c['scheduleStatus'], 'unrecognized', reason: id);
-      expect(c['schedules'], isEmpty, reason: id);
+      expect(c['scheduleStatus'], 'scheduled', reason: id);
       expect((c['sourceEducationalMetadata'] as Map)['exam'], '', reason: id);
       expect(c.containsKey('publishedExamAppointmentEvidence'), false);
+      expect(c['userDecisionWeeklyReservation'], isNotNull, reason: id);
+    }
+    final decided = courses
+        .where((c) => c.containsKey('userDecisionWeeklyReservation'))
+        .toList();
+    expect(decided, hasLength(576));
+    for (final c in decided) {
+      final id = '${c['courseCode']}-${c['section']}';
+      final native = c['sourceEducationalMetadata'] as Map;
+      final skip = {
+        ...excluded,
+        ...RegExp(r'(\d{1,2})\.(\d{1,2})\(')
+            .allMatches(native['exam'] as String)
+            .map(
+              (m) => '2026-${m[1]!.padLeft(2, '0')}-${m[2]!.padLeft(2, '0')}',
+            ),
+      };
+      final expected = <String>{};
+      for (final segment in (native['meetingText'] as String).split(' / ')) {
+        final m = RegExp(
+          r'^([월화수목금토일](?:,[월화수목금토일])*) (\d{2}):(\d{2})~(\d{2}):(\d{2})(?: \[([^\]]+)\])?$',
+        ).firstMatch(segment.trim())!;
+        final days = m[1]!.split(',').map((d) => weekdays[d]!).toSet();
+        final start = int.parse(m[2]!) * 60 + int.parse(m[3]!);
+        final end = int.parse(m[4]!) * 60 + int.parse(m[5]!);
+        for (
+          var d = DateTime(2026, 9, 1);
+          !d.isAfter(DateTime(2026, 12, 21));
+          d = DateTime(d.year, d.month, d.day + 1)
+        ) {
+          final key = timetableDateKey(d);
+          if (days.contains(d.weekday) && !skip.contains(key)) {
+            expected.add('$key/$start/$end/${m[6] ?? ''}');
+          }
+        }
+      }
+      final exam = c['publishedExamAppointmentEvidence'] as Map?;
+      final actual = {
+        for (final m in (c['schedules'] as List).cast<Map>())
+          if (exam == null || m['date'] != exam['calendarDate'])
+            '${m['date']}/${m['startMinute']}/${m['endMinute']}/${m['classroom']}',
+      };
+      expect(actual, expected, reason: id);
+      expect(c['period'], {'startDate': '2026-09-01', 'endDate': '2026-12-21'});
     }
     final examOnly = courses.where(
       (c) =>
@@ -126,9 +171,10 @@ void main() {
     );
     expect(examOnly, hasLength(392));
     expect(raw['publishedExamAppointmentOnlyAdditionCount'], 392);
+    // Only the two rows whose official meeting text has no clock stay held.
     expect(
       courses.where((c) => c['scheduleStatus'] == 'unrecognized'),
-      hasLength(186),
+      hasLength(2),
     );
   });
 
@@ -139,7 +185,10 @@ void main() {
     );
     final saved = moved.toTimetable(id: moved.sourceId, mode: LectureMode.video);
     final restored = TimetableClass.fromJson(saved.toJson());
-    expect(restored.meetings.single.date, '2026-10-21');
+    expect(
+      restored.meetings.where((m) => m.date == '2026-10-21'),
+      hasLength(1),
+    );
     final room = data.courses.singleWhere(
       (c) => c.codeAndSection == 'ENG3107-01',
     );

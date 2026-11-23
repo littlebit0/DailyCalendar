@@ -18,9 +18,9 @@ void main() {
       );
       expect(
         data.courses.where((c) => c.hasSchedulableMeetings),
-        hasLength(1311),
+        hasLength(1495),
       );
-      expect(data.courses.expand((c) => c.meetings), hasLength(21145));
+      expect(data.courses.expand((c) => c.meetings), hasLength(33297));
       final c = data.courses.singleWhere(
         (c) => c.codeAndSection == 'GIS1007-01',
       );
@@ -105,17 +105,22 @@ void main() {
       final examOnly = data.courses.singleWhere(
         (c) => c.codeAndSection == 'EEE4185-01',
       );
-      expect(examOnly.meetings, hasLength(1));
-      expect(examOnly.meetings.single.date, '2026-10-25');
-      expect(examOnly.meetings.single.originalStartMinute, 1080);
-      expect(examOnly.meetings.single.originalEndMinute, 1155);
-      expect(examOnly.meetings.single.classroom, isEmpty);
+      // The published exam stays; the official weekday and clock are now a
+      // weekly reservation too (2026-11-23 user decision).
+      final exam = examOnly.meetings.where((m) => m.date == '2026-10-25');
+      expect(exam, hasLength(1));
+      expect(exam.single.originalStartMinute, 1080);
+      expect(exam.single.originalEndMinute, 1155);
+      expect(exam.single.classroom, isEmpty);
+      expect(examOnly.meetings.length, greaterThan(1));
+      // Held before; its official weekday and clock are reserved weekly
+      // since the 2026-11-23 user decision.
       for (final id in ['HISG104-01']) {
         expect(
           data.courses
               .singleWhere((c) => c.codeAndSection == id)
               .hasSchedulableMeetings,
-          isFalse,
+          isTrue,
         );
       }
     },

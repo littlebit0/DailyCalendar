@@ -20,9 +20,9 @@ void main() {
       expect(data.courses, hasLength(1541));
       expect(
         data.courses.where((c) => c.hasSchedulableMeetings),
-        hasLength(1311),
+        hasLength(1495),
       );
-      expect(data.courses.expand((c) => c.meetings), hasLength(21145));
+      expect(data.courses.expand((c) => c.meetings), hasLength(33297));
       for (final id in ['GME4007-01', 'GME3001-01', 'EDU3033-01']) {
         final course = data.courses.singleWhere((c) => c.codeAndSection == id);
         final saved = course.toTimetable(
