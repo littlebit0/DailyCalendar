@@ -118,6 +118,13 @@ class DateRuleTest(unittest.TestCase):
         self.assertEqual(rule[6], ['2026-09-05', '2026-09-12', '2026-09-19'])  # 9/26·10/3 공휴일
         self.assertNotIn('2026-09-26', rule[6])
 
+    def test_weekend_never_passes_the_last_scheduled_class_day(self):
+        # 금요일 12/18이 마지막 수업일이면 12/19·20 주말을 만들지 않는다(호서 학기종료일 12/18).
+        fridays = ['2026-12-04', '2026-12-11', '2026-12-18']
+        rule, _ = module.date_rule({'courses': [scheduled(fridays, 5)]})
+        self.assertEqual(rule[6][-1], '2026-12-12')
+        self.assertEqual(rule[7][-1], '2026-12-13')
+
     def test_weekend_between_two_closed_weekdays_is_skipped(self):
         fridays = ['2026-10-16', '2026-10-30']  # 10/23 시험 주간
         mondays = ['2026-10-19', '2026-11-02']  # 10/26 시험 주간

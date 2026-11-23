@@ -166,6 +166,7 @@ def date_rule(data):
     if not modal:
         raise ValueError(f"{data.get('universityId')}: no scheduled rows to copy dates from")
     first = datetime.date.fromisoformat(min(d for v in modal.values() for d in v))
+    last_day = datetime.date.fromisoformat(max(d for v in modal.values() for d in v))
     weekday_last = [datetime.date.fromisoformat(v[-1]) for w, v in modal.items() if w <= 5]
     closed = set()
     for v in modal.values():
@@ -184,7 +185,8 @@ def date_rule(data):
         if w in modal:
             continue
         day = first + datetime.timedelta((w - first.isoweekday()) % 7)
-        end = fri + datetime.timedelta(w - 5) if w > 5 else fri
+        # 확정 행의 마지막 수업일을 넘지 않는다(학기 종료일 뒤 주말을 만들지 않음).
+        end = min(fri + datetime.timedelta(w - 5) if w > 5 else fri, last_day)
         out = []
         while day <= end:
             # 앞 금요일과 다음 월요일이 모두 휴업(시험 주간 등)이면 그 주말도 뺀다.
