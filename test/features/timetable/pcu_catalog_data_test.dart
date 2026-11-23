@@ -32,9 +32,8 @@ void main() {
       byStatus[c.scheduleStatus] = (byStatus[c.scheduleStatus] ?? 0) + 1;
     }
     expect(byStatus, {
-      'scheduled': 1665,
-      'unscheduled': 236,
-      'unrecognized': 5,
+      'scheduled': 1674,
+      'unscheduled': 232,
     });
 
     // Handbook page 2 (https://www.pcu.ac.kr/kor/contents/25): 50-minute
@@ -97,7 +96,7 @@ void main() {
         }
       }
     }
-    expect(segments, 2433);
+    expect(segments, 2447);
 
     // Every major course under a mapped department heading keeps its owner.
     expect(

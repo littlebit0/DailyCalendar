@@ -47,6 +47,25 @@ class ImportPcuTests(unittest.TestCase):
         self.assertEqual(pcu.decide([online, timed])[0], 'scheduled')
         self.assertEqual(pcu.decide([{'time': '월C,목B', 'room': 'Y'}, {'time': '목B', 'room': 'Y'}])[0], 'unrecognized')
 
+    def test_latest_handbook_settles_only_courses_it_times_consistently(self):
+        def listing(time, room, prof='김교수'):
+            raw = ['2', '전선', 'ARC22212', '디지털이미징설계', '3', '3', '01', prof, time, room, '']
+            return {'name': '디지털이미징설계', 'time': time, 'room': room, 'raw': raw, 'page': 254}
+        def course(status, section='01'):
+            return {'sourceId': f'x/{section}', 'courseCode': 'ARC22212', 'section': section,
+                    'courseName': '디지털이미징설계', 'professor': '', 'scheduleStatus': status,
+                    'schedules': [], 'sourceSchedule': '', 'sourceClassroom': '', 'remarks': 'r'}
+        off = {'ARC22212-01': [listing('월C,목B', 'Y424-2'), listing('월C,목B', 'Y424-2')],
+               'ARC22212-02': [listing('월B,목C', 'Y424-2'), listing('월B', 'Y424-2')]}
+        held, clash, done = course('unrecognized'), course('unrecognized', '02'), course('scheduled')
+        self.assertEqual(pcu.settle_latest([held, clash, done], off), ['x/01'])
+        self.assertEqual([(m['weekday'], m['startMinute'], m['endMinute']) for m in held['schedules']],
+                         [(1, 810, 900), (4, 660, 750)])
+        self.assertEqual((held['professor'], held['sourceClassroom']), ('김교수', 'Y424-2'))
+        self.assertIn('2026-11-04', held['remarks'])
+        self.assertEqual(clash['scheduleStatus'], 'unrecognized')
+        self.assertEqual(done['schedules'], [])
+
     def test_unknown_numeric_period_is_rejected(self):
         self.assertIsNone(pcu.meetings([(1, '99')], 'AM108'))
 

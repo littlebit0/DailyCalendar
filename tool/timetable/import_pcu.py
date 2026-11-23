@@ -6,6 +6,7 @@ Source: https://hakgwa.pcu.ac.kr/ce/article/depart_ce_notice/37507
 
   extract <handbook.pdf> <rows.json>        (needs PyMuPDF)
   apply   <rows.json> <repository root>     (pure Python)
+  latest  <rows_latest.json> <repository root>  rows extracted from LATEST (2026-11-04 갱신본)
 
 `apply` keeps every existing course value. Rows the earlier extraction skipped
 are added. A schedule is set only when the official listings state the weekday
@@ -188,6 +189,83 @@ def official_listings(rows):
     return {f'{k[0]}-{k[1]}': v for k, v in by.items()}
 
 
+def join(cell, sep=''):
+    lines = [l.strip() for l in (cell or '').split('\n') if l.strip()]
+    out = ''
+    for l in lines:
+        out += (' ' if out.endswith(',') else sep if out else '') + l
+    return out
+
+
+def rooms(cell):
+    parts = [p.strip() for p in re.split(r'[,/]', join(cell)) if p.strip()]
+    return ' / '.join(parts)
+
+
+def printed(page):
+    return page - 6
+
+
+def rowtext(l):
+    return ' '.join(join(c, ' ' if i >= 10 else '') for i, c in enumerate(l['raw']) if join(c))
+
+
+def where(l):
+    return f"인쇄 {printed(l['page'])}쪽(PDF {l['page']}쪽)"
+
+
+def timed_meetings(timed):
+    """(meetings, room) of the listing decide() picked for the time."""
+    if timed['room'] is None:
+        sched = meetings(slots_shared(timed['time']), '')
+        return sched, ' / '.join(dict.fromkeys(m['classroom'] for m in sched))
+    room = rooms(timed['raw'][9])
+    return meetings(slots_std(timed['time']), room), room
+
+
+# 2026-11-04 갱신본(Last-Modified: Wed, 04 Nov 2026 07:05:17 GMT). 학교 홈페이지 강의시간 편람
+# 메뉴(https://www.pcu.ac.kr/kor/contents/155)의 2026-2학기 파일로, 8월 학과 공지 첨부본보다 최신이다.
+LATEST = 'https://www.pcu.ac.kr/images/site/kor/pdf/2026-2-handbook.pdf'
+
+
+def settle_latest(courses, off):
+    """Schedule courses the August handbook left unscheduled/unrecognized when the latest
+    official handbook states their weekday and period without contradiction
+    (2026-11-23 사용자 지시: 모순·시각 없음은 가장 최신 공식 자료로 정한다).
+    The previous source text is kept in remarks. Returns the settled sourceIds."""
+    done = []
+    for c in courses:
+        if c['scheduleStatus'] == 'scheduled':
+            continue
+        L = off.get(f"{c['courseCode']}-{c['section']}") or []
+        L = [l for l in L if l['name'] == c['courseName'].replace(' ', '')] or L
+        status, _, timed = decide(L) if L else ('', '', None)
+        if status != 'scheduled':
+            continue
+        sched, room = timed_meetings(timed)
+        before = (f"담당 {c['professor'] or '빈칸'}, 시간 {c['sourceSchedule'] or '빈칸'}, "
+                  f"강의실 {c['sourceClassroom'] or '빈칸'}")
+        prof = next((join(l['raw'][7]) for l in L if join(l['raw'][7]) and join(l['raw'][7]) != '미배정'), '')
+        c['professor'] = prof or c['professor']
+        c['scheduleStatus'], c['schedules'] = 'scheduled', sched
+        c['sourceSchedule'] = ' '.join(x for x in [c['professor'], timed['time'], room] if x)
+        c['sourceClassroom'] = room
+        c['remarks'] += (f" | 시각 확정: 최신 공식 강의시간편람(2026-11-04 갱신본, {LATEST}) {where(timed)} "
+                         f"원문 '{rowtext(timed)}'으로 확정"
+                         + (f"(이 편람의 시각 적힌 {n}개 목록 모두 같은 요일·교시)" if (n := sum(listing_slots(l)[0] == 'slots' for l in L)) > 1 else '')
+                         + f". 이전 편람(2026-08-03 학과 공지 첨부본) 원문: {before}")
+        done.append(c['sourceId'])
+    return done
+
+
+def latest(rows_path, WT):
+    DS = f'{WT}/assets/timetable/pcu-main-2026-2.json'
+    ds = json.load(open(DS, encoding='utf-8'))
+    done = settle_latest(ds['courses'], official_listings(json.load(open(rows_path, encoding='utf-8'))))
+    json.dump(ds, open(DS, 'w', encoding='utf-8'), ensure_ascii=False, indent=2); open(DS, 'a', encoding='utf-8').write('\n')
+    print(len(done), done)
+
+
 def apply(rows_path, WT):
     DS = f'{WT}/assets/timetable/pcu-main-2026-2.json'
     ORG = f'{WT}/assets/timetable/organizations/pcu.json'
@@ -196,26 +274,6 @@ def apply(rows_path, WT):
     ds = json.load(open(DS, encoding='utf-8'))
     org = json.load(open(ORG, encoding='utf-8'))
     labels = {m['sourceLabel']: m for m in org['mappings']}
-
-    def join(cell, sep=''):
-        lines = [l.strip() for l in (cell or '').split('\n') if l.strip()]
-        out = ''
-        for l in lines:
-            out += (' ' if out.endswith(',') else sep if out else '') + l
-        return out
-
-    def rooms(cell):
-        parts = [p.strip() for p in re.split(r'[,/]', join(cell)) if p.strip()]
-        return ' / '.join(parts)
-
-    def printed(page):
-        return page - 6
-
-    def rowtext(l):
-        return ' '.join(join(c, ' ' if i >= 10 else '') for i, c in enumerate(l['raw']) if join(c))
-
-    def where(l):
-        return f"인쇄 {printed(l['page'])}쪽(PDF {l['page']}쪽)"
 
     # group listings into offerings: code+section, split by course name when the PDF
     # prints one code+section for different courses (사회봉사1~4 share GEN22692).
@@ -309,4 +367,4 @@ def apply(rows_path, WT):
 
 
 if __name__ == '__main__':
-    {'extract': extract, 'apply': apply}[sys.argv[1]](sys.argv[2], sys.argv[3])
+    {'extract': extract, 'apply': apply, 'latest': latest}[sys.argv[1]](sys.argv[2], sys.argv[3])
