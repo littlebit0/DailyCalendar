@@ -7,7 +7,8 @@ published table omits continues with the same slot length. Dates are built the
 way every scheduled scnu course was built (candidate-audit.json): 2026-09-01 to
 2026-12-07, minus the listed holidays and midterm week. Courses without a
 published time or with contradicting duplicate rows stay unrecognized.
-Re-running changes nothing.
+Re-running changes nothing. 2026-11-23 user decision: rows whose 강의시간 is
+empty (미개설) become unscheduled, other fields untouched.
 
 2026-11-23 (2차): '토11,12' reads 11·12 as 야간1·2 (the timetable's own
 '야간1(11)' label) on the 교학규정 제52조 Saturday clock (13:00, 45 min + 5).
@@ -72,6 +73,9 @@ SPLIT_ID = 'scnu-2026-2-XG1174-00'
 SPLIT_NOTE = (' 0824판에 같은 코드·분반 두 행(표35 40행 고전의 재발견 with 상상과 맥락, 42행 그린스마트팜과 '
               '농촌융복합산업)이 있어 행별 강좌로 나눴습니다. 2026-1 수업시간표(2.10판)에서 XG1174는 '
               '그린스마트팜과 농촌융복합산업입니다.')
+# 2026-11-23 user decision: rows with an empty 강의시간 (미개설) stay as published
+# but have no time, so they are unscheduled.
+UNTIMED_NOTE = ' 0824판 수업시간표에 강의시간이 없어(미개설 표기 포함) 시간 미정으로 둡니다.'
 GJ_DEPARTMENT = '광주전남권역 대학 간 학점교류(원격)'
 GJ_NOTE = (' 2026-2학기 광주전남권역 대학 간 학점교류 안내(학사공지 nttSn=281316082 붙임 2·6): '
            '원격수업(콘텐츠 활용)으로 주차별 지정 학습기간에 강의 영상을 수강하며 실시간 수업 시각이 없어 '
@@ -188,11 +192,13 @@ def apply(data):
     for course in data['courses']:
         if course['scheduleStatus'] != 'unrecognized':
             continue
-        if course['departments'] == [GJ_DEPARTMENT]:
+        untimed = not any(a.strip() for a in course['sourceScheduleAliases'])
+        if course['departments'] == [GJ_DEPARTMENT] or untimed:
+            note = GJ_NOTE if course['departments'] == [GJ_DEPARTMENT] else UNTIMED_NOTE
             course['scheduleStatus'] = 'unscheduled'
-            course['remarks'] = HOLD_REMARK.sub('', course['remarks']) + GJ_NOTE
+            course['remarks'] = HOLD_REMARK.sub('', course['remarks']) + note
             for department, text in course['departmentRemarks'].items():
-                course['departmentRemarks'][department] = HOLD_REMARK.sub('', text) + GJ_NOTE
+                course['departmentRemarks'][department] = HOLD_REMARK.sub('', text) + note
             changed.append(course['sourceId'])
             continue
         result = review(course)

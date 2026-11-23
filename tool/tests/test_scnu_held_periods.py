@@ -34,7 +34,7 @@ class ScnuHeldPeriodsTest(unittest.TestCase):
 
     def test_published_periods_are_confirmed_and_untimed_rows_stay(self):
         data = self.data()
-        self.assertEqual(len(apply_scnu.apply(data)), 5)
+        self.assertEqual(len(apply_scnu.apply(data)), 6)
         night, weeks, comma, other, blank, saturday, exchange = data['courses']
         # 16교시 continues the 50-minute night slot: 20:30 to 23:00 on every Wednesday.
         self.assertEqual(night['schedules'][0], {'weekday': 3, 'startMinute': 1230,
@@ -53,9 +53,11 @@ class ScnuHeldPeriodsTest(unittest.TestCase):
         self.assertEqual(exchange['schedules'], [])
         self.assertIn('실시간 수업 시각이 없어', exchange['remarks'])
         self.assertNotIn('일정 미생성', exchange['remarks'])
-        for held in (other, blank):
-            self.assertEqual(held['scheduleStatus'], 'unrecognized')
-            self.assertEqual(held['schedules'], [])
+        self.assertEqual(other['scheduleStatus'], 'unrecognized')
+        # An empty 강의시간 (미개설) has no time: unscheduled, no meetings.
+        self.assertEqual(blank['scheduleStatus'], 'unscheduled')
+        self.assertEqual(blank['schedules'], [])
+        self.assertIn('시간 미정', blank['remarks'])
 
     def test_closed_timetable_section_is_added_once(self):
         row = {'sourceTable': 60, 'sourceContext': ['국어교육과'], 'education': {
@@ -96,11 +98,11 @@ class ScnuHeldPeriodsTest(unittest.TestCase):
         self.assertEqual(apply_scnu.split_shared(data), ['scnu-2026-2-XG1174-00-T35R42'])
         self.assertEqual(apply_scnu.split_shared(data), [])
         first, second = data['courses']
-        self.assertEqual((first['courseName'], first['scheduleStatus']), ('고전', 'unrecognized'))
+        self.assertEqual(first['courseName'], '고전')
         self.assertIn('2026-1 수업시간표', second['remarks'])
         apply_scnu.apply(data)
         self.assertEqual(second['scheduleStatus'], 'scheduled')
-        self.assertEqual(first['scheduleStatus'], 'unrecognized')
+        self.assertEqual(first['scheduleStatus'], 'unscheduled')
 
     def test_rerun_changes_nothing(self):
         data = self.data()

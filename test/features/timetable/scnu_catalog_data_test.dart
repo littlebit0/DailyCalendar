@@ -142,11 +142,14 @@ void main() {
     );
     expect(firstWeeks.meetings.map((m) => m.date).last, '2026-09-30');
     expect(courses.where((c) => c.meetings.isEmpty), hasLength(62));
-    // 원문에 시각이 없는 강좌는 그대로 보류한다.
-    expect(
-      courses.where((c) => c.meetings.isEmpty && c.sourceSchedule.isEmpty),
-      hasLength(21),
+    // 원문 강의시간이 빈 강좌(미개설 21건)는 원문 그대로 두고 시간 미정으로 둔다.
+    final untimed = courses.where(
+      (c) => c.meetings.isEmpty && c.sourceSchedule.isEmpty,
     );
+    expect(untimed, hasLength(21));
+    for (final c in untimed) {
+      expect(c.scheduleStatus, 'unscheduled', reason: c.sourceId);
+    }
     // '토11,12'는 토요일 야간1·2교시(교학규정 제52조 토요일 표): 13:00~14:40.
     final saturday = courses.singleWhere(
       (c) => c.sourceId == 'scnu-2026-2-ED0043-00',
@@ -164,10 +167,7 @@ void main() {
       expect(c.scheduleStatus, 'unscheduled', reason: c.sourceId);
       expect(c.meetings, isEmpty);
     }
-    expect(
-      courses.where((c) => c.scheduleStatus == 'unrecognized'),
-      hasLength(21),
-    );
+    expect(courses.where((c) => c.scheduleStatus == 'unrecognized'), isEmpty);
     // XH1028-00 0824판 두 행(월1,2수6·월3,4수7)을 모두 모임으로 넣는다.
     final ksl = courses.singleWhere((c) => c.sourceId == 'scnu-2026-2-XH1028-00');
     expect(
