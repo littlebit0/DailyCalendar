@@ -43,7 +43,7 @@ void main() {
             )
             as Map<String, dynamic>,
       );
-      expect(data.courses.where((c) => c.hasSchedulableMeetings).length, 1461);
+      expect(data.courses.where((c) => c.hasSchedulableMeetings).length, 1826);
       final nested = data.courses.singleWhere(
         (c) => c.codeAndSection == 'FR2012-00',
       );
@@ -77,12 +77,24 @@ void main() {
         spanish.meetings.any((m) => m.date!.compareTo('2026-12-15') >= 0),
         isFalse,
       );
-      expect(
-        data.courses
-            .singleWhere((c) => c.codeAndSection == 'AE354-01')
-            .hasSchedulableMeetings,
-        isFalse,
+      // 운영 방식 검토로 보류했던 강좌는 원문 요일·시각 그대로 확정한다(2026-11-23 결정).
+      final confirmed = data.courses.singleWhere(
+        (c) => c.codeAndSection == 'AE354-01',
       );
+      expect(
+        confirmed.sourceSchedule,
+        '화 13:30-14:45 (공149호, 공176-3)\n목 13:30-14:45 (공176-4호, 공149)',
+      );
+      expect(confirmed.meetings.first.date, '2026-09-01');
+      expect(confirmed.meetings.first.originalStartMinute, 810);
+      expect(confirmed.meetings.first.originalEndMinute, 885);
+      expect(confirmed.meetings.first.classroom, '공149호, 공176-3');
+      expect(
+        confirmed.meetings.where((m) => m.weekday == 4).first.classroom,
+        '공176-4호, 공149',
+      );
+      expect(confirmed.remarks, contains('공식 요일·시각 기준 확정'));
+      expect(confirmed.remarks, isNot(contains('보류됩니다')));
     },
   );
   test(
@@ -104,18 +116,38 @@ void main() {
         expect(m.originalEndMinute, 885);
         expect(m.classroom, isEmpty);
       }
+      // 원문 '월 15:00-16:15 (정111)\n수 15:00-16:15 (정111)' 그대로 확정, 시험·공휴일 제외.
+      final econ = d.courses.singleWhere(
+        (c) => c.codeAndSection == 'ECON2043-00',
+      );
+      expect(econ.meetings.first.date, '2026-09-02');
       expect(
-        d.courses
-            .singleWhere((c) => c.codeAndSection == 'ECON2043-00')
-            .hasSchedulableMeetings,
-        isFalse,
+        econ.meetings.every(
+          (m) =>
+              {1, 3}.contains(m.weekday) &&
+              m.originalStartMinute == 900 &&
+              m.originalEndMinute == 975 &&
+              m.classroom == '정111',
+        ),
+        isTrue,
       );
       expect(
-        d.courses
-            .singleWhere((c) => c.codeAndSection == 'TRADE4015-00')
-            .hasSchedulableMeetings,
+        econ.meetings.any(
+          (m) =>
+              m.date == '2026-10-05' ||
+              (m.date!.compareTo('2026-10-20') >= 0 &&
+                  m.date!.compareTo('2026-10-26') <= 0) ||
+              m.date!.compareTo('2026-12-15') >= 0,
+        ),
         isFalse,
       );
+      // 원문에 시각이 없는 강좌는 시간 미정으로 추가할 수 있다.
+      final undated = d.courses.singleWhere(
+        (c) => c.codeAndSection == 'TRADE4015-00',
+      );
+      expect(undated.hasSchedulableMeetings, isFalse);
+      expect(undated.canAddToTimetable, isTrue);
+      expect(undated.remarks, contains('시간 미정'));
       expect(
         d.courses
             .singleWhere((c) => c.codeAndSection == 'TRADE3052-00')
@@ -140,8 +172,8 @@ void main() {
       ];
       expect(courses.length, 4666);
       expect(courses.map((c) => c.sourceId).toSet().length, 4666);
-      expect(courses.where((c) => c.hasSchedulableMeetings).length, 3161);
-      expect(courses.expand((c) => c.meetings).length, 58991);
+      expect(courses.where((c) => c.hasSchedulableMeetings).length, 3885);
+      expect(courses.expand((c) => c.meetings).length, 72577);
       for (final code in ['TRADE1016-00', 'TRADE2010-01']) {
         final c = courses.singleWhere((c) => c.codeAndSection == code);
         expect(c.remarks, contains('외국인 전용'));
