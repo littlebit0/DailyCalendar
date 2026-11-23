@@ -206,7 +206,12 @@ void main() {
       expect(courses, hasLength(3095));
       expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(2090));
       final held = courses.where((c) => c.scheduleStatus == 'unrecognized');
-      expect(held, hasLength(1005));
+      expect(held, hasLength(1001));
+      // 거점국립대 원격수업 4강좌: 공개 강의계획서가 온라인 수업으로 안내.
+      expect(
+        courses.where((c) => c.scheduleStatus == 'unscheduled'),
+        hasLength(4),
+      );
       expect(
         held.where((c) => c.sourceSchedule == '시간표자료없음'),
         hasLength(935),
