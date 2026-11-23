@@ -126,7 +126,27 @@ void main() {
       )) {
         expect(c.meetings, isEmpty);
       }
-      expect(courses.singleWhere((c) => c.code == '2204').meetings, isEmpty);
+      // Law notice 225363 (2026-09-03) moves 2204 to Friday 10:00-10:50 and
+      // cancels the first September week.
+      final career = courses.singleWhere((c) => c.code == '2204');
+      expect(career.sourceSchedule, '수(12:00-12:50)');
+      expect(career.meetings, hasLength(11));
+      for (final m in career.meetings) {
+        expect(
+          [m.weekday, m.originalStartMinute, m.originalEndMinute],
+          [5, 600, 650],
+        );
+        expect(m.date, isNot('2026-09-04'));
+      }
+      // HUSS consortium courses are online with no weekly clock (notice 224170).
+      final huss = courses.where(
+        (c) => c.remarks.contains('HUSS_004/detail/224170'),
+      );
+      expect(huss, hasLength(21));
+      for (final c in huss) {
+        expect(c.meetings, isEmpty);
+        expect(records[c.sourceId]['scheduleStatus'], 'unscheduled');
+      }
     },
   );
   test(
@@ -142,7 +162,14 @@ void main() {
         final source = record['publicEducationRows'][0]['education'];
         expect(c.sourceSchedule, source['강의시간']);
         expect(c.sourceClassroom, source['강의실']);
-        final blocks = clock.allMatches(source['강의시간'] as String).toList();
+        // A department notice clock replaces the printed clock (2204).
+        final noticeClock = RegExp(r'공지 시각 (\S+\)),').firstMatch(c.remarks);
+        final blocks = clock
+            .allMatches(noticeClock?[1] ?? source['강의시간'] as String)
+            .toList();
+        final cancelled = RegExp(
+          r'휴강 (\d{4}-\d{2}-\d{2})',
+        ).allMatches(c.remarks).map((m) => m[1]).toSet();
         expect(blocks, isNotEmpty);
         final expected = <String>{};
         for (
@@ -151,7 +178,7 @@ void main() {
           day = DateTime(day.year, day.month, day.day + 1)
         ) {
           final date = timetableDateKey(day);
-          if (holiday.contains(date)) {
+          if (holiday.contains(date) || cancelled.contains(date)) {
             continue;
           }
           for (final b in blocks) {
@@ -204,8 +231,8 @@ void main() {
         }
         expect(actual, expected, reason: 'native registration ${c.code}');
       }
-      expect(count, 66002);
-      expect(courses.where((c) => c.meetings.isNotEmpty), hasLength(3376));
+      expect(count, 66117);
+      expect(courses.where((c) => c.meetings.isNotEmpty), hasLength(3381));
     },
   );
   for (final mode in [
@@ -214,7 +241,7 @@ void main() {
     LectureMode.video,
   ]) {
     test(
-      'Actual 3376 model classes 66002 dates full Drive JSON roundtrip ${mode.name}',
+      'Actual 3381 model classes 66117 dates full Drive JSON roundtrip ${mode.name}',
       () {
         final values = <String, TimetableSyncValue>{};
         var count = 0;
@@ -238,8 +265,8 @@ void main() {
             'research',
           );
         }
-        expect(values, hasLength(3376));
-        expect(count, 66002);
+        expect(values, hasLength(3381));
+        expect(count, 66117);
         final doc = TimetableSyncDocument.records(
           courses: values,
           schemaVersion: 2,
@@ -247,7 +274,7 @@ void main() {
         final json =
             jsonDecode(jsonEncode(doc.toJson())) as Map<String, dynamic>;
         final restored = TimetableSyncDocument.fromJson(json);
-        expect(restored.materializeClasses(), hasLength(3376));
+        expect(restored.materializeClasses(), hasLength(3381));
         for (final c in restored.materializeClasses()) {
           expect(c.isValid, true);
           expect(c.toJson(), values[timetableCourseSyncKey(c)]!.value);
