@@ -302,6 +302,22 @@ void main() {
         }
       }
       expect(checked, 78177);
+      // Nested venue names survive unwrapping the outer schedule parentheses.
+      final sinchon =
+          jsonDecode(
+                File(
+                  'assets/timetable/yonsei-sinchon-2026-2.json',
+                ).readAsStringSync(),
+              )
+              as Map<String, dynamic>;
+      final swim = (sinchon['courses'] as List).singleWhere(
+        (c) => c['sourceId'] == 'yonsei/H1/2026-2/PED1101-01-00',
+      );
+      expect(swim['sourceClassroom'], '(수영장(신촌))');
+      expect(
+        (swim['schedules'] as List).map((m) => m['classroom']).toSet(),
+        {'수영장(신촌)'},
+      );
     },
   );
 }

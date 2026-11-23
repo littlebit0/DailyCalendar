@@ -253,19 +253,19 @@
   },
   "assets/timetable/yonsei-international-2026-2.json": {
     "sha256": "4a8eb6a0acfd542b11728846c08aea49273a71f8a9de3a54485f2b155f42e289",
-    "reason": "2026-11-23: -1교시를 같은 60분 슬롯으로 계산(14), 비대면(동영상) 시각 없음 35건 시간 미정"
+    "reason": "2026-11-23: 중첩 괄호 강의실 이름 보존"
   },
   "assets/timetable/yonsei-mirae-2026-2.json": {
     "sha256": "209037029fee8a515f13b6f231960090534bd32854cd41e387cf6eef732083bb",
-    "reason": "2026-11-23: -1교시를 같은 60분 슬롯으로 계산(14), 비대면(동영상) 시각 없음 35건 시간 미정"
+    "reason": "2026-11-23: 중첩 괄호 강의실 이름 보존"
   },
   "assets/timetable/yonsei-sinchon-2026-2.json": {
-    "sha256": "3042264ba041c306c71c1a2912a7d85b8c13ba003bdf7a167d2fc2cbfda4490f",
-    "reason": "2026-11-23: -1교시를 같은 60분 슬롯으로 계산(14), 비대면(동영상) 시각 없음 35건 시간 미정"
+    "sha256": "966d62cdd2f22cbcfb9809358dc54dbbc28037cd0f397480ecec8d906946da0c",
+    "reason": "2026-11-23: 중첩 괄호 강의실 이름 보존"
   },
   "assets/timetable/yonsei-unknown-2026-2.json": {
     "sha256": "d170bbec4f8f283d0d321db37d27b490abbce1298608c362bc3ff274a2a68417",
-    "reason": "2026-11-23: -1교시를 같은 60분 슬롯으로 계산(14), 비대면(동영상) 시각 없음 35건 시간 미정"
+    "reason": "2026-11-23: 중첩 괄호 강의실 이름 보존"
   },
   "assets/timetable/organizations/yu.json": {
     "sha256": "5c12acd2c987b4f2e81cbe2492829d957a589e9b2ca0df4b1015a9f3191048dc",
