@@ -45,7 +45,26 @@ void main() {
               ).readAsStringSync(),
             )
             as Map;
-    expect(product['courses'], frozen['courses']);
+    // 2026-11-23 사용자 결정으로 확정한 보류 강좌는 시각·상태·비고·기간만 바뀌었다.
+    final products = product['courses'] as List;
+    final frozens = frozen['courses'] as List;
+    expect(products, hasLength(frozens.length));
+    var confirmed = 0;
+    for (var i = 0; i < products.length; i++) {
+      final now = Map<String, dynamic>.from(products[i] as Map);
+      final before = frozens[i] as Map;
+      if (jsonEncode(now['departmentRemarks']).contains('2026-11-23 사용자 결정')) {
+        expect(before['scheduleStatus'], 'unrecognized');
+        expect(now['scheduleStatus'], 'scheduled');
+        for (final f in ['schedules', 'scheduleStatus', 'departmentRemarks']) {
+          now[f] = before[f];
+        }
+        now.remove('period');
+        confirmed++;
+      }
+      expect(now, before);
+    }
+    expect(confirmed, 139);
     final period =
         (jsonDecode(
                   fixtureFile(
@@ -79,8 +98,8 @@ void main() {
     final selected = dataset.courses
         .where((c) => c.hasSchedulableMeetings)
         .toList();
-    expect(selected, hasLength(2044));
-    expect(selected.fold<int>(0, (n, c) => n + c.meetings.length), 56624);
+    expect(selected, hasLength(2183));
+    expect(selected.fold<int>(0, (n, c) => n + c.meetings.length), 59046);
     final baseline =
         jsonDecode(
               fixtureFile(

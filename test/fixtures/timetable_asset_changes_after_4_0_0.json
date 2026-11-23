@@ -764,8 +764,8 @@
     "reason": "공백만 제거(내용 동일): 파싱 비용과 앱 용량 절감"
   },
   "assets/timetable/ssu-main-2026-2.json": {
-    "sha256": "8f4d07b62bd772ae2620ff66f9deb0dc82d19dc1986c0c856eff2e445d63e146",
-    "reason": "공백만 제거(내용 동일): 파싱 비용과 앱 용량 절감"
+    "sha256": "ba527a2deab240e9793325f3602c788ebb1266d178cb322a5b686f6777ae75cb",
+    "reason": "공백만 제거(내용 동일): 파싱 비용과 앱 용량 절감; 숭실대 대면+녹화·운영 검토 보류 강좌를 공개 요일·시각으로 확정(2026-11-23 사용자 결정)"
   },
   "assets/timetable/tuk-first-2026-2.json": {
     "sha256": "2985903db6e3e3a60610ec063314476ebd37e107414c6b96ad44a2079a31c0cb",

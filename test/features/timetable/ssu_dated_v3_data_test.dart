@@ -22,8 +22,8 @@ void main() {
       final selected = dataset.courses
           .where((c) => c.hasSchedulableMeetings)
           .toList();
-      expect(selected, hasLength(2044));
-      expect(selected.fold<int>(0, (n, c) => n + c.meetings.length), 56624);
+      expect(selected, hasLength(2183));
+      expect(selected.fold<int>(0, (n, c) => n + c.meetings.length), 59046);
       final baseline =
           jsonDecode(
                 fixtureFile(
