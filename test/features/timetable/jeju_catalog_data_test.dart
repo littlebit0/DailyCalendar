@@ -63,7 +63,7 @@ void main() {
           }
         }
       }
-      expect(segments, 40477);
+      expect(segments, 40606);
     },
   );
   test(
@@ -221,6 +221,12 @@ void main() {
           reason: prefix,
         );
       }
+      // A period listed with one named room and an empty "[]" keeps the room.
+      final named = courses.singleWhere(
+        (c) => c.sourceId == 'jeju/unknown/2026-2/009009',
+      );
+      expect(named.sourceSchedule, '금6[교양4320] 금6[] 금7[교양4320] 금7[]');
+      expect(named.meetings.map((m) => m.classroom).toSet(), {'교양4320'});
       final exam = courses.singleWhere(
         (c) => c.sourceId == 'jeju/unknown/2026-2/KN0001',
       );
