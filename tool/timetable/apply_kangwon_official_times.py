@@ -161,41 +161,47 @@ def main():
                 else:
                     assert convert(c) == c['schedules'], c['sourceId']
         counts = {'scheduled': 0, 'unscheduled': 0, 'unrecognized': {}, 'lrs': 0, 'repeated': 0}
-        for c in data['courses']:
-            # 2차: 시간 미정으로 둔 '0'(LRS 강좌)과 '토1,1,1' 표기를 공식 LRS 시간표로 확정한다.
-            if c['scheduleStatus'] == 'unscheduled':
-                remarks = ' '.join(c['departmentRemarks'].values())
-                if NONE_NOTE in remarks and c['courseCode'] in LRS_TIMES:
-                    schedules, old, note, key = lrs_meeting(LRS_TIMES[c['courseCode']]), NONE_NOTE, LRS_NOTE, 'lrs'
-                elif REPEATED_NOTE in remarks:
-                    schedules, old, note, key = convert(c), REPEATED_NOTE, REPEATED_OK_NOTE, 'repeated'
-                else:
-                    continue
-                c['scheduleStatus'], c['schedules'] = 'scheduled', schedules
-                c['departmentRemarks'] = {k: v.replace(old, note) for k, v in c['departmentRemarks'].items()}
-                counts[key] += 1
-                continue
-            if c['scheduleStatus'] != 'unrecognized':
-                continue
-            if not c['sourceSchedule'].strip():
-                # 원문 시간표 칸이 비면 시각이 없다: convert()가 빈 구간을 돌려줘도 scheduled로 두지 않는다.
-                status, schedules, note = 'unscheduled', [], BLANK_NOTE
-            elif c['sourceSchedule'].strip() == '0' and c['sourceClassroom'].strip() == '0':
-                status, schedules, note = 'unscheduled', [], NONE_NOTE
-            else:
-                try:
-                    status, schedules, note = 'scheduled', convert(c), NEW_NOTE
-                except ValueError as error:
-                    if str(error) != 'repeated_source_period':
-                        counts['unrecognized'][str(error)] = counts['unrecognized'].get(str(error), 0) + 1
+        # 한 번 실행으로 끝나도록 바뀐 강좌가 없을 때까지 반복한다(예: unrecognized '0' → unscheduled → LRS 확정).
+        while True:
+            before = json.dumps(data['courses'], ensure_ascii=False)
+            counts['unrecognized'] = {}
+            for c in data['courses']:
+                # 2차: 시간 미정으로 둔 '0'(LRS 강좌)과 '토1,1,1' 표기를 공식 LRS 시간표로 확정한다.
+                if c['scheduleStatus'] == 'unscheduled':
+                    remarks = ' '.join(c['departmentRemarks'].values())
+                    if NONE_NOTE in remarks and c['courseCode'] in LRS_TIMES:
+                        schedules, old, note, key = lrs_meeting(LRS_TIMES[c['courseCode']]), NONE_NOTE, LRS_NOTE, 'lrs'
+                    elif REPEATED_NOTE in remarks:
+                        schedules, old, note, key = convert(c), REPEATED_NOTE, REPEATED_OK_NOTE, 'repeated'
+                    else:
                         continue
-                    status, schedules, note = 'unscheduled', [], REPEATED_NOTE
-                    c['departmentRemarks'] = {k: v.replace(HELD_NOTE, OLD_NOTE)
-                                              for k, v in c['departmentRemarks'].items()}
-            c['scheduleStatus'], c['schedules'] = status, schedules
-            c['departmentRemarks'] = {k: v.replace(OLD_NOTE, note)
-                                      for k, v in c['departmentRemarks'].items()}
-            counts[status] += 1
+                    c['scheduleStatus'], c['schedules'] = 'scheduled', schedules
+                    c['departmentRemarks'] = {k: v.replace(old, note) for k, v in c['departmentRemarks'].items()}
+                    counts[key] += 1
+                    continue
+                if c['scheduleStatus'] != 'unrecognized':
+                    continue
+                if not c['sourceSchedule'].strip():
+                    # 원문 시간표 칸이 비면 시각이 없다: convert()가 빈 구간을 돌려줘도 scheduled로 두지 않는다.
+                    status, schedules, note = 'unscheduled', [], BLANK_NOTE
+                elif c['sourceSchedule'].strip() == '0' and c['sourceClassroom'].strip() == '0':
+                    status, schedules, note = 'unscheduled', [], NONE_NOTE
+                else:
+                    try:
+                        status, schedules, note = 'scheduled', convert(c), NEW_NOTE
+                    except ValueError as error:
+                        if str(error) != 'repeated_source_period':
+                            counts['unrecognized'][str(error)] = counts['unrecognized'].get(str(error), 0) + 1
+                            continue
+                        status, schedules, note = 'unscheduled', [], REPEATED_NOTE
+                        c['departmentRemarks'] = {k: v.replace(HELD_NOTE, OLD_NOTE)
+                                                  for k, v in c['departmentRemarks'].items()}
+                c['scheduleStatus'], c['schedules'] = status, schedules
+                c['departmentRemarks'] = {k: v.replace(OLD_NOTE, note)
+                                          for k, v in c['departmentRemarks'].items()}
+                counts[status] += 1
+            if json.dumps(data['courses'], ensure_ascii=False) == before:
+                break
         data['periodEvidence'] = {
             'url': CLOCK_URL, 'checkedDate': '2026-11-23',
             'text': 'A1교시(75분) 09:00~10:15 … A6교시(75분) 16:30~17:45 / '
