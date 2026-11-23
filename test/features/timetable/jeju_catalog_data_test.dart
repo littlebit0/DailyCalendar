@@ -63,7 +63,7 @@ void main() {
           }
         }
       }
-      expect(segments, 41769);
+      expect(segments, 40477);
     },
   );
   test(
@@ -193,39 +193,51 @@ void main() {
     },
   );
   test(
-    'Jeju courses with an official day and period are placed whatever the delivery label',
+    'Jeju courses follow the official timetable and course-guide definitions',
     () async {
-      // 2026-11-23 user decision: 원격·블렌디드·거점국립대 표기와 무관하게 공식
-      // 요일·교시로 확정하고, 토요일은 같은 교시 규칙을 쓴다. 원문에 시각이 없는
-      // 강좌(시간표자료없음 등)만 추가 불가로 남는다.
+      // 2026-11-23: 공식 요일·교시로 확정하고 토요일은 같은 교시 규칙을 쓴다.
+      // 수강편람(공지 278363 p.23~24)은 원격·K-MOOC·거점국립대·JOY 강좌의 시간
+      // 표기를 시험 시각으로 정의하므로 이 강좌들과 시수 0·OCU 강좌는 시간 미정.
       final datasets = await UniversityCatalog.load(
         bundle: FileAssetBundle(),
         university: 'jeju',
       );
       final courses = datasets.expand((d) => d.courses).toList();
       expect(courses, hasLength(3095));
-      expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(2090));
+      expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(1984));
       final held = courses.where((c) => c.scheduleStatus == 'unrecognized');
       expect(held, hasLength(70));
-      // 거점국립대 원격 4, 시수 0(상담·현장실습 등) 816, OCU 92, 원격수업강좌 17,
-      // JOY공유대학 6: 공식 수업시간표·수강편람상 정해진 주간 수업 시각이 없음.
       expect(
         courses.where((c) => c.scheduleStatus == 'unscheduled'),
-        hasLength(935),
+        hasLength(1041),
       );
-      expect(
-        held.where((c) => c.sourceSchedule == '시간표자료없음'),
-        hasLength(28),
-      );
-      final saturday = courses.singleWhere(
+      expect(held.where((c) => c.sourceSchedule == '시간표자료없음'), hasLength(28));
+      for (final prefix in ['원격수업강좌', 'K-MOOC강좌', '거점국립대', 'JOY공유대학']) {
+        expect(
+          courses
+              .where((c) => c.sourceSchedule.startsWith(prefix))
+              .every((c) => c.scheduleStatus == 'unscheduled'),
+          isTrue,
+          reason: prefix,
+        );
+      }
+      final exam = courses.singleWhere(
         (c) => c.sourceId == 'jeju/unknown/2026-2/KN0001',
       );
-      expect(saturday.sourceSchedule, startsWith('거점국립대 [] 토5'));
-      expect(saturday.meetings.first.weekday, DateTime.saturday);
-      expect(saturday.meetings.first.originalStartMinute, 13 * 60);
-      expect(saturday.meetings.first.originalEndMinute, 14 * 60);
+      expect(exam.sourceSchedule, startsWith('거점국립대 [] 토5'));
+      expect(exam.meetings, isEmpty);
+      expect(exam.canAddToTimetable, isTrue);
+      final saturday = courses.singleWhere(
+        (c) => c.sourceId == 'jeju/ara/2026-2/118303',
+      );
+      final sat = saturday.meetings.firstWhere(
+        (m) => m.weekday == DateTime.saturday,
+      );
+      expect([sat.originalStartMinute, sat.originalEndMinute], [540, 720]);
       expect(
-        saturday.toTimetable(id: saturday.sourceId, mode: LectureMode.inPerson).isValid,
+        saturday
+            .toTimetable(id: saturday.sourceId, mode: LectureMode.inPerson)
+            .isValid,
         isTrue,
       );
     },
