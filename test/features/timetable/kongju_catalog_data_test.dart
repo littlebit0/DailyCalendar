@@ -14,9 +14,13 @@ void main() {
     // 14교시 다음 15교시도 같은 50분 슬롯(22:10~23:00)으로 이어 계산.
     for (var p = 0; p < 6; p++) 1080 + 50 * p,
   };
-  final slotEnds = {...slotStarts.skip(1), 1380};
-  // 학과 공지 계약학과 시간표가 같은 과목·강의실에 직접 적은 시각(토 17:55~20:20).
-  const contractClock = '200928901';
+  // 표 213 토요일 행: 10교시 13:00부터 45분 수업 + 5분(15교시 17:10까지 이어 계산).
+  final saturdayStarts = {for (var p = 0; p < 6; p++) 780 + 50 * p};
+  final slotEnds = {
+    ...slotStarts.skip(1),
+    1380,
+    for (final s in saturdayStarts) s + 50,
+  };
 
   test(
     'Kongju lecture-book enrichment leaves no ditto mark or ownerless major course',
@@ -249,9 +253,9 @@ void main() {
         }
       }
       // 남은 미확정: 교시 없음(빈 칸·미개설·원격수업·'-'), 같은 과목번호·과목명·교수의
-      // 원문 행끼리 시각이 다른 2건(고체역학, 국제경영학).
-      expect(unrecognized, 144);
-      expect(resolved, hasLength(465));
+      // 원문 행끼리 시각만 다른 고체역학·국제경영학은 두 수업 시간으로 모두 확정.
+      expect(unrecognized, 142);
+      expect(resolved, hasLength(467));
       const holidays = {
         '2026-09-24',
         '2026-09-25',
@@ -271,7 +275,6 @@ void main() {
           ),
           isTrue,
         );
-        if (c['courseCode'] == contractClock) continue;
         for (final s in (c['schedules'] as List).cast<Map>()) {
           final date = DateTime.parse(s['date'] as String);
           expect(date.weekday, s['weekday']);
@@ -286,7 +289,7 @@ void main() {
           // 강의일람표 table 212: 교시 p는 (8+p):00 시작, 50분 수업 + 10분
           // 쉬는 시간 = 60분 슬롯. table 213 평일 야간 10~14교시는 18:00부터
           // 45분 수업 + 5분 = 50분 슬롯. 연속 교시는 한 구간으로 합친다.
-          expect(slotStarts, contains(s['startMinute']));
+          expect({...slotStarts, ...saturdayStarts}, contains(s['startMinute']));
           expect(slotEnds, contains(s['endMinute']));
         }
       }
@@ -304,11 +307,13 @@ void main() {
       expect(slots('200685701'), {'2 960-1130 교양206'});
       // 목11,12,13,14: 야간 18:50~22:10.
       expect(slots('201066301'), {'4 1130-1330 (산업111-1)\n(실습실101)'});
-      // 토요일 10교시 이후도 평일 야간 시각: 같은 강의실 토7,8,9(15:00) 다음 토10,11,12.
-      expect(slots('201044701'), {'6 1080-1230 (생명307)'});
-      expect(slots('200355101'), {'6 960-1130 (1공403)'});
-      expect(slots('200408001'), {'6 1230-1380 (생명322)'});
-      expect(slots(contractClock), {'6 1075-1220 (9공807)'});
+      // 토요일 10교시 이후는 최신 강의일람표(2026-07-31 수정) 표 213 토요일 행.
+      expect(slots('201044701'), {'6 780-930 (생명307)'});
+      // 토8,9는 표 212(16:00), 토10은 토요일 행(13:00)이라 두 구간.
+      expect(slots('200355101'), {'6 780-830 (1공403)', '6 960-1080 (1공403)'});
+      expect(slots('200408001'), {'6 930-1080 (생명322)'});
+      expect(slots('200928901'), {'6 830-980 (9공807)'});
+      expect(slots('200653501'), {'1 600-780 (4공803)', '1 840-1020 (4공803)'});
       // 같은 번호의 다른 과목명 행(신재생에너지와미래환경)은 이 과목이 아니다.
       expect(slots('200775901'), {
         '1 960-1020 사범2관 (401,406)',
@@ -329,14 +334,17 @@ void main() {
       for (final c in (raw['courses'] as List).cast<Map<String, dynamic>>()) {
         final schedules = (c['schedules'] as List).cast<Map>();
         // 원문이 시계 시각(HH:mm)을 직접 적은 강좌는 그 시각을 그대로 둔다.
-        if (RegExp(r'\d\d:\d\d').hasMatch(c['sourceSchedule'] as String) ||
-            c['courseCode'] == contractClock) {
+        if (RegExp(r'\d\d:\d\d').hasMatch(c['sourceSchedule'] as String)) {
           continue;
         }
         Map? previous;
         for (final s in schedules) {
           final reason = '${c['sourceId']} ${s['date']}';
-          expect(slotStarts, contains(s['startMinute']), reason: reason);
+          expect(
+            {...slotStarts, ...saturdayStarts},
+            contains(s['startMinute']),
+            reason: reason,
+          );
           expect(slotEnds, contains(s['endMinute']), reason: reason);
           if (previous != null &&
               previous['date'] == s['date'] &&

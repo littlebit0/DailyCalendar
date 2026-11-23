@@ -26,12 +26,17 @@ class KongjuHeldPeriodsTest(unittest.TestCase):
         self.assertTrue(c['remarks'].endswith(' 이수구분: 원문.'))
         self.assertEqual(c['sourceSchedule'], '화10 화8 화9')
 
-    def test_saturday_late_periods_follow_weekday_night_clock(self):
+    def test_saturday_late_periods_follow_table_213_saturday_row(self):
         sat = held('토13,14,15', ['normalDayPeriod10plusNotPublishedOrNightScopeUnknown'])
         self.assertIsNone(convert_public(sat, DATES))
         self.assertEqual([(s['weekday'], s['startMinute'], s['endMinute']) for s in sat['schedules']],
-                         [(6, 1230, 1380)])
-        self.assertIn('토요일 10교시 이후도 평일 야간 시각', sat['remarks'])
+                         [(6, 930, 1080)])
+        self.assertIn('2026-07-31 수정', sat['remarks'])
+        # 토8,9 is table 212 (16:00), 토10 the Saturday row (13:00): two separate blocks.
+        mixed = held('토8,9,10', ['normalDayPeriod10plusNotPublishedOrNightScopeUnknown'])
+        self.assertIsNone(convert_public(mixed, DATES))
+        self.assertEqual([(s['startMinute'], s['endMinute']) for s in mixed['schedules']],
+                         [(780, 830), (960, 1080)])
 
     def test_no_period_rows_stay_held(self):
         none = held('', ['noPublishedWeekdayPeriod'])
@@ -49,10 +54,13 @@ class KongjuHeldPeriodsTest(unittest.TestCase):
         self.assertEqual(sorted({s['weekday'] for s in c['schedules']}), [1, 3])
         same = copy.deepcopy(c)
         same.update(scheduleStatus='unrecognized', schedules=[])
+        same['remarks'] = 'BASE. 보류: sameNativeSourceVariantsClockRoomOrTeacherConflict 이수구분: 원문.'
         same['sourceEducationalMetadata']['holdReasons'] = ['sameNativeSourceVariantsClockRoomOrTeacherConflict']
         same['sourceEducationalMetadata']['originalPublishedRowVariants'][1].update(
             courseTitle='수질오염론', professor='이정현')
-        self.assertEqual(convert_public(same, DATES), 'variantConflict')
+        self.assertIsNone(convert_public(same, DATES))
+        self.assertEqual(sorted({s['weekday'] for s in same['schedules']}), [1, 3, 4])
+        self.assertIn('두 수업 시간', same['remarks'])
 
     def test_continuation_line_needs_matching_hours(self):
         self.assertIsNotNone(periodic_blocks('화2,3,4\n6,7,8\n목2,3,4', '5공208', '9'))
