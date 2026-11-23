@@ -21,14 +21,19 @@ is 2 x 90 min for 3.0 시수. The clocks are used as printed; periods are only
 checked against them, never used to recompute a time.
 
 Status rules (DailyCalendar-Timetable skill 5):
-- scheduled: every segment parses, has no 'N주차 - N주차' limit, and the
-  weekly total matches 시수 or 학점. Operating mode (사이버·HyFlex·실습) does
-  not change this (user decision 2026-11-23).
-- unrecognized: 'N주차 - N주차' rows (the academic calendar gives 개강 9/1
-  (Tue) and 종강 12/14 but no week-1 rule; 16주차 would fall after 종강 under
-  either week basis), and rows whose weekly total contradicts both 시수 and
-  학점 (same course code also appears with week limits, so the plain weekly
-  text cannot be repeated for the whole term).
+- scheduled: every segment parses. Operating mode (사이버·HyFlex·실습) does
+  not change this (user decision 2026-11-23). A weekly total that differs
+  from 시수·학점 (16 rows) is kept as printed and noted in remarks: the
+  official weekday and clock are used as published (skill 5, 건국 집중이수).
+- 'N주차 - N주차' rows (간호학과, 52) are dated by WISE teaching weeks. The
+  WISE calendar runs every term period Tuesday to Monday (개강 9/1 Tue,
+  정정 9/1~9/7, 중간시험 10/13~10/26 = weeks 7-8, 기말시험 12/8~12/14 = week
+  15, 종강 12/14 Mon), so week N is 9/1 + 7(N-1) .. +6. The nursing
+  department confirms 16주차: its notice of 2026-11-09 (NURSING_EXAM_NOTICE)
+  moved the 졸업 종합시험 from 12/18 (Fri) to 12/17 because it overlapped the
+  SPBL class, which the timetable prints as NUR42422 '16주차 - 16주차 금'.
+  Only public holidays are skipped; the printed weeks already decide exams.
+- unrecognized: only a text that does not parse.
 - unscheduled: TMTBL_KOR_DSC is empty (사이버강의, 의학과 block courses,
   임상실습, 집중수업 etc.): the school publishes no weekday or clock.
 
@@ -51,6 +56,8 @@ from pathlib import Path
 SOURCE_URL = ('https://support.dongguk.ac.kr/unis/index.do?t='
               '654867724D6E564B57577777554374315558647861564273646A524251543039')
 CALENDAR_URL = 'https://wise.dongguk.ac.kr/schedule/detail?schedule_info_seq=22'
+NURSING_EXAM_NOTICE = ('https://nursing.dongguk.ac.kr/HOME/nursing/sub.htm?nav_code=nur1587087792 '
+                       '학과공지 298 「졸업 종합시험 일정 변경 안내」(2026-11-09)')
 TERM_START = dt.date(2026, 9, 1)
 TERM_END = dt.date(2026, 12, 14)
 LAST_CLASS = dt.date(2026, 12, 7)  # the day before the final exam period
@@ -71,7 +78,7 @@ class Held(Exception):
 
 
 def segments(text):
-    """[(weekLimited, weekday, start, end)] from TMTBL_KOR_DSC, or ValueError."""
+    """[(weeks, weekday, start, end)] from TMTBL_KOR_DSC (weeks None = every week), or ValueError."""
     found = list(SEGMENT.finditer(text))
     if not found or ', '.join(m.group(0) for m in found) != text:
         raise ValueError(f'unknown schedule text: {text!r}')
@@ -83,7 +90,10 @@ def segments(text):
         if start != 540 + round((first - 1) * 60) or end != 540 + round((last - 1) * 60) + 30 or start >= end:
             raise ValueError(f'clock does not match period: {m.group(0)!r}')
         for day in m[3].split(', '):
-            out.append((m[1] is not None, WEEKDAYS[day], start, end))
+            weeks = range(int(m[1]), int(m[2]) + 1) if m[1] else None
+            if weeks is not None and not weeks:
+                raise ValueError(f'empty week range: {m.group(0)!r}')
+            out.append((weeks, WEEKDAYS[day], start, end))
     return out
 
 
@@ -96,6 +106,11 @@ def merge(spans):
         else:
             out.append([day, start, end])
     return [tuple(s) for s in out]
+
+
+def week_date(week, weekday):
+    """Date of `weekday` in WISE teaching week `week` (Tuesday 9/1 starts week 1)."""
+    return TERM_START + dt.timedelta(days=7 * (week - 1) + (weekday - TERM_START.isoweekday()) % 7)
 
 
 def class_dates(weekday):
@@ -112,18 +127,30 @@ def hours(value):
 
 
 def schedule(row):
-    """(status, [(weekday, start, end)], heldReason)."""
+    """(status, [(weekday, start, end, date)], note): weekly rows expand over class_dates,
+    week-limited rows over their printed weeks."""
     text = row['TMTBL_KOR_DSC'] or ''
     if not text.strip():
         return 'unscheduled', [], None
     parts = segments(text)
-    if any(limited for limited, *_ in parts):
-        return 'unrecognized', [], ('주차 한정', '주차 한정 표기(N주차 - N주차): 공식 학사일정에 주차 기준일이 없어 날짜로 바꾸지 않음')
+    if any(weeks for weeks, *_ in parts):
+        if not all(weeks for weeks, *_ in parts):
+            raise ValueError(f'mixed weekly and week-limited text: {text!r}')
+        by_date = collections.defaultdict(list)
+        for weeks, day, start, end in parts:
+            for week in weeks:
+                date = week_date(week, day)
+                if date not in HOLIDAYS:
+                    by_date[date].append((day, start, end))
+        meetings = [(d, s, e, date) for date in sorted(by_date) for d, s, e in merge(by_date[date])]
+        return 'scheduled', meetings, '주차 한정'
     weekly = sum(end - start for _, _, start, end in parts) / 60
+    note = None
     if weekly not in (hours(row['THRY_HCNT']) + hours(row['PRAC_HCNT']), hours(row['CDT'])):
-        return 'unrecognized', [], ('시수·학점 불일치', f'원문 주간 시각 합계 {weekly:g}시간이 시수(이론 {hours(row["THRY_HCNT"]):g}·'
-                                    f'실습 {hours(row["PRAC_HCNT"]):g})·학점 {hours(row["CDT"]):g}과 맞지 않음')
-    return 'scheduled', merge((d, s, e) for _, d, s, e in parts), None
+        note = (f'원문 주간 시각 합계 {weekly:g}시간이 시수(이론 {hours(row["THRY_HCNT"]):g}·실습 {hours(row["PRAC_HCNT"]):g})·'
+                f'학점 {hours(row["CDT"]):g}과 다르나 공식 요일·시각을 그대로 사용')
+    meetings = [(d, s, e, date) for d, s, e in merge((d, s, e) for _, d, s, e in parts) for date in class_dates(d)]
+    return 'scheduled', meetings, note
 
 
 def clean(value):
@@ -136,10 +163,12 @@ def room_text(raw):
 
 def course(row):
     code, section = clean(row['SBJ_NO']), clean(row['DVCLS'])
+    held = None
     try:
-        status, spans, held = schedule(row)
+        status, meetings, note = schedule(row)
     except ValueError as error:
-        status, spans, held = 'unrecognized', [], ('표기 해석 불가', str(error))
+        status, meetings, note = 'unrecognized', [], None
+        held = ('표기 해석 불가', str(error))
     room = room_text(row['ROOM_KOR_DSC'])
     departments = [clean(row[k]) for k in ('COLG_NM', 'DPT_NM', 'MJR_NM') if clean(row[k])]
     native = [f'학수번호-분반 {code}-{section}', f'교과목명 {clean(row["SBJ_NM"])}',
@@ -155,8 +184,14 @@ def course(row):
     if clean(row['CLSLESN_DT']) or clean(row['CLSLESN_RESN_DSC']):
         native.append(f'폐강 원문 {clean(row["CLSLESN_DT"])} {clean(row["CLSLESN_RESN_DSC"])}'.strip())
     remarks = ['공식 종합강의시간표 원문: ' + ', '.join(native)]
-    if status == 'scheduled':
+    if note == '주차 한정':
+        remarks.append('원문 괄호 시각을 그대로 사용. N주차는 학사일정의 화~월 주 단위(1주차 9/1~9/7, 8주차 10/20~26, '
+                       '15주차 12/8~14, 16주차 12/15~21)로 날짜를 정하고 공휴일만 제외. 16주차 수업은 간호학과 '
+                       f'공지({NURSING_EXAM_NOTICE}: 12/18(금) 졸업 종합시험이 SPBL 수업 일정과 겹쳐 12/17로 변경)로 확인')
+    elif status == 'scheduled':
         remarks.append('원문 괄호 시각을 그대로 사용. 9/1 개강~12/7, 중간시험 10/13~26·기말시험 12/8~14·공휴일 제외')
+        if note:
+            remarks.append(note)
     elif held:
         remarks.append('일정 보류: ' + held[1])
     else:
@@ -170,9 +205,11 @@ def course(row):
         'departments': departments, 'remarks': '. '.join(remarks),
         'sourceSchedule': clean(row['TMTBL_KOR_DSC']), 'sourceClassroom': room,
         'scheduleStatus': status,
-        'period': {'startDate': TERM_START.isoformat(), 'endDate': TERM_END.isoformat()},
+        # 16주차 (12/15~21) runs past 종강 12/14, so the period ends at the last printed meeting.
+        'period': {'startDate': TERM_START.isoformat(),
+                   'endDate': max([TERM_END] + [day for *_, day in meetings]).isoformat()},
         'schedules': [{'weekday': d, 'startMinute': s, 'endMinute': e, 'classroom': room, 'date': day.isoformat()}
-                      for d, s, e in spans for day in class_dates(d)],
+                      for d, s, e, day in meetings],
         '_held': held,
     }
 
@@ -199,7 +236,9 @@ def main(argv):
         'sourceUrl': SOURCE_URL,
         'sourceNotice': (f'동국대학교 학사정보시스템 종합강의시간표(국문) 비로그인 공개 화면, 조직분류 학부(WISE)·2026학년도 2학기 '
                          f'조회 결과 {len(rows)}행(2026-11-23 수집). 원문 괄호 시각을 그대로 쓰고, 학사일정({CALENDAR_URL}) '
-                         f'개강 9/1·중간시험 10/13~26·기말시험 12/8~14와 공휴일을 뺀 날짜로 펼칩니다.'),
+                         f'개강 9/1·중간시험 10/13~26·기말시험 12/8~14와 공휴일을 뺀 날짜로 펼칩니다. 간호학과 N주차 표기는 '
+                         f'학사일정의 화~월 주 단위(1주차 9/1~9/7)로 날짜를 정하고 공휴일만 뺍니다(16주차 수업은 간호학과 공지 확인: '
+                         f'{NURSING_EXAM_NOTICE}).'),
         'periodEvidence': ('TMTBL_KOR_DSC 괄호: 앞=시작, ~ 뒤=끝. 1교시 09:00부터 1시간 교시·N.5교시 30분 격자와 전 행 일치, '
                            '주간 합계가 시수·학점과 일치하는 행 1477/1493.'),
         'sourceRowCount': len(rows),

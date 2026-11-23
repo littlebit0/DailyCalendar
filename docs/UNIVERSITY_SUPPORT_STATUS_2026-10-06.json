@@ -2659,7 +2659,7 @@
         "suspensionEvidence": "work/university-support-suspension-20261012/support-decisions.json",
         "productionIntegrationEnabled": true,
         "reopenedDate": "2026-11-23",
-        "reopenNote": "WISE캠퍼스 학부 2026-2 종합강의시간표(국문) 비로그인 공개 조회 1683행 전부를 dongguk-wise-2026-2로 추가(확정 1477, 시간 미정 138, 미확정 68: 주차 한정 52·시수 불일치 16). 원문 괄호 시각 그대로, WISE 학사일정 개강 9/1·중간 10/13~26·기말 12/8~14·공휴일 제외. 서울·일산·unknown 기존 자산은 그대로이며 전체 운영 확인은 하지 않음."
+        "reopenNote": "WISE캠퍼스 학부 2026-2 종합강의시간표(국문) 비로그인 공개 조회 1683행 전부를 dongguk-wise-2026-2로 추가(확정 1545, 시간 미정 138). 원문 괄호 시각 그대로, WISE 학사일정 개강 9/1·중간 10/13~26·기말 12/8~14·공휴일 제외. 간호학과 N주차 52강좌는 학사일정의 화~월 주 단위(1주차 9/1~9/7)와 간호학과 공지(16주차 SPBL 12/18)로 날짜 확정, 시수와 주간 합계가 다른 16강좌는 공식 요일·시각 그대로 확정. 서울·일산·unknown 기존 자산은 그대로이며 전체 운영 확인은 하지 않음."
       },
       "installedAcceptance": "macos_build_signature_install_verified_ui_not_run",
       "deferredAsImpossible": false,

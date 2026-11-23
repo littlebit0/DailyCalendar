@@ -23,11 +23,10 @@ void main() {
       byStatus[c.scheduleStatus] = (byStatus[c.scheduleStatus] ?? 0) + 1;
     }
     expect(byStatus, {
-      'scheduled': 1477,
+      'scheduled': 1545,
       'unscheduled': 138,
-      'unrecognized': 68,
     });
-    expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(1477));
+    expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(1545));
     expect(courses.every((c) => c.meetings.every((m) => m.isValid)), isTrue);
 
     UniversityCourse byKey(String key) =>
@@ -75,11 +74,35 @@ void main() {
       ).meetings.map((m) => (m.startMinute, m.endMinute)).toSet(),
       {(810, 1050)},
     );
-    // Week-limited rows stay as published text only.
+    // 'N주차' rows use Tuesday-to-Monday teaching weeks from 9/1; only
+    // holidays (9/24) are skipped and week 8 is the short last session.
     final elderly = byKey('NUR30914-01');
-    expect(elderly.scheduleStatus, 'unrecognized');
-    expect(elderly.meetings, isEmpty);
+    expect(elderly.scheduleStatus, 'scheduled');
     expect(elderly.sourceSchedule, startsWith('1주차 - 7주차 목'));
+    expect(elderly.meetings.map((m) => (m.date, m.startMinute, m.endMinute)), [
+      ('2026-09-03', 840, 960),
+      ('2026-09-10', 840, 960),
+      ('2026-09-17', 840, 960),
+      ('2026-10-01', 840, 960),
+      ('2026-10-08', 840, 960),
+      ('2026-10-15', 840, 960),
+      ('2026-10-22', 840, 900),
+    ]);
+    // 16주차 Friday is 12/18, the SPBL day in the nursing notice; the course
+    // period runs to that meeting.
+    final spbl = byKey('NUR42422-01');
+    expect(spbl.meetings.last.date, '2026-12-18');
+    expect((spbl.meetings.last.startMinute, spbl.meetings.last.endMinute), (
+      1080,
+      1200,
+    ));
+    // Weekly total differing from 시수 keeps the official weekday and clock.
+    expect(
+      byKey('NUR31721-01').meetings
+          .map((m) => (m.weekday, m.startMinute, m.endMinute))
+          .toSet(),
+      {(1, 660, 780), (3, 660, 780)},
+    );
     // No weekday or clock published: addable as an untimed course.
     final cyber = byKey('COM31018-01');
     expect(cyber.scheduleStatus, 'unscheduled');

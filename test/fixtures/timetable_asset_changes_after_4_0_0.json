@@ -820,7 +820,7 @@
     "reason": "공백만 제거(내용 동일): 파싱 비용과 앱 용량 절감"
   },
   "assets/timetable/dongguk-wise-2026-2.json": {
-    "sha256": "9041ff01add39c2857f37758bcafe87e942cc5e05f876d12887725d6a1dfde18",
-    "reason": "동국대 WISE캠퍼스 학부 2026-2 종합강의시간표(국문) 공개 조회 1683강좌 추가(tool/timetable/import_dongguk_wise.py)"
+    "sha256": "8f7321e53bfe686b36120e94749646407389669d2d26157e93eae44137f86c33",
+    "reason": "동국대 WISE캠퍼스 학부 2026-2 종합강의시간표(국문) 공개 조회 1683강좌 추가(tool/timetable/import_dongguk_wise.py). 간호학과 N주차 52강좌는 학사일정의 화~월 주 단위와 간호학과 공지(16주차 SPBL 12/18)로 날짜 확정, 시수와 합계가 다른 16강좌는 공식 요일·시각 그대로 확정"
   }
 }
