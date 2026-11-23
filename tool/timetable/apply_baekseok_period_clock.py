@@ -42,6 +42,9 @@ SEARCHED = [
     '2019~2025학기 주요사항 책자(sugang/<학기>/<학기>_juyo.pdf): 404',
     '공개 강의계획서: 포털 로그인 필요',
     'https://community.bu.ac.kr/<학부>/ 학부·학과·교양대학 게시판 24개 사이트의 제목 검색(시간표·교시)',
+    'https://community.bu.ac.kr/bbs/{sports_sci/877,sports_sci/880,sports_sci/1849,emt/1187,health/928,health/929}/ '
+    '게시판 목록·제목/본문 검색(집중·스킨·현장실습·응급), 스포츠과학부 학사안내·교과과정, 응급구조학과 실습안내·교과목 해설',
+    'https://www.bu.ac.kr/sites/web/files/sugang/2025_1_hea.pdf, 2025_2_hea.pdf, 2026_1/2026_1_hea.pdf (이전 학기 응급구조학과 안내: 집중이수제 1-8주 더블수업)',
 ]
 FIRST_START = 9 * 60
 SLOT = 60
@@ -142,6 +145,11 @@ OT3_NOTE = (
     '(' + WEEK_SOURCE + ').'
 )
 EMT_CODES = {'09957', '08956'}
+DAY_ONLY_NOTE = (
+    '원문 시간표에 요일만 있고 교시가 비어 있습니다(강의실 "별도"). 학과 홈페이지 공지·게시판, 학사공지, '
+    '수업 운영 주요사항·수업 주차 현황, 교양·학부 시간표 책자에도 수업 시각이 없어, 교시로 해석할 수 없는 '
+    '표기는 시각을 만들지 않고 시간 미정으로 둔다는 규칙(광운대 사례)에 따라 시간 미정으로 둡니다(조회 2026-11-23).'
+)
 EMT_NOTE = (
     '보건학부 시간표 책자 응급구조학과 4학년 안내에 「종합응급처치실습2」와 「응급구조학각론」이 '
     '"집중이수제(1-5주, 1-8주 더블수업)"로 운영된다고 적혀 있으나 어느 과목이 어느 주차인지 정해져 있지 않아 '
@@ -202,6 +210,11 @@ def week_limited(c, rows):
     return False
 
 
+def day_only(schedule):
+    face = [x.strip() for x in schedule.split('/') if x.strip() not in ('사', '-', '')]
+    return bool(face) and all(x in DAYS for x in face)
+
+
 def strip_hold(remarks):
     out = {}
     for k, v in remarks.items():
@@ -219,10 +232,14 @@ def apply(data):
         parsed = parse(c.get('sourceSchedule') or '', c.get('sourceClassroom') or '', remark_text)
         c['departmentRemarks'] = strip_hold(c.get('departmentRemarks', {}))
         has_cyber = '사' in [x.strip() for x in (c.get('sourceSchedule') or '').split('/')]
-        if parsed is None:
+        if parsed is None and day_only(c.get('sourceSchedule') or ''):
+            c['scheduleStatus'] = 'unscheduled'
+            c['schedules'] = []
+            c['remarks'] = DAY_ONLY_NOTE
+        elif parsed is None:
             c['scheduleStatus'] = 'unrecognized'
             c['schedules'] = []
-            c['remarks'] = '원문 시간표에 요일만 있고 교시가 없어 시각을 정할 수 없습니다.'
+            c['remarks'] = '원문 시간표 표기를 교시로 해석할 수 없어 시각을 정할 수 없습니다.'
         elif not parsed:
             c['scheduleStatus'] = 'unscheduled'
             c['schedules'] = []
@@ -273,7 +290,7 @@ def self_check():
     assert meetings(parse('목5,6', '음악208', ''))[0]['startMinute'] == 13 * 60
     assert meetings(parse('월7', 'x', ''))[0]['endMinute'] == 16 * 60
     assert parse('사', '', '') == [] and parse('-', '별도', '') == []
-    assert parse('금', '별도', '') is None
+    assert parse('금', '별도', '') is None and day_only('금') and not day_only('금1')
     assert parse('화', '별도', '수영 화 5,6,7') == [(2, [5, 6, 7], '별도')]
     assert parse('-/ 목2,3', '별도, 진리301', '') == [(4, [2, 3], '진리301')]
     assert [r['classroom'] for r in meetings(parse('수1,2/ 수3,4', 'a, b', ''))] == ['a', 'b']

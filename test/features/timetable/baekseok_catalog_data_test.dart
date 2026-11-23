@@ -128,7 +128,7 @@ void main() {
     for (final c in data.courses) {
       byStatus[c.scheduleStatus] = (byStatus[c.scheduleStatus] ?? 0) + 1;
     }
-    expect(byStatus, {'scheduled': 2382, 'unscheduled': 183, 'unrecognized': 6});
+    expect(byStatus, {'scheduled': 2382, 'unscheduled': 185, 'unrecognized': 4});
     // 비고 "13~15주차/백석연수원/집중이수": 수업 주차 현황의 13~15주차와 연수원 1박 2일만
     final ai = data.courses.singleWhere((c) => c.codeAndSection == '32065-01');
     expect(ai.meetings.map((m) => m.date), [
@@ -168,6 +168,12 @@ void main() {
       ),
       [(4, 780, 900)],
     );
+    // 요일만 있고 교시가 빈 강좌는 시각을 만들지 않고 시간 미정
+    for (final code in ['30035-01', '31438-01']) {
+      final c = data.courses.singleWhere((c) => c.codeAndSection == code);
+      expect(c.scheduleStatus, 'unscheduled');
+      expect(c.meetings, isEmpty);
+    }
     for (final c in data.courses.where((c) => c.sourceSchedule == '사')) {
       expect(c.scheduleStatus, 'unscheduled');
       expect(c.meetings, isEmpty);
