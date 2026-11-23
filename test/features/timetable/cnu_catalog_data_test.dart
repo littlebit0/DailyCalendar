@@ -105,10 +105,10 @@ void main() {
       isEmpty,
     );
     expect(courses.map((c) => c.sourceId).toSet(), hasLength(3888));
-    expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(3206));
+    expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(3207));
     expect(
       courses.where((c) => c.scheduleStatus == 'unscheduled'),
-      hasLength(682),
+      hasLength(681),
     );
     expect(
       courses.where((c) => c.scheduleStatus == 'unrecognized'),
@@ -118,7 +118,7 @@ void main() {
       courses.where((c) => c.remarks.contains('현재 폐강된 강좌')),
       hasLength(142),
     );
-    expect(courses.expand((c) => c.meetings), hasLength(83129));
+    expect(courses.expand((c) => c.meetings), hasLength(83143));
     for (final id in [
       '1372-2007-00',
       '1372-3004-00',
