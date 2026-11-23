@@ -33,6 +33,7 @@ POLICY_SUITES = [
 
 # University timetable import and fetch checks.
 IMPORT_SUITES = [
+    "test_kunsan_held_periods",
     "test_dankook_import",
     "test_expanded_university_courses",
     "test_fetch_konkuk",

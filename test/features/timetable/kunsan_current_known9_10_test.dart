@@ -39,8 +39,19 @@ void main() {
     final byId = {for (final row in rows) row['sourceId']: row};
     expect(byId, hasLength(1718));
     const key = 'kunsan/unknown/2026/2/116289/01';
+    // 2026-11-23 결정으로 숫자 교시 보류 강좌를 정규 예약했다(apply_kunsan_held_periods.py).
+    final held = originals
+        .where(
+          (r) =>
+              r['sourceId'] != key &&
+              (r['schedules'] as List).isEmpty &&
+              byId[r['sourceId']]!['scheduleStatus'] == 'scheduled',
+        )
+        .map((r) => r['sourceId'])
+        .toSet();
+    expect(held, hasLength(59));
     for (final original in originals) {
-      if (original['sourceId'] != key) {
+      if (original['sourceId'] != key && !held.contains(original['sourceId'])) {
         // 쉬는 시간 포함 슬롯(#574): 보관 원본보다 모든 구간 끝이 10분 늦다.
         final row =
             jsonDecode(jsonEncode(byId[original['sourceId']]))
@@ -125,7 +136,7 @@ void main() {
     );
     expect(
       rows.where((r) => (r['schedules'] as List).isNotEmpty),
-      hasLength(1125),
+      hasLength(1184),
     );
     expect(
       originals.fold<int>(0, (n, r) => n + (r['schedules'] as List).length),
@@ -133,7 +144,7 @@ void main() {
     );
     expect(
       rows.fold<int>(0, (n, r) => n + (r['schedules'] as List).length),
-      22984,
+      24087,
     );
 
     final datasets = [
@@ -143,8 +154,8 @@ void main() {
     final allCourses = datasets.expand((d) => d.courses).toList();
     expect(allCourses, hasLength(1718));
     final scheduled = allCourses.where((c) => c.meetings.isNotEmpty).toList();
-    expect(scheduled, hasLength(1125));
-    expect(scheduled.fold<int>(0, (n, c) => n + c.meetings.length), 22984);
+    expect(scheduled, hasLength(1184));
+    expect(scheduled.fold<int>(0, (n, c) => n + c.meetings.length), 24087);
     for (final mode in [
       LectureMode.inPerson,
       LectureMode.liveOnline,
@@ -163,9 +174,9 @@ void main() {
       final restored = TimetableSyncDocument.fromJson(
         jsonDecode(jsonEncode(document.toJson())) as Map<String, dynamic>,
       ).materializeClasses();
-      expect(restored, hasLength(1125));
+      expect(restored, hasLength(1184));
       expect(restored.map((c) => c.sourceId).toSet(), bySource.keys.toSet());
-      expect(restored.fold<int>(0, (n, c) => n + c.meetings.length), 22984);
+      expect(restored.fold<int>(0, (n, c) => n + c.meetings.length), 24087);
       for (final c in restored) {
         final original = bySource[c.sourceId]!;
         expect(c.isValid, isTrue);
