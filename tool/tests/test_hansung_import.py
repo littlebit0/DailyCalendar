@@ -28,28 +28,40 @@ class HansungImportTest(unittest.TestCase):
         self.assertTrue(all('2026-08-31' <= m['date'] <= '2026-12-06' for m in night['schedules']))
         self.assertIn('2026-11-30', {m['date'] for m in night['schedules']})
 
-    def test_holiday_intensive_and_prior_term_credit_do_not_become_weekly(self):
+    def test_published_clock_is_scheduled_whatever_the_operating_mode(self):
+        # 2026-11-23 사용자 결정: 공식 요일·교시가 있으면 운영 방식이 불명확해도 그 시각으로 확정한다.
         courses = {c['courseCode'] + '-' + c['section']: c for c in self.prepare()}
         for key in ['P010182-A', 'P010143-A', 'P017022-Z']:
-            self.assertEqual(courses[key]['schedules'], [])
-            self.assertNotIn('period', courses[key])
+            self.assertEqual(courses[key]['scheduleStatus'], 'scheduled', key)
+            self.assertEqual(courses[key]['period'], {'startDate': '2026-08-31', 'endDate': '2026-12-06'})
+        self.assertEqual(sorted({(m['weekday'], m['startMinute'], m['endMinute'])
+                                 for m in courses['P010143-A']['schedules']}), [(1, 720, 900)])
         self.assertIn('선수·사전이수 안내:', '\n'.join(courses['P010182-A']['departmentRemarks'].values()))
 
-    def test_unknown_partial_clocks_and_simultaneous_rooms_reject(self):
-        for raw in ['탐구관307 수2~3M', '탐구관307 화2M~3M',
-                    '탐구관307 토1~3M', '상상관602 월4~5 / 상상관603 월4~5']:
+    def test_unknown_labels_and_simultaneous_rooms_reject(self):
+        for raw in ['탐구관307 수15~16M', '탐구관307 화3~2M', '상상관602 월4~5 / 상상관603 월4~5']:
             with self.assertRaises(ValueError):
                 H.schedules(raw)
 
-    def test_wrong_current_identity_rejects_and_incomplete_week_never_approves(self):
+    def test_weekend_and_partial_boundaries_use_the_weekday_slots(self):
+        # 2026-10-25 사용자 지시 "다른 교시랑 똑같이 하면 된다": 토·일과 75분 경계도 같은 슬롯.
+        self.assertEqual(H.clock(6, '5', '6M'), (780, 900))
+        self.assertEqual(H.clock(7, '1', '3M'), (540, 720))
+        self.assertEqual(H.clock(3, '2', '4M'), (600, 780))
+        self.assertEqual(H.clock(4, '10', '11M'), (1080, 1190))
+        self.assertEqual(H.clock(5, '5', '6'), (780, 870))
+        self.assertEqual(H.clock(2, '2M', '3M'), (630, 720))
+
+    def test_wrong_current_identity_rejects_and_plan_schedule_conflict_holds(self):
         changed = copy.deepcopy(FIXTURE)
         changed['proofs']['P012012-N']['semester'] = '1'
         with self.assertRaises(ValueError):
             self.prepare(changed)
         changed = copy.deepcopy(FIXTURE)
-        changed['proofs']['P012012-N']['weeks'].pop()
+        changed['proofs']['P012012-N']['sourceSchedule'] = '상상관503 화10~11'
         night = next(c for c in self.prepare(changed) if c['courseCode'] == 'P012012')
         self.assertEqual(night['schedules'], [])
+        self.assertEqual(night['scheduleStatus'], 'unrecognized')
 
     def test_contacts_links_and_unrequested_plan_fields_do_not_ship(self):
         changed = copy.deepcopy(FIXTURE)
