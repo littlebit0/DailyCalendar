@@ -16,9 +16,10 @@
   같은 요일 연속 교시는 한 구간으로 합친다.
 - 같은 공지 안에서 변경 전/후가 있으면 변경 후(최신 공식값), 변경 전은 비고에 둔다.
 - 시각이 없는 행(이러닝 합반, 교육봉사)은 unscheduled.
-- 학수코드·이수구분·학점은 서울 원문에 없다. 같은 학기 수원 공식 PDF(2026-2_교양.pdf·
-  2026-2_전공.pdf, kyonggi-suwon-2026-2.json)에 같은 교과목명이 한 학수코드로만 있으면
-  그 값을 쓰고 비고에 근거를 남긴다. 없으면 공지 머리의 구분 원문을 classification에 둔다.
+- 학수코드·이수구분·학점은 서울 원문에 없다. 공지가 수원 강좌와 합반(같은 수업)이라고 밝힌
+  행만 그 수원 강좌(kyonggi-suwon-2026-2.json, 2026-2 수원 공식 PDF) 값을 쓰고 비고에 근거를 남긴다.
+  교과목명만 같은 강좌에서는 가져오지 않는다. 그 밖의 행은 공지의 구분 원문을 classification에 두고
+  학수코드는 비우며 학점 필드는 생략한다.
 - 교수·강의실은 원문에 없으므로 비운다.
 
 실행(저장소 루트): python3 tool/timetable/import_kyonggi_seoul.py <원본 폴더>
@@ -104,11 +105,7 @@ def main(src):
                          ' · 이러닝 과목: 실시간 수업 시각 미게시'))
 
     suwon = json.load(open(SUWON, encoding='utf-8'))['courses']
-    by_name = {}
     by_reg = {c['sourceId'].rsplit('-', 1)[1]: c for c in suwon}
-    for c in suwon:
-        by_name.setdefault(c['courseName'].strip(), set()).add(
-            (c['courseCode'], c.get('classification') or '', c.get('credits')))
 
     seen = set()
     aliases = {}
@@ -117,7 +114,6 @@ def main(src):
         if reg in seen:
             raise ValueError(f'duplicate registration {reg}')
         seen.add(reg)
-        info = by_name.get(title, set())
         code, classification, credits = ('', '', None)
         notes = [f'수강신청 과목번호 {reg} · 서울캠퍼스(주간) · 분반 번호 미게시', remark]
         if reg in MERGED:
@@ -131,11 +127,10 @@ def main(src):
                 aliases[reg] = [other]
             code, classification, credits = target['courseCode'], target.get('classification') or '', target.get('credits')
             notes.append(f'수원 {merged_into.group(1)} 강좌로 합반: 학수코드·이수구분·학점은 그 강좌(2026-2 수원 공식 PDF) 기준')
-        elif len(info) == 1:
-            code, classification, credits = next(iter(info))
-            notes.append(f'학수코드·이수구분·학점: 같은 학기 수원 공식 PDF의 같은 교과목명 {code} 기준(서울 원문에는 없음)')
-        elif title == '관광교재연구및지도법':
-            classification = '교육학전공'
+        elif ntt == '625261':
+            # 공지 본문의 구분 머리('*교양 교과목' / '*교육학전공') 원문
+            classification = '교육학전공' if title == '관광교재연구및지도법' else '교양'
+            notes.append(f'이수구분: 공지 본문 구분 원문 "{classification}"')
         else:
             classification = '교양/일반선택/교육학전공'
             notes.append('이수구분: 공지 제목의 구분 원문(과목별 구분 미게시)')

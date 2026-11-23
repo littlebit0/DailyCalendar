@@ -281,6 +281,9 @@ void main() {
     final english = byReg('9037');
     expect(english.title, '대학영어5(시사영어)');
     expect(english.sourceSchedule, '금789');
+    // 합반이 아니면 수원 강좌 값을 빌리지 않고 공지 제목의 구분 원문만 둔다.
+    expect(english.code, isEmpty);
+    expect(english.sourceClassification, '교양/일반선택/교육학전공');
     expect(english.meetings.single.weekday, 5);
     expect(english.meetings.single.originalStartMinute, 900);
     expect(english.meetings.single.originalEndMinute, 1080);
