@@ -4413,7 +4413,7 @@
         "suspensionEvidence": "work/university-support-suspension-20261012/support-decisions.json",
         "productionIntegrationEnabled": true,
         "reopenedDate": "2026-11-22",
-        "reopenNote": "사용자 지시(2026-11-22)로 기존 데이터 그대로 검색 재개. 시각 미확정(unrecognized) 강좌는 원문만 표시하고 시간표 추가 불가. 전체 범위 완료 아님. 2026-11-23 사용자 결정으로 폐강 표기 강좌(수강번호 0263)도 원문 강의시간대로 확정(60건 모두 확정)."
+        "reopenNote": "사용자 지시(2026-11-22)로 기존 데이터 그대로 검색 재개. 시각 미확정(unrecognized) 강좌는 원문만 표시하고 시간표 추가 불가. 전체 범위 완료 아님. 2026-11-23 사용자 결정으로 폐강 표기 강좌(수강번호 0263)도 원문 강의시간대로 확정(60건 모두 확정). 사용자 결정으로 공식 학과 공지 시간표(기계공학전공 2026-2 시간표 60건, 행정학과·경찰행정학과·미디어커뮤니케이션학과 변경 공지 9건)의 정규 강좌를 추가(전체 129건). 전체 목록은 아님."
       },
       "installedAcceptance": "macos_build_signature_install_verified_ui_not_run",
       "deferredAsImpossible": false,
