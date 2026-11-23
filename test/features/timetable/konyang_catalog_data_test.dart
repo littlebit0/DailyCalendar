@@ -24,10 +24,10 @@ void main() {
       final courses = [for (final d in datasets) ...d.courses];
       expect(courses, hasLength(1558));
       expect(courses.map((c) => c.sourceId).toSet(), hasLength(1558));
-      expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(260));
+      expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(262));
       expect(
         courses.where((c) => c.scheduleStatus == 'unscheduled'),
-        hasLength(1268),
+        hasLength(1266),
       );
       expect(
         courses.where((c) => c.scheduleStatus == 'unrecognized'),
@@ -71,11 +71,13 @@ void main() {
       final paired = find('61482A-01');
       expect(paired.sourceSchedule, '월 수/5, /1~2');
       expect(clocks(paired), [(1, 780, 840), (3, 540, 660)]);
-      // "월,수 3,4교시" on a 2-2-0 course would be 4 hours a week: time undecided.
-      final mismatch = find('80207C-01');
-      expect(mismatch.sourceSchedule, '월,수 3,4교시');
-      expect(mismatch.scheduleStatus, 'unscheduled');
-      expect(mismatch.meetings, isEmpty);
+      // "월,수 3,4교시" on a 2-2-0 course pairs in order: 월 3교시, 수 4교시.
+      expect(clocks(find('80207C-01')), [(1, 660, 720), (3, 720, 780)]);
+      // Weekdays without any period stay verbatim and time undecided.
+      final noPeriod = find('61480A-01');
+      expect(noPeriod.sourceSchedule, '화요일 수요일');
+      expect(noPeriod.scheduleStatus, 'unscheduled');
+      expect(noPeriod.meetings, isEmpty);
 
       expect(
         abap.isMajorForSourceDepartment('기업소프트웨어학부'),

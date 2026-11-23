@@ -304,6 +304,14 @@ def meetings(text, campus, hours=None):
         if not 0 <= s < e <= 1440:
             raise ValueError('invalid clock')
     if shared and hours is not None and period_count != hours:
+        # "월,수 3,4교시" on a 2-hour course: n weekdays and n periods pair up in order.
+        listed = re.fullmatch(r'\s*((?:[월화수목금토일](?:요일)?\s*[,·]\s*)+[월화수목금토일](?:요일)?)'
+                              r'\s*\(?([\d\s,]+?)\)?\s*(?:교시)?\s*', t)
+        if listed:
+            days = re.findall(r'[월화수목금토일]', listed.group(1))
+            periods = [p for p in re.split(r'\s*,\s*', listed.group(2).strip()) if p]
+            if len(days) == len(periods) == hours:
+                return meetings(', '.join(d + ' ' + p for d, p in zip(days, periods)), campus, hours)
         raise ValueError('shared periods do not match weekly hours')
     return campus, merge(out)
 
@@ -479,7 +487,8 @@ def _self_check():
     assert meetings('월,수 3,4교시', 'glocal')[1] == [(1, 690, 810), (3, 690, 810)]
     assert meetings('월,수 3,4교시', 'glocal', hours=4)[1] == [(1, 690, 810), (3, 690, 810)]
     assert meetings('월 수/5, /1~2', 'medical', hours=3)[1] == [(1, 780, 840), (3, 540, 660)]
-    for unclear, hours in (('월 수/5, /1~2', 4), ('월,수 3,4교시', 2), ('월 수 목/5, /1~2', 3)):
+    assert meetings('월,수 3,4교시', 'medical', hours=2)[1] == [(1, 660, 720), (3, 720, 780)]
+    for unclear, hours in (('월 수/5, /1~2', 4), ('월,수 3,4교시', 3), ('월 수 목/5, /1~2', 3)):
         try:
             meetings(unclear, 'glocal', hours=hours)
             raise AssertionError(unclear)
