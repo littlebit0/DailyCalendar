@@ -90,6 +90,7 @@ void main() {
       final scheduled = <dynamic>[];
       var total = 0;
       var appointments = 0;
+      final statuses = <String, int>{};
       for (final campus in ['daejeon', 'sejong']) {
         final raw =
             jsonDecode(
@@ -107,6 +108,11 @@ void main() {
           final r = rows[i] as Map;
           final metadata = r['metadata'] as Map;
           total++;
+          statuses.update(
+            c.scheduleStatus ?? '',
+            (n) => n + 1,
+            ifAbsent: () => 1,
+          );
           expect(
             metadata['originalEducationalFields'],
             native[(metadata['originalEducationalFields']
@@ -187,6 +193,8 @@ void main() {
       }
       expect(total, 1698);
       expect(scheduled, hasLength(1647));
+      // 원문 요일·교시가 없는 현장실습·현장과제 등 18강좌도 시간 미정(2026-11-23 사용자 결정).
+      expect(statuses, {'scheduled': 1647, 'unscheduled': 51});
       expect(appointments, 25101);
       // 공식 교시표 밖 14교시는 13교시 슬롯(55분)으로 이어 계산한다(apply_hanbat_held_periods.py).
       final bodybuilding = scheduled.singleWhere(
