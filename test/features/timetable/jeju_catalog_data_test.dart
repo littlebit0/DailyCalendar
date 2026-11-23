@@ -206,12 +206,12 @@ void main() {
       expect(courses, hasLength(3095));
       expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(1984));
       final held = courses.where((c) => c.scheduleStatus == 'unrecognized');
-      expect(held, hasLength(70));
+      expect(held, isEmpty);
       expect(
         courses.where((c) => c.scheduleStatus == 'unscheduled'),
-        hasLength(1041),
+        hasLength(1111),
       );
-      expect(held.where((c) => c.sourceSchedule == '시간표자료없음'), hasLength(28));
+      // 학과 공개 자료까지 찾아도 시각이 없는 실습·실기 70건도 시간 미정.
       for (final prefix in ['원격수업강좌', 'K-MOOC강좌', '거점국립대', 'JOY공유대학']) {
         expect(
           courses
