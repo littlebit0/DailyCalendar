@@ -52,4 +52,40 @@ void main() {
       isTrue,
     );
   });
+
+  test('decided courses follow the Donga makeup table, printed week limits '
+      'and show the note in the displayed remarks', () {
+    final courses = [
+      for (final campus in ['seunghak', 'unknown'])
+        ...UniversityDataset.fromJson(load(campus)).courses,
+    ];
+    List<String> dates(String code) => courses
+        .singleWhere((c) => c.code == code)
+        .meetings
+        .map((m) => m.date!)
+        .toList();
+    // Friday course: 10/9 is made up on Wednesday 12/9, 9/25 on 12/11.
+    expect(dates('01B40007'), containsAll(['2026-12-09', '2026-12-11']));
+    expect(dates('01B40007'), isNot(contains('2026-10-09')));
+    // 집중이수제 1~10주(09.04.~11.06.).
+    expect(dates('01329465').last, '2026-11-06');
+    // Weeks 2,3,5,9,10,11,13 for two hours and week 15 for one hour.
+    final hmc = courses.singleWhere((c) => c.code == '01HMC302').meetings;
+    expect(hmc.map((m) => m.date).toList(), [
+      '2026-09-11',
+      '2026-09-18',
+      '2026-10-02',
+      '2026-10-30',
+      '2026-11-06',
+      '2026-11-13',
+      '2026-11-27',
+      '2026-12-11',
+    ]);
+    expect(hmc.last.originalEndMinute - hmc.last.originalStartMinute, 60);
+    for (final c in courses.where(
+      (c) => c.sourceRemarks.contains('2026-11-23 사용자 결정'),
+    )) {
+      expect(c.remarks, isNot(contains('일정 미생성')), reason: c.sourceId);
+    }
+  });
 }
