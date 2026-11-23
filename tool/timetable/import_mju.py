@@ -21,9 +21,12 @@ Every row is one course (강좌번호 is unique; 분반 is not published). 수�
 are printed clock times ("1100 - 1150"), so they become weekly meetings as
 printed. A 비고 saying the course does not meet every week (집중이수제, D-학기제,
 n주, 상·하반기 …) or 자율수강제 does not hold the printed clock: it is kept as a weekly
-in-person meeting (2026-11-23 사용자 결정). Rows are held as `unrecognized` (no
-meetings) only when a printed slot starts before 06:00 (online placeholder clocks
-such as "0000 - 0300"). Rows without any 요일 are `unscheduled`.
+in-person meeting (2026-11-23 사용자 결정). A printed slot starting before 06:00
+("0000 - 0300") is an online placeholder: rows on the official 2026-08-24 원격강좌
+list (REMOTE_PLACEHOLDER, 100% 녹화 동영상 수업) become `unscheduled` without that
+clock; any other such row is held as `unrecognized`. Rows without any 요일 are
+`unscheduled`, except the 계약학과·BCC rows whose times the 미래융합대학 timetable
+(CONTRACT_TIMETABLE) prints.
 
 The spreadsheet prints no 이수구분. 전공필수 comes from the latest-admission table
 「5. 전공필수 2025학번 이후」 of 「2026-2학기 학사안내문(v1.17).hwp」
@@ -107,6 +110,27 @@ def subject_key(name):
 
 REQUIRED_KEYS = {dept: {subject_key(n) for n in names} for dept, names in MAJOR_REQUIRED.items()}
 HOLD_PLACEHOLDER = '시각 보류: 06:00 이전 시작 시각 표기(원격강좌 자리표시 시각으로 보임)'
+ONLINE_NOTICE = 'https://www.mju.ac.kr/bbs/mjukr/143/234634/artclView.do'
+ONLINE_LIST = 'https://www.mju.ac.kr/bbs/mjukr/143/179821/download.do'
+# 「[붙임 2.] 2026-2학기 온라인 수업, 블렌디드러닝 교과목 리스트.pdf」 원격강좌 rows whose
+# 개설강좌현황표 slot is a pre-06:00 placeholder (list 2026-08-24, checked 2026-11-23).
+REMOTE_PLACEHOLDER = {'0663', '5786', '6006', '6018', '6021', '6034', '6048', '6072', '6082',
+                      '6084', '6092', '6093', '6151', '6152', '6153', '6156', '6157', '6158', '6244'}
+REMOTE_NOTE = ('시간 없음(원격): 학사공지 「2026학년도 2학기 정규 온라인 수업 안내 (원격수업 및 블렌디드 러닝)」'
+               f'(2026-08-24, {ONLINE_NOTICE}) "교내 원격수업 … 15주 모두 녹화 동영상(100%)로 수업"; '
+               f'붙임 2 교과목 리스트({ONLINE_LIST})에 인터넷강좌 "원격강좌"로 실림. '
+               '06:00 이전 원문 시각은 수업 시각이 아닌 자리표시로 보고 일정에서 뺌(원문은 위에 보존, 조회 2026-11-23)')
+CONTRACT_NOTICE = ('https://bizhrd.mju.ac.kr/default/notice/sub1.php?com_board_basic=read_form'
+                   '&com_board_idx=751&com_board_id=15')
+# 미래융합대학 「2026학년도 2학기 계약학과&BCC과정 수업시간표 및 수강신청내역 안내」(2026-08-24)
+# 첨부 시간표의 강의 칸: rows the 개설강좌현황표 prints with no 요일 and 교강사 "추후 업로드 예정".
+CONTRACT_TIMETABLE = {
+    '6142': ('우희철', [('토요일', '1100 - 1350', 'S3215', 660, 830)], '2026-2 계약학과 시간표 최종.pdf 9쪽 [스포츠산업경영학과] 3·4학년 토'),
+    '6143': ('강제호', [('월요일', '1400 - 1650', 'S10223', 840, 1010)], '2026-2 계약학과 시간표 최종.pdf 9쪽 [스포츠산업경영학과] 1학년 월'),
+    '6144': ('송여원', [('월요일', '1100 - 1350', 'S10223', 660, 830)], '2026-2 계약학과 시간표 최종.pdf 9쪽 [스포츠산업경영학과] 1학년 월'),
+    '6165': ('김경미', [('토요일', '0900 - 1130', 'S1533', 540, 690)], '2026-2 계약학과 시간표 최종.pdf 6쪽 [복지상담경영학과A] 4학년(편) 토'),
+    '6296': ('이진아', [('화요일', '0900 - 1150', 'S10215', 540, 710)], '2026-2 BCC 시간표 최종.pdf 9쪽 [뷰티비지니스학과 1학년] 화'),
+}
 NS = {'m': 'http://schemas.openxmlformats.org/spreadsheetml/2006/main'}
 COLLEGE_ROW = '대학'  # 단과대 "대학" rows print the college itself in 학과명.
 PROGRAM_GROUPS = {'융합전공'}  # 단과대 열에 전공제도 이름이 인쇄된 묶음
@@ -193,8 +217,20 @@ def build(src, root, closures_path):
         remark = r['비고']
         hold = None
         note = []
+        professor = r['교강사명']
+        if code in CONTRACT_TIMETABLE:
+            if found or professor != '추후 업로드 예정':
+                raise ValueError(f'{code}: 계약학과 시간표 override no longer matches the row')
+            professor, found, where = CONTRACT_TIMETABLE[code]
+            note.append(f'시각 확정: 미래융합대학 「2026학년도 2학기 계약학과&BCC과정 수업시간표 및 수강신청내역 안내」'
+                        f'(2026-08-24, {CONTRACT_NOTICE}) {where} 칸 "{r["교과목명"]}({code}) / {professor} / '
+                        f'{found[0][2]}" {found[0][1]} (조회 2026-11-23; 현황표 교강사 "추후 업로드 예정")')
         if any(s[3] < 360 for s in found):
-            hold = HOLD_PLACEHOLDER
+            if code in REMOTE_PLACEHOLDER and r['인터넷강좌'] == '원격강좌':
+                found = []
+                note.append(REMOTE_NOTE)
+            else:
+                hold = HOLD_PLACEHOLDER
         elif found and NOT_WEEKLY.search(remark):
             note.append(NOT_WEEKLY_NOTE)
         if closure:
@@ -207,7 +243,7 @@ def build(src, root, closures_path):
             'sourceId': f'mju/{campus}/2026/2/{code}',
             'campus': campus, 'academicYear': 2026, 'semester': '2',
             'courseCode': code, 'section': '', 'courseName': r['교과목명'],
-            'professor': r['교강사명'], 'classification': '', 'credits': credits,
+            'professor': professor, 'classification': '', 'credits': credits,
             'departments': [dept], 'departmentCredits': {dept: credits},
             'departmentClassifications': {dept: '전공필수'} if required else {},
             'sourceSchedule': ', '.join(f'{s[0]} {s[1]}' for s in found),

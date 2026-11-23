@@ -43,9 +43,10 @@ void main() {
     expect(total, 1523);
     expect(ids, hasLength(1523));
     expect(byStatus, {
-      'scheduled': 1493,
-      'unrecognized': 19,
-      'unscheduled': 11,
+      // 19 pre-06:00 원격강좌 placeholders are remote without a clock; 5 rows
+      // take their time from the 미래융합대학 계약학과·BCC timetable.
+      'scheduled': 1498,
+      'unscheduled': 25,
     });
   });
 

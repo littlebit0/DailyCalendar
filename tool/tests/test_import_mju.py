@@ -56,6 +56,17 @@ class ImportMjuAssetTests(unittest.TestCase):
         labels = {d for c in courses for d in c['departments']}
         org = json.loads((ROOT / 'assets/timetable/organizations/mju.json').read_text(encoding='utf-8'))
         self.assertEqual({m['sourceLabel'] for m in org['mappings']}, labels)
+        by_code = {c['courseCode']: c for c in courses}
+        for code in mju.REMOTE_PLACEHOLDER:
+            c = by_code[code]
+            self.assertEqual((c['scheduleStatus'], c['sourceSchedule']), ('unscheduled', ''), code)
+            self.assertIn('15주 모두 녹화 동영상', c['remarks'])
+        for code, (professor, found, _) in mju.CONTRACT_TIMETABLE.items():
+            c = by_code[code]
+            self.assertEqual(c['professor'], professor)
+            self.assertEqual([(s['weekday'], s['startMinute'], s['endMinute']) for s in c['schedules']],
+                             [(mju.WEEKDAY[f[0]], f[3], f[4]) for f in found])
+        self.assertEqual(by_code['6165']['schedules'][0]['classroom'], 'S1533')
 
 
 class ImportMjuRequiredTests(unittest.TestCase):
