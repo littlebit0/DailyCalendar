@@ -14,6 +14,9 @@ const baseline =
     'work/university-research/catalog-r/gnu/remaining-campus-clock-followup-v5-20261008';
 // 2026-11-23 1차 재개: 보류 강좌를 공식 요일·교시로 확정한 행(tool/timetable/apply_gnu_official_times.py).
 const confirmedBasis = 'nativeWeeklyPeriodsOfficialClockUserDecision20261123';
+// 2026-11-23 2차: 학과 수정 공지 코드 모순 4강좌를 최신 공식 자료로 확정, 11006946-001 수요일 12교시를 60분 슬롯으로 이어 계산.
+const resolvedBasis = 'identityConflictResolvedLatestOfficialNotice20261123';
+const wednesdayFilled = 'gnu/gajwa/2026-2/11006946-001';
 Map<String, dynamic> read(String path) {
   final actual = path.startsWith('$directory/gnu-')
       ? 'assets/timetable/${path.split('/').last.split('.').first}.json'
@@ -125,8 +128,9 @@ void main() {
         final previous = before[entry.key]!;
         oldDates += (previous['schedules'] as List).length;
         oldScheduled += (previous['schedules'] as List).isNotEmpty ? 1 : 0;
-        if ((entry.value['metadata'] as Map)['reservationBasis'] ==
-            confirmedBasis) {
+        final basis = (entry.value['metadata'] as Map)['reservationBasis'];
+        if ((basis == confirmedBasis && entry.key != wednesdayFilled) ||
+            basis == resolvedBasis) {
           expect(previous['scheduleStatus'], 'unrecognized');
           expect(previous['schedules'], isEmpty);
           expect(entry.value['sourceSchedule'], previous['sourceSchedule']);
@@ -187,10 +191,11 @@ void main() {
           final weekday = '월화수목금토일'.indexOf(match.group(1)!) + 1;
           final numbers = match.group(2)!.split(',').map(int.parse).toList();
           expect(numbers.toSet().length, numbers.length);
-          if (entry.key == 'gnu/gajwa/2026-2/11006946-001' && weekday == 3) {
+          if (entry.key == wednesdayFilled && weekday == 3) {
             expect(numbers, [10, 11, 12]);
             expect(clock.containsKey(12), isFalse);
-            continue;
+            // 표 밖 12교시는 같은 60분 슬롯으로 이어 계산한다.
+            clock[12] = [1200, 1250];
           }
           expect(numbers.every(clock.containsKey), isTrue);
           final runs = <List<int>>[];
@@ -266,21 +271,21 @@ void main() {
           expect(current['campus'], 'chilam');
         }
       }
-      expect(unchanged, 4327);
-      expect(confirmed, 472);
+      expect(unchanged, 4323);
+      expect(confirmed, 476);
       expect(oldScheduled, 2962);
       expect(oldDates, 53239);
-      expect(newDates, 630);
+      expect(newDates, 644);
       expect(blankRooms, 39);
       expect(blankRoomDates, 574);
       expect(nurseCases, 36);
-      expect(models.where((c) => c.meetings.isNotEmpty).length, 3477);
+      expect(models.where((c) => c.meetings.isNotEmpty).length, 3481);
       expect(
         after.values.fold<int>(
           0,
           (sum, c) => sum + (c['schedules'] as List).length,
         ),
-        62695,
+        62763,
       );
       for (final mode in [
         LectureMode.inPerson,
@@ -317,7 +322,7 @@ void main() {
         final restored = TimetableSyncDocument.fromJson(
           jsonDecode(jsonEncode(document.toJson())),
         );
-        expect(restored.courses.length, 3477);
+        expect(restored.courses.length, 3481);
         for (final entry in savedByKey.entries) {
           final actual = TimetableClass.fromJson(
             Map<String, dynamic>.from(

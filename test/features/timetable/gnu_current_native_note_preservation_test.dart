@@ -87,7 +87,21 @@ void main() {
           final row = r as Map;
           final previous = oldRows[row['sourceId']] as Map;
           nativeCount++;
-          if ((row['metadata'] as Map)['reservationBasis'] == confirmedBasis) {
+          final basis = (row['metadata'] as Map)['reservationBasis'];
+          if (row['sourceId'] == 'gnu/gajwa/2026-2/11006946-001') {
+            // 2차: 수요일 10~12교시를 채워 금요일 구간에 수요일 구간이 더해졌다.
+            expect(basis, confirmedBasis);
+            expect(previous['scheduleStatus'], 'scheduled');
+            expect(
+              (row['schedules'] as List)
+                  .map(jsonEncode)
+                  .toSet()
+                  .containsAll((previous['schedules'] as List).map(jsonEncode)),
+              isTrue,
+            );
+            changed++;
+          } else if (basis == confirmedBasis ||
+              basis == 'identityConflictResolvedLatestOfficialNotice20261123') {
             expect(previous['scheduleStatus'], 'unrecognized');
             expect(previous['schedules'], isEmpty);
             confirmed++;
@@ -133,10 +147,10 @@ void main() {
         models.addAll(UniversityDataset.fromJson(current).courses);
       }
       expect(nativeCount, 4842);
-      expect(changed, 1);
-      expect(confirmed, 472);
-      expect(scheduled, 3477);
-      expect(dates, 62695);
+      expect(changed, 2);
+      expect(confirmed, 476);
+      expect(scheduled, 3481);
+      expect(dates, 62763);
       expect(preservedV5Scheduled, 2962);
       expect(preservedV5Dates, 53239);
       for (final mode in [
@@ -167,7 +181,7 @@ void main() {
         final restored = TimetableSyncDocument.fromJson(
           jsonDecode(jsonEncode(doc.toJson())),
         );
-        expect(restored.courses.length, 3477);
+        expect(restored.courses.length, 3481);
         for (final entry in saved.entries) {
           final actual = TimetableClass.fromJson(
             Map<String, dynamic>.from(

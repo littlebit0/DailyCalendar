@@ -164,8 +164,8 @@ void main() {
         }
       }
       expect(count, 4842);
-      expect(scheduled, 3477);
-      expect(meetings, 62695);
+      expect(scheduled, 3481);
+      expect(meetings, 62763);
       for (final mode in [
         LectureMode.inPerson,
         LectureMode.liveOnline,
@@ -259,24 +259,51 @@ void main() {
         saturdayRemote.meetings.map((m) => m.date),
         isNot(contains('2026-10-03')),
       );
-      expect(
-        all.where((c) => c.scheduleStatus == 'unrecognized'),
-        hasLength(4),
-      );
-      for (final pair in [
-        ['11026184', '002'],
-        ['11002308', '001'],
-        ['11020698', '002'],
-        ['11022792', '001'],
-      ]) {
+      // 2차: 학과 수정 공지(2026-07-29)와 코드가 엇갈린 4강좌를 최신 공식 자료로 확정.
+      expect(all.where((c) => c.scheduleStatus == 'unrecognized'), isEmpty);
+      void expectWeekly(
+        UniversityCourse c,
+        String schedule,
+        Set<List<int>> blocks,
+        int count,
+      ) {
+        expect(c.sourceSchedule, schedule);
+        expect(c.hasSchedulableMeetings, isTrue);
+        expect(c.meetings, hasLength(count));
         expect(
-          datasets
-              .expand((d) => d.courses)
-              .singleWhere((c) => c.code == pair[0] && c.section == pair[1])
-              .hasSchedulableMeetings,
-          isFalse,
+          c.meetings
+              .map((m) => '${m.originalStartMinute}-${m.originalEndMinute}')
+              .toSet(),
+          blocks.map((b) => '${b[0]}-${b[1]}').toSet(),
         );
       }
+
+      // 공지 토요일 실제 시각 7·8·9교시 = 14:00~16:00.
+      expectWeekly(course('11002308', '001'), '토7,8,9[202- 408]', {
+        [840, 960],
+      }, 13);
+      expectWeekly(course('11026184', '002'), '토3,4[202- 405]', {
+        [660, 780],
+      }, 13);
+      expectWeekly(course('11020698', '002'), '금1,2,3[024-0260]', {
+        [540, 720],
+      }, 14);
+      expectWeekly(course('11022792', '001'), '목8,9,10[201-0203]', {
+        [960, 1140],
+      }, 14);
+      // 11006946-001 수요일 10~12교시: 표 밖 12교시를 60분 슬롯으로 이어 18:00~21:00.
+      final dance = course('11006946', '001');
+      expect(dance.meetings, hasLength(28));
+      expect(
+        dance.meetings.where(
+          (m) =>
+              m.classroom == '102-0109' &&
+              m.weekday == 3 &&
+              m.originalStartMinute == 1080 &&
+              m.originalEndMinute == 1260,
+        ),
+        hasLength(14),
+      );
     },
   );
 }
