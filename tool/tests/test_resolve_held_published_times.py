@@ -142,12 +142,13 @@ class ParserTest(unittest.TestCase):
         self.assertEqual(module.koreatech_weekly({**course, 'sourceSchedule': '수07B(온라인)'})[0]['startMinute'], 930)
         self.assertIsNone(module.koreatech_weekly({**course, 'remarks': '예약 보류: 원본 숫자 분반 중복 및 상충 시간'}))
 
-    def test_hanyang_rooms_and_medical_hold(self):
+    def test_hanyang_rooms_and_medical_rows_use_term_dates(self):
         course = {'sourceSchedule': '월(16:00-17:30),시간미지정강좌', 'sourceClassroom': '  ,서울 경영관 101강의실,  '}
         self.assertEqual(module.hanyang_weekly(course),
                          [{'weekday': 1, 'startMinute': 960, 'endMinute': 1050, 'classroom': '서울 경영관 101강의실'}])
-        medical = {**course, 'metadata': {'reservationProjection': {'heldReasons': [module.HANYANG_MEDICAL]}}}
-        self.assertIsNone(module.hanyang_weekly(medical))
+        medical = {**course, 'metadata': {'reservationProjection': {
+            'heldReasons': ['medicalOwnCourseOperatingPeriodUnconfirmed']}}}
+        self.assertEqual(module.hanyang_weekly(medical), module.hanyang_weekly(course))
 
 
 class BatchTest(unittest.TestCase):

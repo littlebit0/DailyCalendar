@@ -23,8 +23,8 @@
    minus closures and public holidays.
 
 Still held: rows whose official sources contradict each other (KOREATECH
-MEC367-03·MCA333-02·BSM632-31) and Hanyang 의학과 rows whose own operating period
-is not published.
+MEC367-03·MCA333-02·BSM632-31). Hanyang 의학과 rows use the undergraduate term
+dates: an unpublished separate period is not evidence against it (2026-11-23).
 
     python3 tool/timetable/resolve_held_published_times.py
 """
@@ -55,7 +55,6 @@ PUBLIC_HOLIDAYS = {'2026-09-24', '2026-09-25', '2026-09-26', '2026-10-03',
 # 원문끼리 분반·시간이 서로 달라 보류한다.
 CONFLICTING = {'koreatech/unknown/2026-2/MEC367-03'}
 KOREATECH_CONFLICT = '원본 숫자 분반 중복 및 상충'
-HANYANG_MEDICAL = 'medicalOwnCourseOperatingPeriodUnconfirmed'
 
 
 def remarks(course):
@@ -249,9 +248,7 @@ def _hanyang_room(text):
 
 
 def hanyang_weekly(course):
-    held = ((course.get('metadata') or {}).get('reservationProjection') or {}).get('heldReasons', [])
-    if HANYANG_MEDICAL in held:
-        return None  # 의학과 자체 수업기간 근거 없음: 학부 날짜를 쓰지 않는다
+    # 의학과도 학부 학기 날짜를 쓴다: 별도 기간 미공개는 반증이 아니다(2026-11-23 사용자 결정).
     parts = [p.strip() for p in (course.get('sourceSchedule') or '').split(',')]
     rooms = (course.get('sourceClassroom') or '').split(',')
     if len(rooms) != len(parts):
