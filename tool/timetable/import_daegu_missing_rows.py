@@ -10,6 +10,8 @@ row, and appends only registration numbers that were absent before.
 Existing course records are never changed. New records follow the same rules as
 the original candidate build (closures removed, special/remote/blended and
 conflicting rows held, only directly printed weekday clocks projected).
+The closure-listed rows it skipped are added by import_daegu_closed_rows.py
+(2026-11-23 user decision), which reuses extract_rows below.
 No networking; standard library only.
 """
 import argparse
@@ -34,17 +36,28 @@ def clean(value):
     return re.sub(r'\s+', ' ', value).strip()
 
 
+def major_title(whole):
+    if not any(l[0].strip() == MAJOR_TITLE for l in whole):
+        return None
+    return [MAJOR_TITLE] + [clean(l[0]) for l in sorted(whole, key=lambda l: l[2]) if 80 < l[2] < 100][:1]
+
+
 def extract_major_rows(lines, cols):
+    return extract_rows(lines, cols, NAMES, major_title)
+
+
+def extract_rows(lines, cols, names, title_of):
+    """Rebuild table rows of the pages title_of accepts; names are the column strips in order."""
     rows = []
     for page in sorted(cols):
         whole = lines[page]
-        if not any(l[0].strip() == MAJOR_TITLE for l in whole):
+        title = title_of(whole)
+        if title is None:
             continue
-        title = [clean(l[0]) for l in sorted(whole, key=lambda l: l[2]) if 80 < l[2] < 100]
         headers = [l[2] for l in whole if l[0].strip().startswith('교과목명')]
         ends = [l[2] for l in whole if END.match(l[0].strip())]
         segs = sorted((s for s in cols[page] if s[0].strip()), key=lambda s: (s[2], s[1]))
-        anchors = [s for s in segs if s[5] == 3 and re.fullmatch(r'\d{4}', s[0].strip())]
+        anchors = [s for s in segs if s[5] == names.index('수강번호') and re.fullmatch(r'\d{4}', s[0].strip())]
         table, ordinal, last = 0, 0, {}
         for i, anchor in enumerate(anchors):
             top = anchor[2]
@@ -56,8 +69,8 @@ def extract_major_rows(lines, cols):
             for s in segs:
                 if top - 1 <= s[2] < bottom - 1:
                     cells[s[5]].append(s[0].strip())
-            raw = ['\n'.join(cells.get(k, [])) for k in range(len(NAMES))]
-            education = {NAMES[k]: clean(raw[k]) for k in range(len(NAMES))}
+            raw = ['\n'.join(cells.get(k, [])) for k in range(len(names))]
+            education = {names[k]: clean(raw[k]) for k in range(len(names))}
             # Merged 학년/구분 cells carry down only inside the same printed table.
             for field in ['학년', '구분']:
                 if education[field]:
@@ -65,7 +78,7 @@ def extract_major_rows(lines, cols):
                 elif field in last:
                     education[field] = last[field]
             rows.append({'sourcePage': page, 'tableIndex': table, 'sourceRow': ordinal,
-                         'sourceTitleLines': ['전공 강의시간표'] + title[:1],
+                         'sourceTitleLines': title,
                          'nativeRegistrationNumber': education['수강번호'], 'nativeSection': '',
                          'nativeCanonicalCourseCodePublished': False, 'education': education,
                          'sourceCells': raw, 'extraction': 'official PDF text positions by column strip (PDFKit)'})
