@@ -257,7 +257,11 @@ void main() {
             }
             checked++;
             expect(start % 60, 0, reason: reason);
-            expect(start, inInclusiveRange(480, 1380), reason: reason);
+            expect(
+              start,
+              inInclusiveRange(420, 1380),
+              reason: reason,
+            ); // -1교시 07:00
             expect((end - start) % 60, 0, reason: reason);
             expect(end, lessThanOrEqualTo(1440), reason: reason);
             final periods =
@@ -297,7 +301,7 @@ void main() {
           }
         }
       }
-      expect(checked, 77544);
+      expect(checked, 78177);
     },
   );
 }

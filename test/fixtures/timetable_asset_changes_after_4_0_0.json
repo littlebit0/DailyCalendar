@@ -252,20 +252,20 @@
     "reason": "2026-11-23 사용자 결정: 폐강 표기 강좌 216건을 공식 원문에서 다시 넣음"
   },
   "assets/timetable/yonsei-international-2026-2.json": {
-    "sha256": "b9e1b8689f6c7301d2d80d65770a9ad907c9dccf40d3f1a3c3e7ddaab574e1df",
-    "reason": "2026-11-23 사용자 결정: 폐강 표기 강좌 216건을 공식 원문에서 다시 넣음"
+    "sha256": "4a8eb6a0acfd542b11728846c08aea49273a71f8a9de3a54485f2b155f42e289",
+    "reason": "2026-11-23: -1교시를 같은 60분 슬롯으로 계산(14), 비대면(동영상) 시각 없음 35건 시간 미정"
   },
   "assets/timetable/yonsei-mirae-2026-2.json": {
-    "sha256": "dbef9cb6eea47c9239f1b0e6df291cc1d91d1cce05d66c0ba366827e8abdcb94",
-    "reason": "2026-11-23 사용자 결정: 폐강 표기 강좌 216건을 공식 원문에서 다시 넣음"
+    "sha256": "209037029fee8a515f13b6f231960090534bd32854cd41e387cf6eef732083bb",
+    "reason": "2026-11-23: -1교시를 같은 60분 슬롯으로 계산(14), 비대면(동영상) 시각 없음 35건 시간 미정"
   },
   "assets/timetable/yonsei-sinchon-2026-2.json": {
-    "sha256": "c22bc04ea5bd62582e066fdce9ef9ccd9ebfa0d8409ee538a31bccd5d42daf89",
-    "reason": "2026-11-23 사용자 결정: 폐강 표기 강좌 216건을 공식 원문에서 다시 넣음"
+    "sha256": "3042264ba041c306c71c1a2912a7d85b8c13ba003bdf7a167d2fc2cbfda4490f",
+    "reason": "2026-11-23: -1교시를 같은 60분 슬롯으로 계산(14), 비대면(동영상) 시각 없음 35건 시간 미정"
   },
   "assets/timetable/yonsei-unknown-2026-2.json": {
     "sha256": "d170bbec4f8f283d0d321db37d27b490abbce1298608c362bc3ff274a2a68417",
-    "reason": "2026-11-23 사용자 결정: 폐강 표기 강좌 216건을 공식 원문에서 다시 넣음"
+    "reason": "2026-11-23: -1교시를 같은 60분 슬롯으로 계산(14), 비대면(동영상) 시각 없음 35건 시간 미정"
   },
   "assets/timetable/organizations/yu.json": {
     "sha256": "5c12acd2c987b4f2e81cbe2492829d957a589e9b2ca0df4b1015a9f3191048dc",
