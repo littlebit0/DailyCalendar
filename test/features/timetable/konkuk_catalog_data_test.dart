@@ -54,7 +54,7 @@ void main() {
       );
       expect(
         {for (final d in datasets) d.campus: d.courses.length},
-        {'seoul': 2432, 'glocal': 1449},
+        {'seoul': 2432, 'glocal': 1502},
       );
       for (final (campus, expected) in [
         ('academyinfo:0000052', 'seoul'),
@@ -79,112 +79,113 @@ void main() {
     },
   );
 
-  test(
-    'Konkuk meetings follow the published clocks and survive Drive JSON',
-    () {
-      final courses = <UniversityCourse>[];
-      for (final campus in ['seoul', 'glocal']) {
-        final raw =
-            jsonDecode(
-                  File(
-                    'assets/timetable/konkuk-$campus-2026-2.json',
-                  ).readAsStringSync(),
-                )
-                as Map<String, dynamic>;
-        courses.addAll(UniversityDataset.fromJson(raw).courses);
-      }
-      final byStatus = <String, int>{};
-      for (final c in courses) {
-        byStatus.update(c.scheduleStatus!, (v) => v + 1, ifAbsent: () => 1);
-      }
-      // Only GLOCAL unit 006771 (학수번호 BZZA) has no published name.
-      final unnamed = courses.where((c) => c.departments.isEmpty).toList();
-      expect(unnamed, hasLength(10));
-      expect(
-        unnamed.every(
-          (c) => c.campus == 'glocal' && c.remarks.contains('학수번호 BZZA'),
-        ),
-        isTrue,
-      );
-      expect(
-        courses.where((c) => c.departments.contains('교양학부')),
-        hasLength(403),
-      );
-      expect(
-        courses.where((c) => c.departments.contains('교직과')),
-        hasLength(22),
-      );
-      expect(byStatus, {'scheduled': 3743, 'unscheduled': 138});
-      // Seoul's literal period 00 e-러닝 row has no published time.
-      final untimed = courses.singleWhere(
-        (c) => c.sourceId == 'konkuk/seoul/2026/2/3704',
-      );
-      expect(untimed.scheduleStatus, 'unscheduled');
-      expect(untimed.meetings, isEmpty);
-      final approved = courses.where((c) => c.hasSchedulableMeetings).toList();
-      // 집중이수 rows are scheduled only within the weeks the timetable publishes.
-      final intensive = approved.where((c) => c.remarks.contains('집중이수제: '));
-      expect(intensive, hasLength(96));
-      for (final c in intensive) {
-        expect(c.campus, 'glocal');
-        expect(c.remarks.contains('강의시간표 집중이수'), isTrue);
-        expect(c.period, isNotNull);
-      }
-      final k002 = intensive.singleWhere(
-        (c) => c.sourceId == 'konkuk/glocal/2026/2/K002',
-      );
-      expect(k002.period?.start, DateTime(2026, 8, 31));
-      expect(k002.period?.end, DateTime(2026, 10, 25));
+  test('Konkuk meetings follow the published clocks and survive Drive JSON', () {
+    final courses = <UniversityCourse>[];
+    for (final campus in ['seoul', 'glocal']) {
+      final raw =
+          jsonDecode(
+                File(
+                  'assets/timetable/konkuk-$campus-2026-2.json',
+                ).readAsStringSync(),
+              )
+              as Map<String, dynamic>;
+      courses.addAll(UniversityDataset.fromJson(raw).courses);
+    }
+    final byStatus = <String, int>{};
+    for (final c in courses) {
+      byStatus.update(c.scheduleStatus!, (v) => v + 1, ifAbsent: () => 1);
+    }
+    // Only GLOCAL unit 006771 (학수번호 BZZA) has no published name.
+    final unnamed = courses.where((c) => c.departments.isEmpty).toList();
+    expect(unnamed, hasLength(10));
+    expect(
+      unnamed.every(
+        (c) => c.campus == 'glocal' && c.remarks.contains('학수번호 BZZA'),
+      ),
+      isTrue,
+    );
+    expect(
+      courses.where((c) => c.departments.contains('교양학부')),
+      hasLength(423),
+    );
+    expect(courses.where((c) => c.departments.contains('교직과')), hasLength(22));
+    expect(byStatus, {'scheduled': 3743, 'unscheduled': 191});
+    // Rows the GLOCAL timetable marks 폐강 stay in the catalog; none publishes a time.
+    final closed = courses.where((c) => c.remarks.contains('강의시간표 폐강 표시'));
+    expect(closed, hasLength(53));
+    for (final c in closed) {
+      expect(c.campus, 'glocal');
+      expect(c.scheduleStatus, 'unscheduled', reason: c.sourceId);
+    }
+    // Seoul's literal period 00 e-러닝 row has no published time.
+    final untimed = courses.singleWhere(
+      (c) => c.sourceId == 'konkuk/seoul/2026/2/3704',
+    );
+    expect(untimed.scheduleStatus, 'unscheduled');
+    expect(untimed.meetings, isEmpty);
+    final approved = courses.where((c) => c.hasSchedulableMeetings).toList();
+    // 집중이수 rows are scheduled only within the weeks the timetable publishes.
+    final intensive = approved.where((c) => c.remarks.contains('집중이수제: '));
+    expect(intensive, hasLength(96));
+    for (final c in intensive) {
+      expect(c.campus, 'glocal');
+      expect(c.remarks.contains('강의시간표 집중이수'), isTrue);
+      expect(c.period, isNotNull);
+    }
+    final k002 = intensive.singleWhere(
+      (c) => c.sourceId == 'konkuk/glocal/2026/2/K002',
+    );
+    expect(k002.period?.start, DateTime(2026, 8, 31));
+    expect(k002.period?.end, DateTime(2026, 10, 25));
+    expect(
+      [
+        for (final m in k002.meetings)
+          (m.weekday, m.originalStartMinute, m.originalEndMinute),
+      ],
+      [(3, 540, 720)],
+    );
+    for (final c in approved) {
       expect(
         [
-          for (final m in k002.meetings)
+          for (final m in c.meetings)
             (m.weekday, m.originalStartMinute, m.originalEndMinute),
         ],
-        [(3, 540, 720)],
+        _expected(c),
+        reason: c.sourceId,
       );
-      for (final c in approved) {
-        expect(
-          [
-            for (final m in c.meetings)
-              (m.weekday, m.originalStartMinute, m.originalEndMinute),
-          ],
-          _expected(c),
-          reason: c.sourceId,
+    }
+    expect(approved.expand((c) => c.meetings), hasLength(4940));
+    for (final mode in [
+      LectureMode.inPerson,
+      LectureMode.liveOnline,
+      LectureMode.video,
+    ]) {
+      final values = <String, TimetableSyncValue>{};
+      for (final course in approved) {
+        final saved = course.toTimetable(id: course.sourceId, mode: mode);
+        expect(saved.isValid, isTrue);
+        final key = timetableCourseSyncKey(saved);
+        values[key] = TimetableSyncValue(
+          {...saved.toJson(), 'id': key},
+          DateTime.utc(2026, 10, 23),
+          'test',
         );
       }
-      expect(approved.expand((c) => c.meetings), hasLength(4940));
-      for (final mode in [
-        LectureMode.inPerson,
-        LectureMode.liveOnline,
-        LectureMode.video,
-      ]) {
-        final values = <String, TimetableSyncValue>{};
-        for (final course in approved) {
-          final saved = course.toTimetable(id: course.sourceId, mode: mode);
-          expect(saved.isValid, isTrue);
-          final key = timetableCourseSyncKey(saved);
-          values[key] = TimetableSyncValue(
-            {...saved.toJson(), 'id': key},
-            DateTime.utc(2026, 10, 23),
-            'test',
-          );
-        }
-        final restored = TimetableSyncDocument.fromJson(
-          jsonDecode(
-                jsonEncode(
-                  TimetableSyncDocument.records(
-                    courses: values,
-                    schemaVersion: 2,
-                  ).toJson(),
-                ),
-              )
-              as Map<String, dynamic>,
-        );
-        expect(restored.courses.keys.toSet(), values.keys.toSet());
-        for (final entry in restored.courses.entries) {
-          expect(entry.value.value, values[entry.key]!.value);
-        }
+      final restored = TimetableSyncDocument.fromJson(
+        jsonDecode(
+              jsonEncode(
+                TimetableSyncDocument.records(
+                  courses: values,
+                  schemaVersion: 2,
+                ).toJson(),
+              ),
+            )
+            as Map<String, dynamic>,
+      );
+      expect(restored.courses.keys.toSet(), values.keys.toSet());
+      for (final entry in restored.courses.entries) {
+        expect(entry.value.value, values[entry.key]!.value);
       }
-    },
-  );
+    }
+  });
 }
