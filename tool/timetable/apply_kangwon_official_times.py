@@ -39,6 +39,7 @@ NEW_NOTE = '공식 요일·교시 기준 확정(이러닝·집중·실습 등 �
 HELD_NOTE = '같은 교시가 여러 번 적혀 학점과 교시가 맞지 않음: 시간표 추가 불가'
 REPEATED_NOTE = '같은 교시가 여러 번 적혀 교시로 해석할 수 없음: 요일·시각 미정'
 NONE_NOTE = '원문 수업시간이 0으로만 표기됨: 요일·시각 미정'
+BLANK_NOTE = '공식 시간표에 요일·시각 미게시: 시간 미정 강좌로 추가 가능'
 REPEATED_OK_NOTE = '같은 교시 반복 표기는 그 교시 한 칸(이러닝 수업·시험시간)으로 확정: 공식 LRS 시간표·같은 과목 춘천 분반 원문 기준'
 LRS_NOTE = '원문 수업시간 0: 공식 미래융합가상학과·강원LRS공유대학 시간표의 요일·시각(시험시간)으로 확정'
 
@@ -176,7 +177,10 @@ def main():
                 continue
             if c['scheduleStatus'] != 'unrecognized':
                 continue
-            if c['sourceSchedule'].strip() == '0' and c['sourceClassroom'].strip() == '0':
+            if not c['sourceSchedule'].strip():
+                # 원문 시간표 칸이 비면 시각이 없다: convert()가 빈 구간을 돌려줘도 scheduled로 두지 않는다.
+                status, schedules, note = 'unscheduled', [], BLANK_NOTE
+            elif c['sourceSchedule'].strip() == '0' and c['sourceClassroom'].strip() == '0':
                 status, schedules, note = 'unscheduled', [], NONE_NOTE
             else:
                 try:
