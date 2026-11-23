@@ -157,6 +157,16 @@ void main() {
           .toSet(),
       {'unscheduled'},
     );
+    // The schedule explanation reaches the displayed remarks, which prefer
+    // department remarks over the top-level note.
+    final emergency = data.courses.singleWhere(
+      (c) => c.codeAndSection == '09957-01',
+    );
+    expect(emergency.remarks, contains('집중이수 주차 미공개'));
+    expect(emergency.remarks, contains('응급구조학과'));
+    for (final c in data.courses.where((c) => c.sourceRemarks.isNotEmpty)) {
+      expect(c.remarks, contains(c.sourceRemarks.trim()), reason: c.sourceId);
+    }
     // 목5,6 → 13:00~15:00 (5교시 13:00 시작, 60분 슬롯 두 개)
     final music = data.courses.singleWhere(
       (c) => c.codeAndSection == '07294-01',

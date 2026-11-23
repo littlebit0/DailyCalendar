@@ -150,7 +150,11 @@ void main() {
         expect(c['sourceClassroom'], v[9]);
         expect(c['classification'], v[1]);
         expect(c['credits'], double.parse(v[5]));
-        expect(c['departmentRemarks']['계약학과'], v[10]);
+        // The native remark stays first; the schedule note follows it so the
+        // displayed remarks explain the reservation.
+        final shown = c['departmentRemarks']['계약학과'] as String;
+        final note = (c['remarks'] as String? ?? '').trim();
+        expect(shown, note.isEmpty ? v[10] : '${(v[10] as String).trimRight()}\n$note');
         final m = RegExp(r'^([월화수목금])([1-9](?:,[1-9])*)$').firstMatch(v[8]);
         expect(m, isNotNull);
         final wd = '월화수목금'.indexOf(m!.group(1)!) + 1;
