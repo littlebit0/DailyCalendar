@@ -119,7 +119,7 @@ void main() {
       }
     },
   );
-  test('BU periods stay held until an official period clock table exists', () async {
+  test('BU undergraduate periods use the booklet 60-minute slots from 09:00', () async {
     final data = (await UniversityCatalog.load(
       bundle: FileAssetBundle(),
       university: 'baekseok',
@@ -128,16 +128,19 @@ void main() {
     for (final c in data.courses) {
       byStatus[c.scheduleStatus] = (byStatus[c.scheduleStatus] ?? 0) + 1;
     }
-    expect(byStatus, {'scheduled': 22, 'unscheduled': 183, 'unrecognized': 2366});
+    expect(byStatus, {'scheduled': 2386, 'unscheduled': 183, 'unrecognized': 2});
+    // 목5,6 → 13:00~15:00 (5교시 13:00 시작, 60분 슬롯 두 개)
     final music = data.courses.singleWhere(
       (c) => c.codeAndSection == '07294-01',
     );
     expect(music.sourceSchedule, '목5,6');
-    expect(music.scheduleStatus, 'unrecognized');
-    expect(music.meetings, isEmpty);
-    for (final c in data.courses.where(
-      (c) => ['사', '-', ''].contains(c.sourceSchedule),
-    )) {
+    expect(
+      music.meetings.map(
+        (m) => (m.weekday, m.originalStartMinute, m.originalEndMinute),
+      ),
+      [(4, 780, 900)],
+    );
+    for (final c in data.courses.where((c) => c.sourceSchedule == '사')) {
       expect(c.scheduleStatus, 'unscheduled');
       expect(c.meetings, isEmpty);
     }

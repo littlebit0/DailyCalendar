@@ -203,7 +203,7 @@ void main() {
             expect(c, b);
             oldPlans += (b['schedules'] as List).length;
           } else {
-            // 상태 정리(apply_baekseok_schedule_status.py)는 시간 필드와 비고만 바꾼다.
+            // 학부 교시 시각 확정(apply_baekseok_period_clock.py)은 시간 필드와 비고만 바꾼다.
             for (final k in (b as Map).keys) {
               if (![
                 'departmentRemarks',
