@@ -66,10 +66,58 @@ void main() {
       expect(courses, hasLength(2598));
       expect(additions, hasLength(2114));
       var preservedMeetings = 0;
+      var confirmed = 0;
       for (var i = 0; i < courses.length; i++) {
         final before = old['courses'][i] as Map;
         final after = candidate['courses'][i] as Map;
         expect(after['sourceId'], before['sourceId']);
+        // 2026-11-23 사용자 결정: 보류 강좌를 공식 요일·교시로 확정했다. 원문 필드는 그대로다.
+        if ((after['departmentRemarks'] as Map).values.any(
+          (v) => (v as String).contains('2026-11-23 사용자 결정'),
+        )) {
+          confirmed++;
+          expect(before['scheduleStatus'], 'unrecognized');
+          expect(after['scheduleStatus'], 'scheduled');
+          for (final key in before.keys.where(
+            (key) => !{
+              'schedules',
+              'scheduleStatus',
+              'departmentRemarks',
+            }.contains(key),
+          )) {
+            expect(
+              after[key],
+              before[key],
+              reason: '${before['sourceId']}/$key',
+            );
+          }
+          expect(courses[i].meetings, isNotEmpty);
+          for (final m in courses[i].meetings) {
+            final text = m.teachingDate!.toIso8601String().substring(0, 10);
+            expect(m.teachingDate!.weekday, m.weekday);
+            expect(text.compareTo('2026-08-31') >= 0, true);
+            expect(text.compareTo('2026-12-06') <= 0, true);
+            expect(
+              {
+                '2026-09-24',
+                '2026-09-25',
+                '2026-09-26',
+                '2026-09-27',
+                '2026-10-03',
+                '2026-10-05',
+                '2026-10-09',
+              }.contains(text),
+              false,
+              reason: '${before['sourceId']} $text',
+            );
+            expect(
+              text.compareTo('2026-10-19') >= 0 &&
+                  text.compareTo('2026-10-23') <= 0,
+              false,
+            );
+          }
+          continue;
+        }
         if (!additions.contains(after['sourceId'])) {
           final slotted = Map<String, dynamic>.from(before);
           slotted['schedules'] =
@@ -216,6 +264,7 @@ void main() {
         }
       }
       expect(preservedMeetings, 263);
+      expect(confirmed, 235);
       // 2·3교시(10:00–10:50, 11:00–11:50)는 슬롯(60분)으로 이어져 10:00~12:00 한 구간.
       final education = courses.singleWhere((c) => c.code == '10008');
       expect(
@@ -265,21 +314,22 @@ void main() {
           [1080, 1260, '6403'],
         ],
       );
-      for (final code in [
-        '12645',
-        '12692',
-        '12705',
-        '12904',
-        '10517',
-        '10507',
-        '10510',
-        '10509',
-        '10133',
-      ]) {
-        expect(courses.singleWhere((c) => c.code == code).meetings, isEmpty);
+      // 반교시 블록(75분 수업 + 15분)은 90분 슬롯, 일요일 13교시는 21:00~22:00.
+      final blocks = courses.singleWhere((c) => c.code == '12692');
+      for (final m in blocks.meetings) {
+        expect(
+          [m.originalStartMinute, m.originalEndMinute, m.classroom],
+          [630, 810, 'U212'],
+        );
       }
-      expect(courses.where((c) => c.meetings.isNotEmpty), hasLength(2127));
-      expect(courses.fold<int>(0, (n, c) => n + c.meetings.length), 35380);
+      final virtualSunday = courses.singleWhere(
+        (c) => c.code == '10133' && c.sourceSchedule == '일13',
+      );
+      expect(virtualSunday.meetings.first.weekday, 7);
+      expect(virtualSunday.meetings.first.originalStartMinute, 1260);
+      expect(virtualSunday.meetings.first.originalEndMinute, 1320);
+      expect(courses.where((c) => c.meetings.isNotEmpty), hasLength(2362));
+      expect(courses.fold<int>(0, (n, c) => n + c.meetings.length), 38566);
       for (final mode in [
         LectureMode.inPerson,
         LectureMode.liveOnline,
@@ -311,7 +361,7 @@ void main() {
         final restored = TimetableSyncDocument.fromJson(
           json,
         ).materializeClasses();
-        expect(restored, hasLength(2127));
+        expect(restored, hasLength(2362));
         for (final c in restored) {
           expect(c.defaultMode, mode);
           expect(c.toJson(), values[timetableCourseSyncKey(c)]!.value);
