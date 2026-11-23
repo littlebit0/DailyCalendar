@@ -270,9 +270,9 @@ void main() {
     expect(datasets.map((d) => d.campus).toSet(), {'suwon', 'seoul'});
     final seoul = datasets.singleWhere((d) => d.campus == 'seoul');
     final courses = seoul.courses;
-    expect(courses.length, 41);
-    expect(courses.map((c) => c.sourceId).toSet().length, 41);
-    expect(courses.where((c) => c.hasSchedulableMeetings).length, 28);
+    expect(courses.length, 67);
+    expect(courses.map((c) => c.sourceId).toSet().length, 67);
+    expect(courses.where((c) => c.hasSchedulableMeetings).length, 54);
     expect(courses.where((c) => c.scheduleStatus == 'unscheduled').length, 13);
     expect(courses.where((c) => c.scheduleStatus == 'unrecognized'), isEmpty);
     UniversityCourse byReg(String reg) =>
@@ -281,9 +281,12 @@ void main() {
     final english = byReg('9037');
     expect(english.title, '대학영어5(시사영어)');
     expect(english.sourceSchedule, '금789');
-    // 합반이 아니면 수원 강좌 값을 빌리지 않고 공지 제목의 구분 원문만 둔다.
-    expect(english.code, isEmpty);
+    // 학수코드는 수원 강좌가 아니라 625109 붙임1(2026 교양 교육과정) 원문에서 온다.
+    expect(english.code, 'AS364');
+    expect(english.remarks, contains('AS042 시사영어 3학점 외영 AS364 대학영어5(시사영어)'));
     expect(english.sourceClassification, '교양/일반선택/교육학전공');
+    // 원문에 학수코드가 없는 강좌는 비워 둔다.
+    expect(byReg('9051').code, isEmpty);
     expect(english.meetings.single.weekday, 5);
     expect(english.meetings.single.originalStartMinute, 900);
     expect(english.meetings.single.originalEndMinute, 1080);
@@ -297,6 +300,15 @@ void main() {
     expect(elearning.code, 'AT020');
     expect(elearning.remarks, contains('0001로 합반'));
     expect(byReg('9129').hasSchedulableMeetings, isFalse);
+    // 625108 첨부 p.12 서울 교양 그룹 "19.대학영어(화123,Advanced)": 화 1~3교시.
+    final group = courses.singleWhere((c) => c.sourceId.endsWith('-group-19'));
+    expect(group.title, '대학영어');
+    expect(group.code, 'AS395');
+    expect(group.meetings.single.weekday, 2);
+    expect(group.meetings.single.originalStartMinute, 540);
+    expect(group.meetings.single.originalEndMinute, 720);
+    // 같은 과목·같은 시각의 폐강 공지 강좌(9282 월67)가 있는 그룹 06은 중복으로 넣지 않는다.
+    expect(courses.where((c) => c.sourceId.endsWith('-group-06')), isEmpty);
     for (final c in courses.where((c) => c.hasSchedulableMeetings)) {
       expect(
         c.toTimetable(id: c.sourceId, mode: LectureMode.inPerson).isValid,

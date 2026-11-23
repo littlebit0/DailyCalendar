@@ -395,7 +395,7 @@
         "suspensionEvidence": "work/university-support-suspension-20261012/support-decisions.json",
         "productionIntegrationEnabled": true,
         "reopenedDate": "2026-11-23",
-        "reopenNote": "부분 범위로 검색 재개: 수원 주간 1640강좌(학점교류용 공개 시간표) + 서울 주간 41강좌(통합공지 폐강·변동·이러닝 합반 공지 4건). 서울캠 학과 전공 강좌와 수원·서울 야간은 공개 원자료 없음(KUTIS·수강신청 로그인)."
+        "reopenNote": "부분 범위로 검색 재개: 수원 주간 1640강좌(학점교류용 공개 시간표) + 서울 주간 67강좌(통합공지 폐강·변동·이러닝 합반 공지 4건 41 + 교양 이수요건 안내 첨부 서울 교양 그룹 26). 서울캠 학과 전공 강좌와 수원·서울 야간은 공개 원자료 없음(KUTIS·수강신청 로그인)."
       },
       "installedAcceptance": "macos_build_signature_install_verified_ui_not_run",
       "deferredAsImpossible": false,
