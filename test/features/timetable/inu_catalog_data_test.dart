@@ -88,9 +88,9 @@ void main() {
       expect(scheduled.fold<int>(0, (n, c) => n + c.meetings.length), 116736);
       expect(all.every((c) => c.section.isEmpty), true);
       // 2026-11-23: RISE(시간표 없음)·이러닝·K-MOOC·OCU·교육봉사활동은 공식
-      // 자료상 정해진 주간 시각이 없어 시간 미정, 근거를 못 찾은 4건만 보류.
-      expect(all.where((c) => c.scheduleStatus == 'unscheduled'), hasLength(143));
-      expect(all.where((c) => c.scheduleStatus == 'unrecognized'), hasLength(4));
+      // 자료상 정해진 주간 시각이 없어 시간 미정. 시각을 찾지 못한 4건도 시간 미정.
+      expect(all.where((c) => c.scheduleStatus == 'unscheduled'), hasLength(147));
+      expect(all.where((c) => c.scheduleStatus == 'unrecognized'), isEmpty);
       for (final mode in [
         LectureMode.inPerson,
         LectureMode.liveOnline,

@@ -684,8 +684,8 @@
     "reason": "2026-11-23: 정해진 주간 시각이 없는 RISE·이러닝·K-MOOC·OCU·교육봉사 143강좌를 시간 미정으로 둠"
   },
   "assets/timetable/inu-unknown-2026-2.json": {
-    "sha256": "f76df8d5a3bd081d48aa3b36f957f6daf20471e1b5540a89d2421c5712601e50",
-    "reason": "2026-11-23: 정해진 주간 시각이 없는 RISE·이러닝·K-MOOC·OCU·교육봉사 143강좌를 시간 미정으로 둠"
+    "sha256": "aca9525145bc2bce2f7b1e23b89759a9f166fab88249e7ac032d2fd3a592b453",
+    "reason": "2026-11-23: 시각 없는 4건도 시간 미정으로 둠"
   },
   "assets/timetable/jbnu-gochang-2026-2.json": {
     "sha256": "576cbd2e8f52873d8788121bce9d299edcad4ca7fedfb7b4bed330651026d128",
