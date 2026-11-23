@@ -171,11 +171,43 @@ void main() {
     );
     expect(examOnly, hasLength(392));
     expect(raw['publishedExamAppointmentOnlyAdditionCount'], 392);
-    // Only the two rows whose official meeting text has no clock stay held.
+    // The two rows whose official meeting text was only "[R404]" take the
+    // public syllabus clock (화 16:30-18:00); nothing stays held.
     expect(
       courses.where((c) => c['scheduleStatus'] == 'unrecognized'),
-      hasLength(2),
+      isEmpty,
     );
+  });
+
+  test('PHY4201·PHY4204는 공개 강의계획서의 화 16:30-18:00 R404 주간 예약이다', () {
+    for (final id in ['PHY4201-01', 'PHY4204-01']) {
+      final c = byId(id);
+      expect(c['scheduleStatus'], 'scheduled', reason: id);
+      expect((c['sourceEducationalMetadata'] as Map)['meetingText'], '[R404]');
+      expect(
+        (c['syllabusClockEvidence'] as Map)['clockExcerpt'],
+        '수업시간 화 16:30-18:00',
+      );
+      final expected = <String>[];
+      for (
+        var d = DateTime(2026, 9, 1);
+        !d.isAfter(DateTime(2026, 12, 21));
+        d = DateTime(d.year, d.month, d.day + 1)
+      ) {
+        final key = timetableDateKey(d);
+        if (d.weekday == DateTime.tuesday && !excluded.contains(key)) {
+          expected.add(key);
+        }
+      }
+      final schedules = (c['schedules'] as List).cast<Map>();
+      expect(schedules.map((m) => m['date']), expected, reason: id);
+      for (final m in schedules) {
+        expect(
+          [m['startMinute'], m['endMinute'], m['classroom']],
+          [990, 1080, 'R404'],
+        );
+      }
+    }
   });
 
   test('바뀐 시험 약속·강의실·학과가 저장과 복원을 거쳐도 유지된다', () {

@@ -18,9 +18,9 @@ void main() {
       );
       expect(
         data.courses.where((c) => c.hasSchedulableMeetings),
-        hasLength(1495),
+        hasLength(1497),
       );
-      expect(data.courses.expand((c) => c.meetings), hasLength(33297));
+      expect(data.courses.expand((c) => c.meetings), hasLength(33325));
       for (final mode in [
         LectureMode.inPerson,
         LectureMode.liveOnline,
