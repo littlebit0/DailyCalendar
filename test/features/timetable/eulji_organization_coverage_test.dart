@@ -14,7 +14,7 @@ void main() {
       final datasets = catalog.where((d) => d.universityId == 'eulji').toList();
       expect(
         {for (final d in datasets) d.campus: d.courses.length},
-        {'seongnam': 389, 'uijeongbu': 34, 'daejeon': 2},
+        {'seongnam': 396, 'uijeongbu': 39, 'daejeon': 2},
       );
 
       final raw = <String>{};
@@ -74,7 +74,7 @@ void main() {
         }
       }
     }
-    expect(checked, 425);
+    expect(checked, 437);
   });
 
   test('Eulji period slots include the following break', () {
@@ -105,6 +105,6 @@ void main() {
         }
       }
     }
-    expect(checked, 423);
+    expect(checked, 435);
   });
 }
