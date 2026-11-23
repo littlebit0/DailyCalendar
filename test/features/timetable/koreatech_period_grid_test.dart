@@ -15,7 +15,7 @@ void main() {
     ];
     final scheduled = courses.where((c) => c.hasSchedulableMeetings).toList();
     expect(courses, hasLength(791));
-    expect(scheduled, hasLength(765));
+    expect(scheduled, hasLength(768));
     for (final c in scheduled) {
       for (final m in c.meetings) {
         // 표에 없는 14교시는 같은 30분 칸으로 이어 계산한다(2026-11-23 사용자 결정).
@@ -44,7 +44,7 @@ void main() {
     );
     expect(
       courses.where((c) => c.scheduleStatus == 'unrecognized').map((c) => c.code),
-      unorderedEquals(['MEC367', 'MCA333', 'BSM632']),
+      unorderedEquals(['BSM632']),
     );
   });
 }
