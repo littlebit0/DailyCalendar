@@ -19,6 +19,7 @@ const _weekStarts = [
   1175,
   1230,
   1290,
+  1345,
 ];
 const _weekEnds = [
   600,
@@ -34,6 +35,7 @@ const _weekEnds = [
   1230,
   1290,
   1345,
+  1400,
 ];
 const _satStarts = [
   540,
@@ -152,7 +154,7 @@ void main() {
               '2026-10-03',
             ], isNot(contains(m.date)));
             expect(m.originalStartMinute, greaterThanOrEqualTo(540));
-            expect(m.originalEndMinute, lessThanOrEqualTo(1345));
+            expect(m.originalEndMinute, lessThanOrEqualTo(1400));
             expect(
               (r['schedules'] as List).every(
                 (dynamic s) => !(s as Map).containsKey('deliveryMode'),
@@ -163,8 +165,15 @@ void main() {
         }
       }
       expect(total, 1698);
-      expect(scheduled, hasLength(1611));
-      expect(appointments, 24154);
+      expect(scheduled, hasLength(1623));
+      expect(appointments, 24367);
+      // 공식 교시표 밖 14교시는 13교시 슬롯(55분)으로 이어 계산한다(apply_hanbat_held_periods.py).
+      final bodybuilding = scheduled.singleWhere(
+        (dynamic c) => c.sourceId == 'hanbat/daejeon/2026-2/2026200616',
+      );
+      expect(bodybuilding.meetings.first.weekday, 1);
+      expect(bodybuilding.meetings.first.originalStartMinute, 1290);
+      expect(bodybuilding.meetings.first.originalEndMinute, 1400);
       // 토요일 5~7교시(13:00~15:50)와 월~금 6~8교시(14:00~17:00)는
       // 쉬는 시간을 포함해 각각 한 구간이 된다.
       expect(
@@ -209,7 +218,7 @@ void main() {
         final restored = TimetableSyncDocument.fromJson(
           jsonDecode(jsonEncode(document.toJson())) as Map<String, dynamic>,
         ).materializeClasses();
-        expect(restored, hasLength(1611));
+        expect(restored, hasLength(1623));
         final before = {for (final c in classes) c.sourceId: c};
         for (final c in restored) {
           final original = before[c.sourceId]!;
