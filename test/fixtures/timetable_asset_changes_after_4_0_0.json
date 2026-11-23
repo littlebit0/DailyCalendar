@@ -673,7 +673,7 @@
   },
   "assets/timetable/inu-michuhol-2026-2.json": {
     "sha256": "50df16ebfe07380f35819eba3873adff00c69ecfe5ff7bbe833182aedaba1130",
-    "reason": "2026-11-23 사용자 결정: 공식 요일·시각이 있는 운영 방식·폐강 보류 강좌를 그 시각으로 확정"
+    "reason": "2026-11-23: 정해진 주간 시각이 없는 RISE·이러닝·K-MOOC·OCU·교육봉사 143강좌를 시간 미정으로 둠"
   },
   "assets/timetable/inu-multiple-2026-2.json": {
     "sha256": "252c9c0af0085b62306bf5402767208153d2b6e8036a80dffe165851f3e3a2b6",
@@ -681,11 +681,11 @@
   },
   "assets/timetable/inu-songdo-2026-2.json": {
     "sha256": "e903fff46f0e6c9b65dd419d739344822e882ccb4fb53e867e3d35037fd8c303",
-    "reason": "2026-11-23 사용자 결정: 공식 요일·시각이 있는 운영 방식·폐강 보류 강좌를 그 시각으로 확정"
+    "reason": "2026-11-23: 정해진 주간 시각이 없는 RISE·이러닝·K-MOOC·OCU·교육봉사 143강좌를 시간 미정으로 둠"
   },
   "assets/timetable/inu-unknown-2026-2.json": {
-    "sha256": "4c90976847134a1a9df982246a4f0873d7483b378ab63bf7964d393e430ccec9",
-    "reason": "2026-11-23 사용자 결정: 공식 요일·시각이 있는 운영 방식·폐강 보류 강좌를 그 시각으로 확정"
+    "sha256": "f76df8d5a3bd081d48aa3b36f957f6daf20471e1b5540a89d2421c5712601e50",
+    "reason": "2026-11-23: 정해진 주간 시각이 없는 RISE·이러닝·K-MOOC·OCU·교육봉사 143강좌를 시간 미정으로 둠"
   },
   "assets/timetable/jbnu-gochang-2026-2.json": {
     "sha256": "576cbd2e8f52873d8788121bce9d299edcad4ca7fedfb7b4bed330651026d128",
