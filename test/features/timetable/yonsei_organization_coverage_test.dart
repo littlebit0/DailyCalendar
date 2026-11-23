@@ -54,6 +54,8 @@ void main() {
         'mirae 동아시아국제학부 EAST ASIAN POLITICS AND CULTURE',
         'mirae 동아시아국제학부 공통',
         'mirae 보건과학부(야간) 보건과학부(야간)(2022학년도 편입생~)',
+        // Restored closed course (2026-11-23): no college prefix in the label.
+        'mirae 치위생학과(~2020학번) 치위생전공',
         'sinchon Study Abroad Course Graduate',
         'sinchon 공통 창업,현장실습',
       });

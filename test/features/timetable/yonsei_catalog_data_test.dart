@@ -297,7 +297,7 @@ void main() {
           }
         }
       }
-      expect(checked, 74887);
+      expect(checked, 77544);
     },
   );
 }
