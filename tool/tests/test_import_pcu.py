@@ -47,24 +47,52 @@ class ImportPcuTests(unittest.TestCase):
         self.assertEqual(pcu.decide([online, timed])[0], 'scheduled')
         self.assertEqual(pcu.decide([{'time': '월C,목B', 'room': 'Y'}, {'time': '목B', 'room': 'Y'}])[0], 'unrecognized')
 
-    def test_latest_handbook_settles_only_courses_it_times_consistently(self):
-        def listing(time, room, prof='김교수'):
+    def test_split_table_rows_are_joined_into_one_course_row(self):
+        hdr = ['학년', '', '이수구분', '교과목코드', '교과목명', '학점', '시수', '분반', '담당교수', '강의시간', '강의실', '비고']
+        def row(cells, y=10):
+            return {'page': 281, 'table_y': y, 'hdr': hdr, 'cells': cells, 'heads': [], 'heading': 'X'}
+        rows = pcu.normalize_rows([
+            row(['3', '', '', '', '상상력과문화', '3', '3', '', '문정현', '화C,목C', 'W409', '']),
+            row(['', '3', '교필선', 'GEN22354', '', '', '', '01', '', '', '', '']),
+            row(['', '', '', '', '', '', '', '', '', '', '', '']),
+            row(['3', '', '전선', 'ARC22209', '건축설계2', '6', '12', '01', '', '화7,금', '7B301', '']),
+            row(['', '', '', '', '', '', '', '', '박인규', '', '', '']),
+            row(['3', '', '전선', 'ARC22209', '건축설계2', '6', '12', '01', '박인규', '화7,금7', 'B301', '']),
+        ])
+        self.assertEqual([r['cells'][:10] for r in rows], [
+            ['3', '교필선', 'GEN22354', '상상력과문화', '3', '3', '01', '문정현', '화C,목C', 'W409'],
+            ['3', '전선', 'ARC22209', '건축설계2', '6', '12', '01', '박인규', '화7,금7', 'B301'],
+            # a second printed row with its own code is never folded into the first
+            ['3', '전선', 'ARC22209', '건축설계2', '6', '12', '01', '박인규', '화7,금7', 'B301']])
+
+    def test_repeated_merged_cell_text_is_taken_once(self):
+        f = pcu._fields(['교과목코드', '', '강의시간', ''], ['DPA22406', 'DPA22406', '화5,화6,화7,화', '8'])
+        self.assertEqual((f['교과목코드'], f['강의시간']), ('DPA22406', '화5,화6,화7,화8'))
+
+    def test_rooms_split_on_a_new_room_line_only(self):
+        self.assertEqual(pcu.rooms('A314\nA311'), 'A314 / A311')
+        self.assertEqual(pcu.rooms('SP401,W21\n0'), 'SP401 / W210')
+
+    def test_latest_edition_replaces_differing_values_and_keeps_the_earlier_ones(self):
+        def listing(time, room, prof):
             raw = ['2', '전선', 'ARC22212', '디지털이미징설계', '3', '3', '01', prof, time, room, '']
             return {'name': '디지털이미징설계', 'time': time, 'room': room, 'raw': raw, 'page': 254}
-        def course(status, section='01'):
-            return {'sourceId': f'x/{section}', 'courseCode': 'ARC22212', 'section': section,
-                    'courseName': '디지털이미징설계', 'professor': '', 'scheduleStatus': status,
-                    'schedules': [], 'sourceSchedule': '', 'sourceClassroom': '', 'remarks': 'r'}
-        off = {'ARC22212-01': [listing('월C,목B', 'Y424-2'), listing('월C,목B', 'Y424-2')],
-               'ARC22212-02': [listing('월B,목C', 'Y424-2'), listing('월B', 'Y424-2')]}
-        held, clash, done = course('unrecognized'), course('unrecognized', '02'), course('scheduled')
-        self.assertEqual(pcu.settle_latest([held, clash, done], off), ['x/01'])
-        self.assertEqual([(m['weekday'], m['startMinute'], m['endMinute']) for m in held['schedules']],
-                         [(1, 810, 900), (4, 660, 750)])
-        self.assertEqual((held['professor'], held['sourceClassroom']), ('김교수', 'Y424-2'))
-        self.assertIn('2026-11-04', held['remarks'])
-        self.assertEqual(clash['scheduleStatus'], 'unrecognized')
-        self.assertEqual(done['schedules'], [])
+        def course(status, sched, prof, room):
+            return {'sourceId': 'x', 'scheduleStatus': status, 'schedules': sched, 'professor': prof,
+                    'sourceSchedule': 'old', 'sourceClassroom': room, 'remarks': 'r'}
+        mon_c = [{'weekday': 1, 'startMinute': 810, 'endMinute': 900, 'classroom': 'Y424-2'}]
+        same = course('scheduled', mon_c, '김교수', 'Y424-2')
+        self.assertFalse(pcu.refresh(same, pcu.offering([listing('월C', 'Y424-2', '김교수')], '2026-11-04')))
+        self.assertEqual(same['remarks'], 'r')
+        held = course('unrecognized', [], '김교수', 'Y424-2')
+        o = pcu.offering([listing('월C,목B', 'Y424-2', '이교수'), listing('월C,목B', 'Y424-2', '')], '2026-11-04')
+        self.assertTrue(pcu.refresh(held, o))
+        self.assertEqual([(m['weekday'], m['startMinute']) for m in held['schedules']], [(1, 810), (4, 660)])
+        self.assertEqual((held['scheduleStatus'], held['professor']), ('scheduled', '이교수'))
+        self.assertIn("이전 8월 편람 값: 상태 unrecognized, 담당 김교수, 시간 원문 'old'", held['remarks'])
+        # 'C104(new)' is the same room as 'C104'; a blank professor keeps the earlier one
+        kept = course('scheduled', mon_c, '김교수', 'C104')
+        self.assertFalse(pcu.refresh(kept, pcu.offering([listing('월C', 'C104(new)', '')], '2026-11-04')))
 
     def test_unknown_numeric_period_is_rejected(self):
         self.assertIsNone(pcu.meetings([(1, '99')], 'AM108'))

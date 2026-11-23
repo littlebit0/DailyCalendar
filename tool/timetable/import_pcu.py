@@ -6,13 +6,17 @@ Source: https://hakgwa.pcu.ac.kr/ce/article/depart_ce_notice/37507
 
   extract <handbook.pdf> <rows.json>        (needs PyMuPDF)
   apply   <rows.json> <repository root>     (pure Python)
-  latest  <rows_latest.json> <repository root>  rows extracted from LATEST (2026-11-04 갱신본)
+  apply   <rows_latest.json> <repository root> 2026-11-04   update to the latest edition (LATEST)
 
 `apply` keeps every existing course value. Rows the earlier extraction skipped
 are added. A schedule is set only when the official listings state the weekday
 and period directly and do not contradict each other; everything else stays
 `unrecognized` (listings disagree, weekday omitted, period missing from the
 official period table) or `unscheduled` (the handbook prints no weekday/period).
+With edition 2026-11-04 (the school homepage file, newer than the August attachment)
+existing courses take that edition's weekday/period, room and professor when they
+differ (earlier values kept in remarks), its new sections are added, and sections it
+no longer prints stay with a remark.
 """
 import collections
 import json
@@ -169,9 +173,82 @@ def decide(L):
     return 'unscheduled', '원문에 요일·교시 없음(' + ','.join(sorted({k for k, v in kinds})) + ')', None
 
 
+H8 = ['학년', '이수구분', '교과목코드', '교과목명', '학점', '시수', '분반', '담당교수']
+CANON = H8 + ['강의시간', '강의실', '비고']
+CODE = re.compile(r'[A-Z]{3,4}\d{4,5}')
+
+
+def _fields(hdr, cells):
+    """Header label -> cell text. PyMuPDF splits some 2026-11-04 tables into blank-labelled
+    sub-columns; a value (or the tail of a wrapped one, '화5,화6,화7,화' + '8') may sit in any
+    sub-column, so each label takes the text of the blank columns that follow it. A merged
+    cell PyMuPDF repeats in each sub-column ('DPA22406', 'DPA22406') is taken once."""
+    f, cur = {}, None
+    for h, c in zip(hdr, cells):
+        h = re.sub(r'\s+', '', h or '')
+        if h:
+            cur = {'교과목명학': '교과목명', '점시수': '학점시수', '강의실매': '강의실'}.get(h, h)
+            f.setdefault(cur, '')
+        c = c or ''
+        if cur is not None and c.strip() and c.strip() != f[cur].strip():
+            f[cur] += c
+    if '학점시수' in f:  # '교과목명학' / '점시수' header split: cell '3 3'
+        f['학점'], f['시수'] = (f.pop('학점시수').split() + ['', ''])[:2]
+    return f
+
+
+def _course_table(hdr):
+    return '교과목코드' in hdr and '학년' in hdr and '학기' not in hdr and '강의실및강의시간' not in hdr
+
+
+def normalize_rows(rows):
+    """Rewrite irregular course-table rows into CANON column order (blank sub-columns and split
+    labels folded into their label; regular tables keep their columns), drop empty rows, and join a course row the table split in two:
+    two consecutive rows of one table are joined when no field is filled differently in both.
+    The 2026-08 handbook rows come out with the same values (checked by `selfcheck`)."""
+    out, prev = [], None
+    has = lambda c, i: bool(re.sub(r'\s+', '', c[i]))
+    for r in rows:
+        hdr = [re.sub(r'\s+', '', h or '') for h in r['hdr']]
+        if not _course_table(hdr):
+            out.append(r); prev = None
+            continue
+        if hdr[:8] == H8 and '' not in hdr and '강의실매' not in hdr:
+            hdr, cells = r['hdr'], [c or '' for c in r['cells']]  # regular table: keep its columns
+        else:
+            f = _fields(hdr, r['cells'])
+            hdr, cells = CANON, [f.get(k, '') for k in CANON]
+        if not any(has(cells, i) for i in range(len(cells))):
+            continue
+        key = (r['page'], r['table_y'])
+        if prev is not None and prev[0] == key:
+            pc = prev[1]['cells']
+            sq = lambda c, i: re.sub(r'\s+', '', c[i])
+            both = [i for i in range(min(len(pc), len(cells))) if has(pc, i) and has(cells, i)]
+            # parts of one printed row: at most one part has the course code and no field is
+            # filled differently in both parts
+            # (code+name on one line and the rest on another, a professor a line lower,
+            # a time/room cell finished on the next line)
+            if not (has(pc, 2) and has(cells, 2)) and all(sq(pc, i) == sq(cells, i) for i in both):
+                prev[1]['cells'] = [a if re.sub(r'\s+', '', a) else b for a, b in zip(pc, cells)]
+                continue
+        nr = dict(r, hdr=hdr, cells=cells)
+        out.append(nr)
+        prev = (key, nr)
+    for r in out:
+        c = r['cells']
+        if r['hdr'] is CANON:
+            # the end of a long time cell spilled into the room cell (rooms start with a letter):
+            # '..,금6,금' + '7B301' -> '..,금7' + 'B301', '..,목1' + '0B306' -> '..,목10' (PDF 219쪽)
+            m = re.match(r'(\d{1,2})(?=[A-Z])', re.sub(r'\s+', '', c[9]))
+            if m and re.search(r'[월화수목금토일]\d?$', re.sub(r'\s+', '', c[8])):
+                c[8] = re.sub(r'\s+', '', c[8]) + m.group(1)
+                c[9] = re.sub(r'\s+', '', c[9])[len(m.group(1)):]
+    return out
+
+
 def official_listings(rows):
-    H8=['학년','이수구분','교과목코드','교과목명','학점','시수','분반','담당교수']
-    tt=[r for r in rows if r['hdr'][:8]==H8]
+    tt=[r for r in normalize_rows(rows) if r['hdr'][:8]==H8]
     def norm(s): return re.sub(r'\s+','',s or '')
     def rec(r):
         h=r['hdr']; c=r['cells']; f=dict(zip(h,c))
@@ -183,7 +260,7 @@ def official_listings(rows):
                 'cr':norm(f['학점']),'hr':norm(f['시수']),'sec':norm(f['분반']),'prof':norm(f['담당교수']),
                 'time':norm(time) if time is not None else None,'room':norm(room) if room is not None else None,
                 'note':(f.get('비고') or '').strip(),'page':r['page'],'heading':r['heading'],'raw':c,'heads':r['heads'],'hdr':h}
-    recs=[rec(r) for r in tt]
+    recs=[x for x in map(rec, tt) if x['code']]  # a stray fragment without any course code
     by=collections.defaultdict(list)
     for x in recs: by[(x['code'],x['sec'])].append(x)
     return {f'{k[0]}-{k[1]}': v for k, v in by.items()}
@@ -198,6 +275,8 @@ def join(cell, sep=''):
 
 
 def rooms(cell):
+    # a line starting with a letter is another room ('A314\nA311'); a digit continues one ('W21\n0')
+    cell = re.sub(r'\n\s*(?=[A-Za-z가-힣])', ',', (cell or '').strip())
     parts = [p.strip() for p in re.split(r'[,/]', join(cell)) if p.strip()]
     return ' / '.join(parts)
 
@@ -214,62 +293,83 @@ def where(l):
     return f"인쇄 {printed(l['page'])}쪽(PDF {l['page']}쪽)"
 
 
-def timed_meetings(timed):
-    """(meetings, room) of the listing decide() picked for the time."""
-    if timed['room'] is None:
-        sched = meetings(slots_shared(timed['time']), '')
-        return sched, ' / '.join(dict.fromkeys(m['classroom'] for m in sched))
-    room = rooms(timed['raw'][9])
-    return meetings(slots_std(timed['time']), room), room
-
-
+NOTICE = 'https://hakgwa.pcu.ac.kr/ce/article/depart_ce_notice/37507'
 # 2026-11-04 갱신본(Last-Modified: Wed, 04 Nov 2026 07:05:17 GMT). 학교 홈페이지 강의시간 편람
 # 메뉴(https://www.pcu.ac.kr/kor/contents/155)의 2026-2학기 파일로, 8월 학과 공지 첨부본보다 최신이다.
 LATEST = 'https://www.pcu.ac.kr/images/site/kor/pdf/2026-2-handbook.pdf'
+EDITIONS = {
+    '2026-08': {'name': '2026-2 공식 강의시간편람', 'url': NOTICE, 'dept': (185, 240),
+                'file': 'work/issue-601-pcu-timetable/src/handbook.pdf'},
+    '2026-11-04': {'name': '2026-2 공식 강의시간편람(2026-11-04 갱신본)', 'url': LATEST, 'dept': (186, 241),
+                   'file': 'work/issue-601-pcu-timetable/src/handbook-2026-11-04.pdf'},
+}
 
 
-def settle_latest(courses, off):
-    """Schedule courses the August handbook left unscheduled/unrecognized when the latest
-    official handbook states their weekday and period without contradiction
-    (2026-11-23 사용자 지시: 모순·시각 없음은 가장 최신 공식 자료로 정한다).
-    The previous source text is kept in remarks. Returns the settled sourceIds."""
-    done = []
-    for c in courses:
-        if c['scheduleStatus'] == 'scheduled':
-            continue
-        L = off.get(f"{c['courseCode']}-{c['section']}") or []
-        L = [l for l in L if l['name'] == c['courseName'].replace(' ', '')] or L
-        status, _, timed = decide(L) if L else ('', '', None)
-        if status != 'scheduled':
-            continue
-        sched, room = timed_meetings(timed)
-        before = (f"담당 {c['professor'] or '빈칸'}, 시간 {c['sourceSchedule'] or '빈칸'}, "
-                  f"강의실 {c['sourceClassroom'] or '빈칸'}")
-        prof = next((join(l['raw'][7]) for l in L if join(l['raw'][7]) and join(l['raw'][7]) != '미배정'), '')
-        c['professor'] = prof or c['professor']
-        c['scheduleStatus'], c['schedules'] = 'scheduled', sched
-        c['sourceSchedule'] = ' '.join(x for x in [c['professor'], timed['time'], room] if x)
-        c['sourceClassroom'] = room
-        c['remarks'] += (f" | 시각 확정: 최신 공식 강의시간편람(2026-11-04 갱신본, {LATEST}) {where(timed)} "
-                         f"원문 '{rowtext(timed)}'으로 확정"
-                         + (f"(이 편람의 시각 적힌 {n}개 목록 모두 같은 요일·교시)" if (n := sum(listing_slots(l)[0] == 'slots' for l in L)) > 1 else '')
-                         + f". 이전 편람(2026-08-03 학과 공지 첨부본) 원문: {before}")
-        done.append(c['sourceId'])
-    return done
+def offering(L, edition):
+    """Course values one handbook edition states for an offering (its listings L)."""
+    status, reason, timed = decide(L)
+    prim = L[0]
+    others = [l for l in L[1:] if (l['time'], l['room']) != (prim['time'], prim['room'])]
+    other_note = '; '.join(f"{where(l)} {join(l['raw'][8]) if l['room'] is None else (l['time'] or '빈칸') + ' ' + (l['room'] or '빈칸')}" for l in others[:4])
+    room = rooms(prim['raw'][9]) if prim['room'] is not None else ''
+    sched = []
+    if status == 'scheduled' and timed is not prim and nfkc(room) in UNTIMED | {'-'}:
+        room = ''  # '온라인' listing beside a timed one: the room comes from the timed listing
+    if status == 'scheduled':
+        t = timed['time']
+        if timed['room'] is None:
+            sl = slots_shared(t); room_for = ''
+        else:
+            sl = slots_std(t); room_for = rooms(timed['raw'][9])
+        sched = meetings(sl, room if timed is prim else (room or room_for))
+        if not room:
+            room = room_for or ' / '.join(dict.fromkeys(m['classroom'] for m in sched))
+    prof = next((join(l['raw'][7]) for l in L if join(l['raw'][7])), '')
+    note = join(prim['raw'][10], ' ') if len(prim['raw']) > 10 else ''
+    time_cell = join(prim['raw'][8]) if len(prim['raw']) > 8 else ''
+    remarks = f"{EDITIONS[edition]['name']} {where(prim)} 원문: {rowtext(prim)}"
+    if status == 'unrecognized':
+        remarks += f" | 시각 보류: {reason}" + (f" (같은 강좌의 다른 공식 목록: {other_note})" if other_note else '')
+    elif status == 'scheduled' and timed is not prim:
+        remarks += f" | 시각 근거: {where(timed)} {timed['time']}"
+    other_rooms = [f"{where(l)} {l['room']}" for l in L[1:] if l['room'] and nfkc(l['room']) not in ('온라인',) and rooms(l['raw'][9]) != room and prim['room'] is not None]
+    if status == 'scheduled' and other_rooms:
+        remarks += ' | 다른 공식 목록 강의실: ' + '; '.join(other_rooms[:4])
+    return {'status': status, 'reason': reason, 'other_note': other_note, 'schedules': sched, 'room': room,
+            'professor': prof, 'remarks': remarks, 'prim': prim,
+            'sourceSchedule': ' '.join(x for x in [prof, time_cell, join(prim['raw'][9]) if prim['room'] is not None else '', note] if x)}
 
 
-def latest(rows_path, WT):
-    DS = f'{WT}/assets/timetable/pcu-main-2026-2.json'
-    ds = json.load(open(DS, encoding='utf-8'))
-    done = settle_latest(ds['courses'], official_listings(json.load(open(rows_path, encoding='utf-8'))))
-    json.dump(ds, open(DS, 'w', encoding='utf-8'), ensure_ascii=False, indent=2); open(DS, 'a', encoding='utf-8').write('\n')
-    print(len(done), done)
+def _room_set(r):
+    # 'C104(new)' and 'C104' name the same room in the two editions
+    return frozenset(x.strip() for x in re.split(r'[,/]', re.sub(r'\(new\)', '', r or '')) if x.strip())
 
 
-def apply(rows_path, WT):
+def refresh(c, o):
+    """Bring an existing course to the latest edition's values (2026-11-23 사용자 지시: 같은 강좌의
+    새 공식 자료가 기존 자료와 다르면 새 자료로 교체). Weekday/period, room and professor are
+    compared; a blank professor or room in the latest edition keeps the earlier value.
+    The earlier values stay in remarks. Returns True when the course changed."""
+    span = lambda s: sorted((m['weekday'], m['startMinute'], m['endMinute']) for m in s)
+    nows = lambda s: re.sub(r'\s+', '', s or '')
+    if (c['scheduleStatus'] == o['status'] and span(c['schedules']) == span(o['schedules'])
+            and (not o['professor'] or nows(c['professor']) == nows(o['professor']))
+            and (not o['room'] or _room_set(c['sourceClassroom']) == _room_set(o['room']))):
+        return False
+    before = (f"상태 {c['scheduleStatus']}, 담당 {c['professor'] or '빈칸'}, 시간 원문 '{c['sourceSchedule'] or '빈칸'}', "
+              f"강의실 {c['sourceClassroom'] or '빈칸'}")
+    c['scheduleStatus'], c['schedules'] = o['status'], o['schedules']
+    c['professor'] = o['professor'] or c['professor']
+    c['sourceClassroom'] = o['room'] or c['sourceClassroom']
+    c['sourceSchedule'] = o['sourceSchedule']
+    c['remarks'] += f" | 최신 편람으로 갱신({LATEST}): {o['remarks']} | 이전 8월 편람 값: {before}"
+    return True
+
+
+def apply(rows_path, WT, edition='2026-08'):
     DS = f'{WT}/assets/timetable/pcu-main-2026-2.json'
     ORG = f'{WT}/assets/timetable/organizations/pcu.json'
-    NOTICE = 'https://hakgwa.pcu.ac.kr/ce/article/depart_ce_notice/37507'
+    ed = EDITIONS[edition]
     off = official_listings(json.load(open(rows_path, encoding='utf-8')))
     ds = json.load(open(DS, encoding='utf-8'))
     org = json.load(open(ORG, encoding='utf-8'))
@@ -280,7 +380,9 @@ def apply(rows_path, WT):
     groups = collections.OrderedDict()
     for k, L in off.items():
         names = list(dict.fromkeys(l['name'] for l in L))
-        if len(names) > 1 and all(re.fullmatch(r'사회봉사\d', n) for n in names):
+        # (also when an edition prints only one of them for a section, so it is never matched
+        # to another 사회봉사 course of the same code+section)
+        if all(re.fullmatch(r'사회봉사\d', n) for n in names):
             for n in names:
                 groups[(k, n)] = [l for l in L if l['name'] == n]
         else:
@@ -288,71 +390,61 @@ def apply(rows_path, WT):
 
     existing = {f"{c['courseCode']}-{c['section']}": c for c in ds['courses']}
     existing_by_id = {c['sourceId']: c for c in ds['courses']}
-    added, changed, owners = [], [], []
+    added, changed, owners, seen = [], [], [], set()
     stats = collections.Counter()
     fullwidth = [k for k, L in off.items() if any(l['time'] and l['time'] != nfkc(l['time']) for l in L)]
     for (k, split), L in groups.items():
-        status, reason, timed = decide(L)
-        prim = L[0]
-        others = [l for l in L[1:] if (l['time'], l['room']) != (prim['time'], prim['room'])]
-        other_note = '; '.join(f"{where(l)} {join(l['raw'][8]) if l['room'] is None else (l['time'] or '빈칸') + ' ' + (l['room'] or '빈칸')}" for l in others[:4])
+        o = offering(L, edition)
+        status, reason = o['status'], o['reason']
         c = existing_course(existing, existing_by_id, k, split)
         if c is not None:
+            seen.add(c['sourceId'])
             stats[('existing', status, reason)] += 1
-            if status == 'unrecognized' and c['scheduleStatus'] == 'scheduled':
+            if edition != '2026-08':
+                if refresh(c, o):
+                    changed.append(c['sourceId'])
+            elif status == 'unrecognized' and c['scheduleStatus'] == 'scheduled':
                 c['scheduleStatus'] = 'unrecognized'
                 c['schedules'] = []
-                c['remarks'] += f" | 시각 보류: {reason}" + (f" (같은 강좌의 다른 공식 목록: {other_note})" if other_note else '')
-                changed.append(k)
+                c['remarks'] += f" | 시각 보류: {reason}" + (f" (같은 강좌의 다른 공식 목록: {o['other_note']})" if o['other_note'] else '')
+                changed.append(c['sourceId'])
             continue
         stats[('new', status, reason)] += 1
+        prim = o['prim']
         code, sec = prim['code'], prim['sec']
-        room = rooms(prim['raw'][9]) if prim['room'] is not None else ''
-        sched = []
-        if status == 'scheduled':
-            t = timed['time']
-            if timed['room'] is None:
-                sl = slots_shared(t); room_for = ''
-            else:
-                sl = slots_std(t); room_for = rooms(timed['raw'][9])
-            sched = meetings(sl, room if timed is prim else (room or room_for))
-            if not room:
-                room = room_for or ' / '.join(dict.fromkeys(m['classroom'] for m in sched))
-        prof = next((join(l['raw'][7]) for l in L if join(l['raw'][7])), '')
-        note = join(prim['raw'][10], ' ') if len(prim['raw']) > 10 else ''
-        time_cell = join(prim['raw'][8]) if len(prim['raw']) > 8 else ''
-        remarks = f"2026-2 공식 강의시간편람 {where(prim)} 원문: {rowtext(prim)}"
-        if status == 'unrecognized':
-            remarks += f" | 시각 보류: {reason}" + (f" (같은 강좌의 다른 공식 목록: {other_note})" if other_note else '')
-        elif status == 'scheduled' and timed is not prim:
-            remarks += f" | 시각 근거: {where(timed)} {timed['time']}"
-        other_rooms = [f"{where(l)} {l['room']}" for l in L[1:] if l['room'] and nfkc(l['room']) not in ('온라인',) and rooms(l['raw'][9]) != room and prim['room'] is not None]
-        if status == 'scheduled' and other_rooms:
-            remarks += ' | 다른 공식 목록 강의실: ' + '; '.join(other_rooms[:4])
-            stats['room-differs'] += 1
         sid = source_id(f"{code}-{sec}", split)
         added.append({
             'sourceId': sid, 'campus': 'main', 'academicYear': 2026, 'semester': '2',
-            'courseCode': code, 'section': sec, 'courseName': join(prim['raw'][3]), 'professor': prof,
+            'courseCode': code, 'section': sec, 'courseName': join(prim['raw'][3]), 'professor': o['professor'],
             'classification': prim['cls'], 'credits': float(prim['cr']), 'departments': [],
             'departmentCredits': {}, 'departmentClassifications': {},
-            'sourceSchedule': ' '.join(x for x in [prof, time_cell, join(prim['raw'][9]) if prim['room'] is not None else '', note] if x),
-            'sourceClassroom': room, 'remarks': remarks,
+            'sourceSchedule': o['sourceSchedule'],
+            'sourceClassroom': o['room'], 'remarks': o['remarks'],
             'period': {'startDate': '2026-09-01', 'endDate': '2026-12-18'},
-            'scheduleStatus': status, 'schedules': sched,
+            'scheduleStatus': status, 'schedules': o['schedules'],
         })
         units = []
+        lo, hi = ed['dept']
         for l in L:
-            if 185 <= l['page'] <= 240 and l['heading'] in labels and l['heading'] not in [u['sourceLabel'] for u in units]:
+            if lo <= l['page'] <= hi and l['heading'] in labels and l['heading'] not in [u['sourceLabel'] for u in units]:
                 m = labels[l['heading']]
                 units.append({
                     'college': m['college'], 'department': m['department'], 'sourceLabel': m['sourceLabel'],
-                    'sourceUrl': NOTICE,
-                    'evidence': f"Official 2026-2 강의시간편람 PDF page {l['page']} (printed {printed(l['page'])}), academic table heading <{l['heading']}> precedes the exact code+section row; college relationship explicit printed309/310 organization table.",
-                    'sourceFile': 'work/issue-601-pcu-timetable/src/handbook.pdf', 'isOfferingUnit': False,
+                    'sourceUrl': ed['url'],
+                    'evidence': f"Official {ed['name']} PDF page {l['page']} (printed {printed(l['page'])}), academic table heading <{l['heading']}> precedes the exact code+section row; college relationship explicit printed309/310 organization table.",
+                    'sourceFile': ed['file'], 'isOfferingUnit': False,
                 })
         if units:
             owners.append({'sourceId': sid, 'units': units})
+
+    missing = []
+    if edition != '2026-08':
+        mark = f" | {ed['name']}({ed['url']})에는 이 분반이 없음: 이전 편람 값 유지(폐강 여부는 판단하지 않음)"
+        for c in ds['courses']:
+            if c['sourceId'] not in seen:
+                missing.append(c['sourceId'])
+                if mark not in c['remarks']:
+                    c['remarks'] += mark
 
     ids = [c['sourceId'] for c in ds['courses']] + [c['sourceId'] for c in added]
     assert len(ids) == len(set(ids))
@@ -360,11 +452,10 @@ def apply(rows_path, WT):
     org['courseOwners'].extend(owners)
     json.dump(ds, open(DS, 'w', encoding='utf-8'), ensure_ascii=False, indent=2); open(DS, 'a', encoding='utf-8').write('\n')
     json.dump(org, open(ORG, 'w', encoding='utf-8'), ensure_ascii=False, indent=2); open(ORG, 'a', encoding='utf-8').write('\n')
-    print(json.dumps({'stats': {' / '.join(k) if isinstance(k, tuple) else k: v for k, v in stats.items()}, 'changed': changed, 'added': len(added), 'owners': len(owners), 'fullwidth': fullwidth},
-              ensure_ascii=False, indent=1))
+    print(json.dumps({'changed': changed, 'missing': missing, 'fullwidth': fullwidth}, ensure_ascii=False))
     for k, v in sorted(stats.items(), key=str): print(v, k)
-    print('added', len(added), 'changed', len(changed), 'owners', len(owners), 'total', len(ds['courses']))
+    print('added', len(added), 'changed', len(changed), 'missing', len(missing), 'owners', len(owners), 'total', len(ds['courses']))
 
 
 if __name__ == '__main__':
-    {'extract': extract, 'apply': apply, 'latest': latest}[sys.argv[1]](sys.argv[2], sys.argv[3])
+    {'extract': extract, 'apply': apply}[sys.argv[1]](*sys.argv[2:])

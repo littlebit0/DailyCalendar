@@ -22,18 +22,25 @@ void main() {
     );
     expect(raw['completionClaim'], isFalse);
     final courses = dataset.courses;
-    // 1,774 code+section rows plus 사회봉사2~4, which the handbook prints
-    // under the same code and sections as 사회봉사1.
-    expect(courses, hasLength(1906));
-    expect(courses.map((c) => c.sourceId).toSet(), hasLength(1906));
+    // 1,774 code+section rows of the August handbook plus 사회봉사2~4, which
+    // the handbook prints under the same code and sections as 사회봉사1, and
+    // 114 sections only the 2026-11-04 edition prints. Sections that edition
+    // no longer prints stay (폐강 is not judged).
+    expect(courses, hasLength(2020));
+    expect(courses.map((c) => c.sourceId).toSet(), hasLength(2020));
+    expect(
+      courses.where((c) => c.sourceRemarks.contains('이 분반이 없음')),
+      hasLength(118),
+    );
 
     final byStatus = <String?, int>{};
     for (final c in courses) {
       byStatus[c.scheduleStatus] = (byStatus[c.scheduleStatus] ?? 0) + 1;
     }
     expect(byStatus, {
-      'scheduled': 1674,
-      'unscheduled': 232,
+      'scheduled': 1753,
+      'unscheduled': 263,
+      'unrecognized': 4,
     });
 
     // Handbook page 2 (https://www.pcu.ac.kr/kor/contents/25): 50-minute
@@ -96,12 +103,12 @@ void main() {
         }
       }
     }
-    expect(segments, 2447);
+    expect(segments, 2535);
 
     // Every major course under a mapped department heading keeps its owner.
     expect(
       courses.where((c) => c.offeringOrganizations.isNotEmpty),
-      hasLength(1258),
+      hasLength(1367),
     );
   });
 }
