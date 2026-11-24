@@ -48,6 +48,7 @@ IMPORT_SUITES = [
     "test_import_pcu",
     "test_jnu_import",
     "test_kmu_import",
+    "test_kongju_lecture_book",
     "test_kookmin_import",
     "test_pnu_import",
     "test_sejong_import",

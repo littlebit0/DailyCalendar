@@ -1,4 +1,5 @@
 import 'dart:convert';
+import '../../support/file_asset_bundle.dart';
 import '../../support/source_fixture.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:daily/core/academic/academic_profile.dart';
@@ -7,6 +8,63 @@ import 'package:daily/features/timetable/data/timetable_sync_document.dart';
 import 'package:daily/features/timetable/domain/timetable.dart';
 
 void main() {
+  // 강의일람표 table 212(0~9교시 60분 슬롯)와 table 213 평일 야간(10~14교시 50분 슬롯).
+  final slotStarts = {
+    for (var p = 0; p <= 9; p++) 480 + 60 * p,
+    // 14교시 다음 15교시도 같은 50분 슬롯(22:10~23:00)으로 이어 계산.
+    for (var p = 0; p < 6; p++) 1080 + 50 * p,
+  };
+  // 표 213 토요일 행: 10교시 13:00부터 45분 수업 + 5분(15교시 17:10까지 이어 계산).
+  final saturdayStarts = {for (var p = 0; p < 6; p++) 780 + 50 * p};
+  final slotEnds = {
+    ...slotStarts.skip(1),
+    1380,
+    for (final s in saturdayStarts) s + 50,
+  };
+
+  test(
+    'Kongju lecture-book enrichment leaves no ditto mark or ownerless major course',
+    () async {
+      final courses = (await UniversityCatalog.load(
+        bundle: FileAssetBundle(),
+        university: 'kongju',
+      )).expand((d) => d.courses).toList();
+      expect(courses, hasLength(2675));
+      const ditto = {'〃', '″'};
+      for (final c in courses) {
+        expect(
+          ditto.contains(c.sourceClassification),
+          isFalse,
+          reason: c.sourceId,
+        );
+        expect(
+          c.departmentClassifications.values.where(ditto.contains),
+          isEmpty,
+          reason: c.sourceId,
+        );
+        if (c.sourceClassification.startsWith('전')) {
+          expect(c.departments, isNotEmpty, reason: c.sourceId);
+        }
+      }
+      final dittoRow = courses.singleWhere((c) => c.code == '200497201');
+      expect(dittoRow.departmentClassifications.values.toSet(), {
+        dittoRow.sourceClassification,
+      });
+      final contract = courses.singleWhere((c) => c.code == '2005640');
+      expect(contract.sourceClassification, '전선');
+      expect(contract.professor, '임정란');
+      expect(contract.departments, ['생산기계공학과']);
+      expect(
+        courses.where(
+          (c) =>
+              c.sourceClassification.isEmpty &&
+              c.departmentClassifications.values.every((v) => v.isEmpty),
+        ),
+        hasLength(11),
+      );
+    },
+  );
+
   test(
     'Kongju institutional profile uses the published Cheonan scoped dataset',
     () {
@@ -130,8 +188,9 @@ void main() {
         }
       }
       expect(total, 65);
-      expect(scheduled, hasLength(22));
-      expect(appointments, 242);
+      // 비고 '사업주훈련예정' 43행도 원문 실제수업시간으로 확정했다(apply_kongju_held_periods.py).
+      expect(scheduled, hasLength(65));
+      expect(appointments, 715);
       for (final mode in [
         LectureMode.inPerson,
         LectureMode.liveOnline,
@@ -152,7 +211,7 @@ void main() {
         final restored = TimetableSyncDocument.fromJson(
           jsonDecode(jsonEncode(document.toJson())) as Map<String, dynamic>,
         ).materializeClasses();
-        expect(restored, hasLength(22));
+        expect(restored, hasLength(65));
         final before = {for (final c in classes) c.sourceId: c};
         for (final c in restored) {
           final original = before[c.sourceId]!;
@@ -177,6 +236,7 @@ void main() {
     () {
       final resolved = <String, Map<String, dynamic>>{};
       var unrecognized = 0;
+      var unscheduled = 0;
       for (final campus in ['cheonan', 'singwan', 'yesan', 'unknown']) {
         final raw =
             jsonDecode(
@@ -187,14 +247,20 @@ void main() {
                 as Map<String, dynamic>;
         for (final c in (raw['courses'] as List).cast<Map<String, dynamic>>()) {
           if (c['scheduleStatus'] == 'unrecognized') unrecognized++;
+          if (c['scheduleStatus'] == 'unscheduled') unscheduled++;
           final meta = c['sourceEducationalMetadata'] as Map?;
           if (meta?['resolvedHoldReasons'] != null) {
             resolved[c['courseCode'] as String] = c;
           }
         }
       }
-      expect(unrecognized, 633);
-      expect(resolved, hasLength(19));
+      // 교시 없는 행(빈 칸 87·미개설 30·원격수업 24·'-' 1)은 원문 행 그대로 시간 미정
+      // (2026-11-23 사용자 결정). 같은 과목번호·과목명·교수의 원문 행끼리 시각만 다른
+      // 고체역학·국제경영학은 두 수업 시간으로 모두 확정.
+      expect(unrecognized, 0);
+      // KNU창업옴니버스는 창업교육센터 공지의 목 15:00~17:00으로 확정해 141.
+      expect(unscheduled, 141);
+      expect(resolved, hasLength(467));
       const holidays = {
         '2026-09-24',
         '2026-09-25',
@@ -208,9 +274,12 @@ void main() {
         expect(c['scheduleStatus'], 'scheduled');
         expect(meta['holdReasons'], isEmpty);
         expect(c['remarks'], isNot(contains('보류')));
-        for (final variant in meta['originalPublishedRowVariants'] as List) {
-          expect(variant['periodRaw'], c['sourceSchedule']);
-        }
+        expect(
+          (meta['originalPublishedRowVariants'] as List).any(
+            (dynamic v) => (v as Map)['periodRaw'] == c['sourceSchedule'],
+          ),
+          isTrue,
+        );
         for (final s in (c['schedules'] as List).cast<Map>()) {
           final date = DateTime.parse(s['date'] as String);
           expect(date.weekday, s['weekday']);
@@ -223,11 +292,13 @@ void main() {
             isTrue,
           );
           // 강의일람표 table 212: 교시 p는 (8+p):00 시작, 50분 수업 + 10분
-          // 쉬는 시간 = 60분 슬롯. 연속 교시는 한 구간으로 합친다.
-          expect((s['startMinute'] as int) % 60, 0);
-          expect((s['endMinute'] as int) % 60, 0);
-          expect(s['startMinute'], greaterThanOrEqualTo(540));
-          expect(s['endMinute'], lessThanOrEqualTo(1080));
+          // 쉬는 시간 = 60분 슬롯. table 213 평일 야간 10~14교시는 18:00부터
+          // 45분 수업 + 5분 = 50분 슬롯. 연속 교시는 한 구간으로 합친다.
+          expect({
+            ...slotStarts,
+            ...saturdayStarts,
+          }, contains(s['startMinute']));
+          expect(slotEnds, contains(s['endMinute']));
         }
       }
       Set<String> slots(String code) => {
@@ -240,10 +311,26 @@ void main() {
       expect(slots('200365301'), {'2 840-960 (10공715)', '2 960-1080 (10공805)'});
       // 월7 월8 월9: 요일·교시·강의실이 같아 한 구간으로 합쳐진다.
       expect(slots('000131302'), {'1 900-1080 9공605'});
+      // 화10 화8 화9: 8·9교시 주간 슬롯 + 10교시 야간 18:00~18:50.
+      expect(slots('200685701'), {'2 960-1130 교양206'});
+      // 목11,12,13,14: 야간 18:50~22:10.
+      expect(slots('201066301'), {'4 1130-1330 (산업111-1)\n(실습실101)'});
+      // 토요일 10교시 이후는 최신 강의일람표(2026-07-31 수정) 표 213 토요일 행.
+      expect(slots('201044701'), {'6 780-930 (생명307)'});
+      // 토8,9는 표 212(16:00), 토10은 토요일 행(13:00)이라 두 구간.
+      expect(slots('200355101'), {'6 780-830 (1공403)', '6 960-1080 (1공403)'});
+      expect(slots('200408001'), {'6 930-1080 (생명322)'});
+      expect(slots('200928901'), {'6 830-980 (9공807)'});
+      expect(slots('200653501'), {'1 600-780 (4공803)', '1 840-1020 (4공803)'});
+      // 같은 번호의 다른 과목명 행(신재생에너지와미래환경)은 이 과목이 아니다.
+      expect(slots('200775901'), {
+        '1 960-1020 사범2관 (401,406)',
+        '3 900-1020 사범2관 (401,406)',
+      });
     },
   );
 
-  test('Kongju 교시 계산 구간은 쉬는 시간 포함 60분 슬롯이고 연속 구간이 남지 않는다', () {
+  test('Kongju 교시 계산 구간은 쉬는 시간 포함 슬롯이고 연속 구간이 남지 않는다', () {
     for (final campus in ['cheonan', 'singwan', 'yesan', 'unknown']) {
       final raw =
           jsonDecode(
@@ -261,9 +348,12 @@ void main() {
         Map? previous;
         for (final s in schedules) {
           final reason = '${c['sourceId']} ${s['date']}';
-          expect((s['startMinute'] as int) % 60, 0, reason: reason);
-          expect((s['endMinute'] as int) % 60, 0, reason: reason);
-          expect(s['endMinute'], lessThanOrEqualTo(1080), reason: reason);
+          expect(
+            {...slotStarts, ...saturdayStarts},
+            contains(s['startMinute']),
+            reason: reason,
+          );
+          expect(slotEnds, contains(s['endMinute']), reason: reason);
           if (previous != null &&
               previous['date'] == s['date'] &&
               previous['classroom'] == s['classroom']) {
