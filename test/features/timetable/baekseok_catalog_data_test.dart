@@ -119,4 +119,74 @@ void main() {
       }
     },
   );
+  test('BU undergraduate periods use the booklet 60-minute slots from 09:00', () async {
+    final data = (await UniversityCatalog.load(
+      bundle: FileAssetBundle(),
+      university: 'baekseok',
+    )).single;
+    final byStatus = <String?, int>{};
+    for (final c in data.courses) {
+      byStatus[c.scheduleStatus] = (byStatus[c.scheduleStatus] ?? 0) + 1;
+    }
+    expect(byStatus, {'scheduled': 2382, 'unscheduled': 189});
+    // 비고 "13~15주차/백석연수원/집중이수": 수업 주차 현황의 13~15주차와 연수원 1박 2일만
+    final ai = data.courses.singleWhere((c) => c.codeAndSection == '32065-01');
+    expect(ai.meetings.map((m) => m.date), [
+      '2026-09-11',
+      '2026-09-12',
+      '2026-11-24',
+      '2026-12-01',
+      '2026-12-15',
+    ]);
+    // 작업치료학과 3학년: 10월 26일부터 8주간 집중수업
+    final ot = data.courses.singleWhere((c) => c.codeAndSection == '09502-01');
+    expect(ot.meetings.map((m) => m.date).toSet(), {
+      '2026-10-26',
+      '2026-11-02',
+      '2026-11-09',
+      '2026-11-16',
+      '2026-11-23',
+      '2026-11-30',
+      '2026-12-07',
+      '2026-12-14',
+    });
+    expect(
+      data.courses
+          .where((c) => ['09957', '08956'].contains(c.code))
+          .map((c) => c.scheduleStatus)
+          .toSet(),
+      {'unscheduled'},
+    );
+    // The schedule explanation reaches the displayed remarks, which prefer
+    // department remarks over the top-level note.
+    final emergency = data.courses.singleWhere(
+      (c) => c.codeAndSection == '09957-01',
+    );
+    expect(emergency.remarks, contains('집중이수 주차 미공개'));
+    expect(emergency.remarks, contains('응급구조학과'));
+    for (final c in data.courses.where((c) => c.sourceRemarks.isNotEmpty)) {
+      expect(c.remarks, contains(c.sourceRemarks.trim()), reason: c.sourceId);
+    }
+    // 목5,6 → 13:00~15:00 (5교시 13:00 시작, 60분 슬롯 두 개)
+    final music = data.courses.singleWhere(
+      (c) => c.codeAndSection == '07294-01',
+    );
+    expect(music.sourceSchedule, '목5,6');
+    expect(
+      music.meetings.map(
+        (m) => (m.weekday, m.originalStartMinute, m.originalEndMinute),
+      ),
+      [(4, 780, 900)],
+    );
+    // 요일만 있고 교시가 빈 강좌는 시각을 만들지 않고 시간 미정
+    for (final code in ['30035-01', '31438-01']) {
+      final c = data.courses.singleWhere((c) => c.codeAndSection == code);
+      expect(c.scheduleStatus, 'unscheduled');
+      expect(c.meetings, isEmpty);
+    }
+    for (final c in data.courses.where((c) => c.sourceSchedule == '사')) {
+      expect(c.scheduleStatus, 'unscheduled');
+      expect(c.meetings, isEmpty);
+    }
+  });
 }

@@ -150,7 +150,11 @@ void main() {
         expect(c['sourceClassroom'], v[9]);
         expect(c['classification'], v[1]);
         expect(c['credits'], double.parse(v[5]));
-        expect(c['departmentRemarks']['계약학과'], v[10]);
+        // The native remark stays first; the schedule note follows it so the
+        // displayed remarks explain the reservation.
+        final shown = c['departmentRemarks']['계약학과'] as String;
+        final note = (c['remarks'] as String? ?? '').trim();
+        expect(shown, note.isEmpty ? v[10] : '${(v[10] as String).trimRight()}\n$note');
         final m = RegExp(r'^([월화수목금])([1-9](?:,[1-9])*)$').firstMatch(v[8]);
         expect(m, isNotNull);
         final wd = '월화수목금'.indexOf(m!.group(1)!) + 1;
@@ -199,9 +203,23 @@ void main() {
         );
         if (!((b['departments'] as List).length == 1 &&
             (b['departments'] as List).single == '계약학과')) {
-          expect(c, b);
+          if (b.containsKey('sourceClockProof')) {
+            expect(c, b);
+            oldPlans += (b['schedules'] as List).length;
+          } else {
+            // 학부 교시 시각 확정(apply_baekseok_period_clock.py)은 시간 필드와 비고만 바꾼다.
+            for (final k in (b as Map).keys) {
+              if (![
+                'departmentRemarks',
+                'schedules',
+                'scheduleStatus',
+                'period',
+              ].contains(k)) {
+                expect(c[k], b[k]);
+              }
+            }
+          }
           unchanged++;
-          oldPlans += (b['schedules'] as List).length;
           continue;
         }
         for (final k in (b as Map).keys) {
@@ -238,7 +256,14 @@ void main() {
                     (v) => v['sourceId'] == c.sourceId,
                   )['schedules']
                   as List;
-          if (plans.isEmpty) continue;
+          final rawCourse = (raw['courses'] as List).singleWhere(
+            (v) => v['sourceId'] == c.sourceId,
+          );
+          if (plans.isEmpty ||
+              !(rawCourse.containsKey('scopedClockProof') ||
+                  rawCourse.containsKey('sourceClockProof'))) {
+            continue;
+          }
           final saved = c.toTimetable(id: c.sourceId, mode: mode);
           expect(saved.isValid, true);
           expect(saved.defaultMode, mode);
