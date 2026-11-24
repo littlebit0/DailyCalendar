@@ -77,7 +77,6 @@ class UniversitySupportPolicy {
     'ulsan',
     'unist',
     'uos',
-    'ut',
     'wsu',
     'yongin',
     'yonsei',
