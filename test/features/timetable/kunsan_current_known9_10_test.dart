@@ -39,8 +39,21 @@ void main() {
     final byId = {for (final row in rows) row['sourceId']: row};
     expect(byId, hasLength(1718));
     const key = 'kunsan/unknown/2026/2/116289/01';
+    // 2026-11-23 결정으로 보류·부분 예약 강좌를 공식 교시 전체로 정규 예약했다
+    // (apply_kunsan_held_periods.py: 숫자 교시, 원문자=같은 번호 실습 교시, 원격 부분, 11교시).
+    // 3차(같은 날): 토요일 원문자 78 확정, 0시수·12월 집중강의 84와 시간 빈 JST 136 시간 미정.
+    final held = originals
+        .where(
+          (r) =>
+              r['sourceId'] != key &&
+              byId[r['sourceId']]!['sourceEducation']['heldPeriodDecision'] !=
+                  null,
+        )
+        .map((r) => r['sourceId'])
+        .toSet();
+    expect(held, hasLength(819));
     for (final original in originals) {
-      if (original['sourceId'] != key) {
+      if (original['sourceId'] != key && !held.contains(original['sourceId'])) {
         // 쉬는 시간 포함 슬롯(#574): 보관 원본보다 모든 구간 끝이 10분 늦다.
         final row =
             jsonDecode(jsonEncode(byId[original['sourceId']]))
@@ -66,15 +79,10 @@ void main() {
     expect(after['classification'], '전공선택');
     expect(after['remarks'], contains('11교시'));
     expect(after['remarks'], contains('19:10'));
-    expect(after['remarks'], contains('추정하거나'));
+    expect(after['remarks'], isNot(contains('부분')));
     expect(after['sourceEducation']['nativePublishedWeekday'], 5);
-    expect(after['sourceEducation']['unresolvedSourcePeriodScope'], [
-      {
-        'sourceWeekday': 5,
-        'sourcePeriodLiteral': '11',
-        'sourceClassroom': '예술관-5403',
-      },
-    ]);
+    // 11교시도 같은 60분 슬롯으로 이어 17:10~20:10(2026-11-23 결정).
+    expect(after['sourceEducation']['unresolvedSourcePeriodScope'], isNull);
     const dates = [
       '2026-09-04',
       '2026-09-11',
@@ -94,7 +102,7 @@ void main() {
     expect(meetings.map((m) => m['date']).toList(), dates);
     for (final m in meetings) {
       expect(m['startMinute'], 1030);
-      expect(m['endMinute'], 1150);
+      expect(m['endMinute'], 1210);
       expect(m['classroom'], '예술관-5403');
       expect(m['weekday'], DateTime.parse(m['date'] as String).weekday);
       expect(m['deliveryMode'], 'inPerson');
@@ -125,7 +133,7 @@ void main() {
     );
     expect(
       rows.where((r) => (r['schedules'] as List).isNotEmpty),
-      hasLength(1125),
+      hasLength(1400),
     );
     expect(
       originals.fold<int>(0, (n, r) => n + (r['schedules'] as List).length),
@@ -133,7 +141,7 @@ void main() {
     );
     expect(
       rows.fold<int>(0, (n, r) => n + (r['schedules'] as List).length),
-      22984,
+      30885,
     );
 
     final datasets = [
@@ -143,8 +151,8 @@ void main() {
     final allCourses = datasets.expand((d) => d.courses).toList();
     expect(allCourses, hasLength(1718));
     final scheduled = allCourses.where((c) => c.meetings.isNotEmpty).toList();
-    expect(scheduled, hasLength(1125));
-    expect(scheduled.fold<int>(0, (n, c) => n + c.meetings.length), 22984);
+    expect(scheduled, hasLength(1400));
+    expect(scheduled.fold<int>(0, (n, c) => n + c.meetings.length), 30885);
     for (final mode in [
       LectureMode.inPerson,
       LectureMode.liveOnline,
@@ -163,9 +171,9 @@ void main() {
       final restored = TimetableSyncDocument.fromJson(
         jsonDecode(jsonEncode(document.toJson())) as Map<String, dynamic>,
       ).materializeClasses();
-      expect(restored, hasLength(1125));
+      expect(restored, hasLength(1400));
       expect(restored.map((c) => c.sourceId).toSet(), bySource.keys.toSet());
-      expect(restored.fold<int>(0, (n, c) => n + c.meetings.length), 22984);
+      expect(restored.fold<int>(0, (n, c) => n + c.meetings.length), 30885);
       for (final c in restored) {
         final original = bySource[c.sourceId]!;
         expect(c.isValid, isTrue);

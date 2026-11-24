@@ -49,28 +49,66 @@ void main() {
       ];
       expect(courses.length, 1718);
       expect(courses.map((c) => c.sourceId).toSet().length, 1718);
-      expect(courses.where((c) => c.hasSchedulableMeetings).length, 1125);
-      expect(courses.expand((c) => c.meetings).length, 22984);
+      expect(courses.where((c) => c.hasSchedulableMeetings).length, 1400);
+      expect(courses.expand((c) => c.meetings).length, 30885);
       expect(
         courses.where((c) => c.scheduleStatus == 'unrecognized').length,
-        495,
+        0,
+      );
+      // 원문자 수가 실습 시수와 다른 음악 분반도 적힌 교시대로: 전공실습(2) 12 토① ② ④ ⑤.
+      final gap = courses.singleWhere((c) => c.codeAndSection == '110404-12');
+      expect(
+        gap.meetings
+            .map((m) => (m.originalStartMinute, m.originalEndMinute))
+            .toSet(),
+        {(550, 670), (730, 850)},
+      );
+      // 토요일 원문자도 같은 번호 교시: 기초실기(2) 01 토① = 09:10~10:10.
+      final saturday = courses.singleWhere(
+        (c) => c.codeAndSection == '109430-01',
       );
       expect(
-        courses.where((c) => c.scheduleStatus == 'unscheduled').length,
-        98,
+        saturday.meetings
+            .map((m) => (m.weekday, m.originalStartMinute, m.originalEndMinute))
+            .toSet(),
+        {(6, 550, 610)},
       );
-      final partial = courses.singleWhere(
-        (c) => c.codeAndSection == '115911-01',
-      );
-      expect(partial.sourceSchedule, contains('①'));
+      // 0시수 현장실습·12월 집중강의는 시간 미정, 시간이 빈 JST 강좌도 시간 미정.
+      for (final code in ['104025-06', '116759-01', '115186-01']) {
+        final c = courses.singleWhere((c) => c.codeAndSection == code);
+        expect(c.scheduleStatus, 'unscheduled');
+        expect(c.meetings, isEmpty);
+      }
+      // 야간 11~13교시는 1~10교시와 같은 60분 슬롯으로 이어 19:10~22:10.
+      final night = courses.singleWhere((c) => c.codeAndSection == '100088-02');
+      expect(night.sourceSchedule, '목11 12 13 [사회관-2403]');
+      expect(night.meetings, hasLength(13));
       expect(
-        partial.meetings.every(
-          (m) => m.originalStartMinute == 670 && m.originalEndMinute == 730,
+        night.meetings.every(
+          (m) =>
+              m.originalStartMinute == 1150 &&
+              m.originalEndMinute == 1330 &&
+              m.classroom == '사회관-2403',
         ),
         isTrue,
       );
-      expect(partial.remarks, contains('부분'));
-      expect(partial.remarks, contains('월'));
+      expect(
+        courses.where((c) => c.scheduleStatus == 'unscheduled').length,
+        318,
+      );
+      // 원문자 교시는 같은 번호 교시의 실습 시간이다(이론·실습 시수와 일치): 월①②=09:10~11:10.
+      final circled = courses.singleWhere(
+        (c) => c.codeAndSection == '115911-01',
+      );
+      expect(circled.sourceSchedule, '월① ②,수3 [황룡문화관-3306]');
+      expect(
+        circled.meetings
+            .map((m) => (m.weekday, m.originalStartMinute, m.originalEndMinute))
+            .toSet(),
+        {(1, 550, 670), (3, 670, 730)},
+      );
+      expect(circled.remarks, isNot(contains('부분')));
+      expect(circled.remarks, contains('원문자'));
       for (final mode in [
         LectureMode.inPerson,
         LectureMode.liveOnline,
@@ -83,10 +121,10 @@ void main() {
           if (!c.hasSchedulableMeetings) continue;
           final saved = c.toTimetable(id: c.sourceId, mode: mode);
           expect(saved.isValid, isTrue);
-          // 교시표 1~10교시: 09:10 시작, 50분 수업+10분 쉬는 시간 = 60분 슬롯.
+          // 교시표 1~10교시: 09:10 시작, 50분 수업+10분 쉬는 시간 = 60분 슬롯(11교시 이후도 같은 길이).
           for (final m in c.meetings) {
             expect(m.originalStartMinute % 60, 10, reason: c.codeAndSection);
-            expect(m.originalStartMinute, inInclusiveRange(550, 1090));
+            expect(m.originalStartMinute, inInclusiveRange(550, 1150));
             expect(
               (m.originalEndMinute - m.originalStartMinute) % 60,
               0,
@@ -129,7 +167,7 @@ void main() {
         final restored = TimetableSyncDocument.fromJson(
           jsonDecode(jsonEncode(doc.toJson())) as Map<String, dynamic>,
         );
-        expect(restored.courses.length, 1125);
+        expect(restored.courses.length, 1400);
         for (final e in restored.courses.entries) {
           expect(e.value.value, values[e.key]!.value);
         }
