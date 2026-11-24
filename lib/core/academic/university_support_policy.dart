@@ -22,7 +22,6 @@ class UniversitySupportPolicy {
     'gjue',
     'gnu',
     'gnue',
-    'hanbat',
     'hansei',
     'hansung',
     'hanyang',
