@@ -32,7 +32,6 @@ class UniversitySupportPolicy {
     'kmu',
     'knu',
     'knue',
-    'konkuk',
     'korea',
     'kumoh',
     'kwangwoon',

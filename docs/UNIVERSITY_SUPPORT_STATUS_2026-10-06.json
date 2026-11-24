@@ -269,7 +269,7 @@
         "verification": "Seoul previous/current official annual36; GLOCAL official numeric annual dates plus dynamically selected current summer and prior winter department notice16. Seoul previous winter endsJan15 vs GLOCALJan14; no substituted campus dates. Future GLOCAL winter course not published, not invented. Live checks passed; focused/regression/install pending."
       },
       "timetable": {
-        "status": "temporarily_unsupported",
+        "status": "implemented_catalog_partial",
         "universityId": "konkuk",
         "courses": 206,
         "scheduled": 137,

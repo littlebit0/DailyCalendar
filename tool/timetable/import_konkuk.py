@@ -6,7 +6,8 @@ https://www.konkuk.ac.kr/konkuk/2367/subview.do (교시별 시간 안내). GLOCA
 publish HHMM-HHMM clocks directly. A schedule text that does not match the
 published grammar is kept verbatim as `unrecognized`, never guessed. GLOCAL
 집중이수 rows publish weeks (e.g. 8주(1-8주)) but no dates, so they are held as
-`unrecognized` too. Closed (폐강) GLOCAL rows are excluded.
+`unrecognized` too. Closed (폐강) GLOCAL rows are kept like any other row
+(2026-11-23 user decision) with the published closed flag in the remarks.
 """
 import argparse
 import json
@@ -146,8 +147,6 @@ def glocal_courses(raw):
     courses = []
     for number, entry in sorted(raw['offerings'].items()):
         row = entry['row']
-        if row['clse_fg'] != '0':
-            continue
         schedule = clean(row['lec_tm'])
         status, meetings = glocal_meetings(schedule)
         intensive = clean(row['intensive_nm'])
@@ -156,6 +155,7 @@ def glocal_courses(raw):
             status, meetings = 'unrecognized', []
         areas = sorted({s[2] for s in entry['scopes'] if s[0] in '4 11 12 13'.split()})
         remarks = [
+            '강의시간표 폐강 표시' if row['clse_fg'] != '0' else '',
             clean(row['sugang_remk']), clean(row['remk']),
             '학수번호 ' + clean(row['haksu_id']),
             '집중이수제: ' + intensive if intensive else '',
