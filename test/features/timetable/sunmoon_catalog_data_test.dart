@@ -1,4 +1,3 @@
-
 import 'package:daily/features/timetable/data/timetable_period_defaults.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -14,10 +13,14 @@ void main() {
     );
     expect(
       {for (final d in datasets) d.campus: d.courses.length},
-      {'unknown': 10},
+      // 공식 공지 첫 표의 폐강 과목 3개 포함(2026-11-23 사용자 결정).
+      {'unknown': 13},
     );
     final courses = datasets.single.courses;
-    expect(courses.where((c) => c.scheduleStatus == 'scheduled'), hasLength(7));
+    expect(
+      courses.where((c) => c.scheduleStatus == 'scheduled'),
+      hasLength(10),
+    );
     // Recorded-only HUSS courses publish no weekday or period.
     final untimed = courses.where((c) => c.scheduleStatus == 'unscheduled');
     expect(untimed.map((c) => c.sourceSchedule).toSet(), {'비대면(동영상) 100'});
@@ -41,7 +44,7 @@ void main() {
         (c) =>
             c.scheduleStatus == 'scheduled' && !c.sourceSchedule.contains(':'),
       );
-      expect(byPeriods, hasLength(5));
+      expect(byPeriods, hasLength(8));
       // Rule table (60 minute class table: 50 + 10, period 1 at 09:30).
       final expected = {
         '053510': [(4, 750, 870)],
@@ -49,6 +52,10 @@ void main() {
         '210138': [(2, 750, 870), (4, 870, 930)],
         '210142': [(1, 570, 690), (3, 570, 630)],
         '210113': [(1, 630, 690), (3, 570, 690)],
+        // 폐강 과목(공식 공지 첫 표)도 같은 교시표로 넣는다.
+        '080168': [(4, 750, 930)],
+        '053511': [(5, 690, 810)],
+        '080167': [(4, 930, 1110)],
       };
       for (final c in byPeriods) {
         expect(

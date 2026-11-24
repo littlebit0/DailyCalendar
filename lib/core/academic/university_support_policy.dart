@@ -53,7 +53,6 @@ class UniversitySupportPolicy {
     'postech',
     'sangji',
     'sungkyul',
-    'sunmoon',
     'syu',
     'tuk',
     'ulsan',
