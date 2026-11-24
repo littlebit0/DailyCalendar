@@ -17,20 +17,82 @@ void main() {
       );
       expect(
         {for (final d in data) d.campus: d.courses.length},
-        {'dorim': 718, 'damyang': 18, 'unknown': 571},
+        {'dorim': 721, 'damyang': 19, 'unknown': 576},
       );
       final courses = data.expand((d) => d.courses).toList();
-      expect(courses.map((c) => c.sourceId).toSet(), hasLength(1307));
-      expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(893));
-      expect(
-        courses.where((c) => c.scheduleStatus == 'unrecognized'),
-        hasLength(408),
+      expect(courses.map((c) => c.sourceId).toSet(), hasLength(1316));
+      expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(1233));
+      // UNCO04·강의계획서·교무과 편성표 모두 시간이 빈 77강좌는 시간 미정(2026-11-23 사용자 결정).
+      expect(courses.where((c) => c.scheduleStatus == 'unrecognized'), isEmpty);
+      // UNCO04 시간 칸이 빈 창의인성프로젝트2: 교무과 편성표 "금 13~18교시"(15:00~18:00).
+      final mentoring = courses.singleWhere(
+        (c) => c.codeAndSection == 'ZZA002-00',
       );
+      expect(mentoring.meetings, hasLength(12));
+      expect(
+        mentoring.meetings.every(
+          (m) =>
+              m.weekday == 5 &&
+              m.originalStartMinute == 900 &&
+              m.originalEndMinute == 1080 &&
+              m.classroom == '미정',
+        ),
+        isTrue,
+      );
+      expect(
+        courses
+            .where((c) => c.scheduleStatus == 'unscheduled')
+            .every(
+              (c) => c.sourceSchedule.trim().isEmpty && c.meetings.isEmpty,
+            ),
+        isTrue,
+      );
+      // 운영 방식 검토로 보류했던 강좌: 공식 30분 교시(10교시 13:30)로 확정.
+      final held = courses.singleWhere((c) => c.codeAndSection == 'AA139-00');
+      expect(held.scheduleStatus, 'scheduled');
+      expect(
+        held.meetings
+            .where((m) => m.weekday == 1)
+            .every(
+              (m) =>
+                  m.originalStartMinute == 810 &&
+                  m.originalEndMinute == 900 &&
+                  m.classroom == '인문대학 351',
+            ),
+        isTrue,
+      );
+      expect(held.meetings, hasLength(27));
       expect(
         courses.where((c) => c.scheduleStatus == 'unscheduled'),
-        hasLength(6),
+        hasLength(83),
       );
-      expect(courses.where((c) => c.code == 'ZAA006'), isEmpty);
+      // 공개 UNCO04 원표의 교양필수 프론티어정신 9분반(빠져 있던 행 복원).
+      final frontier = courses.where((c) => c.code == 'ZAA006').toList();
+      expect(frontier, hasLength(9));
+      final f09 = frontier.singleWhere((c) => c.codeAndSection == 'ZAA006-09');
+      expect(f09.sourceId, 'mokpo/damyang/2026/2/ZAA006/09');
+      expect(f09.meetings, hasLength(14));
+      expect(
+        f09.meetings.every(
+          (m) =>
+              m.weekday == 3 &&
+              m.originalStartMinute == 900 &&
+              m.originalEndMinute == 1020 &&
+              m.classroom == '(담양)제5학관 강당 5110',
+        ),
+        isTrue,
+      );
+      // 최신 공개 조회의 담당교수 표기로 교체(일정은 그대로).
+      expect(
+        courses.singleWhere((c) => c.codeAndSection == 'ALM048-00').professor,
+        '조정현(), 이효빈()',
+      );
+      // 같은 강좌의 학수번호가 최신 공개 조회에서 KG631 -> KG721로 바뀌었다.
+      expect(courses.where((c) => c.code == 'KG631'), isEmpty);
+      expect(
+        courses.singleWhere((c) => c.codeAndSection == 'KG721-00').sourceId,
+        'mokpo/dorim/2026/2/KG721/00',
+      );
       final history = courses
           .singleWhere((c) => c.codeAndSection == 'HIS041-00')
           .toTimetable(id: 'history', mode: LectureMode.inPerson);
@@ -149,7 +211,9 @@ void main() {
         campusId: 'academyinfo:0000036',
       );
       expect(wrong.timetableCampus, isNull);
-      final defaults = await TimetablePeriodDefaults.load(bundle: FileAssetBundle());
+      final defaults = await TimetablePeriodDefaults.load(
+        bundle: FileAssetBundle(),
+      );
       final period = defaults.periodFor(2026, '2', university: 'mokpo');
       expect(period?.start, DateTime(2026, 9, 1));
       expect(period?.end, DateTime(2026, 12, 18));
