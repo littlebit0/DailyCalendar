@@ -65,7 +65,6 @@ class UniversitySupportPolicy {
     'tuk',
     'ulsan',
     'unist',
-    'uos',
     'wsu',
     'yongin',
     'yonsei',
