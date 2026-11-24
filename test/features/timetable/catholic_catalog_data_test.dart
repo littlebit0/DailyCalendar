@@ -10,66 +10,65 @@ import '../../support/file_asset_bundle.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
-  test(
-    'Catholic integrated profile loads catalog without inventing campus',
-    () async {
-      final datasets = await UniversityCatalog.load(
-        bundle: FileAssetBundle(),
-        university: 'catholic',
-      );
-      expect(
-        {for (final d in datasets) d.campus: d.courses.length},
-        {'songsim': 1086, 'unknown': 373},
-      );
-      expect(
-        datasets.expand((d) => d.courses).map((c) => c.sourceId).toSet(),
-        hasLength(1459),
-      );
-      for (final id in [
-        'institution:academyinfo:0000046',
+  test('Catholic integrated profile loads its songsim catalog', () async {
+    final datasets = await UniversityCatalog.load(
+      bundle: FileAssetBundle(),
+      university: 'catholic',
+    );
+    expect(
+      {for (final d in datasets) d.campus: d.courses.length},
+      {'songsim': 1459},
+    );
+    expect(
+      datasets.expand((d) => d.courses).map((c) => c.sourceId).toSet(),
+      hasLength(1459),
+    );
+    for (final id in [
+      'institution:academyinfo:0000046',
+      'academyinfo:0000046',
+      'academyinfo:0000048',
+      'academyinfo:0000049',
+    ]) {
+      for (final campus in [
+        null,
         'academyinfo:0000046',
         'academyinfo:0000048',
         'academyinfo:0000049',
       ]) {
-        for (final campus in [
-          null,
-          'academyinfo:0000046',
-          'academyinfo:0000048',
-          'academyinfo:0000049',
-        ]) {
-          final profile = AcademicProfile(
-            universityId: id,
-            universityName: '가톨릭대학교',
-            schoolKind: 'fourYear',
-            campusId: campus,
-          );
-          final restored = AcademicProfile.fromJson(profile.toJson());
-          expect(restored.timetableUniversity, 'catholic');
-          expect(restored.timetableCampus, 'songsim');
-        }
-      }
-      expect(
-        const AcademicProfile(
-          universityId: 'institution:academyinfo:0000046',
+        final profile = AcademicProfile(
+          universityId: id,
           universityName: '가톨릭대학교',
           schoolKind: 'fourYear',
-          campusId: 'academyinfo:0000117',
-        ).timetableSupported,
-        isFalse,
-      );
-      final defaults = await TimetablePeriodDefaults.load(bundle: FileAssetBundle());
-      final period = defaults.periodFor(2026, '2', university: 'catholic');
-      expect(period?.start, DateTime(2026, 8, 31));
-      expect(period?.end, DateTime(2026, 12, 18));
-    },
-  );
+          campusId: campus,
+        );
+        final restored = AcademicProfile.fromJson(profile.toJson());
+        expect(restored.timetableUniversity, 'catholic');
+        expect(restored.timetableCampus, 'songsim');
+      }
+    }
+    expect(
+      const AcademicProfile(
+        universityId: 'institution:academyinfo:0000046',
+        universityName: '가톨릭대학교',
+        schoolKind: 'fourYear',
+        campusId: 'academyinfo:0000117',
+      ).timetableSupported,
+      isFalse,
+    );
+    final defaults = await TimetablePeriodDefaults.load(
+      bundle: FileAssetBundle(),
+    );
+    final period = defaults.periodFor(2026, '2', university: 'catholic');
+    expect(period?.start, DateTime(2026, 8, 31));
+    expect(period?.end, DateTime(2026, 12, 18));
+  });
 
   test(
     'published regular plans preserve user mode, restrictions and date boundaries',
     () {
       final rawCourses = <dynamic>[];
       final datasets = <UniversityDataset>[];
-      for (final campus in ['songsim', 'unknown']) {
+      for (final campus in ['songsim']) {
         final raw =
             jsonDecode(
                   File(
@@ -85,8 +84,8 @@ void main() {
       final courses = datasets.expand((d) => d.courses).toList();
       expect(courses.map((c) => c.sourceId).toSet(), hasLength(1459));
       expect(courses.where((c) => c.credits != null), hasLength(1052));
-      expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(1024));
-      expect(courses.expand((c) => c.meetings), hasLength(21899));
+      expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(1200));
+      expect(courses.expand((c) => c.meetings), hasLength(24647));
       for (final mode in LectureMode.values) {
         for (final course in courses.where((c) => c.hasSchedulableMeetings)) {
           final saved = course.toTimetable(id: course.sourceId, mode: mode);
@@ -127,6 +126,8 @@ void main() {
                 DateTime(2026, 8, 30),
                 DateTime(2026, 9, 24),
                 DateTime(2026, 9, 25),
+                DateTime(2026, 9, 26),
+                DateTime(2026, 10, 3),
                 DateTime(2026, 10, 5),
                 DateTime(2026, 10, 9),
                 DateTime(2026, 12, 19),
@@ -136,10 +137,53 @@ void main() {
           );
         }
       }
+      // 공식 교시표(1교시 09:00, 60분 슬롯)를 10교시 뒤·토요일로 이어 계산해 확정한 강좌.
+      final lab = courses.singleWhere((c) => c.codeAndSection == '03373-01');
+      expect(lab.sourceSchedule, '월9~12(D606)');
+      expect(lab.meetings, hasLength(15));
+      expect(
+        lab.meetings.every(
+          (m) =>
+              m.weekday == 1 &&
+              m.originalStartMinute == 1020 &&
+              m.originalEndMinute == 1260 &&
+              m.classroom == 'D606',
+        ),
+        isTrue,
+      );
+      final saturday = courses.singleWhere(
+        (c) => c.codeAndSection == '06802-01',
+      );
+      expect(saturday.sourceSchedule, '토1~3(K234)');
+      expect(
+        saturday.meetings.map((m) => m.date),
+        isNot(contains('2026-09-26')),
+      );
+      expect(
+        saturday.meetings.map((m) => m.date),
+        isNot(contains('2026-10-03')),
+      );
+      expect(saturday.meetings, hasLength(13));
+      expect(
+        saturday.meetings.every(
+          (m) => m.originalStartMinute == 540 && m.originalEndMinute == 720,
+        ),
+        isTrue,
+      );
       for (final id in ['00097-01', '05642-01', '05911-01', '06539-01']) {
         final course = courses.singleWhere((c) => c.codeAndSection == id);
         expect(course.meetings.every((m) => m.classroom.isEmpty), isTrue);
         expect(course.remarks, contains('강의실은 학교 공시 자료에 미표기'));
+      }
+      // 2026-11-23 개설과목조회 재조회 값으로 강의실을 교체한 강좌(시각은 그대로).
+      for (final (id, source, room, count) in [
+        ('03792-01', '목8~10(K256)', 'K256', 15),
+        ('04411-01', '수5~7(K233)', 'K233', 16),
+      ]) {
+        final course = courses.singleWhere((c) => c.codeAndSection == id);
+        expect(course.sourceSchedule, source);
+        expect(course.meetings, hasLength(count));
+        expect(course.meetings.every((m) => m.classroom == room), isTrue);
       }
       for (final course in rawCourses) {
         expect(course['sourceEducation']['actualAttendanceConfirmed'], isFalse);

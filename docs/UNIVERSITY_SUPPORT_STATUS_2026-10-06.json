@@ -100,7 +100,7 @@
         "sourceUrl": "https://www.catholic.ac.kr/ko/support/calendar2024_list.do"
       },
       "timetable": {
-        "status": "temporarily_unsupported",
+        "status": "implemented_catalog_partial",
         "checkedAt": "2026-10-08",
         "universityId": "catholic",
         "courses": 1459,

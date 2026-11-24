@@ -4,7 +4,6 @@
 class UniversitySupportPolicy {
   static const suspendedTimetableUniversities = <String>{
     'bnue',
-    'catholic',
     'cje',
     'dgist',
     'dnue',
