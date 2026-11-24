@@ -17,11 +17,8 @@ void main() {
       final courses = data.courses;
       expect(courses, hasLength(1990));
       expect(courses.map((c) => c.sourceId).toSet(), hasLength(1990));
-      expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(1728));
-      expect(
-        courses.where((c) => c.scheduleStatus == 'unrecognized'),
-        hasLength(250),
-      );
+      expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(1978));
+      expect(courses.where((c) => c.scheduleStatus == 'unrecognized'), isEmpty);
       expect(
         courses.where((c) => c.scheduleStatus == 'unscheduled'),
         hasLength(12),
@@ -32,22 +29,34 @@ void main() {
       expect(ordinary.meetings.single.startMinute, 660);
       expect(ordinary.meetings.single.endMinute, 840);
       expect(ordinary.meetings.single.classroom, '다산관-310');
+      // 2026-11-23 사용자 결정: 운영 예외 보류 강좌도 공식 교시로 확정한다.
+      final exception = courses.singleWhere(
+        (c) => c.codeAndSection == '101068-11016',
+      );
+      expect(exception.hasSchedulableMeetings, isTrue);
+      // A/B 반교시는 60분 슬롯의 앞·뒤 30분이다(4 ~ 5A = 12:00~13:30).
+      final half = courses.firstWhere(
+        (c) => c.sourceSchedule == '수(4 ~ 5A), 금(4 ~ 5A)',
+      );
       expect(
-        courses.singleWhere((c) => c.codeAndSection == '101068-11016').meetings,
-        isEmpty,
+        half.meetings.map((m) => [m.weekday, m.startMinute, m.endMinute]),
+        [
+          [3, 720, 810],
+          [5, 720, 810],
+        ],
       );
       expect(
         courses.where((c) => c.meetings.any((m) => m.date != null)),
         hasLength(197),
       );
       // 학사관리 규정 별표 1: 교시는 정시에 시작하는 60분 슬롯(50분 수업+10분
-      // 쉬는 시간). 요일 반복 구간은 모두 슬롯 경계에 맞고, 같은 요일·강의실에서
+      // 쉬는 시간). A/B 반교시는 그 슬롯의 30분 단위다. 요일 반복 구간은 모두 슬롯 경계에 맞고, 같은 요일·강의실에서
       // 60분 미만 간격의 구간은 하나로 합쳐져 있다. 시계 시각 원문(날짜 있음)은 제외.
       for (final c in courses.where((c) => c.hasSchedulableMeetings)) {
         final weekly = c.meetings.where((m) => m.date == null).toList();
         for (final m in weekly) {
-          expect(m.startMinute % 60, 0, reason: c.sourceId);
-          expect(m.endMinute % 60, 0, reason: c.sourceId);
+          expect(m.startMinute % 30, 0, reason: c.sourceId);
+          expect(m.endMinute % 30, 0, reason: c.sourceId);
           expect(m.endMinute, greaterThan(m.startMinute), reason: c.sourceId);
           for (final o in weekly.where((o) => !identical(o, m))) {
             if (o.weekday == m.weekday && o.classroom == m.classroom) {
@@ -82,7 +91,9 @@ void main() {
       );
       expect(profile.timetableUniversity, 'seoultech');
       expect(profile.timetableCampus, 'main');
-      final period = await TimetablePeriodDefaults.load(bundle: FileAssetBundle());
+      final period = await TimetablePeriodDefaults.load(
+        bundle: FileAssetBundle(),
+      );
       final term = period.periodFor(2026, '2', university: 'seoultech');
       expect(term?.start, DateTime(2026, 9, 1));
       expect(term?.end, DateTime(2026, 12, 14));

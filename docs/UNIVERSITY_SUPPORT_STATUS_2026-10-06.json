@@ -3397,7 +3397,7 @@
         ]
       },
       "timetable": {
-        "status": "temporarily_unsupported",
+        "status": "implemented_partial_catalog",
         "sourceId": "seoultech",
         "courseCount": 1990,
         "scheduledCourses": 1684,
@@ -3444,7 +3444,9 @@
         "remaining": "Current packaged 1990 offerings / 1684 schedule-bearing / 3042 serialized reservations; partial, whole operating support not verified.",
         "latestSourceProcessingPass": "work/university-research/resume-20261011/current-packaged-coverage.json",
         "priorStatus": "implemented_catalog_verified_with_unpublished_exceptions",
-        "statusNote": "Listed in UniversitySupportPolicy.suspendedTimetableUniversities (#976)."
+        "productionIntegrationEnabled": true,
+        "reopenedDate": "2026-11-22",
+        "reopenNote": "시각 미확정 강좌는 원문만 검색에 표시하고 시간표 추가는 확정 시각 강좌만 허용한다."
       },
       "installedAcceptance": "not_verified",
       "deferredAsImpossible": false,
