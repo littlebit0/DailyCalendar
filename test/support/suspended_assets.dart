@@ -19,11 +19,13 @@ class SuspendedAssetBundle extends CachingAssetBundle {
   /// One `<university>.catalog.json` per suspended university, so the pull
   /// requests that suspend different universities never edit the same file.
   List<String> get _suspendedPaths => [
-    for (final file in Directory(
-      '$suspendedAssetRoot/timetable',
-    ).listSync().whereType<File>())
-      if (file.path.endsWith('.catalog.json'))
-        ...(jsonDecode(file.readAsStringSync()) as List).cast<String>(),
+    // 모든 대학이 재개되면 git이 빈 폴더를 남기지 않으므로 없는 폴더도 허용한다.
+    if (Directory('$suspendedAssetRoot/timetable').existsSync())
+      for (final file in Directory(
+        '$suspendedAssetRoot/timetable',
+      ).listSync().whereType<File>())
+        if (file.path.endsWith('.catalog.json'))
+          ...(jsonDecode(file.readAsStringSync()) as List).cast<String>(),
   ];
 
   File? _suspendedFile(String key) {

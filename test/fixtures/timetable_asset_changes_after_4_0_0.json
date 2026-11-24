@@ -866,5 +866,9 @@
   "assets/timetable/organizations/konyang.json": {
     "sha256": "17453e2737077e7595a85e54305d59b0a06d624bf745af4a01fdb5925f9eadf8",
     "reason": "건양대 시간표 검색 신규 개방(부분 자료): 공개 수업계획서 조회 2026-2와 첨부 수업계획서 수업시간, 공식 캠퍼스·학과 안내 기준"
+  },
+  "assets/timetable/skku-icampus-2026-2.json": {
+    "sha256": "e8b7046232d8b3c200db43bac01e4cb8e9f0b873e203a550991adfe3f9739805",
+    "reason": "공백만 제거(내용 동일): 파싱 비용과 앱 용량 절감"
   }
 }

@@ -36,13 +36,13 @@ void main() {
     addTearDown(store.dispose);
     await store.save(
       TimetableClass(
-        id: 'existing-baekseok-course',
+        id: 'existing-syu-course',
         title: '기존 저장 수업',
         academicYear: 2026,
         semester: '2',
         colorValue: 0xff123456,
         sourceType: 'university',
-        sourceId: 'baekseok-original-course',
+        sourceId: 'syu-original-course',
         meetings: [
           ClassMeeting(
             id: 'meeting',
@@ -60,7 +60,7 @@ void main() {
       MaterialApp(
         home: Scaffold(
           body: UniversityCoursePanel(
-            university: 'baekseok',
+            university: 'syu',
             store: store,
             loadCatalog: () async {
               loaded = true;
@@ -78,7 +78,7 @@ void main() {
     expect(find.text('해당 대학의 학교 시간표는 현재 미지원입니다.'), findsOneWidget);
     expect(loaded, isFalse);
     expect(added, isFalse);
-    expect(store.classes.single.id, 'existing-baekseok-course');
+    expect(store.classes.single.id, 'existing-syu-course');
     expect(preferences.getString(TimetableStore.storageKey), before);
   });
 }
