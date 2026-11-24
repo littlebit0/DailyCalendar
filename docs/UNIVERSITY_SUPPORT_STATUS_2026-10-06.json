@@ -5604,7 +5604,7 @@
         "events2026": 68
       },
       "timetable": {
-        "status": "temporarily_unsupported",
+        "status": "implemented_partial_catalog",
         "checkedAt": "2026-10-08",
         "universityId": "cbnu",
         "courses": 14,
