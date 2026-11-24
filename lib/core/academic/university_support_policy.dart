@@ -18,7 +18,6 @@ class UniversitySupportPolicy {
     'gnu',
     'gnue',
     'hansei',
-    'hanyang',
     'hknu',
     'hoseo',
     'hyupsung',

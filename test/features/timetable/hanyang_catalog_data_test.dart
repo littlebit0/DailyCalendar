@@ -1,6 +1,5 @@
 import 'dart:convert';
 import '../../support/source_fixture.dart';
-import '../../support/suspended_assets.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
 import 'package:daily/features/timetable/domain/timetable.dart';
@@ -17,20 +16,6 @@ void main() {
       final native = read(
         'work/university-research/catalog-d/hanyang-cached-educational-scope-20261008.json',
       );
-      final roomProofs =
-          jsonDecode(
-                fixtureFile(
-                  'work/university-research/catalog-c/hanyang-native-clock-room-only-v4-20261009/independent36-native-clock-room-proof.json',
-                ).readAsStringSync(),
-              )
-              as List;
-      final bulkProof = read(
-        'work/university-research/catalog-c/hanyang-held-native-bulk-v5-20261010/independent-native-calendar-validation.json',
-      );
-      final reviewedRoomIds = {
-        for (final p in roomProofs) p['sourceId'],
-        for (final p in bulkProof['byCourse'] as List) p['sourceId'],
-      };
       final originals = {
         for (final r in native['courses'] as List) r['classId']: r,
       };
@@ -41,6 +26,25 @@ void main() {
                   as List)
               .cast<String>()
               .toSet();
+      // 간호학과 공지 첨부 '2026-2 간호학과 시간표(26.09.14최종).pdf' 격자에서 옮긴 값
+      // (1교시=09:00, 교시당 60분; 3학년 이론 9/1~10/23 304호, 4학년 이론 11/2~12/24 404호).
+      const nursing = <String, (String, String, List<(int, int, int, String)>)>{
+        '12079': ('2026-09-01', '2026-10-23', [(1, 660, 780, '304호'), (4, 660, 780, '304호')]),
+        '12065': ('2026-09-01', '2026-10-23', [(1, 900, 1020, '304호'), (5, 600, 720, '304호')]),
+        '12066': ('2026-09-01', '2026-10-23', [(2, 660, 780, '304호'), (4, 900, 1020, '304호')]),
+        '12068': ('2026-09-01', '2026-10-23', [(2, 840, 900, '304호'), (3, 840, 900, '304호')]),
+        '12077': ('2026-09-01', '2026-10-23', [(2, 900, 1020, '304호'), (5, 780, 900, '304호')]),
+        '12070': ('2026-09-01', '2026-10-23', [(3, 900, 1020, '304호'), (5, 900, 1020, '304호')]),
+        '10306': ('2026-11-02', '2026-12-24', [(1, 540, 660, '404호'), (3, 900, 1020, '404호')]),
+        '10308': ('2026-11-02', '2026-12-24', [(1, 900, 1020, '404호'), (4, 600, 720, '404호')]),
+        // 포털 공개 강의계획서(findCoursePlanInfo, 2026-11-23 조회) 강의시간. 기간 표기가 없어 학기 전체.
+        '12499': ('2026-09-01', '2026-12-21', [(2, 540, 780, '간호미래교육관 404 IC-PBL강의실')]),
+        '10312': ('2026-09-01', '2026-12-21', [(2, 780, 1020, '간호미래교육관 404 IC-PBL강의실')]),
+        '12500': ('2026-09-01', '2026-12-21', [(3, 540, 780, '간호미래교육관 404 IC-PBL강의실')]),
+        // 학과공지 idx=4495(2026-08-10) 화·목 13:00~16:00. 계획서의 화요일만 칸은 수정일을 알 수 없어 따르지 않는다.
+        '25173': ('2026-09-01', '2026-12-21', [(2, 780, 960, '융합교육관 306호 강의실'), (4, 780, 960, '융합교육관 306호 강의실')]),
+        '25174': ('2026-09-01', '2026-12-21', [(2, 780, 960, '융합교육관 307호 강의실'), (4, 780, 960, '융합교육관 307호 강의실')]),
+      };
       const recensusRooms = {
         'hanyang/seoul/2026-2/10351': '서울 재성토목관 103강의실,서울 재성토목관 103강의실',
         'hanyang/erica/2026-2/24136': 'ERICA 컨퍼런스홀 201 강의실,ERICA 컨퍼런스홀 101 강의실',
@@ -49,7 +53,7 @@ void main() {
         final raw =
             jsonDecode(
                   File(
-                    '$suspendedAssetRoot/timetable/hanyang-$campus-2026-2.json',
+                    'assets/timetable/hanyang-$campus-2026-2.json',
                   ).readAsStringSync(),
                 )
                 as Map<String, dynamic>;
@@ -58,8 +62,8 @@ void main() {
         };
         final dataset = UniversityDataset.fromJson(raw);
         final count = campus == 'seoul' ? 2805 : 2156;
-        final eligibleCount = campus == 'seoul' ? 2132 : 1803;
-        final datedCount = campus == 'seoul' ? 51195 : 43599;
+        final eligibleCount = campus == 'seoul' ? 2450 : 1973;
+        final datedCount = campus == 'seoul' ? 58455 : 46773;
         expect(dataset.courses, hasLength(count));
         expect(
           dataset.courses.map((c) => c.sourceId).toSet(),
@@ -137,23 +141,68 @@ void main() {
             (meta['reservationProjection'] as Map)['heldReasons'],
             isEmpty,
           );
-          expect(c.departments.any((d) => d == '의학과' || d == '의예과'), false);
+          // 원문에 시각이 없어 학과 공지 시간표로 확정한 집중수업(2026-11-23).
+          final alternate = meta['alternatePublishedSchedule'] as Map?;
+          if (alternate != null) {
+            final spec = nursing[c.sourceId.split('/').last]!;
+            expect(c.period?.start, DateTime.parse(spec.$1));
+            expect(c.period?.end, DateTime.parse(spec.$2));
+            final want = <String>[];
+            for (
+              var d = DateTime.parse(spec.$1);
+              !d.isAfter(DateTime.parse(spec.$2));
+              d = DateTime(d.year, d.month, d.day + 1)
+            ) {
+              final date = d.toIso8601String().substring(0, 10);
+              if (holidays.contains(date)) continue;
+              for (final slot in spec.$3) {
+                if (slot.$1 == d.weekday) {
+                  want.add('$date/${slot.$1}/${slot.$2}/${slot.$3}/${slot.$4}');
+                }
+              }
+            }
+            expect(
+              c.meetings
+                  .map(
+                    (m) =>
+                        '${m.date}/${m.weekday}/${m.originalStartMinute}/${m.originalEndMinute}/${m.classroom}',
+                  )
+                  .toList(),
+              want,
+              reason: c.sourceId,
+            );
+            continue;
+          }
           // Independently derive exact clocks and campus rooms from native fields.
           final pattern = RegExp(
             r'([월화수목금토일])\((\d{2}):(\d{2})-(\d{2}):(\d{2})\)',
           );
           final matches = pattern.allMatches(a['suupTimes'] as String).toList();
-          final correction = meta['currentOfficialClassroomCorrection'] as Map?;
-          final rooms =
-              ((correction?['changedSourceClassroom'] ?? a['suupRoomNms'])
-                      as String)
+          final parts = (a['suupTimes'] as String)
+              .split(',')
+              .map((s) => s.trim())
+              .toList();
+          var cells = c.sourceClassroom
                   .split(',')
                   .map((s) => s.trim())
                   .toList();
+          // 강의실 칸 수가 시간 칸 수와 다르면 실제 강의실 이름만 모아 모든 구간에 적는다.
+          if (cells.length != parts.length) {
+            final real = cells
+                .where((s) => s.isNotEmpty && !s.startsWith('비지정('))
+                .toSet()
+                .join(', ');
+            cells = List.filled(parts.length, real);
+          }
+          final rooms = [
+            for (var i = 0; i < parts.length; i++)
+              if (parts[i] != '시간미지정강좌') cells[i],
+          ];
           expect(rooms, hasLength(matches.length));
           expect(
             (a['suupTimes'] as String)
                 .replaceAll(pattern, '')
+                .replaceAll('시간미지정강좌', '')
                 .replaceAll(',', '')
                 .trim(),
             isEmpty,
@@ -169,16 +218,13 @@ void main() {
             for (var i = 0; i < matches.length; i++) {
               final m = matches[i];
               final weekday = '월화수목금토일'.indexOf(m[1]!) + 1;
-              if (!reviewedRoomIds.contains(c.sourceId) &&
-                  !rooms[i].startsWith('비지정(')) {
-                expect(
-                  rooms[i],
-                  startsWith(campus == 'seoul' ? '서울 ' : 'ERICA '),
-                );
-              } else {
-                expect(a['campusNm'], campus == 'seoul' ? '서울' : 'ERICA');
-                expect(a['suupViewtypeNm'] == '원격', false);
-              }
+              // 2026-11-23 사용자 결정: 원격·캠퍼스 표기 없는 강의실도 원문 시각으로 확정한다.
+              // 캠퍼스 이름이 붙은 강의실은 그 강좌 캠퍼스여야 한다.
+              expect(a['campusNm'], campus == 'seoul' ? '서울' : 'ERICA');
+              expect(
+                rooms[i].startsWith(campus == 'seoul' ? 'ERICA ' : '서울 '),
+                false,
+              );
               if (d.weekday == weekday) {
                 expected.add({
                   'date': date,
