@@ -126,8 +126,22 @@ void main() {
       for (final c in courses.where((c) => c.code == 'UA03011')) {
         final n = int.parse(c.section);
         if (n <= 43) {
-          expect(c.meetings, isEmpty);
-          expect(c.remarks, contains('예약표시'));
+          // 2026-11-23 사용자 결정: 월~금 8~9교시(19:00~21:00 슬롯)를 각 분반의
+          // 교육기간(바롬 차수표, 미운영 주·공휴일 제외)에만 넣는다.
+          expect(c.meetings, isNotEmpty, reason: c.codeAndSection);
+          for (final m in c.meetings) {
+            expect(c.period!.contains(m.teachingDate!), isTrue);
+            expect([m.originalStartMinute, m.originalEndMinute], [1140, 1260]);
+            expect(m.weekday, inInclusiveRange(1, 5));
+          }
+          expect(
+            c.meetings.where(
+              (m) =>
+                  m.date!.compareTo('2026-09-21') >= 0 &&
+                  m.date!.compareTo('2026-09-25') <= 0,
+            ),
+            isEmpty,
+          );
         } else {
           expect(
             c.meetings,
@@ -146,9 +160,22 @@ void main() {
       for (final c in courses.where(
         (c) => c.code == '1111111' || c.code == '1111112',
       )) {
-        expect(c.meetings, isEmpty);
+        // 대면 경건회 01~05분반만 9/16 개강부터 공식 교시로 확정한다(2026-11-23 사용자 결정).
+        if ((c.code == '1111111' && int.parse(c.section) <= 5) ||
+            c.code == '1111112') {
+          expect(
+            c.meetings
+                    .map((m) => m.date!)
+                    .reduce((a, b) => a.compareTo(b) < 0 ? a : b)
+                    .compareTo('2026-09-16') >=
+                0,
+            isTrue,
+          );
+        } else {
+          expect(c.meetings, isEmpty);
+        }
       }
-      expect(courses.where((c) => c.meetings.isNotEmpty), hasLength(1273));
+      expect(courses.where((c) => c.meetings.isNotEmpty), hasLength(1328));
     },
   );
 
@@ -272,7 +299,12 @@ void main() {
             );
           }
         }
-        if (c.code == 'UA03011') {
+        if (c.code == 'UA03011' && int.parse(c.section) <= 43) {
+          // 2026-11-23 사용자 결정으로 확정한 바롬 분반은 자기 교육기간 안에만 있다.
+          for (final m in c.meetings) {
+            expect(c.period!.contains(m.teachingDate!), isTrue);
+          }
+        } else if (c.code == 'UA03011') {
           final section = int.parse(c.section);
           final expected =
               bahromDates[section <= 49
@@ -296,7 +328,13 @@ void main() {
               day = DateTime(day.year, day.month, day.day + 1)
             ) {
               final date = timetableDateKey(day);
-              if (day.weekday == b['weekday'] && !holidayDates.contains(date)) {
+              // 대면 경건회는 9/16 개강.
+              final chapelBefore =
+                  (c.code == '1111111' || c.code == '1111112') &&
+                  date.compareTo('2026-09-16') < 0;
+              if (day.weekday == b['weekday'] &&
+                  !holidayDates.contains(date) &&
+                  !chapelBefore) {
                 expectedDates.add(date);
               }
             }
@@ -346,7 +384,7 @@ void main() {
     LectureMode.video,
   ]) {
     test(
-      '1273 published plans 20294 dates actual full sync roundtrip $mode',
+      '1328 published plans 21095 dates actual full sync roundtrip $mode',
       () {
         final values = <String, TimetableSyncValue>{};
         var count = 0;
@@ -356,8 +394,13 @@ void main() {
           expect(saved.isValid, true);
           expect(saved.defaultMode, mode);
           expect(saved.note, c.remarks);
-          expect(saved.period!.start, DateTime(2026, 9, 1));
-          expect(saved.period!.end, DateTime(2026, 12, 21));
+          if (c.code == 'UA03011' && int.parse(c.section) <= 43) {
+            // 바롬 분반은 자기 교육기간(차수)을 기간으로 쓴다.
+            expect(saved.period, c.period);
+          } else {
+            expect(saved.period!.start, DateTime(2026, 9, 1));
+            expect(saved.period!.end, DateTime(2026, 12, 21));
+          }
           for (final m in saved.meetings) {
             count++;
             expect(m.isValid, true);
@@ -371,8 +414,8 @@ void main() {
             'research',
           );
         }
-        expect(count, 20294);
-        expect(values, hasLength(1273));
+        expect(count, 21095);
+        expect(values, hasLength(1328));
         final doc = TimetableSyncDocument.records(
           courses: values,
           schemaVersion: 2,
@@ -380,7 +423,7 @@ void main() {
         final json =
             jsonDecode(jsonEncode(doc.toJson())) as Map<String, dynamic>;
         final restored = TimetableSyncDocument.fromJson(json);
-        expect(restored.materializeClasses(), hasLength(1273));
+        expect(restored.materializeClasses(), hasLength(1328));
         for (final c in restored.materializeClasses()) {
           expect(c.isValid, true);
           expect(c.toJson(), values[timetableCourseSyncKey(c)]!.value);

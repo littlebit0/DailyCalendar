@@ -3662,7 +3662,7 @@
         "events2026": 83
       },
       "timetable": {
-        "status": "temporarily_unsupported",
+        "status": "implemented_partial_catalog",
         "sourceId": "swu",
         "courses": 1511,
         "scheduled": 1281,
@@ -3709,7 +3709,9 @@
         "remaining": "Current packaged 1511 offerings / 1281 schedule-bearing / 20406 serialized reservations; partial, whole operating support not verified.",
         "latestSourceProcessingPass": "work/university-research/resume-20261011/current-packaged-coverage.json",
         "priorStatus": "implemented_partial_catalog",
-        "statusNote": "Listed in UniversitySupportPolicy.suspendedTimetableUniversities (#976)."
+        "productionIntegrationEnabled": true,
+        "reopenedDate": "2026-11-22",
+        "reopenNote": "시각 미확정 강좌는 원문만 검색에 표시하고 시간표 추가는 확정 시각 강좌만 허용한다."
       },
       "installedAcceptance": "macos_build_signature_install_verified_ui_not_run",
       "deferredAsImpossible": false,
