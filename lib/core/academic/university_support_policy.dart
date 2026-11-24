@@ -29,7 +29,6 @@ class UniversitySupportPolicy {
     'kaist',
     'kangnam',
     'kangwon',
-    'kau',
     'khu',
     'kmou',
     'kmu',
