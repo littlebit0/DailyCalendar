@@ -268,8 +268,8 @@
     "reason": "2026-11-23: 중첩 괄호 강의실 이름 보존"
   },
   "assets/timetable/organizations/yu.json": {
-    "sha256": "5c12acd2c987b4f2e81cbe2492829d957a589e9b2ca0df4b1015a9f3191048dc",
-    "reason": "#630 영남대 학과 매핑 31개의 근거 문구를 공식 홈페이지 학과 안내 메뉴·천마학부대학 교양학부 페이지 원문 인용으로 교체, 소속은 그대로; 공백만 제거(내용 동일): 파싱 비용과 앱 용량 절감"
+    "sha256": "47cff0295c313ec4896e0b82c0889822a695ee5453c0a28908da9bd25d3303ba",
+    "reason": "2026-11-23 사용자 결정: 공식 학과 공지 시간표의 정규 강좌 69건 추가"
   },
   "assets/timetable/organizations/sch.json": {
     "sha256": "06e14abb90c531ca4a30ca79b5974af95c2d73495cfb621d47059af17ee1058e",
@@ -780,8 +780,8 @@
     "reason": "공백만 제거(내용 동일): 파싱 비용과 앱 용량 절감"
   },
   "assets/timetable/yu-unknown-2026-2.json": {
-    "sha256": "77cb473405ea1b804319dea8ce634a8b0c754ff6931dfcd184f9baa39980d3d9",
-    "reason": "공백만 제거(내용 동일): 파싱 비용과 앱 용량 절감"
+    "sha256": "db59fd7bbc06f53a0e28be3cd37a94d06134d4282de9566b675646fbefe76362",
+    "reason": "2026-11-23 사용자 결정: 공식 학과 공지 시간표의 정규 강좌 69건 추가"
   },
   "assets/timetable/organizations/cau.json": {
     "sha256": "0b13532ec9560e4e314f2866cfdb63ce9c81e70658acf34a96183d63ed9bbd95",

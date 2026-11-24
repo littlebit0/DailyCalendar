@@ -48,11 +48,13 @@ void main() {
       );
       expect(raw['researchOnly'], isFalse);
       expect(raw['completionClaim'], isFalse);
-      expect(dataset.courses, hasLength(60));
+      expect(dataset.courses, hasLength(129));
+      // The first 60 rows come from the 정보전산원 room-change notice.
+      final roomChange = dataset.courses.take(60).toList();
       expect(proof['nativeRows'], hasLength(62));
       var total = 0;
-      for (var i = 0; i < dataset.courses.length; i++) {
-        final c = dataset.courses[i];
+      for (var i = 0; i < roomChange.length; i++) {
+        final c = roomChange[i];
         final row = (raw['courses'] as List)[i] as Map;
         final originals = row['metadata']['originalEducationalRecords'] as List;
         for (final x in originals) {
@@ -85,9 +87,9 @@ void main() {
         );
         expect(row['metadata']['publishedClosureMatch'], closed);
         if (closed) {
+          // Closure is not judged (2026-11-23 user decision): the published
+          // course keeps its official time like every other row.
           expect(native['수강번호'], '0263');
-          expect(c.hasSchedulableMeetings, isFalse);
-          continue;
         }
         final period = RegExp(
           r'^2026\.(\d\d)\.(\d\d)~(\d\d)\.(\d\d)$',
@@ -137,13 +139,13 @@ void main() {
         );
         expect(row['metadata']['actualAttendanceConfirmed'], isFalse);
       }
-      expect(total, 1890);
+      expect(total, 1941);
       for (final mode in [
         LectureMode.inPerson,
         LectureMode.liveOnline,
         LectureMode.video,
       ]) {
-        final before = dataset.courses
+        final before = roomChange
             .where((c) => c.hasSchedulableMeetings)
             .map((c) => c.toTimetable(id: c.sourceId, mode: mode))
             .toList();
@@ -156,7 +158,7 @@ void main() {
         final after = TimetableSyncDocument.fromJson(
           jsonDecode(jsonEncode(doc.toJson())) as Map<String, dynamic>,
         ).materializeClasses();
-        expect(after, hasLength(59));
+        expect(after, hasLength(60));
         final originals = {for (final c in before) c.sourceId: c};
         for (final c in after) {
           final prior = originals[c.sourceId]!;
@@ -176,4 +178,39 @@ void main() {
       }
     },
   );
+  test('department timetable rows keep their published clock and room', () {
+    // 2026-11-23 user decision: official department notice timetables
+    // (기계공학전공 2026-2 시간표, 행정학과·경찰행정학과·미디어커뮤니케이션학과
+    // 변경 공지) add regular courses not in the room-change notice.
+    final raw =
+        jsonDecode(
+              fixtureFile(
+                'assets/timetable/yu-unknown-2026-2.json',
+              ).readAsStringSync(),
+            )
+            as Map<String, dynamic>;
+    final courses = UniversityDataset.fromJson(
+      raw,
+    ).courses.where((c) => c.sourceId.contains('/dept-enrollment-')).toList();
+    expect(courses, hasLength(69));
+    expect(courses.every((c) => c.hasSchedulableMeetings), isTrue);
+    final solid = courses.singleWhere(
+      (c) => c.sourceId == 'yu/unknown/2026-2/dept-enrollment-0825',
+    );
+    expect(solid.sourceSchedule, '화09:00-10:15 금10:30-11:45');
+    final first = solid.meetings.first;
+    expect(first.date, '2026-09-01');
+    expect([first.originalStartMinute, first.originalEndMinute], [540, 615]);
+    expect(first.classroom, 'E29-364');
+    for (final c in courses) {
+      for (final m in c.meetings) {
+        expect(m.date!.compareTo('2026-12-07') <= 0, isTrue);
+        expect(
+          m.date!.compareTo('2026-10-20') < 0 ||
+              m.date!.compareTo('2026-10-26') > 0,
+          isTrue,
+        );
+      }
+    }
+  });
 }
