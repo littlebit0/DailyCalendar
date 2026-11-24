@@ -59,13 +59,26 @@ void main() {
   test('LMS 과제에만 설정이 더해지고 다른 일정은 그대로다', () {
     final settings = AppSettings(lmsDueReminder: on);
     expect(
-      effectiveReminderMinutes(_event('assignment', own: [10]), settings),
+      effectiveReminderMinutes(_event('assignment', own: [10]), settings, now: DateTime(2026, 11, 1)),
       [10, 480, 960, 1440],
     );
-    expect(effectiveReminderMinutes(_event('quiz'), settings), isEmpty);
+    expect(effectiveReminderMinutes(_event('quiz'), settings, now: DateTime(2026, 11, 1)), isEmpty);
     expect(
-      effectiveReminderMinutes(_event('assignment'), AppSettings()),
+      effectiveReminderMinutes(_event('assignment'), AppSettings(), now: DateTime(2026, 11, 1)),
       isEmpty,
+    );
+  });
+
+  test('이미 지난 설정 시각은 건너뛴다', () {
+    // 마감 2026-12-01 23:59, 10시간 전 시점이면 24h·16h 시각은 지났다.
+    final now = DateTime(2026, 12, 1, 14);
+    expect(
+      effectiveReminderMinutes(
+        _event('assignment', own: [10]),
+        AppSettings(lmsDueReminder: on),
+        now: now,
+      ),
+      [10, 480],
     );
   });
 

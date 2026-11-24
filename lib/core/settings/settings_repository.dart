@@ -1044,7 +1044,9 @@ class SettingsRepository {
     final lmsReminderJson = jsonEncode(settings.lmsDueReminder.toJson());
     if (baselineLmsReminderJson != lmsReminderJson &&
         previousLmsReminderJson != lmsReminderJson) {
-      await _preferences.setString(_lmsDueReminderKey, lmsReminderJson);
+      await _persist(
+        _preferences.setString(_lmsDueReminderKey, lmsReminderJson),
+      );
     }
     final shouldMigrateLegacyTextSize =
         !_preferences.containsKey(_appTextSizeKey) &&
