@@ -44,7 +44,7 @@ void main() {
     );
     expect(
       {for (final d in datasets) d.campus: d.courses.length},
-      {'main': 3317},
+      {'main': 3555},
     );
     final period = (await TimetablePeriodDefaults.load(
       bundle: FileAssetBundle(),
@@ -62,7 +62,13 @@ void main() {
             ),
           )
           .toList();
-      expect(added, hasLength(143));
+      // 143 rows the 2026-10-08 extraction missed plus 238 courses the
+      // closure list had removed (2026-11-23 user decision).
+      expect(added, hasLength(381));
+      expect(
+        added.where((c) => c.remarks.contains('폐강 공지 대상이어도 공식 시간표 행')),
+        hasLength(238),
+      );
       for (final c in added) {
         final rows = records[c.sourceId]['publicEducationRows'] as List;
         expect(rows.every((r) => r['extraction'] != null), true);
@@ -74,7 +80,9 @@ void main() {
           expect(c.meetings, isEmpty);
         }
       }
-      expect(added.where((c) => c.meetings.isNotEmpty), hasLength(104));
+      // 104 printed clocks, 1 DU-Flex row and 3 rows whose official clock is
+      // confirmed by the 2026-11-23 user decision, plus 216 restored rows.
+      expect(added.where((c) => c.meetings.isNotEmpty), hasLength(324));
     },
   );
   test(
@@ -82,7 +90,7 @@ void main() {
     () {
       expect(raw['researchOnly'], false);
       expect(raw['completionClaim'], false);
-      expect(courses, hasLength(3317));
+      expect(courses, hasLength(3555));
       expect(
         sha256
             .convert(fixtureFile('$directory/$file').readAsBytesSync())
@@ -107,11 +115,57 @@ void main() {
           .toSet();
       for (final c in courses.where(
         (c) =>
-            held.contains(c.code) && !resolvedGeometry.containsKey(c.sourceId),
+            held.contains(c.code) &&
+            !resolvedGeometry.containsKey(c.sourceId) &&
+            // DU-Flex: the official timetable legend prints only the weekly
+            // in-person 75 minutes, confirmed on 2026-11-23.
+            !c.remarks.contains('DU-Flex 대면 시각 확정') &&
+            // 2026-11-23 user decision: official weekday/clock is confirmed
+            // even when the operation mode is unclear.
+            !c.remarks.contains('공식 시각 확정(2026-11-23)'),
       )) {
         expect(c.meetings, isEmpty);
       }
-      expect(courses.singleWhere((c) => c.code == '2204').meetings, isEmpty);
+      // Law notice 225363 (2026-09-03) moves 2204 to Friday 10:00-10:50 and
+      // cancels the first September week.
+      final career = courses.singleWhere((c) => c.code == '2204');
+      expect(career.sourceSchedule, '수(12:00-12:50)');
+      expect(career.meetings, hasLength(11));
+      for (final m in career.meetings) {
+        expect(
+          [m.weekday, m.originalStartMinute, m.originalEndMinute],
+          [5, 600, 650],
+        );
+        expect(m.date, isNot('2026-09-04'));
+      }
+      // The same notice moves law major 2165 to Tuesday 11:00-11:50.
+      final lawCareer = courses.singleWhere((c) => c.code == '2165');
+      expect(lawCareer.sourceSchedule, '수(12:00-12:50)');
+      expect(lawCareer.meetings, hasLength(14));
+      for (final m in lawCareer.meetings) {
+        expect(
+          [m.weekday, m.originalStartMinute, m.originalEndMinute],
+          [2, 660, 710],
+        );
+      }
+      // Courses whose official clock cell is blank stay without meetings and
+      // are listed as unscheduled (2026-11-23 instruction); none stays held.
+      for (final row in raw['courses'] as List) {
+        expect(row['scheduleStatus'], isNot('unrecognized'));
+        if ((row['sourceSchedule'] as String).trim().isEmpty) {
+          expect(row['schedules'], isEmpty);
+          expect(row['scheduleStatus'], 'unscheduled');
+        }
+      }
+      // HUSS consortium courses are online with no weekly clock (notice 224170).
+      final huss = courses.where(
+        (c) => c.remarks.contains('HUSS_004/detail/224170'),
+      );
+      expect(huss, hasLength(21));
+      for (final c in huss) {
+        expect(c.meetings, isEmpty);
+        expect(records[c.sourceId]['scheduleStatus'], 'unscheduled');
+      }
     },
   );
   test(
@@ -127,7 +181,14 @@ void main() {
         final source = record['publicEducationRows'][0]['education'];
         expect(c.sourceSchedule, source['강의시간']);
         expect(c.sourceClassroom, source['강의실']);
-        final blocks = clock.allMatches(source['강의시간'] as String).toList();
+        // A department notice clock replaces the printed clock (2204).
+        final noticeClock = RegExp(r'공지 시각 (\S+\)),').firstMatch(c.remarks);
+        final blocks = clock
+            .allMatches(noticeClock?[1] ?? source['강의시간'] as String)
+            .toList();
+        final cancelled = RegExp(
+          r'휴강 (\d{4}-\d{2}-\d{2})',
+        ).allMatches(c.remarks).map((m) => m[1]).toSet();
         expect(blocks, isNotEmpty);
         final expected = <String>{};
         for (
@@ -136,7 +197,7 @@ void main() {
           day = DateTime(day.year, day.month, day.day + 1)
         ) {
           final date = timetableDateKey(day);
-          if (holiday.contains(date)) {
+          if (holiday.contains(date) || cancelled.contains(date)) {
             continue;
           }
           for (final b in blocks) {
@@ -147,6 +208,26 @@ void main() {
             final start = int.parse(b[2]!) * 60 + int.parse(b[3]!);
             final end = int.parse(b[4]!) * 60 + int.parse(b[5]!);
             var room = source['강의실'];
+            final rooms = [
+              for (final row in record['publicEducationRows'] as List)
+                row['education']['강의실'] as String,
+            ];
+            if (c.remarks.contains('긴 표기로 통일')) {
+              room = rooms.reduce((a, b) => b.length > a.length ? b : a);
+              expect(
+                rooms.every((r) => room.startsWith(r.split(' ').first)),
+                true,
+              );
+              // Two rooms printed on two lines pair with the two clock lines.
+              final parts = (room as String).split(' ');
+              if (parts.length == blocks.length) {
+                room = parts[blocks.indexOf(b)];
+              }
+            }
+            final notice = RegExp(r'변경 강의실 (\S+)을').firstMatch(c.remarks);
+            if (notice != null) {
+              room = notice[1];
+            }
             final proof = resolvedGeometry[c.sourceId];
             if (proof != null) {
               final printedRows = proof['printedGeometryRows'] as List;
@@ -174,8 +255,8 @@ void main() {
         }
         expect(actual, expected, reason: 'native registration ${c.code}');
       }
-      expect(count, 57187);
-      expect(courses.where((c) => c.meetings.isNotEmpty), hasLength(2905));
+      expect(count, 66117);
+      expect(courses.where((c) => c.meetings.isNotEmpty), hasLength(3381));
     },
   );
   for (final mode in [
@@ -184,7 +265,7 @@ void main() {
     LectureMode.video,
   ]) {
     test(
-      'Actual 2905 model classes 57187 dates full Drive JSON roundtrip ${mode.name}',
+      'Actual 3381 model classes 66117 dates full Drive JSON roundtrip ${mode.name}',
       () {
         final values = <String, TimetableSyncValue>{};
         var count = 0;
@@ -208,8 +289,8 @@ void main() {
             'research',
           );
         }
-        expect(values, hasLength(2905));
-        expect(count, 57187);
+        expect(values, hasLength(3381));
+        expect(count, 66117);
         final doc = TimetableSyncDocument.records(
           courses: values,
           schemaVersion: 2,
@@ -217,7 +298,7 @@ void main() {
         final json =
             jsonDecode(jsonEncode(doc.toJson())) as Map<String, dynamic>;
         final restored = TimetableSyncDocument.fromJson(json);
-        expect(restored.materializeClasses(), hasLength(2905));
+        expect(restored.materializeClasses(), hasLength(3381));
         for (final c in restored.materializeClasses()) {
           expect(c.isValid, true);
           expect(c.toJson(), values[timetableCourseSyncKey(c)]!.value);
