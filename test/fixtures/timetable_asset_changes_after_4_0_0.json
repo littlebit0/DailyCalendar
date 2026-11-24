@@ -672,20 +672,20 @@
     "reason": "공백만 제거(내용 동일): 파싱 비용과 앱 용량 절감"
   },
   "assets/timetable/inu-michuhol-2026-2.json": {
-    "sha256": "afec0cc855100ff0f404eaf4164a96137dc91bc639b0706ff80e02469f76ee90",
-    "reason": "공백만 제거(내용 동일): 파싱 비용과 앱 용량 절감"
+    "sha256": "50df16ebfe07380f35819eba3873adff00c69ecfe5ff7bbe833182aedaba1130",
+    "reason": "2026-11-23: 정해진 주간 시각이 없는 RISE·이러닝·K-MOOC·OCU·교육봉사 143강좌를 시간 미정으로 둠"
   },
   "assets/timetable/inu-multiple-2026-2.json": {
     "sha256": "252c9c0af0085b62306bf5402767208153d2b6e8036a80dffe165851f3e3a2b6",
     "reason": "공백만 제거(내용 동일): 파싱 비용과 앱 용량 절감"
   },
   "assets/timetable/inu-songdo-2026-2.json": {
-    "sha256": "0eb73eba75b5c25f470e5b7270d7831d53403bf493c1a080da32d76741993f0d",
-    "reason": "공백만 제거(내용 동일): 파싱 비용과 앱 용량 절감"
+    "sha256": "e903fff46f0e6c9b65dd419d739344822e882ccb4fb53e867e3d35037fd8c303",
+    "reason": "2026-11-23: 정해진 주간 시각이 없는 RISE·이러닝·K-MOOC·OCU·교육봉사 143강좌를 시간 미정으로 둠"
   },
   "assets/timetable/inu-unknown-2026-2.json": {
-    "sha256": "baf0793beffff63b75347f16e7ae9ee4fab47f64700a03033226494dbeeb0878",
-    "reason": "공백만 제거(내용 동일): 파싱 비용과 앱 용량 절감"
+    "sha256": "aca9525145bc2bce2f7b1e23b89759a9f166fab88249e7ac032d2fd3a592b453",
+    "reason": "2026-11-23: 시각 없는 4건도 시간 미정으로 둠"
   },
   "assets/timetable/jbnu-gochang-2026-2.json": {
     "sha256": "97b5ec60a6618f1e2c5c030f386d52ca1fa2eb57c3059c30dde5588009e2cf8f",

@@ -18,7 +18,6 @@ class UniversitySupportPolicy {
     'hyupsung',
     'iccu',
     'inje',
-    'inu',
     'jnue',
     'kaist',
     'kangnam',

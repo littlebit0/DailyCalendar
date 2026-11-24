@@ -84,9 +84,13 @@ void main() {
       expect(sourceIds, hasLength(2437));
       final all = datasets.expand((d) => d.courses).toList();
       final scheduled = all.where((c) => c.meetings.isNotEmpty).toList();
-      expect(scheduled, hasLength(1975));
-      expect(scheduled.fold<int>(0, (n, c) => n + c.meetings.length), 62689);
+      expect(scheduled, hasLength(2290));
+      expect(scheduled.fold<int>(0, (n, c) => n + c.meetings.length), 116736);
       expect(all.every((c) => c.section.isEmpty), true);
+      // 2026-11-23: RISE(시간표 없음)·이러닝·K-MOOC·OCU·교육봉사활동은 공식
+      // 자료상 정해진 주간 시각이 없어 시간 미정. 시각을 찾지 못한 4건도 시간 미정.
+      expect(all.where((c) => c.scheduleStatus == 'unscheduled'), hasLength(147));
+      expect(all.where((c) => c.scheduleStatus == 'unrecognized'), isEmpty);
       for (final mode in [
         LectureMode.inPerson,
         LectureMode.liveOnline,
@@ -104,7 +108,7 @@ void main() {
         final restored = TimetableSyncDocument.fromJson(
           jsonDecode(jsonEncode(document.toJson())) as Map<String, dynamic>,
         ).materializeClasses();
-        expect(restored, hasLength(1975));
+        expect(restored, hasLength(2290));
         final lookup = {for (final c in originals) c.sourceId: c};
         expect(restored.map((c) => c.sourceId).toSet(), lookup.keys.toSet());
         for (final c in restored) {
