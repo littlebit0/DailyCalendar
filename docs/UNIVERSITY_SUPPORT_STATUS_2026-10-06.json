@@ -599,7 +599,7 @@
         "validationNote": "Official annual calendar plus previous winter from corrected official undergraduate CLS page; dynamically discover published year/semester links. July13-16 wish-list revision verified. Two focused tests passed."
       },
       "timetable": {
-        "status": "temporarily_unsupported",
+        "status": "implemented_catalog_partial",
         "checkedAt": "2026-10-08",
         "universityId": "khu",
         "courses": 4666,
