@@ -5519,7 +5519,7 @@
         "focusedTests": "test/core/academic/cnu_dnue_academic_source_test.dart"
       },
       "timetable": {
-        "status": "temporarily_unsupported",
+        "status": "implemented_partial_catalog",
         "checkedAt": "2026-10-08",
         "universityId": "cnu",
         "courses": 3888,
