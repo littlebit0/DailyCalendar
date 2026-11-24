@@ -1205,7 +1205,10 @@
         "validationNote": "Published undergraduate category101; thirteen sequential monthly requests; empty January/July preserved. December periods match latest Aug3 official revision notice231116. Two focused tests passed."
       },
       "timetable": {
-        "status": "temporarily_unsupported",
+        "status": "implemented_partial_catalog",
+        "productionIntegrationEnabled": true,
+        "reopenedDate": "2026-11-22",
+        "reopenNote": "사용자 지시로 기존 데이터셋을 열어 검색 재개. 시각 미확정 강좌는 원문만 보이고 시간표 추가는 확정 시각 강좌만 가능.",
         "sourceId": "gknu",
         "courses": 24,
         "scheduled": 14,

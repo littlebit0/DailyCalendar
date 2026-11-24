@@ -59,6 +59,12 @@ IMPORT_SUITES = [
     "test_uos_import",
 ]
 
+# Per-university held-course period checks, found by name so that each
+# university's pull request adds its own test without editing this list.
+IMPORT_SUITES += sorted(
+    path.stem for path in (ROOT / "tool" / "tests").glob("test_*_held_periods.py")
+)
+
 # Apple widget behaviour checks (compile Swift).
 WIDGET_SUITES = [
     "test_widget_unreadable_snapshot",
