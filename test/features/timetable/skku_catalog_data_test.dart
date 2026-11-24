@@ -17,7 +17,7 @@ void main() {
       final data =
           jsonDecode(
                 File(
-                  '$suspendedAssetRoot/timetable/skku-$campus-2026-2.json',
+                  'assets/timetable/skku-$campus-2026-2.json',
                 ).readAsStringSync(),
               )
               as Map<String, dynamic>;
@@ -82,14 +82,15 @@ void main() {
       );
       final courses = datasets.expand((d) => d.courses).toList();
       expect(courses.map((c) => c.sourceId).toSet(), hasLength(2782));
-      expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(1842));
+      expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(2548));
       expect(
         courses.where((c) => c.scheduleStatus == 'unscheduled'),
         hasLength(228),
       );
       expect(
+        // 2026-11-23 사용자 결정 후 남은 보류: 사전제작 온라인 1, 원문 시간표 잘림 5.
         courses.where((c) => c.scheduleStatus == 'unrecognized'),
-        hasLength(712),
+        hasLength(6),
       );
       for (final id in ['ICE3057-41', 'ICE3057-42', 'ICE2016-41']) {
         final c = courses.singleWhere((c) => c.codeAndSection == id);
@@ -110,7 +111,7 @@ void main() {
         final raw =
             jsonDecode(
                   File(
-                    '$suspendedAssetRoot/timetable/skku-$campus-2026-2.json',
+                    'assets/timetable/skku-$campus-2026-2.json',
                   ).readAsStringSync(),
                 )
                 as Map<String, dynamic>;
@@ -184,6 +185,7 @@ void main() {
         DateTime.wednesday,
       });
       expect(flipped.meetings.map((m) => m.originalStartMinute).toSet(), {810});
+      // 2026-11-23 사용자 결정: 플립러닝·운영 예외 강좌도 공시 요일·시각으로 확정한다.
       for (final id in [
         'ECO3003-01',
         'BUS3042-01',
@@ -195,7 +197,7 @@ void main() {
           courses
               .singleWhere((c) => c.codeAndSection == id)
               .hasSchedulableMeetings,
-          isFalse,
+          isTrue,
         );
       }
     },

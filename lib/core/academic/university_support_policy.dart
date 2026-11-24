@@ -52,7 +52,6 @@ class UniversitySupportPolicy {
     'nambu',
     'postech',
     'sangji',
-    'skku',
     'ssu',
     'sungkyul',
     'sunmoon',

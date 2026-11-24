@@ -5,8 +5,6 @@ import 'package:daily/features/timetable/data/timetable_sync_document.dart';
 import 'package:daily/features/timetable/domain/timetable.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import '../../support/suspended_assets.dart';
-
 void main() {
   test(
     'public live plans retain virtual rooms, modes and exceptions in Drive',
@@ -16,7 +14,7 @@ void main() {
           ...UniversityDataset.fromJson(
             jsonDecode(
                   File(
-                    '$suspendedAssetRoot/timetable/skku-$campus-2026-2.json',
+                    'assets/timetable/skku-$campus-2026-2.json',
                   ).readAsStringSync(),
                 )
                 as Map<String, dynamic>,
@@ -101,11 +99,12 @@ void main() {
         'GEDM001-E6',
         'GEDW001-23',
       ]) {
+        // 2026-11-23 사용자 결정: 실시간 온라인 강좌도 공시 요일·시각으로 확정한다.
         expect(
           courses
               .singleWhere((c) => c.codeAndSection == id)
               .hasSchedulableMeetings,
-          isFalse,
+          isTrue,
         );
       }
     },
