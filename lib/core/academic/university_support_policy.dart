@@ -34,7 +34,6 @@ class UniversitySupportPolicy {
     'cue',
     'cnue',
     'kentech',
-    'konyang',
   };
 
   static bool timetableAvailable(String? university) =>

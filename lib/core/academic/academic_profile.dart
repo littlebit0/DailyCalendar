@@ -158,6 +158,9 @@ class AcademicProfile {
     // 서울캠퍼스 학교 행으로 저장된 기존 프로필(campusId 없음)
     'institution:academyinfo:0000058' ||
     'academyinfo:0000058' => 'kyonggi',
+    'institution:academyinfo:0000054' ||
+    'academyinfo:0000054' ||
+    'academyinfo:0000055' => 'konyang',
     'institution:academyinfo:0000188' || 'academyinfo:0000188' => 'postech',
     'institution:academyinfo:0000381' || 'academyinfo:0000381' => 'gist',
     'institution:academyinfo:0000178' || 'academyinfo:0000178' => 'baekseok',
@@ -291,6 +294,7 @@ class AcademicProfile {
       'hknu' => const ['academyinfo:0000037'],
       'khu' => const ['academyinfo:0000066'],
       'kyonggi' => const ['academyinfo:0000056', 'academyinfo:0000058'],
+      'konyang' => const ['academyinfo:0000054', 'academyinfo:0000055'],
       'postech' => const ['academyinfo:0000188'],
       'gist' => const ['academyinfo:0000381'],
       'baekseok' => const ['academyinfo:0000178'],
@@ -414,6 +418,8 @@ class AcademicProfile {
       ('kyonggi', 'academyinfo:0000058' || 'institution:academyinfo:0000058') =>
         'seoul',
       ('kyonggi', _) => 'suwon',
+      ('konyang', 'academyinfo:0000055') => 'medical',
+      ('konyang', _) => 'glocal',
       ('postech', _) => 'main',
       ('gist', _) => 'main',
       ('baekseok', _) => 'unknown',

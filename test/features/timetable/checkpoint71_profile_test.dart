@@ -67,6 +67,7 @@ void main() {
         'syu': ['0000116'],
         'donga': ['0000105'],
         'yonsei': ['0000149', '0000150'],
+        'konyang': ['0000054', '0000055'],
       };
       for (final group in groups.entries) {
         final base = group.value.first;
@@ -112,6 +113,7 @@ void main() {
               'ut' || 'nsu' || 'bnue' => 'unknown',
               'syu' => 'main',
               'donga' => 'seunghak',
+              'konyang' => raw == '0000055' ? 'medical' : 'glocal',
               _ => raw == '0000150' ? 'mirae' : 'sinchon',
             });
             final foreign = AcademicProfile(
