@@ -28,7 +28,6 @@ class UniversitySupportPolicy {
     'kangnam',
     'khu',
     'kmou',
-    'knu',
     'knue',
     'korea',
     'kumoh',
