@@ -7033,7 +7033,7 @@
         "checkedAt": "2026-10-12"
       },
       "timetable": {
-        "status": "unsupported",
+        "status": "implemented_partial_catalog",
         "checkedAt": "2026-10-12",
         "universityId": "dju",
         "courses": 46,
@@ -7058,8 +7058,10 @@
         "userDecision": "Apply acquired preliminary source; do not claim confirmed offerings",
         "currentEvidence": "work/university-research/dju-planned-20261012/REPORT.md",
         "priorImplementationStatus": "implemented_planned_partial_catalog",
-        "productionIntegrationEnabled": false,
-        "reason": "No active timetable integration; Daejeon removal was previously requested explicitly."
+        "productionIntegrationEnabled": true,
+        "reason": "No active timetable integration; Daejeon removal was previously requested explicitly.",
+        "reopenedDate": "2026-11-22",
+        "reopenNote": "기존 자산으로 재개. 교시 시각 공식표 미공개로 교시만 있는 강좌는 원문만 표시하고 추가 불가. 시각은 추측하지 않음."
       },
       "sourceEvidence": "work/university-research/dju-planned-20261012/"
     },

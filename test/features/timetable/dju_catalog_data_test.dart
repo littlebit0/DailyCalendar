@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:daily/core/academic/university_support_policy.dart';
 import 'package:daily/features/timetable/data/course_organization_directory.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -11,8 +10,8 @@ Map<String, dynamic> _json(String path) =>
     jsonDecode(fixtureFile(path).readAsStringSync()) as Map<String, dynamic>;
 
 void main() {
-  test('Daejeon 2026-2 keeps every official timetable row and invents no '
-      'clock for periods the school publishes without times', () {
+  test('Daejeon 2026-2 keeps every official timetable row and maps its '
+      'periods with the school 교시표 (1교시 09:00, 60-minute slots)', () {
     final raw = _json('assets/timetable/dju-main-2026-2.json');
     final directory = CourseOrganizationDirectory.fromJson(
       _json('assets/timetable/organizations/dju.json'),
@@ -34,17 +33,22 @@ void main() {
     final byStatus = <String?, int>{};
     for (final c in courses) {
       byStatus[c.scheduleStatus] = (byStatus[c.scheduleStatus] ?? 0) + 1;
-      expect(c.meetings, isEmpty, reason: c.sourceId);
       expect(c.period!.start, DateTime(2026, 9, 1));
       expect(c.period!.end, DateTime(2026, 12, 21));
-      if (c.scheduleStatus == 'unrecognized') {
+      if (c.scheduleStatus == 'scheduled') {
         expect(c.sourceSchedule, isNotEmpty, reason: c.sourceId);
-        expect(c.sourceRemarks, contains('시각 보류'), reason: c.sourceId);
+        expect(c.meetings, isNotEmpty, reason: c.sourceId);
+        expect(c.sourceRemarks, contains('교시 시각 근거'), reason: c.sourceId);
+        for (final m in c.meetings) {
+          expect(m.originalStartMinute % 60, 0, reason: c.sourceId);
+          expect(m.originalEndMinute % 60, 0, reason: c.sourceId);
+        }
       } else {
+        expect(c.meetings, isEmpty, reason: c.sourceId);
         expect(c.sourceSchedule, isEmpty, reason: c.sourceId);
       }
     }
-    expect(byStatus, {'unrecognized': 2080, 'unscheduled': 173});
+    expect(byStatus, {'scheduled': 2080, 'unscheduled': 173});
 
     // Every 전공·일반선택·교직 row keeps its printed 단과대학 > 학부·학과(전공).
     final owned = courses.where((c) => c.departments.isNotEmpty).toList();
@@ -61,13 +65,11 @@ void main() {
     expect(seminar.title, '리버럴아츠세미나2');
     expect(seminar.sourceSchedule, '목(5,6)');
     expect(seminar.sourceClassroom, '1402');
+    // 목(5,6) = 13:00~15:00 under 5교시 13:00~13:50, 6교시 14:00~14:50.
+    expect(seminar.meetings.single.weekday, DateTime.thursday);
+    expect(seminar.meetings.single.originalStartMinute, 780);
+    expect(seminar.meetings.single.originalEndMinute, 900);
     expect(seminar.offeringOrganizations.single.college, '혜화리버럴아츠칼리지');
     expect(seminar.offeringOrganizations.single.department, '혜화리버럴아츠칼리지대학');
-
-    // No published clock table, so search stays suspended.
-    expect(
-      UniversitySupportPolicy.suspendedTimetableUniversities,
-      contains('dju'),
-    );
   });
 }
