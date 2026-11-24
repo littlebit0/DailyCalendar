@@ -2,6 +2,81 @@ import '../../features/events/domain/calendar_event.dart';
 import '../../features/events/domain/event_category.dart';
 import '../academic/academic_profile.dart';
 
+/// LMS 과제 마감 알림: 마감 [hoursBefore]시간 전부터 [intervalHours]시간 간격으로 [count]번.
+class LmsDueReminder {
+  const LmsDueReminder({
+    this.enabled = false,
+    this.hoursBefore = 24,
+    this.intervalHours = 6,
+    this.count = 2,
+  });
+
+  static const maxHoursBefore = 168;
+  static const maxCount = 10;
+
+  final bool enabled;
+  final int hoursBefore;
+  final int intervalHours;
+  final int count;
+
+  /// 사용자가 정한 값에서 만든 "마감 몇 분 전" 목록. 꺼져 있으면 비어 있다.
+  List<int> get minutesBefore {
+    if (!enabled) return const [];
+    final minutes = <int>{};
+    for (var i = 0; i < count; i++) {
+      final hours = hoursBefore - i * intervalHours;
+      if (hours < 0) break;
+      minutes.add(hours * 60);
+    }
+    return minutes.toList()..sort();
+  }
+
+  LmsDueReminder copyWith({
+    bool? enabled,
+    int? hoursBefore,
+    int? intervalHours,
+    int? count,
+  }) => LmsDueReminder(
+    enabled: enabled ?? this.enabled,
+    hoursBefore: hoursBefore ?? this.hoursBefore,
+    intervalHours: intervalHours ?? this.intervalHours,
+    count: count ?? this.count,
+  );
+
+  Map<String, Object?> toJson() => {
+    'enabled': enabled,
+    'hoursBefore': hoursBefore,
+    'intervalHours': intervalHours,
+    'count': count,
+  };
+
+  factory LmsDueReminder.fromJson(Object? json) {
+    if (json is! Map) return const LmsDueReminder();
+    int value(String key, int fallback, int min, int max) {
+      final raw = json[key];
+      return raw is int ? raw.clamp(min, max) : fallback;
+    }
+
+    return LmsDueReminder(
+      enabled: json['enabled'] == true,
+      hoursBefore: value('hoursBefore', 24, 1, maxHoursBefore),
+      intervalHours: value('intervalHours', 6, 1, maxHoursBefore),
+      count: value('count', 2, 1, maxCount),
+    );
+  }
+
+  @override
+  bool operator ==(Object other) =>
+      other is LmsDueReminder &&
+      other.enabled == enabled &&
+      other.hoursBefore == hoursBefore &&
+      other.intervalHours == intervalHours &&
+      other.count == count;
+
+  @override
+  int get hashCode => Object.hash(enabled, hoursBefore, intervalHours, count);
+}
+
 enum AppLanguage {
   system,
   korean,
@@ -235,6 +310,7 @@ class AppSettings {
     this.blockSensitiveAi = true,
     this.categories = _defaultCategories,
     this.dDayReminderOffsets = const [-7, -3, -1, 0],
+    this.lmsDueReminder = const LmsDueReminder(),
     this.appTextSize = AppTextSize.basic,
     this.appStartView = AppStartView.calendar,
     this.defaultCalendarView = CalendarViewMode.week,
@@ -284,6 +360,7 @@ class AppSettings {
   final bool blockSensitiveAi;
   final List<EventCategory> categories;
   final List<int> dDayReminderOffsets;
+  final LmsDueReminder lmsDueReminder;
   final AppTextSize appTextSize;
   final AppStartView appStartView;
   final CalendarViewMode defaultCalendarView;
@@ -322,6 +399,7 @@ class AppSettings {
     bool? blockSensitiveAi,
     List<EventCategory>? categories,
     List<int>? dDayReminderOffsets,
+    LmsDueReminder? lmsDueReminder,
     AppTextSize? appTextSize,
     AppStartView? appStartView,
     CalendarViewMode? defaultCalendarView,
@@ -367,6 +445,7 @@ class AppSettings {
       blockSensitiveAi: blockSensitiveAi ?? this.blockSensitiveAi,
       categories: categories ?? this.categories,
       dDayReminderOffsets: dDayReminderOffsets ?? this.dDayReminderOffsets,
+      lmsDueReminder: lmsDueReminder ?? this.lmsDueReminder,
       appTextSize: appTextSize ?? this.appTextSize,
       appStartView: appStartView ?? this.appStartView,
       defaultCalendarView: defaultCalendarView ?? this.defaultCalendarView,

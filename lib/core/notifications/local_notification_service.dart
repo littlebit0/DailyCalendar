@@ -262,7 +262,7 @@ class LocalNotificationService implements NotificationService {
     final settings = _settingsRepository.load();
     final snapshot = _snapshot(settings);
     final l10n = _localizations(settings);
-    final reminderMinutesList = event.reminderMinutesBeforeList;
+    final reminderMinutesList = effectiveReminderMinutes(event, settings);
     final title = l10n.eventTitle(event.title, holiday: event.holiday);
     final base = _baseReminderTime(event, settings);
     var deliveredImmediateReminder = false;
@@ -454,7 +454,7 @@ class LocalNotificationService implements NotificationService {
           if (_ddayReminderTime(other, settings, offset).isAfter(now)) fixed++;
         }
       }
-      for (final minutes in other.reminderMinutesBeforeList) {
+      for (final minutes in effectiveReminderMinutes(other, settings)) {
         if (!other.recurrence.isRepeating) {
           final base = _baseReminderTime(other, settings);
           final plan = resolveReminderDeliveryPlan(

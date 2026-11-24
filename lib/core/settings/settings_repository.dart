@@ -443,6 +443,7 @@ class SettingsRepository {
   static const _blockSensitiveAiKey = 'blockSensitiveAi';
   static const _categoriesKey = 'eventCategories';
   static const _dDayReminderOffsetsKey = 'dDayReminderOffsets';
+  static const _lmsDueReminderKey = 'lmsDueReminder';
   static const _appTextSizeKey = 'appTextSize';
   static const _legacyCalendarEventTextSizeKey = 'calendarEventTextSize';
   static const _legacyCalendarDensityKey = 'calendarDensity';
@@ -509,6 +510,7 @@ class SettingsRepository {
       blockSensitiveAi: _preferences.getBool(_blockSensitiveAiKey) ?? true,
       categories: _loadCategories(),
       dDayReminderOffsets: _loadDdayOffsets(),
+      lmsDueReminder: _loadLmsDueReminder(),
       appTextSize: AppTextSize.fromName(
         _preferences.getString(_appTextSizeKey) ??
             _preferences.getString(_legacyCalendarEventTextSizeKey),
@@ -1036,6 +1038,13 @@ class SettingsRepository {
       await _persist(
         _preferences.setString(_dDayReminderOffsetsKey, ddayOffsetsJson),
       );
+    }
+    final previousLmsReminderJson = jsonEncode(previous.lmsDueReminder.toJson());
+    final baselineLmsReminderJson = jsonEncode(baseline.lmsDueReminder.toJson());
+    final lmsReminderJson = jsonEncode(settings.lmsDueReminder.toJson());
+    if (baselineLmsReminderJson != lmsReminderJson &&
+        previousLmsReminderJson != lmsReminderJson) {
+      await _preferences.setString(_lmsDueReminderKey, lmsReminderJson);
     }
     final shouldMigrateLegacyTextSize =
         !_preferences.containsKey(_appTextSizeKey) &&
@@ -1791,6 +1800,7 @@ class SettingsRepository {
     await _preferences.remove(_blockSensitiveAiKey);
     await _preferences.remove(_categoriesKey);
     await _preferences.remove(_dDayReminderOffsetsKey);
+    await _preferences.remove(_lmsDueReminderKey);
     await _preferences.remove(_appTextSizeKey);
     await _preferences.remove(_legacyCalendarEventTextSizeKey);
     await _preferences.remove(_legacyCalendarDensityKey);
@@ -1913,6 +1923,16 @@ class SettingsRepository {
       return categories;
     } on Object {
       return const [EventCategory.basic, EventCategory.holiday];
+    }
+  }
+
+  LmsDueReminder _loadLmsDueReminder() {
+    final raw = _preferences.getString(_lmsDueReminderKey);
+    if (raw == null || raw.isEmpty) return const LmsDueReminder();
+    try {
+      return LmsDueReminder.fromJson(jsonDecode(raw));
+    } on Object {
+      return const LmsDueReminder();
     }
   }
 

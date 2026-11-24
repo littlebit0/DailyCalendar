@@ -204,6 +204,7 @@ Map<String, Object?> syncSettingsValues(AppSettings settings) => {
       .map((category) => category.toJson())
       .toList(),
   'dDayReminderOffsets': settings.dDayReminderOffsets,
+  'lmsDueReminder': settings.lmsDueReminder.toJson(),
   'appTextSize': settings.appTextSize.name,
   'appStartView': settings.appStartView.name,
   'defaultCalendarView': settings.defaultCalendarView.name,

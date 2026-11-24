@@ -1445,6 +1445,14 @@ class _AppHomeState extends ConsumerState<_AppHome>
     ref.listen<AppSettings>(appSettingsProvider, (previous, next) {
       if (previous != next) {
         ref.read(lmsControllerProvider).settingsChanged();
+        if (previous != null && previous.lmsDueReminder != next.lmsDueReminder) {
+          unawaited(
+            _applyNotificationSettingsChange(
+              NotificationSettingsChange.between(previous, next),
+              next,
+            ),
+          );
+        }
         if (previous?.themeMode != next.themeMode) {
           _refreshCalendarWidgetTheme();
         } else {
