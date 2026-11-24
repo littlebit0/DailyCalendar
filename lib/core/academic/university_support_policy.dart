@@ -19,7 +19,6 @@ class UniversitySupportPolicy {
     'iccu',
     'inje',
     'inu',
-    'jeju',
     'jnue',
     'kaist',
     'kangnam',
