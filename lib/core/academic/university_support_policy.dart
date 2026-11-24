@@ -39,7 +39,6 @@ class UniversitySupportPolicy {
     'unist',
     'wsu',
     'yongin',
-    'yonsei',
     'yu',
     'snue',
     'cue',

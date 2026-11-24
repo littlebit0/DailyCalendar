@@ -233,6 +233,7 @@ void main() {
     'Yonsei period meetings use 60-minute slots and consecutive periods are merged',
     () {
       // 수강편람 시각표: 0교시 08:00부터 50분 수업+10분 휴식, 10교시까지 60분 간격.
+      // 표 밖 11교시 이상은 같은 60분 슬롯으로 이어 계산한다(2026-11-23 사용자 결정).
       // 쉬는 시간을 포함한 슬롯(교시 시작~다음 교시 시작)으로 저장하고 연속 교시는 합친다.
       var checked = 0;
       for (final campus in ['sinchon', 'international', 'mirae']) {
@@ -256,9 +257,13 @@ void main() {
             }
             checked++;
             expect(start % 60, 0, reason: reason);
-            expect(start, inInclusiveRange(480, 1080), reason: reason);
+            expect(
+              start,
+              inInclusiveRange(420, 1380),
+              reason: reason,
+            ); // -1교시 07:00
             expect((end - start) % 60, 0, reason: reason);
-            expect(end, lessThanOrEqualTo(1140), reason: reason);
+            expect(end, lessThanOrEqualTo(1440), reason: reason);
             final periods =
                 (m['sourcePeriods'] ?? [m['sourcePeriod']]) as List<dynamic>;
             if (periods.first != null) {
@@ -296,7 +301,23 @@ void main() {
           }
         }
       }
-      expect(checked, 57669);
+      expect(checked, 78177);
+      // Nested venue names survive unwrapping the outer schedule parentheses.
+      final sinchon =
+          jsonDecode(
+                File(
+                  'assets/timetable/yonsei-sinchon-2026-2.json',
+                ).readAsStringSync(),
+              )
+              as Map<String, dynamic>;
+      final swim = (sinchon['courses'] as List).singleWhere(
+        (c) => c['sourceId'] == 'yonsei/H1/2026-2/PED1101-01-00',
+      );
+      expect(swim['sourceClassroom'], '(수영장(신촌))');
+      expect(
+        (swim['schedules'] as List).map((m) => m['classroom']).toSet(),
+        {'수영장(신촌)'},
+      );
     },
   );
 }
