@@ -29,7 +29,6 @@ class UniversitySupportPolicy {
     'kangwon',
     'khu',
     'kmou',
-    'kmu',
     'knu',
     'knue',
     'korea',

@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """Prepare current public KMU educational rows without registering support.
 
-Use clocks printed in each offering, not an inferred period cadence. Actual
-field/clinical/intensive dates remain unresolved without a public syllabus.
+Use clocks printed in each offering, not an inferred period cadence. Field,
+practicum and intensive offerings with printed clocks are confirmed as weekly
+meetings even though their operating dates are unpublished (2026-11-23 user
+decision); see tool/timetable/apply_kmu_official_times.py.
 """
 import argparse
 import json
@@ -12,6 +14,7 @@ import re
 DAYS = '월화수목금토일'
 CAMPUS = {'1': 'seongseo', '2': 'daemyeong', '8': 'other'}
 SPECIAL = re.compile(r'임상실습|현장실습|실무실습|동계|하계')
+CONFIRMED = '공식 요일·시각 기준 확정(실습·집중수업 운영 기간 미표기는 주간 대면으로 간주)'
 TIME = re.compile(r'([월화수목금토일])(\d{2}):(\d{2})~(\d{2}):(\d{2})')
 
 
@@ -67,10 +70,9 @@ def convert(rows):
         raw = row['lsnTmtablFormaSmryCtnt']
         slots = meetings(raw)
         notes = [row.get('tlsnObjHgCtnt'), row.get('openLtRemark')]
-        blocked = bool(slots and SPECIAL.search(name))
-        if blocked:
+        if slots and SPECIAL.search(name):
             audit.append(row['scCdLtNo'])
-            notes.append('실제 실습·집중수업 적용 기간 미확정: 원문 시각을 학기 전체에 반복하지 않음')
+            notes.append(CONFIRMED)
         if row['ltTypeGbn'] == '1':
             if slots:
                 raise ValueError('Remote public row unexpectedly has physical slots')
@@ -82,8 +84,8 @@ def convert(rows):
             'courseName': name, 'professor': row['respProfEmpNm'] or '',
             'credits': credits, 'sourceSchedule': raw or '',
             'sourceClassroom': row['eduSpaceNm'] or '',
-            'scheduleStatus': 'unrecognized' if blocked else 'scheduled' if slots else 'unscheduled',
-            'schedules': [] if blocked else slots, 'departments': [department],
+            'scheduleStatus': 'scheduled' if slots else 'unscheduled',
+            'schedules': slots, 'departments': [department],
             'departmentCredits': {department: credits},
             'departmentClassifications': {department: row['cptnGbnNm']},
             'departmentRemarks': {department: '\n'.join(n for n in notes if n)},
@@ -97,13 +99,13 @@ if __name__ == '__main__':
     parser.add_argument('--output', type=Path, required=True)
     args = parser.parse_args()
     source = json.loads(args.input.read_text(encoding='utf-8'))
-    courses, unresolved = convert(source['records'])
+    courses, practicum = convert(source['records'])
     args.output.write_text(json.dumps({
         'schemaVersion': 1, 'academicYear': 2026, 'semester': '2',
         'universityId': 'kmu', 'sourceUrl': source['sourceUrl'],
         'researchOnly': True, 'productionReady': False, 'completionClaim': False,
-        'courses': courses, 'unresolvedActualPeriod': unresolved,
+        'courses': courses, 'confirmedWithoutOperatingPeriod': practicum,
         'remaining': ['active-status semantic and current closure audit',
                       'general semester and actual operating dates'],
     }, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
-    print('Prepared current KMU courses', len(courses), 'unresolved actual period', len(unresolved))
+    print('Prepared current KMU courses', len(courses), 'confirmed without operating period', len(practicum))

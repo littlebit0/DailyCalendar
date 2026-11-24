@@ -724,8 +724,8 @@
     "reason": "공백만 제거(내용 동일): 파싱 비용과 앱 용량 절감"
   },
   "assets/timetable/kmu-seongseo-2026-2.json": {
-    "sha256": "a37dca7b5aa8969a3a6d4f1faf42584b323731652ec84a01a648f6674ca465ef",
-    "reason": "공백만 제거(내용 동일): 파싱 비용과 앱 용량 절감"
+    "sha256": "53d7525fe461c3e97d6bd22e35904143d855ed40f048849396cd68d5d6ff6f09",
+    "reason": "공백만 제거(내용 동일): 파싱 비용과 앱 용량 절감 · 1차 재개: 공식 요일·교시 확정 7강좌"
   },
   "assets/timetable/mokpo-damyang-2026-2.json": {
     "sha256": "63e822e3f9152cbde251cb5b3a95610fc4554510ce3a80a808d95ac2c613e027",
