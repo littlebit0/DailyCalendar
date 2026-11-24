@@ -26,7 +26,6 @@ class UniversitySupportPolicy {
     'jnue',
     'kaist',
     'kangnam',
-    'kangwon',
     'khu',
     'kmou',
     'knu',

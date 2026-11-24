@@ -56,11 +56,8 @@ void main() {
       final courses = [for (final d in data) ...d.courses];
       expect(courses, hasLength(5761));
       expect(courses.map((c) => c.sourceId).toSet(), hasLength(5761));
-      expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(5108));
-      expect(
-        courses.where((c) => c.scheduleStatus == 'unrecognized'),
-        hasLength(653),
-      );
+      expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(5615));
+      expect(courses.where((c) => c.scheduleStatus == 'unrecognized'), isEmpty);
       for (final c in courses.where((c) => c.hasSchedulableMeetings)) {
         final saved = c.toTimetable(id: c.sourceId, mode: LectureMode.inPerson);
         final restored = TimetableClass.fromJson(saved.toJson());
@@ -71,8 +68,9 @@ void main() {
         );
         expect(restored.period?.toJson(), saved.period?.toJson());
       }
+      // 기관 봉사 시각이 확인된 분반만 기간이 있다. 01·02는 원문 요일·교시로 확정.
       final service = courses.where(
-        (c) => c.code == '14207025' && c.hasSchedulableMeetings,
+        (c) => c.code == '14207025' && c.period != null,
       );
       expect(service, hasLength(135));
       for (final c in service) {

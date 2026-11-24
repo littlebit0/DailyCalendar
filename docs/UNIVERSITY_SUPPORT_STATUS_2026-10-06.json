@@ -178,7 +178,7 @@
         "campusLabels": "Official source labels common / Chuncheon / Samcheok; codes for Gangneung and Wonju also preserved when published."
       },
       "timetable": {
-        "status": "temporarily_unsupported",
+        "status": "implemented_catalog_partial",
         "sourceId": "kangwon",
         "courseCount": 5761,
         "scheduledCourses": 5108,
