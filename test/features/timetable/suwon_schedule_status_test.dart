@@ -26,19 +26,21 @@ void main() {
       }
     }
     expect(status, {
-      'scheduled': 1524,
+      'scheduled': 1873,
       'unscheduled': 442,
-      'unrecognized': 368,
+      // 시각 원문 없음 16, 자정을 넘는 15교시 3.
+      'unrecognized': 19,
     });
     expect(
       UniversitySupportPolicy.timetableAvailable('suwon'),
-      isFalse,
-      reason: '368 unrecognized and 6 partially scheduled courses remain',
+      isTrue,
+      reason: 'unrecognized rows stay searchable as source text only',
     );
   });
 
-  // 1교시 09:30, 교시 50분+쉬는 시간 10분을 합친 60분 슬롯. 9교시 이후는 시각
-  // 근거가 없어 자산에 없다.
+  // 1교시 09:30, 교시 50분+쉬는 시간 10분을 합친 60분 슬롯. 야간 교시(45분 수업)는
+  // 2026-11-23 사용자 결정에 따라 쉬는 시간 15분을 더한 60분 슬롯으로 8교시 다음부터
+  // 이어 계산한다(9교시 17:30, 14교시 22:30~23:30).
   test('Suwon meetings use 60-minute period slots including the break', () {
     final raw =
         jsonDecode(
@@ -55,8 +57,8 @@ void main() {
         final start = m['startMinute'] as int;
         final end = m['endMinute'] as int;
         expect((start - 570) % 60, 0, reason: c['sourceId'] as String);
-        expect(start, inInclusiveRange(570, 990));
-        expect(end, lessThanOrEqualTo(1050));
+        expect(start, inInclusiveRange(570, 1350));
+        expect(end, lessThanOrEqualTo(1410));
         expect((end - start) % 60, 0);
         expect(end, greaterThan(start));
         byDayRoom
@@ -82,6 +84,6 @@ void main() {
         expect(b['endMinute'], 570 + periods.last * 60);
       }
     }
-    expect(meetings, 23034);
+    expect(meetings, 28447);
   });
 }
