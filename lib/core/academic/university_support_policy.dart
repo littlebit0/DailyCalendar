@@ -10,7 +10,6 @@ class UniversitySupportPolicy {
     'dnue',
     'dongguk',
     'eulji',
-    'gachon',
     'ginue',
     'gist',
     'gjue',

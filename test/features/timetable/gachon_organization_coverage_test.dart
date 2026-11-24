@@ -5,7 +5,7 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   test(
-    'Gachon leaves only user-held labels without an official affiliation',
+    'Gachon has no label without an official affiliation',
     () async {
       final catalog = await UniversityCatalog.load(university: 'gachon');
       final raw = <String>{};
@@ -30,17 +30,11 @@ void main() {
           }
         }
       }
-      // These need a user decision: the official timetable tree places the
-      // course under a different college than the current college page, or the
-      // label is a former department name listed beside the current one.
-      expect(raw, {'global 관경/관경3', 'global 관경/관경4', 'global 국문/국문3/AI인문대학'});
-      expect(orphans, {
-        'global 수리과학과',
-        'global 수학·금융정보학과',
-        'global 신문방송학과',
-        'global 아동복지학과',
-        'global 언론영상광고학과',
-      });
+      // 관경3·4 sit under both the timetable tree's 사회과학대학 and the current
+      // 경영대학 page (transitional), 국문3 under AI인문대학, and former
+      // department names marked (폐기) in the timetable tree have no chip.
+      expect(raw, isEmpty);
+      expect(orphans, isEmpty);
     },
   );
 }
