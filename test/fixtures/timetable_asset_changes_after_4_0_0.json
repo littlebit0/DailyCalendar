@@ -172,12 +172,12 @@
     "reason": "#645 충남대 원자료 분류 11개(소단위 전공과정 개설 라벨)를 공식 수강편람 개설학과 표기와 학칙 제56조의2 기준 공식 전공제도 묶음 '소단위 전공과정'에 배정; 공백만 제거(내용 동일): 파싱 비용과 앱 용량 절감"
   },
   "assets/timetable/organizations/jbnu.json": {
-    "sha256": "2ec7bf2ec8a77ab0bca58668b2130185f911b7e0c51dbdc6e2b365d6e810e408",
-    "reason": "#640 전북대 '경제학' 개설 라벨(UECO 과목)을 공식 단과대학 학사조직표·2026-2 최종수강편람 기준 경상대학 경제학부(경제학)로 바로잡음(이전 농업생명과학대학 배정은 문자열 부분일치 오류); 공백만 제거(내용 동일): 파싱 비용과 앱 용량 절감"
+    "sha256": "550f47308962d4221d1ff2846b68cd6732672773caf1c4ba0f30c44f1d0e3e66",
+    "reason": "2026-11-23 사용자 결정: 표 밖 늦은 교시 확정, 의학과 33건을 공식 JUMP 조회 결과로 교체"
   },
   "assets/timetable/jbnu-unknown-2026-2.json": {
-    "sha256": "1ec1da73ede8da1cf1a9de8f2d0d57f7e91c166833a06d4f0283ee6b5f48748b",
-    "reason": "#657 전북대 의과대학 블록강의 교시 슬롯을 쉬는 시간 포함 60분(교시 시작 간격)으로 다시 만들고, 같은 날 같은 강의실의 연속 교시를 한 구간으로 합침(1098구간 -> 366구간); 공백만 제거(내용 동일): 파싱 비용과 앱 용량 절감"
+    "sha256": "401a6c30d367f581520a25d3f0dc82f7c522330763b7bf9fce844bb9e073ec24",
+    "reason": "2026-11-23: 사회봉사 1·2를 공식 일정 안내에 따라 시간 미정으로 둠"
   },
   "assets/timetable/organizations/jeju.json": {
     "sha256": "f8bd7a4d4594536f540ac54ab0437d083d92e445375d4142ff1457517f7d06c8",
@@ -688,24 +688,24 @@
     "reason": "공백만 제거(내용 동일): 파싱 비용과 앱 용량 절감"
   },
   "assets/timetable/jbnu-gochang-2026-2.json": {
-    "sha256": "576cbd2e8f52873d8788121bce9d299edcad4ca7fedfb7b4bed330651026d128",
-    "reason": "공백만 제거(내용 동일): 파싱 비용과 앱 용량 절감"
+    "sha256": "97b5ec60a6618f1e2c5c030f386d52ca1fa2eb57c3059c30dde5588009e2cf8f",
+    "reason": "2026-11-23 사용자 결정: 표 밖 늦은 교시 확정, 의학과 33건을 공식 JUMP 조회 결과로 교체"
   },
   "assets/timetable/jbnu-iksan-2026-2.json": {
     "sha256": "43458ef26c46e1dfe8c5de9d1614efeeb92038afdb51587ca2e1fe0c3c220d8b",
     "reason": "공백만 제거(내용 동일): 파싱 비용과 앱 용량 절감"
   },
   "assets/timetable/jbnu-jeonju-2026-2.json": {
-    "sha256": "b37c0adbb78a0f0161c6d0fcda3f5efee1c85b817c952cb5d58d34bb706e65b9",
-    "reason": "공백만 제거(내용 동일): 파싱 비용과 앱 용량 절감"
+    "sha256": "4de5e45724f7452b5c1b84cf17d407407061a3b630d636f5b7866f4a144e53e6",
+    "reason": "2026-11-23 사용자 결정: 표 밖 늦은 교시 확정, 의학과 33건을 공식 JUMP 조회 결과로 교체"
   },
   "assets/timetable/jbnu-namwon-2026-2.json": {
-    "sha256": "afa1803854fbae3bc42bebe5e1eb25f2a5f66f9dab140dc59c9008559d8dd3cd",
-    "reason": "공백만 제거(내용 동일): 파싱 비용과 앱 용량 절감"
+    "sha256": "745f0e389d8147b1f8212431ece181c2651cf62000853024f1a3ca018d17576d",
+    "reason": "2026-11-23 사용자 결정: 표 밖 늦은 교시 확정, 의학과 33건을 공식 JUMP 조회 결과로 교체"
   },
   "assets/timetable/jbnu-saemangeum-2026-2.json": {
-    "sha256": "3ae05f215fa10ab5252449b263540739b65c892f6eae7bac445ac2bf1f02f4ad",
-    "reason": "공백만 제거(내용 동일): 파싱 비용과 앱 용량 절감"
+    "sha256": "6c7c3ed00c268acb76f6fda5613231189a99dfe16b76c7aea1ced414f3daf52a",
+    "reason": "2026-11-23 사용자 결정: 표 밖 늦은 교시 확정, 의학과 33건을 공식 JUMP 조회 결과로 교체"
   },
   "assets/timetable/khu-global-2026-2.json": {
     "sha256": "9440f0248a3cc08171aeab5b43ba82b2b1083c4f0cb68f5096ff7125e163f2e9",

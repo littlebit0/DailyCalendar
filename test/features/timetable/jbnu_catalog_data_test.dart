@@ -2,64 +2,69 @@ import 'dart:convert';
 import '../../support/source_fixture.dart';
 import 'package:crypto/crypto.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
-import 'package:daily/features/timetable/data/timetable_sync_document.dart';
 import 'package:daily/features/timetable/domain/timetable.dart';
 import 'package:flutter_test/flutter_test.dart';
 import '../../support/file_asset_bundle.dart';
 
 const directory = 'work/university-research/catalog-c/jbnu-current-20261008';
-Map<String, dynamic> read(String file) {
-  final original =
-      jsonDecode(fixtureFile('$directory/$file').readAsStringSync())
-          as Map<String, dynamic>;
-  if (file !=
-      'jbnu-unknown-medical-document-2026-2.published-partial-20261008.json') {
-    return original;
-  }
-  final active =
-      jsonDecode(
-            fixtureFile(
-              'assets/timetable/jbnu-unknown-2026-2.json',
-            ).readAsStringSync(),
-          )
-          as Map<String, dynamic>;
-  final documentIds = {
-    for (final row in original['courses'] as List) row['sourceId'],
-  };
-  // This test checks the original clinical document. The newly added native
-  // undergraduate catalogue has separate whole-source integrity checks.
-  return {
-    ...active,
-    'courses': [
-      for (final row in active['courses'] as List)
-        if (documentIds.contains(row['sourceId'])) row,
-    ],
-  };
-}
+Map<String, dynamic> read(String file) =>
+    jsonDecode(fixtureFile('$directory/$file').readAsStringSync())
+        as Map<String, dynamic>;
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
-  final audit = read('medical-candidate-audit.json');
-  final raw = read(audit['candidate']['file']);
-  final courses = UniversityDataset.fromJson(raw).courses;
-  final records = {for (final c in raw['courses']) c['sourceId']: c};
-  test('public expansion preserves every original medical document row', () {
-    final original =
-        jsonDecode(
-              fixtureFile(
-                '$directory/${audit['candidate']['file']}',
-              ).readAsStringSync(),
-            )
-            as Map<String, dynamic>;
-    // 교시 슬롯(쉬는 시간 포함)·연속 교시 합치기로 schedules만 다시 만들었다.
-    List<Object?> withoutSchedules(List rows) => [
-      for (final row in rows) {...(row as Map)..remove('schedules')},
-    ];
-    expect(
-      withoutSchedules(raw['courses']),
-      withoutSchedules(original['courses']),
-    );
-  });
+  test(
+    'Medical rows come from the official JUMP query and replace the dated document',
+    () async {
+      // 2026-11-23 user decision: the 33 rows of the 2026-08-19 medical
+      // document were replaced by the same courses' official JUMP rows.
+      final list =
+          (jsonDecode(
+                    File(
+                      'test/fixtures/jbnu_medical_jump_2026_2.json',
+                    ).readAsStringSync(),
+                  )
+                  as Map)['rows']
+              as List;
+      final official = {
+        for (final r in list)
+          if ('${r['STDTR_NO']}'.startsWith('UMED'))
+            '${r['STDTR_NO']}-${r['DVCLS_NO']}': r,
+      };
+      expect(official, hasLength(33));
+      final datasets = await UniversityCatalog.load(
+        bundle: FileAssetBundle(),
+        university: 'jbnu',
+      );
+      final medical = datasets
+          .expand((d) => d.courses)
+          .where((c) => c.code.startsWith('UMED'))
+          .toList();
+      expect(medical, hasLength(33));
+      expect(
+        datasets
+            .expand((d) => d.courses)
+            .where((c) => c.sourceId.startsWith('jbnu-med-document')),
+        isEmpty,
+      );
+      for (final c in medical) {
+        final r = official['${c.code}-${c.section}']!;
+        expect(c.campus, 'jeonju');
+        expect(c.title, r['SBJCT_NM']);
+        expect(c.professor, r['STAFFNM']);
+        expect(c.sourceSchedule, r['DOW_HR_CN']);
+        expect(c.sourceClassroom, r['DONG_RMNM_CN']);
+        expect(c.hasSchedulableMeetings, isTrue, reason: c.sourceId);
+        final saved = c.toTimetable(id: c.sourceId, mode: LectureMode.inPerson);
+        expect(saved.isValid, isTrue, reason: c.sourceId);
+      }
+      final neurology = medical.singleWhere((c) => c.code == 'UMED001');
+      // 월 0-B (08:30) ... 월 4-A (12:00~12:30) is one Monday block.
+      expect(neurology.meetings.first.weekday, DateTime.monday);
+      expect(neurology.meetings.first.originalStartMinute, 8 * 60 + 30);
+      expect(neurology.meetings.first.originalEndMinute, 12 * 60 + 30);
+    },
+  );
   test(
     'Current public native 3571 metadata, exact campus prefixes and zero fabricated clocks',
     () {
@@ -117,165 +122,7 @@ void main() {
     },
   );
   test(
-    'Medical direct document headers, date/weekday, room, assessment and holds independently checked',
-    () {
-      expect(
-        sha256
-            .convert(
-              fixtureFile(
-                '$directory/${audit['candidate']['file']}',
-              ).readAsBytesSync(),
-            )
-            .toString(),
-        audit['candidate']['sha256'],
-      );
-      expect(courses, hasLength(33));
-      expect(courses.where((c) => c.meetings.isNotEmpty), hasLength(18));
-      final proof = read('medical-document-educational-receipt.json');
-      var count = 0;
-      var cells = 0;
-      for (final c in courses) {
-        final r = records[c.sourceId];
-        final grade = r['sourceGrade'];
-        expect(c.code, '');
-        expect(c.section, '');
-        expect(r['canonicalSubjectCodePublished'], false);
-        expect(c.remarks, contains('공식 과목번호가 아닙니다'));
-        final sh = (proof['sourceSheets'] as List).singleWhere(
-          (s) => s['grade'] == grade,
-        );
-        final subject = (sh['subjects'] as List).singleWhere(
-          (e) => e['row'] == r['publishedDocumentMetadata']['row'],
-        );
-        expect(c.title, subject['courseName']);
-        expect(c.credits, subject['credits']);
-        expect(c.professor, subject['professor']);
-        expect(subject['nativeClassificationAggregate'], '전필합계');
-        expect(c.sourceClassification, '전필');
-        final clocks = <int, List<int>>{};
-        for (final h in sh['sourceClockHeader']) {
-          final m = RegExp(
-            r'(\d+)교시\s*(\d{1,2}):(\d{2})~(\d{1,2}):(\d{2})',
-          ).firstMatch(h['sourceText'])!;
-          clocks[int.parse(m[1]!)] = [
-            int.parse(m[2]!) * 60 + int.parse(m[3]!),
-            int.parse(m[4]!) * 60 + int.parse(m[5]!),
-          ];
-        }
-        final expected = <String>{};
-        final slots = <String, List<List<int>>>{};
-        for (final cell in r['publicDatedCells']) {
-          cells++;
-          final day = DateTime.parse(cell['date']);
-          expect(day.weekday, cell['weekday']);
-          expect('월화수목금토일'[day.weekday - 1], cell['printedWeekday']);
-          final cl = clocks[cell['nativePeriod']]!;
-          expect(cell['originalStartMinute'], cl[0]);
-          expect(cell['originalEndMinute'], cl[1]);
-          final held = (r['holds'] as List).isNotEmpty;
-          final color = cell['fillRgb'];
-          final assessment =
-              jsonEncode(color) == jsonEncode([255, 0, 0]) ||
-              jsonEncode(color) == jsonEncode([255, 128, 128]) ||
-              RegExp('시험|평가|퀴즈').hasMatch(cell['sourceText']);
-          if (!held && !assessment) {
-            // 슬롯 = 교시 시작부터 다음 교시 시작 직전(수업 50분 + 쉬는 시간 10분).
-            (slots['${cell['date']}/${day.weekday}/${proof['classroomAssignment'][grade.toString()]}'] ??=
-                    [])
-                .add([cl[0], cl[0] + 60]);
-          }
-        }
-        // 같은 날·같은 강의실에서 앞 슬롯 끝과 다음 시작 간격이 60분 미만이면 합친다.
-        slots.forEach((key, list) {
-          list.sort((a, b) => a[0].compareTo(b[0]));
-          final merged = <List<int>>[];
-          for (final slot in list) {
-            if (merged.isNotEmpty && slot[0] - merged.last[1] < 60) {
-              merged.last[1] = slot[1];
-            } else {
-              merged.add([...slot]);
-            }
-          }
-          final parts = key.split('/');
-          for (final m in merged) {
-            expected.add('${parts[0]}/${parts[1]}/${m[0]}/${m[1]}/${parts[2]}');
-          }
-        });
-        final actual = <String>{};
-        for (final m in c.meetings) {
-          count++;
-          expect(m.weekday, m.teachingDate!.weekday);
-          expect(m.isValid, true);
-          expect(
-            actual.add(
-              '${m.date}/${m.weekday}/${m.originalStartMinute}/${m.originalEndMinute}/${m.classroom}',
-            ),
-            true,
-          );
-          expect(c.period!.contains(m.teachingDate!), true);
-        }
-        expect(actual, expected, reason: c.title);
-        if (c.title.contains('문제바탕학습')) {
-          expect(c.meetings, isEmpty);
-          expect(r['holds'].join(' '), contains('17:00'));
-        }
-        if (grade == 3 && c.title.contains('실습')) {
-          expect(c.meetings, isEmpty);
-          expect(c.sourceClassroom, '');
-        }
-      }
-      expect(count, 366);
-      expect(cells, 1929);
-      expect(audit['assessmentOrAmbiguousCellsExcluded'], 147);
-    },
-  );
-  for (final mode in [
-    LectureMode.inPerson,
-    LectureMode.liveOnline,
-    LectureMode.video,
-  ]) {
-    test(
-      'Actual model 18 document plans, 366 merged slots full Drive ${mode.name}',
-      () {
-        final values = <String, TimetableSyncValue>{};
-        var count = 0;
-        for (final c in courses.where((c) => c.meetings.isNotEmpty)) {
-          final saved = c.toTimetable(id: c.sourceId, mode: mode);
-          expect(saved.isValid, true);
-          expect(saved.note, c.remarks);
-          for (final m in saved.meetings) {
-            count++;
-            expect(saved.modeOn(m, m.teachingDate!), mode);
-            expect(saved.period!.contains(m.teachingDate!), true);
-          }
-          final key = timetableCourseSyncKey(saved);
-          expect(values.containsKey(key), false);
-          values[key] = TimetableSyncValue(
-            {...saved.toJson(), 'id': key},
-            DateTime.utc(2026, 10, 8),
-            'research',
-          );
-        }
-        expect(values, hasLength(18));
-        expect(count, 366);
-        final doc = TimetableSyncDocument.records(
-          courses: values,
-          schemaVersion: 2,
-        );
-        final json =
-            jsonDecode(jsonEncode(doc.toJson())) as Map<String, dynamic>;
-        final restored = TimetableSyncDocument.fromJson(json);
-        expect(restored.materializeClasses(), hasLength(18));
-        for (final c in restored.materializeClasses()) {
-          expect(c.toJson(), values[timetableCourseSyncKey(c)]!.value);
-          expect(c.isValid, true);
-        }
-      },
-    );
-  }
-
-  test(
-    'JBNU restored catalog keeps 3571 courses and 277 held clocks',
+    'JBNU restored catalog keeps 3571 courses and no held clocks',
     () async {
       final datasets = await UniversityCatalog.load(
         bundle: FileAssetBundle(),
@@ -284,22 +131,38 @@ void main() {
       expect(
         {for (final d in datasets) d.campus: d.courses.length},
         {
-          'unknown': 266,
+          'unknown': 233,
           'gochang': 11,
           'iksan': 129,
-          'jeonju': 3137,
+          'jeonju': 3170,
           'namwon': 21,
           'saemangeum': 7,
         },
       );
       final courses = datasets.expand((d) => d.courses).toList();
       expect(courses.map((c) => c.sourceId).toSet(), hasLength(3571));
-      expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(3294));
+      expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(3569));
       expect(
         courses.where((c) => c.scheduleStatus == 'unrecognized'),
-        hasLength(277),
+        isEmpty,
       );
-      expect(courses.where((c) => c.scheduleStatus == 'unscheduled'), isEmpty);
+      // 사회봉사 1·2 (원문 교시 '0') run as 30 volunteer hours with no class
+      // time per the official 2026-2 guide, so they are untimed courses.
+      expect(
+        courses
+            .where((c) => c.scheduleStatus == 'unscheduled')
+            .map((c) => c.code)
+            .toSet(),
+        {'LAB2014', 'LAB2015'},
+      );
+      // Late half-slots past the handbook table continue the same 30-minute
+      // unit (2026-11-23 user decision): 월 11-A 19:00 ... 월 13-B ~22:00.
+      final late = courses.singleWhere(
+        (c) => c.code == 'USOF075' && c.section == '1',
+      );
+      expect(late.scheduleStatus, 'scheduled');
+      expect(late.meetings.single.originalStartMinute, 19 * 60);
+      expect(late.meetings.single.originalEndMinute, 22 * 60);
     },
   );
 
