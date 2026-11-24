@@ -53,7 +53,6 @@ class UniversitySupportPolicy {
     'postech',
     'sangji',
     'skku',
-    'sookmyung',
     'ssu',
     'sungkyul',
     'sungshin',

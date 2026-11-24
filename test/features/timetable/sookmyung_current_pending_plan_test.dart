@@ -117,6 +117,7 @@ void main() {
       var added = 0;
       var recheckCount = 0;
       var cyberUnscheduled = 0;
+      var confirmed = 0;
       for (final campus in ['first', 'second', 'unknown']) {
         final old = read('${root}sookmyung-$campus-baseline.json');
         final now = read(
@@ -162,6 +163,24 @@ void main() {
               restored['scheduleStatus'] = b['scheduleStatus'];
               restored['remarks'] = b['remarks'];
               expect(restored, b);
+              continue;
+            }
+            // 2026-11-23 사용자 결정: 보류 강좌를 공식 요일·시각으로 확정했다.
+            // 바뀐 필드(시각·상태·비고·보류 사유)만 허용한다.
+            if ((c['remarks'] as String).contains('2026-11-23 사용자 결정')) {
+              expect(b['scheduleStatus'], 'unrecognized');
+              expect(c['scheduleStatus'], 'scheduled');
+              expect(c['schedules'], isNotEmpty);
+              expect(c['metadata']['holdReasons'], isEmpty);
+              final restored =
+                  jsonDecode(jsonEncode(c)) as Map<String, dynamic>;
+              for (final f in ['schedules', 'scheduleStatus', 'remarks']) {
+                restored[f] = b[f];
+              }
+              restored['metadata']['holdReasons'] =
+                  b['metadata']['holdReasons'];
+              expect(restored, b);
+              confirmed++;
               continue;
             }
             expect(c, b);
@@ -238,8 +257,10 @@ void main() {
       expect(added, 4);
       expect(recheckCount, recheckAdded.length);
       // 수강유의사항에 '1,7,14주차 실시간 수업'과 요일·시각이 적힌 논리적사고와소프트웨어
-      // (21104205) 12개 분반은 비실시간 규정으로 지우지 않고 시각 미확정으로 둔다.
+      // (21104205) 12개 분반은 비실시간 규정으로 지우지 않고, 2026-11-23 사용자 결정에
+      // 따라 그 주차·시각으로 확정한다.
       expect(cyberUnscheduled, 33);
+      expect(confirmed, 130);
     },
   );
   test(
@@ -255,8 +276,8 @@ void main() {
       ];
       expect(all, hasLength(1576));
       final scheduled = all.where((c) => c.hasSchedulableMeetings).toList();
-      expect(scheduled, hasLength(1369));
-      expect(scheduled.expand((c) => c.meetings).length, 25615);
+      expect(scheduled, hasLength(1499));
+      expect(scheduled.expand((c) => c.meetings).length, 28361);
       for (final mode in [
         LectureMode.inPerson,
         LectureMode.liveOnline,
