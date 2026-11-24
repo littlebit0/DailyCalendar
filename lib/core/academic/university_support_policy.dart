@@ -11,7 +11,6 @@ class UniversitySupportPolicy {
     'cnu',
     'dgist',
     'dnue',
-    'donga',
     'dongguk',
     'eulji',
     'gachon',
