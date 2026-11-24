@@ -15,11 +15,12 @@ void main() {
     ];
     final scheduled = courses.where((c) => c.hasSchedulableMeetings).toList();
     expect(courses, hasLength(791));
-    expect(scheduled, hasLength(729));
+    expect(scheduled, hasLength(769));
     for (final c in scheduled) {
       for (final m in c.meetings) {
-        expect(m.originalStartMinute, inInclusiveRange(540, 1290));
-        expect(m.originalEndMinute, inInclusiveRange(570, 1320));
+        // 표에 없는 14교시는 같은 30분 칸으로 이어 계산한다(2026-11-23 사용자 결정).
+        expect(m.originalStartMinute, inInclusiveRange(540, 1350));
+        expect(m.originalEndMinute, inInclusiveRange(570, 1380));
         expect(m.originalStartMinute % 30, 0);
       }
     }
@@ -31,6 +32,19 @@ void main() {
           .map((m) => (m.weekday, m.originalStartMinute, m.originalEndMinute))
           .toSet(),
       {(5, 780, 960)},
+    );
+    final night = courses.singleWhere(
+      (c) => c.code == 'ARD711' && c.section == '01',
+    );
+    expect(
+      night.meetings
+          .map((m) => (m.weekday, m.originalStartMinute, m.originalEndMinute))
+          .toSet(),
+      {(3, 840, 900), (3, 1080, 1380)},
+    );
+    expect(
+      courses.where((c) => c.scheduleStatus == 'unrecognized'),
+      isEmpty,
     );
   });
 }

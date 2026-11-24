@@ -42,7 +42,6 @@ class UniversitySupportPolicy {
     'knue',
     'konkuk',
     'korea',
-    'koreatech',
     'kumoh',
     'kwangwoon',
     'kyonggi',

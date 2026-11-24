@@ -6051,7 +6051,7 @@
         "events2026": 80
       },
       "timetable": {
-        "status": "temporarily_unsupported",
+        "status": "implemented_partial_catalog",
         "checkedAt": "2026-10-08",
         "universityId": "koreatech",
         "courses": 791,
