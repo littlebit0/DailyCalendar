@@ -53,7 +53,6 @@ class UniversitySupportPolicy {
     'mju',
     'mmu',
     'nambu',
-    'pcu',
     'postech',
     'sangji',
     'sch',

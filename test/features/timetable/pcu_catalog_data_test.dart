@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:daily/core/academic/university_support_policy.dart';
 import 'package:daily/features/timetable/data/course_organization_directory.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -23,19 +22,24 @@ void main() {
     );
     expect(raw['completionClaim'], isFalse);
     final courses = dataset.courses;
-    // 1,774 code+section rows plus 사회봉사2~4, which the handbook prints
-    // under the same code and sections as 사회봉사1.
-    expect(courses, hasLength(1906));
-    expect(courses.map((c) => c.sourceId).toSet(), hasLength(1906));
+    // 1,774 code+section rows of the August handbook plus 사회봉사2~4, which
+    // the handbook prints under the same code and sections as 사회봉사1, and
+    // 114 sections only the 2026-11-04 edition prints. Sections that edition
+    // no longer prints stay (폐강 is not judged).
+    expect(courses, hasLength(2020));
+    expect(courses.map((c) => c.sourceId).toSet(), hasLength(2020));
+    expect(
+      courses.where((c) => c.sourceRemarks.contains('이 분반이 없음')),
+      hasLength(118),
+    );
 
     final byStatus = <String?, int>{};
     for (final c in courses) {
       byStatus[c.scheduleStatus] = (byStatus[c.scheduleStatus] ?? 0) + 1;
     }
     expect(byStatus, {
-      'scheduled': 1629,
-      'unscheduled': 236,
-      'unrecognized': 41,
+      'scheduled': 1757,
+      'unscheduled': 263,
     });
 
     // Handbook page 2 (https://www.pcu.ac.kr/kor/contents/25): 50-minute
@@ -75,7 +79,8 @@ void main() {
             (end == letterSlots[start] ||
                 (letterSlots.containsValue(end) && end > start));
         expect(numeric || letter, isTrue, reason: c.sourceId);
-        expect(end <= 1350, isTrue, reason: c.sourceId);
+        // 14교시 (22:00-23:00) continues the 60 minute slot past the table.
+        expect(end <= (numeric ? 1380 : 1350), isTrue, reason: c.sourceId);
       }
       // Same day and room with a gap under 60 minutes is one block.
       final sorted = [...c.meetings]
@@ -97,18 +102,12 @@ void main() {
         }
       }
     }
-    expect(segments, 2386);
+    expect(segments, 2543);
 
     // Every major course under a mapped department heading keeps its owner.
     expect(
       courses.where((c) => c.offeringOrganizations.isNotEmpty),
-      hasLength(1258),
-    );
-
-    // Times still waiting for a user decision keep search suspended.
-    expect(
-      UniversitySupportPolicy.suspendedTimetableUniversities,
-      contains('pcu'),
+      hasLength(1367),
     );
   });
 }
