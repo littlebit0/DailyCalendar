@@ -21,7 +21,6 @@ class UniversitySupportPolicy {
     'kmou',
     'knue',
     'kumoh',
-    'kyonggi',
     'mmu',
     'nambu',
     'postech',

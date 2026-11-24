@@ -153,7 +153,11 @@ class AcademicProfile {
     'institution:academyinfo:0000009' || 'academyinfo:0000009' => 'kunsan',
     'institution:academyinfo:0000037' || 'academyinfo:0000037' => 'hknu',
     'institution:academyinfo:0000066' || 'academyinfo:0000066' => 'khu',
-    'institution:academyinfo:0000056' || 'academyinfo:0000056' => 'kyonggi',
+    'institution:academyinfo:0000056' ||
+    'academyinfo:0000056' ||
+    // 서울캠퍼스 학교 행으로 저장된 기존 프로필(campusId 없음)
+    'institution:academyinfo:0000058' ||
+    'academyinfo:0000058' => 'kyonggi',
     'institution:academyinfo:0000188' || 'academyinfo:0000188' => 'postech',
     'institution:academyinfo:0000381' || 'academyinfo:0000381' => 'gist',
     'institution:academyinfo:0000178' || 'academyinfo:0000178' => 'baekseok',
@@ -286,7 +290,7 @@ class AcademicProfile {
       'kunsan' => const ['academyinfo:0000009'],
       'hknu' => const ['academyinfo:0000037'],
       'khu' => const ['academyinfo:0000066'],
-      'kyonggi' => const ['academyinfo:0000056'],
+      'kyonggi' => const ['academyinfo:0000056', 'academyinfo:0000058'],
       'postech' => const ['academyinfo:0000188'],
       'gist' => const ['academyinfo:0000381'],
       'baekseok' => const ['academyinfo:0000178'],
@@ -407,6 +411,8 @@ class AcademicProfile {
       ('kunsan', _) => 'unknown',
       ('hknu', _) => 'anseong',
       ('khu', _) => 'seoul',
+      ('kyonggi', 'academyinfo:0000058' || 'institution:academyinfo:0000058') =>
+        'seoul',
       ('kyonggi', _) => 'suwon',
       ('postech', _) => 'main',
       ('gist', _) => 'main',

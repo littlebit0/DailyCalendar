@@ -7,8 +7,11 @@ import 'package:daily/features/timetable/data/timetable_sync_document.dart';
 import 'package:daily/features/timetable/domain/timetable.dart';
 import 'package:daily/features/timetable/domain/university_course.dart';
 
+import '../../support/file_asset_bundle.dart';
+
 void main() {
-  test('Kyonggi integrated profile exposes published Suwon scope only', () {
+  TestWidgetsFlutterBinding.ensureInitialized();
+  test('Kyonggi profile maps Suwon main and Seoul campus catalogs', () {
     for (final id in [
       'academyinfo:0000056',
       'institution:academyinfo:0000056',
@@ -20,15 +23,14 @@ void main() {
       );
       expect(profile.timetableUniversity, 'kyonggi');
       expect(profile.timetableCampus, 'suwon');
-      expect(
-        AcademicProfile(
-          universityId: id,
-          universityName: '경기대학교',
-          schoolKind: 'fourYear',
-          campusId: 'academyinfo:0000058',
-        ).timetableSupported,
-        isFalse,
+      final seoul = AcademicProfile(
+        universityId: id,
+        universityName: '경기대학교',
+        schoolKind: 'fourYear',
+        campusId: 'academyinfo:0000058',
       );
+      expect(seoul.timetableCampus, 'seoul');
+      expect(seoul.timetableSupported, isTrue);
       expect(
         AcademicProfile(
           universityId: id,
@@ -38,6 +40,22 @@ void main() {
         ).timetableSupported,
         isFalse,
       );
+    }
+  });
+
+  test('Kyonggi Seoul profiles saved by the Seoul campus row map to Seoul', () {
+    for (final id in [
+      'academyinfo:0000058',
+      'institution:academyinfo:0000058',
+    ]) {
+      final profile = AcademicProfile(
+        universityId: id,
+        universityName: '경기대학교',
+        schoolKind: 'fourYear',
+      );
+      expect(profile.timetableUniversity, 'kyonggi');
+      expect(profile.timetableCampus, 'seoul');
+      expect(profile.timetableSupported, isTrue);
     }
   });
   test(
@@ -259,4 +277,60 @@ void main() {
       }
     },
   );
+
+  test('Kyonggi Seoul partial catalog keeps official notice rows', () async {
+    final datasets = await UniversityCatalog.load(
+      bundle: FileAssetBundle(),
+      university: 'kyonggi',
+    );
+    expect(datasets.map((d) => d.campus).toSet(), {'suwon', 'seoul'});
+    final seoul = datasets.singleWhere((d) => d.campus == 'seoul');
+    final courses = seoul.courses;
+    expect(courses.length, 67);
+    expect(courses.map((c) => c.sourceId).toSet().length, 67);
+    expect(courses.where((c) => c.hasSchedulableMeetings).length, 54);
+    expect(courses.where((c) => c.scheduleStatus == 'unscheduled').length, 13);
+    expect(courses.where((c) => c.scheduleStatus == 'unrecognized'), isEmpty);
+    UniversityCourse byReg(String reg) =>
+        courses.singleWhere((c) => c.sourceId.endsWith('-$reg'));
+    // 2차 폐강 공지 "서울 9037 대학영어5(시사영어) 금789": 서울 주간 60분제 7~9교시.
+    final english = byReg('9037');
+    expect(english.title, '대학영어5(시사영어)');
+    expect(english.sourceSchedule, '금789');
+    // 학수코드·학점은 수원 강좌가 아니라 2026학년도 교육과정 안내 책자 표에서 온다.
+    expect(english.code, 'AS364');
+    expect(english.remarks, contains('p.45 "AS364 대학영어5(시사영어) 3학점"'));
+    expect(english.sourceClassification, '교양/일반선택/교육학전공');
+    expect(byReg('9051').code, 'AT031');
+    // 책자 p.191 교직자유선택: 과목명이 두 줄로 나뉜 행.
+    expect(byReg('9126').code, 'ZD002');
+    expect(english.meetings.single.weekday, 5);
+    expect(english.meetings.single.originalStartMinute, 900);
+    expect(english.meetings.single.originalEndMinute, 1080);
+    // 변동 예정 공지: 화 567 -> 화 789 변경 후 시각.
+    final changed = byReg('9126');
+    expect(changed.meetings.single.originalStartMinute, 900);
+    expect(changed.remarks, contains('화 567 -> 화 789'));
+    // 이러닝 합반: 시각이 없어 시간 미정으로 추가된다.
+    final elearning = byReg('9001');
+    expect(elearning.scheduleStatus, 'unscheduled');
+    expect(elearning.code, 'AT020');
+    expect(elearning.remarks, contains('0001로 합반'));
+    expect(byReg('9129').hasSchedulableMeetings, isFalse);
+    // 625108 첨부 p.12 서울 교양 그룹 "19.대학영어(화123,Advanced)": 화 1~3교시.
+    final group = courses.singleWhere((c) => c.sourceId.endsWith('-group-19'));
+    expect(group.title, '대학영어');
+    expect(group.code, 'AS395');
+    expect(group.meetings.single.weekday, 2);
+    expect(group.meetings.single.originalStartMinute, 540);
+    expect(group.meetings.single.originalEndMinute, 720);
+    // 같은 과목·같은 시각의 폐강 공지 강좌(9282 월67)가 있는 그룹 06은 중복으로 넣지 않는다.
+    expect(courses.where((c) => c.sourceId.endsWith('-group-06')), isEmpty);
+    for (final c in courses.where((c) => c.hasSchedulableMeetings)) {
+      expect(
+        c.toTimetable(id: c.sourceId, mode: LectureMode.inPerson).isValid,
+        isTrue,
+      );
+    }
+  });
 }
