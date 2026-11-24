@@ -55,7 +55,6 @@ class UniversitySupportPolicy {
     'skku',
     'ssu',
     'sungkyul',
-    'sungshin',
     'sunmoon',
     'syu',
     'tuk',
