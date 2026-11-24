@@ -19,7 +19,6 @@ class UniversitySupportPolicy {
     'gnue',
     'hansei',
     'hknu',
-    'hoseo',
     'hyupsung',
     'iccu',
     'inje',

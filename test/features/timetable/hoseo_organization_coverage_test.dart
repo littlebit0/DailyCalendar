@@ -48,10 +48,10 @@ void main() {
       for (final c in courses.where((c) => c.scheduleStatus == 'scheduled')) {
         final byDay = <int, List<List<int>>>{};
         for (final m in RegExp(
-          r'([월화수목금])(\d+)(?:~(\d+))?',
+          r'([월화수목금토일])(\d+)(?:~(\d+))?',
         ).allMatches(c.sourceSchedule)) {
           final a = int.parse(m[2]!);
-          byDay.putIfAbsent('월화수목금'.indexOf(m[1]!) + 1, () => []).add([
+          byDay.putIfAbsent('월화수목금토일'.indexOf(m[1]!) + 1, () => []).add([
             a,
             int.parse(m[3] ?? m[2]!),
           ]);
@@ -76,14 +76,18 @@ void main() {
             '${DateTime.parse(m.date!).weekday}/${m.originalStartMinute}/${m.originalEndMinute}',
         };
         expect(actual, expected, reason: c.sourceId);
+        // 학기종료일(2026-12-18) 뒤에는 수업을 만들지 않는다.
+        for (final m in c.meetings) {
+          expect(m.date!.compareTo('2026-12-18') <= 0, true, reason: c.sourceId);
+        }
         checked++;
       }
-      expect(checked, 1743);
-      // Still held (remote/hybrid delivery, Saturday, evening-division,
-      // conflicting rows); search stays suspended.
+      expect(checked, 2450);
+      // 2026-11-23 사용자 결정: p.152 교시표를 0~14교시·토·일 강좌 전체에 적용하고
+      // 원격·하이브리드 운영도 원문 교시로 확정한다.
       expect(
         courses.where((c) => c.scheduleStatus == 'unrecognized'),
-        hasLength(756),
+        isEmpty,
       );
     },
     timeout: const Timeout(Duration(minutes: 3)),
