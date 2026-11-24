@@ -71,7 +71,6 @@ class UniversitySupportPolicy {
     'yongin',
     'yonsei',
     'yu',
-    'deu',
     'snue',
     'cue',
     'cnue',
