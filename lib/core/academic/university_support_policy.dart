@@ -48,7 +48,6 @@ class UniversitySupportPolicy {
     'kumoh',
     'kwangwoon',
     'kyonggi',
-    'mju',
     'mmu',
     'nambu',
     'postech',

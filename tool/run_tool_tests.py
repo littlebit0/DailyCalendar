@@ -46,6 +46,7 @@ IMPORT_SUITES = [
     "test_import_daegu_missing_rows",
     "test_import_daegu_closed_rows",
     "test_import_konkuk",
+    "test_import_mju",
     "test_import_pcu",
     "test_jnu_import",
     "test_kmu_import",
