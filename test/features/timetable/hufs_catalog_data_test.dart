@@ -20,14 +20,14 @@ void main() {
         {'seoul': 1823, 'global': 1549},
       );
       final courses = data.expand((d) => d.courses).toList();
-      expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(3147));
+      expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(3349));
       expect(
         courses.where((c) => c.scheduleStatus == 'unrecognized'),
-        hasLength(221),
+        isEmpty,
       );
       expect(
         courses.where((c) => c.scheduleStatus == 'unscheduled'),
-        hasLength(4),
+        hasLength(23),
       );
       for (final key in [
         'A084891-01',
@@ -120,11 +120,12 @@ void main() {
         (clock.originalStartMinute, clock.originalEndMinute, clock.classroom),
         (1030, 1130, '2201'),
       );
+      // 2026-11-23 사용자 결정: 비대면 표기 강좌도 원문 교시로 확정한다.
       expect(
         courses
             .singleWhere((c) => c.sourceId.endsWith('/N073604/01'))
             .hasSchedulableMeetings,
-        isFalse,
+        isTrue,
       );
       expect(
         courses
@@ -152,7 +153,8 @@ void main() {
           expect(m.originalStartMinute % 60, 0, reason: course.sourceId);
           expect(m.originalEndMinute % 60, 0, reason: course.sourceId);
           checked++;
-          byDate.putIfAbsent('${m.date}', () => []).add((
+          // 주간 구간(date 없음)은 요일별로 묶는다
+          byDate.putIfAbsent('${m.date ?? 'w'}-${m.weekday}', () => []).add((
             m.originalStartMinute,
             m.originalEndMinute,
             m.classroom,
@@ -171,7 +173,7 @@ void main() {
           }
         }
       }
-      expect(checked, 43820);
+      expect(checked, 46608);
     },
   );
 
@@ -189,7 +191,7 @@ void main() {
         );
         expect(profile.timetableUniversity, 'hufs');
         expect(profile.timetableCampus, 'seoul');
-        expect(profile.timetableSupported, isFalse);
+        expect(profile.timetableSupported, isTrue);
       }
       const wrong = AcademicProfile(
         universityId: 'institution:academyinfo:0000192',
