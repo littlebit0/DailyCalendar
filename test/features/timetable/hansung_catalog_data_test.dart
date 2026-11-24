@@ -11,7 +11,7 @@ import '../../support/file_asset_bundle.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   test(
-    'Hansung full metadata preserves verified clocks and blocks unresolved operations',
+    'Hansung full metadata confirms every published clock',
     () async {
       final data = (await UniversityCatalog.load(
         bundle: FileAssetBundle(),
@@ -20,14 +20,14 @@ void main() {
       final courses = data.courses;
       expect(courses, hasLength(1489));
       expect(courses.map((c) => c.sourceId).toSet(), hasLength(1489));
-      expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(1139));
+      expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(1378));
       expect(
         courses.where((c) => c.scheduleStatus == 'unrecognized'),
-        hasLength(240),
+        isEmpty,
       );
       expect(
         courses.where((c) => c.scheduleStatus == 'unscheduled'),
-        hasLength(110),
+        hasLength(111),
       );
       for (final key in [
         'CTS0001-A',
@@ -78,12 +78,31 @@ void main() {
         courses.singleWhere((c) => c.codeAndSection == 'GEN0925-@').section,
         '@',
       );
-      for (final key in ['P010143-A', 'P017022-Z']) {
-        final course = courses.singleWhere((c) => c.codeAndSection == key);
-        expect(course.meetings, isEmpty, reason: key);
-        expect(course.period, isNull, reason: key);
-        expect(course.sourceSchedule, isNotEmpty, reason: key);
-      }
+      // 2026-11-23 사용자 결정: 온라인 병행·집중이수·현장실습도 공식 교시 시각으로 확정한다.
+      final intensive = courses.singleWhere(
+        (c) => c.codeAndSection == 'P010143-A',
+      );
+      expect(
+        intensive.meetings
+            .map((m) => (m.weekday, m.originalStartMinute, m.originalEndMinute))
+            .toSet(),
+        {(1, 720, 900)},
+      );
+      final saturday = courses.firstWhere(
+        (c) => c.sourceSchedule.contains(' 토5~6M'),
+      );
+      expect(
+        saturday.meetings
+            .map((m) => (m.weekday, m.originalStartMinute, m.originalEndMinute))
+            .toSet(),
+        {(6, 780, 900)},
+      );
+      expect(
+        courses
+            .singleWhere((c) => c.codeAndSection == 'GEN0907-Z')
+            .scheduleStatus,
+        'unscheduled',
+      );
       for (final c in courses) {
         for (final raw in c.departmentClassifications.values) {
           expect(
@@ -127,33 +146,26 @@ void main() {
     () {
       // 수강신청 안내 "강의시간 안내": 월·수·목 75분(주간 휴식 15분, 야간 10·5분),
       // 화·금 50분(주간 휴식 10분, 야간 5분). 슬롯 = 시작부터 다음 교시 시작 직전.
-      // 마지막 교시는 같은 요일 그룹의 일반 슬롯(90분/60분)을 쓴다.
-      const slots75 = {
-        540: 630,
-        630: 720,
-        720: 810,
-        810: 900,
-        900: 990,
-        990: 1080,
-        1080: 1165,
-        1165: 1245,
-        1245: 1335,
+      // 2026-10-25 사용자 지시("다른 교시랑 똑같이"): 토·일과 75분 경계도 요일과 무관하게
+      // 같은 교시 라벨 시각을 쓴다. 주간 라벨은 정각·30분, 야간은 안내표 시각이다.
+      final starts = {
+        for (var n = 0; n < 9; n++) ...{540 + n * 60, 570 + n * 60},
+        1080,
+        1135,
+        1165,
+        1190,
+        1245,
+        1300,
       };
-      const slots50 = {
-        540: 600,
-        600: 660,
-        660: 720,
-        720: 780,
-        780: 840,
-        840: 900,
-        900: 960,
-        960: 1020,
-        1020: 1080,
-        1080: 1135,
-        1135: 1190,
-        1190: 1245,
-        1245: 1300,
-        1300: 1360,
+      final ends = {
+        for (var n = 0; n < 9; n++) ...{570 + n * 60, 600 + n * 60},
+        1135,
+        1165,
+        1190,
+        1245,
+        1300,
+        1335,
+        1360,
       };
       final data =
           jsonDecode(
@@ -169,18 +181,11 @@ void main() {
         for (final raw in course['schedules'] as List) {
           final s = raw as Map<String, dynamic>;
           segments++;
-          final slots = switch (s['weekday'] as int) {
-            1 || 3 || 4 => slots75,
-            2 || 5 => slots50,
-            _ => null,
-          };
-          if (slots != null) {
-            final start = s['startMinute'] as int;
-            final end = s['endMinute'] as int;
-            expect(slots.containsKey(start), isTrue, reason: '$s');
-            expect(slots.containsValue(end), isTrue, reason: '$s');
-            expect(end > start, isTrue, reason: '$s');
-          }
+          final start = s['startMinute'] as int;
+          final end = s['endMinute'] as int;
+          expect(starts.contains(start), isTrue, reason: '$s');
+          expect(ends.contains(end), isTrue, reason: '$s');
+          expect(end > start, isTrue, reason: '$s');
           expect(
             seen.add('${s['date']}/${s['classroom']}/${s['startMinute']}'),
             isTrue,
@@ -211,7 +216,7 @@ void main() {
           }
         }
       }
-      expect(segments, 16589);
+      expect(segments, 19799);
     },
   );
   test(

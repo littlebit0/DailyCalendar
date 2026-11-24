@@ -15,7 +15,7 @@ from datetime import date, timedelta
 
 
 # Current school rule article 11 and the official current semester calendar.
-# Holiday operation exceptions are never neutralized by the semantic gate below.
+# School closure days below are never given regular meetings.
 REGULAR_START = date(2026, 8, 31)
 REGULAR_END = date(2026, 12, 6)
 SCHOOL_CLOSURES = {
@@ -41,28 +41,34 @@ def regular_teaching_dates(meetings):
 DAY75=[('1','2',540,630),('2M','3M',630,720),('4','5',720,810),('5M','6M',810,900),('7','8',900,990),('8M','9M',990,1080),('10','11',1080,1165),('11M','12M',1165,1245),('13','14',1245,1335)]
 NIGHT50={10:(1080,1135),11:(1135,1190),12:(1190,1245),13:(1245,1300),14:(1300,1360)}
 
+def _label_clocks():
+    # 사용자 지시(2026-10-25 "다른 교시랑 똑같이 하면 된다"): 경계 라벨은 요일과 무관하게
+    # 75분제 블록 → 50분제 교시 → 주간(1~9M) 30분 칸(n=정각, nM=30분) 순서로 같은 시각을 쓴다.
+    starts = {b[0]: b[2] for b in DAY75}
+    ends = {b[1]: b[3] for b in DAY75}
+    for n in range(1, 15):
+        s, e = (540 + (n - 1) * 60, 540 + n * 60) if n <= 9 else NIGHT50[n]
+        starts.setdefault(str(n), s)
+        ends.setdefault(f'{n}M', e)
+        if n <= 9:
+            starts.setdefault(f'{n}M', s + 30)
+            ends.setdefault(str(n), s + 30)
+    return starts, ends
+
+
+LABEL_STARTS, LABEL_ENDS = _label_clocks()
+
+
 def clock(day, first, last):
-    if day in [1,3,4]:
-        blocks=list(DAY75)
-        starts = {b[0]: i for i, b in enumerate(blocks)}
-        ends = {b[1]: i for i, b in enumerate(blocks)}
-        if first not in starts or last not in ends:
-            raise ValueError('Partial75minute clock not explicitly published')
-        a,b=starts[first],ends[last]
-        if a > b:
-            raise ValueError('Reversed clock blocks')
-        return blocks[a][2],blocks[b][3]
-    if day in [2,5]:
-        # Printed50min cells have numeric starts and M-labeled ends.
-        if not re.fullmatch(r'\d+',first) or not re.fullmatch(r'\d+M',last):
-            raise ValueError('Unpublished partial50minute endpoint')
-        a,b=int(first),int(last[:-1])
-        if not 1 <= a <= b <= 14:
-            raise ValueError('Outofscope50minute clock')
-        start=(540+(a-1)*60,540+a*60) if a<=9 else NIGHT50[a]
-        end=(540+(b-1)*60,540+b*60) if b<=9 else NIGHT50[b]
-        return start[0],end[1]
-    raise ValueError('Saturday/Sunday clock not published by weekday guide')
+    # 토·일도 평일 교시표와 같은 시각·슬롯을 쓴다(2026-10-25 사용자 지시).
+    if not 1 <= day <= 7:
+        raise ValueError('Invalid weekday')
+    if first not in LABEL_STARTS or last not in LABEL_ENDS:
+        raise ValueError('Unpublished clock label')
+    start, end = LABEL_STARTS[first], LABEL_ENDS[last]
+    if start >= end:
+        raise ValueError('Reversed clock blocks')
+    return start, end
 
 
 def schedules(raw):
@@ -110,7 +116,6 @@ def prepare(rows, proofs, neutral):
         groups[(row['kwamokcode'],row['bunban'])].append(row)
     courses = []
     reasons = collections.Counter()
-    intensive={'GEN0993','GEN1031','P010143','P010167','P017023','T030132','V020036','V070078','V076015','Y030038'}
     for (code,section),variants in groups.items():
         r=variants[0]
         p = proofs.get(f'{code}-{section}', {'status':'notChecked'})
@@ -155,7 +160,7 @@ def prepare(rows, proofs, neutral):
         status = 'unrecognized'
         reason = ''
         raw=clean(r['classroom'])
-        if not raw or re.fullmatch(r'온라인강좌\s+[\d.]+시간',raw):
+        if not raw or re.fullmatch(r'온라인강좌\s+[\d.]+시간|사이버',raw):
             status='unscheduled'
         else:
             try:
@@ -163,20 +168,13 @@ def prepare(rows, proofs, neutral):
             except ValueError as e:
                 reason = str(e)
             else:
-                if p['status']!='currentVerifiedIdentity':reason='Current plan not published or not verified'
-                elif p.get('educationalParserVersion')!=4:reason='English operation context not yet reverified'
-                elif clean(p['sourceSchedule'])!=raw:reason='Current plan/source timetable differ'
-                elif p['sourceOfflineFlag']!='Y':reason='Mixed or online operating context requires review'
-                elif (len(p['weeks']) != 15 or [w['week'] for w in p['weeks']] != list(range(1,16)) or
-                      not all(w['topicPublished'] for w in p['weeks'])):reason='Incomplete actual current week context'
-                elif code in intensive:reason='Actual current intensive-period operations require review'
+                # 2026-11-23 사용자 결정: 공식 요일·교시가 있으면 운영 방식(온라인 병행·집중이수·
+                # 현장실습 등)이 불명확해도 대면으로 보고 그 시각으로 확정한다.
+                if p['status']=='currentVerifiedIdentity' and clean(p['sourceSchedule'])!=raw:
+                    reason='Current plan/source timetable differ'
                 else:
-                    lines=p['operatingNotes']+[t for w in p['weeks'] for t in w['operatingEvidence']]
-                    special=[t for t in lines if t not in neutral]
-                    if special:reason='Whole current operating context requires semantic review'
-                    else:
-                        status = 'scheduled'
-                        parsed = regular_teaching_dates(source_meetings)
+                    status = 'scheduled'
+                    parsed = regular_teaching_dates(source_meetings)
         if reason:
             reasons[reason]+=1
             for dep in departments:remarks[dep]+=('\n' if remarks[dep] else '')+'수업 운영·시각 검증 중: 확인 전 자동 반복 추가 불가.'
