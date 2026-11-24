@@ -1,4 +1,3 @@
-
 import 'package:daily/core/academic/academic_profile.dart';
 import 'package:daily/features/timetable/data/timetable_period_defaults.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
@@ -17,16 +16,16 @@ void main() {
       );
       final courses = datasets.expand((d) => d.courses).toList();
       expect(courses.map((c) => c.sourceId).toSet(), hasLength(2598));
-      expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(2127));
+      expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(2362));
       expect(
         courses.where((c) => c.scheduleStatus == 'unscheduled'),
         hasLength(235),
       );
       expect(
         courses.where((c) => c.scheduleStatus == 'unrecognized'),
-        hasLength(236),
+        hasLength(1),
       );
-      expect(courses.expand((c) => c.meetings), hasLength(35380));
+      expect(courses.expand((c) => c.meetings), hasLength(38566));
       for (final c in courses) {
         if (!c.hasSchedulableMeetings) {
           expect(c.meetings, isEmpty);
@@ -42,7 +41,12 @@ void main() {
         );
         for (final m in restored.meetings) {
           expect(m.teachingDate!.weekday, m.weekday);
-          expect(m.classroom, isNotEmpty);
+          // 2026-11-23 사용자 결정: 강의실 미기재 강좌도 공식 요일·교시로 확정한다.
+          if (!c.departmentRemarks.values.join().contains(
+            '2026-11-23 사용자 결정',
+          )) {
+            expect(m.classroom, isNotEmpty);
+          }
           expect(m.startMinute % 30, 0);
           expect(m.endMinute % 30, 0);
         }
@@ -184,7 +188,9 @@ void main() {
           isFalse,
         );
       }
-      final defaults = await TimetablePeriodDefaults.load(bundle: FileAssetBundle());
+      final defaults = await TimetablePeriodDefaults.load(
+        bundle: FileAssetBundle(),
+      );
       final period = defaults.periodFor(2026, '2', university: 'sch');
       expect(period?.start, DateTime(2026, 8, 31));
       expect(period?.end, DateTime(2026, 12, 18));

@@ -4034,7 +4034,7 @@
         "notes": "Public annual calendar requires standard Korean Accept-Language; no authentication or cookies. Previous winter 2025-12-24 through 2026-01-15; full 12 months validated. Current 64 events match previously observed public browser DOM."
       },
       "timetable": {
-        "status": "temporarily_unsupported",
+        "status": "implemented_partial_catalog",
         "checkedAt": "2026-10-08",
         "universityId": "sch",
         "courses": 2598,
@@ -4085,7 +4085,9 @@
         "suspensionDate": "2026-10-12",
         "reason": "User stopped expansion; incomplete source coverage, unresolved interpretation or whole-scope review remains. See support-decisions.json for per-school evidence.",
         "suspensionEvidence": "work/university-support-suspension-20261012/support-decisions.json",
-        "productionIntegrationEnabled": false
+        "productionIntegrationEnabled": true,
+        "reopenedDate": "2026-11-22",
+        "reopenNote": "시각 미확정 강좌는 원문만 검색에 표시하고 시간표 추가는 확정 시각 강좌만 허용한다."
       },
       "installedAcceptance": "macos_build_signature_install_verified_ui_not_run",
       "deferredAsImpossible": false,
