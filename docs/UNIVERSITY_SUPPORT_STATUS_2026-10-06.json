@@ -5830,7 +5830,7 @@
         "verification": "Official academic-office homepage published monthly JSON, 13 sequential requests. January omitted by annual HTML retained; both winters exact. Two focused tests and live check passed; broad checks/install pending."
       },
       "timetable": {
-        "status": "temporarily_unsupported",
+        "status": "implemented_partial_catalog",
         "sourceId": "tuk",
         "courses": 1431,
         "scheduled": 1346,

@@ -52,7 +52,6 @@ class UniversitySupportPolicy {
     'sangji',
     'sungkyul',
     'syu',
-    'tuk',
     'ulsan',
     'unist',
     'wsu',

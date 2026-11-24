@@ -53,9 +53,10 @@ void main() {
       ...UniversityDataset.fromJson(read(e['file'])).courses,
   ];
   test(
-    '1431 native education lossless with physical campus evidence separate',
+    '1466 native education lossless with physical campus evidence separate',
     () {
-      expect(courses, hasLength(1431));
+      // 2026-11-23 사용자 결정: 9/8 공개 폐강 목록 35강좌도 7월 원표 그대로 넣는다.
+      expect(courses, hasLength(1466));
       for (final e in audit['datasets'] as List) {
         expect(
           sha256
@@ -76,6 +77,10 @@ void main() {
             'scheduleStatus',
             'schedules',
             'departmentRemarks',
+            // 2026-11-23 확정으로 보류 사유·투영 표시·안내문을 갱신했다.
+            'individualBlockingReasons',
+            'sourceEducation',
+            'remarks',
           ].contains(k)) {
             expect(b[k], a[k]);
           }
@@ -87,8 +92,8 @@ void main() {
           expect(b['departmentRemarks'][e.key], startsWith(e.value));
         }
       }
-      expect(courses.where((c) => c.campus == 'first'), hasLength(824));
-      expect(courses.where((c) => c.campus == 'unknown'), hasLength(607));
+      expect(courses.where((c) => c.campus == 'first'), hasLength(848));
+      expect(courses.where((c) => c.campus == 'unknown'), hasLength(618));
     },
   );
   for (final mode in [
@@ -96,7 +101,7 @@ void main() {
     LectureMode.liveOnline,
     LectureMode.video,
   ]) {
-    test('1346 dated school plans actual sync roundtrip $mode', () {
+    test('1449 dated school plans actual sync roundtrip $mode', () {
       final values = <String, TimetableSyncValue>{};
       var count = 0;
       for (final c in courses) {
@@ -109,7 +114,11 @@ void main() {
         expect(saved.note, contains('통합정보시스템'));
         final source =
             raw.singleWhere((b) => b['sourceId'] == c.sourceId) as Map;
-        final blocks = source['sourceSnapshotSchedules'] as List;
+        // 2026-11-23 사용자 결정: 원격·온라인강좌 슬롯도 원문 시각으로 확정한다.
+        final snapshot = source['sourceSnapshotSchedules'] as List;
+        final blocks = snapshot.isNotEmpty
+            ? snapshot
+            : source['snapshotActualSlotCandidates'] as List;
         final seen = <String>{};
         for (final m in saved.meetings) {
           count++;
@@ -135,17 +144,22 @@ void main() {
             ].contains(date),
             isFalse,
           );
-          expect(m.classroom.contains('온라인'), isFalse);
-          final b = blocks.singleWhere(
-            (b) =>
-                b['weekday'] == m.weekday &&
-                b['startMinute'] == m.originalStartMinute &&
-                b['endMinute'] == m.originalEndMinute &&
-                b['classroom'] == m.classroom,
-          );
+          // 현장연구·사회봉사는 스냅샷 후보가 없어 원문 강의시간 칸만 비교한다.
+          final b = blocks.isEmpty
+              ? null
+              : blocks.singleWhere(
+                  (b) =>
+                      b['weekday'] == m.weekday &&
+                      b['startMinute'] == m.originalStartMinute &&
+                      b['endMinute'] == m.originalEndMinute &&
+                      b['classroom'] == m.classroom,
+                );
+          if (b == null) {
+            expect(source['sourceSchedule'], contains(m.classroom));
+          }
           expect(
             saved.modeOn(m, m.teachingDate!),
-            b['deliveryMode'] == 'liveOnline' ? LectureMode.liveOnline : mode,
+            b?['deliveryMode'] == 'liveOnline' ? LectureMode.liveOnline : mode,
           );
           expect(
             seen.add(
@@ -160,8 +174,8 @@ void main() {
           'research',
         );
       }
-      expect(values, hasLength(1346));
-      expect(count, 20412);
+      expect(values, hasLength(1449));
+      expect(count, 21893);
       final doc = TimetableSyncDocument.records(
         courses: values,
         schemaVersion: 2,
@@ -181,11 +195,21 @@ void main() {
     () {
       final partial = audit['partialOnlineScope'] as List;
       expect(partial, hasLength(10));
-      expect(partial.where((x) => x['physicalSubsetAvailable']), hasLength(7));
       for (final x in partial) {
         final c = courses.singleWhere((c) => c.sourceId == x['sourceId']);
-        expect(c.remarks, contains('실시간/동영상'));
-        expect(c.remarks, contains('휴강 확정이 아니'));
+        final source =
+            raw.singleWhere((b) => b['sourceId'] == c.sourceId) as Map;
+        expect(c.hasSchedulableMeetings, isTrue, reason: c.sourceId);
+        expect(
+          c.meetings
+              .map((m) => '${m.weekday}/${m.originalStartMinute}')
+              .toSet(),
+          {
+            for (final b in source['snapshotActualSlotCandidates'] as List)
+              '${b['weekday']}/${b['startMinute']}',
+          },
+        );
+        expect(c.remarks, isNot(contains('미반영 사유')));
       }
       for (final c in courses) {
         expect(
@@ -227,6 +251,6 @@ void main() {
         checked++;
       }
     }
-    expect(checked, 1739);
+    expect(checked, 1785);
   });
 }
