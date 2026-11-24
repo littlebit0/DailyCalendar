@@ -54,7 +54,6 @@ class UniversitySupportPolicy {
     'mju',
     'mmu',
     'nambu',
-    'nsu',
     'pcu',
     'postech',
     'sangji',
