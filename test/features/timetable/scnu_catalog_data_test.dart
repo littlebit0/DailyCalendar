@@ -46,6 +46,12 @@ void main() {
           ))
         'scnu-2026-2-${h['nativeSubjectCode']}-${h['nativeSection']}',
   };
+  // 2026-11-23 결정: 공식 요일·교시가 있는 보류 강좌를 확정(tool/timetable/apply_scnu_held_periods.py).
+  final heldPeriods = <String, Map>{
+    for (final row in raw['courses'] as List)
+      if (row['heldPeriodReview'] != null)
+        row['sourceId'] as String: row['heldPeriodReview'] as Map,
+  };
   final regulation =
       jsonDecode(
             File(
@@ -54,7 +60,7 @@ void main() {
           )
           as Map<String, dynamic>;
   test('Native subject code, section, declared merged cells and closures', () {
-    expect(courses, hasLength(1626));
+    expect(courses, hasLength(1721));
     expect(
       sha256
           .convert(fixtureFile('$directory/$file').readAsBytesSync())
@@ -64,8 +70,16 @@ void main() {
     expect(audit['closedStillPresent'], isEmpty);
     expect(
       courses.map((c) => '${c.code}/${c.section}').toSet(),
-      hasLength(1626),
+      hasLength(1720),
     );
+    // 0824판 XG1174-00 두 행(고전의 재발견·그린스마트팜)은 원문 위치로 나눈 두 강좌다.
+    expect(courses.map((c) => c.sourceId).toSet(), hasLength(1721));
+    final green = courses.singleWhere(
+      (c) => c.sourceId == 'scnu-2026-2-XG1174-00-T35R42',
+    );
+    expect(green.title, '그린스마트팜과 농촌융복합산업');
+    expect(green.meetings.first.originalStartMinute, 840);
+    expect(green.meetings.first.originalEndMinute, 960);
     for (final c in courses) {
       final record = records[c.sourceId];
       expect(record['referenceKind'], '교과목코드');
@@ -99,13 +113,67 @@ void main() {
           held.contains('${c.code}/${c.section}') &&
           !resolvedRooms.containsKey(c.sourceId),
     )) {
-      if (night6.contains(c.sourceId)) {
+      if (night6.contains(c.sourceId) || heldPeriods.containsKey(c.sourceId)) {
         expect(c.meetings, isNotEmpty, reason: c.sourceId);
       } else {
         expect(c.meetings, isEmpty, reason: c.sourceId);
       }
     }
-    expect(courses.where((c) => c.meetings.isEmpty), hasLength(121));
+    expect(heldPeriods, hasLength(83));
+    // 공식 수업시간표에 있는 폐강 분반도 원문 그대로 넣는다(2026-11-23 결정).
+    final closed = courses.where((c) => c.remarks.contains('공식 수업시간표에 게시'));
+    expect(closed, hasLength(95));
+    expect(
+      closed.where((c) => c.remarks.contains('폐강 목록에도 있음')),
+      hasLength(63),
+    );
+    expect(closed.where((c) => c.meetings.isNotEmpty), hasLength(92));
+    // 표에 없는 16교시는 교학규정 제52조 야간 6교시(22:10~22:55) 슬롯으로 잇는다.
+    final night16 = courses.singleWhere(
+      (c) => c.sourceId == 'scnu-2026-2-GC0656-F0',
+    );
+    expect(night16.meetings, hasLength(13));
+    expect(night16.meetings.first.date, '2026-09-02');
+    expect(night16.meetings.first.originalStartMinute, 1230);
+    expect(night16.meetings.first.originalEndMinute, 1380);
+    // '(1주-5주)'는 개강 주부터 5주 동안의 날짜만 둔다.
+    final firstWeeks = courses.singleWhere(
+      (c) => c.sourceId == 'scnu-2026-2-XG1128-00',
+    );
+    expect(firstWeeks.meetings.map((m) => m.date).last, '2026-09-30');
+    expect(courses.where((c) => c.meetings.isEmpty), hasLength(62));
+    // 원문 강의시간이 빈 강좌(미개설 21건)는 원문 그대로 두고 시간 미정으로 둔다.
+    final untimed = courses.where(
+      (c) => c.meetings.isEmpty && c.sourceSchedule.isEmpty,
+    );
+    expect(untimed, hasLength(21));
+    for (final c in untimed) {
+      expect(c.scheduleStatus, 'unscheduled', reason: c.sourceId);
+    }
+    // '토11,12'는 토요일 야간1·2교시(교학규정 제52조 토요일 표): 13:00~14:40.
+    final saturday = courses.singleWhere(
+      (c) => c.sourceId == 'scnu-2026-2-ED0043-00',
+    );
+    expect(saturday.scheduleStatus, 'scheduled');
+    expect(saturday.meetings.first.date, '2026-09-05');
+    expect(saturday.meetings.first.originalStartMinute, 780);
+    expect(saturday.meetings.first.originalEndMinute, 880);
+    // 학점교류(콘텐츠 원격수업) 41강좌는 실시간 수업 시각이 없어 시간 미정이다.
+    final exchange = courses.where(
+      (c) => c.departments.contains('광주전남권역 대학 간 학점교류(원격)'),
+    );
+    expect(exchange, hasLength(41));
+    for (final c in exchange) {
+      expect(c.scheduleStatus, 'unscheduled', reason: c.sourceId);
+      expect(c.meetings, isEmpty);
+    }
+    expect(courses.where((c) => c.scheduleStatus == 'unrecognized'), isEmpty);
+    // XH1028-00 0824판 두 행(월1,2수6·월3,4수7)을 모두 모임으로 넣는다.
+    final ksl = courses.singleWhere((c) => c.sourceId == 'scnu-2026-2-XH1028-00');
+    expect(
+      ksl.meetings.where((m) => m.weekday == 1).first.originalEndMinute,
+      780,
+    );
   });
   test(
     'All dates independently match native weekdays, day/night clock cells and room',
@@ -164,6 +232,16 @@ void main() {
         expect(weekdayNight[i], clocks[11 + i]);
       }
       clocks[16] = weekdayNight[5];
+      // 토요일 야간 교시(11=야간1~)는 교학규정 제52조 토요일 표(13:00~)를 쓴다.
+      final saturdayNight = [
+        for (final range
+            in (regulation['transcribedTable'] as Map)['토요일'] as List)
+          RegExp(r'(\d{2}):(\d{2})')
+              .allMatches(range as String)
+              .map((m) => int.parse(m[1]!) * 60 + int.parse(m[2]!))
+              .toList(),
+      ];
+      expect(saturdayNight.first, [780, 825]);
       final excluded = {
         ...(audit['excludedHolidays'] as List),
         ...(audit['excludedMidtermDates'] as List),
@@ -177,12 +255,16 @@ void main() {
       for (final c in courses.where((c) => c.meetings.isNotEmpty)) {
         final record = records[c.sourceId];
         final source = record['publicEducationRows'][0]['education'];
-        final native = (source['강의시간'] as String)
-            .replaceAll(RegExp(r'\s+'), '')
-            .replaceAll('/', '');
+        final review = heldPeriods[c.sourceId];
+        final native =
+            (review?['interpretedSchedule'] ?? source['강의시간'] as String)
+                .replaceAll(RegExp(r'\s+'), '')
+                .replaceAll('/', '');
+        final weeks = review?['weeks'] as List?;
         expect(syntax.allMatches(native), isNotEmpty);
         expect(native.replaceAll(syntax, ''), isEmpty);
-        expect(c.sourceClassroom, source['강의실']);
+        // 강의실 칸이 없는 원문 행은 빈 강의실로 둔다.
+        expect(c.sourceClassroom, source['강의실'] ?? '');
         final pieces = <List<Object>>[];
         for (
           var day = DateTime(2026, 9, 1);
@@ -191,6 +273,11 @@ void main() {
         ) {
           final date = timetableDateKey(day);
           if (excluded.contains(date)) {
+            continue;
+          }
+          // 1주 = 2026-09-01 개강 주(월요일 8/31 시작), 중간시험 10/19~23은 8주.
+          final week = day.difference(DateTime(2026, 8, 31)).inDays ~/ 7 + 1;
+          if (weeks != null && (week < weeks[0] || week > weeks[1])) {
             continue;
           }
           for (final match in syntax.allMatches(native)) {
@@ -203,12 +290,14 @@ void main() {
               periods = periods.map((p) => p + 10).toList();
             }
             for (final p in periods) {
-              if (p == 16) {
+              if (p == 16 && review == null) {
                 expect(match[2], isNotNull, reason: c.sourceId);
                 expect(night6, contains(c.sourceId));
               }
-              final clock = clocks[p]!;
-              var room = source['강의실'];
+              final clock = weekday == 6 && p > 10
+                  ? saturdayNight[p - 11]
+                  : clocks[p]!;
+              var room = review?['classroom'] ?? source['강의실'];
               final proof = resolvedRooms[c.sourceId];
               if (proof != null) {
                 final slot = (proof['literalSlots'] as List).singleWhere(
@@ -258,8 +347,8 @@ void main() {
         }
         expect(actual, expected, reason: 'native ${c.code}/${c.section}');
       }
-      expect(count, 29211);
-      expect(courses.where((c) => c.meetings.isNotEmpty), hasLength(1505));
+      expect(count, 32096);
+      expect(courses.where((c) => c.meetings.isNotEmpty), hasLength(1659));
     },
   );
   for (final mode in [
@@ -297,8 +386,8 @@ void main() {
             'research',
           );
         }
-        expect(values, hasLength(1505));
-        expect(count, 29211);
+        expect(values, hasLength(1659));
+        expect(count, 32096);
         final doc = TimetableSyncDocument.records(
           courses: values,
           schemaVersion: 2,
@@ -306,7 +395,7 @@ void main() {
         final json =
             jsonDecode(jsonEncode(doc.toJson())) as Map<String, dynamic>;
         final restored = TimetableSyncDocument.fromJson(json);
-        expect(restored.materializeClasses(), hasLength(1505));
+        expect(restored.materializeClasses(), hasLength(1659));
         for (final c in restored.materializeClasses()) {
           expect(c.isValid, true);
           expect(c.toJson(), values[timetableCourseSyncKey(c)]!.value);
