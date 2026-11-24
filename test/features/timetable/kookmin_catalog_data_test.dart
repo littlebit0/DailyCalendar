@@ -17,27 +17,57 @@ void main() {
       )).single;
       final courses = data.courses;
       expect(data.campusName, '북악');
-      expect(courses, hasLength(2934));
-      expect(courses.map((c) => c.sourceId).toSet(), hasLength(2934));
-      expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(2893));
+      expect(courses, hasLength(3014));
+      expect(courses.map((c) => c.sourceId).toSet(), hasLength(3014));
+      expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(2988));
       expect(
         courses.where((c) => c.scheduleStatus == 'unscheduled'),
-        hasLength(22),
+        hasLength(26),
       );
-      final blocked = courses.where((c) => c.scheduleStatus == 'unrecognized');
-      expect(blocked, hasLength(19));
-      for (final c in blocked) {
-        expect(c.meetings, isEmpty);
-        expect(c.sourceSchedule, isNotEmpty);
+      expect(courses.where((c) => c.scheduleStatus == 'unrecognized'), isEmpty);
+      // 다른 자료와 달라도 공식 강의시간표 시각(수 18:00~20:40)으로 확정한다.
+      final law = courses.singleWhere((c) => c.codeAndSection == '1659202-51');
+      expect(law.scheduleStatus, 'scheduled');
+      expect(law.meetings.first.originalStartMinute, 1080);
+      expect(law.meetings.last.originalEndMinute, 1240);
+      // 혼합수업이어도 공개 요일·시각을 그대로 확정한다.
+      final blended = courses.singleWhere(
+        (c) => c.codeAndSection == '1652001-01',
+      );
+      expect(blended.scheduleStatus, 'scheduled');
+      expect(blended.meetings, hasLength(1));
+      expect(blended.meetings.single.weekday, 2);
+      expect(blended.meetings.single.originalStartMinute, 900);
+      expect(blended.meetings.single.originalEndMinute, 1080);
+      expect(blended.meetings.single.classroom, '과학관3층23호실');
+      // 공식 조회에 폐강(closed) 표기로 남은 분반도 원문 그대로 넣는다(2026-11-23 결정).
+      final closed = courses.where((c) => c.remarks.contains('폐강(closed)'));
+      expect(closed, hasLength(80));
+      final closedSection = courses.singleWhere(
+        (c) => c.codeAndSection == '1655101-01',
+      );
+      expect(closedSection.meetings.single.weekday, 4);
+      expect(closedSection.meetings.single.originalStartMinute, 900);
+      expect(closedSection.meetings.single.originalEndMinute, 1080);
+      // 2026-11-23 공식 조회 목록에 없는 전공실기 7분반은 넣지 않는다.
+      for (final key in [
+        '0308107-02',
+        '0308107-13',
+        '0308107-22',
+        '0308203-09',
+        '0308203-17',
+        '0338902-04',
+        '0308403-15',
+      ]) {
+        expect(courses.any((c) => c.codeAndSection == key), isFalse);
       }
-      expect(courses.any((c) => c.codeAndSection == '0504202-01'), isFalse);
       final department = courses.singleWhere(
         (c) => c.codeAndSection == '1147400-01',
       );
       expect(department.departments, ['공학교육혁신센터']);
       // The official catalog publishes 학과미배정 as a top-level offering unit.
       final unassigned = courses.where((c) => c.departments.contains('학과미배정'));
-      expect(unassigned, hasLength(23));
+      expect(unassigned, hasLength(25));
       for (final c in unassigned) {
         expect(
           c.offeringOrganizations.any(
