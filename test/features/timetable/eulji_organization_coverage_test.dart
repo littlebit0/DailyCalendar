@@ -14,15 +14,19 @@ void main() {
       final datasets = catalog.where((d) => d.universityId == 'eulji').toList();
       expect(
         {for (final d in datasets) d.campus: d.courses.length},
-        {'seongnam': 389, 'uijeongbu': 34},
+        {'seongnam': 397, 'uijeongbu': 39, 'daejeon': 2},
       );
 
       final raw = <String>{};
       final orphans = <String>{};
       for (final dataset in datasets) {
         for (final course in dataset.courses) {
+          // Daejeon's two official online electives publish no period.
           expect(
-            course.hasSchedulableMeetings,
+            dataset.campus == 'daejeon'
+                ? course.scheduleStatus == 'unscheduled' &&
+                      !course.hasSchedulableMeetings
+                : course.hasSchedulableMeetings,
             isTrue,
             reason: course.sourceId,
           );
@@ -70,7 +74,7 @@ void main() {
         }
       }
     }
-    expect(checked, 423);
+    expect(checked, 438);
   });
 
   test('Eulji period slots include the following break', () {
@@ -89,6 +93,12 @@ void main() {
           final start = s['startMinute'] as int;
           final end = s['endMinute'] as int;
           if (src.contains('야')) {
+            if (src.endsWith('야4~5')) {
+              // 공식 표의 4교시 20:25~21:10·5교시 21:00~21:55가 겹쳐 4교시 시작~5교시 끝.
+              expect([start, end], [1225, 1315], reason: src);
+              checked++;
+              continue;
+            }
             expect(start, 1080, reason: src);
             // 야1~3 = 18:00~20:25(3교시 뒤 10분 휴식 포함), 야1~2 = 18:00~19:30.
             final last = RegExp(r'야1~(\d)$').firstMatch(src)?[1];
@@ -101,6 +111,6 @@ void main() {
         }
       }
     }
-    expect(checked, 423);
+    expect(checked, 436);
   });
 }

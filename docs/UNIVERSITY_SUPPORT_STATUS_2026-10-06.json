@@ -6718,22 +6718,25 @@
         "checkedAt": "2026-10-12"
       },
       "timetable": {
-        "status": "temporarily_unsupported",
+        "status": "implemented_partial_catalog",
         "checkedAt": "2026-10-12",
         "universityId": "eulji",
         "courses": 67,
         "scheduled": 67,
         "datasets": [
           "assets/timetable/eulji-seongnam-2026-2.json",
-          "assets/timetable/eulji-uijeongbu-2026-2.json"
+          "assets/timetable/eulji-uijeongbu-2026-2.json",
+          "assets/timetable/eulji-daejeon-2026-2.json"
         ],
-        "coverageNote": "성남 60개·의정부 7개 교류 공개 자료; 대전·전체 학과 미확보",
+        "coverageNote": "성남 60개·의정부 7개 교류 공개 자료; 대전·전체 학과 미확보; 2026-11-22 대전캠퍼스 공식 교양 2과목(온라인, 시간 미정) 추가. 의예과·의학과는 공개 시간표 없음",
         "wholeUniversityCompletionClaim": false,
         "priorImplementationStatus": "implemented_partial_catalog",
         "suspensionDate": "2026-10-12",
         "reason": "User stopped expansion; incomplete source coverage, unresolved interpretation or whole-scope review remains. See support-decisions.json for per-school evidence.",
         "suspensionEvidence": "work/university-support-suspension-20261012/support-decisions.json",
-        "productionIntegrationEnabled": false
+        "productionIntegrationEnabled": true,
+        "reopenedDate": "2026-11-22",
+        "reopenNote": "사용자 지시(2026-11-22)로 기존 데이터 그대로 검색 재개. 시각 미확정(unrecognized) 강좌는 원문만 표시하고 시간표 추가 불가. 전체 범위 완료 아님. 2026-11-23 사용자 결정으로 폐강·개설유예 공고로 빠졌던 교양 10강좌와 보류였던 온라인 야간 2강좌를 공지 1077 원문대로 추가(남은 보류 1행: 야간4~5교시는 공식 시각이 겹침). 야간 4~5교시 1강좌는 공식 학사안내의 겹친 시각 중 4교시 시작~5교시 끝(20:25~21:55)으로 확정(보류 0)."
       },
       "sourceEvidence": "work/university-research/expansion17-20261011/"
     },

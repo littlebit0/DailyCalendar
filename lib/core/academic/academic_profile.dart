@@ -337,7 +337,7 @@ class AcademicProfile {
       ('iccu', 'academyinfo:0000168') => null,
       ('iccu', _) => 'songdo',
       ('ewha', _) => 'unknown',
-      ('eulji', 'academyinfo:0000161') => null,
+      ('eulji', 'academyinfo:0000161') => 'daejeon',
       ('eulji', 'academyinfo:0002911') => 'uijeongbu',
       ('eulji', _) => 'seongnam',
       ('hansei', _) => 'main',

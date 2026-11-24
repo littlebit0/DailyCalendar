@@ -8,7 +8,6 @@ class UniversitySupportPolicy {
     'dgist',
     'dnue',
     'dongguk',
-    'eulji',
     'ginue',
     'gist',
     'gjue',
