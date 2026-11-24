@@ -45,7 +45,39 @@ void main() {
               ).readAsStringSync(),
             )
             as Map;
-    expect(product['courses'], frozen['courses']);
+    // 2026-11-23 사용자 결정으로 확정한 보류 강좌는 시각·상태·비고·기간만 바뀌었다.
+    final products = product['courses'] as List;
+    final frozens = frozen['courses'] as List;
+    expect(products, hasLength(frozens.length));
+    var confirmed = 0;
+    var untimed = 0;
+    for (var i = 0; i < products.length; i++) {
+      final now = Map<String, dynamic>.from(products[i] as Map);
+      final before = frozens[i] as Map;
+      if (jsonEncode(now['departmentRemarks']).contains('2026-11-23 사용자 결정')) {
+        expect(before['scheduleStatus'], 'unrecognized');
+        expect(now['scheduleStatus'], 'scheduled');
+        for (final f in ['schedules', 'scheduleStatus', 'departmentRemarks']) {
+          now[f] = before[f];
+        }
+        now.remove('period');
+        confirmed++;
+      } else if (jsonEncode(
+        now['departmentRemarks'],
+      ).contains('2026-11-23 사용자 지시')) {
+        // 공식 자료 어디에도 시각이 없는 강좌는 시간 미정으로 옮겼다.
+        expect(before['scheduleStatus'], 'unrecognized');
+        expect(now['scheduleStatus'], 'unscheduled');
+        expect(now['schedules'], isEmpty);
+        for (final f in ['scheduleStatus', 'departmentRemarks']) {
+          now[f] = before[f];
+        }
+        untimed++;
+      }
+      expect(now, before);
+    }
+    expect(confirmed, 139);
+    expect(untimed, 36);
     final period =
         (jsonDecode(
                   fixtureFile(
@@ -79,8 +111,8 @@ void main() {
     final selected = dataset.courses
         .where((c) => c.hasSchedulableMeetings)
         .toList();
-    expect(selected, hasLength(2044));
-    expect(selected.fold<int>(0, (n, c) => n + c.meetings.length), 56624);
+    expect(selected, hasLength(2183));
+    expect(selected.fold<int>(0, (n, c) => n + c.meetings.length), 59046);
     final baseline =
         jsonDecode(
               fixtureFile(

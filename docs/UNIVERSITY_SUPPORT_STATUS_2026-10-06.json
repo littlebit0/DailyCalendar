@@ -4202,7 +4202,7 @@
         "sourceUrl": "https://ssu.ac.kr/학사/학사일정/"
       },
       "timetable": {
-        "status": "temporarily_unsupported",
+        "status": "implemented_partial_catalog",
         "sourceId": "ssu",
         "courses": 2219,
         "scheduled": 2044,
@@ -4251,7 +4251,9 @@
         "remaining": "Current packaged 2219 offerings / 2044 schedule-bearing / 56624 serialized reservations; partial, whole operating support not verified.",
         "latestSourceProcessingPass": "work/university-research/resume-20261011/current-packaged-coverage.json",
         "priorStatus": "implemented_partial_catalog",
-        "statusNote": "Listed in UniversitySupportPolicy.suspendedTimetableUniversities (#976)."
+        "productionIntegrationEnabled": true,
+        "reopenedDate": "2026-11-22",
+        "reopenNote": "시각 미확정 강좌는 원문만 검색에 표시하고 시간표 추가는 확정 시각 강좌만 허용한다."
       },
       "installedAcceptance": "macos_build_signature_install_verified_ui_not_run",
       "deferredAsImpossible": false,

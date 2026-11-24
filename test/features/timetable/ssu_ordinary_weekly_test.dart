@@ -44,9 +44,12 @@ List<Map<String, dynamic>> sourceGeometry(String text, String professor) {
     }
     expect(depth, 0);
     final rawRoom = text.substring(match.end, closing - 1).trim();
-    final name = names.firstWhere(
-      (name) => name.isNotEmpty && rawRoom.endsWith('-$name'),
-    );
+    // A blank professor suffix ('정보과학관 21102-') leaves only the dash.
+    final name = rawRoom.endsWith('-')
+        ? ''
+        : names.firstWhere(
+            (name) => name.isNotEmpty && rawRoom.endsWith('-$name'),
+          );
     final room = rawRoom.substring(0, rawRoom.length - name.length - 1).trim();
     for (final day in match[1]!.split(RegExp(r'\s+'))) {
       final m = <String, dynamic>{
@@ -62,6 +65,9 @@ List<Map<String, dynamic>> sourceGeometry(String text, String professor) {
   }
   return result;
 }
+
+bool confirmedByDecision(Map c) =>
+    jsonEncode(c['departmentRemarks']).contains('2026-11-23 사용자 결정');
 
 void main() {
   final audit = read('$directory/weekly-reservation-audit-v4.json');
@@ -97,9 +103,9 @@ void main() {
       expect(added, hasLength(2027));
       expect(
         model.courses.where((c) => c.hasSchedulableMeetings),
-        hasLength(2044),
+        hasLength(2183),
       );
-      expect(model.courses.expand((c) => c.meetings), hasLength(56624));
+      expect(model.courses.expand((c) => c.meetings), hasLength(59046));
       const allowed = [
         '이수구분(주전공)',
         '이수구분(다전공)',
@@ -119,6 +125,7 @@ void main() {
       var rowCount = 0;
       var existing = 0;
       var held = 0;
+      var confirmed = 0;
       for (var i = 0; i < courses.length; i++) {
         final c = courses[i];
         final before = base['courses'][i];
@@ -150,7 +157,35 @@ void main() {
         ]) {
           expect(c[field], before[field]);
         }
-        if (!added.contains(cid)) {
+        if (confirmedByDecision(c)) {
+          // 2026-11-23 사용자 결정: 대면+녹화 등 보류 강좌를 공개 요일·시각으로 확정했다.
+          expect(before['scheduleStatus'], 'unrecognized');
+          expect(c['scheduleStatus'], 'scheduled');
+          final restored = jsonDecode(jsonEncode(c)) as Map<String, dynamic>;
+          for (final f in [
+            'schedules',
+            'scheduleStatus',
+            'departmentRemarks',
+          ]) {
+            restored[f] = before[f];
+          }
+          restored.remove('period');
+          expect(jsonEncode(restored), jsonEncode(before));
+          confirmed++;
+        } else if (jsonEncode(
+          c['departmentRemarks'],
+        ).contains('2026-11-23 사용자 지시')) {
+          // 공식 자료 어디에도 시각이 없는 강좌는 시간 미정으로 옮겼다.
+          expect(before['scheduleStatus'], 'unrecognized');
+          expect(c['scheduleStatus'], 'unscheduled');
+          expect(c['schedules'], isEmpty);
+          final restored = jsonDecode(jsonEncode(c)) as Map<String, dynamic>;
+          for (final f in ['scheduleStatus', 'departmentRemarks']) {
+            restored[f] = before[f];
+          }
+          expect(jsonEncode(restored), jsonEncode(before));
+          held++;
+        } else if (!added.contains(cid)) {
           expect(jsonEncode(c), jsonEncode(before));
           if ((c['schedules'] as List).isEmpty) {
             held++;
@@ -172,7 +207,8 @@ void main() {
       }
       expect(rowCount, 5561);
       expect(existing, 17);
-      expect(held, 175);
+      expect(confirmed, 139);
+      expect(held, 36);
     },
   );
   test(
@@ -207,7 +243,9 @@ void main() {
       expect(audit['globalExcludedDates'], excluded.toList()..sort());
       var count = 0;
       for (final c in courses.where(
-        (c) => added.contains(c['sourceEducation']['nativeTenDigitCourseId']),
+        (c) =>
+            added.contains(c['sourceEducation']['nativeTenDigitCourseId']) ||
+            confirmedByDecision(c),
       )) {
         final cid = c['sourceEducation']['nativeTenDigitCourseId'];
         final row = source['recordsByCode'][cid][0];
@@ -238,7 +276,8 @@ void main() {
           expect(m.containsKey('deliveryMode'), false);
         }
       }
-      expect(count, 56503);
+      // 2026-11-23 사용자 결정으로 확정한 139개 강좌의 2422개 구간 포함.
+      expect(count, 58925);
     },
   );
   for (final mode in [
@@ -246,7 +285,7 @@ void main() {
     LectureMode.liveOnline,
     LectureMode.video,
   ]) {
-    test('actual2044 classes56624 meetings full Drive ${mode.name}', () {
+    test('actual2183 classes59046 meetings full Drive ${mode.name}', () {
       final values = <String, TimetableSyncValue>{};
       var count = 0;
       for (final c in model.courses.where((c) => c.hasSchedulableMeetings)) {
@@ -299,8 +338,8 @@ void main() {
           'research',
         );
       }
-      expect(count, 56624);
-      expect(values, hasLength(2044));
+      expect(count, 59046);
+      expect(values, hasLength(2183));
       final json =
           jsonDecode(
                 jsonEncode(
@@ -312,7 +351,7 @@ void main() {
               )
               as Map<String, dynamic>;
       final restored = TimetableSyncDocument.fromJson(json);
-      expect(restored.materializeClasses(), hasLength(2044));
+      expect(restored.materializeClasses(), hasLength(2183));
       for (final c in restored.materializeClasses()) {
         expect(c.toJson(), values[timetableCourseSyncKey(c)]!.value);
       }
