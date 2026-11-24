@@ -12,7 +12,6 @@ class UniversitySupportPolicy {
     'ginue',
     'gist',
     'gjue',
-    'gnu',
     'gnue',
     'hansei',
     'hknu',

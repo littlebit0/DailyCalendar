@@ -6,6 +6,7 @@ import 'package:daily/core/academic/academic_profile.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
 import 'package:daily/features/timetable/domain/timetable.dart';
+import 'package:daily/features/timetable/domain/university_course.dart';
 
 void main() {
   test('GNU integrated profile uses its own campus-filterable catalog', () {
@@ -163,8 +164,8 @@ void main() {
         }
       }
       expect(count, 4842);
-      expect(scheduled, 3005);
-      expect(meetings, 53869);
+      expect(scheduled, 3481);
+      expect(meetings, 62763);
       for (final mode in [
         LectureMode.inPerson,
         LectureMode.liveOnline,
@@ -226,18 +227,83 @@ void main() {
         ),
         isTrue,
       );
-      for (final pair in [
-        ['11026184', '002'],
-        ['11002308', '001'],
-      ]) {
+      // 2026-11-23 1차 재개: 보류 강좌를 공식 교시표(n교시 08:00+60n분, 60분 슬롯)로 확정.
+      // 표 밖 교시·토요일도 같은 슬롯으로 이어 계산한다.
+      final all = datasets.expand((d) => d.courses).toList();
+      UniversityCourse course(String code, String section) =>
+          all.singleWhere((c) => c.code == code && c.section == section);
+      final night = course('11021421', '001');
+      expect(night.sourceSchedule, '화14,15[405-0107]');
+      expect(night.meetings, hasLength(14));
+      for (final m in night.meetings) {
+        expect([m.originalStartMinute, m.originalEndMinute], [1320, 1440]);
+        expect(m.classroom, '405-0107');
+      }
+      final saturdayRemote = course('11011228', '001');
+      expect(saturdayRemote.sourceSchedule, '토3');
+      expect(saturdayRemote.meetings, hasLength(13));
+      expect(
+        saturdayRemote.meetings.every(
+          (m) =>
+              m.weekday == 6 &&
+              m.originalStartMinute == 660 &&
+              m.originalEndMinute == 720,
+        ),
+        isTrue,
+      );
+      expect(
+        saturdayRemote.meetings.map((m) => m.date),
+        contains('2026-12-12'),
+      );
+      expect(
+        saturdayRemote.meetings.map((m) => m.date),
+        isNot(contains('2026-10-03')),
+      );
+      // 2차: 학과 수정 공지(2026-07-29)와 코드가 엇갈린 4강좌를 최신 공식 자료로 확정.
+      expect(all.where((c) => c.scheduleStatus == 'unrecognized'), isEmpty);
+      void expectWeekly(
+        UniversityCourse c,
+        String schedule,
+        Set<List<int>> blocks,
+        int count,
+      ) {
+        expect(c.sourceSchedule, schedule);
+        expect(c.hasSchedulableMeetings, isTrue);
+        expect(c.meetings, hasLength(count));
         expect(
-          datasets
-              .expand((d) => d.courses)
-              .singleWhere((c) => c.code == pair[0] && c.section == pair[1])
-              .hasSchedulableMeetings,
-          isFalse,
+          c.meetings
+              .map((m) => '${m.originalStartMinute}-${m.originalEndMinute}')
+              .toSet(),
+          blocks.map((b) => '${b[0]}-${b[1]}').toSet(),
         );
       }
+
+      // 공지 토요일 실제 시각 7·8·9교시 = 14:00~16:00.
+      expectWeekly(course('11002308', '001'), '토7,8,9[202- 408]', {
+        [840, 960],
+      }, 13);
+      expectWeekly(course('11026184', '002'), '토3,4[202- 405]', {
+        [660, 780],
+      }, 13);
+      expectWeekly(course('11020698', '002'), '금1,2,3[024-0260]', {
+        [540, 720],
+      }, 14);
+      expectWeekly(course('11022792', '001'), '목8,9,10[201-0203]', {
+        [960, 1140],
+      }, 14);
+      // 11006946-001 수요일 10~12교시: 표 밖 12교시를 60분 슬롯으로 이어 18:00~21:00.
+      final dance = course('11006946', '001');
+      expect(dance.meetings, hasLength(28));
+      expect(
+        dance.meetings.where(
+          (m) =>
+              m.classroom == '102-0109' &&
+              m.weekday == 3 &&
+              m.originalStartMinute == 1080 &&
+              m.originalEndMinute == 1260,
+        ),
+        hasLength(14),
+      );
     },
   );
 }
