@@ -34,6 +34,7 @@ void main() {
       final scheduled = <UniversityCourse>[];
       final seen = <String>{};
       var rows = 0, slots = 0, closedRows = 0, seventyFive = 0, fifty = 0;
+      var night = 0, blankUnscheduled = 0, unscheduled = 0;
       for (final campus in ['main', 'unknown']) {
         final raw =
             jsonDecode(
@@ -107,9 +108,18 @@ void main() {
           );
           if (closed.contains('${course.code}-${course.section}')) {
             closedRows++;
-            expect(course.hasSchedulableMeetings, isFalse);
+            // 2026-11-23 user decision: closure is not judged; the printed
+            // weekday and periods are reserved like every other course.
             expect(meta['closureMatched'], isTrue);
+            expect(course.sourceRemarks, contains('폐강 여부는 판단하지 않음'));
           }
+          if (row['scheduleStatus'] == 'unscheduled') {
+            unscheduled++;
+            expect(row['schedules'], isEmpty);
+            // 요일ㆍ교시 칸이 빈 강좌는 공개 경로를 다 확인해도 시각이 없어 시간 미정이다.
+            if (compact(source('요일ㆍ교시')).isEmpty) blankUnscheduled++;
+          }
+          expect(row['scheduleStatus'], isNot('unrecognized'));
           if (!course.hasSchedulableMeetings) continue;
           scheduled.add(course);
           expect(course.sourceRemarks, contains('공개 예약 계획, 실제 등교'));
@@ -127,13 +137,26 @@ void main() {
           // 학사내규 제6조 교시표에 쉬는 시간을 포함한 슬롯(50분 수업+10분=60분,
           // 75분 수업+15분=90분)으로 보고, 같은 날 연속 교시는 한 구간으로 합친다.
           final expectedSpans = <String>{};
+          // A wrapped cell ('화 6.7.8' / '9.10.11') separates periods.
+          final printed = compact(
+            course.sourceSchedule.replaceAllMapped(
+              RegExp(r'(\d)\s*\n\s*(\d)'),
+              (m) => '${m[1]}.${m[2]}',
+            ),
+          );
           for (final group in RegExp(
             r'([월화수목금토일]+)(\d+(?:\.\d+)*)',
-          ).allMatches(compact(course.sourceSchedule))) {
+          ).allMatches(printed)) {
             for (final day in group[1]!.split('')) {
               final slots = <(int, int)>[
                 for (final period in group[2]!.split('.'))
                   () {
+                    // 학사내규 제6조 2호 가목: 야간 1~4교시 18:00~21:15 (45분 수업 5분
+                    // 휴식). 10~13교시는 이 50분 슬롯으로 이어 계산한다.
+                    final night = int.parse(period) - 10;
+                    if (night >= 0 && night < 4) {
+                      return (1080 + 50 * night, 1130 + 50 * night);
+                    }
                     final clock = clocks[period] as List;
                     final begin = clock[0] as int;
                     return (begin, begin + (clock[1] - begin == 75 ? 90 : 60));
@@ -178,12 +201,14 @@ void main() {
             // expectedSpans 비교가 보장한다.
             final starts = {
               for (final p in clocks.keys) (clocks[p] as List)[0] as int,
+              for (var n = 0; n < 4; n++) 1080 + 50 * n,
             };
             expect(starts, contains(meeting.originalStartMinute));
             final duration =
                 meeting.originalEndMinute - meeting.originalStartMinute;
             if (duration % 90 == 0) seventyFive++;
             if (duration % 60 == 0) fifty++;
+            if (meeting.originalEndMinute > 1080) night++;
             expect(meeting.classroom, course.sourceClassroom);
             actualSpans.add(
               '${meeting.weekday}/${meeting.originalStartMinute}/${meeting.originalEndMinute}',
@@ -198,14 +223,23 @@ void main() {
           expect(actualSpans, expectedSpans);
         }
       }
-      // 학칙 학사내규 제6조: 21~26교시는 75분 수업이다. 3시간·3학점인데 화 22(75분)
-      // 하나뿐인 영어회화(EGM025-01)는 수업시간이 맞지 않아 보류한다.
-      expect(scheduled.where((c) => c.code == 'EGM025'), isEmpty);
+      // 3시간·3학점인데 화 22 하나뿐인 영어회화(EGM025-01)는 최신 공개 시간표 책의
+      // 요일·교시를 같은 슬롯 규칙(22교시 10:30~12:00)으로 예약한다(2026-11-23).
+      final egm = scheduled.singleWhere((c) => c.code == 'EGM025');
+      expect(
+        egm.meetings
+            .map((m) => '${m.originalStartMinute}-${m.originalEndMinute}')
+            .toSet(),
+        {'630-720'},
+      );
       expect(rows, 1698);
       expect(seen, hasLength(1698));
       expect(closedRows, 104);
-      expect(scheduled, hasLength(1368));
-      expect(slots, 17157);
+      expect(scheduled, hasLength(1538));
+      expect(slots, 19249);
+      expect(night, greaterThan(0));
+      expect(blankUnscheduled, 53);
+      expect(unscheduled, 160);
       expect(seventyFive, greaterThan(0));
       expect(fifty, greaterThan(0));
       for (final mode in [
@@ -226,7 +260,7 @@ void main() {
         final restored = TimetableSyncDocument.fromJson(
           jsonDecode(jsonEncode(document.toJson())) as Map<String, dynamic>,
         ).materializeClasses();
-        expect(restored, hasLength(1368));
+        expect(restored, hasLength(1538));
         for (final c in restored) {
           final prior = before[c.sourceId]!;
           expect(c.isValid, isTrue);
