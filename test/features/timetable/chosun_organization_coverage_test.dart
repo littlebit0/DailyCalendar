@@ -32,14 +32,14 @@ void main() {
           }
         }
       }
-      expect(courses, 3063);
+      expect(courses, 3255);
       expect(raw, isEmpty);
       expect(orphans, isEmpty);
     },
   );
 
   test(
-    'Chosun keeps the published clock and holds non-face-to-face rows',
+    'Chosun keeps the published clock for every row',
     () async {
       final courses = [
         for (final d in await UniversityCatalog.load(university: 'chosun'))
@@ -47,12 +47,17 @@ void main() {
       ];
       expect(
         courses.where((c) => c.scheduleStatus == 'scheduled'),
-        hasLength(2924),
+        hasLength(3255),
       );
       expect(
         courses.where((c) => c.scheduleStatus == 'unrecognized'),
-        hasLength(139),
+        isEmpty,
       );
+      // 2026-11-23 사용자 결정: 블렌디드 등 운영 방식과 관계없이 원문 시각으로 확정한다.
+      final blended = courses.singleWhere((c) => c.sourceId == 'chosun/unknown/2026/2/00142/80');
+      expect(blended.meetings.single.weekday, 6);
+      expect(blended.meetings.single.startMinute, 960);
+      expect(blended.meetings.single.endMinute, 1140);
       final course = courses.singleWhere(
         (c) => c.sourceId == 'chosun/unknown/2026/2/00030/01',
       );

@@ -77,19 +77,19 @@ class ImportChosunTests(unittest.TestCase):
         self.assertIn('비고 비고글', course['departmentRemarks']['컴퓨터공학과'])
         self.assertIn('원어강좌 영어', course['departmentRemarks']['컴퓨터공학과'])
 
-    def test_remote_cyber_and_field_practice_rows_are_held_without_schedules(self):
+    def test_remote_cyber_and_field_practice_rows_keep_published_clock(self):
+        # 2026-11-23 사용자 결정: 운영 방식과 관계없이 원문 요일·시각으로 확정한다.
         isu, kinds = self.tables()
         remote = chosun.course_for(row(SUEOP_BANGSIK_NM='비대면'), isu, kinds)
         cyber = chosun.course_for(row(CYBER_GANGUI_GB='1'), isu, kinds)
         practice = chosun.course_for(row(GANGUI_GB='02'), isu, kinds)
         for course in (remote, cyber, practice):
-            self.assertEqual(course['scheduleStatus'], 'unrecognized')
-            self.assertEqual(course['schedules'], [])
-            self.assertTrue(course['holdReasons'])
-            self.assertIn('시각 보류: ', course['departmentRemarks']['컴퓨터공학과'])
-        self.assertIn('현장실습', practice['holdReasons'][0])
-        # 보류돼도 원문이 적은 시각은 그대로 남는다.
-        self.assertEqual(remote['sourceSchedule'], '월 1A~2B(09:00~10:50)')
+            self.assertEqual(course['scheduleStatus'], 'scheduled')
+            self.assertEqual(course['schedules'][0]['startMinute'], 540)
+            self.assertNotIn('holdReasons', course)
+            self.assertNotIn('시각 보류', course['departmentRemarks']['컴퓨터공학과'])
+        self.assertIn('수업방식 비대면', remote['departmentRemarks']['컴퓨터공학과'])
+        self.assertIn('강의구분', practice['departmentRemarks']['컴퓨터공학과'])
 
     def run_main(self, rows):
         with TemporaryDirectory() as folder:
@@ -105,14 +105,17 @@ class ImportChosunTests(unittest.TestCase):
             data = json.loads(output.read_text(encoding='utf-8')) if output.exists() else None
         return result, data
 
-    def test_main_drops_closed_rows_and_counts_statuses(self):
+    def test_main_keeps_closed_rows_and_counts_statuses(self):
+        # 2026-11-23 사용자 결정: 폐강 표기 행도 원문 그대로 넣는다.
         result, data = self.run_main([
             row(), row(GWAMOK_CD='A002', SUEOP_BANGSIK_NM='비대면'),
-            row(GWAMOK_CD='A003', PYEGANG_YN='폐강')])
+            row(GWAMOK_CD='A003', PYEGANG_YN='폐강'),
+            row(GWAMOK_CD='A004', PYEGANG_YN='폐강', GANGUI_TIME_NM='', GANGUISIL_NM='')])
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertEqual((data['sourceRowCount'], data['closedRowCount']), (3, 1))
-        self.assertEqual(data['courseScheduleStatusCounts'], {'scheduled': 1, 'unrecognized': 1})
-        self.assertEqual([c['courseCode'] for c in data['courses']], ['A001', 'A002'])
+        self.assertEqual((data['sourceRowCount'], data['closedRowCount']), (4, 2))
+        self.assertEqual(data['courseScheduleStatusCounts'], {'scheduled': 3, 'unscheduled': 1})
+        self.assertEqual([c['courseCode'] for c in data['courses']], ['A001', 'A002', 'A003', 'A004'])
+        self.assertIn('원문 폐강 표기', data['courses'][2]['departmentRemarks']['컴퓨터공학과'])
         self.assertFalse(data['completionClaim'])
 
     def test_main_rejects_other_terms_and_duplicate_sections(self):
