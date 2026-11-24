@@ -265,7 +265,12 @@ class AcademicProfile {
       'cbnu' => const ['academyinfo:0000030'],
       'daegu' => const ['academyinfo:0000084'],
       'kongju' => const ['academyinfo:0000008'],
-      'changwon' => const ['academyinfo:0000028'],
+      // One integrated catalog lists Geochang/Namhae-only rows; campus unknown.
+      'changwon' => const [
+        'academyinfo:0000028',
+        'academyinfo:0003297',
+        'academyinfo:0003298',
+      ],
       'gknu' => const ['academyinfo:0000021'],
       'ssu' => const ['academyinfo:0000143'],
       'swu' => const ['academyinfo:0000126'],

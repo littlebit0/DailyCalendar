@@ -9,7 +9,7 @@ import 'package:daily/features/timetable/domain/timetable.dart';
 
 void main() {
   test(
-    'Changwon own main academic profile keeps other campus catalogs unavailable',
+    'Changwon campuses share the integrated catalog; other schools stay unavailable',
     () {
       for (final id in [
         'institution:academyinfo:0000028',
@@ -22,10 +22,11 @@ void main() {
         );
         expect(profile.timetableUniversity, 'changwon');
         expect(profile.timetableCampus, 'unknown');
-        for (final campus in [
-          'academyinfo:0003297',
-          'academyinfo:0003298',
-          'academyinfo:0000117',
+        // The integrated catalog also lists Geochang/Namhae-only rows.
+        for (final (campus, supported) in [
+          ('academyinfo:0003297', true),
+          ('academyinfo:0003298', true),
+          ('academyinfo:0000117', false),
         ]) {
           expect(
             AcademicProfile(
@@ -34,7 +35,7 @@ void main() {
               schoolKind: 'fourYear',
               campusId: campus,
             ).timetableSupported,
-            isFalse,
+            supported,
           );
         }
       }
@@ -104,9 +105,9 @@ void main() {
           .toSet();
       expect(
         dataset.courses.where((c) => c.hasSchedulableMeetings),
-        hasLength(1432),
+        hasLength(1501),
       );
-      expect(dataset.courses.expand((c) => c.meetings), hasLength(28978));
+      expect(dataset.courses.expand((c) => c.meetings), hasLength(30101));
       // 15A·15B use the official 학사안내 period table (22:30~23:20).
       final night = dataset.courses.singleWhere((c) => c.code == 'AHA0132');
       expect(night.meetings, hasLength(12));
@@ -125,7 +126,21 @@ void main() {
       );
       expect(
         raw['courses'].where((c) => c['scheduleStatus'] == 'unrecognized'),
-        hasLength(69),
+        isEmpty,
+      );
+      // 운영 방식 보류였던 강좌도 공식 교시로 확정한다(apply_changwon_held_periods.py).
+      final remote = dataset.courses.singleWhere(
+        (c) => c.sourceId == 'changwon/unknown/2026/2/UGA1009-00',
+      );
+      expect(remote.meetings, hasLength(13));
+      expect(
+        [
+          remote.meetings.first.weekday,
+          remote.meetings.first.originalStartMinute,
+          remote.meetings.first.originalEndMinute,
+          remote.meetings.first.classroom,
+        ],
+        [4, 1100, 1250, '99999'],
       );
       final published = dataset.courses
           .where((c) => priorIds.contains(c.sourceId))
