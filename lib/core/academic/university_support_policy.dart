@@ -33,7 +33,6 @@ class UniversitySupportPolicy {
     'knue',
     'korea',
     'kumoh',
-    'kwangwoon',
     'kyonggi',
     'mmu',
     'nambu',
