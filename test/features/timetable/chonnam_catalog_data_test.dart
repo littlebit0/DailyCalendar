@@ -14,8 +14,8 @@ Map<String, dynamic> source(String campus) =>
 
 void main() {
   for (final (campus, rows, total, scheduled, unrecognized, unscheduled) in [
-    ('gwangju', 16885, 3166, 3072, 93, 1),
-    ('yeosu', 3344, 696, 663, 33, 0),
+    ('gwangju', 16885, 3166, 3163, 0, 3),
+    ('yeosu', 3344, 696, 693, 0, 3),
   ]) {
     test('all $campus public courses survive catalog import and round trip', () {
       final raw = source(campus);
@@ -71,7 +71,8 @@ void main() {
           if (course.scheduleStatus == 'unrecognized') {
             expect(course.sourceSchedule, isNotEmpty);
           } else {
-            expect(course.sourceSchedule, isEmpty);
+            // '****' marks a course with no time assigned (2026-11-23).
+            expect(course.sourceSchedule, anyOf(isEmpty, '****'));
           }
           // Only courses with verified meetings enter the add/round-trip path.
           continue;
@@ -161,16 +162,20 @@ void main() {
         (c) => c.code == 'JAU0002' && c.section == '1',
       );
       expect(ambiguous.sourceSchedule, '****');
-      expect(ambiguous.scheduleStatus, 'unrecognized');
+      expect(ambiguous.scheduleStatus, 'unscheduled');
       expect(ambiguous.hasSchedulableMeetings, isFalse);
+      expect(ambiguous.canAddToTimetable, isTrue);
       expect(ambiguous.matchesQuery('자유과제2'), isTrue);
 
       final late = courses.singleWhere(
         (c) => c.code == 'BIO3078' && c.section == '1',
       );
       expect(late.sourceSchedule, '수10수11수12수13');
-      expect(late.scheduleStatus, 'unrecognized');
-      expect(late.meetings, isEmpty);
+      // Periods past the official table continue the same 60-minute slot
+      // (2026-11-23 user decision): 10교시 18:00 to the end of 13교시 22:00.
+      expect(late.scheduleStatus, 'scheduled');
+      expect(late.meetings.single.originalStartMinute, 18 * 60);
+      expect(late.meetings.single.originalEndMinute, 22 * 60);
 
       final saturday = courses.singleWhere(
         (c) => c.code == 'HRT4038' && c.section == '1',

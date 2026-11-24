@@ -21,7 +21,6 @@ class UniversitySupportPolicy {
     'inu',
     'jbnu',
     'jeju',
-    'jnu',
     'jnue',
     'kaist',
     'kangnam',
