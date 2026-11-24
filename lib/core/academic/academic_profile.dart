@@ -99,7 +99,9 @@ class AcademicProfile {
     'institution:academyinfo:0000254' || 'academyinfo:0000254' => 'bnue',
     'institution:academyinfo:0000374' || 'academyinfo:0000374' => 'kaist',
     'institution:academyinfo:0000253' || 'academyinfo:0000253' => 'dnue',
-    'institution:academyinfo:0000100' || 'academyinfo:0000100' => 'dongguk',
+    'institution:academyinfo:0000100' ||
+    'academyinfo:0000100' ||
+    'academyinfo:0000101' => 'dongguk',
     'institution:academyinfo:0000033' || 'academyinfo:0000033' => 'kmou',
     'institution:academyinfo:0000151' || 'academyinfo:0000151' => 'yu',
 
@@ -235,7 +237,7 @@ class AcademicProfile {
       'bnue' => const ['academyinfo:0000254'],
       'kaist' => const ['academyinfo:0000374'],
       'dnue' => const ['academyinfo:0000253'],
-      'dongguk' => const ['academyinfo:0000100'],
+      'dongguk' => const ['academyinfo:0000100', 'academyinfo:0000101'],
       'kmou' => const ['academyinfo:0000033'],
       'yu' => const ['academyinfo:0000151'],
 
@@ -360,6 +362,7 @@ class AcademicProfile {
       ('bnue', _) => 'unknown',
       ('kaist', _) => 'main',
       ('dnue', _) => 'unknown',
+      ('dongguk', 'academyinfo:0000101') => 'wise',
       ('dongguk', _) => 'seoul',
       ('kmou' || 'yu', _) => 'unknown',
 

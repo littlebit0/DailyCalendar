@@ -7,7 +7,6 @@ class UniversitySupportPolicy {
     'cje',
     'dgist',
     'dnue',
-    'dongguk',
     'ginue',
     'gist',
     'gjue',
