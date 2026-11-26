@@ -49,3 +49,7 @@ Drive v2 파일 형식과 로컬 DB 스키마(15)는 4.2.0과 같습니다. 설�
 
 - main `2df8c926d`의 CI(Platform Builds)에서 Dart 분석·전체 테스트, 시간표 테스트 3개, Apple LMS 세션 테스트, Android·Windows Debug 빌드가 통과했습니다.
 - macOS와 iOS 시뮬레이터 테스트 앱에서 LMS 과제 마감 알림 설정 화면, 값 유지, 영어 표시를 확인했습니다. 시간표는 대표 강좌를 화면에서, 나머지 사례는 앱에 들어 있는 시간표 자료로 확인했습니다.
+- 4.3.0 버전 올림 커밋 `2cd0c6d04`로 Android `.aab`, iOS App Store `.ipa`, macOS App Store `.pkg`를 만들었습니다.
+  - 세 파일 모두 버전 4.3.0(Android versionCode 430)을 확인했습니다.
+  - 서명 인증서·팀·번들 ID는 4.2.0과 같습니다. Mac 바이너리는 arm64 단일입니다.
+  - 이 파일들을 실제 기기에 설치해 쓰지는 않았습니다.
