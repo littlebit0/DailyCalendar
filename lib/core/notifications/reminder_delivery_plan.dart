@@ -1,7 +1,27 @@
 import 'package:flutter/foundation.dart';
 
 import '../../features/events/data/recurrence_expander.dart';
+import '../settings/app_settings.dart';
 import '../../features/events/domain/calendar_event.dart';
+
+/// 일정에 저장된 알림 시각. LMS 과제는 LMS 설정 화면의 마감 알림이 더해진다.
+/// 완료된 일정은 호출하기 전에 이미 제외된다.
+List<int> effectiveReminderMinutes(
+  CalendarEvent event,
+  AppSettings settings, {
+  required DateTime now,
+}) {
+  if (event.lms?.activityType != 'assignment') {
+    return event.reminderMinutesBeforeList;
+  }
+  // 이미 지난 설정 시각은 마감 시각으로 몰아서 알리지 않고 건너뛴다.
+  return normalizeReminderMinutes([
+    ...event.reminderMinutesBeforeList,
+    ...settings.lmsDueReminder.minutesBefore.where(
+      (minutes) => event.startAt.subtract(Duration(minutes: minutes)).isAfter(now),
+    ),
+  ]);
+}
 
 enum ReminderDeliveryType { none, immediate, scheduled }
 

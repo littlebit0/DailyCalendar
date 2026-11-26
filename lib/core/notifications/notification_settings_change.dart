@@ -32,7 +32,8 @@ class NotificationSettingsChange {
     eventReminders:
         previous.allDayReminderHour != next.allDayReminderHour ||
         previous.allDayReminderMinute != next.allDayReminderMinute ||
-        !_sameOffsets(previous.dDayReminderOffsets, next.dDayReminderOffsets),
+        !_sameOffsets(previous.dDayReminderOffsets, next.dDayReminderOffsets) ||
+        previous.lmsDueReminder != next.lmsDueReminder,
   );
 
   static bool _sameOffsets(List<int> a, List<int> b) {

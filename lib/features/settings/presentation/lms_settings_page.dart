@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 import '../../../core/update/update_required_view.dart';
 import '../../../core/di/app_providers.dart';
 import '../../../core/lms/lms_sync_service.dart';
+import '../../../core/settings/app_settings.dart';
 import '../../../core/lms/lms_web_session.dart';
 import '../../../core/localization/app_localizations.dart';
 import '../../../core/theme/daily_ui.dart';
@@ -78,6 +79,22 @@ class _LmsSettingsPageState extends ConsumerState<LmsSettingsPage> {
     } finally {
       if (mounted) setState(() => _opening = false);
     }
+  }
+
+  Future<void> _saveDueReminder(LmsDueReminder value) async {
+    final repository = ref.read(settingsRepositoryProvider);
+    final current = ref.read(appSettingsProvider);
+    await repository.save(
+      current.copyWith(lmsDueReminder: value),
+      changedFrom: current,
+    );
+    ref.read(appSettingsProvider.notifier).state = repository.load();
+    unawaited(
+      ref
+          .read(googleDriveSyncServiceProvider)
+          .queueSettingsBackup()
+          .catchError((_) {}),
+    );
   }
 
   Future<void> _configureAutomaticLogin() async {
@@ -442,6 +459,11 @@ class _LmsSettingsPageState extends ConsumerState<LmsSettingsPage> {
                       ],
                     ),
                     const SizedBox(height: 20),
+                    _LmsDueReminderSection(
+                      value: settings.lmsDueReminder,
+                      onChanged: _saveDueReminder,
+                    ),
+                    const SizedBox(height: 20),
                     DailyGroupedSection(
                       children: [
                         Padding(
@@ -608,6 +630,98 @@ class _LmsSettingsPageState extends ConsumerState<LmsSettingsPage> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _LmsDueReminderSection extends StatelessWidget {
+  const _LmsDueReminderSection({required this.value, required this.onChanged});
+  final LmsDueReminder value;
+  final ValueChanged<LmsDueReminder> onChanged;
+
+  Widget _stepper(
+    BuildContext context, {
+    required String label,
+    required int current,
+    required int min,
+    required int max,
+    required ValueChanged<int> onSelected,
+  }) => Row(
+    children: [
+      Expanded(child: Text(label)),
+      IconButton(
+        tooltip: context.tr('줄이기'),
+        onPressed: current > min ? () => onSelected(current - 1) : null,
+        icon: const Icon(Icons.remove_circle_outline),
+      ),
+      SizedBox(
+        width: 32,
+        child: Text('$current', textAlign: TextAlign.center),
+      ),
+      IconButton(
+        tooltip: context.tr('늘리기'),
+        onPressed: current < max ? () => onSelected(current + 1) : null,
+        icon: const Icon(Icons.add_circle_outline),
+      ),
+    ],
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    return DailyGroupedSection(
+      label: context.tr('LMS 과제 마감 알림'),
+      children: [
+        SwitchListTile(
+          title: Text(context.tr('과제 마감 알림')),
+          subtitle: Text(
+            context.tr('Daily에서 완료 처리한 과제는 알리지 않습니다.'),
+          ),
+          value: value.enabled,
+          onChanged: (enabled) => onChanged(value.copyWith(enabled: enabled)),
+        ),
+        if (value.enabled)
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+            child: Column(
+              children: [
+                _stepper(
+                  context,
+                  label: context.tr('마감 몇 시간 전부터'),
+                  current: value.hoursBefore,
+                  min: 1,
+                  max: LmsDueReminder.maxHoursBefore,
+                  onSelected: (v) => onChanged(value.copyWith(hoursBefore: v)),
+                ),
+                _stepper(
+                  context,
+                  label: context.tr('몇 시간 간격으로'),
+                  current: value.intervalHours,
+                  min: 1,
+                  max: LmsDueReminder.maxHoursBefore,
+                  onSelected: (v) =>
+                      onChanged(value.copyWith(intervalHours: v)),
+                ),
+                _stepper(
+                  context,
+                  label: context.tr('모두 몇 번'),
+                  current: value.count,
+                  min: 1,
+                  max: LmsDueReminder.maxCount,
+                  onSelected: (v) => onChanged(value.copyWith(count: v)),
+                ),
+                const SizedBox(height: 8),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    value.minutesBefore
+                        .map((m) => context.tr('마감 {h}시간 전', args: {'h': m ~/ 60}))
+                        .join(', '),
+                  ),
+                ),
+              ],
+            ),
+          ),
+      ],
     );
   }
 }

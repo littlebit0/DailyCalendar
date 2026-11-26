@@ -2944,6 +2944,7 @@ class GoogleDriveSyncService implements SyncService {
         -1,
         0,
       ]),
+      lmsDueReminder: LmsDueReminder.fromJson(json['lmsDueReminder']),
       appTextSize: AppTextSize.fromName(
         json['appTextSize'] as String? ??
             json['calendarEventTextSize'] as String?,
