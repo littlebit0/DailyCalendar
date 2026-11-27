@@ -383,6 +383,18 @@ UpdateSource updateSourceFor(TargetPlatform platform) => switch (platform) {
   _ => UpdateSource.github,
 };
 
+/// App Store app first (itms-apps on iOS, macappstore on macOS), then the web
+/// page, so the update never lands on a site when the store app can open.
+List<Uri> appStoreAppPages(Uri web, TargetPlatform platform) => [
+  Uri(
+    scheme: platform == TargetPlatform.macOS ? 'macappstore' : 'itms-apps',
+    host: web.host,
+    path: web.path,
+    query: web.hasQuery ? web.query : null,
+  ),
+  web,
+];
+
 /// The version and page of the first App Store lookup result, or null.
 @visibleForTesting
 ({String version, String? url})? parseAppStoreLookup(String body) {

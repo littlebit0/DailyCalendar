@@ -21,7 +21,9 @@ Future<void> _openUpdatePage() async {
     case UpdateSource.appStore:
       final preferences = await SharedPreferences.getInstance();
       final page = preferences.getString(AppUpdateService.storeUrlKey);
-      if (page != null) pages.add(Uri.parse(page));
+      if (page != null) {
+        pages.addAll(appStoreAppPages(Uri.parse(page), defaultTargetPlatform));
+      }
     case UpdateSource.play:
       pages.addAll([
         Uri.parse('market://details?id=com.littlebit0.dailycalendar'),
