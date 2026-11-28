@@ -428,6 +428,16 @@ void main() {
       expect(updateSourceFor(TargetPlatform.android), UpdateSource.play);
       expect(updateSourceFor(TargetPlatform.windows), UpdateSource.github);
       expect(updateSourceFor(TargetPlatform.linux), UpdateSource.github);
+      final web = Uri.parse('https://apps.apple.com/kr/app/daily/id1?mt=8');
+      expect(
+        appStoreAppPages(web, TargetPlatform.iOS).first.toString(),
+        'itms-apps://apps.apple.com/kr/app/daily/id1?mt=8',
+      );
+      expect(
+        appStoreAppPages(web, TargetPlatform.macOS).first.scheme,
+        'macappstore',
+      );
+      expect(appStoreAppPages(web, TargetPlatform.iOS).last, web);
     });
 
     test('parses the App Store lookup and rejects odd answers', () {
